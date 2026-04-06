@@ -1,0 +1,156 @@
+{
+  "version": 1,
+  "runtime_roots": {
+    "runtime_root": ".runtime-cache/cortexpilot",
+    "runtime_contract_root": ".runtime-cache/cortexpilot/contracts",
+    "runs_root": ".runtime-cache/cortexpilot/runs",
+    "worktree_root": ".runtime-cache/cortexpilot/worktrees",
+    "logs_root": ".runtime-cache/logs",
+    "cache_root": ".runtime-cache/cache",
+    "test_output_root": ".runtime-cache/test_output"
+  },
+  "namespaces": {
+    "logs_runtime": ".runtime-cache/logs/runtime",
+    "logs_error": ".runtime-cache/logs/error",
+    "logs_access": ".runtime-cache/logs/access",
+    "logs_e2e": ".runtime-cache/logs/e2e",
+    "logs_ci": ".runtime-cache/logs/ci",
+    "logs_governance": ".runtime-cache/logs/governance",
+    "cache_runtime": ".runtime-cache/cache/runtime",
+    "cache_test": ".runtime-cache/cache/test",
+    "cache_tmp": ".runtime-cache/cache/tmp",
+    "cache_test_quick": ".runtime-cache/cache/test_quick",
+    "cache_build": ".runtime-cache/cache/build",
+    "cache_hypothesis": ".runtime-cache/cache/hypothesis",
+    "cache_gemini_ui_audit": ".runtime-cache/cache/gemini_ui_audit",
+    "cache_toolchains": ".runtime-cache/cache/toolchains",
+    "test_output": ".runtime-cache/test_output",
+    "test_output_space_governance": ".runtime-cache/test_output/space_governance",
+    "governance_reports": ".runtime-cache/test_output/governance",
+    "upstream_verification": ".runtime-cache/test_output/governance/upstream",
+    "worker_markers": ".runtime-cache/test_output/worker_markers",
+    "runtime_contracts": ".runtime-cache/cortexpilot/contracts",
+    "active_contract": ".runtime-cache/cortexpilot/active",
+    "runs": ".runtime-cache/cortexpilot/runs",
+    "runs_diagnostic": ".runtime-cache/cortexpilot/runs_diagnostic",
+    "worktrees": ".runtime-cache/cortexpilot/worktrees",
+    "reports": ".runtime-cache/cortexpilot/reports",
+    "reports_space_governance": ".runtime-cache/cortexpilot/reports/space_governance",
+    "reports_ci": ".runtime-cache/cortexpilot/reports/ci",
+    "reports_ci_current_run": ".runtime-cache/cortexpilot/reports/ci/current_run",
+    "release": ".runtime-cache/cortexpilot/release",
+    "backups": ".runtime-cache/cortexpilot/backups",
+    "briefings": ".runtime-cache/cortexpilot/briefings",
+    "intakes": ".runtime-cache/cortexpilot/intakes",
+    "workflow_cases": ".runtime-cache/cortexpilot/workflow-cases",
+    "codex_homes": ".runtime-cache/cortexpilot/codex-homes",
+    "browser_profiles": ".runtime-cache/cortexpilot/browser-profiles",
+    "temp": ".runtime-cache/cortexpilot/temp",
+    "locks": ".runtime-cache/cortexpilot/locks",
+    "web_search": ".runtime-cache/cortexpilot/web-search"
+  },
+  "machine_managed_repo_local_roots": [
+    "apps/orchestrator/.venv",
+    "apps/dashboard/node_modules",
+    "apps/dashboard/.next",
+    "apps/dashboard/tsconfig.tsbuildinfo",
+    "apps/dashboard/tsconfig.typecheck.tsbuildinfo",
+    "apps/desktop/node_modules",
+    "apps/desktop/dist",
+    "apps/desktop/tsconfig.tsbuildinfo",
+    "packages/frontend-api-client/node_modules"
+  ],
+  "space_governance_gray_zone_roots": [
+    "apps/desktop/src-tauri/target",
+    "apps/desktop/coverage"
+  ],
+  "ephemeral_repo_local_roots": [
+    "apps/dashboard/.next",
+    "apps/desktop/dist",
+    "apps/desktop/tsconfig.tsbuildinfo"
+  ],
+  "workspace_pollution_scan_roots": [
+    "apps",
+    "packages",
+    "scripts",
+    "tooling"
+  ],
+  "workspace_forbidden_dirnames": [
+    "__pycache__",
+    ".pytest_cache",
+    ".claude",
+    ".codex",
+    ".opencode",
+    ".mypy_cache",
+    ".ruff_cache",
+    ".hypothesis",
+    ".runtime-cache",
+    "coverage",
+    "htmlcov",
+    "node_modules",
+    ".next",
+    "dist"
+  ],
+  "workspace_forbidden_file_globs": [
+    ".coverage",
+    ".coverage.*",
+    ".env",
+    ".env.local",
+    ".env.development.local",
+    ".env.production.local",
+    ".env.test.local",
+    "*.tsbuildinfo"
+  ],
+  "machine_cache_roots": [
+    "~/.cache/cortexpilot",
+    "$RUNNER_TEMP/cortexpilot-machine-cache",
+    "$CORTEXPILOT_MACHINE_CACHE_ROOT"
+  ],
+  "cache_classes": {
+    "repo_authored_runtime": {
+      "root": ".runtime-cache",
+      "description": "Repo-authored runtime, test, temp, reports, locks, browser temp artifacts, and other governed machine-local evidence must live under .runtime-cache/."
+    },
+    "repo_owned_external_machine_cache": {
+      "root": "~/.cache/cortexpilot",
+      "description": "Repo-owned external caches and persistent browser state belong under ~/.cache/cortexpilot/. Reclaimable examples include pnpm-store, Playwright browser downloads, docker-ci runner temp, docker-buildx local cache, and clean-room machine temp; the repo-owned browser singleton subtree under ~/.cache/cortexpilot/browser/ is persistent and excluded from TTL/cap cleanup."
+    },
+    "build_dependency_exceptions": {
+      "description": "Framework/build/dependency roots may remain outside .runtime-cache/, but they are explicit exceptions rather than part of the unified runtime cache story."
+    }
+  },
+  "cleanup_policy": {
+    "root_outputs_forbidden": true,
+    "machine_managed_repo_local_roots_must_be_gitignored": true,
+    "ephemeral_repo_local_roots_must_be_cleanup_managed": true,
+    "temp_namespace_retained_by_retention_report": true,
+    "machine_cache_children_governed_by_retention_report": true
+  },
+  "forbidden_top_level_outputs": [
+    "node_modules",
+    ".pnp.cjs",
+    ".pnp.loader.mjs",
+    ".coverage",
+    ".cargo",
+    ".next",
+    ".venv",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".mypy_cache",
+    ".hypothesis",
+    "coverage",
+    "htmlcov",
+    "logs",
+    "out",
+    "tmp",
+    "Users"
+  ],
+  "legacy_runtime_paths": [
+    "cortexpilot/contracts/results",
+    "cortexpilot/contracts/reviews",
+    "cortexpilot/contracts/tasks",
+    ".runtime-cache/browser-profiles",
+    ".runtime-cache/temp",
+    ".runtime-cache/codex"
+  ]
+}

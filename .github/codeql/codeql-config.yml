@@ -1,0 +1,8 @@
+name: cortexpilot-codeql
+
+paths-ignore:
+  - .runtime-cache/**
+  - apps/desktop/src-tauri/target/**
+  - apps/dashboard/.next/**
+  - apps/dashboard/node_modules/**
+  - apps/desktop/node_modules/**

@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "description": "Minimal generated-doc outputs kept after the public-surface reduction.",
+  "entries": [
+    {
+      "output_path": "docs/governance/ui-button-coverage-matrix.md",
+      "mode": "full_render",
+      "source_inputs": [
+        "scripts/sync_ui_button_matrix.py",
+        "scripts/ui_button_inventory.py",
+        "configs/ui_button_coverage_annotations.json"
+      ],
+      "generator": "python3 scripts/sync_ui_button_matrix.py --tiers P0,P1",
+      "freshness_strategy": "timestamp",
+      "authoritative_for": [
+        "ui_button_coverage_reference"
+      ],
+      "human_editable_regions": "none"
+    },
+    {
+      "output_path": "docs/generated/fragments/ci-topology-summary.md",
+      "mode": "full_render",
+      "source_inputs": [
+        "scripts/render_docs.py",
+        "configs/ci_governance_policy.json"
+      ],
+      "generator": "python3 scripts/render_docs.py",
+      "freshness_strategy": "timestamp",
+      "authoritative_for": [
+        "generated_ci_topology_summary"
+      ],
+      "human_editable_regions": "none"
+    },
+    {
+      "output_path": "docs/generated/fragments/current-run-evidence-summary.md",
+      "mode": "full_render",
+      "source_inputs": [
+        "scripts/render_docs.py"
+      ],
+      "generator": "python3 scripts/render_docs.py",
+      "freshness_strategy": "timestamp",
+      "authoritative_for": [
+        "generated_current_run_summary"
+      ],
+      "human_editable_regions": "none"
+    },
+    {
+      "output_path": "docs/generated/fragments/coverage-summary.md",
+      "mode": "full_render",
+      "source_inputs": [
+        "scripts/render_docs.py"
+      ],
+      "generator": "python3 scripts/render_docs.py",
+      "freshness_strategy": "timestamp",
+      "authoritative_for": [
+        "generated_coverage_summary"
+      ],
+      "human_editable_regions": "none"
+    }
+  ]
+}

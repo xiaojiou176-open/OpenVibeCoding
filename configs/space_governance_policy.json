@@ -1,0 +1,1352 @@
+{
+  "version": 1,
+  "recent_activity_hours": 24,
+  "apply_gate_max_age_minutes": 15,
+  "machine_cache_retention_policy": {
+    "default_cap_bytes": 21474836480,
+    "auto_prune_interval_sec": 1800,
+    "protected_prefixes": [
+      "${CORTEXPILOT_MACHINE_CACHE_ROOT}/browser",
+      "${CORTEXPILOT_MACHINE_CACHE_ROOT}/toolchains",
+      "${CORTEXPILOT_MACHINE_CACHE_ROOT}/toolchains/python/current"
+    ],
+    "cap_excluded_prefixes": [
+      "${CORTEXPILOT_MACHINE_CACHE_ROOT}/browser"
+    ]
+  },
+  "shared_realpath_prefixes": [
+    "~/.cache/jarvis"
+  ],
+  "process_groups": {
+    "node": {
+      "patterns": [
+        "\\bnode\\b",
+        "\\bpnpm\\b",
+        "\\bnext\\b",
+        "\\bvite\\b",
+        "\\bvitest\\b"
+      ]
+    },
+    "python": {
+      "patterns": [
+        "\\bpython(3(\\.\\d+)?)?\\b",
+        "\\buv\\b",
+        "\\bpytest\\b"
+      ]
+    },
+    "playwright": {
+      "patterns": [
+        "playwright",
+        "chromium",
+        "webkit",
+        "firefox"
+      ]
+    },
+    "cargo": {
+      "patterns": [
+        "\\bcargo\\b",
+        "\\brustc\\b",
+        "\\brustup\\b"
+      ]
+    },
+    "tauri": {
+      "patterns": [
+        "\\btauri\\b"
+      ]
+    },
+    "docker": {
+      "patterns": [
+        "\\bdocker\\b",
+        "containerd",
+        "buildkit"
+      ]
+    }
+  },
+  "rebuild_commands": [
+    {
+      "id": "bootstrap",
+      "kind": "npm_script",
+      "script": "bootstrap",
+      "description": "repo bootstrap"
+    },
+    {
+      "id": "test_quick",
+      "kind": "npm_script",
+      "script": "test:quick",
+      "description": "repo quick verification"
+    },
+    {
+      "id": "dashboard_build",
+      "kind": "npm_script",
+      "script": "dashboard:build",
+      "description": "dashboard build"
+    },
+    {
+      "id": "desktop_build",
+      "kind": "npm_script",
+      "script": "desktop:build",
+      "description": "desktop build"
+    },
+    {
+      "id": "desktop_tauri_build",
+      "kind": "npm_script",
+      "script": "desktop:tauri:build",
+      "description": "desktop tauri build"
+    },
+    {
+      "id": "dashboard_deps",
+      "kind": "shell_script",
+      "path": "scripts/install_dashboard_deps.sh",
+      "description": "dashboard dependency reinstall"
+    },
+    {
+      "id": "desktop_deps",
+      "kind": "shell_script",
+      "path": "scripts/install_desktop_deps.sh",
+      "description": "desktop dependency reinstall"
+    },
+    {
+      "id": "frontend_api_client_deps",
+      "kind": "shell_script",
+      "path": "scripts/install_frontend_api_client_deps.sh",
+      "description": "frontend API client dependency reinstall"
+    },
+    {
+      "id": "orchestrator_python",
+      "kind": "shell_script",
+      "path": "scripts/bootstrap.sh",
+      "args": [
+        "python"
+      ],
+      "description": "orchestrator python environment bootstrap"
+    },
+    {
+      "id": "bootstrap_playwright",
+      "kind": "shell_script",
+      "path": "scripts/bootstrap.sh",
+      "args": [
+        "playwright"
+      ],
+      "description": "Playwright browser bootstrap"
+    },
+    {
+      "id": "docker_ci_test_quick",
+      "kind": "shell_script",
+      "path": "scripts/docker_ci.sh",
+      "args": [
+        "test-quick"
+      ],
+      "description": "local docker_ci quick verification"
+    },
+    {
+      "id": "clean_room_recovery",
+      "kind": "shell_script",
+      "path": "scripts/check_clean_room_recovery.sh",
+      "args": [
+        "--skip-governance-scorecard"
+      ],
+      "description": "clean-room recovery verification"
+    },
+    {
+      "id": "desktop_native_smoke",
+      "kind": "shell_script",
+      "path": "scripts/docker_ci.sh",
+      "args": [
+        "lane",
+        "desktop-native-smoke"
+      ],
+      "description": "desktop native smoke verification"
+    }
+  ],
+  "layers": {
+    "repo_internal": [
+      {
+        "id": "dashboard_node_modules",
+        "path": "apps/dashboard/node_modules",
+        "type": "app-local dependency copy",
+        "ownership": "current repo dedicated dashboard dependency surface",
+        "ownership_confidence": "High",
+        "sharedness": "repo_local",
+        "summary_role": "leaf",
+        "rebuildability": "rebuildable with network/time via dashboard install flow",
+        "recommendation": "cautious_cleanup",
+        "cleanup_mode": "remove-path",
+        "risk": "medium",
+        "rebuild_command_ids": [
+          "dashboard_deps",
+          "bootstrap"
+        ],
+        "post_cleanup_command_ids": [
+          "dashboard_deps"
+        ],
+        "apply_serial_only": true,
+        "evidence": [
+          "scripts/install_dashboard_deps.sh",
+          "configs/runtime_artifact_policy.json"
+        ],
+        "notes": "High-yield repo-local dependency surface; cleanup should be one-at-a-time with immediate reinstall validation."
+      },
+      {
+        "id": "dashboard_next",
+        "path": "apps/dashboard/.next",
+        "type": "dashboard build output",
+        "ownership": "current repo dedicated dashboard build output",
+        "ownership_confidence": "High",
+        "sharedness": "repo_local",
+        "summary_role": "leaf",
+        "rebuildability": "immediately rebuildable via dashboard build flow",
+        "recommendation": "safe_cleanup",
+        "cleanup_mode": "remove-path",
+        "risk": "low",
+        "rebuild_command_ids": [
+          "dashboard_build"
+        ],
+        "post_cleanup_command_ids": [
+          "dashboard_build"
+        ],
+        "apply_serial_only": false,
+        "evidence": [
+          "apps/dashboard/next.config.js",
+          "configs/runtime_artifact_policy.json"
+        ],
+        "notes": "Low-risk dashboard build residue."
+      },
+      {
+        "id": "dashboard_tsbuildinfo",
+        "path": "apps/dashboard/tsconfig.tsbuildinfo",
+        "type": "dashboard TypeScript incremental state",
+        "ownership": "current repo dedicated dashboard TypeScript cache",
+        "ownership_confidence": "High",
+        "sharedness": "repo_local",
+        "summary_role": "leaf",
+        "rebuildability": "immediately rebuildable via dashboard build flow",
+        "recommendation": "safe_cleanup",
+        "cleanup_mode": "remove-path",
+        "risk": "low",
+        "rebuild_command_ids": [
+          "dashboard_build"
+        ],
+        "post_cleanup_command_ids": [
+          "dashboard_build"
+        ],
+        "apply_serial_only": false,
+        "evidence": [
+          "apps/dashboard/package.json",
+          "configs/runtime_artifact_policy.json"
+        ],
+        "notes": "Low-risk dashboard TypeScript build cache."
+      },
+      {
+        "id": "dashboard_typecheck_tsbuildinfo",
+        "path": "apps/dashboard/tsconfig.typecheck.tsbuildinfo",
+        "type": "dashboard typecheck incremental state",
+        "ownership": "current repo dedicated dashboard typecheck cache",
+        "ownership_confidence": "High",
+        "sharedness": "repo_local",
+        "summary_role": "leaf",
+        "rebuildability": "immediately rebuildable via dashboard build flow",
+        "recommendation": "safe_cleanup",
+        "cleanup_mode": "remove-path",
+        "risk": "low",
+        "rebuild_command_ids": [
+          "dashboard_build"
+        ],
+        "post_cleanup_command_ids": [
+          "dashboard_build"
+        ],
+        "apply_serial_only": false,
+        "evidence": [
+          "apps/dashboard/package.json",
+          "configs/runtime_artifact_policy.json"
+        ],
+        "notes": "Low-risk dashboard typecheck cache."
+      },
+      {
+        "id": "desktop_node_modules",
+        "path": "apps/desktop/node_modules",
+        "type": "app-local dependency copy",
+        "ownership": "current repo dedicated desktop dependency surface",
+        "ownership_confidence": "High",
+        "sharedness": "repo_local",
+        "summary_role": "leaf",
+        "rebuildability": "rebuildable with network/time via desktop install flow",
+        "recommendation": "cautious_cleanup",
+        "cleanup_mode": "remove-path",
+        "risk": "medium",
+        "rebuild_command_ids": [
+          "desktop_deps",
+          "bootstrap"
+        ],
+        "post_cleanup_command_ids": [
+          "desktop_deps"
+        ],
+        "apply_serial_only": true,
+        "evidence": [
+          "scripts/install_desktop_deps.sh",
+          "configs/runtime_artifact_policy.json"
+        ],
+        "notes": "Desktop/Tauri local dependency surface."
+      },
+      {
+        "id": "orchestrator_venv",
+        "path": "apps/orchestrator/.venv",
+        "type": "repo-local python virtualenv",
+        "ownership": "current repo dedicated orchestrator Python environment",
+        "ownership_confidence": "High",
+        "sharedness": "repo_local",
+        "summary_role": "leaf",
+        "rebuildability": "rebuildable with bootstrap python mode and uv lock sync",
+        "recommendation": "cautious_cleanup",
+        "cleanup_mode": "remove-path",
+        "risk": "medium_high",
+        "rebuild_command_ids": [
+          "orchestrator_python",
+          "bootstrap"
+        ],
+        "post_cleanup_command_ids": [
+          "orchestrator_python"
+        ],
+        "apply_serial_only": true,
+        "evidence": [
+          "scripts/bootstrap.sh",
+          "apps/orchestrator/uv.lock"
+        ],
+        "notes": "Now treated as an explicit repo-local machine-managed surface rather than an unclassified gray zone."
+      },
+      {
+        "id": "desktop_dist",
+        "path": "apps/desktop/dist",
+        "type": "frontend build output",
+        "ownership": "current repo dedicated desktop build output",
+        "ownership_confidence": "High",
+        "sharedness": "repo_local",
+        "summary_role": "leaf",
+        "rebuildability": "immediately rebuildable via desktop build/dev flow",
+        "recommendation": "safe_cleanup",
+        "cleanup_mode": "remove-path",
+        "risk": "low",
+        "rebuild_command_ids": [
+          "desktop_build"
+        ],
+        "post_cleanup_command_ids": [
+          "desktop_build"
+        ],
+        "apply_serial_only": false,
+        "evidence": [
+          "apps/desktop/vite.config.ts",
+          "configs/runtime_artifact_policy.json"
+        ],
+        "notes": "Low-risk build artifact."
+      },
+      {
+        "id": "desktop_tsbuildinfo",
+        "path": "apps/desktop/tsconfig.tsbuildinfo",
+        "type": "desktop TypeScript incremental state",
+        "ownership": "current repo dedicated desktop TypeScript cache",
+        "ownership_confidence": "High",
+        "sharedness": "repo_local",
+        "summary_role": "leaf",
+        "rebuildability": "immediately rebuildable via desktop build flow",
+        "recommendation": "safe_cleanup",
+        "cleanup_mode": "remove-path",
+        "risk": "low",
+        "rebuild_command_ids": [
+          "desktop_build"
+        ],
+        "post_cleanup_command_ids": [
+          "desktop_build"
+        ],
+        "apply_serial_only": false,
+        "evidence": [
+          "apps/desktop/package.json",
+          "configs/runtime_artifact_policy.json"
+        ],
+        "notes": "Low-risk desktop TypeScript build cache."
+      },
+      {
+        "id": "frontend_api_client_node_modules",
+        "path": "packages/frontend-api-client/node_modules",
+        "type": "package-local dependency copy",
+        "ownership": "current repo dedicated frontend API client dependency surface",
+        "ownership_confidence": "High",
+        "sharedness": "repo_local",
+        "summary_role": "leaf",
+        "rebuildability": "rebuildable with network/time via frontend API client install flow",
+        "recommendation": "cautious_cleanup",
+        "cleanup_mode": "remove-path",
+        "risk": "medium_low",
+        "rebuild_command_ids": [
+          "frontend_api_client_deps"
+        ],
+        "post_cleanup_command_ids": [
+          "frontend_api_client_deps"
+        ],
+        "apply_serial_only": false,
+        "evidence": [
+          "scripts/install_frontend_api_client_deps.sh",
+          "configs/runtime_artifact_policy.json"
+        ],
+        "notes": "Package-local dependency surface used by frontend API client diagnostics."
+      },
+      {
+        "id": "orchestrator_python_residue",
+        "path": "apps/orchestrator",
+        "type": "python bytecode and pytest residue root",
+        "ownership": "repo-local low-risk Python residue root",
+        "ownership_confidence": "High",
+        "sharedness": "repo_local",
+        "summary_role": "leaf",
+        "rebuildability": "immediately rebuildable",
+        "recommendation": "safe_cleanup",
+        "cleanup_mode": "named-descendants",
+        "cleanup_target_names": [
+          "__pycache__",
+          ".pytest_cache"
+        ],
+        "risk": "low",
+        "rebuild_command_ids": [
+          "test_quick"
+        ],
+        "post_cleanup_command_ids": [
+          "test_quick"
+        ],
+        "apply_serial_only": false,
+        "evidence": [
+          "scripts/cleanup_workspace_modules.sh",
+          "configs/runtime_artifact_policy.json"
+        ],
+        "notes": "Low-risk Python cache residue under orchestrator."
+      },
+      {
+        "id": "scripts_python_residue",
+        "path": "scripts",
+        "type": "script-tree Python bytecode residue root",
+        "ownership": "repo-local low-risk script residue root",
+        "ownership_confidence": "High",
+        "sharedness": "repo_local",
+        "summary_role": "leaf",
+        "rebuildability": "immediately rebuildable",
+        "recommendation": "safe_cleanup",
+        "cleanup_mode": "named-descendants",
+        "cleanup_target_names": [
+          "__pycache__",
+          ".pytest_cache"
+        ],
+        "risk": "low",
+        "rebuild_command_ids": [
+          "test_quick"
+        ],
+        "post_cleanup_command_ids": [
+          "test_quick"
+        ],
+        "apply_serial_only": false,
+        "evidence": [
+          "scripts/cleanup_workspace_modules.sh",
+          "configs/runtime_artifact_policy.json"
+        ],
+        "notes": "Low-risk Python cache residue under scripts."
+      },
+      {
+        "id": "tooling_python_residue",
+        "path": "tooling",
+        "type": "tooling-tree Python bytecode residue root",
+        "ownership": "repo-local low-risk tooling residue root",
+        "ownership_confidence": "High",
+        "sharedness": "repo_local",
+        "summary_role": "leaf",
+        "rebuildability": "immediately rebuildable",
+        "recommendation": "safe_cleanup",
+        "cleanup_mode": "named-descendants",
+        "cleanup_target_names": [
+          "__pycache__",
+          ".pytest_cache"
+        ],
+        "risk": "low",
+        "rebuild_command_ids": [
+          "test_quick"
+        ],
+        "post_cleanup_command_ids": [
+          "test_quick"
+        ],
+        "apply_serial_only": false,
+        "evidence": [
+          "scripts/cleanup_workspace_modules.sh",
+          "configs/runtime_artifact_policy.json"
+        ],
+        "notes": "Low-risk Python cache residue under tooling."
+      },
+      {
+        "id": "runtime_temp",
+        "path": ".runtime-cache/cortexpilot/temp",
+        "type": "runtime temp namespace",
+        "ownership": "current repo runtime temp namespace",
+        "ownership_confidence": "High",
+        "sharedness": "repo_local",
+        "summary_role": "leaf",
+        "rebuildability": "immediately rebuildable",
+        "recommendation": "needs_verification",
+        "cleanup_mode": "aged-children",
+        "cleanup_scan_depth": 2,
+        "cleanup_min_age_hours": 72,
+        "risk": "low_medium",
+        "rebuild_command_ids": [
+          "test_quick"
+        ],
+        "post_cleanup_command_ids": [
+          "test_quick"
+        ],
+        "apply_serial_only": false,
+        "evidence": [
+          "configs/runtime_artifact_policy.json",
+          "docs/architecture/runtime-topology.md"
+        ],
+        "notes": "Only prune stale children; do not treat the whole namespace as disposable hot data."
+      },
+      {
+        "id": "runtime_test_output",
+        "path": ".runtime-cache/test_output",
+        "type": "verification evidence namespace",
+        "ownership": "current repo verification outputs",
+        "ownership_confidence": "High",
+        "sharedness": "repo_local",
+        "summary_role": "leaf",
+        "rebuildability": "rebuildable but may contain current debug or release evidence",
+        "recommendation": "needs_verification",
+        "cleanup_mode": "aged-children",
+        "cleanup_scan_depth": 2,
+        "cleanup_min_age_hours": 168,
+        "risk": "medium",
+        "rebuild_command_ids": [
+          "test_quick"
+        ],
+        "post_cleanup_command_ids": [
+          "test_quick"
+        ],
+        "apply_serial_only": false,
+        "evidence": [
+          "docs/architecture/runtime-topology.md",
+          "scripts/test_quick.sh"
+        ],
+        "notes": "Prune only aged child evidence, never whole test_output."
+      },
+      {
+        "id": "runtime_logs",
+        "path": ".runtime-cache/logs",
+        "type": "runtime log namespace",
+        "ownership": "current repo runtime logs",
+        "ownership_confidence": "High",
+        "sharedness": "repo_local",
+        "summary_role": "leaf",
+        "rebuildability": "rebuildable but may contain current failure evidence",
+        "recommendation": "needs_verification",
+        "cleanup_mode": "aged-children",
+        "cleanup_scan_depth": 2,
+        "cleanup_min_age_hours": 168,
+        "risk": "medium",
+        "rebuild_command_ids": [
+          "test_quick"
+        ],
+        "post_cleanup_command_ids": [
+          "test_quick"
+        ],
+        "apply_serial_only": false,
+        "evidence": [
+          "docs/architecture/runtime-topology.md",
+          "apps/orchestrator/src/cortexpilot_orch/observability/logger.py"
+        ],
+        "notes": "Treat as evidence lane first, cleanup lane second."
+      },
+      {
+        "id": "desktop_tauri_target",
+        "path": "apps/desktop/src-tauri/target",
+        "type": "native build output gray-zone surface",
+        "ownership": "desktop Tauri native build output",
+        "ownership_confidence": "Medium",
+        "sharedness": "repo_local",
+        "summary_role": "leaf",
+        "rebuildability": "rebuildable but potentially expensive",
+        "recommendation": "needs_verification",
+        "cleanup_mode": "remove-path",
+        "risk": "medium_high",
+        "rebuild_command_ids": [
+          "desktop_tauri_build"
+        ],
+        "post_cleanup_command_ids": [
+          "desktop_tauri_build"
+        ],
+        "apply_serial_only": true,
+        "evidence": [
+          "scripts/verify_desktop_release.sh",
+          "scripts/sign_and_notarize_desktop_release.sh"
+        ],
+        "notes": "Explicitly tracked as a gray-zone build surface; do not silently normalize it as steady-state runtime."
+      },
+      {
+        "id": "desktop_coverage",
+        "path": "apps/desktop/coverage",
+        "type": "app-local coverage output gray-zone surface",
+        "ownership": "desktop Vitest coverage output",
+        "ownership_confidence": "Medium",
+        "sharedness": "repo_local",
+        "summary_role": "leaf",
+        "rebuildability": "rebuildable",
+        "recommendation": "needs_verification",
+        "cleanup_mode": "aged-children",
+        "cleanup_scan_depth": 2,
+        "cleanup_min_age_hours": 168,
+        "risk": "medium",
+        "rebuild_command_ids": [
+          "test_quick"
+        ],
+        "post_cleanup_command_ids": [
+          "test_quick"
+        ],
+        "apply_serial_only": false,
+        "evidence": [
+          "apps/desktop/vite.config.ts",
+          ".gitignore"
+        ],
+        "notes": "Coverage output exists by tool behavior but is not a canonical steady-state runtime root."
+      },
+      {
+        "id": "runtime_browser_profiles",
+        "path": ".runtime-cache/cortexpilot/browser-profiles",
+        "type": "governed browser profile namespace",
+        "ownership": "preferred runtime browser profile root",
+        "ownership_confidence": "Medium",
+        "sharedness": "repo_local",
+        "summary_role": "leaf",
+        "rebuildability": "rebuildable but writer attribution is partial",
+        "recommendation": "needs_verification",
+        "cleanup_mode": "aged-children",
+        "cleanup_scan_depth": 2,
+        "cleanup_min_age_hours": 168,
+        "risk": "medium_high",
+        "rebuild_command_ids": [
+          "test_quick"
+        ],
+        "post_cleanup_command_ids": [
+          "test_quick"
+        ],
+        "apply_serial_only": false,
+        "evidence": [
+          "configs/runtime_artifact_policy.json",
+          "apps/orchestrator/src/cortexpilot_orch/policy/browser_policy_resolver.py"
+        ],
+        "notes": "Allowed by policy, but keep under verification because materialization depends on runtime browser flows."
+      },
+      {
+        "id": "runtime_backups",
+        "path": ".runtime-cache/cortexpilot/backups",
+        "type": "runtime historical backup namespace",
+        "ownership": "governed backup surface",
+        "ownership_confidence": "Low",
+        "sharedness": "repo_local",
+        "summary_role": "leaf",
+        "rebuildability": "not assumed rebuildable",
+        "recommendation": "observe_only",
+        "cleanup_mode": "observe-only",
+        "risk": "high",
+        "rebuild_command_ids": [],
+        "evidence": [
+          "docs/architecture/runtime-topology.md",
+          "configs/runtime_artifact_policy.json"
+        ],
+        "notes": "Policy-known but writer attribution remains incomplete; never auto-clear as routine cache."
+      }
+    ],
+    "repo_external_related": [
+      {
+        "id": "external_machine_cache_root",
+        "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}",
+        "type": "machine-scoped cache namespace",
+        "ownership": "repo-owned external cache namespace",
+        "ownership_confidence": "High",
+        "sharedness": "repo_machine_shared",
+        "summary_role": "rollup_root",
+        "rebuildability": "rebuildable with bootstrap/install flows",
+        "recommendation": "needs_verification",
+        "cleanup_mode": "observe-only",
+        "risk": "medium",
+        "rebuild_command_ids": [
+          "bootstrap"
+        ],
+        "evidence": [
+          "scripts/lib/toolchain_env.sh",
+          "scripts/lib/env.sh",
+          "configs/runtime_artifact_policy.json"
+        ],
+        "notes": "Top-level namespace is shared by multiple CortexPilot worktrees/branches on the same machine."
+      },
+      {
+        "id": "external_repo_browser_root",
+        "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/browser",
+        "type": "repo-owned persistent browser singleton root",
+        "ownership": "repo-owned Chrome singleton browser root",
+        "ownership_confidence": "High",
+        "sharedness": "repo_machine_dedicated",
+        "summary_role": "breakdown_only",
+        "rebuildability": "rebuildable only through the explicit repo browser migrate/bootstrap flow",
+        "recommendation": "observe_only",
+        "cleanup_mode": "observe-only",
+        "risk": "medium",
+        "rebuild_command_ids": [
+          "bootstrap"
+        ],
+        "evidence": [
+          "scripts/repo_chrome_singleton.py",
+          "tooling/browser/repo_chrome_singleton.py",
+          "apps/orchestrator/src/cortexpilot_orch/policy/browser_policy_resolver.py"
+        ],
+        "notes": "Persistent repo browser workspace rooted at ~/.cache/cortexpilot/browser. It stays auditable, but does not participate in TTL or cap-driven cleanup."
+      },
+      {
+        "id": "external_pnpm_store",
+        "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/pnpm-store",
+        "type": "machine-scoped pnpm store",
+        "ownership": "repo-controlled external pnpm cache",
+        "ownership_confidence": "High",
+        "sharedness": "repo_machine_shared",
+        "summary_role": "breakdown_only",
+        "rebuildability": "rebuildable with dashboard/desktop dependency installs",
+        "recommendation": "needs_verification",
+        "cleanup_mode": "observe-only",
+        "risk": "medium",
+        "rebuild_command_ids": [
+          "dashboard_deps",
+          "desktop_deps"
+        ],
+        "evidence": [
+          "scripts/install_dashboard_deps.sh",
+          "scripts/install_desktop_deps.sh",
+          "scripts/lib/toolchain_env.sh"
+        ],
+        "notes": "High-yield shared cache; explicit shared confirmation required before apply."
+      },
+      {
+        "id": "external_pnpm_store_dashboard",
+        "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/pnpm-store/dashboard",
+        "type": "dashboard-scoped pnpm store branch",
+        "ownership": "repo-controlled external dashboard pnpm cache",
+        "ownership_confidence": "High",
+        "sharedness": "repo_machine_shared",
+        "summary_role": "breakdown_only",
+        "rebuildability": "rebuildable with dashboard dependency installs",
+        "recommendation": "needs_verification",
+        "cleanup_mode": "remove-path",
+        "retention_auto_cleanup": true,
+        "retention_ttl_hours": 168,
+        "risk": "medium",
+        "rebuild_command_ids": [
+          "dashboard_deps"
+        ],
+        "post_cleanup_command_ids": [
+          "dashboard_deps"
+        ],
+        "apply_serial_only": true,
+        "evidence": [
+          "scripts/install_dashboard_deps.sh",
+          "scripts/lib/toolchain_env.sh"
+        ],
+        "notes": "Dashboard-specific pnpm store branch under the shared CortexPilot machine cache."
+      },
+      {
+        "id": "external_pnpm_store_desktop",
+        "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/pnpm-store/desktop",
+        "type": "desktop-scoped pnpm store branch",
+        "ownership": "repo-controlled external desktop pnpm cache",
+        "ownership_confidence": "High",
+        "sharedness": "repo_machine_shared",
+        "summary_role": "breakdown_only",
+        "rebuildability": "rebuildable with desktop dependency installs",
+        "recommendation": "needs_verification",
+        "cleanup_mode": "remove-path",
+        "retention_auto_cleanup": true,
+        "retention_ttl_hours": 168,
+        "risk": "medium",
+        "rebuild_command_ids": [
+          "desktop_deps"
+        ],
+        "post_cleanup_command_ids": [
+          "desktop_deps"
+        ],
+        "apply_serial_only": true,
+        "evidence": [
+          "scripts/install_desktop_deps.sh",
+          "scripts/lib/toolchain_env.sh"
+        ],
+        "notes": "Desktop-specific pnpm store branch under the shared CortexPilot machine cache."
+      },
+      {
+        "id": "external_pnpm_store_v10",
+        "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/pnpm-store/v10",
+        "type": "pnpm content-addressed store root",
+        "ownership": "repo-controlled external pnpm store content-addressed cache",
+        "ownership_confidence": "High",
+        "sharedness": "repo_machine_shared",
+        "summary_role": "breakdown_only",
+        "rebuildability": "rebuildable with dashboard/desktop dependency installs",
+        "recommendation": "needs_verification",
+        "cleanup_mode": "remove-path",
+        "retention_auto_cleanup": true,
+        "retention_ttl_hours": 336,
+        "risk": "medium",
+        "rebuild_command_ids": [
+          "dashboard_deps",
+          "desktop_deps"
+        ],
+        "post_cleanup_command_ids": [
+          "dashboard_deps",
+          "desktop_deps"
+        ],
+        "apply_serial_only": true,
+        "evidence": [
+          "scripts/install_dashboard_deps.sh",
+          "scripts/install_desktop_deps.sh",
+          "scripts/lib/toolchain_env.sh"
+        ],
+        "notes": "Shared content-addressed pnpm store root; avoid double-counting it with the parent pnpm-store rollup."
+      },
+      {
+        "id": "external_pnpm_store_local",
+        "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/pnpm-store-local-*",
+        "type": "derived pnpm retry/local store",
+        "ownership": "repo-derived temporary pnpm store namespace",
+        "ownership_confidence": "High",
+        "sharedness": "repo_machine_shared",
+        "summary_role": "breakdown_only",
+        "rebuildability": "rebuildable",
+        "recommendation": "needs_verification",
+        "cleanup_mode": "remove-path",
+        "retention_auto_cleanup": true,
+        "retention_ttl_hours": 24,
+        "risk": "medium",
+        "rebuild_command_ids": [
+          "dashboard_deps",
+          "desktop_deps"
+        ],
+        "post_cleanup_command_ids": [
+          "dashboard_deps",
+          "desktop_deps"
+        ],
+        "apply_serial_only": true,
+        "evidence": [
+          "scripts/lib/toolchain_env.sh",
+          "scripts/install_dashboard_deps.sh"
+        ],
+        "notes": "Treat as temporary derived cache, but still require shared-cache confirmation."
+      },
+      {
+        "id": "external_tmp_docker_ci_runner_temp",
+        "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/tmp/docker-ci/runner-temp-*",
+        "type": "machine-scoped docker_ci runner temp root",
+        "ownership": "repo-owned docker_ci host runner temp",
+        "ownership_confidence": "High",
+        "sharedness": "repo_machine_shared",
+        "summary_role": "breakdown_only",
+        "rebuildability": "rebuildable by local docker_ci quick verification",
+        "recommendation": "needs_verification",
+        "cleanup_mode": "remove-path",
+        "retention_auto_cleanup": true,
+        "retention_ttl_hours": 24,
+        "risk": "medium",
+        "rebuild_command_ids": [
+          "docker_ci_test_quick"
+        ],
+        "post_cleanup_command_ids": [
+          "docker_ci_test_quick"
+        ],
+        "apply_serial_only": true,
+        "producer": "docker_ci_runner_temp",
+        "lifecycle": "machine_tmp",
+        "process_command_hints": [
+          "scripts/docker_ci.sh",
+          "cortexpilot-docker-ci",
+          "runner-temp"
+        ],
+        "evidence": [
+          "scripts/docker_ci.sh",
+          "scripts/lib/toolchain_env.sh"
+        ],
+        "notes": "Repo-owned heavy local CI runner temp surface. Keep it under the CortexPilot machine tmp root instead of Darwin TMPDIR."
+      },
+      {
+        "id": "external_tmp_clean_room_machine_cache",
+        "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/tmp/clean-room-machine-cache.*",
+        "type": "machine-scoped clean-room machine cache",
+        "ownership": "repo-owned clean-room recovery machine cache",
+        "ownership_confidence": "High",
+        "sharedness": "repo_machine_shared",
+        "summary_role": "breakdown_only",
+        "rebuildability": "rebuildable by clean-room recovery verification",
+        "recommendation": "needs_verification",
+        "cleanup_mode": "remove-path",
+        "retention_auto_cleanup": true,
+        "retention_ttl_hours": 24,
+        "risk": "medium",
+        "rebuild_command_ids": [
+          "clean_room_recovery"
+        ],
+        "post_cleanup_command_ids": [
+          "clean_room_recovery"
+        ],
+        "apply_serial_only": true,
+        "producer": "clean_room_recovery",
+        "lifecycle": "machine_tmp",
+        "process_command_hints": [
+          "scripts/check_clean_room_recovery.sh",
+          "clean-room-machine-cache"
+        ],
+        "evidence": [
+          "scripts/check_clean_room_recovery.sh",
+          "scripts/lib/toolchain_env.sh"
+        ],
+        "notes": "Repo-owned clean-room machine cache root. This is a machine temp surface, not a shared browser/system temp."
+      },
+      {
+        "id": "external_tmp_clean_room_preserve",
+        "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/tmp/clean-room-preserve.*",
+        "type": "machine-scoped clean-room preserve root",
+        "ownership": "repo-owned clean-room preserve temp root",
+        "ownership_confidence": "High",
+        "sharedness": "repo_machine_shared",
+        "summary_role": "breakdown_only",
+        "rebuildability": "rebuildable by clean-room recovery verification",
+        "recommendation": "needs_verification",
+        "cleanup_mode": "remove-path",
+        "retention_auto_cleanup": true,
+        "retention_ttl_hours": 24,
+        "risk": "medium",
+        "rebuild_command_ids": [
+          "clean_room_recovery"
+        ],
+        "post_cleanup_command_ids": [
+          "clean_room_recovery"
+        ],
+        "apply_serial_only": true,
+        "producer": "clean_room_recovery",
+        "lifecycle": "machine_tmp",
+        "process_command_hints": [
+          "scripts/check_clean_room_recovery.sh",
+          "clean-room-preserve"
+        ],
+        "evidence": [
+          "scripts/check_clean_room_recovery.sh",
+          "scripts/lib/toolchain_env.sh"
+        ],
+        "notes": "Repo-owned clean-room preserve temp root. This should stay under the CortexPilot machine tmp root rather than Darwin TMPDIR."
+      },
+      {
+        "id": "external_playwright",
+        "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/playwright",
+        "type": "machine-scoped Playwright browser cache",
+        "ownership": "repo-controlled external browser download root",
+        "ownership_confidence": "High",
+        "sharedness": "repo_machine_shared",
+        "summary_role": "breakdown_only",
+        "rebuildability": "rebuildable by Playwright install",
+        "recommendation": "needs_verification",
+        "cleanup_mode": "remove-path",
+        "retention_auto_cleanup": true,
+        "retention_ttl_hours": 168,
+        "risk": "low_medium",
+        "rebuild_command_ids": [
+          "bootstrap_playwright"
+        ],
+        "post_cleanup_command_ids": [
+          "bootstrap_playwright"
+        ],
+        "apply_serial_only": true,
+        "evidence": [
+          "scripts/lib/toolchain_env.sh",
+          "scripts/bootstrap.sh"
+        ],
+        "notes": "Repo-owned browser cache, but still shared across CortexPilot worktrees on the same machine."
+      },
+      {
+        "id": "external_docker_buildx_cache_root",
+        "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/docker-buildx-cache",
+        "type": "repo-owned docker buildx local cache root",
+        "ownership": "repo-owned docker buildx local cache root",
+        "ownership_confidence": "High",
+        "sharedness": "repo_machine_shared",
+        "summary_role": "breakdown_only",
+        "rebuildability": "rebuildable by docker_ci image rebuilds",
+        "recommendation": "needs_verification",
+        "cleanup_mode": "observe-only",
+        "risk": "medium",
+        "rebuild_command_ids": [
+          "docker_ci_test_quick",
+          "desktop_native_smoke"
+        ],
+        "evidence": [
+          "scripts/docker_ci.sh",
+          "scripts/lib/toolchain_env.sh"
+        ],
+        "notes": "Rollup root for repo-owned local Docker buildx caches. Child caches are the apply targets."
+      },
+      {
+        "id": "external_docker_buildx_cache_core",
+        "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/docker-buildx-cache/cortexpilot-ci-core-local",
+        "type": "repo-owned docker buildx core image cache",
+        "ownership": "repo-owned docker buildx cache for the core local CI image",
+        "ownership_confidence": "High",
+        "sharedness": "repo_machine_shared",
+        "summary_role": "breakdown_only",
+        "rebuildability": "rebuildable by local docker_ci quick verification",
+        "recommendation": "needs_verification",
+        "cleanup_mode": "remove-path",
+        "retention_auto_cleanup": true,
+        "retention_ttl_hours": 72,
+        "risk": "medium",
+        "rebuild_command_ids": [
+          "docker_ci_test_quick"
+        ],
+        "post_cleanup_command_ids": [
+          "docker_ci_test_quick"
+        ],
+        "apply_serial_only": true,
+        "producer": "docker_ci_buildx_cache",
+        "lifecycle": "machine_cache",
+        "process_command_hints": [
+          "buildx",
+          "scripts/docker_ci.sh",
+          "cortexpilot-ci-core:local"
+        ],
+        "evidence": [
+          "scripts/docker_ci.sh",
+          "scripts/lib/toolchain_env.sh"
+        ],
+        "notes": "Repo-owned local build cache for the core docker_ci image."
+      },
+      {
+        "id": "external_docker_buildx_cache_desktop_native",
+        "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/docker-buildx-cache/cortexpilot-ci-desktop-native-local",
+        "type": "repo-owned docker buildx desktop-native image cache",
+        "ownership": "repo-owned docker buildx cache for the desktop-native local CI image",
+        "ownership_confidence": "High",
+        "sharedness": "repo_machine_shared",
+        "summary_role": "breakdown_only",
+        "rebuildability": "rebuildable by desktop-native smoke verification",
+        "recommendation": "needs_verification",
+        "cleanup_mode": "remove-path",
+        "retention_auto_cleanup": true,
+        "retention_ttl_hours": 72,
+        "risk": "medium",
+        "rebuild_command_ids": [
+          "desktop_native_smoke"
+        ],
+        "post_cleanup_command_ids": [
+          "desktop_native_smoke"
+        ],
+        "apply_serial_only": true,
+        "producer": "docker_ci_buildx_cache",
+        "lifecycle": "machine_cache",
+        "process_command_hints": [
+          "buildx",
+          "desktop-native-smoke",
+          "cortexpilot-ci-desktop-native:local"
+        ],
+        "evidence": [
+          "scripts/docker_ci.sh",
+          "scripts/lib/toolchain_env.sh"
+        ],
+        "notes": "Repo-owned local build cache for the desktop-native docker_ci image."
+      },
+      {
+        "id": "external_cargo",
+        "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/cargo",
+        "type": "machine-scoped Cargo cache",
+        "ownership": "repo-controlled external Cargo home",
+        "ownership_confidence": "High",
+        "sharedness": "repo_machine_shared",
+        "summary_role": "breakdown_only",
+        "rebuildability": "rebuildable via Cargo/Tauri flows",
+        "recommendation": "needs_verification",
+        "cleanup_mode": "remove-path",
+        "risk": "medium",
+        "rebuild_command_ids": [
+          "desktop_tauri_build"
+        ],
+        "post_cleanup_command_ids": [
+          "desktop_tauri_build"
+        ],
+        "apply_serial_only": true,
+        "evidence": [
+          "scripts/lib/toolchain_env.sh",
+          "scripts/docker_ci.sh"
+        ],
+        "notes": "Repo-related external Cargo cache."
+      },
+      {
+        "id": "external_python_toolchain_current",
+        "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/toolchains/python/current",
+        "type": "shared python toolchain root",
+        "ownership": "repo-related but potentially cross-repo shared Python toolchain",
+        "ownership_confidence": "Medium",
+        "sharedness": "repo_machine_shared",
+        "summary_role": "breakdown_only",
+        "rebuildability": "unknown without owner namespace validation",
+        "recommendation": "needs_verification",
+        "cleanup_mode": "observe-only",
+        "risk": "high",
+        "rebuild_command_ids": [
+          "bootstrap"
+        ],
+        "evidence": [
+          "scripts/lib/toolchain_env.sh",
+          "scripts/lib/env.sh"
+        ],
+        "notes": "Explicitly protected from single-repo cleanup when it resolves into another repo namespace such as jarvis."
+      }
+    ],
+    "shared_observation": [
+      {
+        "id": "shared_uv_cache",
+        "path": "~/.cache/uv",
+        "type": "global uv cache",
+        "ownership": "shared ecosystem cache",
+        "ownership_confidence": "Medium",
+        "sharedness": "shared_observation",
+        "summary_role": "leaf",
+        "rebuildability": "rebuildable",
+        "recommendation": "observe_only",
+        "cleanup_mode": "observe-only",
+        "risk": "high",
+        "rebuild_command_ids": [],
+        "evidence": [
+          "scripts/bootstrap.sh",
+          "scripts/docker_ci.sh"
+        ],
+        "notes": "Outside short-term cleanup scope."
+      },
+      {
+        "id": "shared_cargo_home",
+        "path": "~/.cargo",
+        "type": "global Cargo home",
+        "ownership": "shared ecosystem cache",
+        "ownership_confidence": "Medium",
+        "sharedness": "shared_observation",
+        "summary_role": "leaf",
+        "rebuildability": "rebuildable",
+        "recommendation": "observe_only",
+        "cleanup_mode": "observe-only",
+        "risk": "high",
+        "rebuild_command_ids": [],
+        "evidence": [
+          "apps/desktop/src-tauri/Cargo.toml",
+          "scripts/lib/toolchain_env.sh"
+        ],
+        "notes": "Outside short-term cleanup scope."
+      },
+      {
+        "id": "shared_rustup",
+        "path": "~/.rustup",
+        "type": "global Rust toolchain store",
+        "ownership": "shared ecosystem cache",
+        "ownership_confidence": "Medium",
+        "sharedness": "shared_observation",
+        "summary_role": "leaf",
+        "rebuildability": "rebuildable with high time cost",
+        "recommendation": "observe_only",
+        "cleanup_mode": "observe-only",
+        "risk": "high",
+        "rebuild_command_ids": [],
+        "evidence": [
+          "apps/desktop/src-tauri/rust-toolchain.toml",
+          "infra/ci/Dockerfile.core"
+        ],
+        "notes": "Outside short-term cleanup scope."
+      },
+      {
+        "id": "shared_ms_playwright",
+        "path": "~/Library/Caches/ms-playwright",
+        "type": "global Playwright browser cache",
+        "ownership": "shared ecosystem cache",
+        "ownership_confidence": "Medium",
+        "sharedness": "shared_observation",
+        "summary_role": "leaf",
+        "rebuildability": "rebuildable",
+        "recommendation": "observe_only",
+        "cleanup_mode": "observe-only",
+        "risk": "high",
+        "rebuild_command_ids": [],
+        "evidence": [
+          "scripts/bootstrap.sh",
+          "scripts/lib/toolchain_env.sh"
+        ],
+        "notes": "Outside short-term cleanup scope because CortexPilot already prefers its own browser cache root."
+      },
+      {
+        "id": "shared_npm_cache",
+        "path": "~/.npm",
+        "type": "global npm cache",
+        "ownership": "shared ecosystem cache",
+        "ownership_confidence": "Medium",
+        "sharedness": "shared_observation",
+        "summary_role": "leaf",
+        "rebuildability": "rebuildable",
+        "recommendation": "observe_only",
+        "cleanup_mode": "observe-only",
+        "risk": "high",
+        "rebuild_command_ids": [],
+        "evidence": [
+          "package.json",
+          "scripts/lib/toolchain_env.sh"
+        ],
+        "notes": "Outside short-term cleanup scope."
+      },
+      {
+        "id": "shared_docker_data",
+        "path": "~/Library/Containers/com.docker.docker/Data",
+        "type": "docker desktop host data",
+        "ownership": "shared host runtime data with incomplete repo attribution",
+        "ownership_confidence": "Low",
+        "sharedness": "shared_observation",
+        "summary_role": "leaf",
+        "rebuildability": "rebuildable with potentially high time cost",
+        "recommendation": "needs_verification",
+        "cleanup_mode": "observe-only",
+        "risk": "extreme",
+        "rebuild_command_ids": [],
+        "evidence": [
+          "scripts/docker_ci.sh",
+          "infra/ci/compose.yml",
+          "infra/docker/langfuse/docker-compose.yml",
+          "infra/docker/temporal/docker-compose.yml"
+        ],
+        "notes": "Never enter short-term cleanup without live Docker daemon attribution."
+      }
+    ]
+  },
+  "wave_targets": {
+    "wave1": {
+      "target_ids": [
+        "dashboard_next",
+        "dashboard_tsbuildinfo",
+        "dashboard_typecheck_tsbuildinfo",
+        "desktop_dist",
+        "desktop_tsbuildinfo",
+        "orchestrator_python_residue",
+        "scripts_python_residue",
+        "tooling_python_residue",
+        "runtime_temp",
+        "runtime_test_output",
+        "runtime_logs"
+      ],
+      "process_groups": [
+        "node",
+        "python",
+        "playwright",
+        "cargo",
+        "tauri"
+      ],
+      "process_path_hints": [
+        ".runtime-cache",
+        "apps/desktop"
+      ],
+      "process_command_hints": [
+        "CortexPilot",
+        "apps/desktop",
+        ".runtime-cache"
+      ],
+      "required_rebuild_commands": [
+        "test_quick",
+        "dashboard_build",
+        "desktop_build"
+      ]
+    },
+    "wave2": {
+      "target_ids": [
+        "dashboard_node_modules",
+        "desktop_node_modules",
+        "orchestrator_venv",
+        "frontend_api_client_node_modules",
+        "desktop_tauri_target"
+      ],
+      "process_groups": [
+        "node",
+        "python",
+        "playwright",
+        "cargo",
+        "tauri"
+      ],
+      "process_path_hints": [
+        "apps/dashboard",
+        "apps/desktop",
+        "apps/orchestrator",
+        "packages/frontend-api-client"
+      ],
+      "process_command_hints": [
+        "CortexPilot",
+        "apps/dashboard",
+        "apps/desktop",
+        "apps/orchestrator",
+        "packages/frontend-api-client"
+      ],
+      "required_rebuild_commands": [
+        "dashboard_deps",
+        "desktop_deps",
+        "orchestrator_python",
+        "frontend_api_client_deps",
+        "desktop_tauri_build",
+        "bootstrap"
+      ]
+    },
+    "wave3": {
+      "target_ids": [
+        "external_pnpm_store_dashboard",
+        "external_pnpm_store_desktop",
+        "external_pnpm_store_v10",
+        "external_pnpm_store_local",
+        "external_tmp_docker_ci_runner_temp",
+        "external_tmp_clean_room_machine_cache",
+        "external_tmp_clean_room_preserve",
+        "external_playwright",
+        "external_docker_buildx_cache_core",
+        "external_docker_buildx_cache_desktop_native",
+        "external_cargo"
+      ],
+      "process_groups": [
+        "node",
+        "python",
+        "playwright",
+        "cargo",
+        "tauri",
+        "docker"
+      ],
+      "process_path_hints": [
+        "${CORTEXPILOT_MACHINE_CACHE_ROOT}",
+        "${CORTEXPILOT_MACHINE_CACHE_ROOT}/pnpm-store",
+        "${CORTEXPILOT_MACHINE_CACHE_ROOT}/tmp",
+        "${CORTEXPILOT_MACHINE_CACHE_ROOT}/tmp/docker-ci",
+        "${CORTEXPILOT_MACHINE_CACHE_ROOT}/playwright",
+        "${CORTEXPILOT_MACHINE_CACHE_ROOT}/docker-buildx-cache",
+        "${CORTEXPILOT_MACHINE_CACHE_ROOT}/cargo"
+      ],
+      "process_command_hints": [
+        "CortexPilot",
+        ".cache/cortexpilot",
+        "scripts/docker_ci.sh",
+        "scripts/check_clean_room_recovery.sh",
+        "cortexpilot-docker-ci",
+        "buildx",
+        "clean-room-machine-cache",
+        "clean-room-preserve",
+        "pnpm-store",
+        "playwright",
+        "cargo"
+      ],
+      "required_rebuild_commands": [
+        "dashboard_deps",
+        "desktop_deps",
+        "desktop_tauri_build",
+        "bootstrap_playwright",
+        "docker_ci_test_quick",
+        "desktop_native_smoke",
+        "clean_room_recovery",
+        "bootstrap"
+      ]
+    }
+  }
+}

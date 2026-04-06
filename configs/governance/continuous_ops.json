@@ -1,0 +1,117 @@
+{
+  "version": 1,
+  "fail_closed": true,
+  "changed_scope_map": {
+    "map_file": "configs/changed_scope_test_map.json",
+    "strict_declared_tests": true,
+    "min_rules": 55
+  },
+  "ui_matrix": {
+    "sync_cmd": "python3 scripts/sync_ui_button_matrix.py --tiers P0,P1,P2",
+    "check_cmd": "npm run ui:matrix:check",
+    "todo_gates": {
+      "p0_enabled": true,
+      "p1_enabled": true
+    },
+    "p2_visibility_gate": {
+      "enabled": true,
+      "surfaces": "dashboard,desktop",
+      "min_scoped": 4,
+      "fail_on_todo": 0
+    },
+    "p2_weekly_target": {
+      "enabled": true,
+      "tiers": "P2",
+      "surfaces": "dashboard,desktop",
+      "target_partial_max": 56,
+      "target_covered_min": 7,
+      "baseline": {
+        "week_start_date": "2026-02-27",
+        "partial_count": 63,
+        "covered_count": 0
+      },
+      "min_weekly_gap_reduction": 1.0,
+      "fail_closed_mode": "strict",
+      "ramp_table": [
+        {
+          "week_offset": 1,
+          "target_partial_max": 63,
+          "target_covered_min": 0,
+          "min_weekly_gap_reduction": 0.0
+        },
+        {
+          "week_offset": 2,
+          "target_partial_max": 60,
+          "target_covered_min": 3,
+          "min_weekly_gap_reduction": 1.0
+        },
+        {
+          "week_offset": 3,
+          "target_partial_max": 56,
+          "target_covered_min": 7,
+          "min_weekly_gap_reduction": 1.0
+        },
+        {
+          "week_offset": 4,
+          "target_partial_max": 50,
+          "target_covered_min": 13,
+          "min_weekly_gap_reduction": 1.5
+        },
+        {
+          "week_offset": 6,
+          "target_partial_max": 42,
+          "target_covered_min": 21,
+          "min_weekly_gap_reduction": 1.5
+        },
+        {
+          "week_offset": 8,
+          "target_partial_max": 34,
+          "target_covered_min": 29,
+          "min_weekly_gap_reduction": 2.0
+        },
+        {
+          "week_offset": 10,
+          "target_partial_max": 24,
+          "target_covered_min": 39,
+          "min_weekly_gap_reduction": 2.0
+        },
+        {
+          "week_offset": 12,
+          "target_partial_max": 12,
+          "target_covered_min": 51,
+          "min_weekly_gap_reduction": 2.5
+        },
+        {
+          "week_offset": 14,
+          "target_partial_max": 0,
+          "target_covered_min": 63,
+          "min_weekly_gap_reduction": 2.5
+        }
+      ]
+    }
+  },
+  "p2_critical_flake_gate": {
+    "enabled": true,
+    "commands_file_default": "scripts/ui_regression_p2_critical.commands",
+    "commands_file_quick": "scripts/ui_regression_p2_critical.quick.commands",
+    "iterations_default": 4,
+    "iterations_quick": 1,
+    "threshold_percent_default": 1.5,
+    "threshold_percent_quick": 5.0,
+    "max_workers_default": 1,
+    "max_workers_quick": 1
+  },
+  "trend_gate": {
+    "enabled": false,
+    "command": "python3 scripts/ui_regression_trend_append.py --p0-report \"$P0_REPORT\" --p1-report \"$P1_REPORT\" --truth-report \"$TRUTH_REPORT\""
+  },
+  "recent_streak": {
+    "enabled": true,
+    "windows": [
+      7,
+      14
+    ],
+    "strict": false,
+    "workflow_file": ".github/workflows/continuous-governance.yml"
+  }
+}

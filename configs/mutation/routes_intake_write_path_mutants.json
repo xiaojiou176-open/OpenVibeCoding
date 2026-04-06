@@ -1,0 +1,26 @@
+{
+  "target": "apps/orchestrator/src/cortexpilot_orch/api/routes_intake.py",
+  "mutants": [
+    {
+      "name": "require_handler_missing_guard_disabled",
+      "operator": "condition_disable",
+      "occurrence": 1,
+      "old": "    if handler is None:\n        raise _route_deps_not_configured_http_error(operation=operation)",
+      "new": "    if False:\n        raise _route_deps_not_configured_http_error(operation=operation)"
+    },
+    {
+      "name": "run_intake_operation_label_changed",
+      "operator": "literal_replace",
+      "occurrence": 1,
+      "old": "return _require_handler(request, \"run_intake\", operation=\"run_intake\")(intake_id, payload)",
+      "new": "return _require_handler(request, \"run_intake\", operation=\"get_intake\")(intake_id, payload)"
+    },
+    {
+      "name": "pm_run_intake_operation_label_changed",
+      "operator": "literal_replace",
+      "occurrence": 1,
+      "old": "return _require_handler(request, \"run_intake\", operation=\"pm_run_intake\")(intake_id, payload)",
+      "new": "return _require_handler(request, \"run_intake\", operation=\"get_intake\")(intake_id, payload)"
+    }
+  ]
+}

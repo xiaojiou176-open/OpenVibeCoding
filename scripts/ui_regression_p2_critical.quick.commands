@@ -1,0 +1,2 @@
+npm --prefix apps/dashboard run test -- --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 tests/dashboard_p1_controls.test.tsx tests/command_tower_session_tabs.suite.tsx
+npm --prefix apps/dashboard run test -- --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 tests/command_tower_async_home.suite.tsx tests/command_tower_async_session.suite.tsx

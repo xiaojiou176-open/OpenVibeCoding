@@ -1,0 +1,32 @@
+# High-risk path rules for PR full-ci escalation.
+# One shell-glob pattern per line. Supports ** and * style matching in bash [[ ]].
+
+# CI/workflow/policy surfaces
+.github/workflows/**
+policies/**
+tooling/registry.json
+
+# Core orchestrator runtime and dependency lock surfaces
+apps/orchestrator/src/**
+apps/orchestrator/pyproject.toml
+apps/orchestrator/requirements.txt
+apps/orchestrator/uv.lock
+
+# Dashboard/desktop runtime surfaces
+apps/dashboard/app/**
+apps/dashboard/components/**
+apps/dashboard/lib/**
+apps/desktop/src/**
+apps/desktop/src-tauri/src/**
+
+# Env governance SSOT
+configs/env.registry.json
+configs/env_tiers.json
+
+# CI entry scripts / hard gates
+scripts/ci.sh
+scripts/test.sh
+scripts/bootstrap.sh
+scripts/pre_commit_lint_gate.sh
+scripts/pre_commit_quality_gate.sh
+scripts/check_env_governance.py

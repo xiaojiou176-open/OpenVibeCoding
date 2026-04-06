@@ -1,0 +1,8 @@
+# P2 critical UI regression command set (focused, executable, PR-blocking lane)
+npm --prefix apps/dashboard run test:ct-regression
+npm --prefix apps/desktop run e2e:command-tower:real
+npm --prefix apps/desktop run e2e:first-entry:real
+npm run dashboard:e2e:ct-controls:real
+npm --prefix apps/dashboard run test -- --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 tests/dashboard_p1_controls.test.tsx tests/command_tower_session_tabs.suite.tsx
+npm --prefix apps/dashboard run test -- --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 tests/command_tower_async_home.suite.tsx tests/command_tower_async_session.suite.tsx
+npm --prefix apps/desktop run test -- --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 src/App.test.tsx src/pages/desktop_p0_misc_controls.test.tsx src/pages/desktop_p1_controls.test.tsx src/pages/command_tower_mode_split.test.tsx src/lib/desktopUi.test.ts

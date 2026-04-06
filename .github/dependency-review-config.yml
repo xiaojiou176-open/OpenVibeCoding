@@ -1,0 +1,3 @@
+fail-on-severity: high
+license-check: true
+warn-only: false

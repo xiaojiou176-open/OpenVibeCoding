@@ -1,0 +1,704 @@
+{
+  "version": 1,
+  "description": "Backend direct os.getenv/os.environ reads must be explicitly allowlisted by file and key. Provider runtime supports gemini/openai/anthropic and unified CORTEXPILOT_PROVIDER* compatibility keys.",
+  "entries": [
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/api/routes_admin.py",
+      "keys": [
+        "CORTEXPILOT_APPROVAL_ALLOWED_ROLES",
+        "CORTEXPILOT_RUM_MAX_PAYLOAD_BYTES"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/api/routes_runs.py",
+      "keys": [
+        "CORTEXPILOT_APPROVAL_ALLOWED_ROLES"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/api/pm_session_aggregation.py",
+      "keys": [
+        "CORTEXPILOT_COMMAND_TOWER_OVERVIEW_TTL_SEC"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/chain/runner.py",
+      "keys": [
+        "CORTEXPILOT_CHAIN_EXEC_MODE",
+        "CORTEXPILOT_CHAIN_SUBPROCESS_TIMEOUT_SEC"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/cli.py",
+      "keys": [
+        "CORTEXPILOT_FORCE_UNLOCK",
+        "CORTEXPILOT_RUNNER"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/cli_coverage_helpers.py",
+      "keys": [
+        "EQUILIBRIUM_BASE_URL",
+        "CORTEXPILOT_AGENTS_BASE_URL",
+        "CORTEXPILOT_ALLOW_CODEX_EXEC",
+        "CORTEXPILOT_CHAIN_EXEC_MODE",
+        "CORTEXPILOT_CHAIN_SUBPROCESS_TIMEOUT_SEC",
+        "CORTEXPILOT_LOCK_AUTO_CLEANUP",
+        "CORTEXPILOT_LOCK_TTL_SEC",
+        "CORTEXPILOT_PROVIDER_BASE_URL",
+        "CORTEXPILOT_PYTHON",
+        "CORTEXPILOT_RUNNER"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/cli_runtime_helpers.py",
+      "keys": [
+        "CORTEXPILOT_HOOKS_AUTO_INSTALL"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/mcp_queue_pilot_server.py",
+      "keys": [
+        "CORTEXPILOT_APPROVAL_ALLOWED_ROLES",
+        "CORTEXPILOT_MCP_QUEUE_PILOT_ENABLE_APPLY"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/config.py",
+      "keys": [
+        "ANTHROPIC_BASE_URL",
+        "CI",
+        "CORTEXPILOT_API_AUTH_REQUIRED",
+        "CORTEXPILOT_API_ALLOWED_ORIGINS",
+        "CORTEXPILOT_API_TOKEN",
+        "CORTEXPILOT_CACHE_ROOT",
+        "CORTEXPILOT_DASHBOARD_PORT",
+        "CORTEXPILOT_LOGS_ROOT",
+        "CORTEXPILOT_REPO_ROOT",
+        "CORTEXPILOT_RUNTIME_ROOT",
+        "EQUILIBRIUM_BASE_URL",
+        "GEMINI_BASE_URL",
+        "GITHUB_ACTIONS",
+        "CORTEXPILOT_AGENTS_API",
+        "CORTEXPILOT_AGENTS_BASE_URL",
+        "CORTEXPILOT_AGENTS_MODEL",
+        "CORTEXPILOT_AGENTS_STORE",
+        "CORTEXPILOT_CANARY_PERCENT",
+        "CORTEXPILOT_CODEX_MODEL",
+        "CORTEXPILOT_CONTRACT_ROOT",
+        "CORTEXPILOT_DEFAULT_ENV_ROOT",
+        "CORTEXPILOT_ENABLE_CONSOLE_TRACE",
+        "CORTEXPILOT_ENV_FILE",
+        "CORTEXPILOT_LANGFUSE_HEADERS",
+        "CORTEXPILOT_LANGFUSE_OTLP_ENDPOINT",
+        "CORTEXPILOT_LOG_BACKUP_COUNT",
+        "CORTEXPILOT_LOG_MAX_BYTES",
+        "CORTEXPILOT_LOG_SCHEMA_VERSION",
+        "CORTEXPILOT_MACHINE_CACHE_ROOT",
+        "CORTEXPILOT_MCP_SERVER_CONNECT_TIMEOUT_SEC",
+        "CORTEXPILOT_MCP_SERVER_TIMEOUT_SEC",
+        "CORTEXPILOT_OTEL_REQUIRED",
+        "CORTEXPILOT_OTLP_ENDPOINT",
+        "CORTEXPILOT_OTLP_HEADERS",
+        "CORTEXPILOT_OTLP_PROTOCOL",
+        "CORTEXPILOT_PNPM_STORE_DIR",
+        "CORTEXPILOT_PROVIDER",
+        "CORTEXPILOT_PROVIDER_BASE_URL",
+        "CORTEXPILOT_PROVIDER_MODEL",
+        "CORTEXPILOT_RETENTION_CACHE_HOURS",
+        "CORTEXPILOT_RETENTION_CODEX_HOME_DAYS",
+        "CORTEXPILOT_RETENTION_INTAKE_DAYS",
+        "CORTEXPILOT_RETENTION_LOG_DAYS",
+        "CORTEXPILOT_RETENTION_LOG_MAX_FILES",
+        "CORTEXPILOT_RETENTION_MACHINE_CACHE_CAP_BYTES",
+        "CORTEXPILOT_RETENTION_MAX_CODEX_HOMES",
+        "CORTEXPILOT_RETENTION_MAX_INTAKES",
+        "CORTEXPILOT_RETENTION_MAX_RUNS",
+        "CORTEXPILOT_RETENTION_RUN_DAYS",
+        "CORTEXPILOT_RETENTION_WORKTREE_DAYS",
+        "CORTEXPILOT_RUNS_ROOT",
+        "CORTEXPILOT_RUNTIME_CONTRACT_ROOT",
+        "CORTEXPILOT_SCHEMA_ROOT",
+        "CORTEXPILOT_TOOLCHAIN_CACHE_ROOT",
+        "CORTEXPILOT_TRACE_ID",
+        "CORTEXPILOT_TRACING_ENABLED",
+        "CORTEXPILOT_TRACING_ENDPOINT",
+        "CORTEXPILOT_TRACING_HEADERS",
+        "CORTEXPILOT_WORKTREE_ROOT",
+        "OPENAI_BASE_URL",
+        "RUNNER_TEMP",
+        "XDG_CACHE_HOME"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/contract/compiler.py",
+      "keys": [
+        "CORTEXPILOT_CODEX_MODEL",
+        "CORTEXPILOT_PROVIDER_MODEL"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/contract/role_config_registry.py",
+      "keys": [
+        "CORTEXPILOT_ROLE_CONFIG_REGISTRY"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/contract/validator.py",
+      "keys": [
+        "CORTEXPILOT_AGENT_REGISTRY",
+        "CORTEXPILOT_SUPERPOWERS_GATE_ENFORCE"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/gates/diff_gate.py",
+      "keys": [
+        "CORTEXPILOT_PROTECTED_PATHS"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/gates/integrated_gate.py",
+      "keys": [
+        "CORTEXPILOT_TOOL_REGISTRY"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/gates/mcp_concurrency_gate.py",
+      "keys": [
+        "CORTEXPILOT_MCP_ALLOW_MULTI",
+        "CORTEXPILOT_MCP_PROXY_ENABLED"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/gates/network_gate.py",
+      "keys": [
+        "CORTEXPILOT_NETWORK_APPROVED"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/gates/reviewer_gate.py",
+      "keys": [
+        "CORTEXPILOT_REVIEWER_SNAPSHOT_VERBOSE"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/gates/sampling_gate.py",
+      "keys": [
+        "CORTEXPILOT_SAMPLING_APPROVED"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/gates/tests_gate.py",
+      "keys": [
+        "CORTEXPILOT_ACCEPTANCE_STRICT_NONTRIVIAL"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/gates/tool_gate.py",
+      "keys": [
+        "CORTEXPILOT_NETWORK_APPROVED"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/locks/locker.py",
+      "keys": [
+        "CORTEXPILOT_FORCE_UNLOCK",
+        "CORTEXPILOT_LOCK_OWNER_TOKEN",
+        "CORTEXPILOT_LOCK_TTL_SEC",
+        "CORTEXPILOT_LOCK_TTL_SEC_DEFAULT",
+        "CORTEXPILOT_RUNNING_LOCK_STALE_SEC",
+        "CORTEXPILOT_RUN_ID"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/planning/coverage_chain.py",
+      "keys": [
+        "CORTEXPILOT_COVERAGE_WORKER_TIMEOUT_SEC",
+        "CORTEXPILOT_PYTHON",
+        "CORTEXPILOT_RUNNER"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/planning/intake.py",
+      "keys": [
+        "GEMINI_API_KEY",
+        "CORTEXPILOT_AGENTS_STORE",
+        "CORTEXPILOT_RUNNER",
+        "CORTEXPILOT_ORCHESTRATION_SMOKE_MODE",
+        "CORTEXPILOT_E2E_ORCHESTRATION_SMOKE_MODE"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/policy/browser_policy_resolver.py",
+      "keys": [
+        "CI",
+        "CORTEXPILOT_BROWSER_BREAK_GLASS",
+        "CORTEXPILOT_BROWSER_COOKIE_PATH",
+        "CORTEXPILOT_BROWSER_HUMAN_BEHAVIOR",
+        "CORTEXPILOT_BROWSER_HUMAN_BEHAVIOR_LEVEL",
+        "CORTEXPILOT_BROWSER_PLUGIN_OPTIONAL",
+        "CORTEXPILOT_BROWSER_PROFILE_ALLOWLIST",
+        "CORTEXPILOT_BROWSER_CDP_HOST",
+        "CORTEXPILOT_BROWSER_CDP_PORT",
+        "CORTEXPILOT_BROWSER_PROFILE_DIR",
+        "CORTEXPILOT_BROWSER_PROFILE_MODE",
+        "CORTEXPILOT_BROWSER_PROFILE_NAME",
+        "CORTEXPILOT_CI_CONTAINER",
+        "CORTEXPILOT_CLEAN_ROOM_MACHINE_TMP_ROOT",
+        "CORTEXPILOT_CLEAN_ROOM_PRESERVE_ROOT",
+        "CORTEXPILOT_BROWSER_STEALTH_MODE",
+        "GITHUB_ACTIONS",
+        "CORTEXPILOT_WEB_COOKIE_PATH",
+        "CORTEXPILOT_WEB_PROFILE_DIR",
+        "CORTEXPILOT_WEB_PROFILE_MODE",
+        "CORTEXPILOT_WEB_PROFILE_NAME",
+        "CORTEXPILOT_WEB_STEALTH_MODE"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/runners/provider_capability.py",
+      "keys": [
+        "CORTEXPILOT_PROVIDER_BASE_URL"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/queue/store.py",
+      "keys": [
+        "CORTEXPILOT_RUNTIME_ROOT"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/runtime/space_governance.py",
+      "keys": [
+        "CORTEXPILOT_MACHINE_CACHE_ROOT"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/replay/replay_helpers.py",
+      "keys": [
+        "CORTEXPILOT_CONTRACT_HMAC_KEY"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/replay/replayer_verify_helpers.py",
+      "keys": [
+        "CORTEXPILOT_CONTRACT_HMAC_KEY"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/reviewer/reviewer.py",
+      "keys": [
+        "CORTEXPILOT_CODEX_MODEL",
+        "CORTEXPILOT_CODEX_USE_OUTPUT_SCHEMA"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/runners/agents_contract_flow.py",
+      "keys": [
+        "CORTEXPILOT_LANGGRAPH_CONTRACT_SUBFLOW"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/runners/agents_handoff.py",
+      "keys": [
+        "CORTEXPILOT_AGENTS_FORCE_HANDOFF"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/runners/agents_handoff_runtime.py",
+      "keys": [
+        "CORTEXPILOT_AGENTS_HANDOFF_TIMEOUT_FAIL_OPEN"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/runners/agents_mcp_runtime.py",
+      "keys": [
+        "CODEX_HOME",
+        "GEMINI_API_KEY",
+        "CORTEXPILOT_AGENTS_MODEL",
+        "CORTEXPILOT_CODEX_BASE_HOME",
+        "CORTEXPILOT_CODEX_MODEL",
+        "CORTEXPILOT_PROVIDER_MODEL",
+        "CORTEXPILOT_RUNTIME_ROOT"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/runners/agents_mcp_runtime_helpers.py",
+      "keys": [
+        "CORTEXPILOT_MCP_EVENT_ROUTED_SAMPLE_EVERY"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/runners/agents_prompting.py",
+      "keys": [
+        "CORTEXPILOT_CODEX_MODEL",
+        "CORTEXPILOT_CODEX_TIMEBOX_SEC",
+        "CORTEXPILOT_INLINE_OUTPUT_SCHEMA",
+        "CORTEXPILOT_SKIP_ROLE_PROMPT"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/runners/agents_runner.py",
+      "keys": [
+        "CORTEXPILOT_CODEX_BASE_URL"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/runners/agents_runner_execution_helpers.py",
+      "keys": [
+        "GEMINI_API_KEY",
+        "CORTEXPILOT_AGENTS_LLM_CLIENT_RETRIES",
+        "CORTEXPILOT_AGENTS_LLM_TIMEOUT_SEC",
+        "CORTEXPILOT_AGENTS_STREAM_RETRY_BACKOFF_SEC",
+        "CORTEXPILOT_AGENTS_STREAM_TIMEOUT_FALLBACK",
+        "CORTEXPILOT_AGENTS_STREAM_TIMEOUT_RETRIES"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/runners/agents_runtime_helpers.py",
+      "keys": [
+        "EQUILIBRIUM_BASE_URL",
+        "CORTEXPILOT_CODEX_PROFILE"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/runners/agents_stream_runtime.py",
+      "keys": [
+        "CORTEXPILOT_CODEX_TIMEBOX_SEC",
+        "CORTEXPILOT_MCP_BROKEN_PIPE_FAIL",
+        "CORTEXPILOT_STREAM_IDLE_TIMEOUT_SEC"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/runners/app_server_runner.py",
+      "keys": [
+        "CORTEXPILOT_CODEX_MODEL"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/runners/codex_runner.py",
+      "keys": [
+        "CORTEXPILOT_ALLOW_CODEX_EXEC",
+        "CORTEXPILOT_CODEX_EXEC_TIMEOUT_SEC",
+        "CORTEXPILOT_CODEX_MODEL",
+        "CORTEXPILOT_CODEX_PROFILE",
+        "CORTEXPILOT_CODEX_USE_OUTPUT_SCHEMA",
+        "CORTEXPILOT_CODEX_VERSION",
+        "CORTEXPILOT_MCP_ONLY"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/runners/common.py",
+      "keys": [
+        "CORTEXPILOT_RUN_ID"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/runners/execution_adapter.py",
+      "keys": [
+        "CORTEXPILOT_PROVIDER"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/runners/mcp_server_lifecycle.py",
+      "keys": [
+        "CORTEXPILOT_MCP_CLEANUP_TIMEOUT_SEC",
+        "CORTEXPILOT_MCP_CONNECT_TIMEOUT_SEC",
+        "CORTEXPILOT_MCP_SERVER_CLEANUP_TIMEOUT_SEC",
+        "CORTEXPILOT_MCP_SERVER_CONNECT_TIMEOUT_SEC",
+        "CORTEXPILOT_MCP_SERVER_TIMEOUT_SEC",
+        "CORTEXPILOT_MCP_TIMEOUT_SEC",
+        "CORTEXPILOT_MCP_TOOL_TIMEOUT_SEC"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/runners/mcp_streaming.py",
+      "keys": [
+        "CORTEXPILOT_STREAM_LOG_EVERY"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/runners/provider_resolution.py",
+      "keys": [
+        "ANTHROPIC_API_KEY",
+        "GEMINI_API_KEY",
+        "GOOGLE_API_KEY",
+        "CORTEXPILOT_AGENTS_BASE_URL",
+        "CORTEXPILOT_AGENTS_MODEL",
+        "CORTEXPILOT_PROVIDER",
+        "CORTEXPILOT_PROVIDER_BASE_URL",
+        "CORTEXPILOT_PROVIDER_MODEL",
+        "OPENAI_API_KEY"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/scheduler/approval_flow.py",
+      "keys": [
+        "CORTEXPILOT_FORCE_UNLOCK",
+        "CORTEXPILOT_GOD_MODE_ON_REQUEST",
+        "CORTEXPILOT_GOD_MODE_REQUIRED",
+        "CORTEXPILOT_GOD_MODE_TIMEOUT_SEC",
+        "CORTEXPILOT_LOCK_AUTO_CLEANUP",
+        "CORTEXPILOT_LOCK_TTL_SEC",
+        "CORTEXPILOT_LOCK_TTL_SEC_DEFAULT"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/scheduler/artifact_pipeline.py",
+      "keys": [
+        "CORTEXPILOT_RUNTIME_ROOT"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/scheduler/core_helpers.py",
+      "keys": [
+        "CODEX_HOME",
+        "CORTEXPILOT_CODEX_HOME_PER_RUN",
+        "CORTEXPILOT_TRACE_BASE_URL",
+        "CORTEXPILOT_TRACE_URL_TEMPLATE"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/scheduler/execute_task_pipeline.py",
+      "keys": [
+        "CODEX_HOME",
+        "CORTEXPILOT_CODEX_PROFILE",
+        "CORTEXPILOT_CODEX_VERSION",
+        "CORTEXPILOT_DIAGNOSTIC_RUNS_ROOT",
+        "CORTEXPILOT_NETWORK_APPROVED",
+        "CORTEXPILOT_NODE_VERSION",
+        "CORTEXPILOT_ORCHESTRATOR_VERSION",
+        "CORTEXPILOT_RUNNER",
+        "CORTEXPILOT_RUNS_ROOT",
+        "CORTEXPILOT_RUN_ID",
+        "CORTEXPILOT_RUNTIME_ROOT",
+        "CORTEXPILOT_TEMPORAL_NAMESPACE",
+        "CORTEXPILOT_TEMPORAL_TASK_QUEUE",
+        "CORTEXPILOT_TEMPORAL_WORKFLOW_ID",
+        "CORTEXPILOT_TRACE_ID"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/scheduler/execute_task_preflight.py",
+      "keys": [
+        "CORTEXPILOT_TEMPORAL_ACTIVITY",
+        "CORTEXPILOT_TEMPORAL_WORKFLOW"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/scheduler/policy_pipeline.py",
+      "keys": [
+        "CORTEXPILOT_ALLOW_CODEX_EXEC",
+        "CORTEXPILOT_MCP_ONLY"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/scheduler/preflight_gate_runtime_helpers.py",
+      "keys": [
+        "CORTEXPILOT_MCP_CONCURRENCY_MODE",
+        "CORTEXPILOT_MCP_CONCURRENCY_REQUIRED",
+        "CORTEXPILOT_NETWORK_APPROVED"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/scheduler/runtime_utils.py",
+      "keys": [
+        "CORTEXPILOT_CODEX_MODEL",
+        "CORTEXPILOT_CODEX_PROFILE"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/scheduler/scheduler.py",
+      "keys": [
+        "CORTEXPILOT_CODEX_PROFILE",
+        "CORTEXPILOT_CODEX_VERSION",
+        "CORTEXPILOT_RUN_ID",
+        "CORTEXPILOT_TRACE_ID"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/scheduler/scheduler_bridge_runtime.py",
+      "keys": [
+        "CORTEXPILOT_RUNNER"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/scheduler/task_execution_review_helpers.py",
+      "keys": [
+        "CORTEXPILOT_REVIEWER_MODE"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/scheduler/task_execution_runtime_helpers.py",
+      "keys": [
+        "CORTEXPILOT_DIFF_GATE_SCOPED_REVERT",
+        "CORTEXPILOT_EVALS_ENABLED"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/scheduler/test_wave_b2_regressions.py",
+      "keys": [
+        "CODEX_HOME",
+        "CORTEXPILOT_RUN_ID"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/scheduler/tool_execution_pipeline.py",
+      "keys": [
+        "CORTEXPILOT_SEARCH_VERIFY_AI"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/store/run_store_primitives.py",
+      "keys": [
+        "CORTEXPILOT_CONTRACT_HMAC_KEY"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/store/session_map.py",
+      "keys": [
+        "CORTEXPILOT_CODEX_SESSIONS_ROOT",
+        "CORTEXPILOT_SESSION_ALIAS_PATH"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/temporal/manager.py",
+      "keys": [
+        "CORTEXPILOT_TEMPORAL_ACTIVITY",
+        "CORTEXPILOT_TEMPORAL_ADDRESS",
+        "CORTEXPILOT_TEMPORAL_ENABLED",
+        "CORTEXPILOT_TEMPORAL_NAMESPACE",
+        "CORTEXPILOT_TEMPORAL_REQUIRED"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/temporal/runner.py",
+      "keys": [
+        "CORTEXPILOT_TEMPORAL_ADDRESS",
+        "CORTEXPILOT_TEMPORAL_NAMESPACE",
+        "CORTEXPILOT_TEMPORAL_TASK_QUEUE",
+        "CORTEXPILOT_TEMPORAL_WORKFLOW"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/temporal/test_workflows.py",
+      "keys": [
+        "CORTEXPILOT_TEMPORAL_ACTIVITY",
+        "CORTEXPILOT_TEMPORAL_WORKFLOW",
+        "CORTEXPILOT_TEMPORAL_WORKFLOW_ID"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/temporal/worker.py",
+      "keys": [
+        "CORTEXPILOT_TEMPORAL_ADDRESS",
+        "CORTEXPILOT_TEMPORAL_NAMESPACE",
+        "CORTEXPILOT_TEMPORAL_TASK_QUEUE"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/temporal/workflows.py",
+      "keys": [
+        "CORTEXPILOT_TEMPORAL_ACTIVITY",
+        "CORTEXPILOT_TEMPORAL_ACTIVITY_TIMEOUT",
+        "CORTEXPILOT_TEMPORAL_WORKFLOW",
+        "CORTEXPILOT_TEMPORAL_WORKFLOW_ID"
+      ]
+    },
+    {
+      "path": "apps/orchestrator/src/cortexpilot_orch/transport/codex_profile_pool.py",
+      "keys": [
+        "CORTEXPILOT_CODEX_PROFILE_POOL",
+        "CORTEXPILOT_CODEX_PROFILE_POOL_LOCK_TTL_SEC",
+        "CORTEXPILOT_RUNTIME_ROOT"
+      ]
+    },
+    {
+      "path": "tooling/briefing_generator.py",
+      "keys": [
+        "CORTEXPILOT_RUNS_ROOT"
+      ]
+    },
+    {
+      "path": "tooling/browser/playwright_runner.py",
+      "keys": [
+        "CORTEXPILOT_BROWSER_ALLOWLIST",
+        "CORTEXPILOT_HEADLESS",
+        "CORTEXPILOT_PLAYWRIGHT_TIMEOUT_MS"
+      ]
+    },
+    {
+      "path": "tooling/browser/policy.py",
+      "keys": [
+        "CORTEXPILOT_BROWSER_HUMAN_BEHAVIOR",
+        "CORTEXPILOT_BROWSER_HUMAN_BEHAVIOR_LEVEL",
+        "CORTEXPILOT_BROWSER_PLUGIN_OPTIONAL"
+      ]
+    },
+    {
+      "path": "tooling/browser/session_manager.py",
+      "keys": [
+        "CHROME_PATH",
+        "CORTEXPILOT_BROWSER_CDP_HOST",
+        "CORTEXPILOT_BROWSER_CDP_PORT",
+        "CI",
+        "CORTEXPILOT_BROWSER_COOKIE_PATH",
+        "CORTEXPILOT_BROWSER_PROFILE_DIR",
+        "CORTEXPILOT_BROWSER_PROFILE_MODE",
+        "CORTEXPILOT_BROWSER_PROFILE_NAME",
+        "CORTEXPILOT_CI_CONTAINER",
+        "CORTEXPILOT_CLEAN_ROOM_MACHINE_TMP_ROOT",
+        "CORTEXPILOT_CLEAN_ROOM_PRESERVE_ROOT",
+        "CORTEXPILOT_RUNTIME_ROOT",
+        "GITHUB_ACTIONS",
+        "CORTEXPILOT_WEB_COOKIE_PATH",
+        "CORTEXPILOT_WEB_PROFILE_DIR",
+        "CORTEXPILOT_WEB_PROFILE_MODE",
+        "CORTEXPILOT_WEB_PROFILE_NAME"
+      ]
+    },
+    {
+      "path": "tooling/browser/stealth_provider.py",
+      "keys": [
+        "CORTEXPILOT_BROWSER_PLUGIN_OPTIONAL",
+        "CORTEXPILOT_BROWSER_STEALTH_MODE",
+        "CORTEXPILOT_WEB_STEALTH_MODE"
+      ]
+    },
+    {
+      "path": "tooling/mcp/sampling_runner.py",
+      "keys": [
+        "GEMINI_API_KEY",
+        "CORTEXPILOT_AGENTS_BASE_URL",
+        "CORTEXPILOT_SAMPLING_MODE",
+        "CORTEXPILOT_SAMPLING_MODEL",
+        "CORTEXPILOT_SAMPLING_PROVIDER"
+      ]
+    },
+    {
+      "path": "tooling/search/ai_verifier.py",
+      "keys": [
+        "CORTEXPILOT_AGENTS_API",
+        "CORTEXPILOT_AGENTS_BASE_URL",
+        "CORTEXPILOT_SEARCH_PROVIDER",
+        "CORTEXPILOT_SEARCH_VERIFY_MODEL"
+      ]
+    },
+    {
+      "path": "tooling/search/search_engine.py",
+      "keys": [
+        "CORTEXPILOT_BROWSER_PROFILE_MODE",
+        "CORTEXPILOT_BROWSER_STEALTH_MODE",
+        "CORTEXPILOT_RUNTIME_ROOT",
+        "CORTEXPILOT_SEARCH_MODE",
+        "CORTEXPILOT_SEARCH_PROVIDER",
+        "CORTEXPILOT_WEB_ALLOWLIST",
+        "CORTEXPILOT_WEB_HEADLESS",
+        "CORTEXPILOT_WEB_PROFILE_MODE",
+        "CORTEXPILOT_WEB_SEARCH_FALLBACK",
+        "CORTEXPILOT_WEB_SEARCH_FALLBACK_POLICY",
+        "CORTEXPILOT_WEB_STEALTH_MODE"
+      ]
+    }
+  ]
+}

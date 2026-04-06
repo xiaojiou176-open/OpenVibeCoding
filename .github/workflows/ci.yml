@@ -1,0 +1,1163 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      run_ui_truth:
+        description: "Run the protected UI truth lane"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+      run_resilience_and_e2e:
+        description: "Run protected live/external verification lanes"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+      run_release_evidence:
+        description: "Build protected release evidence after live verification"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci-trust-boundary:
+    name: CI Trust Boundary
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      actions: write
+      security-events: read
+    outputs:
+      trusted_route_allowed: ${{ steps.decide.outputs.trusted_route_allowed }}
+      sensitive_dispatch_allowed: ${{ steps.decide.outputs.sensitive_dispatch_allowed }}
+      untrusted_pr: ${{ steps.decide.outputs.untrusted_pr }}
+      route_id: ${{ steps.decide.outputs.route_id }}
+      trust_class: ${{ steps.decide.outputs.trust_class }}
+      runner_class: ${{ steps.decide.outputs.runner_class }}
+    steps:
+      - name: Decide CI trust boundary
+        id: decide
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          REPOSITORY: ${{ github.repository }}
+          PR_HEAD_REPO: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || '' }}
+          PR_IS_FORK: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork || false }}
+          GITHUB_REF_VALUE: ${{ github.ref }}
+        run: |
+          set -euo pipefail
+          trusted_route_allowed="false"
+          sensitive_dispatch_allowed="false"
+          untrusted_pr="false"
+          route_id="trusted_pr"
+          trust_class="trusted"
+          runner_class="github_hosted"
+
+          if [[ "${EVENT_NAME}" == "pull_request" ]]; then
+            if [[ "${PR_HEAD_REPO}" == "${REPOSITORY}" && "${PR_IS_FORK}" != "true" ]]; then
+              trusted_route_allowed="true"
+              route_id="trusted_pr"
+              trust_class="trusted"
+            else
+              untrusted_pr="true"
+              route_id="untrusted_pr"
+              trust_class="untrusted"
+              runner_class="github_hosted"
+            fi
+          else
+            trusted_route_allowed="true"
+            trust_class="trusted"
+          fi
+
+          if [[ "${EVENT_NAME}" == "push" && "${GITHUB_REF_VALUE}" == "refs/heads/main" ]]; then
+            route_id="push_main"
+          elif [[ "${EVENT_NAME}" == "workflow_dispatch" ]]; then
+            sensitive_dispatch_allowed="true"
+            route_id="workflow_dispatch"
+          fi
+
+          {
+            echo "trusted_route_allowed=${trusted_route_allowed}"
+            echo "sensitive_dispatch_allowed=${sensitive_dispatch_allowed}"
+            echo "untrusted_pr=${untrusted_pr}"
+            echo "route_id=${route_id}"
+            echo "trust_class=${trust_class}"
+            echo "runner_class=${runner_class}"
+          } >> "${GITHUB_OUTPUT}"
+
+          {
+            echo "### CI Trust Boundary"
+            echo "- event: ${EVENT_NAME}"
+            echo "- trusted_route_allowed: ${trusted_route_allowed}"
+            echo "- sensitive_dispatch_allowed: ${sensitive_dispatch_allowed}"
+            echo "- untrusted_pr: ${untrusted_pr}"
+            echo "- route_id: ${route_id}"
+            echo "- trust_class: ${trust_class}"
+            echo "- runner_class: ${runner_class}"
+          } >> "${GITHUB_STEP_SUMMARY}"
+
+      - name: Seed route report
+        run: |
+          set -euo pipefail
+          mkdir -p .runtime-cache/cortexpilot/reports/ci/routes
+          python3 - <<'PY'
+          import json
+          import os
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          route_id = os.environ["ROUTE_ID"]
+          out_dir = Path(".runtime-cache/cortexpilot/reports/ci/routes")
+          out_dir.mkdir(parents=True, exist_ok=True)
+          payload = {
+              "report_type": "cortexpilot_ci_route_report",
+              "generated_at": datetime.now(timezone.utc).isoformat(),
+              "route_id": route_id,
+              "trust_class": os.environ["TRUST_CLASS"],
+              "runner_class": os.environ["RUNNER_CLASS"],
+              "cloud_bootstrap_allowed": os.environ["CLOUD_BOOTSTRAP_ALLOWED"] == "true",
+              "cloud_bootstrap_used": False,
+              "github_run_id": os.environ["GITHUB_RUN_ID"],
+              "github_run_attempt": os.environ["GITHUB_RUN_ATTEMPT"],
+              "github_sha": os.environ["GITHUB_SHA"],
+              "github_ref": os.environ["GITHUB_REF"],
+              "github_event_name": os.environ["GITHUB_EVENT_NAME"],
+              "jobs_expected": [],
+              "jobs_observed": ["ci-trust-boundary"],
+              "artifact_names": [],
+              "overall_status": "seeded",
+          }
+          json_path = out_dir / f"{route_id}.json"
+          md_path = out_dir / f"{route_id}.md"
+          json_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+          md_path.write_text(
+              "\n".join(
+                  [
+                      "## CI Route Seed",
+                      "",
+                      f"- route_id: `{route_id}`",
+                      f"- trust_class: `{payload['trust_class']}`",
+                      f"- runner_class: `{payload['runner_class']}`",
+                      f"- github_run_id: `{payload['github_run_id']}`",
+                      "",
+                  ]
+              ),
+              encoding="utf-8",
+          )
+          PY
+        env:
+          ROUTE_ID: ${{ steps.decide.outputs.route_id }}
+          TRUST_CLASS: ${{ steps.decide.outputs.trust_class }}
+          RUNNER_CLASS: ${{ steps.decide.outputs.runner_class }}
+          CLOUD_BOOTSTRAP_ALLOWED: ${{ steps.decide.outputs.sensitive_dispatch_allowed }}
+
+      - name: Upload route seed artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ci-route-seed-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 14
+          if-no-files-found: error
+          path: |
+            .runtime-cache/cortexpilot/reports/ci/routes
+
+  quick-feedback:
+    name: Quick Feedback
+    runs-on: ubuntu-24.04
+    needs: ci-trust-boundary
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: write
+      security-events: read
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      CORTEXPILOT_HYGIENE_QUICK_PATH: "1"
+    steps:
+      - name: Capture quick-feedback start
+        id: quick_feedback_start
+        run: |
+          set -euo pipefail
+          echo "started_at=$(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> "${GITHUB_OUTPUT}"
+          echo "started_epoch=$(date +%s)" >> "${GITHUB_OUTPUT}"
+
+      - name: Initialize Runner Tool Cache Env
+        run: |
+          echo "AGENT_TOOLSDIRECTORY=${RUNNER_TEMP}/hostedtoolcache-${GITHUB_JOB}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "${GITHUB_ENV}"
+          echo "RUNNER_TOOL_CACHE=${RUNNER_TEMP}/hostedtoolcache-${GITHUB_JOB}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "${GITHUB_ENV}"
+
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          clean: true
+
+      - name: Workflow / shell syntax sanity
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import pathlib
+          import sys
+          try:
+              import yaml
+          except Exception:
+              print('PyYAML unavailable on runner; skip workflow YAML parse sanity check')
+              raise SystemExit(0)
+          for path in pathlib.Path('.github/workflows').glob('*.yml'):
+              yaml.safe_load(path.read_text(encoding='utf-8'))
+              print(f'parsed {path}')
+          PY
+          bash -n scripts/docker_ci.sh
+          bash -n scripts/ci.sh
+          bash -n scripts/ci_control_plane_doctor.sh
+
+      - name: Control-plane doctor (GitHub-hosted quick path)
+        run: |
+          set -euo pipefail
+          CORTEXPILOT_DOCTOR_REQUIRE_DOCKER=0 \
+          CORTEXPILOT_DOCTOR_REQUIRE_SUDO=0 \
+          bash scripts/ci_control_plane_doctor.sh
+
+      - name: Governance self-tests
+        run: |
+          set -euo pipefail
+          status=0
+          run_gate() {
+            local gate_name="$1"
+            shift
+            echo "==> [quick-feedback] start ${gate_name}"
+            if "$@"; then
+              echo "✅ [quick-feedback] ${gate_name} passed"
+            else
+              local exit_code=$?
+              echo "❌ [quick-feedback] ${gate_name} failed (exit=${exit_code})" >&2
+              status=1
+            fi
+          }
+          run_gate "ci-policy-resolution" bash scripts/test_ci_policy_resolution.sh
+          run_gate "perf-smoke-policy" bash scripts/test_perf_smoke_policy_resolution.sh
+          run_gate "provider-hardcut" bash scripts/test_provider_hardcut_gate.sh
+          run_gate "orchestrator-decoupling" bash scripts/test_orchestrator_decoupling_gate.sh
+          run_gate "test-smell" bash scripts/test_test_smell_gate.sh
+          run_gate "ci-platform-governance" bash scripts/test_ci_platform_governance.sh
+          exit "$status"
+
+      - name: Workflow static security gates
+        run: |
+          set -euo pipefail
+          bash scripts/check_workflow_static_security.sh
+
+      - name: Quick policy / doc / hygiene gates
+        env:
+          CORTEXPILOT_DOC_GATE_MODE: ci-diff
+          CORTEXPILOT_DOC_GATE_BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          CORTEXPILOT_DOC_GATE_HEAD_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+          CORTEXPILOT_HYGIENE_QUICK_PATH: "1"
+          GH_TOKEN: ${{ github.token }}
+          TRUSTED_ROUTE_ALLOWED: ${{ needs.ci-trust-boundary.outputs.trusted_route_allowed }}
+        run: |
+          set -euo pipefail
+          github_alert_mode="require"
+          if [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]]; then
+            github_alert_mode="auto"
+          fi
+          export CORTEXPILOT_GITHUB_ALERTS_MODE="${github_alert_mode}"
+          bash scripts/check_governance_python_entrypoints.sh
+          bash scripts/run_governance_py.sh scripts/check_repo_positioning.py
+          bash scripts/run_governance_py.sh scripts/check_github_security_alerts.py --mode "${github_alert_mode}" --repo xiaojiou176-open/CortexPilot-public
+          bash scripts/run_governance_py.sh scripts/check_env_governance.py --mode gate --max-deprecated-count 10 --max-deprecated-ratio 0.03
+          bash scripts/run_governance_py.sh scripts/check_workflow_runner_governance.py
+          bash scripts/run_governance_py.sh scripts/check_ci_governance_policy.py
+          bash scripts/run_governance_py.sh scripts/check_ci_supply_chain_policy.py
+          bash scripts/run_governance_py.sh scripts/check_docs_navigation_registry.py
+          bash scripts/run_governance_py.sh scripts/check_docs_manual_fact_boundary.py
+          bash scripts/run_governance_py.sh scripts/check_docs_render_freshness.py
+          bash scripts/check_gitignore_hygiene.sh
+          bash scripts/check_repo_hygiene.sh
+          if [[ "${GITHUB_EVENT_NAME}" == "pull_request" || "${GITHUB_EVENT_NAME}" == "push" ]]; then
+            bash scripts/hooks/doc_drift_gate.sh
+            bash scripts/hooks/doc_sync_gate.sh
+          fi
+
+      - name: Publish quick-feedback summary
+        if: always()
+        env:
+          JOB_STATUS: ${{ job.status }}
+          STARTED_AT: ${{ steps.quick_feedback_start.outputs.started_at }}
+          STARTED_EPOCH: ${{ steps.quick_feedback_start.outputs.started_epoch }}
+          SOURCE_RUN_ID: ${{ github.run_id }}
+          SOURCE_RUN_ATTEMPT: ${{ github.run_attempt }}
+          SOURCE_SHA: ${{ github.sha }}
+          SOURCE_REF: ${{ github.ref }}
+          SOURCE_EVENT: ${{ github.event_name }}
+          SOURCE_ROUTE: ${{ needs.ci-trust-boundary.outputs.route_id }}
+          SOURCE_TRUST_CLASS: ${{ needs.ci-trust-boundary.outputs.trust_class }}
+        run: |
+          python3 scripts/build_ci_slice_summary.py \
+            --slice quick-feedback \
+            --status "${JOB_STATUS}" \
+            --json-path .runtime-cache/test_output/ci_slices/quick-feedback/summary.json \
+            --markdown-path .runtime-cache/test_output/ci_slices/quick-feedback/summary.md \
+            --started-at "${STARTED_AT}" \
+            --started-epoch "${STARTED_EPOCH}" \
+            --artifact-root .runtime-cache/test_output \
+            --artifact-root .runtime-cache/logs \
+            --artifact-root .runtime-cache/cortexpilot/reports \
+            --source-run-id "${SOURCE_RUN_ID}" \
+            --source-run-attempt "${SOURCE_RUN_ATTEMPT}" \
+            --source-sha "${SOURCE_SHA}" \
+            --source-ref "${SOURCE_REF}" \
+            --source-event "${SOURCE_EVENT}" \
+            --source-route "${SOURCE_ROUTE}" \
+            --source-trust-class "${SOURCE_TRUST_CLASS}" \
+            --source-runner-class github_hosted
+          {
+            echo "## Quick Feedback"
+            echo "- status: ${JOB_STATUS}"
+            if [[ -f .runtime-cache/test_output/ci_control_plane_doctor/summary.md ]]; then
+              echo ""
+              cat .runtime-cache/test_output/ci_control_plane_doctor/summary.md
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload quick-feedback artifacts
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ci-quick-feedback-artifacts-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: |
+            .runtime-cache/test_output
+            .runtime-cache/logs
+            .runtime-cache/cortexpilot/reports
+
+  dependency-review:
+    name: Dependency Review
+    needs:
+      - ci-trust-boundary
+      - quick-feedback
+    if: always() && github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - name: Initialize Runner Tool Cache Env
+        run: |
+          echo "AGENT_TOOLSDIRECTORY=${RUNNER_TEMP}/hostedtoolcache-${GITHUB_JOB}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "${GITHUB_ENV}"
+          echo "RUNNER_TOOL_CACHE=${RUNNER_TEMP}/hostedtoolcache-${GITHUB_JOB}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "${GITHUB_ENV}"
+
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          clean: true
+
+      - name: Run dependency review
+        uses: actions/dependency-review-action@2031cfc080254a8a887f58cffee85186f0e49e48
+        with:
+          config-file: .github/dependency-review-config.yml
+
+  untrusted-pr-basic-gates:
+    name: PR Low-Privilege Gates
+    needs:
+      - ci-trust-boundary
+      - quick-feedback
+    if: github.event_name == 'pull_request' && needs.ci-trust-boundary.outputs.untrusted_pr == 'true'
+    runs-on: ubuntu-24.04
+    outputs:
+      route_report_artifact_name: ${{ steps.finalize_untrusted_route.outputs.route_report_artifact_name }}
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      actions: write
+    steps:
+      - name: Initialize Runner Tool Cache Env
+        run: |
+          echo "AGENT_TOOLSDIRECTORY=${RUNNER_TEMP}/hostedtoolcache-${GITHUB_JOB}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "${GITHUB_ENV}"
+          echo "RUNNER_TOOL_CACHE=${RUNNER_TEMP}/hostedtoolcache-${GITHUB_JOB}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "${GITHUB_ENV}"
+
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          clean: true
+
+      - name: Download route seed artifact
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16
+        with:
+          name: ci-route-seed-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime-cache/cortexpilot/reports/ci/routes
+          merge-multiple: true
+
+      - name: Run low-privilege PR lane
+        id: run_low_priv_lane
+        env:
+          CORTEXPILOT_DOC_GATE_MODE: ci-diff
+          CORTEXPILOT_DOC_GATE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          CORTEXPILOT_DOC_GATE_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          source scripts/lib/test_heartbeat.sh
+          run_with_heartbeat_and_timeout "ci:pr-low-priv:basic-gates" "1800" "30" -- \
+            bash scripts/docker_ci.sh lane basic-gates
+          run_with_heartbeat_and_timeout "ci:pr-low-priv:orchestrator-tests" "1800" "30" -- \
+            bash scripts/docker_ci.sh lane orchestrator-tests
+
+      - name: Finalize untrusted route report
+        if: always()
+        id: finalize_untrusted_route
+        env:
+          LOW_PRIV_OUTCOME: ${{ steps.run_low_priv_lane.outcome }}
+          ROUTE_ID_VALUE: ${{ needs.ci-trust-boundary.outputs.route_id }}
+          LOW_PRIV_ARTIFACT_NAME: ci-pr-low-priv-artifacts-${{ github.run_id }}-${{ github.run_attempt }}
+          GITHUB_RUN_ID_VALUE: ${{ github.run_id }}
+          GITHUB_RUN_ATTEMPT_VALUE: ${{ github.run_attempt }}
+        run: |
+          set -euo pipefail
+          status="pass"
+          if [[ "${LOW_PRIV_OUTCOME}" != "success" ]]; then
+            status="fail"
+          fi
+          python3 scripts/build_ci_route_report.py finalize \
+            --input ".runtime-cache/cortexpilot/reports/ci/routes/${ROUTE_ID_VALUE}.json" \
+            --output ".runtime-cache/cortexpilot/reports/ci/routes/${ROUTE_ID_VALUE}.json" \
+            --overall-status "${status}" \
+            --cloud-bootstrap-used false \
+            --job-observed ci-trust-boundary \
+            --job-observed quick-feedback \
+            --job-observed untrusted-pr-basic-gates \
+            --artifact-name "${LOW_PRIV_ARTIFACT_NAME}"
+          python3 scripts/build_ci_route_report.py validate \
+            --input ".runtime-cache/cortexpilot/reports/ci/routes/${ROUTE_ID_VALUE}.json" \
+            --expected-route-id untrusted_pr \
+            --expected-trust-class untrusted \
+            --expected-runner-class github_hosted \
+            --expected-cloud-bootstrap-allowed false \
+            --forbid-cloud-bootstrap-used \
+            --forbid-self-hosted-artifacts
+          echo "route_status=${status}" >> "${GITHUB_OUTPUT}"
+          echo "route_report_artifact_name=ci-route-report-untrusted_pr-${status}-${GITHUB_RUN_ID_VALUE}-${GITHUB_RUN_ATTEMPT_VALUE}" >> "${GITHUB_OUTPUT}"
+
+      - name: Publish low-privilege summary
+        if: always()
+        env:
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          {
+            echo "## PR Low-Privilege Gates"
+            echo "- status: ${JOB_STATUS}"
+            echo "- route: untrusted-pr-basic-gates"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload low-privilege artifacts
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ci-pr-low-priv-artifacts-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: |
+            .runtime-cache/test_output
+            .runtime-cache/logs
+            .runtime-cache/cortexpilot/reports
+
+      - name: Upload untrusted route report artifact
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ${{ steps.finalize_untrusted_route.outputs.route_report_artifact_name }}
+          retention-days: 14
+          if-no-files-found: error
+          path: |
+            .runtime-cache/cortexpilot/reports/ci/routes/${{ needs.ci-trust-boundary.outputs.route_id }}.json
+            .runtime-cache/cortexpilot/reports/ci/routes/${{ needs.ci-trust-boundary.outputs.route_id }}.md
+
+  policy-and-security:
+    name: Policy and Security
+    needs:
+      - ci-trust-boundary
+      - quick-feedback
+    if: needs.ci-trust-boundary.outputs.trusted_route_allowed == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      actions: write
+      security-events: read
+    env:
+      CORTEXPILOT_CI_ROUTE_ID: ${{ needs.ci-trust-boundary.outputs.route_id }}
+      CORTEXPILOT_CI_TRUST_CLASS: ${{ needs.ci-trust-boundary.outputs.trust_class }}
+      CORTEXPILOT_CI_RUNNER_CLASS: github_hosted
+      CORTEXPILOT_CI_CLOUD_BOOTSTRAP_ALLOWED: ${{ needs.ci-trust-boundary.outputs.sensitive_dispatch_allowed }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Initialize Runner Tool Cache Env
+        run: |
+          echo "AGENT_TOOLSDIRECTORY=${RUNNER_TEMP}/hostedtoolcache-${GITHUB_JOB}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "${GITHUB_ENV}"
+          echo "RUNNER_TOOL_CACHE=${RUNNER_TEMP}/hostedtoolcache-${GITHUB_JOB}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "${GITHUB_ENV}"
+
+      - name: Repair Workspace Ownership
+        run: |
+          if [[ -d "${GITHUB_WORKSPACE}" ]]; then
+            sudo chown -R "$(id -u):$(id -g)" "${GITHUB_WORKSPACE}" || true
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          clean: true
+
+      - name: Run hosted control-plane doctor
+        run: bash scripts/ci_control_plane_doctor.sh
+
+      - name: Run policy/security slice
+        run: |
+          source scripts/lib/test_heartbeat.sh
+          if sudo -n true >/dev/null 2>&1; then
+            lane_runner=(sudo -E bash scripts/docker_ci.sh lane ci-policy-and-security)
+          else
+            lane_runner=(bash scripts/docker_ci.sh lane ci-policy-and-security)
+          fi
+          run_with_heartbeat_and_timeout "ci:policy-and-security" "3600" "30" -- \
+            "${lane_runner[@]}"
+
+      - name: Publish policy/security summary
+        if: always()
+        env:
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          {
+            echo "## Policy and Security"
+            echo "- status: ${JOB_STATUS}"
+            if [[ -f .runtime-cache/test_output/ci_control_plane_doctor/summary.md ]]; then
+              echo ""
+              cat .runtime-cache/test_output/ci_control_plane_doctor/summary.md
+            fi
+            if [[ -f .runtime-cache/test_output/ci_slices/policy-and-security/summary.md ]]; then
+              echo ""
+              cat .runtime-cache/test_output/ci_slices/policy-and-security/summary.md
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload policy/security artifacts
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ci-policy-and-security-artifacts-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: |
+            .runtime-cache/test_output
+            .runtime-cache/logs
+            .runtime-cache/cortexpilot/reports
+            .runtime-cache/cortexpilot/release
+
+  core-tests:
+    name: Core Tests
+    needs:
+      - ci-trust-boundary
+      - quick-feedback
+    if: needs.ci-trust-boundary.outputs.trusted_route_allowed == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    permissions:
+      contents: read
+      actions: write
+    env:
+      CORTEXPILOT_CI_ROUTE_ID: ${{ needs.ci-trust-boundary.outputs.route_id }}
+      CORTEXPILOT_CI_TRUST_CLASS: ${{ needs.ci-trust-boundary.outputs.trust_class }}
+      CORTEXPILOT_CI_RUNNER_CLASS: github_hosted
+      CORTEXPILOT_CI_CLOUD_BOOTSTRAP_ALLOWED: ${{ needs.ci-trust-boundary.outputs.sensitive_dispatch_allowed }}
+    steps:
+      - name: Initialize Runner Tool Cache Env
+        run: |
+          echo "AGENT_TOOLSDIRECTORY=${RUNNER_TEMP}/hostedtoolcache-${GITHUB_JOB}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "${GITHUB_ENV}"
+          echo "RUNNER_TOOL_CACHE=${RUNNER_TEMP}/hostedtoolcache-${GITHUB_JOB}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "${GITHUB_ENV}"
+
+      - name: Repair Workspace Ownership
+        run: |
+          if [[ -d "${GITHUB_WORKSPACE}" ]]; then
+            sudo chown -R "$(id -u):$(id -g)" "${GITHUB_WORKSPACE}" || true
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          clean: true
+
+      - name: Run core-tests slice
+        env:
+          CORTEXPILOT_CI_TEST_PHASE_PARALLEL: "1"
+        run: |
+          source scripts/lib/test_heartbeat.sh
+          if sudo -n true >/dev/null 2>&1; then
+            lane_runner=(sudo -E bash scripts/docker_ci.sh lane ci-core-tests)
+          else
+            lane_runner=(bash scripts/docker_ci.sh lane ci-core-tests)
+          fi
+          run_with_heartbeat_and_timeout "ci:core-tests" "5400" "30" -- \
+            "${lane_runner[@]}"
+
+      - name: Publish core-tests summary
+        if: always()
+        env:
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          {
+            echo "## Core Tests"
+            echo "- status: ${JOB_STATUS}"
+            if [[ -f .runtime-cache/test_output/ci_slices/core-tests/summary.md ]]; then
+              echo ""
+              cat .runtime-cache/test_output/ci_slices/core-tests/summary.md
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload core-tests artifacts
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ci-core-tests-artifacts-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: |
+            .runtime-cache/test_output
+            .runtime-cache/logs
+            .runtime-cache/cortexpilot/reports
+
+  ui-truth:
+    name: UI Truth
+    needs:
+      - ci-trust-boundary
+      - quick-feedback
+      - core-tests
+    if: needs.ci-trust-boundary.outputs.trusted_route_allowed == 'true' && needs.ci-trust-boundary.outputs.sensitive_dispatch_allowed == 'true' && github.event_name == 'workflow_dispatch' && github.event.inputs.run_ui_truth == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    environment: owner-approved-sensitive
+    permissions:
+      contents: read
+      actions: write
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      CORTEXPILOT_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE: require
+      CORTEXPILOT_CI_ROUTE_ID: ${{ needs.ci-trust-boundary.outputs.route_id }}
+      CORTEXPILOT_CI_TRUST_CLASS: ${{ needs.ci-trust-boundary.outputs.trust_class }}
+      CORTEXPILOT_CI_RUNNER_CLASS: github_hosted
+      CORTEXPILOT_CI_CLOUD_BOOTSTRAP_ALLOWED: ${{ needs.ci-trust-boundary.outputs.sensitive_dispatch_allowed }}
+    steps:
+      - name: Initialize Runner Tool Cache Env
+        run: |
+          echo "AGENT_TOOLSDIRECTORY=${RUNNER_TEMP}/hostedtoolcache-${GITHUB_JOB}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "${GITHUB_ENV}"
+          echo "RUNNER_TOOL_CACHE=${RUNNER_TEMP}/hostedtoolcache-${GITHUB_JOB}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "${GITHUB_ENV}"
+
+      - name: Repair Workspace Ownership
+        run: |
+          if [[ -d "${GITHUB_WORKSPACE}" ]]; then
+            sudo chown -R "$(id -u):$(id -g)" "${GITHUB_WORKSPACE}" || true
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          clean: true
+
+      - name: Run ui-truth slice
+        run: |
+          source scripts/lib/test_heartbeat.sh
+          if sudo -n true >/dev/null 2>&1; then
+            lane_runner=(sudo -E bash scripts/docker_ci.sh lane ci-ui-truth)
+          else
+            lane_runner=(bash scripts/docker_ci.sh lane ci-ui-truth)
+          fi
+          run_with_heartbeat_and_timeout "ci:ui-truth" "7200" "30" -- \
+            "${lane_runner[@]}"
+
+      - name: Publish ui-truth summary
+        if: always()
+        env:
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          {
+            echo "## UI Truth"
+            echo "- status: ${JOB_STATUS}"
+            if [[ -f .runtime-cache/test_output/ci_slices/ui-truth/summary.md ]]; then
+              echo ""
+              cat .runtime-cache/test_output/ci_slices/ui-truth/summary.md
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload ui-truth artifacts
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ci-ui-truth-artifacts-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: |
+            .runtime-cache/test_output
+            .runtime-cache/logs
+            .runtime-cache/cortexpilot/reports
+
+  resilience-and-e2e:
+    name: Resilience and E2E
+    needs:
+      - ci-trust-boundary
+      - quick-feedback
+      - core-tests
+    if: needs.ci-trust-boundary.outputs.trusted_route_allowed == 'true' && needs.ci-trust-boundary.outputs.sensitive_dispatch_allowed == 'true' && github.event_name == 'workflow_dispatch' && github.event.inputs.run_resilience_and_e2e == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    environment: owner-approved-sensitive
+    permissions:
+      contents: read
+      actions: write
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      CORTEXPILOT_CI_LIVE_PREFLIGHT_PROVIDER_API_MODE: require
+      CORTEXPILOT_CI_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE: require
+      CORTEXPILOT_CI_ROUTE_ID: ${{ needs.ci-trust-boundary.outputs.route_id }}
+      CORTEXPILOT_CI_TRUST_CLASS: ${{ needs.ci-trust-boundary.outputs.trust_class }}
+      CORTEXPILOT_CI_RUNNER_CLASS: github_hosted
+      CORTEXPILOT_CI_CLOUD_BOOTSTRAP_ALLOWED: ${{ needs.ci-trust-boundary.outputs.sensitive_dispatch_allowed }}
+    steps:
+      - name: Initialize Runner Tool Cache Env
+        run: |
+          echo "AGENT_TOOLSDIRECTORY=${RUNNER_TEMP}/hostedtoolcache-${GITHUB_JOB}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "${GITHUB_ENV}"
+          echo "RUNNER_TOOL_CACHE=${RUNNER_TEMP}/hostedtoolcache-${GITHUB_JOB}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "${GITHUB_ENV}"
+
+      - name: Repair Workspace Ownership
+        run: |
+          if [[ -d "${GITHUB_WORKSPACE}" ]]; then
+            sudo chown -R "$(id -u):$(id -g)" "${GITHUB_WORKSPACE}" || true
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          clean: true
+
+      - name: Run resilience/E2E slice
+        run: |
+          source scripts/lib/test_heartbeat.sh
+          if sudo -n true >/dev/null 2>&1; then
+            lane_runner=(sudo -E bash scripts/docker_ci.sh lane ci-resilience-and-e2e)
+          else
+            lane_runner=(bash scripts/docker_ci.sh lane ci-resilience-and-e2e)
+          fi
+          run_with_heartbeat_and_timeout "ci:resilience-and-e2e" "7200" "30" -- \
+            "${lane_runner[@]}"
+
+      - name: Publish resilience/E2E summary
+        if: always()
+        env:
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          {
+            echo "## Resilience and E2E"
+            echo "- status: ${JOB_STATUS}"
+            if [[ -f .runtime-cache/test_output/ci_slices/resilience-and-e2e/summary.md ]]; then
+              echo ""
+              cat .runtime-cache/test_output/ci_slices/resilience-and-e2e/summary.md
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload resilience/E2E artifacts
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ci-resilience-and-e2e-artifacts-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: |
+            .runtime-cache/test_output
+            .runtime-cache/logs
+            .runtime-cache/cortexpilot/reports
+
+  release-evidence:
+    name: Release Evidence
+    needs:
+      - ci-trust-boundary
+      - quick-feedback
+      - policy-and-security
+      - core-tests
+      - resilience-and-e2e
+    if: needs.ci-trust-boundary.outputs.trusted_route_allowed == 'true' && needs.ci-trust-boundary.outputs.sensitive_dispatch_allowed == 'true' && github.event_name == 'workflow_dispatch' && github.event.inputs.run_release_evidence == 'true' && needs.resilience-and-e2e.result == 'success'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    environment: owner-approved-sensitive
+    permissions:
+      contents: read
+      actions: write
+    outputs:
+      route_report_artifact_name: ${{ steps.finalize_release_route.outputs.route_report_artifact_name }}
+    env:
+      CORTEXPILOT_CI_ROUTE_ID: ${{ needs.ci-trust-boundary.outputs.route_id }}
+      CORTEXPILOT_CI_TRUST_CLASS: ${{ needs.ci-trust-boundary.outputs.trust_class }}
+      CORTEXPILOT_CI_RUNNER_CLASS: github_hosted
+      CORTEXPILOT_CI_CLOUD_BOOTSTRAP_ALLOWED: ${{ needs.ci-trust-boundary.outputs.sensitive_dispatch_allowed }}
+    steps:
+      - name: Initialize Runner Tool Cache Env
+        run: |
+          echo "AGENT_TOOLSDIRECTORY=${RUNNER_TEMP}/hostedtoolcache-${GITHUB_JOB}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "${GITHUB_ENV}"
+          echo "RUNNER_TOOL_CACHE=${RUNNER_TEMP}/hostedtoolcache-${GITHUB_JOB}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "${GITHUB_ENV}"
+
+      - name: Repair Workspace Ownership
+        run: |
+          if [[ -d "${GITHUB_WORKSPACE}" ]]; then
+            sudo chown -R "$(id -u):$(id -g)" "${GITHUB_WORKSPACE}" || true
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          clean: true
+
+      - name: Download quick-feedback artifacts
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16
+        with:
+          name: ci-quick-feedback-artifacts-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime-cache
+          merge-multiple: true
+
+      - name: Download policy-and-security artifacts
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16
+        with:
+          name: ci-policy-and-security-artifacts-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime-cache
+          merge-multiple: true
+
+      - name: Download core-tests artifacts
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16
+        with:
+          name: ci-core-tests-artifacts-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime-cache
+          merge-multiple: true
+
+      - name: Download resilience-and-e2e artifacts
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16
+        with:
+          name: ci-resilience-and-e2e-artifacts-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime-cache
+          merge-multiple: true
+
+      - name: Download route seed artifact
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16
+        with:
+          name: ci-route-seed-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime-cache/cortexpilot/reports/ci/routes
+          merge-multiple: true
+
+      - name: Run release-evidence slice
+        id: run_release_evidence_slice
+        run: |
+          source scripts/lib/test_heartbeat.sh
+          if sudo -n true >/dev/null 2>&1; then
+            lane_runner=(sudo -E bash scripts/docker_ci.sh lane ci-release-evidence)
+          else
+            lane_runner=(bash scripts/docker_ci.sh lane ci-release-evidence)
+          fi
+          run_with_heartbeat_and_timeout "ci:release-evidence" "5400" "30" -- \
+            "${lane_runner[@]}"
+
+      - name: Finalize trusted route report
+        if: always()
+        id: finalize_release_route
+        env:
+          RELEASE_EVIDENCE_OUTCOME: ${{ steps.run_release_evidence_slice.outcome }}
+          ROUTE_ID_VALUE: ${{ needs.ci-trust-boundary.outputs.route_id }}
+          SENSITIVE_DISPATCH_ALLOWED: ${{ needs.ci-trust-boundary.outputs.sensitive_dispatch_allowed }}
+          POLICY_SECURITY_ARTIFACT_NAME: ci-policy-and-security-artifacts-${{ github.run_id }}-${{ github.run_attempt }}
+          CORE_TESTS_ARTIFACT_NAME: ci-core-tests-artifacts-${{ github.run_id }}-${{ github.run_attempt }}
+          RESILIENCE_ARTIFACT_NAME: ci-resilience-and-e2e-artifacts-${{ github.run_id }}-${{ github.run_attempt }}
+          RELEASE_ARTIFACT_NAME: ci-release-evidence-artifacts-${{ github.run_id }}-${{ github.run_attempt }}
+          GITHUB_RUN_ID_VALUE: ${{ github.run_id }}
+          GITHUB_RUN_ATTEMPT_VALUE: ${{ github.run_attempt }}
+        run: |
+          set -euo pipefail
+          status="pass"
+          if [[ "${RELEASE_EVIDENCE_OUTCOME}" != "success" ]]; then
+            status="fail"
+          fi
+          python3 scripts/build_ci_route_report.py finalize \
+            --input ".runtime-cache/cortexpilot/reports/ci/routes/${ROUTE_ID_VALUE}.json" \
+            --output ".runtime-cache/cortexpilot/reports/ci/routes/${ROUTE_ID_VALUE}.json" \
+            --overall-status "${status}" \
+            --cloud-bootstrap-used "${SENSITIVE_DISPATCH_ALLOWED}" \
+            --job-observed ci-trust-boundary \
+            --job-observed quick-feedback \
+            --job-observed policy-and-security \
+            --job-observed core-tests \
+            --job-observed resilience-and-e2e \
+            --job-observed release-evidence \
+            --artifact-name "${POLICY_SECURITY_ARTIFACT_NAME}" \
+            --artifact-name "${CORE_TESTS_ARTIFACT_NAME}" \
+            --artifact-name "${RESILIENCE_ARTIFACT_NAME}" \
+            --artifact-name "${RELEASE_ARTIFACT_NAME}"
+          echo "route_status=${status}" >> "${GITHUB_OUTPUT}"
+          echo "route_report_artifact_name=ci-route-report-${ROUTE_ID_VALUE}-${status}-${GITHUB_RUN_ID_VALUE}-${GITHUB_RUN_ATTEMPT_VALUE}" >> "${GITHUB_OUTPUT}"
+
+      - name: Publish release-evidence summary
+        if: always()
+        env:
+          JOB_STATUS: ${{ job.status }}
+        run: |
+          {
+            echo "## Release Evidence"
+            echo "- status: ${JOB_STATUS}"
+            if [[ -f .runtime-cache/test_output/ci_slices/release-evidence/summary.md ]]; then
+              echo ""
+              cat .runtime-cache/test_output/ci_slices/release-evidence/summary.md
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload release-evidence artifacts
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ci-release-evidence-artifacts-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: |
+            .runtime-cache/test_output
+            .runtime-cache/logs
+            .runtime-cache/cortexpilot/release
+            .runtime-cache/cortexpilot/reports
+
+      - name: Upload trusted route report artifact
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ${{ steps.finalize_release_route.outputs.route_report_artifact_name }}
+          retention-days: 14
+          if-no-files-found: error
+          path: |
+            .runtime-cache/cortexpilot/reports/ci/routes/${{ needs.ci-trust-boundary.outputs.route_id }}.json
+            .runtime-cache/cortexpilot/reports/ci/routes/${{ needs.ci-trust-boundary.outputs.route_id }}.md
+
+  pr-release-critical-gates:
+    name: PR Release-Critical Gates
+    if: always() && github.event_name == 'pull_request' && needs.ci-trust-boundary.outputs.trusted_route_allowed == 'true'
+    outputs:
+      route_report_artifact_name: ${{ steps.finalize_trusted_pr_route.outputs.route_report_artifact_name }}
+    needs:
+      - ci-trust-boundary
+      - quick-feedback
+      - policy-and-security
+      - core-tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Initialize Runner Tool Cache Env
+        run: |
+          echo "AGENT_TOOLSDIRECTORY=${RUNNER_TEMP}/hostedtoolcache-${GITHUB_JOB}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "${GITHUB_ENV}"
+          echo "RUNNER_TOOL_CACHE=${RUNNER_TEMP}/hostedtoolcache-${GITHUB_JOB}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "${GITHUB_ENV}"
+
+      - name: Repair Workspace Ownership
+        run: |
+          if [[ -d "${GITHUB_WORKSPACE}" ]]; then
+            sudo chown -R "$(id -u):$(id -g)" "${GITHUB_WORKSPACE}" || true
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          clean: true
+
+      - name: Download route seed artifact
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16
+        with:
+          name: ci-route-seed-${{ github.run_id }}-${{ github.run_attempt }}
+          path: .runtime-cache/cortexpilot/reports/ci/routes
+          merge-multiple: true
+
+      - name: Aggregate PR release-critical gates
+        run: echo "✅ PR release-critical gate aggregation passed (sensitive verification stays on protected workflow_dispatch lanes only)."
+
+      - name: Finalize trusted PR route report
+        if: always()
+        id: finalize_trusted_pr_route
+        env:
+          POLICY_SECURITY_RESULT: ${{ needs.policy-and-security.result }}
+          CORE_TESTS_RESULT: ${{ needs.core-tests.result }}
+          ROUTE_ID_VALUE: ${{ needs.ci-trust-boundary.outputs.route_id }}
+          POLICY_SECURITY_ARTIFACT_NAME: ci-policy-and-security-artifacts-${{ github.run_id }}-${{ github.run_attempt }}
+          CORE_TESTS_ARTIFACT_NAME: ci-core-tests-artifacts-${{ github.run_id }}-${{ github.run_attempt }}
+          GITHUB_RUN_ID_VALUE: ${{ github.run_id }}
+          GITHUB_RUN_ATTEMPT_VALUE: ${{ github.run_attempt }}
+        run: |
+          set -euo pipefail
+          status="pass"
+          for gate_result in \
+            "${POLICY_SECURITY_RESULT}" \
+            "${CORE_TESTS_RESULT}"; do
+            if [[ "${gate_result}" == "failure" || "${gate_result}" == "cancelled" ]]; then
+              status="fail"
+              break
+            fi
+          done
+          python3 scripts/build_ci_route_report.py finalize \
+            --input ".runtime-cache/cortexpilot/reports/ci/routes/${ROUTE_ID_VALUE}.json" \
+            --output ".runtime-cache/cortexpilot/reports/ci/routes/${ROUTE_ID_VALUE}.json" \
+            --overall-status "${status}" \
+            --cloud-bootstrap-used false \
+            --job-observed ci-trust-boundary \
+            --job-observed quick-feedback \
+            --job-observed policy-and-security \
+            --job-observed core-tests \
+            --job-observed pr-release-critical-gates \
+            --artifact-name "${POLICY_SECURITY_ARTIFACT_NAME}" \
+            --artifact-name "${CORE_TESTS_ARTIFACT_NAME}"
+          echo "route_report_artifact_name=ci-route-report-trusted_pr-${status}-${GITHUB_RUN_ID_VALUE}-${GITHUB_RUN_ATTEMPT_VALUE}" >> "${GITHUB_OUTPUT}"
+
+      - name: Upload trusted PR route report artifact
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: ${{ steps.finalize_trusted_pr_route.outputs.route_report_artifact_name }}
+          retention-days: 14
+          if-no-files-found: error
+          path: |
+            .runtime-cache/cortexpilot/reports/ci/routes/${{ needs.ci-trust-boundary.outputs.route_id }}.json
+            .runtime-cache/cortexpilot/reports/ci/routes/${{ needs.ci-trust-boundary.outputs.route_id }}.md
+
+  pr-ci-gate:
+    name: PR CI Gate
+    if: always() && github.event_name == 'pull_request'
+    needs:
+      - ci-trust-boundary
+      - quick-feedback
+      - dependency-review
+      - untrusted-pr-basic-gates
+      - pr-release-critical-gates
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Enforce PR CI route
+        env:
+          TRUSTED_ROUTE_ALLOWED: ${{ needs.ci-trust-boundary.outputs.trusted_route_allowed }}
+          ROUTE_ID: ${{ needs.ci-trust-boundary.outputs.route_id }}
+          ROUTE_RUNNER_CLASS: ${{ needs.ci-trust-boundary.outputs.runner_class }}
+          QUICK_FEEDBACK_RESULT: ${{ needs.quick-feedback.result }}
+          DEPENDENCY_REVIEW_RESULT: ${{ needs.dependency-review.result }}
+          LOW_PRIV_RESULT: ${{ needs.untrusted-pr-basic-gates.result }}
+          TRUSTED_RESULT: ${{ needs.pr-release-critical-gates.result }}
+          LOW_PRIV_ROUTE_ARTIFACT_NAME: ${{ needs.untrusted-pr-basic-gates.outputs.route_report_artifact_name }}
+          TRUSTED_ROUTE_ARTIFACT_NAME: ${{ needs.pr-release-critical-gates.outputs.route_report_artifact_name }}
+        run: |
+          set -euo pipefail
+          if [[ "${QUICK_FEEDBACK_RESULT}" != "success" ]]; then
+            echo "❌ Quick feedback must pass before PR can be considered green." >&2
+            exit 1
+          fi
+          if [[ "${DEPENDENCY_REVIEW_RESULT}" != "success" ]]; then
+            echo "❌ Dependency review must pass before PR can be considered green." >&2
+            exit 1
+          fi
+          if [[ "${TRUSTED_ROUTE_ALLOWED}" == "true" ]]; then
+            if [[ "${TRUSTED_RESULT}" != "success" ]]; then
+              echo "❌ Trusted PR must pass release-critical gates." >&2
+              exit 1
+            fi
+            artifact_name="${TRUSTED_ROUTE_ARTIFACT_NAME}"
+            expected_trust="trusted"
+            expected_runner="github_hosted"
+            expected_cloud="false"
+            echo "✅ Trusted PR satisfied hosted release-critical gates."
+          else
+            if [[ "${LOW_PRIV_RESULT}" != "success" ]]; then
+              echo "❌ Untrusted PR must pass low-privilege GitHub-hosted gates." >&2
+              exit 1
+            fi
+            artifact_name="${LOW_PRIV_ROUTE_ARTIFACT_NAME}"
+            expected_trust="untrusted"
+            expected_runner="github_hosted"
+            expected_cloud="false"
+            echo "✅ Untrusted PR was routed to low-privilege GitHub-hosted validation."
+          fi
+          if [[ -z "${artifact_name}" ]]; then
+            echo "❌ Missing route report artifact name for PR route validation." >&2
+            exit 1
+          fi
+          {
+            echo "ROUTE_ARTIFACT_NAME=${artifact_name}"
+            echo "ROUTE_ID=${ROUTE_ID}"
+            echo "EXPECTED_TRUST=${expected_trust}"
+            echo "EXPECTED_RUNNER=${expected_runner}"
+            echo "EXPECTED_CLOUD=${expected_cloud}"
+          } >> "${GITHUB_ENV}"
+
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          clean: true
+
+      - name: Download route report artifact
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16
+        with:
+          name: ${{ env.ROUTE_ARTIFACT_NAME }}
+          path: .runtime-cache/cortexpilot/reports/ci/routes
+          merge-multiple: true
+
+      - name: Validate route report
+        run: |
+          set -euo pipefail
+          declare -a route_args=(
+            --input ".runtime-cache/cortexpilot/reports/ci/routes/${ROUTE_ID}.json"
+            --expected-route-id "${ROUTE_ID}"
+            --expected-trust-class "${EXPECTED_TRUST}"
+            --expected-runner-class "${EXPECTED_RUNNER}"
+            --expected-cloud-bootstrap-allowed "${EXPECTED_CLOUD}"
+          )
+          if [[ "${EXPECTED_TRUST}" == "trusted" ]]; then
+            route_args+=(--forbid-cloud-bootstrap-used)
+          else
+            route_args+=(--forbid-cloud-bootstrap-used --forbid-self-hosted-artifacts)
+          fi
+          python3 scripts/build_ci_route_report.py validate "${route_args[@]}"

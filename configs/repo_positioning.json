@@ -1,0 +1,26 @@
+{
+  "surfaces": [
+    {
+      "path": "README.md",
+      "must_include": [
+        "CortexPilot is a contract-first multi-agent orchestration repository.",
+        "## Public Collaboration Files",
+        "MIT License"
+      ]
+    },
+    {
+      "path": "docs/README.md",
+      "must_include": [
+        "This repository keeps its public documentation intentionally small.",
+        "docs/architecture/runtime-topology.md",
+        "docs/specs/00_SPEC.md"
+      ]
+    },
+    {
+      "path": "CLAUDE.md",
+      "must_include": [
+        "This file mirrors the root AI entrypoint for tools that prefer `CLAUDE.md`."
+      ]
+    }
+  ]
+}

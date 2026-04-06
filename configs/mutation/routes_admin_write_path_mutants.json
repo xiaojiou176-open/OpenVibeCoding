@@ -1,0 +1,26 @@
+{
+  "target": "apps/orchestrator/src/cortexpilot_orch/api/routes_admin.py",
+  "mutants": [
+    {
+      "name": "request_rbac_guard_disabled",
+      "operator": "condition_disable",
+      "occurrence": 1,
+      "old": "    if request is not None:\n        _enforce_approval_rbac(request)",
+      "new": "    if False:\n        _enforce_approval_rbac(request)"
+    },
+    {
+      "name": "approval_pending_guard_disabled",
+      "operator": "condition_disable",
+      "occurrence": 1,
+      "old": "    if not has_pending_approval:\n        raise HTTPException(status_code=409, detail={\"code\": \"APPROVAL_NOT_PENDING\"})",
+      "new": "    if False:\n        raise HTTPException(status_code=409, detail={\"code\": \"APPROVAL_NOT_PENDING\"})"
+    },
+    {
+      "name": "pending_check_operation_changed",
+      "operator": "literal_replace",
+      "occurrence": 1,
+      "old": "\"operation\": \"approve_god_mode:pending_check\",",
+      "new": "\"operation\": \"approve_god_mode:mutation\","
+    }
+  ]
+}

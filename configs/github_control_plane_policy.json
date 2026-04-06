@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "owner": "xiaojiou176-open",
+  "repo": "CortexPilot-public",
+  "default_branch": "main",
+  "required_actions_permissions": {
+    "enabled": true,
+    "allowed_actions": "all",
+    "sha_pinning_required": true
+  },
+  "required_environments": [
+    "owner-approved-sensitive"
+  ],
+  "required_checks": [
+    "Quick Feedback",
+    "PR CI Gate",
+    "PR Release-Critical Gates"
+  ],
+  "branch_protection_required": true,
+  "platform_evidence": {
+    "private_vulnerability_reporting": {
+      "required": true,
+      "mode": "api"
+    },
+    "vulnerability_alerts": {
+      "required": true,
+      "mode": "api"
+    },
+    "dependabot_config": {
+      "required": true,
+      "mode": "repo_file",
+      "path": ".github/dependabot.yml"
+    },
+    "codeql_workflow": {
+      "required": true,
+      "mode": "repo_file",
+      "path": ".github/workflows/codeql.yml"
+    },
+    "codeql_config": {
+      "required": true,
+      "mode": "repo_file",
+      "path": ".github/codeql/codeql-config.yml"
+    },
+    "deploy_story": {
+      "required": true,
+      "mode": "doc_note",
+      "path": "README.md",
+      "expected_note": "MIT License"
+    }
+  }
+}

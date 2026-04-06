@@ -1,0 +1,303 @@
+{
+  "schema_version": 1,
+  "description": "Minimal navigation registry for the public documentation surface.",
+  "entries": [
+    {
+      "path": "docs/README.md",
+      "kind": "entrypoint",
+      "status": "active",
+      "canonical": true,
+      "generated": false,
+      "owner_surface": "docs",
+      "listed_in_primary_navigation": true
+    },
+    {
+      "path": "docs/index.html",
+      "kind": "entrypoint",
+      "status": "active",
+      "canonical": true,
+      "generated": false,
+      "owner_surface": "docs",
+      "listed_in_primary_navigation": true
+    },
+    {
+      "path": "docs/architecture/runtime-topology.md",
+      "kind": "reference",
+      "status": "active",
+      "canonical": true,
+      "generated": false,
+      "owner_surface": "docs",
+      "listed_in_primary_navigation": true
+    },
+    {
+      "path": "docs/specs/00_SPEC.md",
+      "kind": "policy",
+      "status": "active",
+      "canonical": true,
+      "generated": false,
+      "owner_surface": "docs",
+      "listed_in_primary_navigation": true
+    },
+    {
+      "path": "docs/runbooks/onboarding-30min.md",
+      "kind": "runbook",
+      "status": "active",
+      "canonical": true,
+      "generated": false,
+      "owner_surface": "docs",
+      "listed_in_primary_navigation": true
+    },
+    {
+      "path": "docs/runbooks/space-governance.md",
+      "kind": "runbook",
+      "status": "active",
+      "canonical": true,
+      "generated": false,
+      "owner_surface": "docs",
+      "listed_in_primary_navigation": true
+    },
+    {
+      "path": "docs/architecture/mcp-and-operator-copilot-v1.md",
+      "kind": "reference",
+      "status": "active",
+      "canonical": true,
+      "generated": false,
+      "owner_surface": "docs",
+      "listed_in_primary_navigation": true
+    },
+    {
+      "path": "docs/runbooks/public-release-checklist.md",
+      "kind": "runbook",
+      "status": "active",
+      "canonical": true,
+      "generated": false,
+      "owner_surface": "docs",
+      "listed_in_primary_navigation": false
+    },
+    {
+      "path": "docs/runbooks/storefront-share-kit.md",
+      "kind": "runbook",
+      "status": "active",
+      "canonical": true,
+      "generated": false,
+      "owner_surface": "docs",
+      "listed_in_primary_navigation": false
+    },
+    {
+      "path": "docs/runbooks/github-storefront-manual-steps.md",
+      "kind": "runbook",
+      "status": "active",
+      "canonical": true,
+      "generated": false,
+      "owner_surface": "docs",
+      "listed_in_primary_navigation": false
+    },
+    {
+      "path": "docs/releases/first-public-release-draft.md",
+      "kind": "reference",
+      "status": "active",
+      "canonical": true,
+      "generated": false,
+      "owner_surface": "docs",
+      "listed_in_primary_navigation": false
+    },
+    {
+      "path": "docs/assets/storefront/demo-status.md",
+      "kind": "reference",
+      "status": "active",
+      "canonical": true,
+      "generated": false,
+      "owner_surface": "docs",
+      "listed_in_primary_navigation": false
+    },
+    {
+      "path": "docs/assets/storefront/benchmark-methodology.md",
+      "kind": "reference",
+      "status": "active",
+      "canonical": true,
+      "generated": false,
+      "owner_surface": "docs",
+      "listed_in_primary_navigation": false
+    },
+    {
+      "path": "docs/architecture/ecosystem-and-builder-surfaces-v1.md",
+      "kind": "reference",
+      "status": "active",
+      "canonical": true,
+      "generated": false,
+      "owner_surface": "docs",
+      "listed_in_primary_navigation": false
+    },
+    {
+      "path": "docs/runbooks/render-hosted-operator-pilot.md",
+      "kind": "runbook",
+      "status": "active",
+      "canonical": true,
+      "generated": false,
+      "owner_surface": "docs",
+      "listed_in_primary_navigation": false
+    },
+    {
+      "path": "docs/runbooks/write-mcp-queue-pilot.md",
+      "kind": "runbook",
+      "status": "active",
+      "canonical": true,
+      "generated": false,
+      "owner_surface": "docs",
+      "listed_in_primary_navigation": false
+    },
+    {
+      "path": "docs/builders/index.html",
+      "kind": "entrypoint",
+      "status": "active",
+      "canonical": true,
+      "generated": false,
+      "owner_surface": "docs",
+      "listed_in_primary_navigation": true
+    },
+    {
+      "path": "docs/ecosystem/index.html",
+      "kind": "entrypoint",
+      "status": "active",
+      "canonical": true,
+      "generated": false,
+      "owner_surface": "docs",
+      "listed_in_primary_navigation": true
+    },
+    {
+      "path": "docs/compatibility/index.html",
+      "kind": "entrypoint",
+      "status": "active",
+      "canonical": true,
+      "generated": false,
+      "owner_surface": "docs",
+      "listed_in_primary_navigation": true
+    },
+    {
+      "path": "docs/agent-starters/index.html",
+      "kind": "entrypoint",
+      "status": "active",
+      "canonical": true,
+      "generated": false,
+      "owner_surface": "docs",
+      "listed_in_primary_navigation": true
+    },
+    {
+      "path": "docs/use-cases/index.html",
+      "kind": "entrypoint",
+      "status": "active",
+      "canonical": true,
+      "generated": false,
+      "owner_surface": "docs",
+      "listed_in_primary_navigation": true
+    },
+    {
+      "path": "docs/ai-surfaces/index.html",
+      "kind": "entrypoint",
+      "status": "active",
+      "canonical": true,
+      "generated": false,
+      "owner_surface": "docs",
+      "listed_in_primary_navigation": true
+    },
+    {
+      "path": "docs/mcp/index.html",
+      "kind": "entrypoint",
+      "status": "active",
+      "canonical": true,
+      "generated": false,
+      "owner_surface": "docs",
+      "listed_in_primary_navigation": true
+    },
+    {
+      "path": "docs/api/index.html",
+      "kind": "entrypoint",
+      "status": "active",
+      "canonical": true,
+      "generated": false,
+      "owner_surface": "docs",
+      "listed_in_primary_navigation": true
+    },
+    {
+      "path": "docs/integrations/index.html",
+      "kind": "entrypoint",
+      "status": "active",
+      "canonical": true,
+      "generated": false,
+      "owner_surface": "docs",
+      "listed_in_primary_navigation": true
+    },
+    {
+      "path": "docs/skills/index.html",
+      "kind": "entrypoint",
+      "status": "active",
+      "canonical": true,
+      "generated": false,
+      "owner_surface": "docs",
+      "listed_in_primary_navigation": true
+    },
+    {
+      "path": "docs/robots.txt",
+      "kind": "reference",
+      "status": "active",
+      "canonical": true,
+      "generated": false,
+      "owner_surface": "docs",
+      "listed_in_primary_navigation": false
+    },
+    {
+      "path": "docs/sitemap.xml",
+      "kind": "reference",
+      "status": "active",
+      "canonical": true,
+      "generated": false,
+      "owner_surface": "docs",
+      "listed_in_primary_navigation": false
+    },
+    {
+      "path": "docs/governance/doc-drift-map.json",
+      "kind": "policy",
+      "status": "active",
+      "canonical": false,
+      "generated": false,
+      "owner_surface": "docs",
+      "listed_in_primary_navigation": false
+    },
+    {
+      "path": "docs/governance/incident-regression-map.json",
+      "kind": "policy",
+      "status": "active",
+      "canonical": false,
+      "generated": false,
+      "owner_surface": "docs",
+      "listed_in_primary_navigation": false
+    },
+    {
+      "path": "docs/governance/ui_protocol_allowlist.json",
+      "kind": "policy",
+      "status": "active",
+      "canonical": false,
+      "generated": false,
+      "owner_surface": "ui",
+      "listed_in_primary_navigation": false
+    },
+    {
+      "path": "docs/governance/perf-baseline.json",
+      "kind": "policy",
+      "status": "active",
+      "canonical": false,
+      "generated": false,
+      "owner_surface": "ci",
+      "listed_in_primary_navigation": false
+    },
+    {
+      "path": "docs/governance/ui-button-coverage-matrix.md",
+      "kind": "reference",
+      "status": "active",
+      "canonical": false,
+      "generated": true,
+      "owner_surface": "ui",
+      "listed_in_primary_navigation": false
+    }
+  ]
+}

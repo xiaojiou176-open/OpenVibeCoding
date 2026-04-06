@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "description": "Baseline drift contract for GitHub-hosted CI runner toolchains.",
+  "commands": [
+    {
+      "name": "docker",
+      "version_args": [
+        "--version"
+      ],
+      "required": true,
+      "match_regex": "^Docker version (27|29)\\."
+    },
+    {
+      "name": "jq",
+      "version_args": [
+        "--version"
+      ],
+      "required": true,
+      "match_regex": "^jq-1\\.7"
+    },
+    {
+      "name": "curl",
+      "version_args": [
+        "--version"
+      ],
+      "required": true,
+      "match_regex": "^curl 8\\."
+    },
+    {
+      "name": "sudo",
+      "version_args": [
+        "--version"
+      ],
+      "required": true,
+      "match_regex": "^Sudo version 1\\.9\\."
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "metadata": {
+    "name": "ci_policy_core",
+    "version": "1.0.0",
+    "layer": "core",
+    "schema": "schemas/ci_policy.schema.json",
+    "description": "Core CI policy defaults mapped from current scripts/ci.sh behavior.",
+    "source_of_truth": [
+      "scripts/ci.sh",
+      "scripts/resolve_ci_pm_chat_env.sh",
+      "scripts/resolve_perf_smoke_env.sh"
+    ]
+  },
+  "audit": {
+    "enabled": true,
+    "break_glass_audit_log": ".runtime-cache/test_output/ci_break_glass_audit.jsonl",
+    "change_control": "config-only-skeleton"
+  },
+  "core": {
+    "gates": {
+      "dead_code": true,
+      "provider_hardcut": true,
+      "orchestrator_decoupling": true,
+      "ui_audit": true,
+      "external_web_probe": true,
+      "ui_button_matrix": true,
+      "ui_matrix_todo_p1": true,
+      "desktop_first_entry_e2e": true,
+      "ui_regression_flake": true,
+      "ui_strict_click": true,
+      "ui_truth_strict": true,
+      "resilience": true,
+      "pm_chat_e2e": true,
+      "mutation": true,
+      "incident": true
+    },
+    "execution": {
+      "test_phase_parallel": true,
+      "apply_retention": false,
+      "nightly_full": false,
+      "weekly_full": false
+    },
+    "defaults": {
+      "external_web_probe_url": "https://example.com",
+      "ui_button_matrix_mode": "full",
+      "ui_button_matrix_required_tiers": [
+        "P0",
+        "P1"
+      ],
+      "ui_flake_parallel": false,
+      "ui_flake_run_p1": true,
+      "ui_strict_click_required": true,
+      "ui_strict_require_gemini_verdict": true,
+      "ui_truth_disable_auto_latest": true,
+      "ui_truth_require_run_id_match": true,
+      "ui_truth_enforce_flake_policy": true,
+      "perf_strict_http_on_ci": true
+    },
+    "pm_chat": {
+      "runner": "agents",
+      "web_mode": "prod",
+      "mode_on_ci": "real",
+      "mode_local_without_key": "mock",
+      "allow_mock_on_ci": false,
+      "allow_missing_key": false
+    }
+  }
+}

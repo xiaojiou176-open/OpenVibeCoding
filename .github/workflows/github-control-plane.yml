@@ -1,0 +1,33 @@
+name: GitHub Control Plane
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  github-control-plane:
+    runs-on: ubuntu-24.04
+    environment: owner-approved-sensitive
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          clean: true
+          persist-credentials: false
+
+      - name: Run control-plane checker
+        env:
+          GH_TOKEN: ${{ secrets.GH_ADMIN_TOKEN || github.token }}
+        run: |
+          bash scripts/run_governance_py.sh scripts/check_github_control_plane.py
+
+      - name: Upload control-plane report
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: github-control-plane-report-${{ github.run_id }}-${{ github.run_attempt }}
+          retention-days: 14
+          path: .runtime-cache/test_output/governance/github_control_plane_report.json
+          if-no-files-found: warn

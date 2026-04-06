@@ -1,0 +1,695 @@
+{
+  "version": 1,
+  "backend_scope_globs": [
+    "apps/orchestrator/**",
+    "configs/**",
+    "contracts/**",
+    "schemas/**",
+    "scripts/*.py",
+    "scripts/*.sh",
+    ".github/workflows/*.yml"
+  ],
+  "rules": [
+    {
+      "id": "orchestrator_api",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/api/*.py",
+        "apps/orchestrator/src/cortexpilot_orch/api/**/*.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_api_main.py"
+      ]
+    },
+    {
+      "id": "orchestrator_policy",
+      "path_globs": [
+        "apps/orchestrator/src/*policy*.py",
+        "apps/orchestrator/src/**/*policy*.py",
+        "apps/orchestrator/src/**/policy/*.py",
+        "apps/orchestrator/src/**/policy/**/*.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_policy_registry_alignment.py"
+      ]
+    },
+    {
+      "id": "orchestrator_schema",
+      "path_globs": [
+        "apps/orchestrator/src/*schema*.py",
+        "apps/orchestrator/src/**/*schema*.py",
+        "apps/orchestrator/src/**/schema/*.py",
+        "apps/orchestrator/src/**/schema/**/*.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_schema_validation.py",
+        "apps/orchestrator/tests/test_schema_aliases.py"
+      ]
+    },
+    {
+      "id": "orchestrator_direct_tests",
+      "path_globs": [
+        "apps/orchestrator/tests/**/*.py"
+      ],
+      "select_changed_test_file": true
+    },
+    {
+      "id": "orchestrator_api_routes_pm",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/api/routes_pm.py",
+        "apps/orchestrator/src/cortexpilot_orch/api/main_pm_intake_helpers.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_api_main_pm_sessions.py",
+        "apps/orchestrator/tests/test_pm_session_aggregation_views.py"
+      ]
+    },
+    {
+      "id": "orchestrator_api_routes_runs",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/api/routes_runs.py",
+        "apps/orchestrator/src/cortexpilot_orch/api/main_runs_handlers.py",
+        "apps/orchestrator/src/cortexpilot_orch/api/main_run_views_helpers.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_main_runs_handlers_failure_classification.py",
+        "apps/orchestrator/tests/test_api_main_runtime_views.py"
+      ]
+    },
+    {
+      "id": "orchestrator_api_routes_admin",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/api/routes_admin.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_api_main.py",
+        "apps/orchestrator/tests/e2e/test_god_mode_e2e.py"
+      ]
+    },
+    {
+      "id": "orchestrator_api_routes_intake",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/api/routes_intake.py",
+        "apps/orchestrator/src/cortexpilot_orch/planning/intake.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_intake_plan_bundle.py",
+        "apps/orchestrator/tests/test_intake_helpers_coverage.py"
+      ]
+    },
+    {
+      "id": "orchestrator_pm_session_aggregation",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/api/pm_session_aggregation*.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_pm_session_aggregation_context.py",
+        "apps/orchestrator/tests/test_pm_session_aggregation_views.py"
+      ]
+    },
+    {
+      "id": "orchestrator_scheduler_core",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/scheduler/scheduler.py",
+        "apps/orchestrator/src/cortexpilot_orch/scheduler/core_helpers.py",
+        "apps/orchestrator/src/cortexpilot_orch/scheduler/runtime_*.py",
+        "apps/orchestrator/src/cortexpilot_orch/scheduler/execute_flow.py",
+        "apps/orchestrator/src/cortexpilot_orch/scheduler/approval_flow.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_scheduler_paths.py",
+        "apps/orchestrator/tests/test_scheduler_failures.py",
+        "apps/orchestrator/tests/test_scheduler_behavior_parity.py"
+      ]
+    },
+    {
+      "id": "orchestrator_scheduler_policy",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/scheduler/policy_pipeline.py",
+        "apps/orchestrator/src/cortexpilot_orch/scheduler/preflight_gate_pipeline.py",
+        "apps/orchestrator/src/cortexpilot_orch/scheduler/preflight_gate_*.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_scheduler_policy_pipeline_new.py",
+        "apps/orchestrator/tests/test_scheduler_core_helpers_parity.py"
+      ]
+    },
+    {
+      "id": "orchestrator_scheduler_task_execution",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/scheduler/task_execution_pipeline.py",
+        "apps/orchestrator/src/cortexpilot_orch/scheduler/task_execution_runtime_helpers.py",
+        "apps/orchestrator/src/cortexpilot_orch/scheduler/task_execution_review_helpers.py",
+        "apps/orchestrator/src/cortexpilot_orch/scheduler/tool_execution_pipeline.py",
+        "apps/orchestrator/src/cortexpilot_orch/scheduler/evidence_pipeline.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_scheduler_task_execution_runtime_helpers.py",
+        "apps/orchestrator/tests/test_scheduler_tool_execution_pipeline_new.py",
+        "apps/orchestrator/tests/test_scheduler_artifact_pipeline_new.py"
+      ]
+    },
+    {
+      "id": "orchestrator_scheduler_rollback",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/scheduler/rollback_pipeline.py",
+        "apps/orchestrator/src/cortexpilot_orch/services/rollback_service.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_scheduler_rollback_pipeline_new.py",
+        "apps/orchestrator/tests/test_rollback_service.py"
+      ]
+    },
+    {
+      "id": "orchestrator_runners_agents",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/runners/agents_*.py",
+        "apps/orchestrator/src/cortexpilot_orch/runners/agents_runner.py",
+        "apps/orchestrator/src/cortexpilot_orch/runners/provider_resolution.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_agents_runner_behavior_parity.py",
+        "apps/orchestrator/tests/test_agents_prompting_parity.py",
+        "apps/orchestrator/tests/test_agents_handoff_chain.py"
+      ]
+    },
+    {
+      "id": "orchestrator_runners_mcp",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/runners/*mcp*.py",
+        "apps/orchestrator/src/cortexpilot_orch/runners/tool_runner.py",
+        "apps/orchestrator/src/cortexpilot_orch/runners/mcp_adapter_runtime.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_runners_mcp_new_modules.py",
+        "apps/orchestrator/tests/test_mcp_adapter_runtime.py",
+        "apps/orchestrator/tests/test_tool_runner_mcp_adapters.py"
+      ]
+    },
+    {
+      "id": "orchestrator_runners_langgraph",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/runners/langgraph_*.py",
+        "apps/orchestrator/src/cortexpilot_orch/runners/agents_contract_flow.py",
+        "apps/orchestrator/src/cortexpilot_orch/runners/agents_stream_flow.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_p1_langgraph_contract_flow.py",
+        "apps/orchestrator/tests/test_p1_langgraph_stream_flow.py",
+        "apps/orchestrator/tests/test_p1_langgraph_integration_matrix.py"
+      ]
+    },
+    {
+      "id": "orchestrator_replay",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/replay/*.py",
+        "apps/orchestrator/src/cortexpilot_orch/replay/**/*.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_replayer_branch_coverage.py",
+        "apps/orchestrator/tests/test_replayer_strict_branches.py",
+        "apps/orchestrator/tests/e2e/test_replay_verify_strict.py"
+      ]
+    },
+    {
+      "id": "orchestrator_chain",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/chain/*.py",
+        "apps/orchestrator/src/cortexpilot_orch/chain/**/*.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_chain_runner.py",
+        "apps/orchestrator/tests/test_chain_runner_lifecycle.py",
+        "apps/orchestrator/tests/test_chain_context_policy.py"
+      ]
+    },
+    {
+      "id": "orchestrator_store",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/store/*.py",
+        "apps/orchestrator/src/cortexpilot_orch/store/**/*.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_run_store.py",
+        "apps/orchestrator/tests/test_run_store_helpers.py",
+        "apps/orchestrator/tests/test_session_map_extended.py",
+        "apps/orchestrator/tests/test_session_alias_store.py"
+      ]
+    },
+    {
+      "id": "orchestrator_gates",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/gates/*.py",
+        "apps/orchestrator/src/cortexpilot_orch/gates/**/*.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_gates.py",
+        "apps/orchestrator/tests/test_integrated_gate.py",
+        "apps/orchestrator/tests/test_tool_gate_allowlist.py",
+        "apps/orchestrator/tests/test_network_gate.py",
+        "apps/orchestrator/tests/test_schema_gate.py"
+      ]
+    },
+    {
+      "id": "orchestrator_planning",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/planning/*.py",
+        "apps/orchestrator/src/cortexpilot_orch/planning/**/*.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_intake_plan_bundle.py",
+        "apps/orchestrator/tests/test_intake_helpers_coverage.py",
+        "apps/orchestrator/tests/test_coverage_chain_builder.py"
+      ]
+    },
+    {
+      "id": "orchestrator_contract",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/contract/*.py",
+        "apps/orchestrator/src/cortexpilot_orch/contract/**/*.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_validator_and_compiler.py",
+        "apps/orchestrator/tests/test_compiler_branch_matrix_extra.py"
+      ]
+    },
+    {
+      "id": "orchestrator_observability",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/observability/*.py",
+        "apps/orchestrator/src/cortexpilot_orch/observability/**/*.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_observability_logger.py",
+        "apps/orchestrator/tests/test_tracer.py",
+        "apps/orchestrator/tests/test_codex_event_parser.py"
+      ]
+    },
+    {
+      "id": "orchestrator_runtime_locks_queue_worktrees",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/runtime/*.py",
+        "apps/orchestrator/src/cortexpilot_orch/locks/*.py",
+        "apps/orchestrator/src/cortexpilot_orch/queue/*.py",
+        "apps/orchestrator/src/cortexpilot_orch/worktrees/*.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_runtime_retention.py",
+        "apps/orchestrator/tests/test_locker_extended.py",
+        "apps/orchestrator/tests/test_queue.py",
+        "apps/orchestrator/tests/test_worktree_manager_extended.py"
+      ]
+    },
+    {
+      "id": "schemas",
+      "path_globs": [
+        "schemas/**"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_schema_validation.py",
+        "apps/orchestrator/tests/test_schema_aliases.py"
+      ]
+    },
+    {
+      "id": "contracts",
+      "path_globs": [
+        "contracts/**"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_contract_examples_failure_samples.py",
+        "apps/orchestrator/tests/test_validator_and_compiler.py"
+      ]
+    },
+    {
+      "id": "configs",
+      "path_globs": [
+        "configs/**"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_policy_registry_alignment.py",
+        "apps/orchestrator/tests/test_env_governance_script.py"
+      ]
+    },
+    {
+      "id": "scripts_python",
+      "path_globs": [
+        "scripts/*.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_api_main.py",
+        "apps/orchestrator/tests/test_env_governance_script.py"
+      ]
+    },
+    {
+      "id": "scripts_shell_ci",
+      "path_globs": [
+        "scripts/ci*.sh",
+        "scripts/resolve_ci_pm_chat_env.sh",
+        "scripts/resolve_perf_smoke_env.sh"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_pm_chat_e2e_script_guardrails.py",
+        "apps/orchestrator/tests/test_ui_full_e2e_strict_gate.py",
+        "apps/orchestrator/tests/test_env_governance_script.py"
+      ]
+    },
+    {
+      "id": "scripts_shell_test_quality",
+      "path_globs": [
+        "scripts/test*.sh",
+        "scripts/pre_commit*.sh",
+        "scripts/check_repo_hygiene.sh",
+        "scripts/dead_code_gate.sh",
+        "scripts/dead_code_nightly.sh"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_tests_gate_extended.py",
+        "apps/orchestrator/tests/test_gates.py",
+        "apps/orchestrator/tests/test_policy_registry_alignment.py"
+      ]
+    },
+    {
+      "id": "scripts_shell_command_tower",
+      "path_globs": [
+        "scripts/command_tower*.sh",
+        "scripts/e2e_command_tower_controls_real.sh",
+        "scripts/e2e_dashboard_high_risk_actions_real.sh",
+        "scripts/e2e_pm_chat_command_tower_success.sh"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_command_tower_overview.py",
+        "apps/orchestrator/tests/e2e/test_dashboard_e2e.py",
+        "apps/orchestrator/tests/test_pm_chat_e2e_script_guardrails.py"
+      ]
+    },
+    {
+      "id": "scripts_shell_ui_regression",
+      "path_globs": [
+        "scripts/ui_*.sh",
+        "scripts/bench_e2e_speed.sh"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_ui_full_e2e_strict_gate.py",
+        "apps/orchestrator/tests/test_ui_failure_taxonomy_mapping.py"
+      ]
+    },
+    {
+      "id": "scripts_shell_security_release",
+      "path_globs": [
+        "scripts/security_scan.sh",
+        "scripts/check_incident_regression_gate.sh",
+        "scripts/check_db_migration_governance.sh",
+        "scripts/release_anchor_snapshot.sh",
+        "scripts/canary_watchdog.sh",
+        "scripts/mutation_gate.sh",
+        "scripts/verify_desktop_release.sh",
+        "scripts/sign_and_notarize_desktop_release.sh"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/e2e/test_governance_e2e.py",
+        "apps/orchestrator/tests/test_integrated_gate.py",
+        "apps/orchestrator/tests/test_policy_registry_alignment.py"
+      ]
+    },
+    {
+      "id": "github_workflows_ci",
+      "path_globs": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/continuous-governance.yml"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_pm_chat_e2e_script_guardrails.py",
+        "apps/orchestrator/tests/test_ui_full_e2e_strict_gate.py",
+        "apps/orchestrator/tests/test_policy_registry_alignment.py"
+      ]
+    },
+    {
+      "id": "orchestrator_cli_runtime",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/cli.py",
+        "apps/orchestrator/src/cortexpilot_orch/cli_*helpers.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_cli_commands.py",
+        "apps/orchestrator/tests/test_cli_helpers_extra.py"
+      ]
+    },
+    {
+      "id": "orchestrator_config_core",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/config.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_policy_registry_alignment.py",
+        "apps/orchestrator/tests/test_env_governance_script.py"
+      ]
+    },
+    {
+      "id": "orchestrator_services",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/services/*.py",
+        "apps/orchestrator/src/cortexpilot_orch/services/**/*.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_rollback_service.py",
+        "apps/orchestrator/tests/test_session_index_service.py"
+      ]
+    },
+    {
+      "id": "orchestrator_reviewer",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/reviewer/*.py",
+        "apps/orchestrator/src/cortexpilot_orch/reviewer/**/*.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_reviewer_gate_extended.py",
+        "apps/orchestrator/tests/test_reviewer_logic.py"
+      ]
+    },
+    {
+      "id": "orchestrator_temporal",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/temporal/*.py",
+        "apps/orchestrator/src/cortexpilot_orch/temporal/**/*.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_temporal_runner.py",
+        "apps/orchestrator/tests/test_temporal_workflows.py"
+      ]
+    },
+    {
+      "id": "orchestrator_transport",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/transport/*.py",
+        "apps/orchestrator/src/cortexpilot_orch/transport/**/*.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_transport_modules.py",
+        "apps/orchestrator/tests/test_tool_pipeline_integration.py"
+      ]
+    },
+    {
+      "id": "orchestrator_policy_directory",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/policy/*.py",
+        "apps/orchestrator/src/cortexpilot_orch/policy/**/*.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_policy_registry_alignment.py",
+        "apps/orchestrator/tests/test_search_role_gate.py"
+      ]
+    },
+    {
+      "id": "orchestrator_chain_helpers",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/chain/*helpers*.py",
+        "apps/orchestrator/src/cortexpilot_orch/chain/runtime_helpers.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_chain_helpers.py",
+        "apps/orchestrator/tests/test_chain_helpers_extra.py"
+      ]
+    },
+    {
+      "id": "orchestrator_replay_helpers",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/replay/*helpers*.py",
+        "apps/orchestrator/src/cortexpilot_orch/replay/replayer_*.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_replayer_helper_matrix_extra.py",
+        "apps/orchestrator/tests/test_replayer_additional.py"
+      ]
+    },
+    {
+      "id": "orchestrator_locks_specific",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/locks/*.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_locker_additional.py",
+        "apps/orchestrator/tests/test_locker_extended.py"
+      ]
+    },
+    {
+      "id": "orchestrator_queue_specific",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/queue/*.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_queue.py",
+        "apps/orchestrator/tests/test_scheduler_paths.py",
+        "apps/orchestrator/tests/test_api_main_runtime_views.py"
+      ]
+    },
+    {
+      "id": "orchestrator_schedule_contracts",
+      "path_globs": [
+        "schemas/queue_item*.json",
+        "schemas/scheduled_run*.json",
+        "schemas/sla_state*.json",
+        "scripts/check_schedule_boundary.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_schema_validation.py",
+        "apps/orchestrator/tests/test_schema_aliases.py",
+        "apps/orchestrator/tests/test_queue.py",
+        "apps/orchestrator/tests/test_api_main_runtime_views.py"
+      ]
+    },
+    {
+      "id": "orchestrator_worktrees_specific",
+      "path_globs": [
+        "apps/orchestrator/src/cortexpilot_orch/worktrees/*.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_worktree_manager_extended.py",
+        "apps/orchestrator/tests/test_worktree_lock.py"
+      ]
+    },
+    {
+      "id": "configs_env_governance",
+      "path_globs": [
+        "configs/env.registry.json",
+        "configs/env_tiers.json"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_env_governance_script.py",
+        "apps/orchestrator/tests/test_policy_registry_alignment.py"
+      ]
+    },
+    {
+      "id": "configs_changed_scope_controls",
+      "path_globs": [
+        "configs/changed_scope_test_map.json",
+        "configs/governance/continuous_ops.json"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_tests_gate_extended.py",
+        "apps/orchestrator/tests/test_policy_registry_alignment.py"
+      ]
+    },
+    {
+      "id": "contracts_failure_examples",
+      "path_globs": [
+        "contracts/examples/task_result.failure*.json"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_contract_examples_failure_samples.py",
+        "apps/orchestrator/tests/test_validator_and_compiler.py"
+      ]
+    },
+    {
+      "id": "scripts_python_ui_audit",
+      "path_globs": [
+        "scripts/ui_*.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_ui_full_e2e_strict_gate.py",
+        "apps/orchestrator/tests/test_ui_failure_taxonomy_mapping.py"
+      ]
+    },
+    {
+      "id": "scripts_python_env_and_scope",
+      "path_globs": [
+        "scripts/check_env_*.py",
+        "scripts/report_env_governance.py",
+        "scripts/check_changed_scope_map.py"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_env_governance_script.py",
+        "apps/orchestrator/tests/test_tests_gate_extended.py"
+      ]
+    },
+    {
+      "id": "scripts_shell_dev_runtime",
+      "path_globs": [
+        "scripts/bootstrap.sh",
+        "scripts/dev_*.sh",
+        "scripts/cleanup_runtime*.sh"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_runtime_retention.py",
+        "apps/orchestrator/tests/test_integrated_gate.py"
+      ]
+    },
+    {
+      "id": "scripts_shell_desktop_high_risk",
+      "path_globs": [
+        "scripts/e2e_desktop_high_risk_actions_real.sh",
+        "scripts/test_desktop_*.sh"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_pm_chat_e2e_script_guardrails.py",
+        "apps/orchestrator/tests/test_integrated_gate.py"
+      ]
+    },
+    {
+      "id": "scripts_shell_provider_eval",
+      "path_globs": [
+        "scripts/provider_hardcut_gate.sh",
+        "scripts/test_provider_hardcut_gate.sh",
+        "scripts/run_evals.sh"
+      ],
+      "tests": [
+        "apps/orchestrator/tests/test_provider_resolution_gemini_only.py",
+        "apps/orchestrator/tests/test_evals_gate.py"
+      ]
+    }
+  ],
+  "fallback": {
+    "tests": [
+      "apps/orchestrator/tests/test_schema_validation.py",
+      "apps/orchestrator/tests/test_policy_registry_alignment.py"
+    ],
+    "by_path_globs": [
+      {
+        "path_globs": [
+          "schemas/**"
+        ],
+        "tests": [
+          "apps/orchestrator/tests/test_schema_aliases.py"
+        ]
+      },
+      {
+        "path_globs": [
+          "contracts/**"
+        ],
+        "tests": [
+          "apps/orchestrator/tests/test_contract_examples_failure_samples.py",
+          "apps/orchestrator/tests/test_validator_and_compiler.py"
+        ]
+      },
+      {
+        "path_globs": [
+          "scripts/*.sh",
+          ".github/workflows/*.yml"
+        ],
+        "tests": [
+          "apps/orchestrator/tests/test_pm_chat_e2e_script_guardrails.py",
+          "apps/orchestrator/tests/test_ui_full_e2e_strict_gate.py"
+        ]
+      }
+    ],
+    "orchestrator_source_heuristic": true
+  }
+}

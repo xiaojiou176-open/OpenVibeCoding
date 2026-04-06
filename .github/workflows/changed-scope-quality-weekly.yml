@@ -1,0 +1,132 @@
+name: changed-scope-quality-weekly
+
+on:
+  schedule:
+    - cron: '45 3 * * 1'
+  workflow_dispatch:
+    inputs:
+      feedback_jsonl_path:
+        description: 'Custom feedback JSONL path (optional)'
+        required: false
+        type: string
+        default: ''
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'scripts/report_changed_scope_quality.py'
+      - 'configs/changed_scope/rule_tuning.json'
+      - 'tests/fixtures/changed_scope/changed-scope-feedback.schema.json'
+      - 'tests/fixtures/changed_scope/changed-scope-feedback.sample.jsonl'
+      - '.github/workflows/changed-scope-quality-weekly.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  changed-scope-quality:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      actions: write
+    steps:
+      - name: Initialize Runner Tool Cache Env
+        run: |
+          echo "AGENT_TOOLSDIRECTORY=${RUNNER_TEMP}/hostedtoolcache-${GITHUB_JOB}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "${GITHUB_ENV}"
+          echo "RUNNER_TOOL_CACHE=${RUNNER_TEMP}/hostedtoolcache-${GITHUB_JOB}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "${GITHUB_ENV}"
+
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          clean: true
+
+      - name: Prepare input
+        id: prep
+        env:
+          CUSTOM_INPUT: ${{ github.event.inputs.feedback_jsonl_path || '' }}
+        run: |
+          set -euo pipefail
+          mkdir -p .runtime-cache/test_output/changed_scope_quality/input
+          custom_input="${CUSTOM_INPUT}"
+          default_input=".runtime-cache/test_output/changed_scope/feedback.jsonl"
+          input_path="${default_input}"
+          if [[ -n "${custom_input}" ]]; then
+            input_path="${custom_input}"
+          fi
+          if [[ ! -f "${input_path}" ]]; then
+            input_path=".runtime-cache/test_output/changed_scope_quality/input/feedback.sample.jsonl"
+            cp tests/fixtures/changed_scope/changed-scope-feedback.sample.jsonl "${input_path}"
+            echo "[changed-scope-quality] feedback input missing, fallback to sample dataset"
+            sample_fallback_used="1"
+          else
+            sample_fallback_used="0"
+          fi
+          {
+            echo "sample_fallback_used=${sample_fallback_used}"
+            echo "input_path=${input_path}"
+          } >> "${GITHUB_OUTPUT}"
+
+      - name: Generate changed-scope quality report via docker_ci lane
+        env:
+          INPUT_PATH: ${{ steps.prep.outputs.input_path }}
+        run: |
+          set -euo pipefail
+          bash scripts/docker_ci.sh lane changed-scope-quality \
+            --input-jsonl "${INPUT_PATH}" \
+            --output-dir ".runtime-cache/test_output/changed_scope_quality" \
+            --base-config "configs/changed_scope/rule_tuning.json"
+
+      - name: Publish summary
+        if: always()
+        env:
+          RUN_ID: ${{ github.run_id }}
+          INPUT_PATH: ${{ steps.prep.outputs.input_path }}
+          SAMPLE_FALLBACK_USED: ${{ steps.prep.outputs.sample_fallback_used }}
+        run: |
+          set -euo pipefail
+          latest_week="$(find .runtime-cache/test_output/changed_scope_quality -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort | tail -n 1)"
+          summary_md=".runtime-cache/test_output/changed_scope_quality/${latest_week}/changed_scope_quality.summary.md"
+          if [[ -f "${summary_md}" ]]; then
+            {
+              echo "## changed-scope-quality-weekly"
+              echo "- run_id: ${RUN_ID}"
+              echo "- input: \`${INPUT_PATH}\`"
+              echo "- sample_fallback_used: \`${SAMPLE_FALLBACK_USED}\`"
+              echo ""
+              cat "${summary_md}"
+            } >> "${GITHUB_STEP_SUMMARY}"
+          fi
+
+      - name: Emit truth-mode marker
+        if: always()
+        env:
+          SAMPLE_FALLBACK_USED: ${{ steps.prep.outputs.sample_fallback_used }}
+        run: |
+          set -euo pipefail
+          mkdir -p .runtime-cache/test_output/changed_scope_quality/meta
+          if [[ "${SAMPLE_FALLBACK_USED}" == "1" ]]; then
+            sample_fallback_used=true
+          else
+            sample_fallback_used=false
+          fi
+          cat > .runtime-cache/test_output/changed_scope_quality/meta/truth_status.json <<EOF
+          {
+            "report_type": "cortexpilot_changed_scope_truth_status",
+            "sample_fallback_used": ${sample_fallback_used},
+            "analytics_only": true,
+            "blocking_quality_gate": false,
+            "release_truth_eligible": false
+          }
+          EOF
+
+      - name: Upload changed-scope quality artifacts
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: changed-scope-quality-weekly-${{ github.run_id }}
+          retention-days: 14
+          if-no-files-found: warn
+          path: |
+            .runtime-cache/test_output/changed_scope_quality/**

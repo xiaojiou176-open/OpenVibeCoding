@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "description": "SSOT for repository-level third-party asset and branding provenance review. Non-verified entries must not be treated as legal-safe public redistribution approval.",
+  "entries": [
+    {
+      "id": "desktop-icon-bundle",
+      "surface_kind": "application_icon_bundle",
+      "path_globs": [
+        "apps/desktop/src-tauri/icons/**/*"
+      ],
+      "status": "active",
+      "review_state": "verified",
+      "owner": "repository-maintainer",
+      "origin_summary": "Desktop icon bundle is now generated in-repo by the repository-owned script `scripts/generate_first_party_desktop_icons.py`, so the current icon assets are first-party branding rather than third-party source material.",
+      "usage_boundary": "Treat the desktop icon bundle as first-party repository branding; redistribution follows the repository LICENSE boundary, not a pending third-party clearance workflow.",
+      "evidence_refs": [
+        "THIRD_PARTY_NOTICES.md",
+        "scripts/generate_first_party_desktop_icons.py",
+        "CHANGELOG.md"
+      ]
+    },
+    {
+      "id": "storefront-explainer-assets",
+      "surface_kind": "branding_surface",
+      "path_globs": [
+        "docs/assets/storefront/hero-command-tower.svg",
+        "docs/assets/storefront/first-loop-storyboard.svg",
+        "docs/assets/storefront/first-loop-storyboard.png",
+        "docs/assets/storefront/first-loop-storyboard.gif",
+        "docs/assets/storefront/social-preview-source.svg",
+        "docs/assets/storefront/social-preview-1280x640.png"
+      ],
+      "status": "active",
+      "review_state": "verified",
+      "owner": "repository-maintainer",
+      "origin_summary": "These storefront explainer assets are repository-owned, first-party visuals maintained in-repo for README, release, and social preview use. The SVG source files are the editable truth for exported PNG/GIF derivatives.",
+      "usage_boundary": "Treat this bundle as first-party explanatory and promotional artwork. The social preview PNG is only an upload candidate until the live GitHub setting is visually verified.",
+      "evidence_refs": [
+        "docs/assets/storefront/README.md",
+        "docs/assets/storefront/demo-status.md",
+        "docs/runbooks/storefront-share-kit.md",
+        "scripts/export_storefront_assets.sh"
+      ]
+    },
+    {
+      "id": "storefront-live-capture-assets",
+      "surface_kind": "documentation_media",
+      "path_globs": [
+        "docs/assets/storefront/dashboard-home-live-1440x900.png",
+        "docs/assets/storefront/dashboard-command-tower-live-1440x900.png",
+        "docs/assets/storefront/dashboard-runs-live-1440x900.png",
+        "docs/assets/storefront/dashboard-live-degraded-loop.gif",
+        "docs/assets/storefront/desktop-shell-live-1440x900.png"
+      ],
+      "status": "active",
+      "review_state": "verified",
+      "owner": "repository-maintainer",
+      "origin_summary": "These are repository-tracked first-party screenshots and GIF captures produced from local product surfaces. They are not third-party assets, but they do require explicit provenance and usage boundaries because local/degraded captures can be misrepresented as healthy public proof.",
+      "usage_boundary": "Use only with the exact truth labels recorded in `docs/assets/storefront/demo-status.md`. Degraded/local captures must not be described as healthy end-to-end proof.",
+      "evidence_refs": [
+        "docs/assets/storefront/demo-status.md",
+        "docs/runbooks/storefront-share-kit.md"
+      ]
+    },
+    {
+      "id": "release-proof-assets",
+      "surface_kind": "release_asset_bundle",
+      "path_globs": [
+        "docs/releases/assets/news-digest-healthy-proof-2026-03-27.md",
+        "docs/releases/assets/news-digest-healthy-proof-summary-2026-03-27.json",
+        "docs/releases/assets/news-digest-healthy-proof-gemini-2026-03-27.png",
+        "docs/releases/assets/news-digest-healthy-proof-grok-2026-03-27.png",
+        "docs/releases/assets/news-digest-benchmark-summary-2026-03-27.md",
+        "docs/releases/assets/news-digest-benchmark-summary-2026-03-27.json",
+        "docs/releases/assets/news-digest-benchmark-route-2026-03-27.md",
+        "docs/releases/assets/news-digest-healthy-proof-route-2026-03-27.md"
+      ],
+      "status": "active",
+      "review_state": "verified",
+      "owner": "repository-maintainer",
+      "origin_summary": "These release-facing proof assets are first-party records copied out of repository-owned execution evidence. They are fit for repo-side proof and public release wording only within the scope explicitly described in each summary file.",
+      "usage_boundary": "Do not describe these assets as proof that a live GitHub Release page is already published. Healthy proof and benchmark artifacts must keep their current single-path and single-run boundaries explicit until broader evidence exists.",
+      "evidence_refs": [
+        "docs/releases/first-public-release-draft.md",
+        "docs/assets/storefront/demo-status.md",
+        "docs/assets/storefront/benchmark-methodology.md"
+      ]
+    }
+  ]
+}

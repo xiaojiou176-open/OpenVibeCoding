@@ -1,0 +1,55 @@
+{
+  "metadata": {
+    "name": "ci_policy_advanced",
+    "version": "1.0.0",
+    "layer": "advanced",
+    "schema": "schemas/ci_policy.schema.json",
+    "description": "Advanced fail-closed and break-glass policy skeleton.",
+    "source_of_truth": [
+      "scripts/ci.sh",
+      "scripts/ui_e2e_truth_gate.sh"
+    ]
+  },
+  "audit": {
+    "enabled": true,
+    "break_glass_required": true,
+    "break_glass_audit_log": ".runtime-cache/test_output/ci_break_glass_audit.jsonl"
+  },
+  "advanced": {
+    "fail_closed": {
+      "gate_skip_requires_break_glass": true,
+      "soft_audit_requires_break_glass": true,
+      "ui_strict_downgrade_requires_break_glass": true,
+      "ui_truth_strict_required": true,
+      "ui_truth_disable_auto_latest_required": true,
+      "ui_truth_require_run_id_match_required": true
+    },
+    "break_glass": {
+      "template": {
+        "enabled": false,
+        "reason": "",
+        "ticket": "",
+        "expires_on": "YYYY-MM-DD"
+      },
+      "required_fields": [
+        "reason",
+        "ticket",
+        "expires_on"
+      ],
+      "scopes": [
+        "CORTEXPILOT_CI_DEAD_CODE_GATE",
+        "CORTEXPILOT_CI_PROVIDER_HARDCUT_GATE",
+        "CORTEXPILOT_CI_ORCHESTRATOR_DECOUPLING_GATE",
+        "CORTEXPILOT_CI_UI_AUDIT_GATE",
+        "CORTEXPILOT_CI_EXTERNAL_WEB_PROBE_GATE",
+        "CORTEXPILOT_CI_UI_BUTTON_MATRIX_GATE",
+        "CORTEXPILOT_CI_UI_REGRESSION_FLAKE_GATE",
+        "CORTEXPILOT_CI_UI_STRICT_BREAK_GLASS",
+        "CORTEXPILOT_CI_RESILIENCE_GATES",
+        "CORTEXPILOT_CI_PM_CHAT_E2E",
+        "CORTEXPILOT_CI_MUTATION_GATE",
+        "CORTEXPILOT_CI_INCIDENT_GATE"
+      ]
+    }
+  }
+}

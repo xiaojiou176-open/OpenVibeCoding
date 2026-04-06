@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "description": "Repo-owned CI governance policy for trusted/untrusted routing, supply-chain boundaries, SLOs, and fail-closed release evidence.",
+  "workflow_file": ".github/workflows/ci.yml",
+  "concurrency": {
+    "group": "ci-${{ github.workflow }}-${{ github.ref }}",
+    "cancel_in_progress": true
+  },
+  "required_jobs": [
+    "ci-trust-boundary",
+    "quick-feedback",
+    "untrusted-pr-basic-gates",
+    "policy-and-security",
+    "core-tests",
+    "ui-truth",
+    "resilience-and-e2e",
+    "release-evidence",
+    "pr-release-critical-gates",
+    "pr-ci-gate"
+  ],
+  "runner_contract": {
+    "github_hosted": [
+      "ci-trust-boundary",
+      "quick-feedback",
+      "untrusted-pr-basic-gates",
+      "policy-and-security",
+      "core-tests",
+      "ui-truth",
+      "resilience-and-e2e",
+      "release-evidence",
+      "pr-release-critical-gates",
+      "pr-ci-gate"
+    ]
+  },
+  "trusted_semantic_jobs": [
+    "policy-and-security",
+    "core-tests"
+  ],
+  "artifact_roots_required": [
+    ".runtime-cache/test_output",
+    ".runtime-cache/logs",
+    ".runtime-cache/cortexpilot/reports"
+  ],
+  "artifact_roots_release_required": [
+    ".runtime-cache/cortexpilot/release"
+  ],
+  "retry_green_policy": {
+    "max_retry_green_count": 0
+  },
+  "slice_slo_sec": {
+    "quick-feedback": 300,
+    "policy-and-security": 3600,
+    "core-tests": 5400,
+    "ui-truth": 7200,
+    "resilience-and-e2e": 7200,
+    "release-evidence": 5400
+  },
+  "runner_quarantine": {
+    "retry_green_count_blocking": 1,
+    "slo_breach_count_blocking": 1,
+    "doctor_failure_blocking": true,
+    "drift_failure_blocking": true
+  },
+  "route_contract": {
+    "untrusted_pr": {
+      "event_names": ["pull_request"],
+      "trust_class": "untrusted",
+      "runner_class": "github_hosted",
+      "cloud_bootstrap_allowed": false,
+      "required_jobs": [
+        "ci-trust-boundary",
+        "quick-feedback",
+        "untrusted-pr-basic-gates",
+        "pr-ci-gate"
+      ],
+      "required_artifact_prefixes": [
+        "ci-pr-low-priv-artifacts-",
+        "ci-route-report-untrusted_pr-"
+      ]
+    },
+    "trusted_pr": {
+      "event_names": ["pull_request"],
+      "trust_class": "trusted",
+      "runner_class": "github_hosted",
+      "cloud_bootstrap_allowed": false,
+      "required_jobs": [
+        "ci-trust-boundary",
+        "quick-feedback",
+        "policy-and-security",
+        "core-tests",
+        "pr-release-critical-gates",
+        "pr-ci-gate"
+      ],
+      "required_artifact_prefixes": [
+        "ci-policy-and-security-artifacts-",
+        "ci-core-tests-artifacts-",
+        "ci-route-report-trusted_pr-"
+      ]
+    },
+    "push_main": {
+      "event_names": ["push"],
+      "trust_class": "trusted",
+      "runner_class": "github_hosted",
+      "cloud_bootstrap_allowed": false,
+      "required_jobs": [
+        "ci-trust-boundary",
+        "quick-feedback",
+        "policy-and-security",
+        "core-tests"
+      ],
+      "required_artifact_prefixes": [
+        "ci-policy-and-security-artifacts-",
+        "ci-core-tests-artifacts-",
+        "ci-quick-feedback-artifacts-"
+      ]
+    },
+    "workflow_dispatch": {
+      "event_names": ["workflow_dispatch"],
+      "trust_class": "trusted",
+      "runner_class": "github_hosted",
+      "cloud_bootstrap_allowed": true,
+      "required_jobs": [
+        "ci-trust-boundary",
+        "quick-feedback",
+        "policy-and-security",
+        "core-tests"
+      ],
+      "required_artifact_prefixes": [
+        "ci-policy-and-security-artifacts-",
+        "ci-core-tests-artifacts-",
+        "ci-quick-feedback-artifacts-"
+      ]
+    }
+  },
+  "protected_dispatch_contract": {
+    "required_environment": "owner-approved-sensitive",
+    "manual_only_jobs": {
+      "ui-truth": "run_ui_truth",
+      "resilience-and-e2e": "run_resilience_and_e2e",
+      "release-evidence": "run_release_evidence"
+    }
+  },
+  "strict_env_contract": {
+    "allowlisted_cortexpilot_env": [
+      "CORTEXPILOT_DOC_GATE_MODE",
+      "CORTEXPILOT_DOC_GATE_BASE_SHA",
+      "CORTEXPILOT_DOC_GATE_HEAD_SHA",
+      "CORTEXPILOT_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE",
+      "CORTEXPILOT_CI_LIVE_PREFLIGHT_PROVIDER_API_MODE",
+      "CORTEXPILOT_CI_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE",
+      "CORTEXPILOT_CI_ROUTE_ID",
+      "CORTEXPILOT_CI_TRUST_CLASS",
+      "CORTEXPILOT_CI_RUNNER_CLASS",
+      "CORTEXPILOT_CI_CLOUD_BOOTSTRAP_ALLOWED"
+    ],
+    "forbid_dotenv_fallback": true
+  },
+  "freshness_contract": {
+    "max_report_age_sec": 172800,
+    "required_report_metadata_fields": [
+      "generated_at",
+      "source_run_id",
+      "source_route",
+      "source_event"
+    ],
+    "analytics_only_blacklist_paths": [
+      ".runtime-cache/test_output/changed_scope_quality/meta/truth_status.json"
+    ]
+  },
+  "supply_chain": {
+    "allowed_action_repos": [
+      "actions/checkout",
+      "actions/dependency-review-action",
+      "actions/upload-artifact",
+      "actions/download-artifact",
+      "google-github-actions/auth",
+      "google-github-actions/setup-gcloud"
+    ],
+    "allowed_download_hosts": [
+      "nodejs.org",
+      "github.com",
+      "static.rust-lang.org",
+      "mcr.microsoft.com",
+      "ports.ubuntu.com"
+    ]
+  }
+}

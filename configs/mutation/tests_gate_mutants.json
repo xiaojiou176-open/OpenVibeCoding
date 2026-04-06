@@ -1,0 +1,173 @@
+{
+  "target": "apps/orchestrator/src/cortexpilot_orch/gates/tests_gate.py",
+  "mutants": [
+    {
+      "name": "normalize_tests_timeout_ignore_input",
+      "operator": "literal_replace",
+      "occurrence": 1,
+      "old": "\"timeout_sec\": timeout_sec,",
+      "new": "\"timeout_sec\": _DEFAULT_TIMEOUT_SEC,"
+    },
+    {
+      "name": "command_report_timeout_ignore_input",
+      "operator": "literal_replace",
+      "occurrence": 2,
+      "old": "\"timeout_sec\": timeout_sec,",
+      "new": "\"timeout_sec\": _DEFAULT_TIMEOUT_SEC,"
+    },
+    {
+      "name": "trivial_empty_command_disabled",
+      "operator": "boolean_flip",
+      "occurrence": 1,
+      "old": "if not normalized:\n        return True",
+      "new": "if not normalized:\n        return False"
+    },
+    {
+      "name": "trivial_allowlist_disabled",
+      "operator": "boolean_flip",
+      "occurrence": 1,
+      "old": "if normalized in _TRIVIAL_ACCEPTANCE_COMMANDS:\n        return True",
+      "new": "if normalized in _TRIVIAL_ACCEPTANCE_COMMANDS:\n        return False"
+    },
+    {
+      "name": "trivial_echo_prefix_check_disabled",
+      "operator": "condition_disable",
+      "occurrence": 1,
+      "old": "if normalized.startswith(\"echo \"):",
+      "new": "if False:"
+    },
+    {
+      "name": "trivial_echo_payload_allowlist_disabled",
+      "operator": "set_shrink",
+      "occurrence": 1,
+      "old": "if payload in {\"\", \"ok\", \"hello\", \"pass\", \"success\", \"done\", \"1\"}:\n            return True",
+      "new": "if payload in {\"__never__\"}:\n            return True"
+    },
+    {
+      "name": "acceptance_tests_empty_guard_disabled",
+      "operator": "condition_disable",
+      "occurrence": 1,
+      "old": "if not normalized:\n        report = _build_report(",
+      "new": "if False:\n        report = _build_report("
+    },
+    {
+      "name": "must_pass_guard_disabled",
+      "operator": "condition_disable",
+      "occurrence": 1,
+      "old": "if not has_must_pass:",
+      "new": "if False:"
+    },
+    {
+      "name": "strict_nontrivial_guard_disabled",
+      "operator": "condition_disable",
+      "occurrence": 1,
+      "old": "if strict_nontrivial_enabled and _is_trivial_acceptance_command(command):",
+      "new": "if False and _is_trivial_acceptance_command(command):"
+    },
+    {
+      "name": "tool_gate_check_disabled_first",
+      "operator": "condition_disable",
+      "occurrence": 1,
+      "old": "if not gate.get(\"ok\", False):",
+      "new": "if False:"
+    },
+    {
+      "name": "tool_gate_check_disabled_second",
+      "operator": "condition_disable",
+      "occurrence": 2,
+      "old": "if not gate.get(\"ok\", False):",
+      "new": "if False:"
+    },
+    {
+      "name": "invalid_shlex_handler_removed",
+      "operator": "exception_type_change",
+      "occurrence": 1,
+      "old": "except ValueError as exc:",
+      "new": "except RuntimeError as exc:"
+    },
+    {
+      "name": "launch_error_exception_handler_removed",
+      "operator": "exception_type_change",
+      "occurrence": 1,
+      "old": "except (OSError, ValueError) as exc:",
+      "new": "except TimeoutError as exc:"
+    },
+    {
+      "name": "launch_error_message_changed",
+      "operator": "literal_replace",
+      "occurrence": 1,
+      "old": "launch_error = f\"test launch failed: {exc}\"",
+      "new": "launch_error = f\"launch failed: {exc}\""
+    },
+    {
+      "name": "timeout_branch_disabled",
+      "operator": "condition_disable",
+      "occurrence": 1,
+      "old": "if exit_code == 124:",
+      "new": "if False:"
+    },
+    {
+      "name": "must_pass_failure_guard_disabled",
+      "operator": "condition_disable",
+      "occurrence": 1,
+      "old": "if exit_code != 0 and _coerce_must_pass(test.get(\"must_pass\", True)):",
+      "new": "if False and _coerce_must_pass(test.get(\"must_pass\", True)):"
+    },
+    {
+      "name": "empty_command_reason_changed",
+      "operator": "literal_replace",
+      "occurrence": 1,
+      "old": "\"reason\": \"empty command\"",
+      "new": "\"reason\": \"acceptance_tests empty\""
+    },
+    {
+      "name": "missing_must_pass_reason_changed",
+      "operator": "literal_replace",
+      "occurrence": 1,
+      "old": "\"reason\": \"missing must_pass acceptance test\"",
+      "new": "\"reason\": \"test failed\""
+    },
+    {
+      "name": "strict_nontrivial_reason_changed",
+      "operator": "literal_replace",
+      "occurrence": 1,
+      "old": "\"reason\": \"trivial acceptance command blocked\"",
+      "new": "\"reason\": \"tool gate violation\""
+    },
+    {
+      "name": "tool_gate_reason_changed_first",
+      "operator": "literal_replace",
+      "occurrence": 1,
+      "old": "\"reason\": \"tool gate violation\"",
+      "new": "\"reason\": \"test failed\""
+    },
+    {
+      "name": "tool_gate_reason_changed_second",
+      "operator": "literal_replace",
+      "occurrence": 2,
+      "old": "\"reason\": \"tool gate violation\"",
+      "new": "\"reason\": \"test failed\""
+    },
+    {
+      "name": "test_launch_failed_reason_changed",
+      "operator": "literal_replace",
+      "occurrence": 1,
+      "old": "\"reason\": \"test launch failed\"",
+      "new": "\"reason\": \"test failed\""
+    },
+    {
+      "name": "must_pass_false_string_handling_broken",
+      "operator": "boolean_flip",
+      "occurrence": 1,
+      "old": "if value in {\"0\", \"false\", \"no\", \"n\", \"off\"}:\n            return False",
+      "new": "if value in {\"0\", \"false\", \"no\", \"n\", \"off\"}:\n            return True"
+    },
+    {
+      "name": "nan_timeout_fallback_broken",
+      "operator": "fallback_remove",
+      "occurrence": 2,
+      "old": "return float(_DEFAULT_TIMEOUT_SEC)",
+      "new": "return timeout_sec"
+    }
+  ]
+}

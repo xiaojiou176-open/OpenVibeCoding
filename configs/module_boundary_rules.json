@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "id": "packages-must-not-import-apps",
+      "description": "Shared packages cannot depend on app-layer implementations.",
+      "include_globs": [
+        "packages/**/*.js",
+        "packages/**/*.mjs",
+        "packages/**/*.ts",
+        "packages/**/*.tsx"
+      ],
+      "deny_patterns": [
+        "(?:from|import|require)\\s*(?:\\(|[^\\n])*['\\\"][^'\\\"]*(?:@cortexpilot/.*/app/|/apps/|\\.\\./apps/|\\.\\./\\.\\./apps/)"
+      ]
+    },
+    {
+      "id": "runtime-code-must-not-import-governance-surfaces",
+      "description": "Runtime source may not depend on docs/configs/agents governance surfaces.",
+      "include_globs": [
+        "apps/orchestrator/src/**/*.py",
+        "apps/dashboard/app/**/*.ts",
+        "apps/dashboard/app/**/*.tsx",
+        "apps/dashboard/components/**/*.ts",
+        "apps/dashboard/components/**/*.tsx",
+        "apps/dashboard/lib/**/*.ts",
+        "apps/dashboard/lib/**/*.tsx",
+        "apps/desktop/src/**/*.ts",
+        "apps/desktop/src/**/*.tsx"
+      ],
+      "deny_patterns": [
+        "(?:from|import|require)\\s*(?:\\(|[^\\n])*['\\\"][^'\\\"]*(?:/docs/|\\.\\./docs/|\\.\\./\\.\\./docs/)",
+        "(?:from|import|require)\\s*(?:\\(|[^\\n])*['\\\"][^'\\\"]*(?:/configs/|\\.\\./configs/|\\.\\./\\.\\./configs/)",
+        "(?:from|import|require)\\s*(?:\\(|[^\\n])*['\\\"][^'\\\"]*(?:/agents/|\\.\\./agents/|\\.\\./\\.\\./agents/)",
+        "(?:from|import|require)\\s*(?:\\(|[^\\n])*['\\\"][^'\\\"]*(?:/scripts/|\\.\\./scripts/|\\.\\./\\.\\./scripts/)"
+      ]
+    },
+    {
+      "id": "dashboard-runtime-must-not-relative-import-external-surfaces",
+      "description": "Dashboard runtime code may only relative-import within apps/dashboard itself.",
+      "include_globs": [
+        "apps/dashboard/app/**/*.ts",
+        "apps/dashboard/app/**/*.tsx",
+        "apps/dashboard/components/**/*.ts",
+        "apps/dashboard/components/**/*.tsx",
+        "apps/dashboard/lib/**/*.ts",
+        "apps/dashboard/lib/**/*.tsx"
+      ],
+      "forbidden_relative_resolved_prefixes": [
+        "apps/desktop/",
+        "apps/orchestrator/",
+        "packages/"
+      ]
+    },
+    {
+      "id": "desktop-runtime-must-not-relative-import-external-surfaces",
+      "description": "Desktop runtime code may only relative-import within apps/desktop itself.",
+      "include_globs": [
+        "apps/desktop/src/**/*.ts",
+        "apps/desktop/src/**/*.tsx"
+      ],
+      "forbidden_relative_resolved_prefixes": [
+        "apps/dashboard/",
+        "apps/orchestrator/",
+        "packages/"
+      ]
+    }
+  ]
+}

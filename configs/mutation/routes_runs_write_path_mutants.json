@@ -1,0 +1,33 @@
+{
+  "target": "apps/orchestrator/src/cortexpilot_orch/api/routes_runs.py",
+  "mutants": [
+    {
+      "name": "promote_rbac_disabled",
+      "operator": "condition_disable",
+      "occurrence": 1,
+      "old": "    _enforce_mutation_rbac(request)\n    return runs_deps.promote_evidence(_validated_run_id(run_id))",
+      "new": "    return runs_deps.promote_evidence(_validated_run_id(run_id))"
+    },
+    {
+      "name": "rollback_rbac_disabled",
+      "operator": "condition_disable",
+      "occurrence": 1,
+      "old": "    _enforce_mutation_rbac(request)\n    return runs_deps.rollback_run(_validated_run_id(run_id))",
+      "new": "    return runs_deps.rollback_run(_validated_run_id(run_id))"
+    },
+    {
+      "name": "reject_rbac_disabled",
+      "operator": "condition_disable",
+      "occurrence": 1,
+      "old": "    _enforce_mutation_rbac(request)\n    return runs_deps.reject_run(_validated_run_id(run_id))",
+      "new": "    return runs_deps.reject_run(_validated_run_id(run_id))"
+    },
+    {
+      "name": "role_header_trust_check_disabled",
+      "operator": "condition_disable",
+      "occurrence": 1,
+      "old": "    if not _role_header_is_trusted(request):",
+      "new": "    if False:"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+# P0 UI regression command set (real ui + backend chain)
+npm --prefix apps/desktop run e2e:first-entry:real:full
+npm --prefix apps/desktop run e2e:first-entry:real:degraded
+npm run desktop:e2e:high-risk-actions:real
+npm run dashboard:e2e:high-risk-actions:real

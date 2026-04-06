@@ -1,0 +1,121 @@
+# ============================================================
+# CortexPilot Git Ignore Policy (Layered)
+# Goal: keep repo reproducible, clean, and noise-free.
+# ============================================================
+
+# ------------------------------
+# OS / System noise
+# ------------------------------
+.DS_Store
+agents/.DS_Store
+
+# ------------------------------
+# Environment secrets (local only)
+# ------------------------------
+.env
+.env.local
+**/.env.local
+**/.env.*.local
+
+# ------------------------------
+# Runtime / Temp / Logs
+# ------------------------------
+*.log
+tests/stdout_*.log
+tests/stderr_*.log
+logs/
+cache/
+data/
+tmp/
+tmp_*
+*.tmp
+artifacts/
+.runtime-cache/
+
+# ------------------------------
+# Python artifacts
+# ------------------------------
+*.pyc
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.pytype/
+.pyre/
+.nox/
+.tox/
+.venv/
+.hypothesis/
+
+# ------------------------------
+# JS / TS / Frontend artifacts
+# ------------------------------
+node_modules/
+**/node_modules/
+dist/
+build/
+.next/
+**/.next-*/
+.turbo/
+.cache/
+*.tsbuildinfo
+
+# ------------------------------
+# Rust / Tauri artifacts
+# ------------------------------
+**/target/
+
+# ------------------------------
+# Coverage / test outputs
+# ------------------------------
+coverage/
+htmlcov/
+coverage.xml
+.coverage*
+.coveragerc
+
+# ------------------------------
+# Local tooling state
+# ------------------------------
+.aider*
+.agent/
+.agents/
+.archive/
+.codex-memory.jsonl
+.codex/
+.claude/
+.opencode/
+.serena/
+.cursorrules/
+**/.cache/cortexpilot/modules-root/
+
+# ------------------------------
+# Generated contract outputs
+# ------------------------------
+contracts/results/
+contracts/reviews/
+contracts/tasks/
+.runtime-cache/cortexpilot/contracts/
+**/.runtime-cache/cortexpilot/contracts/
+
+# ------------------------------
+# Policies: ignore by default, track SSOT payloads only
+# ------------------------------
+policies/**
+!policies/
+!policies/*.json
+!policies/README.md
+!policies/agents/
+!policies/agents/**
+!policies/packs/
+!policies/packs/*.json
+
+# ------------------------------
+# First-party policy/agent UI sources must stay tracked
+# ------------------------------
+!agents/
+!agents/**
+!apps/dashboard/app/agents/
+!apps/dashboard/app/agents/**
+!apps/dashboard/app/policies/
+!apps/dashboard/app/policies/**

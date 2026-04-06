@@ -1,0 +1,1140 @@
+{
+  "schema_version": 1,
+  "description": "Human-maintained annotations for generated UI button coverage matrix rows.",
+  "rows": {
+    "btn-dashboard-0751a2cc97e1": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/pm_intake_components_branches.test.tsx`（discover 阶段输入已就绪时直接触发首条需求发送）",
+      "evidence_type": "mixed",
+      "source_path": "apps/dashboard/tests/pm_intake_components_branches.test.tsx; scripts/e2e_pm_chat_command_tower_success.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-dashboard-b8a678f01964": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/pm_page_chat.test.tsx`（stop/cancel 交互路径）",
+      "evidence_type": "mixed",
+      "source_path": "apps/dashboard/tests/pm_page_chat.test.tsx; scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-dashboard-1fc9760f8bfa": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/pm_page_chat.test.tsx`（composer send + timeline append）",
+      "evidence_type": "mixed",
+      "source_path": "apps/dashboard/tests/pm_page_chat.test.tsx; scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-dashboard-f820f295b869": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/pm_page_stage_flow.suite.tsx`（左侧栏草稿会话点击聚焦输入框）",
+      "evidence_type": "mixed",
+      "source_path": "apps/dashboard/tests/pm_page_stage_flow.suite.tsx; scripts/e2e_pm_chat_command_tower_success.sh",
+      "source_kind": "real_playwright,component_test"
+    },
+    "btn-dashboard-a94bc0905b93": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/pm_page_chat.test.tsx`（`/run` 执行路径）",
+      "evidence_type": "mixed",
+      "source_path": "apps/dashboard/tests/pm_page_chat.test.tsx; scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-dashboard-705b57a4622f": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/home_page.test.tsx`（治理 CTA 在失败态 `打开全局失败治理` 与无失败态 `发起新任务` 两条分支断言）",
+      "evidence_type": "mixed",
+      "source_path": "apps/dashboard/tests/home_page.test.tsx; scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-dashboard-e489e2298e65": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/home_page.test.tsx`（RunsPage 治理入口 `查看失败事件` href 断言）",
+      "evidence_type": "mixed",
+      "source_path": "apps/dashboard/tests/home_page.test.tsx; scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-dashboard-cbe9bf3952eb": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/home_page.test.tsx`（RunsPage 状态筛选 `全部` href 断言）",
+      "evidence_type": "mixed",
+      "source_path": "apps/dashboard/tests/home_page.test.tsx; scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-dashboard-e06f5de24674": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/home_page.test.tsx`（RunsPage 状态筛选 `失败` href 断言）",
+      "evidence_type": "mixed",
+      "source_path": "apps/dashboard/tests/home_page.test.tsx; scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-dashboard-ccd0aa9e83a8": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/home_page.test.tsx`（RunsPage 状态筛选 `进行中` href 断言）",
+      "evidence_type": "mixed",
+      "source_path": "apps/dashboard/tests/home_page.test.tsx; scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-dashboard-1cca8db17bdc": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/home_page.test.tsx`（RunsPage 状态筛选 `成功` href 断言）",
+      "evidence_type": "mixed",
+      "source_path": "apps/dashboard/tests/home_page.test.tsx; scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-dashboard-65fc417ef785": {
+      "status": "COVERED",
+      "notes": "`scripts/e2e_dashboard_high_risk_actions_real.sh` (Search 提升为证据包)",
+      "evidence_type": "real_playwright",
+      "source_path": "scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright"
+    },
+    "btn-dashboard-60c64ec20197": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/api_wrappers.suite.ts`（覆盖 DiffGate error/empty/list 三态下运行列表跳转断言）",
+      "evidence_type": "mixed",
+      "source_path": "apps/dashboard/tests/api_wrappers.suite.ts; scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,component_test"
+    },
+    "btn-dashboard-e71868799416": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/api_wrappers.suite.ts`（覆盖 DiffGate error/empty/list 三态下运行列表跳转断言）",
+      "evidence_type": "mixed",
+      "source_path": "apps/dashboard/tests/api_wrappers.suite.ts; scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,component_test"
+    },
+    "btn-dashboard-c85d0e3e91a6": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/api_wrappers.suite.ts`（覆盖 DiffGate error/empty/list 三态下运行列表跳转断言）",
+      "evidence_type": "mixed",
+      "source_path": "apps/dashboard/tests/api_wrappers.suite.ts; scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,component_test"
+    },
+    "btn-dashboard-1a127edd5b3d": {
+      "status": "COVERED",
+      "notes": "`scripts/e2e_dashboard_high_risk_actions_real.sh` (DiffGate 加载失败重试路径)",
+      "evidence_type": "real_playwright",
+      "source_path": "scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright"
+    },
+    "btn-dashboard-d4fcc2872149": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/api_wrappers.suite.ts`（覆盖 DiffGate error/empty/list 三态下运行列表跳转断言）",
+      "evidence_type": "mixed",
+      "source_path": "apps/dashboard/tests/api_wrappers.suite.ts; scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,component_test"
+    },
+    "btn-dashboard-183c3196fe8f": {
+      "status": "COVERED",
+      "notes": "`scripts/e2e_dashboard_high_risk_actions_real.sh` (DiffGate 加载失败重试路径)",
+      "evidence_type": "real_playwright",
+      "source_path": "scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright"
+    },
+    "btn-dashboard-3cbe7347a850": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/diff_gate_panel.test.tsx`（summary-first 列表在 `diff-gate-expand-list` 上执行点击并验证展开后可见第 13 条）",
+      "evidence_type": "mixed",
+      "source_path": "apps/dashboard/tests/diff_gate_panel.test.tsx; scripts/ui_full_e2e_gemini_audit.py",
+      "source_kind": "real_playwright,component_test"
+    },
+    "btn-dashboard-3012f4e4fb7b": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/diff_gate_panel.test.tsx`（footer 收起到首屏 10 条交互）",
+      "evidence_type": "mixed",
+      "source_path": "apps/dashboard/tests/diff_gate_panel.test.tsx; scripts/ui_full_e2e_gemini_audit.py",
+      "source_kind": "real_playwright,component_test"
+    },
+    "btn-dashboard-7959894b6b5e": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/api_wrappers.suite.ts`（覆盖 DiffGate error/empty/list 三态下运行列表跳转断言）",
+      "evidence_type": "mixed",
+      "source_path": "apps/dashboard/tests/api_wrappers.suite.ts; scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,component_test"
+    },
+    "btn-dashboard-5c93911bd024": {
+      "status": "COVERED",
+      "notes": "`scripts/e2e_dashboard_high_risk_actions_real.sh` (DiffGate 查看/隐藏 Diff 切换)",
+      "evidence_type": "real_playwright",
+      "source_path": "scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright"
+    },
+    "btn-dashboard-8362de529fcf": {
+      "status": "COVERED",
+      "notes": "`scripts/e2e_dashboard_high_risk_actions_real.sh` (POST `/api/runs/{run_id}/rollback`)",
+      "evidence_type": "real_playwright",
+      "source_path": "scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright"
+    },
+    "btn-dashboard-6c033c0a6cb0": {
+      "status": "COVERED",
+      "notes": "`scripts/e2e_dashboard_high_risk_actions_real.sh` (POST `/api/runs/{run_id}/reject`)",
+      "evidence_type": "real_playwright",
+      "source_path": "scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright"
+    },
+    "btn-dashboard-c934d0c8ee09": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/diff_gate_panel.test.tsx`（footer 收起到首屏 10 条交互）",
+      "evidence_type": "mixed",
+      "source_path": "apps/dashboard/tests/diff_gate_panel.test.tsx; scripts/ui_full_e2e_gemini_audit.py",
+      "source_kind": "real_playwright,component_test"
+    },
+    "btn-dashboard-5984614e018a": {
+      "status": "COVERED",
+      "notes": "`scripts/e2e_dashboard_high_risk_actions_real.sh` (DiffViewer 刷新当前页面)",
+      "evidence_type": "real_playwright",
+      "source_path": "scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright"
+    },
+    "btn-dashboard-8b06ec647982": {
+      "status": "COVERED",
+      "notes": "`scripts/e2e_dashboard_high_risk_actions_real.sh` (DiffViewer 重试刷新)",
+      "evidence_type": "real_playwright",
+      "source_path": "scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright"
+    },
+    "btn-dashboard-7b78a92268cc": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/event_timeline.test.tsx`（drill-down 刷新关联执行日志）",
+      "evidence_type": "mixed",
+      "source_path": "apps/dashboard/tests/event_timeline.test.tsx; scripts/ui_full_e2e_gemini_audit.py",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-dashboard-13fbefe83564": {
+      "status": "COVERED",
+      "notes": "`scripts/e2e_dashboard_high_risk_actions_real.sh` (GodMode 队列 我已完成继续执行)",
+      "evidence_type": "real_playwright",
+      "source_path": "scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright"
+    },
+    "btn-dashboard-7c4f768a364b": {
+      "status": "COVERED",
+      "notes": "`scripts/e2e_dashboard_high_risk_actions_real.sh` (手动输入 run_id 后 POST `/api/god-mode/approve`)",
+      "evidence_type": "real_playwright",
+      "source_path": "scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright"
+    },
+    "btn-dashboard-38eb9d726842": {
+      "status": "COVERED",
+      "notes": "`scripts/e2e_dashboard_high_risk_actions_real.sh` (待审批队列确认弹窗 + POST `/api/god-mode/approve`)",
+      "evidence_type": "real_playwright",
+      "source_path": "scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright"
+    },
+    "btn-dashboard-4025bd938b77": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/runlist.test.tsx`（空态 CTA 的 href 与点击断言）",
+      "evidence_type": "mixed",
+      "source_path": "apps/dashboard/tests/runlist.test.tsx; scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-dashboard-33594a3ddb32": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/runlist.test.tsx`（单条处置链接 href 与可访问性断言）",
+      "evidence_type": "mixed",
+      "source_path": "apps/dashboard/tests/runlist.test.tsx; scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-dashboard-7d69e02f65e3": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/command_tower_priority_layout.suite.tsx`（Live Lane 快捷动作按钮可见） + `scripts/ui_full_e2e_gemini_audit.py`（`local_command_tower_strict_20260309_c` 真实点击通过）",
+      "evidence_type": "mixed",
+      "source_path": "apps/dashboard/tests/command_tower_priority_layout.suite.tsx; scripts/ui_full_e2e_gemini_audit.py",
+      "source_kind": "real_playwright,component_test"
+    },
+    "btn-dashboard-afcd85dc666d": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/command_tower_async_session.suite.tsx`（drawer 发送消息交互）",
+      "evidence_type": "mixed",
+      "source_path": "apps/dashboard/tests/command_tower_async_session.suite.tsx; scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,component_test"
+    },
+    "btn-dashboard-0a4fe4ec34fb": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/command_tower_session_tabs.suite.tsx` (missing-run detail path via trigger)",
+      "evidence_type": "mixed",
+      "source_path": "apps/dashboard/tests/command_tower_session_tabs.suite.tsx; scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,component_test"
+    },
+    "btn-dashboard-91b543a820c1": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/command_tower_session_tabs.suite.tsx`（空态 next-action 按钮文案、href 与可访问性断言）",
+      "evidence_type": "mixed",
+      "source_path": "apps/dashboard/tests/command_tower_session_tabs.suite.tsx; scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,component_test"
+    },
+    "btn-dashboard-335ac14296c2": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/command_tower_session_tabs.suite.tsx` (retry from error to empty state)",
+      "evidence_type": "mixed",
+      "source_path": "apps/dashboard/tests/command_tower_session_tabs.suite.tsx; scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,component_test"
+    },
+    "btn-dashboard-aee69cf25872": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/command_tower_session_tabs.suite.tsx` (switches back to runs tab)",
+      "evidence_type": "mixed",
+      "source_path": "apps/dashboard/tests/command_tower_session_tabs.suite.tsx; scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,component_test"
+    },
+    "btn-dashboard-14c043c5d174": {
+      "status": "COVERED",
+      "notes": "`scripts/e2e_dashboard_high_risk_actions_real.sh` (RunDetail 切换 差异 Tab)",
+      "evidence_type": "real_playwright",
+      "source_path": "scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright"
+    },
+    "btn-dashboard-357b9cbe8b3c": {
+      "status": "COVERED",
+      "notes": "`scripts/e2e_dashboard_high_risk_actions_real.sh` (RunDetail 切换 日志 Tab)",
+      "evidence_type": "real_playwright",
+      "source_path": "scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright"
+    },
+    "btn-dashboard-0d822760eec8": {
+      "status": "COVERED",
+      "notes": "`scripts/e2e_dashboard_high_risk_actions_real.sh` (RunDetail 切换 报告 Tab)",
+      "evidence_type": "real_playwright",
+      "source_path": "scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright"
+    },
+    "btn-dashboard-0c5278673477": {
+      "status": "COVERED",
+      "notes": "`scripts/e2e_dashboard_high_risk_actions_real.sh` (RunDetail 切换 链路 Tab)",
+      "evidence_type": "real_playwright",
+      "source_path": "scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright"
+    },
+    "btn-dashboard-2e4db7b39361": {
+      "status": "COVERED",
+      "notes": "`scripts/e2e_dashboard_high_risk_actions_real.sh` (Run Detail 回放按钮 + POST `/api/runs/{run_id}/replay`)",
+      "evidence_type": "real_playwright",
+      "source_path": "scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright"
+    },
+    "btn-dashboard-0b19aea4c7fc": {
+      "status": "COVERED",
+      "notes": "`scripts/e2e_dashboard_high_risk_actions_real.sh` (RunDetail 实时开关)",
+      "evidence_type": "real_playwright",
+      "source_path": "scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright"
+    },
+    "btn-dashboard-b0770636ab2f": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/rundetail_core.suite.tsx`（失败终态下切到诊断报告）",
+      "evidence_type": "mixed",
+      "source_path": "apps/dashboard/tests/rundetail_core.suite.tsx; scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,component_test"
+    },
+    "btn-dashboard-2557b6ebf97d": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/rundetail_core.suite.tsx`（失败终态下切到执行日志）",
+      "evidence_type": "mixed",
+      "source_path": "apps/dashboard/tests/rundetail_core.suite.tsx; scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,component_test"
+    },
+    "btn-dashboard-200794e1116b": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/rundetail_core.suite.tsx`（人工审批跳转链接断言）",
+      "evidence_type": "mixed",
+      "source_path": "apps/dashboard/tests/rundetail_core.suite.tsx; scripts/e2e_dashboard_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,component_test"
+    },
+    "btn-dashboard-db85382a3a23": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/agents_page_pagination_accessibility.suite.tsx`（失败运行入口 href 断言）",
+      "evidence_type": "component_test",
+      "source_path": "apps/dashboard/tests/agents_page_pagination_accessibility.suite.tsx",
+      "source_kind": "component_test"
+    },
+    "btn-dashboard-fa7c4af5bbf9": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/agents_page_pagination_accessibility.suite.tsx`（注册代理入口锚点与文案断言）",
+      "evidence_type": "component_test",
+      "source_path": "apps/dashboard/tests/agents_page_pagination_accessibility.suite.tsx",
+      "source_kind": "component_test"
+    },
+    "btn-dashboard-530399de05a5": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/agents_page_pagination_accessibility.suite.tsx`（失败运行入口 href 断言）",
+      "evidence_type": "component_test",
+      "source_path": "apps/dashboard/tests/agents_page_pagination_accessibility.suite.tsx",
+      "source_kind": "component_test"
+    },
+    "btn-dashboard-e5d4d0f8a99b": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/dashboard_p1_controls.test.tsx` (CommandTowerError retry)",
+      "evidence_type": "unit_test",
+      "source_path": "apps/dashboard/tests/dashboard_p1_controls.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-dashboard-f53feb2fd592": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/api_wrappers.suite.ts`（会话页快速导航返回总览链接断言）",
+      "evidence_type": "component_test",
+      "source_path": "apps/dashboard/tests/api_wrappers.suite.ts",
+      "source_kind": "component_test"
+    },
+    "btn-dashboard-f8759c5d61c4": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/review_tests_contracts_pages_summary.test.tsx`（contracts 页超过首屏时暴露展开全部链接）",
+      "evidence_type": "component_test",
+      "source_path": "apps/dashboard/tests/review_tests_contracts_pages_summary.test.tsx",
+      "source_kind": "component_test"
+    },
+    "btn-dashboard-a375211c1bf7": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/dashboard_p1_controls.test.tsx` (DashboardError retry)",
+      "evidence_type": "unit_test",
+      "source_path": "apps/dashboard/tests/dashboard_p1_controls.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-dashboard-11c6a3b4e195": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/locks_page_state.test.tsx`（锁记录超过首屏时展开全部）",
+      "evidence_type": "component_test",
+      "source_path": "apps/dashboard/tests/locks_page_state.test.tsx",
+      "source_kind": "component_test"
+    },
+    "btn-dashboard-e418c227dd5f": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/home_page.test.tsx`（查看全部运行链接断言）",
+      "evidence_type": "unit_test",
+      "source_path": "apps/dashboard/tests/home_page.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-dashboard-fa0b3c79a919": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/dashboard_p1_controls.test.tsx`（split 展开交互）",
+      "evidence_type": "unit_test",
+      "source_path": "apps/dashboard/tests/dashboard_p1_controls.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-dashboard-2602de72f625": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/dashboard_p1_controls.test.tsx` (PmPageError retry)",
+      "evidence_type": "unit_test",
+      "source_path": "apps/dashboard/tests/dashboard_p1_controls.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-dashboard-1967565c09aa": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/review_tests_contracts_pages_summary.test.tsx`（tests 页超过首屏时暴露展开全部链接）",
+      "evidence_type": "component_test",
+      "source_path": "apps/dashboard/tests/review_tests_contracts_pages_summary.test.tsx",
+      "source_kind": "component_test"
+    },
+    "btn-dashboard-fa4f39ec444c": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/workflow_detail_page.test.tsx`（降级态返回工作流列表链接）",
+      "evidence_type": "component_test",
+      "source_path": "apps/dashboard/tests/workflow_detail_page.test.tsx",
+      "source_kind": "component_test"
+    },
+    "btn-dashboard-43e59965bb9f": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/event_timeline.test.tsx` (filter preset buttons)",
+      "evidence_type": "unit_test",
+      "source_path": "apps/dashboard/tests/event_timeline.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-dashboard-3ea5468c917b": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/event_timeline.test.tsx` (filter preset buttons)",
+      "evidence_type": "unit_test",
+      "source_path": "apps/dashboard/tests/event_timeline.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-dashboard-47ff69e82e82": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/event_timeline.test.tsx`（点击事件源后保持 drill-down 并触发 inspect）",
+      "evidence_type": "unit_test",
+      "source_path": "apps/dashboard/tests/event_timeline.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-dashboard-f643a1770427": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/god_mode_panel.test.tsx`（inline refresh 待审批队列）",
+      "evidence_type": "component_test",
+      "source_path": "apps/dashboard/tests/god_mode_panel.test.tsx",
+      "source_kind": "component_test"
+    },
+    "btn-dashboard-1d3d297c233d": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/command_tower_async_home.suite.tsx` (applies drawer filters and verifies request query)",
+      "evidence_type": "component_test",
+      "source_path": "apps/dashboard/tests/command_tower_async_home.suite.tsx",
+      "source_kind": "component_test"
+    },
+    "btn-dashboard-60f6ef74da11": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/command_tower_async_home.suite.tsx` (resets drawer filters and clears project key)",
+      "evidence_type": "component_test",
+      "source_path": "apps/dashboard/tests/command_tower_async_home.suite.tsx",
+      "source_kind": "component_test"
+    },
+    "btn-dashboard-d8a1c5e57bae": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/command_tower_async_home.suite.tsx`（high-risk focus toggle 交互）",
+      "evidence_type": "component_test",
+      "source_path": "apps/dashboard/tests/command_tower_async_home.suite.tsx",
+      "source_kind": "component_test"
+    },
+    "btn-dashboard-73d3a1893787": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/command_tower_async_home.suite.tsx`（降级快照卡片 `异常处置动作` 中失败事件入口 href 断言）",
+      "evidence_type": "component_test",
+      "source_path": "apps/dashboard/tests/command_tower_async_home.suite.tsx",
+      "source_kind": "component_test"
+    },
+    "btn-dashboard-69a07290d023": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/command_tower_async_home.suite.tsx`（降级快照卡片 `异常处置动作` 中运行记录入口 href 断言）",
+      "evidence_type": "component_test",
+      "source_path": "apps/dashboard/tests/command_tower_async_home.suite.tsx",
+      "source_kind": "component_test"
+    },
+    "btn-dashboard-fdc4f7f1551c": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/command_tower_async_home.suite.tsx`（high-risk focus toggle 交互）",
+      "evidence_type": "component_test",
+      "source_path": "apps/dashboard/tests/command_tower_async_home.suite.tsx",
+      "source_kind": "component_test"
+    },
+    "btn-dashboard-8f788977e613": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/command_tower_async_home.suite.tsx`（filters reset）",
+      "evidence_type": "component_test",
+      "source_path": "apps/dashboard/tests/command_tower_async_home.suite.tsx",
+      "source_kind": "component_test"
+    },
+    "btn-dashboard-16c8d96d1908": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/command_tower_async_home.suite.tsx`（focus mode 切换）",
+      "evidence_type": "component_test",
+      "source_path": "apps/dashboard/tests/command_tower_async_home.suite.tsx",
+      "source_kind": "component_test"
+    },
+    "btn-dashboard-70a022869e40": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/command_tower_async_home.suite.tsx`（降级快照卡片 `异常处置动作` 中运行记录入口 href 断言）",
+      "evidence_type": "component_test",
+      "source_path": "apps/dashboard/tests/command_tower_async_home.suite.tsx",
+      "source_kind": "component_test"
+    },
+    "btn-dashboard-8fa7ec44694f": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/command_tower_async_session.suite.tsx`（session live toggle）",
+      "evidence_type": "component_test",
+      "source_path": "apps/dashboard/tests/command_tower_async_session.suite.tsx",
+      "source_kind": "component_test"
+    },
+    "btn-dashboard-4096166fa74b": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/command_tower_async_session.suite.tsx`（manual refresh）",
+      "evidence_type": "component_test",
+      "source_path": "apps/dashboard/tests/command_tower_async_session.suite.tsx",
+      "source_kind": "component_test"
+    },
+    "btn-dashboard-bcf8a017eb6a": {
+      "status": "COVERED",
+      "notes": "`scripts/e2e_command_tower_controls_real.sh` (session manual refresh)",
+      "evidence_type": "real_playwright",
+      "source_path": "scripts/e2e_command_tower_controls_real.sh",
+      "source_kind": "real_playwright"
+    },
+    "btn-dashboard-9f247d1c3721": {
+      "status": "COVERED",
+      "notes": "`scripts/e2e_command_tower_controls_real.sh` (Session 暂停/恢复实时)",
+      "evidence_type": "real_playwright",
+      "source_path": "scripts/e2e_command_tower_controls_real.sh",
+      "source_kind": "real_playwright"
+    },
+    "btn-dashboard-de89f2a0232f": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/command_tower_session_tabs.suite.tsx`（ready 状态运行详情链接 href/run_id/title 断言）",
+      "evidence_type": "component_test",
+      "source_path": "apps/dashboard/tests/command_tower_session_tabs.suite.tsx",
+      "source_kind": "component_test"
+    },
+    "btn-dashboard-7b8aeb71c175": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/command_tower_session_tabs.suite.tsx` (switches to graph tab)",
+      "evidence_type": "component_test",
+      "source_path": "apps/dashboard/tests/command_tower_session_tabs.suite.tsx",
+      "source_kind": "component_test"
+    },
+    "btn-dashboard-7927dcf9de6d": {
+      "status": "COVERED",
+      "notes": "`apps/dashboard/tests/command_tower_session_tabs.suite.tsx` (switches to timeline tab)",
+      "evidence_type": "component_test",
+      "source_path": "apps/dashboard/tests/command_tower_session_tabs.suite.tsx",
+      "source_kind": "component_test"
+    },
+    "btn-desktop-c4fd7e63e3e0": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx` + `apps/desktop/src/pages/run_detail_page_controls.test.tsx`",
+      "evidence_type": "mixed",
+      "source_path": "apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx; apps/desktop/src/pages/run_detail_page_controls.test.tsx; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-desktop-7f9a1d984901": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/scripts/e2e-first-entry-no-block-real.mjs`",
+      "evidence_type": "real_playwright",
+      "source_path": "apps/desktop/scripts/e2e-first-entry-no-block-real.mjs; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright"
+    },
+    "btn-desktop-60e96249b8ca": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/scripts/e2e-first-entry-no-block-real.mjs` (second message + delayed POST + click `停止生成` + ack/status assertions)",
+      "evidence_type": "real_playwright",
+      "source_path": "apps/desktop/scripts/e2e-first-entry-no-block-real.mjs; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright"
+    },
+    "btn-desktop-a3ac7b1d0300": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx` + `apps/desktop/src/pages/run_detail_page_controls.test.tsx`",
+      "evidence_type": "mixed",
+      "source_path": "apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx; apps/desktop/src/pages/run_detail_page_controls.test.tsx; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-desktop-90e1bfa3fde4": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx` + `apps/desktop/src/pages/run_detail_page_controls.test.tsx`",
+      "evidence_type": "mixed",
+      "source_path": "apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx; apps/desktop/src/pages/run_detail_page_controls.test.tsx; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-desktop-8a1a9b7fef08": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx` + `apps/desktop/src/pages/run_detail_page_controls.test.tsx`",
+      "evidence_type": "mixed",
+      "source_path": "apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx; apps/desktop/src/pages/run_detail_page_controls.test.tsx; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-desktop-3a87d88045c3": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/lib/desktopUi.test.ts` + `apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx`",
+      "evidence_type": "mixed",
+      "source_path": "apps/desktop/src/lib/desktopUi.test.ts; apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-desktop-97c365fcaa31": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/scripts/e2e-command-tower-controls-real.mjs` (session detail send + POST `/api/pm/sessions/{id}/messages`)",
+      "evidence_type": "real_playwright",
+      "source_path": "apps/desktop/scripts/e2e-command-tower-controls-real.mjs; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright"
+    },
+    "btn-desktop-acb28dc8d17f": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx` + `apps/desktop/src/pages/run_detail_page_controls.test.tsx`",
+      "evidence_type": "mixed",
+      "source_path": "apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx; apps/desktop/src/pages/run_detail_page_controls.test.tsx; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-desktop-2dae03f0cf5d": {
+      "status": "COVERED",
+      "notes": "`scripts/e2e_desktop_high_risk_actions_real.sh` (POST `/api/runs/{run_id}/rollback`)",
+      "evidence_type": "real_playwright",
+      "source_path": "scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright"
+    },
+    "btn-desktop-a13354434fa2": {
+      "status": "COVERED",
+      "notes": "`scripts/e2e_desktop_high_risk_actions_real.sh` (POST `/api/runs/{run_id}/reject`)",
+      "evidence_type": "real_playwright",
+      "source_path": "scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright"
+    },
+    "btn-desktop-f3380f1954c1": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/lib/desktopUi.test.ts` + `apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx`",
+      "evidence_type": "mixed",
+      "source_path": "apps/desktop/src/lib/desktopUi.test.ts; apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-desktop-285c03be88a9": {
+      "status": "COVERED",
+      "notes": "`scripts/e2e_desktop_high_risk_actions_real.sh` (GodMode 队列 批准执行 -> 确认批准)",
+      "evidence_type": "real_playwright",
+      "source_path": "scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright"
+    },
+    "btn-desktop-5f7dab9c8e49": {
+      "status": "COVERED",
+      "notes": "`scripts/e2e_desktop_high_risk_actions_real.sh` (manual approve POST `/api/god-mode/approve`)",
+      "evidence_type": "real_playwright",
+      "source_path": "scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright"
+    },
+    "btn-desktop-b04f884bd3d5": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/GodModePage.test.tsx`（confirm dialog 取消关闭 + 焦点回归）",
+      "evidence_type": "mixed",
+      "source_path": "apps/desktop/src/pages/GodModePage.test.tsx; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-desktop-e498d1eaa56a": {
+      "status": "COVERED",
+      "notes": "`scripts/e2e_desktop_high_risk_actions_real.sh` (confirm approve POST `/api/god-mode/approve`)",
+      "evidence_type": "real_playwright",
+      "source_path": "scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright"
+    },
+    "btn-desktop-b3a499273844": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx` + `apps/desktop/src/pages/run_detail_page_controls.test.tsx`",
+      "evidence_type": "mixed",
+      "source_path": "apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx; apps/desktop/src/pages/run_detail_page_controls.test.tsx; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-desktop-309da29d279c": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx` + `apps/desktop/src/pages/run_detail_page_controls.test.tsx`",
+      "evidence_type": "mixed",
+      "source_path": "apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx; apps/desktop/src/pages/run_detail_page_controls.test.tsx; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-desktop-c764340c9d7f": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx` + `apps/desktop/src/pages/run_detail_page_controls.test.tsx`",
+      "evidence_type": "mixed",
+      "source_path": "apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx; apps/desktop/src/pages/run_detail_page_controls.test.tsx; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-desktop-f5556ce4cb43": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx` + `apps/desktop/src/pages/run_detail_page_controls.test.tsx`",
+      "evidence_type": "mixed",
+      "source_path": "apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx; apps/desktop/src/pages/run_detail_page_controls.test.tsx; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-desktop-39b822b6c536": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx` + `apps/desktop/src/pages/run_detail_page_controls.test.tsx`",
+      "evidence_type": "mixed",
+      "source_path": "apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx; apps/desktop/src/pages/run_detail_page_controls.test.tsx; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-desktop-98c7ae944a44": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx` + `apps/desktop/src/pages/run_detail_page_controls.test.tsx`",
+      "evidence_type": "mixed",
+      "source_path": "apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx; apps/desktop/src/pages/run_detail_page_controls.test.tsx; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-desktop-27aa799e2929": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx` + `apps/desktop/src/pages/run_detail_page_controls.test.tsx`",
+      "evidence_type": "mixed",
+      "source_path": "apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx; apps/desktop/src/pages/run_detail_page_controls.test.tsx; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-desktop-19143502f733": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx` + `apps/desktop/src/pages/run_detail_page_controls.test.tsx`",
+      "evidence_type": "mixed",
+      "source_path": "apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx; apps/desktop/src/pages/run_detail_page_controls.test.tsx; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-desktop-460b1a240082": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx` + `apps/desktop/src/pages/run_detail_page_controls.test.tsx`",
+      "evidence_type": "mixed",
+      "source_path": "apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx; apps/desktop/src/pages/run_detail_page_controls.test.tsx; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-desktop-4badd466cb37": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx` + `apps/desktop/src/pages/run_detail_page_controls.test.tsx`",
+      "evidence_type": "mixed",
+      "source_path": "apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx; apps/desktop/src/pages/run_detail_page_controls.test.tsx; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-desktop-cd1f8a12fc26": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx` + `apps/desktop/src/pages/run_detail_page_controls.test.tsx`",
+      "evidence_type": "mixed",
+      "source_path": "apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx; apps/desktop/src/pages/run_detail_page_controls.test.tsx; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-desktop-4e45d4806c85": {
+      "status": "COVERED",
+      "notes": "`scripts/e2e_desktop_high_risk_actions_real.sh` (POST `/api/runs/{run_id}/evidence/promote`)",
+      "evidence_type": "real_playwright",
+      "source_path": "scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright"
+    },
+    "btn-desktop-c7f20739f532": {
+      "status": "COVERED",
+      "notes": "`scripts/e2e_desktop_high_risk_actions_real.sh` (POST `/api/runs/{run_id}/rollback`)",
+      "evidence_type": "real_playwright",
+      "source_path": "scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright"
+    },
+    "btn-desktop-b3865c51c34b": {
+      "status": "COVERED",
+      "notes": "`scripts/e2e_desktop_high_risk_actions_real.sh` (POST `/api/runs/{run_id}/reject`)",
+      "evidence_type": "real_playwright",
+      "source_path": "scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright"
+    },
+    "btn-desktop-9c3edf51f7f9": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx` + `apps/desktop/src/pages/run_detail_page_controls.test.tsx`",
+      "evidence_type": "mixed",
+      "source_path": "apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx; apps/desktop/src/pages/run_detail_page_controls.test.tsx; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-desktop-24a76cae002a": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx` + `apps/desktop/src/pages/run_detail_page_controls.test.tsx`",
+      "evidence_type": "mixed",
+      "source_path": "apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx; apps/desktop/src/pages/run_detail_page_controls.test.tsx; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-desktop-07aa281c63da": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx` + `apps/desktop/src/pages/run_detail_page_controls.test.tsx`",
+      "evidence_type": "mixed",
+      "source_path": "apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx; apps/desktop/src/pages/run_detail_page_controls.test.tsx; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-desktop-41d2e54bbadc": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx` + `apps/desktop/src/pages/run_detail_page_controls.test.tsx`",
+      "evidence_type": "mixed",
+      "source_path": "apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx; apps/desktop/src/pages/run_detail_page_controls.test.tsx; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-desktop-1a48014106a7": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx` + `apps/desktop/src/pages/run_detail_page_controls.test.tsx`",
+      "evidence_type": "mixed",
+      "source_path": "apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx; apps/desktop/src/pages/run_detail_page_controls.test.tsx; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-desktop-dc8af6021c63": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx` + `apps/desktop/src/pages/run_detail_page_controls.test.tsx`",
+      "evidence_type": "mixed",
+      "source_path": "apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx; apps/desktop/src/pages/run_detail_page_controls.test.tsx; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-desktop-61d323cc1b59": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx` + `apps/desktop/src/pages/run_detail_page_controls.test.tsx`",
+      "evidence_type": "mixed",
+      "source_path": "apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx; apps/desktop/src/pages/run_detail_page_controls.test.tsx; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-desktop-4f853f35128b": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx` + `apps/desktop/src/pages/run_detail_page_controls.test.tsx`",
+      "evidence_type": "mixed",
+      "source_path": "apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx; apps/desktop/src/pages/run_detail_page_controls.test.tsx; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-desktop-663d8c6a640d": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx` + `apps/desktop/src/pages/run_detail_page_controls.test.tsx`",
+      "evidence_type": "mixed",
+      "source_path": "apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx; apps/desktop/src/pages/run_detail_page_controls.test.tsx; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-desktop-af55d474a7a4": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx` + `apps/desktop/src/pages/run_detail_page_controls.test.tsx`",
+      "evidence_type": "mixed",
+      "source_path": "apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx; apps/desktop/src/pages/run_detail_page_controls.test.tsx; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-desktop-9df53d2209d6": {
+      "status": "COVERED",
+      "notes": "`scripts/e2e_desktop_high_risk_actions_real.sh` (POST `/api/runs/{run_id}/replay`)",
+      "evidence_type": "real_playwright",
+      "source_path": "scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright"
+    },
+    "btn-desktop-41e59ef9422d": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx` + `apps/desktop/src/pages/run_detail_page_controls.test.tsx`",
+      "evidence_type": "mixed",
+      "source_path": "apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx; apps/desktop/src/pages/run_detail_page_controls.test.tsx; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-desktop-b8f21235b777": {
+      "status": "COVERED",
+      "notes": "`scripts/e2e_desktop_high_risk_actions_real.sh` (Runs 列表点击 run-id 进入详情)",
+      "evidence_type": "real_playwright",
+      "source_path": "scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright"
+    },
+    "btn-desktop-858a5532779c": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx` + `apps/desktop/src/pages/run_detail_page_controls.test.tsx`",
+      "evidence_type": "mixed",
+      "source_path": "apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx; apps/desktop/src/pages/run_detail_page_controls.test.tsx; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-desktop-5291fa7fe5ea": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx` + `apps/desktop/src/pages/run_detail_page_controls.test.tsx`",
+      "evidence_type": "mixed",
+      "source_path": "apps/desktop/src/pages/desktop_p0_misc_controls.test.tsx; apps/desktop/src/pages/run_detail_page_controls.test.tsx; scripts/e2e_desktop_high_risk_actions_real.sh",
+      "source_kind": "real_playwright,unit_test"
+    },
+    "btn-desktop-98c57c960d8a": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p1_controls.test.tsx` + `apps/desktop/src/App.test.tsx`",
+      "evidence_type": "unit_test",
+      "source_path": "apps/desktop/src/pages/desktop_p1_controls.test.tsx; apps/desktop/src/App.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-desktop-0c462b3e1585": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p1_controls.test.tsx` + `apps/desktop/src/App.test.tsx`",
+      "evidence_type": "unit_test",
+      "source_path": "apps/desktop/src/pages/desktop_p1_controls.test.tsx; apps/desktop/src/App.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-desktop-4a4617a4bce4": {
+      "status": "COVERED",
+      "notes": "apps/desktop/src/App.test.tsx:223",
+      "evidence_type": "unit_test",
+      "source_path": "apps/desktop/src/App.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-desktop-7d01b9ebf345": {
+      "status": "COVERED",
+      "notes": "apps/desktop/src/App.test.tsx:223",
+      "evidence_type": "unit_test",
+      "source_path": "apps/desktop/src/App.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-desktop-9102e15497fd": {
+      "status": "COVERED",
+      "notes": "apps/desktop/src/App.test.tsx:431",
+      "evidence_type": "unit_test",
+      "source_path": "apps/desktop/src/App.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-desktop-14ea2f5011db": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p1_controls.test.tsx` + `apps/desktop/src/App.test.tsx`",
+      "evidence_type": "unit_test",
+      "source_path": "apps/desktop/src/pages/desktop_p1_controls.test.tsx; apps/desktop/src/App.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-desktop-00c76de7edc3": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p1_controls.test.tsx` + `apps/desktop/src/App.test.tsx`",
+      "evidence_type": "unit_test",
+      "source_path": "apps/desktop/src/pages/desktop_p1_controls.test.tsx; apps/desktop/src/App.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-desktop-4634dbcb4537": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p1_controls.test.tsx` + `apps/desktop/src/App.test.tsx`",
+      "evidence_type": "unit_test",
+      "source_path": "apps/desktop/src/pages/desktop_p1_controls.test.tsx; apps/desktop/src/App.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-desktop-69d1c27a1a1e": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p1_controls.test.tsx` + `apps/desktop/src/App.test.tsx`",
+      "evidence_type": "unit_test",
+      "source_path": "apps/desktop/src/pages/desktop_p1_controls.test.tsx; apps/desktop/src/App.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-desktop-9e5a029a5751": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p1_controls.test.tsx` + `apps/desktop/src/App.test.tsx`",
+      "evidence_type": "unit_test",
+      "source_path": "apps/desktop/src/pages/desktop_p1_controls.test.tsx; apps/desktop/src/App.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-desktop-3ca56c0010e8": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/scripts/e2e-command-tower-controls-real.mjs` (pause/resume toggle assertion)",
+      "evidence_type": "real_playwright",
+      "source_path": "apps/desktop/scripts/e2e-command-tower-controls-real.mjs",
+      "source_kind": "real_playwright"
+    },
+    "btn-desktop-b19b122b8731": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/scripts/e2e-command-tower-controls-real.mjs` (sessions query contains `status/project_key`)",
+      "evidence_type": "real_playwright",
+      "source_path": "apps/desktop/scripts/e2e-command-tower-controls-real.mjs",
+      "source_kind": "real_playwright"
+    },
+    "btn-desktop-a6b2c02976fe": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/scripts/e2e-command-tower-controls-real.mjs` (sessions query clears `status/project_key`)",
+      "evidence_type": "real_playwright",
+      "source_path": "apps/desktop/scripts/e2e-command-tower-controls-real.mjs",
+      "source_kind": "real_playwright"
+    },
+    "btn-desktop-e4742290a772": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p1_controls.test.tsx` + `apps/desktop/src/App.test.tsx`",
+      "evidence_type": "unit_test",
+      "source_path": "apps/desktop/src/pages/desktop_p1_controls.test.tsx; apps/desktop/src/App.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-desktop-360af9be558f": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p1_controls.test.tsx` + `apps/desktop/src/App.test.tsx`",
+      "evidence_type": "unit_test",
+      "source_path": "apps/desktop/src/pages/desktop_p1_controls.test.tsx; apps/desktop/src/App.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-desktop-b8f663785060": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/scripts/e2e-command-tower-controls-real.mjs` (sessions query clears `status/project_key`)",
+      "evidence_type": "real_playwright",
+      "source_path": "apps/desktop/scripts/e2e-command-tower-controls-real.mjs",
+      "source_kind": "real_playwright"
+    },
+    "btn-desktop-8e6431917cbc": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p1_controls.test.tsx` + `apps/desktop/src/App.test.tsx`",
+      "evidence_type": "unit_test",
+      "source_path": "apps/desktop/src/pages/desktop_p1_controls.test.tsx; apps/desktop/src/App.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-desktop-067c2a9602b8": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p1_controls.test.tsx` + `apps/desktop/src/App.test.tsx`",
+      "evidence_type": "unit_test",
+      "source_path": "apps/desktop/src/pages/desktop_p1_controls.test.tsx; apps/desktop/src/App.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-desktop-20490d5158f6": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p1_controls.test.tsx` + `apps/desktop/src/App.test.tsx`",
+      "evidence_type": "unit_test",
+      "source_path": "apps/desktop/src/pages/desktop_p1_controls.test.tsx; apps/desktop/src/App.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-desktop-92ffe961514f": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p1_controls.test.tsx` + `apps/desktop/src/App.test.tsx`",
+      "evidence_type": "unit_test",
+      "source_path": "apps/desktop/src/pages/desktop_p1_controls.test.tsx; apps/desktop/src/App.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-desktop-ac43bb8aabd2": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/scripts/e2e-command-tower-controls-real.mjs` (pause/resume toggle assertion)",
+      "evidence_type": "real_playwright",
+      "source_path": "apps/desktop/scripts/e2e-command-tower-controls-real.mjs",
+      "source_kind": "real_playwright"
+    },
+    "btn-desktop-ec849656bde8": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p1_controls.test.tsx` + `apps/desktop/src/App.test.tsx`",
+      "evidence_type": "unit_test",
+      "source_path": "apps/desktop/src/pages/desktop_p1_controls.test.tsx; apps/desktop/src/App.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-desktop-fab246f3ca73": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p1_controls.test.tsx` + `apps/desktop/src/App.test.tsx`",
+      "evidence_type": "unit_test",
+      "source_path": "apps/desktop/src/pages/desktop_p1_controls.test.tsx; apps/desktop/src/App.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-desktop-6fe4cf4e943f": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p1_controls.test.tsx` + `apps/desktop/src/App.test.tsx`",
+      "evidence_type": "unit_test",
+      "source_path": "apps/desktop/src/pages/desktop_p1_controls.test.tsx; apps/desktop/src/App.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-desktop-92e2c2f338b7": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p1_controls.test.tsx` + `apps/desktop/src/App.test.tsx`",
+      "evidence_type": "unit_test",
+      "source_path": "apps/desktop/src/pages/desktop_p1_controls.test.tsx; apps/desktop/src/App.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-desktop-73c66888dbf8": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p1_controls.test.tsx` + `apps/desktop/src/App.test.tsx`",
+      "evidence_type": "unit_test",
+      "source_path": "apps/desktop/src/pages/desktop_p1_controls.test.tsx; apps/desktop/src/App.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-desktop-dfe65f3bfdfe": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/EventsPage.test.tsx`（row toggle 展开/收起详情）",
+      "evidence_type": "unit_test",
+      "source_path": "apps/desktop/src/pages/EventsPage.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-desktop-41e8e9f93eed": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p1_controls.test.tsx` + `apps/desktop/src/App.test.tsx`",
+      "evidence_type": "unit_test",
+      "source_path": "apps/desktop/src/pages/desktop_p1_controls.test.tsx; apps/desktop/src/App.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-desktop-4168cf1e8826": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p1_controls.test.tsx` + `apps/desktop/src/App.test.tsx`",
+      "evidence_type": "unit_test",
+      "source_path": "apps/desktop/src/pages/desktop_p1_controls.test.tsx; apps/desktop/src/App.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-desktop-56772a29c6e8": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p1_controls.test.tsx` + `apps/desktop/src/App.test.tsx`",
+      "evidence_type": "unit_test",
+      "source_path": "apps/desktop/src/pages/desktop_p1_controls.test.tsx; apps/desktop/src/App.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-desktop-39649a71e1f9": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p1_controls.test.tsx` + `apps/desktop/src/App.test.tsx`",
+      "evidence_type": "unit_test",
+      "source_path": "apps/desktop/src/pages/desktop_p1_controls.test.tsx; apps/desktop/src/App.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-desktop-c4fa8218049f": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p1_controls.test.tsx` + `apps/desktop/src/App.test.tsx`",
+      "evidence_type": "unit_test",
+      "source_path": "apps/desktop/src/pages/desktop_p1_controls.test.tsx; apps/desktop/src/App.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-desktop-071e733f405b": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p1_controls.test.tsx` + `apps/desktop/src/App.test.tsx`",
+      "evidence_type": "unit_test",
+      "source_path": "apps/desktop/src/pages/desktop_p1_controls.test.tsx; apps/desktop/src/App.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-desktop-3f94e32e51c3": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p1_controls.test.tsx` + `apps/desktop/src/App.test.tsx`",
+      "evidence_type": "unit_test",
+      "source_path": "apps/desktop/src/pages/desktop_p1_controls.test.tsx; apps/desktop/src/App.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-desktop-557db569b6ad": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p1_controls.test.tsx` + `apps/desktop/src/App.test.tsx`",
+      "evidence_type": "unit_test",
+      "source_path": "apps/desktop/src/pages/desktop_p1_controls.test.tsx; apps/desktop/src/App.test.tsx",
+      "source_kind": "unit_test"
+    },
+    "btn-desktop-807393bcc904": {
+      "status": "COVERED",
+      "notes": "`apps/desktop/src/pages/desktop_p1_controls.test.tsx` + `apps/desktop/src/App.test.tsx`",
+      "evidence_type": "unit_test",
+      "source_path": "apps/desktop/src/pages/desktop_p1_controls.test.tsx; apps/desktop/src/App.test.tsx",
+      "source_kind": "unit_test"
+    }
+  }
+}
