@@ -172,7 +172,7 @@ jobs:
           CLOUD_BOOTSTRAP_ALLOWED: ${{ steps.decide.outputs.sensitive_dispatch_allowed }}
 
       - name: Upload route seed artifact
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
         with:
           name: ci-route-seed-${{ github.run_id }}-${{ github.run_attempt }}
           retention-days: 14
@@ -351,7 +351,7 @@ jobs:
       - name: Upload quick-feedback artifacts
         if: always()
         continue-on-error: true
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
         with:
           name: ci-quick-feedback-artifacts-${{ github.run_id }}-${{ github.run_attempt }}
           retention-days: 14
@@ -484,7 +484,7 @@ jobs:
 
       - name: Upload low-privilege artifacts
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
         with:
           name: ci-pr-low-priv-artifacts-${{ github.run_id }}-${{ github.run_attempt }}
           retention-days: 14
@@ -496,7 +496,7 @@ jobs:
 
       - name: Upload untrusted route report artifact
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
         with:
           name: ${{ steps.finalize_untrusted_route.outputs.route_report_artifact_name }}
           retention-days: 14
@@ -576,7 +576,7 @@ jobs:
 
       - name: Upload policy/security artifacts
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
         with:
           name: ci-policy-and-security-artifacts-${{ github.run_id }}-${{ github.run_attempt }}
           retention-days: 14
@@ -651,7 +651,7 @@ jobs:
 
       - name: Upload core-tests artifacts
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
         with:
           name: ci-core-tests-artifacts-${{ github.run_id }}-${{ github.run_attempt }}
           retention-days: 14
@@ -729,7 +729,7 @@ jobs:
 
       - name: Upload ui-truth artifacts
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
         with:
           name: ci-ui-truth-artifacts-${{ github.run_id }}-${{ github.run_attempt }}
           retention-days: 14
@@ -808,7 +808,7 @@ jobs:
 
       - name: Upload resilience/E2E artifacts
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
         with:
           name: ci-resilience-and-e2e-artifacts-${{ github.run_id }}-${{ github.run_attempt }}
           retention-days: 14
@@ -959,7 +959,7 @@ jobs:
 
       - name: Upload release-evidence artifacts
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
         with:
           name: ci-release-evidence-artifacts-${{ github.run_id }}-${{ github.run_attempt }}
           retention-days: 14
@@ -972,7 +972,7 @@ jobs:
 
       - name: Upload trusted route report artifact
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
         with:
           name: ${{ steps.finalize_release_route.outputs.route_report_artifact_name }}
           retention-days: 14
@@ -1062,7 +1062,7 @@ jobs:
 
       - name: Upload trusted PR route report artifact
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
         with:
           name: ${{ steps.finalize_trusted_pr_route.outputs.route_report_artifact_name }}
           retention-days: 14
