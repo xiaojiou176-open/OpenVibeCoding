@@ -39,7 +39,7 @@
     "@vitest/coverage-v8": "4.0.18",
     "jsdom": "29.0.1",
     "lighthouse": "13.0.3",
-    "typescript": "5.9.3",
+    "typescript": "6.0.2",
     "vitest": "4.0.18"
   },
   "pnpm": {
