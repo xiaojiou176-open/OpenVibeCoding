@@ -24,8 +24,9 @@ All notable changes to this repository will be documented in this file.
   `security-events: read` plus an explicit `GH_TOKEN` injection, aligning the
   route-report policy test with the grouped `GITHUB_ENV` export block used by
   the current workflow hardening, and teaching hosted `trusted_pr` /
-  `untrusted_pr` repo hygiene to keep the live alerts query advisory when the
-  GitHub integration token still cannot read the alerts APIs
+  `untrusted_pr` / `push_main` repo hygiene plus Quick Feedback to keep the
+  live alerts query advisory when the GitHub integration token still cannot
+  read the alerts APIs or the first hosted analysis has not materialized yet
 - scrubbed maintainer-local path fixtures and raw token-looking literals from
   public orchestrator/security tests, generalized the modules-root ignore rule,
   and documented the same public-fixture hygiene contract across the root AI

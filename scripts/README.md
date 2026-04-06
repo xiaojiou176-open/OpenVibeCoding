@@ -156,12 +156,13 @@ user's ambient Python environment.
   repo hygiene, the host-compatible pre-commit quality gate, a dedicated
   pre-commit hook, pre-push, and Quick Feedback so cloud-side security
   regressions cannot hide behind a locally clean worktree. GitHub-hosted
-  `pull_request` routes keep this query advisory-only in Quick Feedback and
-  the hosted policy slice because the integration token may not be able to
-  read the alerts APIs there. The gate now queries the GitHub REST API
-  directly from `GH_TOKEN` / `GITHUB_TOKEN` and only falls back to
-  `gh auth token` for local token discovery, so containerized CI lanes do not
-  depend on a `gh` binary being installed.
+  `trusted_pr`, `untrusted_pr`, and hosted-first `push_main` routes keep this
+  query advisory-only in Quick Feedback and the hosted policy slice because
+  the integration token may not be able to read the alerts APIs there and a
+  fresh hosted `push_main` route may not have live analysis yet. The gate now
+  queries the GitHub REST API directly from `GH_TOKEN` / `GITHUB_TOKEN` and
+  only falls back to `gh auth token` for local token discovery, so
+  containerized CI lanes do not depend on a `gh` binary being installed.
 - `check_workflow_static_security.sh` is the repo-owned GitHub Actions static
   security gate. It bootstraps pinned `actionlint` + `zizmor` binaries through
   `scripts/lib/release_tool_helpers.sh`, then runs both scanners fail-closed

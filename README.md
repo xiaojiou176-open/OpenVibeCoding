@@ -270,11 +270,13 @@ current-tree plus fresh-clone secret scanning
 (`bash scripts/check_secret_scan_closeout.sh --mode both`), while pull
 requests also run the official GitHub Dependency Review action with the
 repo-owned `.github/dependency-review-config.yml` policy.
-GitHub-hosted `pull_request` routes keep the live alerts query in advisory
-mode for both Quick Feedback and the hosted policy slice, because the
-integration token cannot always read the secret/code-scanning alert APIs
-there; the fail-closed contract still holds on local hooks, local repo
-hygiene, pre-push, and other routes that carry authoritative credentials.
+GitHub-hosted `trusted_pr`, `untrusted_pr`, and hosted-first `push_main`
+routes keep the live alerts query in advisory mode for Quick Feedback and the
+hosted policy slice, because the integration token cannot always read the
+secret/code-scanning alert APIs there and a fresh hosted `push_main` route may
+not have CodeQL/secret-scanning analysis materialized yet; the fail-closed
+contract still holds on local hooks, local repo hygiene, pre-push, and other
+routes that carry authoritative credentials.
 
 Hosted-first `push_main` follows the same external-truth boundary as PR routes:
 protected upstream/provider smoke stays a manual closeout concern, so the

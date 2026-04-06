@@ -272,13 +272,21 @@ jobs:
           CORTEXPILOT_DOC_GATE_MODE: ci-diff
           CORTEXPILOT_DOC_GATE_BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
           CORTEXPILOT_DOC_GATE_HEAD_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+          CORTEXPILOT_CI_ROUTE_ID: ${{ needs.ci-trust-boundary.outputs.route_id }}
+          CORTEXPILOT_CI_RUNNER_CLASS: github_hosted
           CORTEXPILOT_HYGIENE_QUICK_PATH: "1"
           GH_TOKEN: ${{ github.token }}
           TRUSTED_ROUTE_ALLOWED: ${{ needs.ci-trust-boundary.outputs.trusted_route_allowed }}
         run: |
           set -euo pipefail
           github_alert_mode="require"
-          if [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]]; then
+          if [[ "${CORTEXPILOT_CI_RUNNER_CLASS:-}" == "github_hosted" ]]; then
+            case "${CORTEXPILOT_CI_ROUTE_ID:-}" in
+              trusted_pr|untrusted_pr|push_main)
+                github_alert_mode="auto"
+                ;;
+            esac
+          elif [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]]; then
             github_alert_mode="auto"
           fi
           export CORTEXPILOT_GITHUB_ALERTS_MODE="${github_alert_mode}"
