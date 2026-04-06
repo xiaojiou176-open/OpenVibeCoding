@@ -34,9 +34,10 @@ owns the repo-wide Trivy filesystem/dependency lane, and
 secret scanning against the current tree or a fresh clone. Pull requests also
 run the official GitHub Dependency Review action under the repo-owned
 `.github/dependency-review-config.yml` policy file. On GitHub-hosted
-`pull_request` routes the live alerts query stays advisory for both Quick
-Feedback and the hosted policy slice because the integration token may not be
-allowed to read the alerts APIs there.
+`trusted_pr`, `untrusted_pr`, and hosted-first `push_main` routes the live
+alerts query stays advisory for both Quick Feedback and the hosted policy
+slice because the integration token may not be allowed to read the alerts APIs
+there and a fresh hosted `push_main` route may not have live analysis yet.
 
 ## Repository Entry
 

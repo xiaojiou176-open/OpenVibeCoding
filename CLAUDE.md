@@ -22,8 +22,9 @@ This file mirrors the root AI entrypoint for tools that prefer `CLAUDE.md`.
   `example.com` contract, preserve `.jsonl` temp-report hints in portable scan
   scratch names, fail closed on tracked direct email/phone markers plus
   forbidden runtime files, fail closed on open GitHub secret/code scanning
-  alerts in local hooks and pre-push while GitHub-hosted `pull_request`
-  Quick Feedback / hosted policy lanes stay advisory under integration-token
+  alerts in local hooks and pre-push while GitHub-hosted `trusted_pr`,
+  `untrusted_pr`, and hosted-first `push_main` Quick Feedback / hosted policy
+  lanes stay advisory under integration-token and first-analysis timing
   limits, keep workflow static security (`actionlint` + `zizmor`), canonical
   secret scanning, and Trivy dependency scanning wired into repo-owned
   entrypoints, and sync the root/docs entrypoints when that contract shifts

@@ -7,10 +7,12 @@ INCLUDE_EXTERNAL_TRUTH="${CORTEXPILOT_HYGIENE_INCLUDE_EXTERNAL:-0}"
 QUICK_PATH="${CORTEXPILOT_HYGIENE_QUICK_PATH:-0}"
 if [[ -n "${CORTEXPILOT_GITHUB_ALERTS_MODE:-}" ]]; then
   GITHUB_ALERTS_MODE="${CORTEXPILOT_GITHUB_ALERTS_MODE}"
-elif [[ "${CORTEXPILOT_CI_RUNNER_CLASS:-}" == "github_hosted" && ( "${CORTEXPILOT_CI_ROUTE_ID:-}" == "trusted_pr" || "${CORTEXPILOT_CI_ROUTE_ID:-}" == "untrusted_pr" ) ]]; then
-  # GitHub-hosted PR integration tokens cannot reliably read the alerts APIs.
-  # Keep local / repo-owned gates fail-closed, but avoid blocking hosted PR
-  # slices on a permission model they cannot satisfy.
+elif [[ "${CORTEXPILOT_CI_RUNNER_CLASS:-}" == "github_hosted" && ( "${CORTEXPILOT_CI_ROUTE_ID:-}" == "trusted_pr" || "${CORTEXPILOT_CI_ROUTE_ID:-}" == "untrusted_pr" || "${CORTEXPILOT_CI_ROUTE_ID:-}" == "push_main" ) ]]; then
+  # GitHub-hosted integration tokens cannot reliably read the alerts APIs, and
+  # fresh hosted-first push_main routes may not have CodeQL/secret-scanning
+  # analysis materialized yet. Keep local / repo-owned gates fail-closed, but
+  # avoid blocking hosted routes on a permission/timing model they cannot
+  # satisfy.
   GITHUB_ALERTS_MODE="auto"
 else
   GITHUB_ALERTS_MODE="require"
