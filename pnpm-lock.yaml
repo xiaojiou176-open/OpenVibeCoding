@@ -67,8 +67,8 @@ importers:
         version: 5.1.7(@babel/core@7.29.0)(react@19.2.4)
     devDependencies:
       '@axe-core/cli':
-        specifier: 4.10.2
-        version: 4.10.2
+        specifier: 4.11.1
+        version: 4.11.1
       '@testing-library/jest-dom':
         specifier: 6.9.1
         version: 6.9.1
@@ -220,8 +220,8 @@ packages:
   '@asamuzakjp/nwsapi@2.3.9':
     resolution: {integrity: sha512-n8GuYSrI9bF7FFZ/SjhwevlHc8xaVlb/7HmHelnc/PZXBD2ZR49NnN9sMMuDdEGPeeRQ5d0hqlSlEpgCX3Wl0Q==}
 
-  '@axe-core/cli@4.10.2':
-    resolution: {integrity: sha512-QBAKaeCWpegkPr5OoA0BJ5rXh8wcGtPXViE9T1OgmPeSf1YCPOz+6ccrOF4h68Y4djCMpFqb9nm3/fpjKoQJQg==}
+  '@axe-core/cli@4.11.1':
+    resolution: {integrity: sha512-xC7doMReoy7QnQ18azdpIZHoYL1HcG5c5wvEcCpm5kWny520RGTRrBcnAZENaQ9nTQAkE7fXZFK4Z1cfBDTBFg==}
     engines: {node: '>=8'}
     hasBin: true
 
@@ -325,6 +325,9 @@ packages:
   '@babel/types@7.29.0':
     resolution: {integrity: sha512-LwdZHpScM4Qz8Xw2iKSzS+cfglZzJGvofQICy7W7v4caru4EaAmyUuO6BGrbyQ2mYV11W0U8j5mBhd14dd3B0A==}
     engines: {node: '>=6.9.0'}
+
+  '@bazel/runfiles@6.5.0':
+    resolution: {integrity: sha512-RzahvqTkfpY2jsDxo8YItPX+/iZ6hbiikw1YhE0bA9EKBR5Og8Pa6FHn9PO9M0zaXRVsr0GFQLKbB/0rzy9SzA==}
 
   '@bcoe/v8-coverage@1.0.2':
     resolution: {integrity: sha512-6zABk/ECA/QYSCQ1NGiVwwbQerUCZ+TQbp64Q3AgmfNvurHH0j8TtXa1qbShXA6qqkpAj4V5W8pP6mLe1mcMqA==}
@@ -1486,10 +1489,6 @@ packages:
   atomically@2.1.1:
     resolution: {integrity: sha512-P4w9o2dqARji6P7MHprklbfiArZAWvo07yW7qs3pdljb3BWr12FIB7W+p0zJiuiVsUpRO0iZn1kFFcpPegg0tQ==}
 
-  axe-core@4.10.3:
-    resolution: {integrity: sha512-Xm7bpRXnDSX2YE2YFfBk2FnF0ep6tmG7xPh8iHee8MIcrgq762Nkce856dYtJYLkuIoYZvGfTs/PbZhideTcEg==}
-    engines: {node: '>=4'}
-
   axe-core@4.11.1:
     resolution: {integrity: sha512-BASOg+YwO2C+346x3LZOeoovTIoTrRqEsqMa6fmfAV0P+U9mFr9NsyOEpiYvFjbc64NMrSswhV50WdXzdb/Z5A==}
     engines: {node: '>=4'}
@@ -1817,8 +1816,8 @@ packages:
     resolution: {integrity: sha512-1gxPBJpI/pcjQhKgIU91II6Wkay+dLcN3M6rf2uwP8hRur3HtQXjVrdAK3sjC0piaEuxzMwjXChcETiJl47lAQ==}
     engines: {node: '>=18'}
 
-  dotenv@16.6.1:
-    resolution: {integrity: sha512-uBq4egWHTcTt33a72vpSG0z3HnPuIl6NqYcTrKEg2azoEyl2hpW0zqlxysq2pK9HlDIHyHyakeYaYnSAwd8bow==}
+  dotenv@17.4.1:
+    resolution: {integrity: sha512-k8DaKGP6r1G30Lx8V4+pCsLzKr8vLmV2paqEj1Y55GdAgJuIqpRp5FfajGF8KtwMxCz9qJc6wUIJnm053d/WCw==}
     engines: {node: '>=12'}
 
   dunder-proto@1.0.1:
@@ -2484,8 +2483,8 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
-  netmask@2.0.2:
-    resolution: {integrity: sha512-dBpDMdxv9Irdq66304OLfEmQ9tbNRFnFTuZiLo+bD+r332bBmMJ8GBLXklIXXgxd3+v9+KUnZaUR5PJMa75Gsg==}
+  netmask@2.1.0:
+    resolution: {integrity: sha512-z9sZrk6wyf8/NDKKqe+Tyl58XtgkYrV4kgt1O8xrzYvpl1LvPacPo0imMLHfpStk3kgCIq1ksJ2bmJn9hue2lQ==}
     engines: {node: '>= 0.4.0'}
 
   next@16.2.1:
@@ -2729,9 +2728,9 @@ packages:
   scheduler@0.27.0:
     resolution: {integrity: sha512-eNv+WrVbKu1f3vbYJT/xtiF5syA5HPIMtf9IgY/nKg0sWqzAUEvqY/xm7OcZc/qafLx/iO9FgOmeSAp4v5ti/Q==}
 
-  selenium-webdriver@4.22.0:
-    resolution: {integrity: sha512-GNbrkCHmy249ai885wgXqTfqL2lZnclUH/P8pwTDIqzyFxU3YhDiN7p/c9tMFA4NhgRdEBO2QCG+CWmG7xr/Mw==}
-    engines: {node: '>= 14.21.0'}
+  selenium-webdriver@4.39.0:
+    resolution: {integrity: sha512-NAs9jCU+UeZ/ZmRb8R6zOp7N8eMklefdBYASnaRmCNXdgFE8w3OCxxZmLixkwqnGDHY5VF7hCulfw1Mls43N/A==}
+    engines: {node: '>= 20.0.0'}
 
   semver@6.3.1:
     resolution: {integrity: sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==}
@@ -3251,25 +3250,25 @@ snapshots:
 
   '@asamuzakjp/nwsapi@2.3.9': {}
 
-  '@axe-core/cli@4.10.2':
+  '@axe-core/cli@4.11.1':
     dependencies:
-      '@axe-core/webdriverjs': 4.11.1(selenium-webdriver@4.22.0)
-      axe-core: 4.10.3
+      '@axe-core/webdriverjs': 4.11.1(selenium-webdriver@4.39.0)
+      axe-core: 4.11.1
       chromedriver: 147.0.1
       colors: 1.4.0
       commander: 9.5.0
-      dotenv: 16.6.1
-      selenium-webdriver: 4.22.0
+      dotenv: 17.4.1
+      selenium-webdriver: 4.39.0
     transitivePeerDependencies:
       - bufferutil
       - debug
       - supports-color
       - utf-8-validate
 
-  '@axe-core/webdriverjs@4.11.1(selenium-webdriver@4.22.0)':
+  '@axe-core/webdriverjs@4.11.1(selenium-webdriver@4.39.0)':
     dependencies:
       axe-core: 4.11.1
-      selenium-webdriver: 4.22.0
+      selenium-webdriver: 4.39.0
 
   '@babel/code-frame@7.29.0':
     dependencies:
@@ -3390,6 +3389,8 @@ snapshots:
     dependencies:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.28.5
+
+  '@bazel/runfiles@6.5.0': {}
 
   '@bcoe/v8-coverage@1.0.2': {}
 
@@ -4497,8 +4498,6 @@ snapshots:
       stubborn-fs: 2.0.0
       when-exit: 2.1.5
 
-  axe-core@4.10.3: {}
-
   axe-core@4.11.1: {}
 
   axios@1.14.0:
@@ -4788,7 +4787,7 @@ snapshots:
     dependencies:
       type-fest: 4.41.0
 
-  dotenv@16.6.1: {}
+  dotenv@17.4.1: {}
 
   dunder-proto@1.0.1:
     dependencies:
@@ -5704,7 +5703,7 @@ snapshots:
 
   nanoid@3.3.11: {}
 
-  netmask@2.0.2: {}
+  netmask@2.1.0: {}
 
   next@16.2.1(@babel/core@7.29.0)(@opentelemetry/api@1.9.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
     dependencies:
@@ -5767,7 +5766,7 @@ snapshots:
   pac-resolver@7.0.1:
     dependencies:
       degenerator: 5.0.1
-      netmask: 2.0.2
+      netmask: 2.1.0
 
   pako@1.0.11: {}
 
@@ -6025,11 +6024,12 @@ snapshots:
 
   scheduler@0.27.0: {}
 
-  selenium-webdriver@4.22.0:
+  selenium-webdriver@4.39.0:
     dependencies:
+      '@bazel/runfiles': 6.5.0
       jszip: 3.10.1
       tmp: 0.2.5
-      ws: 8.19.0
+      ws: 8.20.0
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
