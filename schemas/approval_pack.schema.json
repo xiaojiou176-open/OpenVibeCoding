@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/approval_pack.schema.json",
+  "title": "ApprovalPack",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "report_type",
+    "run_id",
+    "status",
+    "summary",
+    "reasons",
+    "actions",
+    "verify_steps",
+    "resume_step"
+  ],
+  "properties": {
+    "report_type": {
+      "type": "string",
+      "const": "approval_pack"
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "minLength": 1
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "failure_reason": {
+      "type": "string"
+    },
+    "reasons": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "verify_steps": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "resume_step": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "version": "v1",
+  "roles": {
+    "PM": {
+      "system_prompt_ref": "policies/agents/codex/roles/10_pm.md",
+      "skills_bundle_ref": null,
+      "mcp_bundle_ref": null,
+      "runtime_binding": {
+        "runner": null,
+        "provider": null,
+        "model": null
+      }
+    },
+    "TECH_LEAD": {
+      "system_prompt_ref": "policies/agents/codex/roles/20_tech_lead.md",
+      "skills_bundle_ref": "policies/skills_bundle_registry.json#bundles.tech_lead_contract_bridge_v1",
+      "mcp_bundle_ref": null,
+      "runtime_binding": {
+        "runner": null,
+        "provider": null,
+        "model": null
+      }
+    },
+    "SEARCHER": {
+      "system_prompt_ref": "policies/agents/codex/roles/30_searcher.md",
+      "skills_bundle_ref": null,
+      "mcp_bundle_ref": "policies/agent_registry.json#agents(role=SEARCHER).capabilities.mcp_tools",
+      "runtime_binding": {
+        "runner": null,
+        "provider": null,
+        "model": null
+      }
+    },
+    "RESEARCHER": {
+      "system_prompt_ref": "policies/agents/codex/roles/30_searcher.md",
+      "skills_bundle_ref": null,
+      "mcp_bundle_ref": "policies/agent_registry.json#agents(role=RESEARCHER).capabilities.mcp_tools",
+      "runtime_binding": {
+        "runner": null,
+        "provider": null,
+        "model": null
+      }
+    },
+    "REVIEWER": {
+      "system_prompt_ref": "policies/agents/codex/roles/40_reviewer.md",
+      "skills_bundle_ref": "policies/skills_bundle_registry.json#bundles.reviewer_gate_v1",
+      "mcp_bundle_ref": "policies/agent_registry.json#agents(role=REVIEWER).capabilities.mcp_tools",
+      "runtime_binding": {
+        "runner": null,
+        "provider": null,
+        "model": null
+      }
+    },
+    "WORKER": {
+      "system_prompt_ref": "policies/agents/codex/roles/50_worker_core.md",
+      "skills_bundle_ref": "policies/skills_bundle_registry.json#bundles.worker_delivery_core_v1",
+      "mcp_bundle_ref": "policies/agent_registry.json#agents(role=WORKER).capabilities.mcp_tools",
+      "runtime_binding": {
+        "runner": null,
+        "provider": null,
+        "model": null
+      }
+    },
+    "UI_UX": {
+      "system_prompt_ref": "policies/agents/codex/roles/51_worker_frontend.md",
+      "skills_bundle_ref": "policies/skills_bundle_registry.json#bundles.worker_delivery_core_v1",
+      "mcp_bundle_ref": null,
+      "runtime_binding": {
+        "runner": null,
+        "provider": null,
+        "model": null
+      }
+    },
+    "FRONTEND": {
+      "system_prompt_ref": "policies/agents/codex/roles/51_worker_frontend.md",
+      "skills_bundle_ref": "policies/skills_bundle_registry.json#bundles.worker_delivery_core_v1",
+      "mcp_bundle_ref": null,
+      "runtime_binding": {
+        "runner": null,
+        "provider": null,
+        "model": null
+      }
+    },
+    "BACKEND": {
+      "system_prompt_ref": "policies/agents/codex/roles/52_worker_backend.md",
+      "skills_bundle_ref": "policies/skills_bundle_registry.json#bundles.worker_delivery_core_v1",
+      "mcp_bundle_ref": null,
+      "runtime_binding": {
+        "runner": null,
+        "provider": null,
+        "model": null
+      }
+    },
+    "AI": {
+      "system_prompt_ref": "policies/agents/codex/roles/53_worker_ai.md",
+      "skills_bundle_ref": "policies/skills_bundle_registry.json#bundles.worker_delivery_core_v1",
+      "mcp_bundle_ref": null,
+      "runtime_binding": {
+        "runner": null,
+        "provider": null,
+        "model": null
+      }
+    },
+    "SECURITY": {
+      "system_prompt_ref": "policies/agents/codex/roles/54_worker_security.md",
+      "skills_bundle_ref": "policies/skills_bundle_registry.json#bundles.worker_delivery_core_v1",
+      "mcp_bundle_ref": null,
+      "runtime_binding": {
+        "runner": null,
+        "provider": null,
+        "model": null
+      }
+    },
+    "INFRA": {
+      "system_prompt_ref": "policies/agents/codex/roles/55_worker_infra.md",
+      "skills_bundle_ref": "policies/skills_bundle_registry.json#bundles.worker_delivery_core_v1",
+      "mcp_bundle_ref": null,
+      "runtime_binding": {
+        "runner": null,
+        "provider": null,
+        "model": null
+      }
+    },
+    "OPS": {
+      "system_prompt_ref": "policies/agents/codex/roles/55_worker_infra.md",
+      "skills_bundle_ref": "policies/skills_bundle_registry.json#bundles.worker_delivery_core_v1",
+      "mcp_bundle_ref": null,
+      "runtime_binding": {
+        "runner": null,
+        "provider": null,
+        "model": null
+      }
+    },
+    "TEST": {
+      "system_prompt_ref": "policies/agents/codex/roles/56_worker_test.md",
+      "skills_bundle_ref": "policies/skills_bundle_registry.json#bundles.test_evidence_v1",
+      "mcp_bundle_ref": null,
+      "runtime_binding": {
+        "runner": null,
+        "provider": null,
+        "model": null
+      }
+    },
+    "TEST_RUNNER": {
+      "system_prompt_ref": "policies/agents/codex/roles/56_worker_test.md",
+      "skills_bundle_ref": "policies/skills_bundle_registry.json#bundles.test_evidence_v1",
+      "mcp_bundle_ref": null,
+      "runtime_binding": {
+        "runner": null,
+        "provider": null,
+        "model": null
+      }
+    }
+  }
+}

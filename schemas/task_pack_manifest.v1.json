@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/task_pack_manifest.v1.json",
+  "title": "TaskPackManifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "pack_id",
+    "version",
+    "title",
+    "description",
+    "visibility",
+    "entry_mode",
+    "task_template",
+    "input_fields",
+    "ui_hint"
+  ],
+  "properties": {
+    "pack_id": { "type": "string", "minLength": 1 },
+    "version": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "description": { "type": "string", "minLength": 1 },
+    "visibility": { "type": "string", "enum": ["public", "internal"] },
+    "entry_mode": { "type": "string", "enum": ["pm_intake"] },
+    "task_template": { "type": "string", "minLength": 1 },
+    "input_fields": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["field_id", "label", "control"],
+        "properties": {
+          "field_id": { "type": "string", "minLength": 1 },
+          "label": { "type": "string", "minLength": 1 },
+          "control": { "type": "string", "enum": ["text", "textarea", "url", "select", "number"] },
+          "required": { "type": "boolean" },
+          "placeholder": { "type": "string" },
+          "help_text": { "type": "string" },
+          "default_value": {
+            "oneOf": [
+              { "type": "string" },
+              { "type": "number" }
+            ]
+          },
+          "value_codec": { "type": "string", "enum": ["string", "string_list", "integer"] },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["value", "label"],
+              "properties": {
+                "value": { "type": "string", "minLength": 1 },
+                "label": { "type": "string", "minLength": 1 },
+                "description": { "type": "string" }
+              }
+            }
+          },
+          "min": { "type": "number" },
+          "max": { "type": "number" }
+        }
+      }
+    },
+    "ui_hint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["surface_group"],
+      "properties": {
+        "surface_group": { "type": "string", "minLength": 1 },
+        "default_label": { "type": "string" }
+      }
+    },
+    "evidence_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "primary_report": { "type": "string" },
+        "requires_search_requests": { "type": "boolean" },
+        "requires_browser_requests": { "type": "boolean" }
+      }
+    }
+  }
+}

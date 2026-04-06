@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://cortexpilot.local/schemas/log_event.v2.json",
+  "title": "CortexPilot log event envelope v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "ts",
+    "level",
+    "domain",
+    "surface",
+    "service",
+    "component",
+    "event",
+    "lane",
+    "run_id",
+    "request_id",
+    "trace_id",
+    "session_id",
+    "test_id",
+    "source_kind",
+    "artifact_kind",
+    "correlation_kind",
+    "meta",
+    "redaction_version",
+    "schema_version"
+  ],
+  "properties": {
+    "ts": { "type": "string", "format": "date-time" },
+    "level": { "type": "string" },
+    "domain": {
+      "type": "string",
+      "enum": ["runtime", "api", "ui", "desktop", "ci", "e2e", "test", "governance"]
+    },
+    "surface": {
+      "type": "string",
+      "enum": ["backend", "dashboard", "desktop", "ci", "tooling"]
+    },
+    "service": { "type": "string", "minLength": 1 },
+    "component": { "type": "string", "minLength": 1 },
+    "event": { "type": "string", "minLength": 1 },
+    "lane": {
+      "type": "string",
+      "enum": ["runtime", "error", "access", "e2e", "ci", "governance"]
+    },
+    "run_id": { "type": "string" },
+    "request_id": { "type": "string" },
+    "trace_id": { "type": "string" },
+    "session_id": { "type": "string" },
+    "test_id": { "type": "string" },
+    "source_kind": {
+      "type": "string",
+      "enum": ["app_log", "test_log", "ci_log", "artifact_manifest", "event_stream"]
+    },
+    "artifact_kind": { "type": "string" },
+    "correlation_kind": {
+      "type": "string",
+      "enum": ["run", "session", "test", "request", "trace", "none"]
+    },
+    "meta": { "type": "object" },
+    "redaction_version": { "type": "string", "const": "redaction.v1" },
+    "schema_version": { "type": "string", "const": "log_event.v2" }
+  }
+}

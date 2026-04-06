@@ -1,0 +1,35 @@
+{
+  "version": "v1",
+  "allow": [
+    {"exec": "codex", "argv_prefixes": [["codex", "exec"], ["codex", "exec", "resume"]]},
+    {"exec": "git", "argv_prefixes": [["git"]]},
+    {"exec": "echo", "argv_prefixes": [["echo"]]},
+    {"exec": "pytest", "argv_prefixes": [["pytest"]]},
+    {"exec": "python", "argv_prefixes": [["python", "-m", "pytest"], ["python", "-m", "cortexpilot_orch.cli"]]},
+    {"exec": "python3", "argv_prefixes": [["python3", "-m", "pytest"], ["python3", "-m", "cortexpilot_orch.cli"]]},
+    {"exec": "npm", "argv_prefixes": [["npm", "test"]]}
+  ],
+  "deny_substrings": [
+    "rm -rf",
+    "sudo",
+    "ssh ",
+    "scp ",
+    "sftp ",
+    "curl ",
+    "wget ",
+    ".env",
+    ".runtime-cache/cortexpilot/",
+    "git push",
+    "git reset --hard",
+    "git clean -fd",
+    "npm install",
+    "pip install"
+  ],
+  "forbidden_actions": [
+    "git push",
+    "git reset --hard",
+    "git clean -fd",
+    "npm install",
+    "pip install"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/evidence_report.v1.json",
+  "title": "EvidenceReport",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["status", "missing"],
+  "properties": {
+    "status": {"type": "string", "enum": ["ok", "fail"]},
+    "missing": {"type": "array", "items": {"type": "string"}}
+  }
+}

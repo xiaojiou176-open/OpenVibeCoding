@@ -1,0 +1,28 @@
+{
+  "installed": [
+    "01-filesystem",
+    "codex",
+    "git",
+    "python",
+    "node",
+    "playwright",
+    "tampermonkey",
+    "search",
+    "browser",
+    "sampling",
+    "aider",
+    "continue",
+    "open_interpreter"
+  ],
+  "integrated": [
+    "01-filesystem",
+    "codex",
+    "search",
+    "browser",
+    "tampermonkey",
+    "sampling",
+    "aider",
+    "continue",
+    "open_interpreter"
+  ]
+}

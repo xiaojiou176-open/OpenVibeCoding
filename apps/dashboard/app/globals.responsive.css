@@ -1,0 +1,277 @@
+/* =========================================
+   Responsive Breakpoints
+   1180px — tablet landscape
+   920px  — tablet portrait
+   640px  — mobile
+   ========================================= */
+
+@media (max-width: 1180px) {
+  .grid-3,
+  .grid-2,
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ct-home-layout,
+  .command-tower-layout {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: stretch;
+  }
+
+  .ct-right-drawer,
+  .command-tower-drawer,
+  .ct-drawer-sticky {
+    position: static;
+    top: auto;
+    max-height: none;
+    overflow: visible;
+    padding-right: 0;
+  }
+
+  .ct-panel-group,
+  .command-tower-panel-group {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+
+  .ct-main-workspace > *,
+  .command-tower-main > *,
+  .ct-right-drawer > *,
+  .command-tower-drawer > *,
+  .ct-pm-panel-zone > *,
+  .command-tower-pm-panel > * {
+    min-width: 0;
+  }
+
+  .ct-session-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 920px) {
+  .app-body::before,
+  .metric-card::before,
+  .metric-card::after {
+    display: none;
+  }
+
+  .app-section,
+  .metric-card,
+  .quick-card,
+  .ui-card,
+  .compact-status-card,
+  .pm-chain-card,
+  .pm-context-card,
+  .ct-drawer-panel,
+  .command-tower-drawer .ui-card,
+  .sidebar-link,
+  .ui-badge {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .sidebar,
+  .topbar {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .metric-card:hover,
+  .quick-card:hover,
+  .ui-card:hover,
+  .compact-status-card:hover,
+  .pm-chain-card:hover,
+  .pm-context-card:hover,
+  .ct-drawer-panel:hover,
+  .command-tower-drawer .ui-card:hover,
+  .sidebar-link:hover,
+  .ui-badge:hover {
+    transform: none;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+    height: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--color-border);
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: var(--space-4);
+    gap: var(--space-3);
+  }
+
+  .sidebar-brand {
+    width: 100%;
+  }
+
+  .sidebar-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .sidebar-section {
+    flex: 1 1 260px;
+    min-width: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-1);
+  }
+
+  .sidebar-section-title {
+    margin-bottom: 0;
+  }
+
+  .sidebar-list {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+  }
+
+  .sidebar-link {
+    min-width: max-content;
+    white-space: normal;
+  }
+
+  .content {
+    padding: var(--space-5);
+    gap: var(--space-5);
+  }
+
+  .topbar {
+    padding: 0 var(--space-5);
+  }
+
+  .stats-grid,
+  .grid-3,
+  .grid-2,
+  .quick-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-title {
+    font-size: var(--text-xl);
+  }
+
+  .section-title {
+    font-size: var(--text-base);
+  }
+
+  .metric-card,
+  .quick-card {
+    padding: var(--space-4);
+    gap: var(--space-2);
+  }
+
+  .run-table th,
+  .run-table td {
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .data-list-row {
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .data-list-label {
+    width: auto;
+  }
+
+  .ct-home-layout,
+  .command-tower-layout,
+  .ct-main-workspace,
+  .command-tower-main,
+  .ct-right-drawer,
+  .command-tower-drawer,
+  .ct-pm-panel-zone,
+  .command-tower-pm-panel {
+    gap: var(--space-3);
+  }
+
+  .ct-panel-group,
+  .command-tower-panel-group {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-3);
+  }
+
+  .metric-value {
+    font-size: var(--text-xl);
+  }
+}
+
+@media (max-width: 640px) {
+  .app-body::before {
+    display: none;
+  }
+
+  .content {
+    padding: var(--space-4);
+    gap: var(--space-4);
+  }
+
+  .topbar {
+    padding: 0 var(--space-4);
+  }
+
+  .topbar-title {
+    font-size: var(--text-sm);
+  }
+
+  .ct-home-layout,
+  .command-tower-layout,
+  .ct-main-workspace,
+  .command-tower-main,
+  .ct-right-drawer,
+  .command-tower-drawer,
+  .ct-pm-panel-zone,
+  .command-tower-pm-panel {
+    gap: var(--space-2);
+  }
+
+  .ct-right-drawer,
+  .command-tower-drawer {
+    overflow-x: hidden;
+  }
+
+  .ct-pm-panel-zone > .card,
+  .command-tower-pm-panel > .card {
+    padding: var(--space-3);
+  }
+
+  .card {
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+  }
+
+  .metric-card {
+    padding: var(--space-4);
+  }
+
+  .quick-card {
+    padding: var(--space-4);
+  }
+
+  .page-title {
+    font-size: var(--text-lg);
+  }
+
+  .section-title {
+    font-size: var(--text-sm);
+  }
+
+  .run-table th,
+  .run-table td {
+    padding: var(--space-1-5) var(--space-2);
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+}

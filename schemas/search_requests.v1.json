@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/search_requests.v1.json",
+  "title": "SearchRequests",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["queries"],
+  "properties": {
+    "queries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "repeat": {"type": "integer", "minimum": 1},
+    "parallel": {"type": "integer", "minimum": 1},
+    "providers": {
+      "type": "array",
+      "items": {"type": "string"},
+      "minItems": 1
+    },
+    "browser_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "stealth_mode": {"type": "string", "enum": ["none", "lite", "plugin"]},
+        "human_behavior": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {"type": "boolean"},
+            "level": {"type": "string", "enum": ["low", "medium", "high"]}
+          }
+        }
+      }
+    },
+    "verify": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "providers": {
+          "type": "array",
+          "items": {"type": "string"},
+          "minItems": 1
+        },
+        "repeat": {"type": "integer", "minimum": 1}
+      }
+    },
+    "verify_ai": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {"type": "boolean"}
+      }
+    },
+    "task_template": {
+      "type": "string",
+      "enum": ["news_digest", "topic_brief", "page_brief"]
+    },
+    "template_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "url": {"type": "string", "minLength": 1},
+        "focus": {"type": "string", "minLength": 1},
+        "topic": {"type": "string", "minLength": 1},
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "time_range": {
+          "type": "string",
+          "enum": ["24h", "7d", "30d"]
+        },
+        "max_results": {"type": "integer", "minimum": 1, "maximum": 10}
+      }
+    },
+    "freshness_requirement_days": {"type": "integer", "minimum": 0}
+  }
+}

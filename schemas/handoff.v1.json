@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/handoff.v1.json",
+  "title": "AgentHandoff",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["instruction_sha256", "summary", "risks"],
+  "properties": {
+    "instruction_sha256": {
+      "type": "string",
+      "pattern": "^[a-fA-F0-9]{64}$"
+    },
+    "summary": {"type": "string"},
+    "risks": {"type": "array", "items": {"type": "string"}}
+  }
+}

@@ -1,0 +1,648 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/run_manifest.schema.json",
+  "title": "RunManifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "run_id",
+    "created_at",
+    "status",
+    "user_request",
+    "repo",
+    "versions",
+    "tasks",
+    "artifacts",
+    "evidence_hashes",
+    "trace_id"
+  ],
+  "$defs": {
+    "ArtifactRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        },
+        "media_type": {
+          "type": "string"
+        },
+        "size_bytes": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    }
+  },
+  "properties": {
+    "run_id": {
+      "type": "string",
+      "minLength": 8
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "finished_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "RUNNING",
+        "SUCCESS",
+        "FAILURE"
+      ]
+    },
+    "failure_reason": {
+      "type": "string"
+    },
+    "user_request": {
+      "type": "string",
+      "minLength": 1
+    },
+    "trace_id": {
+      "type": "string",
+      "minLength": 8
+    },
+    "diagnostic": {
+      "type": "boolean"
+    },
+    "runner": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "mcp_only": {
+          "type": "boolean"
+        },
+        "profile": {
+          "type": "string"
+        }
+      }
+    },
+    "policy_pack": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ]
+    },
+    "repo": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "root",
+        "baseline_ref"
+      ],
+      "properties": {
+        "root": {
+          "type": "string"
+        },
+        "remote_url": {
+          "type": "string"
+        },
+        "branch": {
+          "type": "string"
+        },
+        "baseline_ref": {
+          "type": "string"
+        },
+        "final_ref": {
+          "type": "string"
+        }
+      }
+    },
+    "versions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contracts_schema",
+        "orchestrator"
+      ],
+      "properties": {
+        "contracts_schema": {
+          "type": "string"
+        },
+        "orchestrator": {
+          "type": "string"
+        },
+        "codex_cli": {
+          "type": "string"
+        },
+        "agents_sdk": {
+          "type": "string"
+        },
+        "python": {
+          "type": "string"
+        },
+        "node": {
+          "type": "string"
+        }
+      }
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "temperature": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 2
+        },
+        "top_p": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "seed": {
+          "type": "integer"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "role_binding_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authority",
+        "source",
+        "execution_authority",
+        "skills_bundle_ref",
+        "mcp_bundle_ref",
+        "runtime_binding"
+      ],
+      "properties": {
+        "authority": {
+          "type": "string",
+          "enum": [
+            "contract-derived-read-model"
+          ]
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "execution_authority": {
+          "type": "string",
+          "enum": [
+            "task_contract"
+          ]
+        },
+        "skills_bundle_ref": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "ref",
+            "bundle_id",
+            "resolved_skill_set",
+            "validation"
+          ],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "unresolved",
+                "resolved",
+                "registry-backed"
+              ]
+            },
+            "ref": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "bundle_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "resolved_skill_set": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "validation": {
+              "type": "string",
+              "enum": [
+                "fail-closed"
+              ]
+            }
+          }
+        },
+        "mcp_bundle_ref": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "ref",
+            "resolved_mcp_tool_set",
+            "validation"
+          ],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "unresolved",
+                "resolved",
+                "registry-backed"
+              ]
+            },
+            "ref": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "resolved_mcp_tool_set": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "validation": {
+              "type": "string",
+              "enum": [
+                "fail-closed"
+              ]
+            }
+          }
+        },
+        "runtime_binding": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "authority_scope",
+            "source",
+            "summary"
+          ],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "unresolved",
+                "partially-resolved",
+                "contract-derived"
+              ]
+            },
+            "authority_scope": {
+              "type": "string",
+              "enum": [
+                "contract-derived-read-model"
+              ]
+            },
+            "source": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "runner",
+                "provider",
+                "model"
+              ],
+              "properties": {
+                "runner": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "provider": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "model": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "summary": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "runner",
+                "provider",
+                "model"
+              ],
+              "properties": {
+                "runner": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "provider": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "model": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            },
+            "capability": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "status",
+                "lane",
+                "compat_api_mode",
+                "provider_status",
+                "provider_inventory_id",
+                "tool_execution",
+                "notes"
+              ],
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "previewable"
+                  ]
+                },
+                "lane": {
+                  "type": "string",
+                  "enum": [
+                    "standard-provider-path",
+                    "switchyard-chat-compatible"
+                  ]
+                },
+                "compat_api_mode": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "provider_status": {
+                  "type": "string",
+                  "enum": [
+                    "unresolved",
+                    "allowlisted",
+                    "unsupported"
+                  ]
+                },
+                "provider_inventory_id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "tool_execution": {
+                  "type": "string",
+                  "enum": [
+                    "provider-path-required",
+                    "fail-closed"
+                  ]
+                },
+                "notes": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "tasks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "task_id",
+          "role",
+          "contract",
+          "status"
+        ],
+        "properties": {
+          "task_id": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "PM",
+              "TECH_LEAD",
+              "WORKER",
+              "REVIEWER",
+              "TEST_RUNNER",
+              "SEARCHER",
+              "RESEARCHER",
+              "UI_UX",
+              "FRONTEND",
+              "BACKEND",
+              "AI",
+              "SECURITY",
+              "INFRA",
+              "TEST",
+              "OPS"
+            ]
+          },
+          "assigned_agent_id": {
+            "type": "string"
+          },
+          "thread_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "RUNNING",
+              "SUCCESS",
+              "FAILED",
+              "BLOCKED",
+              "SKIPPED"
+            ]
+          },
+          "contract": {
+            "$ref": "#/$defs/ArtifactRef"
+          },
+          "result": {
+            "$ref": "#/$defs/ArtifactRef"
+          },
+          "review_report": {
+            "$ref": "#/$defs/ArtifactRef"
+          },
+          "test_report": {
+            "$ref": "#/$defs/ArtifactRef"
+          }
+        }
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ArtifactRef"
+      }
+    },
+    "evidence_hashes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[a-fA-F0-9]{64}$"
+      },
+      "required": [
+        "contract.json",
+        "events.jsonl",
+        "patch.diff",
+        "diff_name_only.txt",
+        "reports/review_report.json",
+        "reports/test_report.json"
+      ],
+      "properties": {
+        "contract.json": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        },
+        "events.jsonl": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        },
+        "events.hashchain.jsonl": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        },
+        "contract.sig": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        },
+        "patch.diff": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        },
+        "diff_name_only.txt": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        },
+        "reports/review_report.json": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        },
+        "reports/test_report.json": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "contract_sha256": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        },
+        "contract_signature_path": {
+          "type": "string"
+        },
+        "contract_signature_sha256": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        },
+        "events_hashchain_path": {
+          "type": "string"
+        },
+        "manifest_sha256": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        }
+      }
+    },
+    "trace": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "trace_id": {
+          "type": "string"
+        },
+        "trace_url": {
+          "type": "string"
+        }
+      }
+    },
+    "workflow": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "workflow_id": {
+          "type": "string"
+        },
+        "task_queue": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "RUNNING",
+            "SUCCESS",
+            "FAILURE"
+          ]
+        }
+      }
+    },
+    "observability": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "has_otel": {
+          "type": "boolean"
+        },
+        "otlp_endpoint": {
+          "type": "string"
+        },
+        "otlp_protocol": {
+          "type": "string"
+        },
+        "console_enabled": {
+          "type": "boolean"
+        },
+        "required": {
+          "type": "boolean"
+        }
+      }
+    },
+    "notes": {
+      "type": "string"
+    }
+  }
+}

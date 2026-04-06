@@ -1,0 +1,370 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cortexpilot.local/schemas/ci_policy.schema.json",
+  "title": "CI Policy",
+  "type": "object",
+  "required": [
+    "metadata",
+    "audit"
+  ],
+  "properties": {
+    "metadata": {
+      "$ref": "#/$defs/metadata"
+    },
+    "audit": {
+      "$ref": "#/$defs/audit"
+    },
+    "core": {
+      "$ref": "#/$defs/core"
+    },
+    "profile": {
+      "$ref": "#/$defs/profile"
+    },
+    "advanced": {
+      "$ref": "#/$defs/advanced"
+    }
+  },
+  "allOf": [
+    {
+      "oneOf": [
+        {
+          "required": [
+            "core"
+          ]
+        },
+        {
+          "required": [
+            "profile"
+          ]
+        },
+        {
+          "required": [
+            "advanced"
+          ]
+        }
+      ]
+    }
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "metadata": {
+      "type": "object",
+      "required": [
+        "name",
+        "version",
+        "layer",
+        "schema"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "layer": {
+          "type": "string",
+          "enum": [
+            "core",
+            "profile",
+            "advanced"
+          ]
+        },
+        "schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string"
+        },
+        "source_of_truth": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "audit": {
+      "type": "object",
+      "required": [
+        "enabled"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "change_control": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        },
+        "break_glass_required": {
+          "type": "boolean"
+        },
+        "break_glass_audit_log": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "core": {
+      "type": "object",
+      "required": [
+        "gates",
+        "execution",
+        "defaults",
+        "pm_chat"
+      ],
+      "properties": {
+        "gates": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "boolean"
+          }
+        },
+        "execution": {
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "boolean",
+              "integer"
+            ]
+          }
+        },
+        "defaults": {
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "boolean",
+              "number",
+              "string",
+              "array"
+            ]
+          }
+        },
+        "pm_chat": {
+          "type": "object",
+          "required": [
+            "runner",
+            "web_mode",
+            "mode_on_ci",
+            "mode_local_without_key",
+            "allow_mock_on_ci",
+            "allow_missing_key"
+          ],
+          "properties": {
+            "runner": {
+              "type": "string"
+            },
+            "web_mode": {
+              "type": "string"
+            },
+            "mode_on_ci": {
+              "type": "string"
+            },
+            "mode_local_without_key": {
+              "type": "string"
+            },
+            "allow_mock_on_ci": {
+              "type": "boolean"
+            },
+            "allow_missing_key": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "profile": {
+      "type": "object",
+      "required": [
+        "default",
+        "profiles"
+      ],
+      "properties": {
+        "default": {
+          "type": "string",
+          "enum": [
+            "pr",
+            "nightly",
+            "weekly"
+          ]
+        },
+        "profiles": {
+          "type": "object",
+          "required": [
+            "pr",
+            "nightly",
+            "weekly"
+          ],
+          "properties": {
+            "pr": {
+              "$ref": "#/$defs/profile_unit"
+            },
+            "nightly": {
+              "$ref": "#/$defs/profile_unit"
+            },
+            "weekly": {
+              "$ref": "#/$defs/profile_unit"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "profile_unit": {
+      "type": "object",
+      "required": [
+        "ui_flake",
+        "ui_truth"
+      ],
+      "properties": {
+        "ui_flake": {
+          "$ref": "#/$defs/flake"
+        },
+        "ui_truth": {
+          "$ref": "#/$defs/truth"
+        }
+      },
+      "additionalProperties": false
+    },
+    "flake": {
+      "type": "object",
+      "required": [
+        "p0_iterations",
+        "p1_iterations",
+        "p0_threshold_percent",
+        "p1_threshold_percent"
+      ],
+      "properties": {
+        "p0_iterations": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "p1_iterations": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "p0_threshold_percent": {
+          "type": "number",
+          "minimum": 0
+        },
+        "p1_threshold_percent": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "truth": {
+      "type": "object",
+      "required": [
+        "p0_min_iterations",
+        "p1_min_iterations",
+        "p0_max_threshold_percent",
+        "p1_max_threshold_percent"
+      ],
+      "properties": {
+        "p0_min_iterations": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "p1_min_iterations": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "p0_max_threshold_percent": {
+          "type": "number",
+          "minimum": 0
+        },
+        "p1_max_threshold_percent": {
+          "type": "number",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "advanced": {
+      "type": "object",
+      "required": [
+        "fail_closed",
+        "break_glass"
+      ],
+      "properties": {
+        "fail_closed": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "boolean"
+          }
+        },
+        "break_glass": {
+          "type": "object",
+          "required": [
+            "template",
+            "required_fields",
+            "scopes"
+          ],
+          "properties": {
+            "template": {
+              "$ref": "#/$defs/break_glass_template"
+            },
+            "required_fields": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "contains": {
+                "const": "reason"
+              },
+              "minItems": 3
+            },
+            "scopes": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "break_glass_template": {
+      "type": "object",
+      "required": [
+        "enabled",
+        "reason",
+        "ticket",
+        "expires_on"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "ticket": {
+          "type": "string"
+        },
+        "expires_on": {
+          "type": "string",
+          "pattern": "^([0-9]{4})-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])|YYYY-MM-DD$"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

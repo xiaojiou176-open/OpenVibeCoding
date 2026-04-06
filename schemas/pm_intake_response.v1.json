@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/pm_intake_response.v1.json",
+  "title": "PMIntakeResponse",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "intake_id",
+    "status",
+    "questions"
+  ],
+  "properties": {
+    "intake_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "NEEDS_INPUT",
+        "READY",
+        "FAILED"
+      ]
+    },
+    "questions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "plan": {
+      "type": "object"
+    },
+    "plan_bundle": {
+      "type": "object"
+    },
+    "task_chain": {
+      "type": "object"
+    },
+    "task_chain_path": {
+      "type": "string"
+    },
+    "chain_run_id": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "task_template": {
+      "type": "string"
+    },
+    "template_payload": {
+      "type": "object"
+    },
+    "browser_policy_preset": {
+      "type": "string"
+    },
+    "effective_browser_policy": {
+      "type": "object"
+    },
+    "policy_notes": {
+      "type": "string"
+    }
+  }
+}

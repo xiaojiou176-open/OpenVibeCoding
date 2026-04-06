@@ -1,0 +1,435 @@
+{
+  "chain_id": "chain-lifecycle-full",
+  "owner_agent": {
+    "role": "PM",
+    "agent_id": "agent-1",
+    "codex_thread_id": ""
+  },
+  "strategy": {
+    "continue_on_fail": false,
+    "lifecycle": {
+      "enforce": true,
+      "required_path": [
+        "PM",
+        "TECH_LEAD",
+        "WORKER",
+        "REVIEWER",
+        "TEST_RUNNER",
+        "TECH_LEAD",
+        "PM"
+      ],
+      "min_workers": 2,
+      "min_reviewers": 2,
+      "reviewer_quorum": 2,
+      "require_test_stage": true,
+      "require_return_to_pm": true
+    }
+  },
+  "steps": [
+    {
+      "name": "pm_to_tl",
+      "kind": "handoff",
+      "payload": {
+        "task_id": "pm_to_tl_01",
+        "owner_agent": {
+          "role": "PM",
+          "agent_id": "agent-1",
+          "codex_thread_id": ""
+        },
+        "assigned_agent": {
+          "role": "TECH_LEAD",
+          "agent_id": "agent-1",
+          "codex_thread_id": ""
+        }
+      }
+    },
+    {
+      "name": "worker_core",
+      "kind": "contract",
+      "depends_on": [
+        "pm_to_tl"
+      ],
+      "parallel_group": "workers",
+      "exclusive_paths": [
+        ".runtime-cache/test_output/worker_markers/worker_core.txt"
+      ],
+      "payload": {
+        "task_id": "worker_core_01",
+        "owner_agent": {
+          "role": "TECH_LEAD",
+          "agent_id": "agent-1",
+          "codex_thread_id": ""
+        },
+        "assigned_agent": {
+          "role": "WORKER",
+          "agent_id": "agent-1",
+          "codex_thread_id": ""
+        },
+        "inputs": {
+          "spec": "Implement core changes",
+          "artifacts": []
+        },
+        "required_outputs": [
+          {
+            "name": ".runtime-cache/test_output/worker_markers/worker_core.txt",
+            "type": "file",
+            "acceptance": "generated"
+          }
+        ],
+        "allowed_paths": [
+          ".runtime-cache/test_output/worker_markers/worker_core.txt"
+        ],
+        "forbidden_actions": [],
+        "acceptance_tests": [
+          {
+            "name": "noop",
+            "cmd": "echo ok",
+            "must_pass": true
+          }
+        ],
+        "tool_permissions": {
+          "filesystem": "workspace-write",
+          "shell": "on-request",
+          "network": "deny",
+          "mcp_tools": [
+            "codex"
+          ]
+        },
+        "mcp_tool_set": [
+          "01-filesystem"
+        ],
+        "timeout_retry": {
+          "timeout_sec": 30,
+          "max_retries": 0,
+          "retry_backoff_sec": 0
+        },
+        "rollback": {
+          "strategy": "git_reset_hard",
+          "baseline_ref": "HEAD"
+        },
+        "evidence_links": [],
+        "log_refs": {
+          "run_id": "",
+          "paths": {}
+        },
+        "task_type": "IMPLEMENT"
+      }
+    },
+    {
+      "name": "worker_frontend",
+      "kind": "contract",
+      "depends_on": [
+        "pm_to_tl"
+      ],
+      "parallel_group": "workers",
+      "exclusive_paths": [
+        ".runtime-cache/test_output/worker_markers/worker_frontend.txt"
+      ],
+      "payload": {
+        "task_id": "worker_frontend_01",
+        "owner_agent": {
+          "role": "TECH_LEAD",
+          "agent_id": "agent-1",
+          "codex_thread_id": ""
+        },
+        "assigned_agent": {
+          "role": "FRONTEND",
+          "agent_id": "agent-1",
+          "codex_thread_id": ""
+        },
+        "inputs": {
+          "spec": "Implement frontend changes",
+          "artifacts": []
+        },
+        "required_outputs": [
+          {
+            "name": ".runtime-cache/test_output/worker_markers/worker_frontend.txt",
+            "type": "file",
+            "acceptance": "generated"
+          }
+        ],
+        "allowed_paths": [
+          ".runtime-cache/test_output/worker_markers/worker_frontend.txt"
+        ],
+        "forbidden_actions": [],
+        "acceptance_tests": [
+          {
+            "name": "noop",
+            "cmd": "echo ok",
+            "must_pass": true
+          }
+        ],
+        "tool_permissions": {
+          "filesystem": "workspace-write",
+          "shell": "on-request",
+          "network": "deny",
+          "mcp_tools": [
+            "codex"
+          ]
+        },
+        "mcp_tool_set": [
+          "01-filesystem"
+        ],
+        "timeout_retry": {
+          "timeout_sec": 30,
+          "max_retries": 0,
+          "retry_backoff_sec": 0
+        },
+        "rollback": {
+          "strategy": "git_reset_hard",
+          "baseline_ref": "HEAD"
+        },
+        "evidence_links": [],
+        "log_refs": {
+          "run_id": "",
+          "paths": {}
+        },
+        "task_type": "IMPLEMENT"
+      }
+    },
+    {
+      "name": "review_a",
+      "kind": "contract",
+      "depends_on": [
+        "worker_core",
+        "worker_frontend"
+      ],
+      "exclusive_paths": [
+        ".runtime-cache/test_output/worker_markers/review_a.txt"
+      ],
+      "payload": {
+        "task_id": "review_a_01",
+        "owner_agent": {
+          "role": "TECH_LEAD",
+          "agent_id": "agent-1",
+          "codex_thread_id": ""
+        },
+        "assigned_agent": {
+          "role": "REVIEWER",
+          "agent_id": "agent-1",
+          "codex_thread_id": ""
+        },
+        "inputs": {
+          "spec": "Review worker outputs",
+          "artifacts": []
+        },
+        "required_outputs": [
+          {
+            "name": ".runtime-cache/test_output/worker_markers/review_a.txt",
+            "type": "file",
+            "acceptance": "generated"
+          }
+        ],
+        "allowed_paths": [
+          ".runtime-cache/test_output/worker_markers/review_a.txt",
+          ".runtime-cache/test_output/worker_markers/worker_core.txt",
+          ".runtime-cache/test_output/worker_markers/worker_frontend.txt"
+        ],
+        "forbidden_actions": [],
+        "acceptance_tests": [
+          {
+            "name": "noop",
+            "cmd": "echo ok",
+            "must_pass": true
+          }
+        ],
+        "tool_permissions": {
+          "filesystem": "read-only",
+          "shell": "on-request",
+          "network": "deny",
+          "mcp_tools": [
+            "codex"
+          ]
+        },
+        "mcp_tool_set": [
+          "01-filesystem"
+        ],
+        "timeout_retry": {
+          "timeout_sec": 30,
+          "max_retries": 0,
+          "retry_backoff_sec": 0
+        },
+        "rollback": {
+          "strategy": "git_reset_hard",
+          "baseline_ref": "HEAD"
+        },
+        "evidence_links": [],
+        "log_refs": {
+          "run_id": "",
+          "paths": {}
+        },
+        "task_type": "REVIEW"
+      }
+    },
+    {
+      "name": "review_b",
+      "kind": "contract",
+      "depends_on": [
+        "worker_core",
+        "worker_frontend"
+      ],
+      "exclusive_paths": [
+        ".runtime-cache/test_output/worker_markers/review_b.txt"
+      ],
+      "payload": {
+        "task_id": "review_b_01",
+        "owner_agent": {
+          "role": "TECH_LEAD",
+          "agent_id": "agent-1",
+          "codex_thread_id": ""
+        },
+        "assigned_agent": {
+          "role": "REVIEWER",
+          "agent_id": "agent-1",
+          "codex_thread_id": ""
+        },
+        "inputs": {
+          "spec": "Review worker outputs",
+          "artifacts": []
+        },
+        "required_outputs": [
+          {
+            "name": ".runtime-cache/test_output/worker_markers/review_b.txt",
+            "type": "file",
+            "acceptance": "generated"
+          }
+        ],
+        "allowed_paths": [
+          ".runtime-cache/test_output/worker_markers/review_b.txt",
+          ".runtime-cache/test_output/worker_markers/worker_core.txt",
+          ".runtime-cache/test_output/worker_markers/worker_frontend.txt"
+        ],
+        "forbidden_actions": [],
+        "acceptance_tests": [
+          {
+            "name": "noop",
+            "cmd": "echo ok",
+            "must_pass": true
+          }
+        ],
+        "tool_permissions": {
+          "filesystem": "read-only",
+          "shell": "on-request",
+          "network": "deny",
+          "mcp_tools": [
+            "codex"
+          ]
+        },
+        "mcp_tool_set": [
+          "01-filesystem"
+        ],
+        "timeout_retry": {
+          "timeout_sec": 30,
+          "max_retries": 0,
+          "retry_backoff_sec": 0
+        },
+        "rollback": {
+          "strategy": "git_reset_hard",
+          "baseline_ref": "HEAD"
+        },
+        "evidence_links": [],
+        "log_refs": {
+          "run_id": "",
+          "paths": {}
+        },
+        "task_type": "REVIEW"
+      }
+    },
+    {
+      "name": "testing",
+      "kind": "contract",
+      "depends_on": [
+        "review_a",
+        "review_b"
+      ],
+      "exclusive_paths": [
+        ".runtime-cache/test_output/worker_markers/testing.txt"
+      ],
+      "payload": {
+        "task_id": "testing_01",
+        "owner_agent": {
+          "role": "TECH_LEAD",
+          "agent_id": "agent-1",
+          "codex_thread_id": ""
+        },
+        "assigned_agent": {
+          "role": "TEST_RUNNER",
+          "agent_id": "agent-1",
+          "codex_thread_id": ""
+        },
+        "inputs": {
+          "spec": "Run acceptance tests",
+          "artifacts": []
+        },
+        "required_outputs": [
+          {
+            "name": ".runtime-cache/test_output/worker_markers/testing.txt",
+            "type": "file",
+            "acceptance": "generated"
+          }
+        ],
+        "allowed_paths": [
+          ".runtime-cache/test_output/worker_markers/testing.txt",
+          ".runtime-cache/test_output/worker_markers/worker_core.txt",
+          ".runtime-cache/test_output/worker_markers/worker_frontend.txt",
+          ".runtime-cache/test_output/worker_markers/review_a.txt",
+          ".runtime-cache/test_output/worker_markers/review_b.txt"
+        ],
+        "forbidden_actions": [],
+        "acceptance_tests": [
+          {
+            "name": "noop",
+            "cmd": "echo ok",
+            "must_pass": true
+          }
+        ],
+        "tool_permissions": {
+          "filesystem": "read-only",
+          "shell": "on-request",
+          "network": "deny",
+          "mcp_tools": [
+            "codex"
+          ]
+        },
+        "mcp_tool_set": [
+          "01-filesystem"
+        ],
+        "timeout_retry": {
+          "timeout_sec": 30,
+          "max_retries": 0,
+          "retry_backoff_sec": 0
+        },
+        "rollback": {
+          "strategy": "git_reset_hard",
+          "baseline_ref": "HEAD"
+        },
+        "evidence_links": [],
+        "log_refs": {
+          "run_id": "",
+          "paths": {}
+        },
+        "task_type": "TEST"
+      }
+    },
+    {
+      "name": "tl_to_pm",
+      "kind": "handoff",
+      "depends_on": [
+        "testing"
+      ],
+      "payload": {
+        "task_id": "tl_to_pm_01",
+        "owner_agent": {
+          "role": "TECH_LEAD",
+          "agent_id": "agent-1",
+          "codex_thread_id": ""
+        },
+        "assigned_agent": {
+          "role": "PM",
+          "agent_id": "agent-1",
+          "codex_thread_id": ""
+        }
+      }
+    }
+  ]
+}

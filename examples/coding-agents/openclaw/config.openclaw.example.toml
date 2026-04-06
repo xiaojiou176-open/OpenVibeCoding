@@ -1,0 +1,21 @@
+# Merge this into your OpenClaw config when you want the compatible local
+# CortexPilot bundle plus the same read-only MCP server definition.
+
+[plugins]
+enabled = true
+
+[plugins.load]
+paths = [
+  "__CORTEXPILOT_REPO_ROOT__/examples/coding-agents/plugin-bundles/cortexpilot-coding-agent-bundle"
+]
+
+[plugins.entries.cortexpilot-coding-agent-bundle]
+enabled = true
+
+[mcp.servers.cortexpilot]
+command = "python3"
+args = ["-m", "cortexpilot_orch.cli", "mcp-readonly-server"]
+cwd = "__CORTEXPILOT_REPO_ROOT__"
+
+[mcp.servers.cortexpilot.env]
+PYTHONPATH = "__CORTEXPILOT_REPO_ROOT__/apps/orchestrator/src"

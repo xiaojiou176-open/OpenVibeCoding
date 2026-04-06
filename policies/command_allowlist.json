@@ -1,0 +1,19 @@
+{
+  "version": "v1",
+  "allow": [
+    {"exec": "codex", "argv_prefixes": [["codex", "exec"], ["codex", "exec", "resume"]]},
+    {"exec": "git", "argv_prefixes": [["git"]]},
+    {"exec": "echo", "argv_prefixes": [["echo"]]},
+    {"exec": "bootstrap.sh", "argv_prefixes": [["scripts/bootstrap.sh"], ["./scripts/bootstrap.sh"]]},
+    {"exec": "test.sh", "argv_prefixes": [["scripts/test.sh"], ["./scripts/test.sh"]]},
+    {"exec": "e2e.sh", "argv_prefixes": [["scripts/e2e.sh"], ["./scripts/e2e.sh"]]},
+    {"exec": "pytest", "argv_prefixes": [["pytest"]]},
+    {"exec": "python", "argv_prefixes": [["python", "-m", "pytest"], ["python", "-m", "cortexpilot_orch.cli"]]},
+    {"exec": "python3", "argv_prefixes": [["python3", "-m", "pytest"], ["python3", "-m", "cortexpilot_orch.cli"]]},
+    {"exec": "npm", "argv_prefixes": [["npm", "test"]]},
+    {"exec": "node", "argv_prefixes": [["node", "scripts/"], ["node", "tools/"]]},
+    {"exec": "bash", "argv_prefixes": [["bash", "scripts/"]]},
+    {"exec": "sh", "argv_prefixes": [["sh", "scripts/"]]}
+  ],
+  "deny_substrings": ["rm -rf", "sudo", "ssh ", "scp ", "sftp ", "curl ", "wget ", ".env", ".runtime-cache/cortexpilot/"]
+}

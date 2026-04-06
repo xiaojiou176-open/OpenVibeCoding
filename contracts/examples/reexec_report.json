@@ -1,0 +1,10 @@
+{
+  "run_id": "run-001",
+  "status": "pass",
+  "reexec_ts": "2026-02-03T00:02:00Z",
+  "hard_equal_pass": true,
+  "soft_equal_pass": true,
+  "hard_diffs": [],
+  "soft_diffs": [],
+  "errors": []
+}

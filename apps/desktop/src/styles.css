@@ -1,0 +1,14 @@
+@import "./styles.tokens.css";
+@import "./styles.layout.css";
+@import "./styles.feature.css";
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+}

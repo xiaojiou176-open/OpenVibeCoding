@@ -1,0 +1,19 @@
+{
+  "chain_id": "chain-001",
+  "run_id": "run-001",
+  "status": "SUCCESS",
+  "steps": [
+    {
+      "index": 0,
+      "name": "plan",
+      "kind": "plan",
+      "task_id": "task-plan",
+      "run_id": "run-001",
+      "status": "done"
+    }
+  ],
+  "timestamps": {
+    "started_at": "2026-02-03T00:00:00Z",
+    "finished_at": "2026-02-03T00:01:00Z"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.local/schemas/workflow_case.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "workflow_id",
+    "status",
+    "verdict",
+    "summary",
+    "pm_session_ids",
+    "run_ids",
+    "case_source",
+    "updated_at"
+  ],
+  "properties": {
+    "workflow_id": { "type": "string", "minLength": 1 },
+    "namespace": { "type": "string" },
+    "task_queue": { "type": "string" },
+    "status": { "type": "string", "minLength": 1 },
+    "objective": { "type": "string" },
+    "owner_pm": { "type": "string" },
+    "project_key": { "type": "string" },
+    "verdict": { "type": "string", "minLength": 1 },
+    "summary": { "type": "string", "minLength": 1 },
+    "pm_session_ids": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "run_ids": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "case_source": {
+      "type": "string",
+      "enum": ["persisted", "derived"]
+    },
+    "updated_at": { "type": "string", "minLength": 1 }
+  }
+}

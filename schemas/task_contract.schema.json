@@ -1,0 +1,750 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/task_contract.schema.json",
+  "title": "TaskContract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "task_id",
+    "owner_agent",
+    "assigned_agent",
+    "inputs",
+    "required_outputs",
+    "allowed_paths",
+    "forbidden_actions",
+    "acceptance_tests",
+    "tool_permissions",
+    "timeout_retry",
+    "rollback",
+    "evidence_links",
+    "log_refs",
+    "mcp_tool_set"
+  ],
+  "properties": {
+    "task_id": {
+      "type": "string",
+      "minLength": 8,
+      "description": "唯一任务标识符 (UUID or Hash)"
+    },
+    "task_type": {
+      "type": "string",
+      "enum": [
+        "PLAN",
+        "IMPLEMENT",
+        "REVIEW",
+        "TEST",
+        "SEARCH"
+      ]
+    },
+    "parent_task_id": {
+      "type": "string",
+      "description": "用于追溯任务拆分来源"
+    },
+    "owner_agent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "agent_id"
+      ],
+      "properties": {
+        "role": {
+          "type": "string",
+          "enum": [
+            "PM",
+            "TECH_LEAD",
+            "WORKER",
+            "REVIEWER",
+            "TEST_RUNNER",
+            "SEARCHER",
+            "RESEARCHER",
+            "UI_UX",
+            "FRONTEND",
+            "BACKEND",
+            "AI",
+            "SECURITY",
+            "INFRA",
+            "TEST",
+            "OPS"
+          ]
+        },
+        "agent_id": {
+          "type": "string"
+        },
+        "codex_thread_id": {
+          "type": "string",
+          "description": "用于 Codex MCP/SDK 的会话续聊 ID"
+        }
+      }
+    },
+    "assigned_agent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "agent_id"
+      ],
+      "description": "实际执行者（Worker/Reviewer/Test Runner 等）",
+      "properties": {
+        "role": {
+          "type": "string",
+          "enum": [
+            "PM",
+            "TECH_LEAD",
+            "WORKER",
+            "REVIEWER",
+            "TEST_RUNNER",
+            "SEARCHER",
+            "RESEARCHER",
+            "UI_UX",
+            "FRONTEND",
+            "BACKEND",
+            "AI",
+            "SECURITY",
+            "INFRA",
+            "TEST",
+            "OPS"
+          ]
+        },
+        "agent_id": {
+          "type": "string"
+        },
+        "codex_thread_id": {
+          "type": "string",
+          "description": "用于 Codex MCP/SDK 的会话续聊 ID"
+        }
+      }
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "spec",
+        "artifacts"
+      ],
+      "properties": {
+        "spec": {
+          "type": "string",
+          "minLength": 1,
+          "description": "任务的具体需求描述"
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "uri",
+              "sha256"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "uri": {
+                "type": "string"
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-fA-F0-9]{64}$",
+                "description": "输入工件的哈希校验值，确保无篡改"
+              }
+            }
+          }
+        }
+      }
+    },
+    "required_outputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "type",
+          "acceptance"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "patch",
+              "commit",
+              "report",
+              "json",
+              "file"
+            ]
+          },
+          "acceptance": {
+            "type": "string",
+            "description": "人类可读的验收标准描述"
+          }
+        }
+      }
+    },
+    "allowed_paths": {
+      "type": "array",
+      "description": "允许修改的文件路径白名单（精确路径或目录前缀，禁止通配符）",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "forbidden_actions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "显式禁止的操作，如 rm -rf, 修改 .env 等"
+    },
+    "acceptance_tests": {
+      "type": "array",
+      "description": "由 Orchestrator 执行的验证命令",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "cmd",
+          "must_pass"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "cmd": {
+            "type": "string"
+          },
+          "must_pass": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "tool_permissions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "filesystem",
+        "shell",
+        "network",
+        "mcp_tools"
+      ],
+      "properties": {
+        "filesystem": {
+          "type": "string",
+          "enum": [
+            "read-only",
+            "workspace-write"
+          ],
+          "description": "映射到 Codex sandbox 参数"
+        },
+        "shell": {
+          "type": "string",
+          "enum": [
+            "deny",
+            "untrusted",
+            "on-request",
+            "never"
+          ]
+        },
+        "network": {
+          "type": "string",
+          "enum": [
+            "deny",
+            "on-request",
+            "allow"
+          ]
+        },
+        "mcp_tools": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "允许调用的 MCP 工具名称列表"
+        }
+      }
+    },
+    "policy_pack": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "description": "策略包等级（Risk Tier）"
+    },
+    "timeout_retry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "timeout_sec",
+        "max_retries",
+        "retry_backoff_sec"
+      ],
+      "properties": {
+        "timeout_sec": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_retries": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "retry_backoff_sec": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "rollback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "strategy",
+        "baseline_ref"
+      ],
+      "properties": {
+        "strategy": {
+          "type": "string",
+          "enum": [
+            "git_reset_hard",
+            "git_revert_commit",
+            "worktree_drop"
+          ]
+        },
+        "baseline_ref": {
+          "type": "string",
+          "description": "回滚锚点 (Commit Hash)"
+        },
+        "target_ref": {
+          "type": "string",
+          "description": "回滚目标提交 (仅 git_revert_commit 使用)"
+        }
+      }
+    },
+    "evidence_links": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "外部证据链接，如搜索结果、文档引用"
+    },
+    "log_refs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "paths"
+      ],
+      "properties": {
+        "run_id": {
+          "type": "string"
+        },
+        "paths": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "codex_jsonl": {
+              "type": "string",
+              "description": "Codex 原始事件流路径"
+            },
+            "codex_transcript": {
+              "type": "string"
+            },
+            "git_diff": {
+              "type": "string"
+            },
+            "tests_log": {
+              "type": "string"
+            },
+            "trace_id": {
+              "type": "string",
+              "description": "Agents SDK / OTel Trace ID"
+            }
+          }
+        }
+      }
+    },
+    "handoff_chain": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "PM",
+              "TECH_LEAD",
+              "WORKER",
+              "REVIEWER",
+              "TEST_RUNNER",
+              "SEARCHER",
+              "RESEARCHER",
+              "UI_UX",
+              "FRONTEND",
+              "BACKEND",
+              "AI",
+              "SECURITY",
+              "INFRA",
+              "TEST",
+              "OPS"
+            ]
+          }
+        },
+        "max_handoffs": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10
+        }
+      }
+    },
+    "mcp_tool_set": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "启动该任务所需的 MCP 工具集（由 TL 明确声明）"
+    },
+    "audit_only": {
+      "type": "boolean",
+      "default": false,
+      "description": "仅审计任务（允许空 diff 的 reviewer 例外）"
+    },
+    "browser_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "profile_mode": {
+          "type": "string",
+          "enum": [
+            "ephemeral",
+            "allow_profile",
+            "cookie_file"
+          ]
+        },
+        "profile_ref": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "profile_dir": {
+              "type": "string",
+              "minLength": 1
+            },
+            "profile_name": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "cookie_ref": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "cookie_path": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "stealth_mode": {
+          "type": "string",
+          "enum": [
+            "none",
+            "lite",
+            "plugin"
+          ]
+        },
+        "human_behavior": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "level": {
+              "type": "string",
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "runtime_options": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "runner": {
+          "type": "string",
+          "minLength": 1,
+          "enum": [
+            "agents",
+            "app-server",
+            "app_server",
+            "codex",
+            "claude"
+          ],
+          "description": "可选运行器覆盖（agents/app-server/codex/claude）"
+        },
+        "provider": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9._-]+$",
+          "description": "可选 LLM Provider 覆盖（支持 canonical 与 OpenAI-compatible 自定义 provider）"
+        },
+        "execution": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "mcp_first": {
+              "type": "boolean",
+              "description": "执行提示：优先走 MCP-first 适配路径"
+            }
+          }
+        },
+        "strict_acceptance": {
+          "type": "boolean",
+          "description": "是否启用严格验收模式（拒绝 trivial acceptance）"
+        }
+      }
+    },
+    "role_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identity",
+        "purpose",
+        "system_prompt_ref",
+        "skills_bundle_ref",
+        "mcp_bundle_ref",
+        "runtime_binding",
+        "tool_permissions",
+        "resolved_mcp_tool_set",
+        "handoff",
+        "fail_closed_conditions"
+      ],
+      "properties": {
+        "identity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "role",
+            "agent_id"
+          ],
+          "properties": {
+            "role": {
+              "type": "string",
+              "enum": [
+                "PM",
+                "TECH_LEAD",
+                "WORKER",
+                "REVIEWER",
+                "TEST_RUNNER",
+                "SEARCHER",
+                "RESEARCHER",
+                "UI_UX",
+                "FRONTEND",
+                "BACKEND",
+                "AI",
+                "SECURITY",
+                "INFRA",
+                "TEST",
+                "OPS"
+              ]
+            },
+            "agent_id": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "system_prompt_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "skills_bundle_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "mcp_bundle_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "runtime_binding": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "runner",
+            "provider",
+            "model"
+          ],
+          "properties": {
+            "runner": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "provider": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "model": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "tool_permissions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "filesystem",
+            "shell",
+            "network"
+          ],
+          "properties": {
+            "filesystem": {
+              "type": "string",
+              "enum": [
+                "read-only",
+                "workspace-write"
+              ]
+            },
+            "shell": {
+              "type": "string",
+              "enum": [
+                "deny",
+                "untrusted",
+                "on-request",
+                "never"
+              ]
+            },
+            "network": {
+              "type": "string",
+              "enum": [
+                "deny",
+                "on-request",
+                "allow"
+              ]
+            }
+          }
+        },
+        "resolved_mcp_tool_set": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "handoff": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "eligible",
+            "required_downstream_roles",
+            "chain_roles",
+            "max_handoffs"
+          ],
+          "properties": {
+            "eligible": {
+              "type": "boolean"
+            },
+            "required_downstream_roles": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "PM",
+                  "TECH_LEAD",
+                  "WORKER",
+                  "REVIEWER",
+                  "TEST_RUNNER",
+                  "SEARCHER",
+                  "RESEARCHER",
+                  "UI_UX",
+                  "FRONTEND",
+                  "BACKEND",
+                  "AI",
+                  "SECURITY",
+                  "INFRA",
+                  "TEST",
+                  "OPS"
+                ]
+              }
+            },
+            "chain_roles": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "PM",
+                  "TECH_LEAD",
+                  "WORKER",
+                  "REVIEWER",
+                  "TEST_RUNNER",
+                  "SEARCHER",
+                  "RESEARCHER",
+                  "UI_UX",
+                  "FRONTEND",
+                  "BACKEND",
+                  "AI",
+                  "SECURITY",
+                  "INFRA",
+                  "TEST",
+                  "OPS"
+                ]
+              }
+            },
+            "max_handoffs": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 1
+            }
+          }
+        },
+        "fail_closed_conditions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}

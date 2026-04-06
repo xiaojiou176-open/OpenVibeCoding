@@ -1,0 +1,51 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "CortexPilot Command Tower Desktop",
+  "version": "0.1.0",
+  "identifier": "com.cortexpilot.desktop",
+  "build": {
+    "beforeDevCommand": "npm run dev -- --host 127.0.0.1 --port 1420",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "macOSPrivateApi": true,
+    "windows": [
+      {
+        "title": "CortexPilot Command Tower Desktop",
+        "width": 1400,
+        "height": 900,
+        "minWidth": 1024,
+        "minHeight": 720,
+        "transparent": true,
+        "decorations": false,
+        "titleBarStyle": "Overlay",
+        "hiddenTitle": true
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' http://127.0.0.1:* http://localhost:* ws://127.0.0.1:* ws://localhost:*; font-src 'self' data:; object-src 'none'; frame-ancestors 'none';",
+      "capabilities": ["default"]
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["app", "dmg"],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
+  },
+  "plugins": {
+    "deep-link": {
+      "desktop": {
+        "schemes": [
+          "cortexpilot"
+        ]
+      }
+    }
+  }
+}

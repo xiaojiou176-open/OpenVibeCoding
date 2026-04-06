@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/agent_registry.schema.json",
+  "title": "AgentRegistry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "agents"
+  ],
+  "properties": {
+    "version": {
+      "type": "string",
+      "enum": [
+        "v1"
+      ]
+    },
+    "role_contracts": {
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^[A-Z_]+$": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "purpose",
+            "system_prompt_ref",
+            "skills_bundle_ref",
+            "mcp_bundle_ref",
+            "handoff_eligible",
+            "required_downstream_roles",
+            "fail_closed_conditions"
+          ],
+          "properties": {
+            "purpose": {
+              "type": "string",
+              "minLength": 1
+            },
+            "system_prompt_ref": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "skills_bundle_ref": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "mcp_bundle_ref": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "handoff_eligible": {
+              "type": "boolean"
+            },
+            "required_downstream_roles": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "PM",
+                  "TECH_LEAD",
+                  "WORKER",
+                  "REVIEWER",
+                  "TEST_RUNNER",
+                  "SEARCHER",
+                  "RESEARCHER",
+                  "UI_UX",
+                  "FRONTEND",
+                  "BACKEND",
+                  "AI",
+                  "SECURITY",
+                  "INFRA",
+                  "TEST",
+                  "OPS"
+                ]
+              }
+            },
+            "fail_closed_conditions": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "agents": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "agent_id",
+          "role",
+          "codex_home",
+          "defaults"
+        ],
+        "properties": {
+          "agent_id": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "PM",
+              "TECH_LEAD",
+              "WORKER",
+              "REVIEWER",
+              "TEST_RUNNER",
+              "SEARCHER",
+              "RESEARCHER",
+              "UI_UX",
+              "FRONTEND",
+              "BACKEND",
+              "AI",
+              "SECURITY",
+              "INFRA",
+              "TEST",
+              "OPS"
+            ]
+          },
+          "description": {
+            "type": "string"
+          },
+          "codex_home": {
+            "type": "string"
+          },
+          "defaults": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "sandbox",
+              "approval_policy",
+              "network"
+            ],
+            "properties": {
+              "sandbox": {
+                "type": "string",
+                "enum": [
+                  "read-only",
+                  "workspace-write",
+                  "danger-full-access"
+                ]
+              },
+              "approval_policy": {
+                "type": "string",
+                "enum": [
+                  "untrusted",
+                  "on-request",
+                  "never"
+                ]
+              },
+              "network": {
+                "type": "string",
+                "enum": [
+                  "deny",
+                  "on-request",
+                  "allow"
+                ]
+              }
+            }
+          },
+          "capabilities": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "mcp_tools": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "notes": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

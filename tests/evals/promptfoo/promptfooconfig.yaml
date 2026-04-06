@@ -1,0 +1,197 @@
+description: "CortexPilot regression baseline"
+# Example:
+# GEMINI_API_KEY=xxx CORTEXPILOT_EVAL_MODEL=gemini-2.0-flash bash scripts/run_evals.sh
+
+prompts:
+  - |
+    Return only a compact JSON object.
+    User request: {{request}}
+    Regression target: {{regression_target}}
+    Required fields:
+    - "classification": one of "happy_path", "ambiguous_requirement", "tool_path_mistake", "schema_invalid"
+    - "needs_fix": boolean
+    - "primary_risk": one of "none", "missing_scope", "governed_path_violation", "contract_shape_invalid"
+    - "tool_path": a JSON array with 1 to 3 kebab-case steps
+    - "decision_basis": one sentence explaining the decisive signal
+    - "summary": a single sentence with at most 20 words
+    Decision rules:
+    - Match the exact classification and needs_fix implied by the request.
+    - Make tool_path reflect the safest real workflow, not a generic filler path.
+    - Keep the object compact and deterministic.
+    Do not include markdown fences or explanatory text outside the JSON object.
+
+providers:
+  - id: "google:__CORTEXPILOT_EVAL_MODEL__"
+    config:
+      apiKey: "${GEMINI_API_KEY}"
+
+defaultTest:
+  assert:
+    - type: is-json
+      value:
+        type: object
+        additionalProperties: false
+        required:
+          - classification
+          - needs_fix
+          - primary_risk
+          - tool_path
+          - decision_basis
+          - summary
+        properties:
+          classification:
+            type: string
+            enum:
+              - happy_path
+              - ambiguous_requirement
+              - tool_path_mistake
+              - schema_invalid
+          needs_fix:
+            type: boolean
+          primary_risk:
+            type: string
+            enum:
+              - none
+              - missing_scope
+              - governed_path_violation
+              - contract_shape_invalid
+          tool_path:
+            type: array
+            minItems: 1
+            maxItems: 3
+            uniqueItems: true
+            items:
+              type: string
+              pattern: "^[a-z0-9]+(?:-[a-z0-9]+)+$"
+          decision_basis:
+            type: string
+            minLength: 12
+            maxLength: 160
+          summary:
+            type: string
+            minLength: 8
+            maxLength: 120
+    - type: javascript
+      value: |
+        const fail = (reason) => ({ pass: false, score: 0, reason });
+        let data;
+        try {
+          data = JSON.parse(output);
+        } catch (error) {
+          return fail(`output is not valid JSON: ${error.message}`);
+        }
+
+        const vars = context.vars || {};
+        const parseForbiddenTerms = (raw) =>
+          String(raw || "")
+            .split(",")
+            .map((term) => term.trim().toLowerCase())
+            .filter(Boolean);
+        const parseRequiredGroups = (raw) =>
+          String(raw || "")
+            .split(";")
+            .map((group) =>
+              group
+                .split("|")
+                .map((term) => term.trim().toLowerCase())
+                .filter(Boolean),
+            )
+            .filter((group) => group.length > 0);
+        const normalizedPath = Array.isArray(data.tool_path)
+          ? data.tool_path.map((step) => String(step).trim().toLowerCase())
+          : [];
+        const joinedPath = normalizedPath.join(" ");
+        const summaryWords = String(data.summary || "")
+          .trim()
+          .split(/\s+/)
+          .filter(Boolean);
+
+        if (data.classification !== vars.classification) {
+          return fail(`classification mismatch: expected ${vars.classification}, got ${data.classification}`);
+        }
+
+        if (Boolean(data.needs_fix) !== Boolean(vars.needs_fix)) {
+          return fail(`needs_fix mismatch: expected ${Boolean(vars.needs_fix)}, got ${Boolean(data.needs_fix)}`);
+        }
+
+        if (data.primary_risk !== vars.primary_risk) {
+          return fail(`primary_risk mismatch: expected ${vars.primary_risk}, got ${data.primary_risk}`);
+        }
+
+        if (normalizedPath.length < 1 || normalizedPath.length > 3) {
+          return fail("tool_path must have 1 to 3 steps");
+        }
+
+        if (new Set(normalizedPath).size !== normalizedPath.length) {
+          return fail("tool_path steps must be unique");
+        }
+
+        if (normalizedPath.some((step) => !/^[a-z0-9]+(?:-[a-z0-9]+)+$/.test(step))) {
+          return fail("tool_path steps must be kebab-case");
+        }
+
+        for (const normalizedGroup of parseRequiredGroups(vars.required_path_term_groups)) {
+          const matched = normalizedGroup.some((term) =>
+            normalizedPath.some((step) => step.includes(term)),
+          );
+          if (!matched) {
+            return fail(`tool_path missing one of required terms: ${normalizedGroup.join("/")}`);
+          }
+        }
+
+        for (const normalizedForbidden of parseForbiddenTerms(vars.forbidden_path_terms)) {
+          if (joinedPath.includes(normalizedForbidden)) {
+            return fail(`tool_path contains forbidden term: ${normalizedForbidden}`);
+          }
+        }
+
+        if (summaryWords.length < 4 || summaryWords.length > 20) {
+          return fail("summary must contain 4 to 20 words");
+        }
+
+        if (!/[a-z0-9]/i.test(String(data.decision_basis || ""))) {
+          return fail("decision_basis must be a meaningful sentence");
+        }
+
+        return {
+          pass: true,
+          score: 1,
+        };
+
+tests:
+  - description: "happy path stays bounded to docs rerender instead of over-escalating"
+    vars:
+      regression_target: "bounded docs-only rerender after governance text change"
+      classification: "happy_path"
+      needs_fix: false
+      primary_risk: "none"
+      required_path_term_groups: "doc|fragment;render|rerender;verify|check"
+      forbidden_path_terms: "schema,runtime-root"
+      request: "After a documentation-only wording fix in docs/specs/00_SPEC.md, stop. Do not change runtime behavior or CI policy."
+  - description: "ambiguous requirement must clarify scope before editing"
+    vars:
+      regression_target: "missing scope must be classified before mutation"
+      classification: "ambiguous_requirement"
+      needs_fix: true
+      primary_risk: "missing_scope"
+      required_path_term_groups: "clarify|ask;scope|intent"
+      forbidden_path_terms: "force-edit"
+      request: "The user only says 'fix the repo' after seeing a red CI comment, but does not say whether the problem is docs drift, runtime hygiene, or the PM intake contract."
+  - description: "path governance mistake must route runtime artifacts back to the governed root"
+    vars:
+      regression_target: "governed runtime root must win over convenient local script paths"
+      classification: "tool_path_mistake"
+      needs_fix: true
+      primary_risk: "governed_path_violation"
+      required_path_term_groups: "runtime;root;route|reroute|governed"
+      forbidden_path_terms: "scripts"
+      request: "A change proposal writes evaluation receipts into scripts/.runtime-cache because it is 'close to the script'. CortexPilot runtime artifacts must stay under the governed runtime root."
+  - description: "pm intake run responses must stay structured for downstream observers"
+    vars:
+      regression_target: "pm intake /run contract must expose structured fields immediately"
+      classification: "schema_invalid"
+      needs_fix: true
+      primary_risk: "contract_shape_invalid"
+      required_path_term_groups: "schema|contract;run|response;validate|repair"
+      forbidden_path_terms: "markdown"
+      request: "POST /api/pm/intake/{intake_id}/run returns free-form text without kind, run_id, or structured fields, so the PM session cannot observe the run immediately."

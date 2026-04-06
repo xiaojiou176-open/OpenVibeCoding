@@ -1,0 +1,4 @@
+{"timestamp":"2026-03-02T09:15:00Z","rule_id":"backend_pytest_selection","feedback":{"label":"tp"},"pr":{"number":101}}
+{"timestamp":"2026-03-02T09:17:00Z","rule_id":"backend_pytest_selection","feedback":{"label":"fp"},"pr":{"number":101}}
+{"timestamp":"2026-03-05T11:30:00Z","rule_id":"orchestrator_fallback_scope","feedback":{"label":"accepted"},"pr":{"number":104}}
+{"timestamp":"2026-03-05T11:45:00Z","rule_id":"orchestrator_fallback_scope","feedback":{"label":"miss"},"pr":{"number":104}}

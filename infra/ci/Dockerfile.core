@@ -1,0 +1,54 @@
+FROM mcr.microsoft.com/playwright/python:v1.52.0-noble@sha256:a1d2b48b65f41f34e5e1d7690f385f1376397b7208691cba359e4078edbf86cb
+
+ARG NODE_VERSION=20.19.0
+ARG NODE_SHA256_AMD64=b4e336584d62abefad31baecff7af167268be9bb7dd11f1297112e6eed3ca0d5
+ARG NODE_SHA256_ARM64=dbe339e55eb393955a213e6b872066880bb9feceaa494f4d44c7aac205ec2ab9
+ARG UV_VERSION=0.8.15
+ARG PLAYWRIGHT_PYTHON_VERSION=1.58.0
+ARG GITLEAKS_VERSION=8.24.2
+ARG GITLEAKS_SHA256_AMD64=fa0500f6b7e41d28791ebc680f5dd9899cd42b58629218a5f041efa899151a8e
+ARG GITLEAKS_SHA256_ARM64=574a6d52573c61173add7ddb5e3cc68c0e82cb0735818a1eeb9a0a2de1643fbc
+ARG RUST_VERSION=1.88.0
+ARG RUSTUP_SHA256_AMD64=4acc9acc76d5079515b46346a485974457b5a79893cfb01112423c89aeb5aa10
+ARG RUSTUP_SHA256_ARM64=9732d6c5e2a098d3521fca8145d826ae0aaa067ef2385ead08e6feac88fa5792
+ARG CARGO_AUDIT_VERSION=0.22.1
+ARG CARGO_AUDIT_SHA256_AMD64=1890badd5f15831a9af4b074399fcd21e6f7c0fe42c84e9254cdffc9f813765c
+ARG CARGO_AUDIT_SHA256_ARM64=4c8df835ee484441bd2c8c6bcac28c4ce4b4058ba9e7477cb9e0012fe7769f66
+ARG APT_CURL_VERSION=8.5.0-2ubuntu10.8
+ARG APT_CA_CERTIFICATES_VERSION=20240203
+ARG APT_GIT_VERSION=1:2.43.0-1ubuntu7.3
+ARG APT_JQ_VERSION=1.7.1-3ubuntu0.24.04.1
+ARG APT_XZ_UTILS_VERSION=5.6.1+really5.4.5-1ubuntu0.2
+ARG APT_PYTHON3_VENV_VERSION=3.12.3-0ubuntu2.1
+ARG APT_PKG_CONFIG_VERSION=1.8.1-2build1
+ARG APT_RIPGREP_VERSION=14.1.0-1
+ARG APT_SHELLCHECK_VERSION=0.9.0-1
+ARG APT_BUILD_ESSENTIAL_VERSION=12.10ubuntu1
+ARG TARGETARCH
+
+ENV DEBIAN_FRONTEND=noninteractive     COREPACK_ENABLE_DOWNLOAD_PROMPT=0     PLAYWRIGHT_BROWSERS_PATH=/ms-playwright     PNPM_HOME=/usr/local/share/pnpm     CARGO_HOME=/usr/local/cargo     RUSTUP_HOME=/usr/local/rustup     PATH=/usr/local/share/pnpm:/usr/local/cargo/bin:$PATH
+
+RUN apt-get update     && apt-get install -y --no-install-recommends       build-essential=${APT_BUILD_ESSENTIAL_VERSION}       curl=${APT_CURL_VERSION}       ca-certificates=${APT_CA_CERTIFICATES_VERSION}       git=${APT_GIT_VERSION}       jq=${APT_JQ_VERSION}       pkg-config=${APT_PKG_CONFIG_VERSION}       xz-utils=${APT_XZ_UTILS_VERSION}       python3-venv=${APT_PYTHON3_VENV_VERSION}       ripgrep=${APT_RIPGREP_VERSION}       shellcheck=${APT_SHELLCHECK_VERSION}     && rm -rf /var/lib/apt/lists/*
+
+RUN case "${TARGETARCH}" in       amd64)         node_arch="x64";         node_sha256="${NODE_SHA256_AMD64}";         ;;       arm64)         node_arch="arm64";         node_sha256="${NODE_SHA256_ARM64}";         ;;       *) echo "unsupported TARGETARCH=${TARGETARCH}" >&2; exit 1 ;;     esac     && curl -fsSL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-${node_arch}.tar.xz"       -o /tmp/node.tar.xz     && echo "${node_sha256}  /tmp/node.tar.xz" | sha256sum -c -     && tar -xJf /tmp/node.tar.xz -C /usr/local --strip-components=1     && rm -f /tmp/node.tar.xz
+
+RUN python3 -m pip install --break-system-packages --no-cache-dir "uv==${UV_VERSION}"
+RUN python3 -m pip install --break-system-packages --no-cache-dir "playwright==${PLAYWRIGHT_PYTHON_VERSION}"
+
+RUN case "${TARGETARCH}" in       amd64)         gitleaks_arch="x64";         gitleaks_sha256="${GITLEAKS_SHA256_AMD64}";         ;;       arm64)         gitleaks_arch="arm64";         gitleaks_sha256="${GITLEAKS_SHA256_ARM64}";         ;;       *) echo "unsupported TARGETARCH=${TARGETARCH}" >&2; exit 1 ;;     esac     && curl -fsSL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_${gitleaks_arch}.tar.gz"       -o /tmp/gitleaks.tar.gz     && echo "${gitleaks_sha256}  /tmp/gitleaks.tar.gz" | sha256sum -c -     && tar -xzf /tmp/gitleaks.tar.gz -C /tmp     && install /tmp/gitleaks /usr/local/bin/gitleaks     && rm -f /tmp/gitleaks.tar.gz /tmp/gitleaks
+
+RUN case "${TARGETARCH}" in       amd64)         rustup_target="x86_64-unknown-linux-gnu";         rustup_sha256="${RUSTUP_SHA256_AMD64}";         cargo_audit_arch="x86_64-unknown-linux-gnu";         cargo_audit_sha256="${CARGO_AUDIT_SHA256_AMD64}";         ;;       arm64)         rustup_target="aarch64-unknown-linux-gnu";         rustup_sha256="${RUSTUP_SHA256_ARM64}";         cargo_audit_arch="aarch64-unknown-linux-gnu";         cargo_audit_sha256="${CARGO_AUDIT_SHA256_ARM64}";         ;;       *) echo "unsupported TARGETARCH=${TARGETARCH}" >&2; exit 1 ;;     esac     && curl -fsSL "https://static.rust-lang.org/rustup/dist/${rustup_target}/rustup-init" -o /tmp/rustup-init     && echo "${rustup_sha256}  /tmp/rustup-init" | sha256sum -c -     && chmod +x /tmp/rustup-init     && /tmp/rustup-init -y --profile minimal --default-toolchain "${RUST_VERSION}" --no-modify-path     && rm -f /tmp/rustup-init     && curl -fsSL "https://github.com/rustsec/rustsec/releases/download/cargo-audit/v${CARGO_AUDIT_VERSION}/cargo-audit-${cargo_audit_arch}-v${CARGO_AUDIT_VERSION}.tgz"       -o /tmp/cargo-audit.tgz     && echo "${cargo_audit_sha256}  /tmp/cargo-audit.tgz" | sha256sum -c -     && tar -xzf /tmp/cargo-audit.tgz -C /tmp     && install "/tmp/cargo-audit-${cargo_audit_arch}-v${CARGO_AUDIT_VERSION}/cargo-audit" /usr/local/bin/cargo-audit     && rm -rf "/tmp/cargo-audit-${cargo_audit_arch}-v${CARGO_AUDIT_VERSION}" /tmp/cargo-audit.tgz     && cargo --version     && rustc --version     && cargo-audit --version
+
+RUN corepack enable     && corepack prepare pnpm@10.22.0 --activate     && node --version     && pnpm --version     && python3 --version     && uv --version
+
+WORKDIR /workspace
+
+# CI parity contract:
+# - Python / Node / uv / Corepack / pnpm are available in-image.
+# - Node and pnpm are pinned to repo-owned exact versions.
+# - Playwright system deps come from the digest-pinned Playwright base image.
+# - Apt package versions are pinned explicitly and fail closed on drift.
+# - External curl downloads are checksum-verified before install.
+# - Playwright browsers are baked into the image under /ms-playwright.
+# - Runtime commands mount the repo at /workspace via infra/ci/compose.yml.
+RUN python3 -m playwright install chromium

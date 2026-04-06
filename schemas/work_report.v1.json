@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/work_report.v1.json",
+  "title": "WorkReport",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "task_id",
+    "status",
+    "patch_ref",
+    "diff_summary",
+    "evidence_refs",
+    "failure_reason"
+  ],
+  "$defs": {
+    "artifact_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"},
+        "bytes": {"type": "integer", "minimum": 0},
+        "mime": {"type": "string"}
+      }
+    }
+  },
+  "properties": {
+    "task_id": {"type": "string", "minLength": 1},
+    "run_id": {"type": "string"},
+    "attempt": {"type": "integer", "minimum": 0},
+    "role": {
+      "type": "string",
+      "enum": ["PM", "TECH_LEAD", "WORKER", "REVIEWER", "TEST_RUNNER", "ORCHESTRATOR"]
+    },
+    "status": {"type": "string", "enum": ["success", "fail", "aborted"]},
+    "patch_ref": {"type": "string"},
+    "diff_summary": {"type": "string"},
+    "evidence_refs": {"type": "object", "additionalProperties": true},
+    "failure_reason": {"type": "string"},
+    "baseline_ref": {"type": "string"},
+    "head_ref": {"type": "string"},
+    "patch": {"$ref": "#/$defs/artifact_ref"},
+    "changed_files": {"$ref": "#/$defs/artifact_ref"},
+    "gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "diff_gate": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["passed"],
+          "properties": {
+            "passed": {"type": "boolean"},
+            "violations": {"type": "array", "items": {"type": "string"}}
+          }
+        },
+        "tool_gate": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "passed": {"type": "boolean"},
+            "violations": {"type": "array", "items": {"type": "string"}}
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "codex_events_jsonl": {"$ref": "#/$defs/artifact_ref"},
+        "transcript_md": {"$ref": "#/$defs/artifact_ref"},
+        "thread_id_txt": {"$ref": "#/$defs/artifact_ref"},
+        "trace_id_txt": {"$ref": "#/$defs/artifact_ref"},
+        "orchestrator_events_jsonl": {"$ref": "#/$defs/artifact_ref"}
+      }
+    },
+    "next_actions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "recommended": {"type": "array", "items": {"type": "string"}},
+        "suggested_allowed_paths_delta": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "timestamps": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "started_at": {"type": "string", "format": "date-time"},
+        "finished_at": {"type": "string", "format": "date-time"}
+      }
+    },
+    "metrics": {"type": "object", "additionalProperties": true},
+    "notes": {"type": "string"}
+  }
+}

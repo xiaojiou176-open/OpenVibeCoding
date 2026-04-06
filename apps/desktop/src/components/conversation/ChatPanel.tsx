@@ -1,0 +1,507 @@
+import { lazy, Suspense, type RefObject } from "react";
+import { ArrowUp } from "lucide-react";
+import { previewFlightPlanCopilotBrief } from "../../lib/api";
+import { Button } from "../ui/Button";
+import { Input, Select, Textarea } from "../ui/Input";
+import { DesktopFlightPlanCopilotPanel } from "../copilot/DesktopFlightPlanCopilotPanel";
+import { OnboardingBanner } from "./OnboardingBanner";
+import { renderChatEmbed, type ChatMessage, type Workspace } from "../../lib/desktopUi";
+import {
+  GENERAL_TASK_TEMPLATE,
+  type ExecutionPlanReport,
+  type TaskPackFieldDefinition,
+  type TaskPackManifest,
+} from "../../lib/types";
+
+const LazyMarkdownMessage = lazy(async () => {
+  const module = await import("./MarkdownMessage");
+  return { default: module.MarkdownMessage };
+});
+
+function shouldRenderMarkdown(content: string): boolean {
+  return (
+    content.includes("```") ||
+    /`[^`]+`/.test(content) ||
+    /^\s{0,3}#{1,6}\s/m.test(content) ||
+    /^\s*>\s/m.test(content) ||
+    /^\s*([-*+]|\d+\.)\s/m.test(content) ||
+    /\[[^\]]+\]\([^)]+\)/.test(content) ||
+    /(^|\n)\|.+\|/.test(content) ||
+    /(\*\*[^*]+\*\*|__[^_]+__)/.test(content)
+  );
+}
+
+function compactPreviewList(values: string[], limit = 3): string {
+  const filtered = values.map((value) => value.trim()).filter(Boolean);
+  if (filtered.length === 0) {
+    return "-";
+  }
+  if (filtered.length <= limit) {
+    return filtered.join(", ");
+  }
+  return `${filtered.slice(0, limit).join(", ")} +${filtered.length - limit} more`;
+}
+
+function summarizeFlightPlanTriggers(report: ExecutionPlanReport): string {
+  const triggers: string[] = [];
+  if (report.search_queries.length > 0) {
+    triggers.push(`Search (${report.search_queries.length})`);
+  }
+  if (report.task_template === "page_brief" || report.browser_policy_preset === "custom" || Boolean(report.effective_browser_policy)) {
+    triggers.push("Browser");
+  }
+  if (report.requires_human_approval) {
+    triggers.push("Manual approval");
+  }
+  return triggers.length > 0 ? triggers.join(", ") : "No extra capability trigger predicted.";
+}
+
+type ChatPanelProps = {
+  onboardingVisible: boolean;
+  dismissOnboarding: () => void;
+  isOffline: boolean;
+  liveError: string;
+  workspace: Workspace | null;
+  activeSessionId: string;
+  activeSessionGenerating: boolean;
+  phaseText: string;
+  refreshNow: () => void;
+  drawerVisible: boolean;
+  drawerPinned: boolean;
+  setDrawerVisible: (updater: (value: boolean) => boolean) => void;
+  setDrawerPinned: (updater: (value: boolean) => boolean) => void;
+  activeTimeline: ChatMessage[];
+  chatThreadRef: RefObject<HTMLElement | null>;
+  streamingText: string;
+  reportActions: {
+    onAccept?: (embedId: string) => void;
+    onRework?: (embedId: string) => void;
+    onViewDiff?: (embedId: string) => void;
+  };
+  creatingFirstSession: boolean;
+  firstSessionBootstrapError: string;
+  firstSessionAllowedPath: string;
+  taskPacks?: TaskPackManifest[];
+  taskPacksLoading?: boolean;
+  taskPacksError?: string;
+  taskTemplate?: string;
+  onTaskTemplateChange?: (value: string) => void;
+  selectedTaskPack?: TaskPackManifest | null;
+  taskPackFieldValues?: Record<string, string>;
+  onTaskPackFieldChange?: (fieldId: string, value: string) => void;
+  executionPlanPreview?: ExecutionPlanReport | null;
+  executionPlanPreviewLoading?: boolean;
+  executionPlanPreviewError?: string;
+  onCreateFirstSession: () => void;
+  onOpenSessionFallback: () => void;
+  onPreviewFirstSession?: () => void;
+  chooseDecision: (messageId: string, embedId: string, optionId: string) => void;
+  recoverableDraft: { key: string; value: string } | null;
+  restoreDraft: () => void;
+  discardDraft: () => void;
+  composerRef: RefObject<HTMLTextAreaElement | null>;
+  composerInput: string;
+  setComposerInput: (value: string) => void;
+  onComposerEnterSend: () => void;
+  composerPlaceholder: string;
+  composerLength: number;
+  composerMaxChars: number;
+  composerOverLimit: boolean;
+  canSend: boolean;
+  sendDisabledReason: string | null;
+  starterPrompts: string[];
+  onApplyStarterPrompt: (prompt: string) => void;
+  hasActiveGeneration: boolean;
+  stopGeneration: () => void;
+  isUserNearBottom: boolean;
+  unreadCount: number;
+  onBackToBottom: () => void;
+};
+
+export function ChatPanel({
+  onboardingVisible,
+  dismissOnboarding,
+  isOffline,
+  liveError,
+  workspace,
+  activeSessionId,
+  activeSessionGenerating,
+  phaseText,
+  refreshNow,
+  drawerVisible,
+  drawerPinned,
+  setDrawerVisible,
+  setDrawerPinned,
+  activeTimeline,
+  chatThreadRef,
+  streamingText,
+  reportActions,
+  creatingFirstSession,
+  firstSessionBootstrapError,
+  firstSessionAllowedPath,
+  taskPacks = [],
+  taskPacksLoading = false,
+  taskPacksError = "",
+  taskTemplate = GENERAL_TASK_TEMPLATE,
+  onTaskTemplateChange = () => {},
+  selectedTaskPack = null,
+  taskPackFieldValues = {},
+  onTaskPackFieldChange = () => {},
+  executionPlanPreview = null,
+  executionPlanPreviewLoading = false,
+  executionPlanPreviewError = "",
+  onCreateFirstSession,
+  onOpenSessionFallback,
+  onPreviewFirstSession,
+  chooseDecision,
+  recoverableDraft,
+  restoreDraft,
+  discardDraft,
+  composerRef,
+  composerInput,
+  setComposerInput,
+  onComposerEnterSend,
+  composerPlaceholder,
+  composerLength,
+  composerMaxChars,
+  composerOverLimit,
+  canSend,
+  sendDisabledReason,
+  starterPrompts,
+  onApplyStarterPrompt,
+  hasActiveGeneration,
+  stopGeneration,
+  isUserNearBottom,
+  unreadCount,
+  onBackToBottom
+}: ChatPanelProps) {
+  const hasUserMessage = activeTimeline.some((item) => item.role === "user");
+  const nextStepLabel = !activeSessionId
+    ? "Step 0: create the first session"
+    : !hasUserMessage
+    ? "Step 1: send the first request"
+    : activeSessionGenerating
+      ? "Next: wait for this stage to finish"
+      : "Step 2: type /run to begin";
+
+  function focusComposerWithTemplate(): void {
+    if (!activeSessionId) {
+      onCreateFirstSession();
+      return;
+    }
+    composerRef.current?.focus();
+    if (!hasUserMessage && !composerInput.trim()) {
+      setComposerInput(`objective: Complete a first task in ${firstSessionAllowedPath} that can be verified within 3 minutes.\nallowed_paths: ["${firstSessionAllowedPath}"]`);
+    } else if (!activeSessionGenerating && !composerInput.trim()) {
+      setComposerInput("/run");
+    }
+  }
+
+  function renderTaskPackField(field: TaskPackFieldDefinition) {
+    const fieldValue = taskPackFieldValues[field.field_id] ?? "";
+    if (field.control === "textarea") {
+      return (
+        <label key={field.field_id} className="row-start-gap-2">
+          <span className="mono text-sm fw-500">{field.label}</span>
+          <Textarea
+            value={fieldValue}
+            onChange={(event) => onTaskPackFieldChange(field.field_id, event.target.value)}
+            rows={field.field_id === "sources" ? 4 : 3}
+            placeholder={field.placeholder}
+          />
+          {field.help_text ? <span className="shortcut-hint">{field.help_text}</span> : null}
+        </label>
+      );
+    }
+    if (field.control === "select") {
+      return (
+        <label key={field.field_id} className="row-start-gap-2">
+          <span className="mono text-sm fw-500">{field.label}</span>
+          <Select value={fieldValue} onChange={(event) => onTaskPackFieldChange(field.field_id, event.target.value)}>
+            {(field.options || []).map((option) => (
+              <option key={`${field.field_id}-${option.value}`} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </Select>
+          {field.help_text ? <span className="shortcut-hint">{field.help_text}</span> : null}
+        </label>
+      );
+    }
+    return (
+      <label key={field.field_id} className="row-start-gap-2">
+        <span className="mono text-sm fw-500">{field.label}</span>
+        <Input
+          type={field.control === "number" ? "number" : field.control === "url" ? "url" : "text"}
+          min={field.control === "number" ? field.min : undefined}
+          max={field.control === "number" ? field.max : undefined}
+          value={fieldValue}
+          onChange={(event) => onTaskPackFieldChange(field.field_id, event.target.value)}
+          placeholder={field.placeholder}
+        />
+        {field.help_text ? <span className="shortcut-hint">{field.help_text}</span> : null}
+      </label>
+    );
+  }
+
+  return (
+    <section className="chat-panel" aria-label="Conversation panel">
+      <OnboardingBanner
+        visible={onboardingVisible}
+        phaseText={activeSessionGenerating ? phaseText : hasUserMessage ? "Ready for /run" : "Waiting for the first request"}
+        nextStepLabel={nextStepLabel}
+        onNextStep={focusComposerWithTemplate}
+        onDismiss={dismissOnboarding}
+      />
+      {isOffline ? (
+        <section className="alert-warning" role="alert">
+          You are offline. Sync will resume automatically when the network returns.
+        </section>
+      ) : null}
+      {liveError ? (
+        <section className="alert-warning" role="alert" aria-live="polite">
+          {liveError}
+        </section>
+      ) : null}
+      {!workspace ? (
+        <section className="workspace-empty" aria-label="Empty workspace state">
+          <h2>Select a workspace before starting the conversation</h2>
+          <p>Each workspace represents one repository and one agent configuration.</p>
+        </section>
+      ) : (
+        <>
+          <section className="chat-toolbar" aria-label="Session toolbar">
+            <p>
+              <strong>{workspace.repo}</strong> / {workspace.branch} · Session {activeSessionId || "not created yet"}
+            </p>
+            <p className="shortcut-hint" role="status" aria-live="polite">
+              {!activeSessionId ? "Create the first session before sending a message" : activeSessionGenerating ? phaseText : "The PM is ready for your next instruction"}
+            </p>
+            {activeSessionGenerating ? (
+              <p className="shortcut-hint" role="note" aria-live="polite">Syncing session data...</p>
+            ) : null}
+            <p className="shortcut-hint" role="note">
+              <kbd>Cmd/Ctrl+\\</kbd> toggle layout · <kbd>Cmd/Ctrl+Shift+D</kbd> pop out Chain
+            </p>
+            <div className="quick-actions" role="group" aria-label="Live quick actions">
+              <Button variant="secondary" onClick={() => refreshNow()}>Refresh now</Button>
+              <Button variant="secondary" aria-pressed={drawerVisible} onClick={() => setDrawerVisible((value) => !value)}>
+                {drawerVisible ? "Hide drawer" : "Show drawer"}
+              </Button>
+              <Button
+                variant={drawerPinned ? "primary" : "ghost"}
+                aria-pressed={drawerPinned}
+                onClick={() => setDrawerPinned((value) => !value)}
+              >
+                {drawerPinned ? "Drawer pinned" : "Drawer unpinned"}
+              </Button>
+            </div>
+          </section>
+          {!activeSessionId ? (
+            <section className="workspace-empty" aria-label="First-session empty state">
+              <h2>Create the first session in desktop before sending a request</h2>
+              <p>Desktop submits either the smallest intake (<code>objective</code> + <code>allowed_paths</code>) or a selected task-pack payload.</p>
+              <p className="shortcut-hint">Default <code>allowed_paths</code>: <code>{firstSessionAllowedPath}</code></p>
+              {taskPacksError ? (
+                <p className="composer-state-note" role="alert">
+                  {taskPacksError}
+                </p>
+              ) : null}
+              <div className="row-start-gap-2">
+                <label className="row-start-gap-2">
+                  <span className="mono text-sm fw-500">Task pack</span>
+                  <Select
+                    value={taskTemplate}
+                    onChange={(event) => onTaskTemplateChange(event.target.value)}
+                    aria-label="Desktop task pack"
+                  >
+                    {taskPacksLoading ? <option value={taskTemplate}>Loading task packs...</option> : null}
+                    {taskPacks.map((pack) => (
+                      <option key={pack.pack_id} value={pack.task_template}>
+                        {pack.ui_hint?.default_label || pack.task_template}
+                      </option>
+                    ))}
+                    <option value={GENERAL_TASK_TEMPLATE}>{GENERAL_TASK_TEMPLATE}</option>
+                  </Select>
+                </label>
+                {selectedTaskPack ? (
+                  <>
+                    <p className="shortcut-hint">{selectedTaskPack.description}</p>
+                    {selectedTaskPack.evidence_contract?.primary_report ? (
+                      <p className="shortcut-hint">Primary report: {selectedTaskPack.evidence_contract.primary_report}</p>
+                    ) : null}
+                    <div className="stack-gap-3">
+                      {selectedTaskPack.input_fields.map((field) => renderTaskPackField(field))}
+                    </div>
+                  </>
+                ) : null}
+              </div>
+              {firstSessionBootstrapError ? (
+                <p className="composer-state-note" role="alert" aria-live="assertive">
+                  {firstSessionBootstrapError}
+                </p>
+              ) : null}
+              {executionPlanPreviewError ? (
+                <p className="composer-state-note" role="alert" aria-live="assertive">
+                  {executionPlanPreviewError}
+                </p>
+              ) : null}
+              {executionPlanPreview ? (
+                <div className="stack-gap-2" aria-label="Desktop Flight Plan preview">
+                  <p className="shortcut-hint"><strong>Flight Plan:</strong> {executionPlanPreview.summary}</p>
+                  <p className="shortcut-hint">
+                    <strong>Checklist:</strong> {executionPlanPreview.objective}
+                  </p>
+                  <p className="shortcut-hint">
+                    Scope boundary: {executionPlanPreview.allowed_paths.length} allowed path entries, starting with {compactPreviewList(executionPlanPreview.allowed_paths)}
+                  </p>
+                  <p className="shortcut-hint">
+                    Expected outputs: reports {compactPreviewList(executionPlanPreview.predicted_reports)}; artifacts {compactPreviewList(executionPlanPreview.predicted_artifacts)}
+                  </p>
+                  <p className="shortcut-hint">
+                    Approval risk: {executionPlanPreview.requires_human_approval ? "Manual approval likely." : "No manual approval expected."}
+                  </p>
+                  <p className="shortcut-hint">
+                    Capability triggers: {summarizeFlightPlanTriggers(executionPlanPreview)}
+                  </p>
+                  {executionPlanPreview.warnings?.length ? (
+                    <p className="shortcut-hint">Risk gates: {executionPlanPreview.warnings.join(" | ")}</p>
+                  ) : null}
+                  <DesktopFlightPlanCopilotPanel
+                    title="Flight Plan copilot"
+                    intro="Generate one advisory-only pre-run brief grounded in the current Flight Plan preview, expected outputs, capability triggers, and risk gates."
+                    buttonLabel="Explain this Flight Plan"
+                    loadBrief={() => previewFlightPlanCopilotBrief(executionPlanPreview, activeSessionId)}
+                  />
+                </div>
+              ) : null}
+              <div className="quick-actions">
+                <Button variant="secondary" onClick={onPreviewFirstSession} disabled={isOffline || executionPlanPreviewLoading}>
+                  {executionPlanPreviewLoading ? "Previewing Flight Plan..." : "Preview Flight Plan"}
+                </Button>
+                <Button variant="primary" onClick={onCreateFirstSession} disabled={isOffline || creatingFirstSession}>
+                  {creatingFirstSession ? "Creating the first session in desktop..." : "Create first session in desktop"}
+                </Button>
+                <Button variant="secondary" onClick={onOpenSessionFallback}>Open Dashboard /pm and create it manually</Button>
+              </div>
+            </section>
+          ) : null}
+          <section
+            ref={chatThreadRef}
+            className="chat-thread"
+            aria-label="Session messages"
+            role="log"
+            aria-live="polite"
+            aria-relevant="additions text"
+            aria-busy={activeSessionGenerating}
+          >
+            {!activeSessionId ? (
+              <p className="drawer-mode-note">No session exists yet. Click "Create first session in desktop" first. If that fails, open Dashboard /pm and create it manually.</p>
+            ) : activeTimeline.length === 0 ? (
+              <p className="drawer-mode-note">This session has no messages yet. Enter a request below and press Enter to send.</p>
+            ) : (
+              activeTimeline.map((item) => (
+                <article
+                  key={item.id}
+                  data-message-id={item.id}
+                  className={`chat-bubble ${item.role === "user" ? "is-user" : "is-pm"}`.trim()}
+                >
+                  <strong>{item.role === "user" ? "You" : "CortexPilot Command Tower PM"}</strong>
+                  <div className="markdown-content">
+                    {shouldRenderMarkdown(item.content) ? (
+                      <Suspense fallback={<p className="chat-plain-text">{item.content}</p>}>
+                        <LazyMarkdownMessage content={item.content} />
+                      </Suspense>
+                    ) : (
+                      <p className="chat-plain-text">{item.content}</p>
+                    )}
+                  </div>
+                  {(item.embeds || []).map((embed) => renderChatEmbed(item, embed, chooseDecision, reportActions))}
+                </article>
+              ))
+            )}
+            {activeSessionGenerating ? (
+              <article className="chat-bubble is-pm typing-bubble" aria-live="polite">
+                <strong>CortexPilot Command Tower PM</strong>
+                <p>{streamingText || phaseText}</p>
+              </article>
+            ) : null}
+          </section>
+          <section className="chat-composer" aria-label="Message composer">
+            <label htmlFor="desktop-chat-input">Continue the conversation</label>
+            {recoverableDraft ? (
+              <section className="alert-warning draft-recovery" role="status" aria-live="polite">
+                <p>An unsent draft was found. Restore it?</p>
+                <div className="quick-actions">
+                  <Button variant="secondary" onClick={restoreDraft}>Restore draft</Button>
+                  <Button variant="destructive" onClick={discardDraft}>Discard draft</Button>
+                </div>
+              </section>
+            ) : null}
+            <Textarea
+              ref={composerRef}
+              id="desktop-chat-input"
+              value={composerInput}
+              onChange={(event) => setComposerInput(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) {
+                  event.preventDefault();
+                  onComposerEnterSend();
+                }
+              }}
+              rows={1}
+              maxLength={composerMaxChars}
+              placeholder={composerPlaceholder}
+              disabled={!workspace || isOffline}
+            />
+            {!hasUserMessage && starterPrompts.length > 0 ? (
+              <div className="starter-prompts" role="group" aria-label="Starter request templates">
+                {starterPrompts.map((prompt) => (
+                  <Button
+                    key={prompt}
+                    type="button"
+                    unstyled
+                    className="starter-prompt"
+                    onClick={() => onApplyStarterPrompt(prompt)}
+                    disabled={!workspace || isOffline || hasActiveGeneration}
+                  >
+                    {prompt}
+                  </Button>
+                ))}
+              </div>
+            ) : null}
+            <div className="composer-meta">
+              <p className="shortcut-hint" role="note">Press Enter to send. Use Shift+Enter for a new line.</p>
+              <span className={`status-badge ${composerOverLimit ? "status-critical" : "status-running"}`}>
+                {composerLength}/{composerMaxChars}
+              </span>
+            </div>
+            {sendDisabledReason ? (
+              <p className="composer-state-note" role="status" aria-live="polite">
+                {sendDisabledReason}
+              </p>
+            ) : null}
+            <div className="quick-actions">
+              <Button
+                variant="primary"
+                onClick={onComposerEnterSend}
+                disabled={!canSend}
+              >
+                <ArrowUp size={16} aria-hidden="true" />
+                Send message
+              </Button>
+              {!isUserNearBottom || unreadCount > 0 ? (
+                <Button variant="secondary" onClick={onBackToBottom} disabled={activeTimeline.length === 0}>
+                  Back to bottom{unreadCount > 0 ? ` (${unreadCount})` : ""}
+                </Button>
+              ) : null}
+              <Button variant="ghost" onClick={stopGeneration} disabled={!hasActiveGeneration}>
+                Stop generation
+              </Button>
+            </div>
+          </section>
+        </>
+      )}
+    </section>
+  );
+}

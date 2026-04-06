@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/task_chain.v1.json",
+  "title": "TaskChain",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "chain_id",
+    "owner_agent",
+    "steps"
+  ],
+  "properties": {
+    "chain_id": {
+      "type": "string",
+      "minLength": 8
+    },
+    "owner_agent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "agent_id"
+      ],
+      "properties": {
+        "role": {
+          "type": "string",
+          "enum": [
+            "PM",
+            "TECH_LEAD",
+            "WORKER",
+            "REVIEWER",
+            "TEST_RUNNER",
+            "SEARCHER",
+            "RESEARCHER",
+            "UI_UX",
+            "FRONTEND",
+            "BACKEND",
+            "AI",
+            "SECURITY",
+            "INFRA",
+            "TEST",
+            "OPS"
+          ]
+        },
+        "agent_id": {
+          "type": "string"
+        },
+        "codex_thread_id": {
+          "type": "string"
+        }
+      }
+    },
+    "strategy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "continue_on_fail": {
+          "type": "boolean"
+        },
+        "lifecycle": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "enforce": {
+              "type": "boolean"
+            },
+            "required_path": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "PM",
+                  "TECH_LEAD",
+                  "WORKER",
+                  "REVIEWER",
+                  "TEST_RUNNER",
+                  "TEST",
+                  "SEARCHER",
+                  "RESEARCHER",
+                  "UI_UX",
+                  "FRONTEND",
+                  "BACKEND",
+                  "AI",
+                  "SECURITY",
+                  "INFRA",
+                  "OPS"
+                ]
+              },
+              "minItems": 1
+            },
+            "min_workers": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "min_reviewers": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "reviewer_quorum": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "require_test_stage": {
+              "type": "boolean"
+            },
+            "require_return_to_pm": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "kind",
+          "payload"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "plan",
+              "contract",
+              "handoff"
+            ]
+          },
+          "payload": {
+            "type": "object"
+          },
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "depends_on": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "parallel_group": {
+            "type": "string"
+          },
+          "context_policy": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "exclusive_paths": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          }
+        }
+      }
+    }
+  }
+}

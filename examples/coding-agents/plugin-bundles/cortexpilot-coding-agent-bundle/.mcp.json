@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "cortexpilot-readonly": {
+      "command": "bash",
+      "args": [
+        "./bin/run-cortexpilot-readonly-mcp.sh"
+      ]
+    }
+  }
+}

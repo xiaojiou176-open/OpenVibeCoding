@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/run_compare_report.schema.json",
+  "title": "RunCompareReport",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "report_type",
+    "run_id",
+    "baseline_run_id",
+    "status",
+    "compare_summary"
+  ],
+  "properties": {
+    "report_type": {
+      "type": "string",
+      "const": "run_compare_report"
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "baseline_run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "minLength": 1
+    },
+    "compare_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mismatched_count",
+        "missing_count",
+        "extra_count",
+        "missing_reports_count",
+        "failed_report_checks_count",
+        "evidence_ok",
+        "llm_params_ok",
+        "llm_snapshot_ok"
+      ],
+      "properties": {
+        "mismatched_count": { "type": "integer", "minimum": 0 },
+        "missing_count": { "type": "integer", "minimum": 0 },
+        "extra_count": { "type": "integer", "minimum": 0 },
+        "missing_reports_count": { "type": "integer", "minimum": 0 },
+        "failed_report_checks_count": { "type": "integer", "minimum": 0 },
+        "evidence_ok": { "type": "boolean" },
+        "llm_params_ok": { "type": "boolean" },
+        "llm_snapshot_ok": { "type": "boolean" }
+      }
+    }
+  }
+}

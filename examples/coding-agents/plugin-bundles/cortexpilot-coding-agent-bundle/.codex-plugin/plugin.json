@@ -1,0 +1,17 @@
+{
+  "name": "cortexpilot-coding-agent-bundle",
+  "version": "0.1.0",
+  "description": "Repo-owned CortexPilot skill bundle for local Codex and compatible coding-agent installs.",
+  "author": "CortexPilot",
+  "homepage": "https://github.com/xiaojiou176-open/CortexPilot-public",
+  "repository": "https://github.com/xiaojiou176-open/CortexPilot-public",
+  "license": "MIT",
+  "keywords": [
+    "cortexpilot",
+    "codex",
+    "workflow-cases",
+    "proof-and-replay",
+    "skills"
+  ],
+  "skills": "./skills/"
+}

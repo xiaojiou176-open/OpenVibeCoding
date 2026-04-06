@@ -1,0 +1,8 @@
+{
+  "task_id": "task-001",
+  "status": "success",
+  "patch_ref": "git/patch.diff",
+  "diff_summary": "no changes outside allowed_paths",
+  "evidence_refs": {},
+  "failure_reason": ""
+}

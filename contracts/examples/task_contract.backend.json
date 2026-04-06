@@ -1,0 +1,76 @@
+{
+  "task_id": "task_backend_example",
+  "owner_agent": {
+    "role": "WORKER",
+    "agent_id": "cortexpilot-worker-1",
+    "codex_thread_id": ""
+  },
+  "assigned_agent": {
+    "role": "WORKER",
+    "agent_id": "cortexpilot-worker-1",
+    "codex_thread_id": ""
+  },
+  "inputs": {
+    "spec": "示例后端任务：更新 orchestrator 模块",
+    "artifacts": []
+  },
+  "required_outputs": [
+    {
+      "name": "apps/orchestrator/src/cortexpilot_orch/cli.py",
+      "type": "file",
+      "acceptance": "CLI 仍可正常启动且命令完整"
+    }
+  ],
+  "allowed_paths": [
+    "apps/orchestrator"
+  ],
+  "forbidden_actions": [
+    "rm -rf",
+    "git push"
+  ],
+  "acceptance_tests": [
+    {
+      "name": "pytest",
+      "cmd": "pytest apps/orchestrator/tests -m 'not e2e'",
+      "must_pass": true
+    }
+  ],
+  "tool_permissions": {
+    "filesystem": "workspace-write",
+    "shell": "on-request",
+    "network": "deny",
+    "mcp_tools": [
+      "codex"
+    ]
+  },
+  "timeout_retry": {
+    "timeout_sec": 900,
+    "max_retries": 2,
+    "retry_backoff_sec": 3
+  },
+  "rollback": {
+    "strategy": "git_reset_hard",
+    "baseline_ref": "HEAD"
+  },
+  "evidence_links": [],
+  "log_refs": {
+    "run_id": "",
+    "paths": {
+      "codex_jsonl": "",
+      "codex_transcript": "",
+      "git_diff": "",
+      "tests_log": "",
+      "trace_id": ""
+    }
+  },
+  "mcp_tool_set": [
+    "01-filesystem"
+  ],
+  "runtime_options": {
+    "runner": "claude",
+    "provider": "anthropic",
+    "execution": {
+      "mcp_first": true
+    }
+  }
+}

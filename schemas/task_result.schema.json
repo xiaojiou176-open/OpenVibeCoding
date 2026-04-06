@@ -1,0 +1,229 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/task_result.schema.json",
+  "title": "TaskResult",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "run_id",
+    "task_id",
+    "producer",
+    "status",
+    "started_at",
+    "finished_at",
+    "summary",
+    "artifacts",
+    "git",
+    "gates",
+    "next_steps"
+  ],
+  "$defs": {
+    "ArtifactRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-fA-F0-9]{64}$"
+        },
+        "media_type": {
+          "type": "string"
+        },
+        "size_bytes": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "GateResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "passed"
+      ],
+      "properties": {
+        "passed": {
+          "type": "boolean"
+        },
+        "violations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Producer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "agent_id"
+      ],
+      "properties": {
+        "role": {
+          "type": "string",
+          "enum": [
+            "PM",
+            "TECH_LEAD",
+            "WORKER",
+            "REVIEWER",
+            "TEST_RUNNER",
+            "SEARCHER",
+            "RESEARCHER",
+            "UI_UX",
+            "FRONTEND",
+            "BACKEND",
+            "AI",
+            "SECURITY",
+            "INFRA",
+            "TEST",
+            "OPS",
+            "ORCHESTRATOR"
+          ]
+        },
+        "agent_id": {
+          "type": "string"
+        },
+        "codex_thread_id": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "properties": {
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "attempt": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "producer": {
+      "$ref": "#/$defs/Producer"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "SUCCESS",
+        "FAILED",
+        "BLOCKED",
+        "SKIPPED"
+      ]
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "finished_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ArtifactRef"
+      }
+    },
+    "git": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baseline_ref",
+        "head_ref",
+        "changed_files",
+        "patch"
+      ],
+      "properties": {
+        "baseline_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "head_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "changed_files": {
+          "$ref": "#/$defs/ArtifactRef"
+        },
+        "patch": {
+          "$ref": "#/$defs/ArtifactRef"
+        }
+      }
+    },
+    "gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "diff_gate",
+        "policy_gate",
+        "review_gate",
+        "tests_gate"
+      ],
+      "properties": {
+        "diff_gate": {
+          "$ref": "#/$defs/GateResult"
+        },
+        "policy_gate": {
+          "$ref": "#/$defs/GateResult"
+        },
+        "review_gate": {
+          "$ref": "#/$defs/GateResult"
+        },
+        "tests_gate": {
+          "$ref": "#/$defs/GateResult"
+        }
+      }
+    },
+    "next_steps": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "suggested_action",
+        "notes"
+      ],
+      "properties": {
+        "suggested_action": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "failure": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "hint": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

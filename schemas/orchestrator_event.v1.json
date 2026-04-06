@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/orchestrator_event.v1.json",
+  "title": "OrchestratorEvent",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["ts", "level", "event_type", "run_id", "task_id", "attempt", "payload", "trace_id"],
+  "properties": {
+    "ts": {"type": "string", "format": "date-time"},
+    "level": {"type": "string", "enum": ["INFO", "WARN", "ERROR"]},
+    "event_type": {"type": "string"},
+    "run_id": {"type": "string"},
+    "task_id": {"type": ["string", "null"]},
+    "attempt": {"type": ["integer", "null"]},
+    "payload": {"type": "object", "additionalProperties": true},
+    "event": {"type": "string"},
+    "context": {"type": "object", "additionalProperties": true},
+    "meta": {"type": "object", "additionalProperties": true},
+    "trace_id": {"type": "string"},
+    "model_id": {"type": "string"},
+    "agent_id": {"type": "string"},
+    "role": {"type": "string"},
+    "tool_name": {"type": "string"},
+    "step": {"type": ["integer", "string"]},
+    "span_id": {"type": "string"},
+    "parent_span_id": {"type": "string"},
+    "tool_calls": {"type": "array", "items": {"type": "object", "additionalProperties": true}}
+  }
+}

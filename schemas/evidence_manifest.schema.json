@@ -1,0 +1,247 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cortexpilot.local/schemas/evidence_manifest.schema.json",
+  "title": "CortexPilot Evidence Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "manifest_type",
+    "schema_version",
+    "generated_at",
+    "overall_status",
+    "schema_path",
+    "strict_mode",
+    "strict_required_sections",
+    "sources",
+    "evidence"
+  ],
+  "properties": {
+    "manifest_type": {
+      "type": "string",
+      "const": "cortexpilot_evidence_manifest"
+    },
+    "schema_version": {
+      "type": "integer",
+      "const": 2
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "overall_status": {
+      "type": "string",
+      "enum": ["pass", "fail"]
+    },
+    "schema_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "strict_mode": {
+      "type": "boolean"
+    },
+    "strict_required_sections": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "ui_truth",
+          "ui_flake_p0",
+          "ui_flake_p1",
+          "ui_full_strict",
+          "mutation",
+          "security",
+          "incident"
+        ]
+      }
+    },
+    "sources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "truth_report",
+        "flake_p0_report",
+        "flake_p1_report",
+        "full_strict_report",
+        "mutation_report",
+        "security_report",
+        "incident_report"
+      ],
+      "properties": {
+        "truth_report": {"type": "string", "minLength": 1},
+        "flake_p0_report": {"type": "string", "minLength": 1},
+        "flake_p1_report": {"type": "string", "minLength": 1},
+        "full_strict_report": {"type": "string", "minLength": 1},
+        "mutation_report": {"type": "string"},
+        "security_report": {"type": "string"},
+        "incident_report": {"type": "string"}
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ui_truth",
+        "ui_flake",
+        "ui_full_strict",
+        "mutation",
+        "security",
+        "incident"
+      ],
+      "properties": {
+        "ui_truth": {"$ref": "#/$defs/uiSection"},
+        "ui_flake": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["p0", "p1"],
+          "properties": {
+            "p0": {"$ref": "#/$defs/uiFlakeSection"},
+            "p1": {"$ref": "#/$defs/uiFlakeSection"}
+          }
+        },
+        "ui_full_strict": {"$ref": "#/$defs/uiFullStrictSection"},
+        "mutation": {"$ref": "#/$defs/optionalSection"},
+        "security": {"$ref": "#/$defs/optionalSection"},
+        "incident": {"$ref": "#/$defs/optionalSection"}
+      }
+    },
+    "release_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_manifest",
+        "source_run_id",
+        "source_route",
+        "source_event",
+        "freshness_window_sec",
+        "provenance_report",
+        "current_run_index",
+        "analytics_exclusions"
+      ],
+      "properties": {
+        "source_manifest": {"type": "string", "minLength": 1},
+        "source_run_id": {"type": "string", "minLength": 1},
+        "source_route": {"type": "string", "minLength": 1},
+        "source_event": {"type": "string", "minLength": 1},
+        "freshness_window_sec": {"type": "integer", "minimum": 0},
+        "provenance_report": {"type": "string", "minLength": 1},
+        "current_run_index": {"type": "string", "minLength": 1},
+        "analytics_exclusions": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "baseSection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "status",
+        "timestamp_utc",
+        "timestamp_source",
+        "artifacts",
+        "metrics"
+      ],
+      "properties": {
+        "run_id": {"type": "string", "minLength": 1},
+        "status": {"type": "string"},
+        "timestamp_utc": {"type": "string", "format": "date-time"},
+        "timestamp_source": {
+          "type": "string",
+          "enum": ["generated_at", "created_at", "updated_at", "finished_at", "file_mtime"]
+        },
+        "artifacts": {"type": "object"},
+        "metrics": {"type": "object"}
+      }
+    },
+    "uiSection": {
+      "allOf": [
+        {"$ref": "#/$defs/baseSection"},
+        {
+          "type": "object",
+          "properties": {
+            "status": {"enum": ["pass", "fail"]},
+            "artifacts": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["report_json"],
+              "properties": {
+                "report_json": {"type": "string", "minLength": 1}
+              }
+            }
+          }
+        }
+      ]
+    },
+    "uiFlakeSection": {
+      "allOf": [
+        {"$ref": "#/$defs/baseSection"},
+        {
+          "type": "object",
+          "properties": {
+            "status": {"enum": ["pass", "fail"]},
+            "artifacts": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "report_json",
+                "attempts_jsonl",
+                "attempts_sha256",
+                "report_markdown"
+              ],
+              "properties": {
+                "report_json": {"type": "string", "minLength": 1},
+                "attempts_jsonl": {"type": "string", "minLength": 1},
+                "attempts_sha256": {"type": "string", "minLength": 1},
+                "report_markdown": {"type": "string", "minLength": 1}
+              }
+            }
+          }
+        }
+      ]
+    },
+    "uiFullStrictSection": {
+      "allOf": [
+        {"$ref": "#/$defs/baseSection"},
+        {
+          "type": "object",
+          "properties": {
+            "status": {"enum": ["pass", "fail"]},
+            "artifacts": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["report_json", "click_inventory_report"],
+              "properties": {
+                "report_json": {"type": "string", "minLength": 1},
+                "click_inventory_report": {"type": "string", "minLength": 1}
+              }
+            }
+          }
+        }
+      ]
+    },
+    "optionalSection": {
+      "allOf": [
+        {"$ref": "#/$defs/baseSection"},
+        {
+          "type": "object",
+          "properties": {
+            "status": {"enum": ["pass", "fail", "missing"]},
+            "artifacts": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["report_json"],
+              "properties": {
+                "report_json": {"type": "string"}
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "version": "v1",
+  "allow": ["01-filesystem", "codex", "sampling", "search", "browser", "tampermonkey", "aider", "continue", "open_interpreter"],
+  "deny": []
+}

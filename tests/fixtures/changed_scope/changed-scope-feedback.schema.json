@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Changed Scope Feedback Record",
+  "type": "object",
+  "required": ["timestamp", "rule_id", "feedback"],
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "rule_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "feedback": {
+      "type": "object",
+      "required": ["label"],
+      "properties": {
+        "label": {
+          "type": "string",
+          "enum": [
+            "tp",
+            "true_positive",
+            "hit",
+            "accepted",
+            "fp",
+            "false_positive",
+            "noise",
+            "rejected",
+            "tn",
+            "true_negative",
+            "fn",
+            "false_negative",
+            "miss"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "pr": {
+      "type": "object",
+      "properties": {
+        "number": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

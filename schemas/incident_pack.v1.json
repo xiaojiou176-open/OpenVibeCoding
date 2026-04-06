@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/incident_pack.v1.json",
+  "title": "IncidentPack",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "report_type",
+    "run_id",
+    "status",
+    "summary",
+    "failure_class",
+    "failure_code",
+    "failure_stage",
+    "failure_reason",
+    "root_event",
+    "next_action",
+    "blocking_events"
+  ],
+  "properties": {
+    "report_type": {
+      "type": "string",
+      "const": "incident_pack"
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "minLength": 1
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "failure_class": {
+      "type": "string"
+    },
+    "failure_code": {
+      "type": "string"
+    },
+    "failure_stage": {
+      "type": "string"
+    },
+    "failure_reason": {
+      "type": "string"
+    },
+    "root_event": {
+      "type": "string"
+    },
+    "next_action": {
+      "type": "string"
+    },
+    "blocking_events": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

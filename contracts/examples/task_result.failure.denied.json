@@ -1,0 +1,58 @@
+{
+  "run_id": "run-1001",
+  "task_id": "task-denied-001",
+  "producer": {"role": "WORKER", "agent_id": "worker-1"},
+  "status": "FAILED",
+  "started_at": "2024-01-01T00:00:00Z",
+  "finished_at": "2024-01-01T00:00:02Z",
+  "summary": "execution denied by policy gate",
+  "artifacts": [
+    {
+      "name": "task_result_failure_denied",
+      "path": "reports/task_result.failure.denied.json",
+      "sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+    }
+  ],
+  "git": {
+    "baseline_ref": "HEAD",
+    "head_ref": "HEAD",
+    "changed_files": {
+      "name": "diff_name_only",
+      "path": "diff_name_only.txt",
+      "sha256": "2222222222222222222222222222222222222222222222222222222222222222"
+    },
+    "patch": {
+      "name": "patch",
+      "path": "patch.diff",
+      "sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+    }
+  },
+  "gates": {
+    "diff_gate": {
+      "passed": true,
+      "violations": []
+    },
+    "policy_gate": {
+      "passed": false,
+      "violations": [
+        "write path not in allowed_paths"
+      ]
+    },
+    "review_gate": {
+      "passed": true,
+      "violations": []
+    },
+    "tests_gate": {
+      "passed": true,
+      "violations": []
+    }
+  },
+  "next_steps": {
+    "suggested_action": "narrow_write_scope",
+    "notes": "limit writes to allowed_paths or request approved override"
+  },
+  "failure": {
+    "message": "policy gate denied: write path not in allowed_paths",
+    "hint": "limit writes to allowed_paths or request approved override"
+  }
+}

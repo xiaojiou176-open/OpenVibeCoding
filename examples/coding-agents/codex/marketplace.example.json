@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "plugins": {
+    "cortexpilot-coding-agent-bundle": {
+      "source": {
+        "path": "../plugin-bundles/cortexpilot-coding-agent-bundle"
+      }
+    }
+  }
+}

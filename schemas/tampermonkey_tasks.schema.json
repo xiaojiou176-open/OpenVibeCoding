@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/tampermonkey_tasks.schema.json",
+  "title": "TampermonkeyTasks",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["tasks"],
+  "properties": {
+    "tasks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["script"],
+        "properties": {
+          "script": {"type": "string", "minLength": 1},
+          "url": {"type": "string"},
+          "script_content": {"type": "string"},
+          "raw_output": {"type": "string"},
+          "parsed": {
+            "type": ["object", "array", "string", "number", "boolean", "null"],
+            "additionalProperties": true
+          }
+        }
+      }
+    }
+  }
+}

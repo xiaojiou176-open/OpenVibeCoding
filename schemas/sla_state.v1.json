@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/sla_state.v1.json",
+  "title": "SlaState",
+  "type": "string",
+  "enum": [
+    "scheduled",
+    "on_track",
+    "at_risk",
+    "breached",
+    "in_progress",
+    "completed",
+    "ended"
+  ]
+}

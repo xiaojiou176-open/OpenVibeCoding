@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/evidence_bundle.schema.json",
+  "title": "EvidenceBundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["bundle_id", "created_at", "requested_by", "query", "sources", "claims", "limitations"],
+  "properties": {
+    "bundle_id": {"type": "string", "minLength": 8},
+    "created_at": {"type": "string", "format": "date-time"},
+    "requested_by": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "agent_id"],
+      "properties": {
+        "role": {"type": "string", "enum": ["PM", "TECH_LEAD", "SEARCHER", "ORCHESTRATOR"]},
+        "agent_id": {"type": "string"}
+      }
+    },
+    "query": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["raw_question", "refined_prompt"],
+      "properties": {
+        "raw_question": {"type": "string"},
+        "refined_prompt": {"type": "string"},
+        "freshness_requirement_days": {"type": "integer", "minimum": 0}
+      }
+    },
+    "sources": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/Source"}},
+    "claims": {"type": "array", "items": {"$ref": "#/$defs/Claim"}},
+    "consensus": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "agreements": {"type": "array", "items": {"type": "string"}},
+        "disagreements": {"type": "array", "items": {"type": "string"}},
+        "needs_verification": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "artifacts": {"type": "array", "items": {"$ref": "#/$defs/ArtifactRef"}},
+    "limitations": {"type": "array", "items": {"type": "string"}}
+  },
+  "$defs": {
+    "ArtifactRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "path", "sha256"],
+      "properties": {
+        "name": {"type": "string"},
+        "path": {"type": "string"},
+        "sha256": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"},
+        "media_type": {"type": "string"},
+        "size_bytes": {"type": "integer", "minimum": 0}
+      }
+    },
+    "Source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "kind", "title", "retrieved_at"],
+      "properties": {
+        "source_id": {"type": "string"},
+        "kind": {"type": "string", "enum": ["webpage", "pdf", "repo", "issue", "paper", "forum_thread", "video", "other"]},
+        "title": {"type": "string"},
+        "url": {"type": "string"},
+        "retrieved_at": {"type": "string", "format": "date-time"},
+        "publisher": {"type": "string"},
+        "content_sha256": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"},
+        "notes": {"type": "string"}
+      }
+    },
+    "Claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["claim_id", "text", "status", "confidence", "supporting_source_ids"],
+      "properties": {
+        "claim_id": {"type": "string"},
+        "text": {"type": "string"},
+        "status": {"type": "string", "enum": ["UNVERIFIED", "VERIFIED", "DISPUTED", "REJECTED"]},
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+        "supporting_source_ids": {"type": "array", "items": {"type": "string"}},
+        "contradicting_source_ids": {"type": "array", "items": {"type": "string"}},
+        "verification_notes": {"type": "string"},
+        "risk_if_wrong": {"type": "string", "enum": ["LOW", "MEDIUM", "HIGH"]}
+      }
+    }
+  }
+}

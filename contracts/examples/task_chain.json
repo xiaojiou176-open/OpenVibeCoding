@@ -1,0 +1,40 @@
+{
+  "chain_id": "chain-001",
+  "owner_agent": {
+    "role": "PM",
+    "agent_id": "agent-1"
+  },
+  "steps": [
+    {
+      "name": "tl_plan",
+      "kind": "plan",
+      "payload": {
+        "plan_id": "plan-001",
+        "task_id": "task-001",
+        "owner_agent": {"role": "PM", "agent_id": "agent-1"},
+        "assigned_agent": {"role": "WORKER", "agent_id": "agent-1"},
+        "task_type": "IMPLEMENT",
+        "spec": "Create a minimal governance endpoint",
+        "allowed_paths": ["apps/orchestrator/src"],
+        "acceptance_tests": [{"name": "noop", "cmd": "echo ok", "must_pass": true}]
+      },
+      "labels": ["pm", "tl"]
+    },
+    {
+      "name": "implementation",
+      "kind": "plan",
+      "payload": {
+        "plan_id": "plan-002",
+        "task_id": "task-002",
+        "owner_agent": {"role": "TECH_LEAD", "agent_id": "agent-1"},
+        "assigned_agent": {"role": "WORKER", "agent_id": "agent-1"},
+        "task_type": "IMPLEMENT",
+        "spec": "Implement the governance endpoint and tests",
+        "allowed_paths": ["apps/orchestrator/src", "apps/orchestrator/tests"],
+        "acceptance_tests": [{"name": "noop", "cmd": "echo ok", "must_pass": true}]
+      },
+      "depends_on": ["tl_plan"],
+      "labels": ["worker"]
+    }
+  ]
+}

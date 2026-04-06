@@ -1,0 +1,35 @@
+{
+  "run_id": "run-0001",
+  "task_id": "task-001",
+  "runner": {"role": "TEST_RUNNER", "agent_id": "runner-1"},
+  "started_at": "2024-01-01T00:03:00Z",
+  "finished_at": "2024-01-01T00:04:00Z",
+  "status": "PASS",
+  "commands": [
+    {
+      "name": "pytest",
+      "cmd_argv": ["pytest", "-q"],
+      "must_pass": true,
+      "timeout_sec": 600,
+      "exit_code": 0,
+      "duration_sec": 1.2,
+      "stdout": {
+        "name": "stdout",
+        "path": "tests/stdout.log",
+        "sha256": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+      },
+      "stderr": {
+        "name": "stderr",
+        "path": "tests/stderr.log",
+        "sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "name": "junit",
+      "path": "tests/junit.xml",
+      "sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+    }
+  ]
+}

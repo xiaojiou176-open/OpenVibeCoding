@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/tool_call.schema.json",
+  "title": "ToolCall",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["ts", "run_id", "tool", "status", "args"],
+  "properties": {
+    "ts": {"type": "string"},
+    "run_id": {"type": "string", "minLength": 1},
+    "task_id": {"type": "string"},
+    "tool": {"type": "string", "minLength": 1},
+    "status": {"type": "string", "minLength": 1},
+    "args": {"type": "object"},
+    "config": {"type": "object"},
+    "duration_ms": {"type": "integer", "minimum": 0},
+    "error": {"type": "string"},
+    "artifacts": {"type": "object"},
+    "thread_id": {"type": "string"},
+    "session_id": {"type": "string"},
+    "output_sha256": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"}
+  }
+}

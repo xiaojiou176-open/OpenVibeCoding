@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/role_config_registry.schema.json",
+  "title": "RoleConfigRegistry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "roles"
+  ],
+  "properties": {
+    "version": {
+      "type": "string",
+      "enum": [
+        "v1"
+      ]
+    },
+    "roles": {
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^[A-Z_]+$": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "system_prompt_ref",
+            "skills_bundle_ref",
+            "mcp_bundle_ref",
+            "runtime_binding"
+          ],
+          "properties": {
+            "system_prompt_ref": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "skills_bundle_ref": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "mcp_bundle_ref": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "runtime_binding": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "runner",
+                "provider",
+                "model"
+              ],
+              "properties": {
+                "runner": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "provider": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "model": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

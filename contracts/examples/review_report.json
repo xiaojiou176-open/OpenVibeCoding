@@ -1,0 +1,17 @@
+{
+  "run_id": "run-0001",
+  "task_id": "task-001",
+  "reviewer": {"role": "REVIEWER", "agent_id": "reviewer-1"},
+  "reviewed_at": "2024-01-01T00:02:00Z",
+  "verdict": "PASS",
+  "summary": "clean review",
+  "scope_check": {"passed": true, "violations": []},
+  "evidence": [
+    {
+      "name": "review_log",
+      "path": "reports/review.log",
+      "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+    }
+  ],
+  "produced_diff": false
+}

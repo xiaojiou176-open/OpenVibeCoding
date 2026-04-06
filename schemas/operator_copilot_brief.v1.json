@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/operator_copilot_brief.v1.json",
+  "title": "OperatorCopilotBrief",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "report_type",
+    "generated_at",
+    "subject_id",
+    "status",
+    "summary",
+    "likely_cause",
+    "compare_takeaway",
+    "proof_takeaway",
+    "incident_takeaway",
+    "queue_takeaway",
+    "approval_takeaway",
+    "recommended_actions",
+    "top_risks",
+    "questions_answered",
+    "used_truth_surfaces",
+    "limitations",
+    "provider",
+    "model"
+  ],
+  "properties": {
+    "report_type": { "type": "string", "const": "operator_copilot_brief" },
+    "generated_at": { "type": "string", "minLength": 1 },
+    "scope": { "type": "string", "enum": ["run", "workflow", "flight_plan"] },
+    "subject_id": { "type": "string", "minLength": 1 },
+    "run_id": { "type": "string" },
+    "workflow_id": { "type": "string" },
+    "intake_id": { "type": "string" },
+    "status": { "type": "string", "enum": ["OK", "UNAVAILABLE"] },
+    "summary": { "type": "string", "minLength": 1 },
+    "likely_cause": { "type": "string", "minLength": 1 },
+    "compare_takeaway": { "type": "string", "minLength": 1 },
+    "proof_takeaway": { "type": "string", "minLength": 1 },
+    "incident_takeaway": { "type": "string", "minLength": 1 },
+    "queue_takeaway": { "type": "string", "minLength": 1 },
+    "approval_takeaway": { "type": "string", "minLength": 1 },
+    "recommended_actions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "top_risks": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "questions_answered": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "used_truth_surfaces": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "limitations": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "provider": { "type": "string", "minLength": 1 },
+    "model": { "type": "string", "minLength": 1 }
+  }
+}

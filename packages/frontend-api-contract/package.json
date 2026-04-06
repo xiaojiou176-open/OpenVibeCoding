@@ -1,0 +1,22 @@
+{
+  "name": "@cortexpilot/frontend-api-contract",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "require": "./index.cjs",
+      "default": "./index.js"
+    },
+    "./ui-flow": {
+      "types": "./ui-flow.d.ts",
+      "import": "./ui-flow.js",
+      "require": "./ui-flow.cjs",
+      "default": "./ui-flow.js"
+    }
+  }
+}

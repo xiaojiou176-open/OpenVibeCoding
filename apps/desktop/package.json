@@ -1,0 +1,71 @@
+{
+  "name": "cortexpilot-desktop",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "test": "DESKTOP_VITEST_POOL=${DESKTOP_VITEST_POOL:-forks} vitest run --coverage",
+    "test:target": "DESKTOP_VITEST_POOL=${DESKTOP_VITEST_POOL:-forks} vitest run",
+    "e2e:first-entry": "node ./scripts/e2e-first-entry-no-block.mjs",
+    "e2e:first-entry:real": "node ./scripts/e2e-first-entry-no-block-real.mjs",
+    "e2e:first-entry:real:full": "node ./scripts/e2e-first-entry-no-block-real.mjs",
+    "e2e:first-entry:real:degraded": "node ./scripts/e2e-first-entry-degraded-real.mjs",
+    "e2e:command-tower:real": "node ./scripts/e2e-command-tower-controls-real.mjs",
+    "e2e:tauri:real": "node ./scripts/e2e-tauri-shell-real.mjs",
+    "audit:snapshots": "node ./scripts/capture-layout-snapshots.mjs",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build",
+    "tauri:verify-release": "bash ../../scripts/verify_desktop_release.sh",
+    "tauri:notarize:preflight": "bash ../../scripts/sign_and_notarize_desktop_release.sh --preflight",
+    "tauri:notarize:dry-run": "bash ../../scripts/sign_and_notarize_desktop_release.sh --dry-run",
+    "tauri:notarize": "bash ../../scripts/sign_and_notarize_desktop_release.sh",
+    "tauri:test-notarize": "bash ../../scripts/test_desktop_notarization_pipeline.sh",
+    "tauri:test-snapshots": "bash ../../scripts/test_desktop_snapshot_pipeline.sh",
+    "tauri:test-release-verify": "bash ../../scripts/test_desktop_release_verification_pipeline.sh",
+    "lint": "npm run typecheck",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@cortexpilot/frontend-api-client": "file:../../packages/frontend-api-client",
+    "@cortexpilot/frontend-api-contract": "file:../../packages/frontend-api-contract",
+    "@cortexpilot/frontend-shared": "file:../../packages/frontend-shared",
+    "@tauri-apps/api": "2.10.1",
+    "@tauri-apps/plugin-deep-link": "2.4.7",
+    "@tauri-apps/plugin-global-shortcut": "2.3.1",
+    "@tauri-apps/plugin-os": "2.3.2",
+    "@tauri-apps/plugin-updater": "2.10.0",
+    "@xyflow/react": "^12.10.1",
+    "lucide-react": "0.564.0",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
+    "sonner": "^2.0.7"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "2.10.0",
+    "@testing-library/jest-dom": "6.9.1",
+    "@testing-library/react": "16.3.2",
+    "@testing-library/user-event": "14.6.1",
+    "@types/node": "25.2.0",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "5.2.0",
+    "@vitest/coverage-v8": "4.0.18",
+    "jsdom": "26.1.0",
+    "playwright": "1.58.2",
+    "typescript": "5.9.3",
+    "vite": "8.0.5",
+    "vitest": "4.0.18"
+  },
+  "pnpm": {
+    "overrides": {
+      "picomatch@4": "4.0.4",
+      "rollup": "4.59.0",
+      "vite": "8.0.5"
+    }
+  }
+}

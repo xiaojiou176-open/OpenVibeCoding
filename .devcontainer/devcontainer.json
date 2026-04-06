@@ -1,0 +1,18 @@
+{
+  "name": "cortexpilot-ci-core",
+  "dockerComposeFile": [
+    "../infra/ci/compose.yml"
+  ],
+  "service": "core",
+  "workspaceFolder": "/workspace",
+  "overrideCommand": false,
+  "shutdownAction": "stopCompose",
+  "remoteUser": "root",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  }
+}

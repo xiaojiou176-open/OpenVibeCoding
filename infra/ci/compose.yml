@@ -1,0 +1,24 @@
+services:
+  core:
+    build:
+      context: ../..
+      dockerfile: infra/ci/Dockerfile.core
+    image: cortexpilot-ci-core:local
+    init: true
+    command: ["bash", "-lc", "sleep infinity"]
+    tty: true
+    working_dir: /workspace
+    environment:
+      CI: ${CI:-0}
+      GITHUB_ACTIONS: ${GITHUB_ACTIONS:-false}
+      GITHUB_JOB: ${GITHUB_JOB:-local}
+      GITHUB_RUN_ID: ${GITHUB_RUN_ID:-0}
+      GITHUB_RUN_ATTEMPT: ${GITHUB_RUN_ATTEMPT:-0}
+      GITHUB_EVENT_NAME: ${GITHUB_EVENT_NAME:-local}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      RUNNER_TEMP: /tmp/cortexpilot-runner-temp
+      CORTEXPILOT_CI_CONTAINER: "1"
+      PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
+    volumes:
+      - ../..:/workspace
+      - ${CORTEXPILOT_DOCKER_CI_RUNNER_TEMP_HOST:-/tmp/cortexpilot-docker-ci-runner-temp}:/tmp/cortexpilot-runner-temp

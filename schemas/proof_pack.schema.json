@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.local/schemas/proof_pack.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "report_type",
+    "run_id",
+    "task_template",
+    "primary_report",
+    "summary",
+    "result_status",
+    "proof_ready",
+    "evidence_refs",
+    "next_action"
+  ],
+  "properties": {
+    "report_type": { "const": "proof_pack" },
+    "run_id": { "type": "string", "minLength": 1 },
+    "task_template": { "type": "string", "minLength": 1 },
+    "primary_report": { "type": "string", "minLength": 1 },
+    "summary": { "type": "string", "minLength": 1 },
+    "result_status": { "type": "string", "minLength": 1 },
+    "proof_ready": { "type": "boolean" },
+    "evidence_refs": {
+      "type": "object",
+      "additionalProperties": { "type": "string" }
+    },
+    "next_action": { "type": "string", "minLength": 1 }
+  }
+}

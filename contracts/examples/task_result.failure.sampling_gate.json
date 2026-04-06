@@ -1,0 +1,58 @@
+{
+  "run_id": "run-1002",
+  "task_id": "task-sampling-gate-001",
+  "producer": {"role": "WORKER", "agent_id": "worker-1"},
+  "status": "FAILED",
+  "started_at": "2024-01-01T00:05:00Z",
+  "finished_at": "2024-01-01T00:05:07Z",
+  "summary": "mcp sampling request rejected by gate policy",
+  "artifacts": [
+    {
+      "name": "task_result_failure_sampling_gate",
+      "path": "reports/task_result.failure.sampling_gate.json",
+      "sha256": "4444444444444444444444444444444444444444444444444444444444444444"
+    }
+  ],
+  "git": {
+    "baseline_ref": "HEAD",
+    "head_ref": "HEAD",
+    "changed_files": {
+      "name": "diff_name_only",
+      "path": "diff_name_only.txt",
+      "sha256": "5555555555555555555555555555555555555555555555555555555555555555"
+    },
+    "patch": {
+      "name": "patch",
+      "path": "patch.diff",
+      "sha256": "6666666666666666666666666666666666666666666666666666666666666666"
+    }
+  },
+  "gates": {
+    "diff_gate": {
+      "passed": true,
+      "violations": []
+    },
+    "policy_gate": {
+      "passed": false,
+      "violations": [
+        "sampled tool requests exceed policy limits"
+      ]
+    },
+    "review_gate": {
+      "passed": true,
+      "violations": []
+    },
+    "tests_gate": {
+      "passed": true,
+      "violations": []
+    }
+  },
+  "next_steps": {
+    "suggested_action": "reduce_sampling_scope",
+    "notes": "reduce sampled calls or tighten tool request set before retry"
+  },
+  "failure": {
+    "message": "mcp sampling gate violation: sampled tool requests exceed policy limits",
+    "hint": "reduce sampled calls or tighten tool request set before retry"
+  }
+}

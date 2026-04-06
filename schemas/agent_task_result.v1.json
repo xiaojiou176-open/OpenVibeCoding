@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/agent_task_result.v1.json",
+  "title": "AgentTaskResult",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["task_id", "status", "summary", "evidence_refs", "failure"],
+  "properties": {
+    "task_id": {"type": "string", "minLength": 1},
+    "status": {"type": "string", "enum": ["SUCCESS", "FAILED", "BLOCKED", "SKIPPED"]},
+    "summary": {"type": "string"},
+    "evidence_refs": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "failure": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "message": {"type": "string"},
+        "hint": {"type": "string"}
+      }
+    },
+    "contracts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    },
+    "handoff_payload": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}

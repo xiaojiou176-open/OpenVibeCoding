@@ -1,0 +1,328 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/task-plan.json",
+  "title": "TaskPlan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "plan_id",
+    "spec",
+    "allowed_paths",
+    "mcp_tool_set"
+  ],
+  "properties": {
+    "plan_id": {
+      "type": "string",
+      "minLength": 6
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "parent_task_id": {
+      "type": "string"
+    },
+    "plan_type": {
+      "type": "string",
+      "enum": [
+        "UI_UX",
+        "TEST",
+        "BACKEND",
+        "FRONTEND",
+        "OPS",
+        "SECURITY",
+        "AI"
+      ]
+    },
+    "owner_agent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "agent_id"
+      ],
+      "properties": {
+        "role": {
+          "type": "string",
+          "enum": [
+            "PM",
+            "TECH_LEAD",
+            "WORKER",
+            "REVIEWER",
+            "TEST_RUNNER",
+            "SEARCHER",
+            "RESEARCHER",
+            "UI_UX",
+            "FRONTEND",
+            "BACKEND",
+            "AI",
+            "SECURITY",
+            "INFRA",
+            "TEST",
+            "OPS"
+          ]
+        },
+        "agent_id": {
+          "type": "string"
+        },
+        "codex_thread_id": {
+          "type": "string"
+        }
+      }
+    },
+    "assigned_agent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role",
+        "agent_id"
+      ],
+      "properties": {
+        "role": {
+          "type": "string",
+          "enum": [
+            "PM",
+            "TECH_LEAD",
+            "WORKER",
+            "REVIEWER",
+            "TEST_RUNNER",
+            "SEARCHER",
+            "RESEARCHER",
+            "UI_UX",
+            "FRONTEND",
+            "BACKEND",
+            "AI",
+            "SECURITY",
+            "INFRA",
+            "TEST",
+            "OPS"
+          ]
+        },
+        "agent_id": {
+          "type": "string"
+        },
+        "codex_thread_id": {
+          "type": "string"
+        }
+      }
+    },
+    "task_type": {
+      "type": "string",
+      "enum": [
+        "PLAN",
+        "IMPLEMENT",
+        "REVIEW",
+        "TEST",
+        "SEARCH"
+      ]
+    },
+    "spec": {
+      "type": "string",
+      "minLength": 1
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "uri",
+          "sha256"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "uri": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-fA-F0-9]{64}$"
+          }
+        }
+      }
+    },
+    "required_outputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "type",
+          "acceptance"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "patch",
+              "commit",
+              "report",
+              "json",
+              "file"
+            ]
+          },
+          "acceptance": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "allowed_paths": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "forbidden_actions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "acceptance_tests": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "cmd",
+          "must_pass"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "cmd": {
+            "type": "string"
+          },
+          "must_pass": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "tool_permissions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "filesystem",
+        "shell",
+        "network",
+        "mcp_tools"
+      ],
+      "properties": {
+        "filesystem": {
+          "type": "string",
+          "enum": [
+            "read-only",
+            "workspace-write"
+          ]
+        },
+        "shell": {
+          "type": "string",
+          "enum": [
+            "deny",
+            "untrusted",
+            "on-request",
+            "never"
+          ]
+        },
+        "network": {
+          "type": "string",
+          "enum": [
+            "deny",
+            "on-request",
+            "allow"
+          ]
+        },
+        "mcp_tools": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "timeout_retry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "timeout_sec",
+        "max_retries",
+        "retry_backoff_sec"
+      ],
+      "properties": {
+        "timeout_sec": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_retries": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "retry_backoff_sec": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "rollback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "strategy",
+        "baseline_ref"
+      ],
+      "properties": {
+        "strategy": {
+          "type": "string",
+          "enum": [
+            "git_reset_hard",
+            "git_revert_commit",
+            "worktree_drop"
+          ]
+        },
+        "baseline_ref": {
+          "type": "string"
+        }
+      }
+    },
+    "evidence_links": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "labels": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "mcp_tool_set": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "该计划任务所需的 MCP 工具集（由 TL 明确声明）"
+    },
+    "audit_only": {
+      "type": "boolean",
+      "default": false,
+      "description": "仅审计任务（允许空 diff 的 reviewer 例外）"
+    }
+  }
+}

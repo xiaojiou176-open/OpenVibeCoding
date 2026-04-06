@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/reexec_report.v1.json",
+  "title": "ReexecReport",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "run_id",
+    "status",
+    "reexec_ts",
+    "hard_equal_pass",
+    "soft_equal_pass",
+    "hard_diffs",
+    "soft_diffs",
+    "errors"
+  ],
+  "properties": {
+    "run_id": {"type": "string"},
+    "status": {"type": "string", "enum": ["pass", "fail"]},
+    "reexec_ts": {"type": "string", "format": "date-time"},
+    "hard_equal_pass": {"type": "boolean"},
+    "soft_equal_pass": {"type": "boolean"},
+    "hard_diffs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["key"],
+        "properties": {
+          "key": {"type": "string"},
+          "expected": {},
+          "actual": {}
+        }
+      }
+    },
+    "soft_diffs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["key"],
+        "properties": {
+          "key": {"type": "string"},
+          "expected": {},
+          "actual": {}
+        }
+      }
+    },
+    "errors": {
+      "type": "array",
+      "items": {"type": "string"}
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "baseUrl": ".",
+    "paths": {
+      "@cortexpilot/frontend-shared/uiCopy": [
+        "../../packages/frontend-shared/uiCopy.ts"
+      ],
+      "@cortexpilot/frontend-shared/uiLocale": [
+        "../../packages/frontend-shared/uiLocale.ts"
+      ],
+      "@cortexpilot/frontend-shared/types": [
+        "../../packages/frontend-shared/types.ts"
+      ]
+    },
+    "allowImportingTsExtensions": false,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "types": ["vitest/globals", "node"]
+  },
+  "include": ["src"]
+}

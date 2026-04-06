@@ -1,0 +1,7 @@
+{
+  "plan_id": "plan_example_01",
+  "spec": "update orchestrator docs",
+  "allowed_paths": ["docs/"],
+  "mcp_tool_set": ["01-filesystem"],
+  "acceptance_tests": [{"name": "noop", "cmd": "echo hello", "must_pass": true}]
+}

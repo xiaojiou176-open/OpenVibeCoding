@@ -1,0 +1,38 @@
+{
+  "run_id": "run-0001",
+  "task_id": "task-001",
+  "producer": {"role": "WORKER", "agent_id": "worker-1"},
+  "status": "SUCCESS",
+  "started_at": "2024-01-01T00:00:00Z",
+  "finished_at": "2024-01-01T00:01:00Z",
+  "summary": "completed",
+  "artifacts": [
+    {
+      "name": "task_result",
+      "path": "reports/task_result.json",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  ],
+  "git": {
+    "baseline_ref": "HEAD",
+    "head_ref": "HEAD",
+    "changed_files": {
+      "name": "diff_name_only",
+      "path": "diff_name_only.txt",
+      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    "patch": {
+      "name": "patch",
+      "path": "patch.diff",
+      "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    }
+  },
+  "gates": {
+    "diff_gate": {"passed": true, "violations": []},
+    "policy_gate": {"passed": true, "violations": []},
+    "review_gate": {"passed": true, "violations": []},
+    "tests_gate": {"passed": true, "violations": []}
+  },
+  "next_steps": {"suggested_action": "none", "notes": "n/a"},
+  "failure": null
+}

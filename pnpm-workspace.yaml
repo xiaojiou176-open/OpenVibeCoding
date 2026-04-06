@@ -1,0 +1,6 @@
+packages:
+  - "apps/dashboard"
+  - "apps/desktop"
+  - "packages/frontend-api-contract"
+  - "packages/frontend-api-client"
+  - "packages/frontend-shared"

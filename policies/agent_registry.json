@@ -1,0 +1,360 @@
+{
+  "version": "v1",
+  "role_contracts": {
+    "PM": {
+      "purpose": "Turn user intent into a contract-first execution request without side effects.",
+      "system_prompt_ref": "policies/agents/codex/roles/10_pm.md",
+      "skills_bundle_ref": null,
+      "mcp_bundle_ref": null,
+      "handoff_eligible": true,
+      "required_downstream_roles": ["TECH_LEAD"],
+      "fail_closed_conditions": [
+        "No self-search or side-effect execution",
+        "Invalid task contracts are rejected immediately"
+      ]
+    },
+    "TECH_LEAD": {
+      "purpose": "Split product intent into executable, non-overlapping contracts and integration checkpoints.",
+      "system_prompt_ref": "policies/agents/codex/roles/20_tech_lead.md",
+      "skills_bundle_ref": "policies/skills_bundle_registry.json#bundles.tech_lead_contract_bridge_v1",
+      "mcp_bundle_ref": null,
+      "handoff_eligible": true,
+      "required_downstream_roles": ["WORKER", "REVIEWER", "TEST_RUNNER"],
+      "fail_closed_conditions": [
+        "Ambiguous contracts must be revised before dispatch",
+        "Overlapping allowed_paths must fail closed"
+      ]
+    },
+    "SEARCHER": {
+      "purpose": "Perform controlled external retrieval and return evidence-backed findings only.",
+      "system_prompt_ref": "policies/agents/codex/roles/30_searcher.md",
+      "skills_bundle_ref": null,
+      "mcp_bundle_ref": "policies/agent_registry.json#agents(role=SEARCHER).capabilities.mcp_tools",
+      "handoff_eligible": false,
+      "required_downstream_roles": [],
+      "fail_closed_conditions": [
+        "Search tasks require SEARCHER or RESEARCHER role",
+        "Retrieval must stay inside allowlisted network/tool policy"
+      ]
+    },
+    "RESEARCHER": {
+      "purpose": "Perform controlled external retrieval and synthesize primary-source findings.",
+      "system_prompt_ref": "policies/agents/codex/roles/30_searcher.md",
+      "skills_bundle_ref": null,
+      "mcp_bundle_ref": "policies/agent_registry.json#agents(role=RESEARCHER).capabilities.mcp_tools",
+      "handoff_eligible": false,
+      "required_downstream_roles": [],
+      "fail_closed_conditions": [
+        "Research tasks require allowlisted network access",
+        "Unsupported tools or sources fail closed"
+      ]
+    },
+    "REVIEWER": {
+      "purpose": "Perform read-only blocker review against the contract, diff, and evidence trail.",
+      "system_prompt_ref": "policies/agents/codex/roles/40_reviewer.md",
+      "skills_bundle_ref": "policies/skills_bundle_registry.json#bundles.reviewer_gate_v1",
+      "mcp_bundle_ref": "policies/agent_registry.json#agents(role=REVIEWER).capabilities.mcp_tools",
+      "handoff_eligible": true,
+      "required_downstream_roles": ["TEST_RUNNER"],
+      "fail_closed_conditions": [
+        "Reviewer must remain read-only",
+        "Produced diffs or missing review evidence fail closed"
+      ]
+    },
+    "WORKER": {
+      "purpose": "Execute the contracted change inside allowed_paths and produce structured evidence.",
+      "system_prompt_ref": "policies/agents/codex/roles/50_worker_core.md",
+      "skills_bundle_ref": "policies/skills_bundle_registry.json#bundles.worker_delivery_core_v1",
+      "mcp_bundle_ref": "policies/agent_registry.json#agents(role=WORKER).capabilities.mcp_tools",
+      "handoff_eligible": true,
+      "required_downstream_roles": ["REVIEWER", "TEST_RUNNER"],
+      "fail_closed_conditions": [
+        "Writes outside allowed_paths fail closed",
+        "Missing output schema or MCP allowlist fails closed"
+      ]
+    },
+    "UI_UX": {
+      "purpose": "Implement contracted UI or UX changes without crossing backend boundaries.",
+      "system_prompt_ref": "policies/agents/codex/roles/51_worker_frontend.md",
+      "skills_bundle_ref": "policies/skills_bundle_registry.json#bundles.worker_delivery_core_v1",
+      "mcp_bundle_ref": null,
+      "handoff_eligible": true,
+      "required_downstream_roles": ["REVIEWER", "TEST_RUNNER"],
+      "fail_closed_conditions": [
+        "Out-of-scope backend changes fail closed",
+        "Accessibility gaps must be surfaced before closeout"
+      ]
+    },
+    "FRONTEND": {
+      "purpose": "Implement contracted frontend changes within the approved UI surface.",
+      "system_prompt_ref": "policies/agents/codex/roles/51_worker_frontend.md",
+      "skills_bundle_ref": "policies/skills_bundle_registry.json#bundles.worker_delivery_core_v1",
+      "mcp_bundle_ref": null,
+      "handoff_eligible": true,
+      "required_downstream_roles": ["REVIEWER", "TEST_RUNNER"],
+      "fail_closed_conditions": [
+        "Out-of-scope backend changes fail closed",
+        "Role contract or design-token drift fails closed"
+      ]
+    },
+    "BACKEND": {
+      "purpose": "Implement contracted backend changes with typed interfaces and bounded runtime behavior.",
+      "system_prompt_ref": "policies/agents/codex/roles/52_worker_backend.md",
+      "skills_bundle_ref": "policies/skills_bundle_registry.json#bundles.worker_delivery_core_v1",
+      "mcp_bundle_ref": null,
+      "handoff_eligible": true,
+      "required_downstream_roles": ["REVIEWER", "TEST_RUNNER"],
+      "fail_closed_conditions": [
+        "Contract drift against API/schema boundaries fails closed",
+        "Out-of-scope frontend changes fail closed"
+      ]
+    },
+    "AI": {
+      "purpose": "Implement contracted model/runtime/tooling integration without widening product scope.",
+      "system_prompt_ref": "policies/agents/codex/roles/53_worker_ai.md",
+      "skills_bundle_ref": "policies/skills_bundle_registry.json#bundles.worker_delivery_core_v1",
+      "mcp_bundle_ref": null,
+      "handoff_eligible": true,
+      "required_downstream_roles": ["REVIEWER", "TEST_RUNNER"],
+      "fail_closed_conditions": [
+        "Unsupported provider/tool semantics fail closed",
+        "Replay or determinism regressions fail closed"
+      ]
+    },
+    "SECURITY": {
+      "purpose": "Apply contracted security checks or safeguards without widening telemetry or blast radius.",
+      "system_prompt_ref": "policies/agents/codex/roles/54_worker_security.md",
+      "skills_bundle_ref": "policies/skills_bundle_registry.json#bundles.worker_delivery_core_v1",
+      "mcp_bundle_ref": null,
+      "handoff_eligible": true,
+      "required_downstream_roles": ["REVIEWER", "TEST_RUNNER"],
+      "fail_closed_conditions": [
+        "Sensitive operations outside explicit scope fail closed",
+        "Unsafe defaults or secret leaks fail closed"
+      ]
+    },
+    "INFRA": {
+      "purpose": "Apply contracted infrastructure and reproducibility changes without mutating app logic beyond scope.",
+      "system_prompt_ref": "policies/agents/codex/roles/55_worker_infra.md",
+      "skills_bundle_ref": "policies/skills_bundle_registry.json#bundles.worker_delivery_core_v1",
+      "mcp_bundle_ref": null,
+      "handoff_eligible": true,
+      "required_downstream_roles": ["REVIEWER", "TEST_RUNNER"],
+      "fail_closed_conditions": [
+        "Unsafe environment or CI mutations fail closed",
+        "App-logic changes outside contract fail closed"
+      ]
+    },
+    "OPS": {
+      "purpose": "Apply contracted operational changes and keep runtime evidence paths governed.",
+      "system_prompt_ref": "policies/agents/codex/roles/55_worker_infra.md",
+      "skills_bundle_ref": "policies/skills_bundle_registry.json#bundles.worker_delivery_core_v1",
+      "mcp_bundle_ref": null,
+      "handoff_eligible": true,
+      "required_downstream_roles": ["REVIEWER", "TEST_RUNNER"],
+      "fail_closed_conditions": [
+        "Ungoverned runtime mutations fail closed",
+        "Operational changes outside approved paths fail closed"
+      ]
+    },
+    "TEST": {
+      "purpose": "Execute contracted validation and report deterministic evidence only.",
+      "system_prompt_ref": "policies/agents/codex/roles/56_worker_test.md",
+      "skills_bundle_ref": "policies/skills_bundle_registry.json#bundles.test_evidence_v1",
+      "mcp_bundle_ref": null,
+      "handoff_eligible": false,
+      "required_downstream_roles": [],
+      "fail_closed_conditions": [
+        "Trivial acceptance tests fail closed",
+        "Missing or non-deterministic test evidence fails closed"
+      ]
+    },
+    "TEST_RUNNER": {
+      "purpose": "Execute contracted validation commands and report deterministic evidence only.",
+      "system_prompt_ref": "policies/agents/codex/roles/56_worker_test.md",
+      "skills_bundle_ref": "policies/skills_bundle_registry.json#bundles.test_evidence_v1",
+      "mcp_bundle_ref": null,
+      "handoff_eligible": false,
+      "required_downstream_roles": [],
+      "fail_closed_conditions": [
+        "Trivial acceptance tests fail closed",
+        "Missing or non-deterministic test evidence fails closed"
+      ]
+    }
+  },
+  "agents": [
+    {
+      "agent_id": "agent-1",
+      "role": "WORKER",
+      "codex_home": "$HOME/.codex-homes/cortexpilot-worker-core",
+      "defaults": {
+        "sandbox": "workspace-write",
+        "approval_policy": "never",
+        "network": "deny"
+      },
+      "capabilities": {
+        "mcp_tools": [
+          "01-filesystem",
+          "codex",
+          "sampling",
+          "aider",
+          "continue",
+          "open_interpreter"
+        ],
+        "notes": "default worker"
+      }
+    },
+    {
+      "agent_id": "agent-1",
+      "role": "REVIEWER",
+      "codex_home": "$HOME/.codex-homes/cortexpilot-reviewer",
+      "defaults": {
+        "sandbox": "read-only",
+        "approval_policy": "never",
+        "network": "deny"
+      },
+      "capabilities": {
+        "mcp_tools": [
+          "codex"
+        ],
+        "notes": "reviewer requires codex for MCP gate compatibility"
+      }
+    },
+    {
+      "agent_id": "agent-1",
+      "role": "TEST_RUNNER",
+      "codex_home": "$HOME/.codex-homes/cortexpilot-test-runner",
+      "defaults": {
+        "sandbox": "workspace-write",
+        "approval_policy": "never",
+        "network": "deny"
+      }
+    },
+    {
+      "agent_id": "agent-1",
+      "role": "TECH_LEAD",
+      "codex_home": "$HOME/.codex-homes/cortexpilot-techlead",
+      "defaults": {
+        "sandbox": "read-only",
+        "approval_policy": "never",
+        "network": "deny"
+      }
+    },
+    {
+      "agent_id": "agent-1",
+      "role": "PM",
+      "codex_home": "$HOME/.codex-homes/cortexpilot-pm",
+      "defaults": {
+        "sandbox": "read-only",
+        "approval_policy": "never",
+        "network": "deny"
+      }
+    },
+    {
+      "agent_id": "agent-1",
+      "role": "UI_UX",
+      "codex_home": "$HOME/.codex-homes/cortexpilot-ui-ux",
+      "defaults": {
+        "sandbox": "workspace-write",
+        "approval_policy": "never",
+        "network": "deny"
+      }
+    },
+    {
+      "agent_id": "agent-1",
+      "role": "FRONTEND",
+      "codex_home": "$HOME/.codex-homes/cortexpilot-worker-frontend",
+      "defaults": {
+        "sandbox": "workspace-write",
+        "approval_policy": "never",
+        "network": "deny"
+      }
+    },
+    {
+      "agent_id": "agent-1",
+      "role": "BACKEND",
+      "codex_home": "$HOME/.codex-homes/cortexpilot-worker-backend",
+      "defaults": {
+        "sandbox": "workspace-write",
+        "approval_policy": "never",
+        "network": "deny"
+      }
+    },
+    {
+      "agent_id": "agent-1",
+      "role": "SEARCHER",
+      "codex_home": "$HOME/.codex-homes/cortexpilot-searcher",
+      "defaults": {
+        "sandbox": "workspace-write",
+        "approval_policy": "never",
+        "network": "allow"
+      },
+      "capabilities": {
+        "mcp_tools": [
+          "codex",
+          "search"
+        ],
+        "notes": "searcher requires codex plus search allowlist"
+      }
+    },
+    {
+      "agent_id": "agent-1",
+      "role": "RESEARCHER",
+      "codex_home": "$HOME/.codex-homes/cortexpilot-researcher",
+      "defaults": {
+        "sandbox": "workspace-write",
+        "approval_policy": "never",
+        "network": "allow"
+      },
+      "capabilities": {
+        "mcp_tools": [
+          "codex",
+          "search"
+        ],
+        "notes": "researcher requires codex plus search allowlist"
+      }
+    },
+    {
+      "agent_id": "worker",
+      "role": "WORKER",
+      "codex_home": "$HOME/.codex-homes/cortexpilot-worker",
+      "defaults": {
+        "sandbox": "workspace-write",
+        "approval_policy": "never",
+        "network": "deny"
+      },
+      "capabilities": {
+        "mcp_tools": [
+          "01-filesystem",
+          "codex",
+          "sampling",
+          "aider",
+          "continue",
+          "open_interpreter"
+        ],
+        "notes": "worker alias"
+      }
+    },
+    {
+      "agent_id": "e2e-worker",
+      "role": "WORKER",
+      "codex_home": "$HOME/.codex-homes/cortexpilot-worker-e2e",
+      "defaults": {
+        "sandbox": "workspace-write",
+        "approval_policy": "never",
+        "network": "deny"
+      },
+      "capabilities": {
+        "mcp_tools": [
+          "01-filesystem",
+          "codex",
+          "sampling",
+          "aider",
+          "continue",
+          "open_interpreter"
+        ],
+        "notes": "e2e worker"
+      }
+    }
+  ]
+}

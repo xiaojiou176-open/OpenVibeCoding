@@ -1,0 +1,43 @@
+{
+  "version": "v1",
+  "bundles": {
+    "tech_lead_contract_bridge_v1": {
+      "bundle_id": "tech_lead_contract_bridge_v1",
+      "summary": "Contract-first planning and downstream handoff discipline for TECH_LEAD.",
+      "skills": [
+        "requirements_decomposition",
+        "contract_lock",
+        "delegation_packet_design",
+        "integration_checkpointing"
+      ]
+    },
+    "worker_delivery_core_v1": {
+      "bundle_id": "worker_delivery_core_v1",
+      "summary": "Bounded execution, contract alignment, and evidence-first delivery skills for execution roles.",
+      "skills": [
+        "contract_alignment",
+        "bounded_change_execution",
+        "artifact_hygiene",
+        "verification_evidence"
+      ]
+    },
+    "reviewer_gate_v1": {
+      "bundle_id": "reviewer_gate_v1",
+      "summary": "Blocker-only review and contract drift detection skills for REVIEWER.",
+      "skills": [
+        "blocker_only_review",
+        "contract_drift_detection",
+        "evidence_gap_triage"
+      ]
+    },
+    "test_evidence_v1": {
+      "bundle_id": "test_evidence_v1",
+      "summary": "Deterministic validation and evidence packaging skills for TEST roles.",
+      "skills": [
+        "deterministic_validation",
+        "regression_gatekeeping",
+        "artifact_assertion"
+      ]
+    }
+  }
+}

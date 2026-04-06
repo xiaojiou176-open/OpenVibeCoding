@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/review_report.v1.json",
+  "title": "ReviewReport",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["run_id", "reviewer", "reviewed_at", "verdict", "summary", "scope_check", "evidence"],
+  "$defs": {
+    "ArtifactRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "path", "sha256"],
+      "properties": {
+        "name": {"type": "string"},
+        "path": {"type": "string"},
+        "sha256": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"},
+        "media_type": {"type": "string"},
+        "size_bytes": {"type": "integer", "minimum": 0}
+      }
+    },
+    "Reviewer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "agent_id"],
+      "properties": {
+        "role": {"type": "string", "enum": ["REVIEWER"]},
+        "agent_id": {"type": "string"},
+        "codex_thread_id": {"type": "string"}
+      }
+    }
+  },
+  "properties": {
+    "run_id": {"type": "string", "minLength": 1},
+    "task_id": {"type": "string", "minLength": 1},
+    "attempt": {"type": "integer", "minimum": 0},
+    "reviewer": {"$ref": "#/$defs/Reviewer"},
+    "reviewed_at": {"type": "string", "format": "date-time"},
+    "verdict": {"type": "string", "enum": ["PASS", "FAIL", "BLOCKED"]},
+    "summary": {"type": "string"},
+    "scope_check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["passed", "violations"],
+      "properties": {
+        "passed": {"type": "boolean"},
+        "violations": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "evidence": {"type": "array", "items": {"$ref": "#/$defs/ArtifactRef"}},
+    "produced_diff": {
+      "const": false,
+      "description": "Reviewer 必须只读；出现 true 视为系统级故障"
+    },
+    "notes": {"type": "string"}
+  }
+}

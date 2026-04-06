@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/scheduled_run.schema.json",
+  "title": "ScheduledRun",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["task_id", "scheduled_at"],
+  "properties": {
+    "task_id": { "type": "string", "minLength": 1 },
+    "workflow_id": { "type": "string" },
+    "source_run_id": { "type": "string" },
+    "scheduled_at": { "type": "string", "minLength": 1 },
+    "deadline_at": { "type": "string" },
+    "priority": { "type": "integer", "minimum": -100, "maximum": 100 }
+  }
+}

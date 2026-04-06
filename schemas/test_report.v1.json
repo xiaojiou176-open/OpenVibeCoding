@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/test_report.v1.json",
+  "title": "TestReport",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "run_id",
+    "task_id",
+    "runner",
+    "started_at",
+    "finished_at",
+    "status",
+    "commands",
+    "artifacts"
+  ],
+  "$defs": {
+    "ArtifactRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "path", "sha256"],
+      "properties": {
+        "name": {"type": "string"},
+        "path": {"type": "string"},
+        "sha256": {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"},
+        "media_type": {"type": "string"},
+        "size_bytes": {"type": "integer", "minimum": 0}
+      }
+    },
+    "CommandRun": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "cmd_argv",
+        "must_pass",
+        "timeout_sec",
+        "exit_code",
+        "duration_sec",
+        "stdout",
+        "stderr"
+      ],
+      "properties": {
+        "name": {"type": "string"},
+        "cmd_argv": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "must_pass": {"type": "boolean"},
+        "timeout_sec": {"type": "number", "minimum": 0},
+        "exit_code": {"type": "integer"},
+        "duration_sec": {"type": "number", "minimum": 0},
+        "cwd": {"type": "string"},
+        "stdout": {"$ref": "#/$defs/ArtifactRef"},
+        "stderr": {"$ref": "#/$defs/ArtifactRef"}
+      }
+    },
+    "Runner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "agent_id"],
+      "properties": {
+        "role": {"type": "string", "enum": ["TEST_RUNNER", "ORCHESTRATOR"]},
+        "agent_id": {"type": "string"}
+      }
+    }
+  },
+  "properties": {
+    "run_id": {"type": "string", "minLength": 1},
+    "task_id": {"type": "string", "minLength": 1},
+    "attempt": {"type": "integer", "minimum": 0},
+    "runner": {"$ref": "#/$defs/Runner"},
+    "started_at": {"type": "string", "format": "date-time"},
+    "finished_at": {"type": "string", "format": "date-time"},
+    "status": {"type": "string", "enum": ["PASS", "FAIL", "ERROR", "SKIPPED"]},
+    "commands": {"type": "array", "items": {"$ref": "#/$defs/CommandRun"}},
+    "artifacts": {"type": "array", "items": {"$ref": "#/$defs/ArtifactRef"}},
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "passed": {"type": "integer", "minimum": 0},
+        "failed": {"type": "integer", "minimum": 0},
+        "skipped": {"type": "integer", "minimum": 0}
+      }
+    },
+    "failure": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "message": {"type": "string"},
+        "hint": {"type": "string"}
+      }
+    }
+  }
+}

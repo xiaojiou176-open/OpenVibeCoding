@@ -1,0 +1,48 @@
+# Direct dependency manifest (SSOT input for lock generation).
+# Resolution flow:
+#   apps/orchestrator/requirements.txt -> apps/orchestrator/uv.lock
+# Install flow:
+#   uv pip sync apps/orchestrator/uv.lock
+#
+# Do not install from requirements-dev.txt in CI/mainline.
+
+pydantic==2.12.5
+jsonschema==4.26.0
+typer==0.21.1
+rich==14.3.3
+pytest==9.0.2
+fastapi==0.128.1
+uvicorn==0.42.0
+python-dotenv==1.2.1
+opentelemetry-api==1.40.0
+opentelemetry-sdk==1.40.0
+opentelemetry-exporter-otlp-proto-grpc==1.40.0
+opentelemetry-exporter-otlp-proto-http==1.40.0
+playwright==1.58.0
+# Primary LLM provider (Gemini-first).
+google-genai==1.68.0
+# Optional provider accelerator (enabled via CORTEXPILOT_PROVIDER_USE_LITELLM=1).
+# Keep this path optional at runtime; do not block baseline bootstrap/clean-room
+# recovery on a provider accelerator that is activated only behind an env flag.
+# TEMP BLOCKER: current runtime imports `agents.*` modules in
+# `apps/orchestrator/src/cortexpilot_orch/**`; removing this now breaks runtime.
+# Minimal fallback for now is to keep this dependency until agents runtime is migrated.
+openai-agents==0.7.0
+temporalio==1.22.0
+duckduckgo-search==8.1.1
+
+# Dev/test toolchain (intentionally locked in the same graph for CI/local parity).
+pytest-cov==7.0.0
+pytest-xdist==3.8.0
+httpx==0.28.1
+hypothesis==6.151.9
+pip-audit==2.10.0
+pre-commit==4.5.1
+vulture==2.14
+
+# Security-pinned transitive dependencies required by the mainline audit gate.
+cryptography==46.0.6
+pyasn1==0.6.3
+pyjwt==2.12.1
+pygments==2.20.0
+requests==2.33.0

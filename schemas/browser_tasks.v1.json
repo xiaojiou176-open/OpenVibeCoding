@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/browser_tasks.v1.json",
+  "title": "BrowserTasks",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["tasks"],
+  "properties": {
+    "headless": {"type": "boolean"},
+    "task_template": {
+      "type": "string",
+      "enum": ["page_brief"]
+    },
+    "template_payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "url": {"type": "string", "minLength": 1},
+        "focus": {"type": "string", "minLength": 1}
+      }
+    },
+    "tasks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["url"],
+        "properties": {
+          "url": {"type": "string", "minLength": 1},
+          "script": {"type": "string"},
+          "browser_policy": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "stealth_mode": {"type": "string", "enum": ["none", "lite", "plugin"]},
+              "human_behavior": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "enabled": {"type": "boolean"},
+                  "level": {"type": "string", "enum": ["low", "medium", "high"]}
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

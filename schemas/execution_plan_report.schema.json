@@ -1,0 +1,340 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/execution_plan_report.schema.json",
+  "title": "ExecutionPlanReport",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "report_type",
+    "generated_at",
+    "objective",
+    "summary",
+    "questions",
+    "warnings",
+    "notes",
+    "assigned_role",
+    "allowed_paths",
+    "acceptance_tests",
+    "search_queries",
+    "predicted_reports",
+    "predicted_artifacts",
+    "requires_human_approval",
+    "contract_preview"
+  ],
+  "properties": {
+    "report_type": {
+      "type": "string",
+      "const": "execution_plan_report"
+    },
+    "generated_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "task_template": {
+      "type": "string"
+    },
+    "objective": {
+      "type": "string",
+      "minLength": 1
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "browser_policy_preset": {
+      "type": "string"
+    },
+    "effective_browser_policy": {
+      "type": "object"
+    },
+    "questions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "assigned_role": {
+      "type": "string",
+      "minLength": 1
+    },
+    "assigned_agent_id": {
+      "type": "string"
+    },
+    "allowed_paths": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "acceptance_tests": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "search_queries": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "predicted_reports": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "predicted_artifacts": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "runtime_capability_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "lane",
+        "compat_api_mode",
+        "provider_status",
+        "provider_inventory_id",
+        "tool_execution",
+        "notes"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "previewable"
+          ]
+        },
+        "lane": {
+          "type": "string",
+          "enum": [
+            "standard-provider-path",
+            "switchyard-chat-compatible"
+          ]
+        },
+        "compat_api_mode": {
+          "type": "string",
+          "minLength": 1
+        },
+        "provider_status": {
+          "type": "string",
+          "enum": [
+            "unresolved",
+            "allowlisted",
+            "unsupported"
+          ]
+        },
+        "provider_inventory_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "tool_execution": {
+          "type": "string",
+          "enum": [
+            "provider-path-required",
+            "fail-closed"
+          ]
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "requires_human_approval": {
+      "type": "boolean"
+    },
+    "plan": {
+      "type": "object"
+    },
+    "plan_bundle": {
+      "type": "object"
+    },
+    "task_chain": {
+      "type": "object"
+    },
+    "role_contract_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "identity",
+        "purpose",
+        "system_prompt_ref",
+        "skills_bundle_ref",
+        "mcp_bundle_ref",
+        "runtime_binding",
+        "tool_permissions",
+        "resolved_mcp_tool_set",
+        "handoff",
+        "fail_closed_conditions"
+      ],
+      "properties": {
+        "identity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "role",
+            "agent_id"
+          ],
+          "properties": {
+            "role": {
+              "type": "string",
+              "minLength": 1
+            },
+            "agent_id": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "system_prompt_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "skills_bundle_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "mcp_bundle_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "runtime_binding": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "runner",
+            "provider",
+            "model"
+          ],
+          "properties": {
+            "runner": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "provider": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "model": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "tool_permissions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "filesystem",
+            "shell",
+            "network"
+          ],
+          "properties": {
+            "filesystem": {
+              "type": "string",
+              "minLength": 1
+            },
+            "shell": {
+              "type": "string",
+              "minLength": 1
+            },
+            "network": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "resolved_mcp_tool_set": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "handoff": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "eligible",
+            "required_downstream_roles",
+            "chain_roles",
+            "max_handoffs"
+          ],
+          "properties": {
+            "eligible": {
+              "type": "boolean"
+            },
+            "required_downstream_roles": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "chain_roles": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "max_handoffs": {
+              "type": [
+                "integer",
+                "null"
+              ]
+            }
+          }
+        },
+        "fail_closed_conditions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "contract_preview": {
+      "type": "object"
+    }
+  }
+}

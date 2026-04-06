@@ -1,0 +1,35 @@
+{
+  "pack_id": "page_brief",
+  "version": "v1",
+  "title": "Public Page Brief",
+  "description": "Public, read-only page brief for a single URL.",
+  "visibility": "public",
+  "entry_mode": "pm_intake",
+  "task_template": "page_brief",
+  "input_fields": [
+    {
+      "field_id": "url",
+      "label": "Page URL",
+      "control": "url",
+      "required": true,
+      "placeholder": "https://example.com"
+    },
+    {
+      "field_id": "focus",
+      "label": "Focus",
+      "control": "textarea",
+      "required": true,
+      "placeholder": "Summarize the page for a first-time reader.",
+      "default_value": "Summarize the page for a first-time reader."
+    }
+  ],
+  "ui_hint": {
+    "surface_group": "public_task_templates",
+    "default_label": "Public page brief"
+  },
+  "evidence_contract": {
+    "primary_report": "page_brief_result.json",
+    "requires_search_requests": false,
+    "requires_browser_requests": true
+  }
+}

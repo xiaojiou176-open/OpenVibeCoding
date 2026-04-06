@@ -1,0 +1,96 @@
+.pm-stage-spotlight {
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--color-brand-cyan) 20%, var(--color-border));
+  background: color-mix(in srgb, var(--color-bg-surface) 96%, white);
+  padding: 12px;
+}
+
+.pm-stage-spotlight h3 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.pm-stage-spotlight p {
+  margin: 6px 0 0;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+}
+
+.pm-stage-context-panel {
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--color-brand-indigo) 15%, var(--color-border));
+  background: color-mix(in srgb, var(--color-bg-surface) 95%, white);
+  padding: 12px;
+}
+
+.pm-stage-context-panel h3 {
+  margin: 0 0 8px;
+  font-size: 14px;
+}
+
+.pm-stage-context-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.pm-stage-context-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.ct-priority-lanes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.ct-priority-lane {
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--color-brand-indigo) 12%, var(--color-border));
+  background: color-mix(in srgb, var(--color-bg-surface) 96%, white);
+  padding: 12px;
+}
+
+.ct-priority-lane header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.ct-priority-lane h3 {
+  margin: 0;
+  font-size: 13px;
+}
+
+.ct-priority-lane p {
+  margin: 8px 0 0;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+}
+
+.session-row-detail td {
+  padding-top: 0;
+}
+
+.session-row-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  padding: 8px 12px 12px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--color-bg-surface) 96%, white);
+  border: 1px solid color-mix(in srgb, var(--color-brand-indigo) 10%, var(--color-border));
+}
+
+@media (max-width: 1100px) {
+  .ct-priority-lanes {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/queue_item.v1.json",
+  "title": "QueueItem",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "queue_id",
+    "task_id",
+    "status",
+    "priority",
+    "eligible",
+    "queue_state",
+    "sla_state"
+  ],
+  "properties": {
+    "queue_id": { "type": "string", "minLength": 1 },
+    "task_id": { "type": "string", "minLength": 1 },
+    "owner": { "type": "string" },
+    "contract_path": { "type": "string" },
+    "workflow_id": { "type": "string" },
+    "source_run_id": { "type": "string" },
+    "status": { "type": "string", "minLength": 1 },
+    "priority": { "type": "integer", "minimum": -100, "maximum": 100 },
+    "scheduled_at": { "type": "string" },
+    "deadline_at": { "type": "string" },
+    "run_id": { "type": "string" },
+    "created_at": { "type": "string" },
+    "claimed_at": { "type": "string" },
+    "completed_at": { "type": "string" },
+    "eligible": { "type": "boolean" },
+    "queue_state": { "type": "string", "enum": ["eligible", "waiting", "claimed", "closed"] },
+    "sla_state": {
+      "type": "string",
+      "enum": ["scheduled", "on_track", "at_risk", "breached", "in_progress", "completed", "ended"]
+    },
+    "waiting_reason": { "type": "string" }
+  }
+}

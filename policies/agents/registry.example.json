@@ -1,0 +1,26 @@
+{
+  "version": "v1",
+  "agents": [
+    {
+      "agent_id": "cortexpilot-pm",
+      "role": "PM",
+      "description": "唯一对外入口：只产出合同，不跑命令/不改代码/不自搜",
+      "codex_home": "~/.codex-homes/cortexpilot-pm",
+      "defaults": {"sandbox": "read-only", "approval_policy": "never", "network": "deny"}
+    },
+    {
+      "agent_id": "cortexpilot-worker-core",
+      "role": "WORKER",
+      "description": "受控执行：只在 allowed_paths 内改动",
+      "codex_home": "~/.codex-homes/cortexpilot-worker-core",
+      "defaults": {"sandbox": "workspace-write", "approval_policy": "on-request", "network": "deny"}
+    },
+    {
+      "agent_id": "cortexpilot-reviewer",
+      "role": "REVIEWER",
+      "description": "只审不改：物理只读",
+      "codex_home": "~/.codex-homes/cortexpilot-reviewer",
+      "defaults": {"sandbox": "read-only", "approval_policy": "never", "network": "deny"}
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "version": "v1",
+  "forbidden_actions": [
+    "rm -rf",
+    "sudo",
+    "ssh ",
+    "scp ",
+    "sftp ",
+    "curl ",
+    "wget ",
+    ".env",
+    ".runtime-cache/cortexpilot/"
+  ]
+}

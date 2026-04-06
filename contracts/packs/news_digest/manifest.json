@@ -1,0 +1,60 @@
+{
+  "pack_id": "news_digest",
+  "version": "v1",
+  "title": "Public News Digest",
+  "description": "Public, read-only digest over recent sources for one topic.",
+  "visibility": "public",
+  "entry_mode": "pm_intake",
+  "task_template": "news_digest",
+  "input_fields": [
+    {
+      "field_id": "topic",
+      "label": "Topic",
+      "control": "text",
+      "required": true,
+      "placeholder": "e.g. Seattle tech and AI",
+      "default_value": "Seattle tech and AI"
+    },
+    {
+      "field_id": "sources",
+      "label": "Source domains",
+      "control": "textarea",
+      "required": true,
+      "placeholder": "theverge.com\ntechcrunch.com\nopenai.com/blog",
+      "help_text": "One domain per line.",
+      "default_value": "theverge.com\ntechcrunch.com\nopenai.com/blog",
+      "value_codec": "string_list"
+    },
+    {
+      "field_id": "time_range",
+      "label": "Time range",
+      "control": "select",
+      "required": true,
+      "default_value": "24h",
+      "options": [
+        { "value": "24h", "label": "24h" },
+        { "value": "7d", "label": "7d" },
+        { "value": "30d", "label": "30d" }
+      ]
+    },
+    {
+      "field_id": "max_results",
+      "label": "Max results",
+      "control": "number",
+      "required": true,
+      "default_value": 5,
+      "value_codec": "integer",
+      "min": 1,
+      "max": 10
+    }
+  ],
+  "ui_hint": {
+    "surface_group": "public_task_templates",
+    "default_label": "Public news digest"
+  },
+  "evidence_contract": {
+    "primary_report": "news_digest_result.json",
+    "requires_search_requests": true,
+    "requires_browser_requests": false
+  }
+}

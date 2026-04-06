@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/search_verification_ai.v1.json",
+  "title": "SearchVerificationAI",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["verdict", "summary", "risks", "followups"],
+  "properties": {
+    "verdict": {"type": "string", "enum": ["CONSISTENT", "INCONSISTENT", "INCONCLUSIVE"]},
+    "summary": {"type": "string"},
+    "risks": {"type": "array", "items": {"type": "string"}},
+    "followups": {"type": "array", "items": {"type": "string"}},
+    "model": {"type": "string"}
+  }
+}

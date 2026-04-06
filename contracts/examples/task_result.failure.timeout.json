@@ -1,0 +1,58 @@
+{
+  "run_id": "run-1003",
+  "task_id": "task-timeout-001",
+  "producer": {"role": "WORKER", "agent_id": "worker-1"},
+  "status": "FAILED",
+  "started_at": "2024-01-01T00:10:00Z",
+  "finished_at": "2024-01-01T00:15:00Z",
+  "summary": "task execution timed out before terminal completion",
+  "artifacts": [
+    {
+      "name": "task_result_failure_timeout",
+      "path": "reports/task_result.failure.timeout.json",
+      "sha256": "7777777777777777777777777777777777777777777777777777777777777777"
+    }
+  ],
+  "git": {
+    "baseline_ref": "HEAD",
+    "head_ref": "HEAD",
+    "changed_files": {
+      "name": "diff_name_only",
+      "path": "diff_name_only.txt",
+      "sha256": "8888888888888888888888888888888888888888888888888888888888888888"
+    },
+    "patch": {
+      "name": "patch",
+      "path": "patch.diff",
+      "sha256": "9999999999999999999999999999999999999999999999999999999999999999"
+    }
+  },
+  "gates": {
+    "diff_gate": {
+      "passed": true,
+      "violations": []
+    },
+    "policy_gate": {
+      "passed": true,
+      "violations": []
+    },
+    "review_gate": {
+      "passed": true,
+      "violations": []
+    },
+    "tests_gate": {
+      "passed": false,
+      "violations": [
+        "execution timeout before terminal completion"
+      ]
+    }
+  },
+  "next_steps": {
+    "suggested_action": "increase_timeout_or_reduce_scope",
+    "notes": "increase subprocess timeout or investigate worker hang conditions"
+  },
+  "failure": {
+    "message": "chain subprocess timeout or missing run_id",
+    "hint": "increase subprocess timeout or investigate worker hang conditions"
+  }
+}

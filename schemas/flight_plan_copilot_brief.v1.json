@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/schemas/flight_plan_copilot_brief.v1.json",
+  "title": "FlightPlanCopilotBrief",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "report_type",
+    "generated_at",
+    "status",
+    "summary",
+    "risk_takeaway",
+    "capability_takeaway",
+    "approval_takeaway",
+    "recommended_actions",
+    "top_risks",
+    "questions_answered",
+    "used_truth_surfaces",
+    "limitations",
+    "provider",
+    "model"
+  ],
+  "properties": {
+    "report_type": { "type": "string", "const": "flight_plan_copilot_brief" },
+    "generated_at": { "type": "string", "minLength": 1 },
+    "status": { "type": "string", "enum": ["OK", "UNAVAILABLE"] },
+    "summary": { "type": "string", "minLength": 1 },
+    "risk_takeaway": { "type": "string", "minLength": 1 },
+    "capability_takeaway": { "type": "string", "minLength": 1 },
+    "approval_takeaway": { "type": "string", "minLength": 1 },
+    "recommended_actions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "top_risks": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "questions_answered": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "used_truth_surfaces": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "limitations": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "provider": { "type": "string", "minLength": 1 },
+    "model": { "type": "string", "minLength": 1 }
+  }
+}
