@@ -38,7 +38,7 @@ httpx==0.28.1
 hypothesis==6.151.9
 pip-audit==2.10.0
 pre-commit==4.5.1
-vulture==2.14
+vulture==2.16
 
 # Security-pinned transitive dependencies required by the mainline audit gate.
 cryptography==46.0.6
