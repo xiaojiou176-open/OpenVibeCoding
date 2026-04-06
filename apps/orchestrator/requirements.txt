@@ -27,7 +27,7 @@ google-genai==1.68.0
 # TEMP BLOCKER: current runtime imports `agents.*` modules in
 # `apps/orchestrator/src/cortexpilot_orch/**`; removing this now breaks runtime.
 # Minimal fallback for now is to keep this dependency until agents runtime is migrated.
-openai-agents==0.7.0
+openai-agents==0.13.2
 temporalio==1.22.0
 duckduckgo-search==8.1.1
 
