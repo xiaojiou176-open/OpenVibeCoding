@@ -202,6 +202,7 @@ def test_tool_pipeline_network_gate_denied(tmp_path: Path, monkeypatch) -> None:
     repo = tmp_path / "repo"
     repo.mkdir()
     _init_repo(repo)
+    (repo / "codex_home").mkdir()
     (repo / "README.md").write_text("hello", encoding="utf-8")
     _git(["git", "add", "README.md", "policies/command_allowlist.json"], repo)
     _git(["git", "commit", "-m", "init"], repo)
@@ -328,6 +329,66 @@ def test_tool_pipeline_search_browser_tampermonkey(tmp_path: Path, monkeypatch) 
             and "TAMPERMONKEY_OUTPUT" in (run_dir / "events.jsonl").read_text(encoding="utf-8")
         )
     )
+
+
+def test_tool_pipeline_searcher_short_circuits_before_codex_runner(tmp_path: Path, monkeypatch) -> None:
+    _reset_scheduler_tool_hooks(monkeypatch)
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    _init_repo(repo)
+    (repo / "codex_home").mkdir()
+    (repo / "README.md").write_text("hello", encoding="utf-8")
+    _git(["git", "add", "README.md", "policies/command_allowlist.json"], repo)
+    _git(["git", "commit", "-m", "init"], repo)
+
+    runtime_root = tmp_path / "runtime"
+    runs_root = runtime_root / "runs"
+    worktree_root = runtime_root / "worktrees"
+    _configure_runtime_roots(monkeypatch, runtime_root, runs_root, worktree_root)
+    monkeypatch.setenv("CORTEXPILOT_SEARCH_MODE", "mock")
+    monkeypatch.setenv("CORTEXPILOT_CHAIN_EXEC_MODE", "inline")
+    monkeypatch.setenv("CORTEXPILOT_RUNNER", "codex")
+    monkeypatch.setenv("CORTEXPILOT_MCP_ONLY", "1")
+    monkeypatch.setenv("CORTEXPILOT_ALLOW_CODEX_EXEC", "1")
+
+    search_path = repo / "search_requests.json"
+    search_body = _write_json(
+        search_path,
+        {"queries": ["cortexpilot"], "providers": ["chatgpt_web", "grok_web"], "repeat": 2, "parallel": 2},
+    )
+    _pin_tool_requests(
+        monkeypatch,
+        search_request={"queries": ["cortexpilot"], "providers": ["chatgpt_web", "grok_web"], "repeat": 2, "parallel": 2},
+    )
+
+    artifacts = [
+        {
+            "name": "search_requests.json",
+            "uri": search_path.name,
+            "sha256": _sha256_text(search_body),
+        }
+    ]
+
+    contract = _base_contract("task_search_short_circuit", artifacts)
+    contract["assigned_agent"]["role"] = "SEARCHER"
+    contract_path = repo / "contract.json"
+    _write_json(contract_path, contract)
+
+    monkeypatch.setattr(
+        "cortexpilot_orch.runners.codex_runner.CodexRunner.run_contract",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(AssertionError("codex runner should not execute after search pipeline success")),
+    )
+
+    monkeypatch.chdir(repo)
+    orch = Orchestrator(repo)
+    run_id = orch.execute_task(contract_path, mock_mode=False)
+
+    manifest = json.loads((runs_root / run_id / "manifest.json").read_text(encoding="utf-8"))
+    run_dir = runs_root / run_id
+    assert manifest["status"] == "SUCCESS"
+    assert (run_dir / "artifacts" / "search_results.json").exists()
+    assert (run_dir / "reports" / "evidence_bundle.json").exists()
+    assert (run_dir / "reports" / "task_result.json").exists()
 
 
 def test_tool_pipeline_browser_failure_marks_run_failed(tmp_path: Path, monkeypatch) -> None:

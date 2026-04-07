@@ -15,29 +15,19 @@ summary for contributors and maintainers.
 `configs/docs_nav_registry.json` is the machine source of truth for the active
 docs inventory. This file is the human-readable summary of that registry.
 
-Public-fixture hygiene stays part of the docs contract too: orchestrator probe
-and security fixtures must use synthetic token fragments plus generic workspace
-sample roots instead of maintainer-local paths or raw token-looking literals.
-The same contract now keeps `security_scan.sh` placeholder URIs pinned to the
-exact `example.com` host and preserves `.jsonl` hints in portable temp-report
-names, while `scripts/check_public_sensitive_surface.py` blocks tracked
-local-path/PII/raw-token/runtime-file leaks on current public source surfaces.
-The same gate family now includes `scripts/check_github_security_alerts.py`,
-which fails closed on open GitHub secret-scanning and code-scanning alerts in
-repo hygiene, host-compatible pre-commit quality, a dedicated pre-commit hook,
-pre-push, and Quick Feedback.
-Workflow governance now has matching repo-owned entrypoints too:
-`scripts/check_workflow_static_security.sh` pairs `actionlint` with
-`zizmor` in one fail-closed gate, `scripts/check_trivy_repo_scan.sh`
-owns the repo-wide Trivy filesystem/dependency lane, and
-`scripts/check_secret_scan_closeout.sh` is the closeout wrapper that can rerun
-secret scanning against the current tree or a fresh clone. Pull requests also
-run the official GitHub Dependency Review action under the repo-owned
-`.github/dependency-review-config.yml` policy file. On GitHub-hosted
-`trusted_pr`, `untrusted_pr`, and hosted-first `push_main` routes the live
-alerts query stays advisory for both Quick Feedback and the hosted policy
-slice because the integration token may not be allowed to read the alerts APIs
-there and a fresh hosted `push_main` route may not have live analysis yet.
+Daily local verification lives in the root [README](../README.md). Treat this
+file as the docs inventory map, not as a second CI manual.
+
+For CI/security/documentation truth, prefer the machine-owned surfaces and
+repo-owned gates instead of restating the same rules here:
+
+- `configs/docs_nav_registry.json`
+- `configs/ci_governance_policy.json`
+- `configs/github_control_plane_policy.json`
+- `scripts/check_public_sensitive_surface.py`
+- `scripts/check_workflow_static_security.sh`
+- `scripts/check_trivy_repo_scan.sh`
+- `scripts/check_secret_scan_closeout.sh`
 
 ## Repository Entry
 
@@ -97,6 +87,8 @@ navigation set.
 - `docs/runbooks/github-storefront-manual-steps.md`: exact GitHub UI values and manual storefront steps
 - `docs/releases/first-public-release-draft.md`: repo-side draft source for the first public GitHub Release
 - `docs/assets/storefront/demo-status.md`: status ledger for tracked public demo and proof assets
+- `docs/assets/storefront/proof-pack-index.json`: machine-readable public proof bundle index for proven and showcase storefront slices
+- `docs/assets/storefront/live-capture-requirements.json`: machine-readable contract for the remaining healthy GIF and English-first public capture deliverables
 - `docs/assets/storefront/benchmark-methodology.md`: public benchmark evidence contract and wording boundary
 - `docs/architecture/ecosystem-and-builder-surfaces-v1.md`: ecosystem binding, first-run distribution loop, and current builder/client entry points
 - `docs/runbooks/render-hosted-operator-pilot.md`: repo-side Git-backed hosted operator blueprint for future guarded Render pilots; use it to stage env/health/rollback/support/security requirements without implying a live hosted service

@@ -103,6 +103,7 @@ def _inject_fragments() -> None:
 def main() -> int:
     args = parse_args()
     if not args.inject_only:
+        _run(["python3", "scripts/generate_storefront_proof_pack_index.py"])
         _run(["python3", "scripts/ui_button_inventory.py", "--surface", "all"])
         _run(["python3", "scripts/sync_ui_button_matrix.py", "--tiers", "P0,P1"])
         _write_fragments()

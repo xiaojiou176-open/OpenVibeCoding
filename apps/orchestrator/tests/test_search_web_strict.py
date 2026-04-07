@@ -3,6 +3,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from tooling.search.search_engine import (
+    _activate_chat_input,
     _browser_search,
     _pick_chat_input_locator,
     _url_allowed,
@@ -71,7 +72,7 @@ def test_web_error_artifacts_screenshot_fallback_never_raises(tmp_path: Path) ->
     assert Path(artifacts["html"]).exists()
 
 
-def test_pick_chat_input_locator_prefers_standard_inputs() -> None:
+def test_pick_chat_input_locator_prefers_provider_specific_editors_before_generic_inputs() -> None:
     class DummyLocator:
         def __init__(self, name: str, count: int) -> None:
             self.name = name
@@ -84,12 +85,14 @@ def test_pick_chat_input_locator_prefers_standard_inputs() -> None:
     class DummyPage:
         def __init__(self) -> None:
             self.locators = {
-                "textarea": DummyLocator("textarea", 1),
-                "input[type='text']": DummyLocator("input", 1),
+                "[data-placeholder='Ask anything'][contenteditable='true']": DummyLocator("grok-placeholder", 1),
+                ".tiptap.ProseMirror[contenteditable='true']": DummyLocator("grok-tiptap", 1),
+                "[aria-label='Enter a prompt for Gemini'][contenteditable='true']": DummyLocator("aria", 1),
                 "[role='textbox'][contenteditable='true']": DummyLocator("textbox", 1),
                 "[contenteditable='true'][role='textbox']": DummyLocator("textbox-reversed", 1),
-                "[aria-label='Enter a prompt for Gemini'][contenteditable='true']": DummyLocator("aria", 1),
                 ".ql-editor[contenteditable='true']": DummyLocator("ql-editor", 1),
+                "textarea": DummyLocator("textarea", 1),
+                "input[type='text']": DummyLocator("input", 1),
             }
 
         def locator(self, selector: str) -> DummyLocator:
@@ -97,7 +100,7 @@ def test_pick_chat_input_locator_prefers_standard_inputs() -> None:
 
     locator = _pick_chat_input_locator(DummyPage())
     assert locator is not None
-    assert locator.name == "textarea"
+    assert locator.name == "grok-placeholder"
 
 
 def test_pick_chat_input_locator_falls_back_to_contenteditable_textbox() -> None:
@@ -113,12 +116,14 @@ def test_pick_chat_input_locator_falls_back_to_contenteditable_textbox() -> None
     class DummyPage:
         def __init__(self) -> None:
             self.locators = {
-                "textarea": DummyLocator("textarea", 0),
-                "input[type='text']": DummyLocator("input", 0),
+                "[data-placeholder='Ask anything'][contenteditable='true']": DummyLocator("grok-placeholder", 0),
+                ".tiptap.ProseMirror[contenteditable='true']": DummyLocator("grok-tiptap", 0),
+                "[aria-label='Enter a prompt for Gemini'][contenteditable='true']": DummyLocator("aria", 0),
                 "[role='textbox'][contenteditable='true']": DummyLocator("textbox", 1),
                 "[contenteditable='true'][role='textbox']": DummyLocator("textbox-reversed", 0),
-                "[aria-label='Enter a prompt for Gemini'][contenteditable='true']": DummyLocator("aria", 0),
                 ".ql-editor[contenteditable='true']": DummyLocator("ql-editor", 0),
+                "textarea": DummyLocator("textarea", 0),
+                "input[type='text']": DummyLocator("input", 0),
             }
 
         def locator(self, selector: str) -> DummyLocator:
@@ -127,6 +132,37 @@ def test_pick_chat_input_locator_falls_back_to_contenteditable_textbox() -> None
     locator = _pick_chat_input_locator(DummyPage())
     assert locator is not None
     assert locator.name == "textbox"
+
+
+def test_pick_chat_input_locator_supports_grok_tiptap_editor() -> None:
+    class DummyLocator:
+        def __init__(self, name: str, count: int) -> None:
+            self.name = name
+            self._count = count
+            self.first = self
+
+        def count(self) -> int:
+            return self._count
+
+    class DummyPage:
+        def __init__(self) -> None:
+            self.locators = {
+                "[data-placeholder='Ask anything'][contenteditable='true']": DummyLocator("grok-placeholder", 1),
+                ".tiptap.ProseMirror[contenteditable='true']": DummyLocator("grok-tiptap", 1),
+                "[aria-label='Enter a prompt for Gemini'][contenteditable='true']": DummyLocator("aria", 0),
+                "[role='textbox'][contenteditable='true']": DummyLocator("textbox", 0),
+                "[contenteditable='true'][role='textbox']": DummyLocator("textbox-reversed", 0),
+                ".ql-editor[contenteditable='true']": DummyLocator("ql-editor", 0),
+                "textarea": DummyLocator("textarea", 0),
+                "input[type='text']": DummyLocator("input", 0),
+            }
+
+        def locator(self, selector: str) -> DummyLocator:
+            return self.locators[selector]
+
+    locator = _pick_chat_input_locator(DummyPage())
+    assert locator is not None
+    assert locator.name == "grok-placeholder"
 
 
 def test_pick_chat_input_locator_returns_none_when_no_supported_input_exists() -> None:
@@ -142,6 +178,97 @@ def test_pick_chat_input_locator_returns_none_when_no_supported_input_exists() -
             return DummyLocator()
 
     assert _pick_chat_input_locator(DummyPage()) is None
+
+
+def test_pick_chat_input_locator_skips_hidden_textarea_for_visible_grok_editor() -> None:
+    class DummyCandidate:
+        def __init__(self, name: str, visible: bool) -> None:
+            self.name = name
+            self._visible = visible
+
+        def is_visible(self) -> bool:
+            return self._visible
+
+    class DummyLocator:
+        def __init__(self, candidates: list[DummyCandidate]) -> None:
+            self._candidates = candidates
+            self.first = candidates[0] if candidates else None
+
+        def count(self) -> int:
+            return len(self._candidates)
+
+        def nth(self, index: int) -> DummyCandidate:
+            return self._candidates[index]
+
+    class DummyPage:
+        def __init__(self) -> None:
+            self.locators = {
+                "[data-placeholder='Ask anything'][contenteditable='true']": DummyLocator(
+                    [DummyCandidate("grok-visible", True)]
+                ),
+                ".tiptap.ProseMirror[contenteditable='true']": DummyLocator([]),
+                "[aria-label='Enter a prompt for Gemini'][contenteditable='true']": DummyLocator([]),
+                "[role='textbox'][contenteditable='true']": DummyLocator([]),
+                "[contenteditable='true'][role='textbox']": DummyLocator([]),
+                ".ql-editor[contenteditable='true']": DummyLocator([]),
+                "textarea": DummyLocator([DummyCandidate("hidden-textarea", False)]),
+                "input[type='text']": DummyLocator([]),
+            }
+
+        def locator(self, selector: str) -> DummyLocator:
+            return self.locators[selector]
+
+    locator = _pick_chat_input_locator(DummyPage())
+    assert locator is not None
+    assert locator.name == "grok-visible"
+
+
+def test_activate_chat_input_prefers_normal_click() -> None:
+    events: list[str] = []
+
+    class DummyLocator:
+        def click(self, *, timeout=None, force=False):  # noqa: ANN001
+            events.append(f"click:{timeout}:{force}")
+
+        def focus(self) -> None:
+            events.append("focus")
+
+    _activate_chat_input(DummyLocator())
+
+    assert events == ["click:5000:False"]
+
+
+def test_activate_chat_input_falls_back_to_force_click() -> None:
+    events: list[str] = []
+
+    class DummyLocator:
+        def click(self, *, timeout=None, force=False):  # noqa: ANN001
+            events.append(f"click:{timeout}:{force}")
+            if not force:
+                raise RuntimeError("overlay intercept")
+
+        def focus(self) -> None:
+            events.append("focus")
+
+    _activate_chat_input(DummyLocator())
+
+    assert events == ["click:5000:False", "click:5000:True"]
+
+
+def test_activate_chat_input_falls_back_to_focus_when_clicks_fail() -> None:
+    events: list[str] = []
+
+    class DummyLocator:
+        def click(self, *, timeout=None, force=False):  # noqa: ANN001
+            events.append(f"click:{timeout}:{force}")
+            raise RuntimeError("still blocked")
+
+        def focus(self) -> None:
+            events.append("focus")
+
+    _activate_chat_input(DummyLocator())
+
+    assert events == ["click:5000:False", "click:5000:True", "focus"]
 
 
 def test_browser_search_closes_session_before_playwright_exit(monkeypatch, tmp_path: Path) -> None:

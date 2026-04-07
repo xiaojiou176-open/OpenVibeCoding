@@ -145,6 +145,13 @@ def _write_public_task_result(
     )
 
 
+def _profile_mode_from_policy(policy: dict[str, Any] | None) -> str:
+    if not isinstance(policy, dict):
+        return ""
+    value = str(policy.get("profile_mode") or "").strip().lower()
+    return value
+
+
 def run_search_pipeline(
     run_id: str,
     tool_runner: ToolRunner,
@@ -203,6 +210,17 @@ def run_search_pipeline(
         verify_repeat = 1
 
     request_policy = request.get("browser_policy") if isinstance(request.get("browser_policy"), dict) else None
+    effective_profile_mode = (
+        _profile_mode_from_policy(request_policy)
+        or _profile_mode_from_policy(contract_policy)
+    )
+    if effective_profile_mode == "allow_profile" and parallel > 1:
+        policy_adjustments["parallel"] = {
+            "from": parallel,
+            "to": 1,
+            "reason": "allow_profile browser sessions are serialized to avoid shared-context flake",
+        }
+        parallel = 1
 
     tasks: list[tuple[str, str, dict[str, Any] | None, str]] = []
     task_index = 0

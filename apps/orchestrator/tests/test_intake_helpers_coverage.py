@@ -426,13 +426,13 @@ def test_intake_service_answer_and_build_contract(monkeypatch, tmp_path: Path) -
     assert any(item.get("name") == "search_requests.json" for item in artifacts)
     assert contract["tool_permissions"]["mcp_tools"] == ["codex", "search"]
 
-    # PM owner should force handoff chain in compiled contract.
+    # Search-style compiled contracts should stay direct instead of carrying a PM handoff chain.
     response_path = service._store._intake_dir(intake_id) / "response.json"
     response = json.loads(response_path.read_text(encoding="utf-8"))
     response["plan"]["owner_agent"] = {"role": "PM", "agent_id": "agent-1"}
     response_path.write_text(json.dumps(response, ensure_ascii=False, indent=2), encoding="utf-8")
     contract_pm = service.build_contract(intake_id)
-    assert contract_pm.get("handoff_chain", {}).get("enabled") is True
+    assert "handoff_chain" not in contract_pm
 
 
 def test_intake_service_auto_run_chain_restores_runner_env(monkeypatch, tmp_path: Path) -> None:

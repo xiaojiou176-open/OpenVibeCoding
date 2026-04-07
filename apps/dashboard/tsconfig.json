@@ -504,7 +504,15 @@
     ".next-e2e-41709/types/**/*.ts",
     ".next-e2e-41709/dev/types/**/*.ts",
     ".next-e2e-52171/types/**/*.ts",
-    ".next-e2e-52171/dev/types/**/*.ts"
+    ".next-e2e-52171/dev/types/**/*.ts",
+    ".next-storefront-capture/types/**/*.ts",
+    ".next-storefront-capture/dev/types/**/*.ts",
+    ".next-storefront-final-capture/types/**/*.ts",
+    ".next-storefront-final-capture/dev/types/**/*.ts",
+    ".next-storefront-final-capture-english/types/**/*.ts",
+    ".next-storefront-final-capture-english/dev/types/**/*.ts",
+    ".next-storefront-final-capture-english-prod/types/**/*.ts",
+    ".next-storefront-final-capture-english-prod/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

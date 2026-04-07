@@ -9,10 +9,10 @@ ones that still need a real capture pass.
 - `first-loop-storyboard.svg`: shareable storyboard of the PM -> Command Tower -> Runs loop
 - `first-loop-storyboard.png`: static storyboard export
 - `first-loop-storyboard.gif`: storyboard animation export
-- `dashboard-home-live-1440x900.png`: real dashboard home screenshot captured from a local production server
-- `dashboard-command-tower-live-1440x900.png`: real Command Tower screenshot captured from a local production server
-- `dashboard-runs-live-1440x900.png`: real Runs page screenshot captured from a local production server
-- `dashboard-live-degraded-loop.gif`: real multi-page dashboard GIF captured from a local degraded run
+- `dashboard-home-live-1440x900.png`: healthy English-first dashboard home screenshot captured from a clean local runtime root
+- `dashboard-command-tower-live-1440x900.png`: healthy English-first Command Tower session screenshot captured from the same verified path
+- `dashboard-runs-live-1440x900.png`: healthy English-first Runs / Proof & Replay screenshot captured from the same verified path
+- `dashboard-live-healthy-loop.gif`: healthy backend-backed multi-page dashboard GIF captured from the same verified path
 - `desktop-shell-live-1440x900.png`: real desktop preview screenshot captured from the app snapshot pipeline
 - `social-preview-source.svg`: editable social card source
 - `social-preview-1280x640.png`: upload-ready social card candidate
@@ -20,6 +20,7 @@ ones that still need a real capture pass.
 - `docs/releases/assets/news-digest-healthy-proof-gemini-2026-03-27.png`: successful Gemini proof screenshot
 - `docs/releases/assets/news-digest-healthy-proof-grok-2026-03-27.png`: successful Grok proof screenshot
 - `docs/releases/assets/news-digest-benchmark-summary-2026-03-27.md`: first tracked public `news_digest` baseline summary
+- `docs/releases/assets/news-digest-proof-pack-2026-03-27.json`: machine-readable proof-pack directory for the current public trust bundle
 - `docs/releases/assets/news-digest-workflow-case-recap-2026-03-27.md`: share-ready Workflow Case recap for the official first public baseline
 
 ## Current Proof Ledger
@@ -27,7 +28,8 @@ ones that still need a real capture pass.
 | Proof class | Current status | Notes |
 | --- | --- | --- |
 | Storyboard explainer assets | present | useful for explaining the loop, not proving runtime health |
-| Real local degraded dashboard captures | present | honest supporting evidence, but not healthy backend-backed proof |
+| Healthy backend-backed dashboard capture set | present | tracked English-first home, Command Tower session, and Runs captures from a clean local runtime root |
+| Healthy backend-backed live GIF | present | tracked multi-page walkthrough of the official first public happy path |
 | Desktop preview capture | present | shows the shell surface only |
 | Healthy backend-backed `news_digest` public proof set | present | tracked proof summary: `docs/releases/assets/news-digest-healthy-proof-2026-03-27.md` |
 | Public benchmark artifact from a real tracked run | present | first tracked single-run baseline: `docs/releases/assets/news-digest-benchmark-summary-2026-03-27.md` |
@@ -36,7 +38,6 @@ ones that still need a real capture pass.
 
 ## Still Missing
 
-- a tracked healthy live-capture GIF for the official first public happy path
 - a broader multi-round public benchmark artifact beyond the current single-run
   baseline summary
 - a live GitHub social preview upload
@@ -47,9 +48,17 @@ It prevents “we already have assets” from drifting into fake maturity. A sou
 file, a storyboard, a storyboard animation, and a production-ready live capture
 are different things.
 
+The public storytelling shorthand is now:
+
+- **first proven workflow** = `news_digest`
+- **public proof pack** = healthy proof summary + benchmark summary + Workflow Case recap + demo-status ledger
+- **showcase paths** = `topic_brief` and `page_brief` until they have their own healthy proof bundles
+
 ## Truth Boundary
 
-- `dashboard-home-live-1440x900.png`, `dashboard-command-tower-live-1440x900.png`, `dashboard-runs-live-1440x900.png`, and `dashboard-live-degraded-loop.gif` are real captures from the dashboard server, but they were captured in a local degraded state where backend data was unavailable.
+- `dashboard-home-live-1440x900.png`, `dashboard-command-tower-live-1440x900.png`, `dashboard-runs-live-1440x900.png`, and `dashboard-live-healthy-loop.gif` are real healthy captures from the dashboard server backed by the clean local runtime root `.runtime-cache/storefront-final-capture-english`.
+- these tracked captures are safe repo-side proof of a healthy local first public path, not proof of hosted production scale, stable multi-run release averages, or live GitHub publication state.
+- `dashboard-live-degraded-loop.gif` remains a historical degraded capture and should stay labeled as degraded if it is referenced at all.
 - `desktop-shell-live-1440x900.png` is a real screenshot from the desktop snapshot pipeline.
 - `social-preview-1280x640.png` is a repo-tracked upload candidate for the GitHub social preview setting, not proof that the live GitHub setting has already been applied.
 - `docs/releases/first-public-release-draft.md` remains the repo-side draft source that fed the published release notes.
@@ -64,4 +73,4 @@ are different things.
   a historical blocker receipt from earlier failed healthy-proof attempts.
 - `https://xiaojiou176-open.github.io/CortexPilot-public/` is now the live GitHub
   Pages site backed by `main` / `/docs`.
-- None of these captures should be described as proof of a fully healthy end-to-end backend session.
+- None of these captures should be described as proof of live hosted readiness, live GitHub publication state, or broad production-scale stability.

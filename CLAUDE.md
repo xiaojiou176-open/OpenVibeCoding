@@ -374,6 +374,8 @@ This file mirrors the root AI entrypoint for tools that prefer `CLAUDE.md`.
 ## Key Commands
 
 - `npm run bootstrap`
+- `npm run ci`
+- `npm run ci:strict`
 - `npm run test`
 - `npm run test:quick`
 - `npm run scan:host-process-risks`

@@ -3,42 +3,34 @@
 AI Work Command Tower for Codex and Claude Code workflows with Model Context
 Protocol (MCP)-readable proof, replay, and Workflow Cases.
 
-CortexPilot is a contract-first orchestration repo for Codex / Claude Code
-teams that want one operator surface, one governed run path, and one
-replayable evidence trail instead of scattered agents, logs, and scripts.
+CortexPilot gives Codex / Claude Code teams one governed path from the PM
+request to the Workflow Case to Proof & Replay, instead of scattered agents,
+logs, and local scripts.
 
 CortexPilot is a contract-first multi-agent orchestration repository.
 
-CortexPilot is an AI Work Command Tower built around three product words:
-**Command Tower**, **Workflow Cases**, and **Proof & Replay**.
+The public story is intentionally narrower than the full monorepo:
 
-The desktop operator surfaces are also being pulled onto the same shared copy
-and shared status-presentation substrate, so `Run Detail` and `Overview` do
-not drift back into page-local wording contracts.
+- **See one proven workflow first**
+- **Choose the right adoption path second**
+- **Open MCP / API / builder / skills surfaces only after the real job is clear**
 
-The current public story speaks first to Codex / Claude Code teams and second
-to broader AI ops / platform teams. The front door should ride the heat around
-those ecosystems without pretending CortexPilot is already a hosted operator
-service.
+Current public boundary: CortexPilot is a repo-backed operator control plane,
+not a hosted product, and the shipped MCP surface remains **read-only**.
 
-The public homepage now stays intentionally compressed: start with the first
-success path, use the compatibility matrix as the main router, and let the
-deeper MCP / integration / skills / builder pages carry the detailed
-explanations.
-
-The dashboard public-home now mirrors that same rule: keep the compatibility
-card as the main routing layer, but keep a lighter **Use Cases** side door for
-the fastest proof-first walkthrough instead of rebuilding a second routing
-grid inside the operator surface.
-
-The product name stays **CortexPilot**. If `cortexpilot.ai` is later claimed,
-treat it as a marketing/front-door domain, not as a product rename.
-
-[Quickstart](#quickstart) · [Docs](docs/README.md) · [Architecture](docs/architecture/runtime-topology.md) · [Ecosystem Map](https://xiaojiou176-open.github.io/CortexPilot-public/ecosystem/) · [Compatibility Matrix](https://xiaojiou176-open.github.io/CortexPilot-public/compatibility/) · [Agent Starter Kits](https://xiaojiou176-open.github.io/CortexPilot-public/agent-starters/) · [Integration Guide](https://xiaojiou176-open.github.io/CortexPilot-public/integrations/) · [Skills Guide](https://xiaojiou176-open.github.io/CortexPilot-public/skills/) · [AI + MCP + API Surfaces](https://xiaojiou176-open.github.io/CortexPilot-public/ai-surfaces/) · [MCP Quickstart](https://xiaojiou176-open.github.io/CortexPilot-public/mcp/) · [API Quickstart](https://xiaojiou176-open.github.io/CortexPilot-public/api/) · [Builder Quickstart](https://xiaojiou176-open.github.io/CortexPilot-public/builders/) · [Use Cases](https://xiaojiou176-open.github.io/CortexPilot-public/use-cases/) · [Client Entry Points](packages/frontend-api-client/README.md) · [Contract Entry Points](packages/frontend-api-contract/docs/README.md) · [Spec](docs/specs/00_SPEC.md) · [Releases](https://github.com/xiaojiou176-open/CortexPilot-public/releases)
+[Quickstart](#quickstart) · [First Proven Workflow](https://xiaojiou176-open.github.io/CortexPilot-public/use-cases/) · [Compatibility Matrix](https://xiaojiou176-open.github.io/CortexPilot-public/compatibility/) · [Docs](docs/README.md) · [Architecture](docs/architecture/runtime-topology.md) · [AI + MCP + API Surfaces](https://xiaojiou176-open.github.io/CortexPilot-public/ai-surfaces/) · [Builder Quickstart](https://xiaojiou176-open.github.io/CortexPilot-public/builders/) · [Releases](https://github.com/xiaojiou176-open/CortexPilot-public/releases)
 
 ![CortexPilot studio preview card](docs/assets/storefront/cortexpilot-studio-preview.svg)
 
 ![CortexPilot command tower flow](docs/assets/storefront/hero-command-tower.svg)
+
+## Open The Right Door
+
+| If you're here to... | Open this first |
+| --- | --- |
+| evaluate the product story | [First Proven Workflow](https://xiaojiou176-open.github.io/CortexPilot-public/use-cases/) |
+| choose the right Codex / Claude Code / OpenClaw / MCP / skills / builder path | [Compatibility Matrix](https://xiaojiou176-open.github.io/CortexPilot-public/compatibility/) |
+| build on the protocol or package surfaces | [AI + MCP + API Surfaces](https://xiaojiou176-open.github.io/CortexPilot-public/ai-surfaces/) and [Builder Quickstart](https://xiaojiou176-open.github.io/CortexPilot-public/builders/) |
 
 The default public loop is simple: **start one workflow case, watch it move
 through Command Tower, then inspect Proof & Replay before you trust the
@@ -55,18 +47,23 @@ paths:
 | validate the smallest governed path | `CORTEXPILOT_HOST_COMPAT=1 bash scripts/test_quick.sh --no-related` | the quickest repo-side proof path without pretending the full system already ran |
 | inspect what the system records | open the run list and `.runtime-cache/` after the quick path | a concrete evidence bundle and replay surface, not just a shell success line |
 
+A clean first pass should let you:
+
+- create one task from the PM surface
+- watch that task appear in **Command Tower**
+- confirm the linked **Workflow Case**
+- inspect **Proof & Replay** before trusting the result
+
+For the public product story, the current official first proven workflow is
+[`news_digest`](https://xiaojiou176-open.github.io/CortexPilot-public/use-cases/).
+`topic_brief` and `page_brief` are still public showcase paths, not equally
+release-proven baselines.
+
 If this repository is close to your use case, star it to track the first public
 release, new task templates, and storefront updates.
 
-The integration / skills / MCP / builder pages now also carry more copy-paste
-drop-in recipes, so external Codex / Claude Code / OpenClaw teams do not have
-to reconstruct the vendored-skill, stdio-MCP, and builder-starter path from
-source files alone.
-
-The host-compatible pre-commit lane now routes repo-owned `scripts/*.py` hooks
-through `bash scripts/run_governance_py.sh`, so the quality gate stays
-deterministic without leaving repo-local `__pycache__` residue behind after a
-clean run.
+If you need contributor setup instead of product evaluation, jump to the
+[30-minute onboarding guide](docs/runbooks/onboarding-30min.md).
 
 ## Why CortexPilot Exists
 
@@ -76,87 +73,21 @@ workflow case, and rerun it without guessing?**
 
 This repository combines:
 
-- **Command Tower**: one operator surface for governed AI agents, MCP tools, and live run visibility
-- **Workflow Cases**: one stable operating record that ties request, queue, verdict, and linked runs together
-- **Proof & Replay**: one place to inspect evidence bundles, compare reruns, and replay failures without guessing
-- **Operator surfaces**: use the web dashboard or desktop shell to watch and control the same system
-- **Role Contract preview**: intake planning can now expose a resolved role binding summary
-  (prompt ref, MCP bundle ref, runtime binding, fail-closed posture) before execution starts,
-  while handoff remains a summary/risk evidence surface instead of rewriting the task contract
-- **Role binding receipt**: PM-facing `run_intake(...)` responses and run manifests now
-  carry a contract-derived `role_binding_summary`, so skills / MCP / runtime bindings stay
-  readable after execution without pretending that summary has execution authority
-- **Role binding read model**: run detail now also exposes a stable
-  `role_binding_read_model` so persisted bundle/runtime state is readable from
-  read-only surfaces by projecting `contract.json` without promoting that read
-  model into execution authority
-- **Skills bundle surface**: qualifying delivery roles now resolve
-  `skills_bundle_ref` from the repo-owned `policies/skills_bundle_registry.json`
-  surface, so bundle status is no longer a placeholder-only field
-- **Workflow case read model**: control-plane workflow reads now expose a
-  `workflow_case_read_model` that points back to the latest linked run's
-  persisted `role_binding_summary`, keeping workflow/control-plane reads
-  stable without inventing a second execution authority
-- **Workflow detail read-only projection**: dashboard and desktop Workflow Case
-  detail views now render that `workflow_case_read_model` directly, so
-  operators can inspect bundle/runtime posture from the current case surface
-  while `task_contract` remains the only execution authority
-- **Prompt 8 contract convergence**: `docs/api/openapi.cortexpilot.json` plus
-  generated `@cortexpilot/frontend-api-contract` artifacts now publish
-  run/workflow route bindings and `RoleBindingReadModel` /
-  `WorkflowCaseReadModel` shapes from one source instead of relying on a
-  stale helper contract plus hand-written overlays
-- **Run Detail read-only projection**: dashboard and desktop Run Detail now
-  expose `role_binding_read_model` on their primary operator summary surfaces,
-  so the persisted binding summary is visible where operators already inspect
-  run status while `task_contract` still owns execution authority
-- **Prompt 9 operator catalog**: `/api/agents` now publishes a registry-backed
-  role catalog, `/api/contracts` now exposes a normalized contract inspector
-  record, and dashboard/desktop `Agents` + `Contracts` pages project the same
-  bundle/runtime truth as read-only operator surfaces without becoming
-  execution authority or edit controls
-- **Prompt 10 role configuration desk**: role defaults now have a repo-owned
-  control-plane overlay in `policies/role_config_registry.json`, plus
-  preview/apply API surfaces for `system_prompt_ref`, `skills_bundle_ref`,
-  `mcp_bundle_ref`, and role-level `runtime_binding`; the `Agents` pages act as
-  the primary control desk while `Contracts` stays inspector-first and
-  `task_contract` remains the only execution authority
-- **Prompt 10 runtime capability truth**: intake preview, run manifests,
-  operator copilot, `Contracts`, and `Run Detail` now also surface a derived
-  runtime capability summary (`lane`, `compat_api_mode`, `provider_status`,
-  `tool_execution`) so runtime/provider posture is readable without pretending
-  the system already has full tool parity or runtime replaceability
-- **Prompt 10 smoke-gate hardening**: staged dashboard smoke builds now keep
-  their dependency-install log path recreated on each run, and
-  `apps/dashboard/lib/types.ts` now explicitly re-exports task-pack/runtime
-  helper values so UI-audit builds fail on product regressions instead of
-  brittle staging/export drift
-- **Prompt 10 clean-room recovery hardening**: empty-runtime recovery now
-  reinstalls package-local `frontend-api-client` dependencies before it runs
-  the node smoke bundle, so clean-room verification keeps testing the package
-  itself instead of failing on missing local installs
-- **Prompt 10 clean-room cleanup hardening**: clean-room recovery now runs the
-  repo-owned workspace-module cleanup before its broad runtime `rm -rf` sweep,
-  and that cleanup path can now quarantine stubborn `apps/dashboard/node_modules`
-  residue before deletion, so the recovery lane does not abort on transient
-  bind-mounted module trees
-- **Prompt 10 quick-gate decoupling**: the `cortexpilot_orch.contract`
-  package now lazy-loads `compiler` / `validator` entrypoints, so Quick
-  Feedback governance scripts can import `ContractValidator` and schedule
-  boundary checks without accidentally pulling the runtime-provider stack or
-  requiring `httpx` on light governance Python paths
-- **Quick Feedback light path**: role-config runtime capability summaries now
-  resolve through a lightweight provider-capability helper, so control-plane
-  previews keep their fail-closed provider posture without forcing GitHub
-  quick-path governance checks to import full runtime transport dependencies;
-  the staged dashboard UI-audit workspace now also copies the required
-  `packages/frontend-*` sources into its temporary root so Next/Turbopack does
-  not reject out-of-root symlinks during smoke builds, and repeated pnpm
-  `ERR_PNPM_ENOENT` recovery now escalates from fresh-store retries to a
-  workspace-local store path instead of repeating the same failing copy route,
-  while `provider_resolution` keeps a dead-code-clean compatibility export
-  surface for callers that still import lightweight helper names from the
-  runtime module
+- **Command Tower**: one operator surface for governed AI work, live run visibility, and queue posture
+- **Workflow Cases**: one stable operating record that ties request, verdict, proof, and linked runs together
+- **Proof & Replay**: one place to inspect evidence bundles, compare reruns, and replay failures before promotion
+- **Operator surfaces**: a web dashboard plus a macOS desktop shell for the same control plane
+- **Read-only inspection surfaces**: repo-local MCP, API, and contract read models that expose truth without turning mirrors into execution authority
+- **Governed boundaries**: fail-closed gates for CI, host safety, repo hygiene, and public-proof honesty
+
+If you need the deeper bundle/runtime/read-model details, open the focused
+entrypoints instead of treating the root README like the whole control-plane
+manual:
+
+- [AI + MCP + API Surfaces](https://xiaojiou176-open.github.io/CortexPilot-public/ai-surfaces/)
+- [Builder Quickstart](https://xiaojiou176-open.github.io/CortexPilot-public/builders/)
+- [Contract Entry Points](packages/frontend-api-contract/docs/README.md)
+- [Spec](docs/specs/00_SPEC.md)
 
 ## Quickstart
 
@@ -532,16 +463,19 @@ current private reporting path on the live public repository. An additional
 verified fallback private channel is not yet published and should not be
 assumed.
 
-Current repo-side verification entrypoints:
+Default local verification path:
 
 ```bash
-npm run test
+npm run ci
 npm run test:quick
-bash scripts/check_repo_hygiene.sh
-npm run scan:workflow-security
-npm run scan:trivy
-npm run security:scan:closeout
+npm run test
 ```
+
+`npm run ci` is now the hosted-aligned local fast gate. Use
+`npm run ci:strict`, `npm run docs:check`, `bash scripts/check_repo_hygiene.sh`,
+`npm run scan:workflow-security`, `npm run scan:trivy`, and
+`npm run security:scan:closeout` only when you intentionally want the stricter
+closeout/manual layers.
 
 `npm run test:quick` now expects the dashboard clean-room install gate to
 prove `jsdom` itself can load, instead of pinning success to the presence of a

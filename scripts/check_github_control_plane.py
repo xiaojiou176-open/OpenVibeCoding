@@ -32,6 +32,16 @@ def _repo_path_exists(relative_path: str) -> bool:
     return (ROOT / relative_path).exists()
 
 
+def _security_feature_status(repo_payload: dict, feature_name: str) -> str:
+    security = repo_payload.get("security_and_analysis")
+    if not isinstance(security, dict):
+        return ""
+    feature = security.get(feature_name)
+    if not isinstance(feature, dict):
+        return ""
+    return str(feature.get("status") or "").strip()
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Validate live GitHub control-plane settings against repo policy.")
     parser.add_argument("--policy", default=str(DEFAULT_POLICY))
@@ -102,6 +112,19 @@ def main() -> int:
         vulnerability_alerts_required = bool((platform_evidence.get("vulnerability_alerts") or {}).get("required"))
         if vulnerability_alerts_required and vuln_alerts_code != 0:
             errors.append(f"vulnerability alerts not proven: {vuln_alerts_payload}")
+        for feature_name in (
+            "secret_scanning",
+            "secret_scanning_push_protection",
+            "secret_scanning_non_provider_patterns",
+            "secret_scanning_validity_checks",
+        ):
+            feature_rule = platform_evidence.get(feature_name) if isinstance(platform_evidence.get(feature_name), dict) else {}
+            if feature_rule.get("required"):
+                status = _security_feature_status(repo_payload, feature_name)
+                if status != "enabled":
+                    errors.append(
+                        f"{feature_name} drift: actual={status or 'missing'!r} expected='enabled'"
+                    )
         dependabot_rule = platform_evidence.get("dependabot_config") if isinstance(platform_evidence.get("dependabot_config"), dict) else {}
         dependabot_path = str(dependabot_rule.get("path") or "").strip()
         if dependabot_path and not _repo_path_exists(dependabot_path):
@@ -137,6 +160,7 @@ def main() -> int:
         "environments": env_payload if env_code == 0 else {"error": env_payload},
         "private_vulnerability_reporting": pvr_payload if pvr_code == 0 else {"error": pvr_payload},
         "vulnerability_alerts": {"enabled": True} if vuln_alerts_code == 0 else {"error": vuln_alerts_payload},
+        "security_and_analysis": repo_payload.get("security_and_analysis") if repo_code == 0 else {"error": repo_payload},
         "codeql_default_setup": codeql_payload if codeql_code == 0 else {"error": codeql_payload},
         "dependabot_alerts": dependabot_payload if dependabot_code == 0 else {"error": dependabot_payload},
         "errors": errors,

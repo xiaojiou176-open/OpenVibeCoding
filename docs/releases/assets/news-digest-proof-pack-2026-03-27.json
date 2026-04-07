@@ -1,0 +1,35 @@
+{
+  "artifact_type": "news_digest_public_proof_pack",
+  "task_template": "news_digest",
+  "status": "official_release_proven_baseline",
+  "baseline_scope": "single-run public baseline",
+  "summary": "This pack is the smallest truthful public trust bundle for CortexPilot today. It combines the official news_digest healthy proof summary, the tracked single-run benchmark summary, the share-ready Workflow Case recap, and the storefront demo-status ledger.",
+  "truth_boundary": {
+    "healthy_public_baseline": true,
+    "equally_proven_topic_brief": false,
+    "equally_proven_page_brief": false,
+    "healthy_live_capture_gif_present": true,
+    "healthy_english_first_public_capture_set_present": true,
+    "broader_multi_round_benchmark_present": false
+  },
+  "primary_assets": {
+    "proof_summary_markdown": "docs/releases/assets/news-digest-healthy-proof-2026-03-27.md",
+    "proof_summary_json": "docs/releases/assets/news-digest-healthy-proof-summary-2026-03-27.json",
+    "benchmark_summary_markdown": "docs/releases/assets/news-digest-benchmark-summary-2026-03-27.md",
+    "benchmark_summary_json": "docs/releases/assets/news-digest-benchmark-summary-2026-03-27.json",
+    "workflow_case_recap_markdown": "docs/releases/assets/news-digest-workflow-case-recap-2026-03-27.md",
+    "demo_status_markdown": "docs/assets/storefront/demo-status.md"
+  },
+  "supporting_assets": {
+    "gemini_proof_screenshot": "docs/releases/assets/news-digest-healthy-proof-gemini-2026-03-27.png",
+    "grok_proof_screenshot": "docs/releases/assets/news-digest-healthy-proof-grok-2026-03-27.png",
+    "dashboard_home_capture": "docs/assets/storefront/dashboard-home-live-1440x900.png",
+    "dashboard_command_tower_capture": "docs/assets/storefront/dashboard-command-tower-live-1440x900.png",
+    "dashboard_runs_capture": "docs/assets/storefront/dashboard-runs-live-1440x900.png",
+    "healthy_live_capture_gif": "docs/assets/storefront/dashboard-live-healthy-loop.gif"
+  },
+  "known_gaps": [
+    "No broader multi-round benchmark artifact beyond the current single-run baseline summary yet.",
+    "topic_brief and page_brief still need their own healthy proof and benchmark bundles."
+  ]
+}

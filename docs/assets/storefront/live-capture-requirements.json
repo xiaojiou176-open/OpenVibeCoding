@@ -1,0 +1,56 @@
+{
+  "artifact_type": "cortexpilot_storefront_live_capture_requirements",
+  "applies_to_bundle": "news_digest",
+  "summary": "This contract records the healthy public capture deliverables for the official first public baseline and the tracked assets that currently satisfy them.",
+  "required_assets": [
+    {
+      "asset_id": "healthy_live_capture_gif",
+      "status": "present",
+      "required": true,
+      "description": "A healthy backend-backed GIF that shows the official news_digest first public happy path.",
+      "path": "docs/assets/storefront/dashboard-live-healthy-loop.gif",
+      "must_not_be": [
+        "storyboard animation",
+        "local degraded capture",
+        "mocked or synthetic walkthrough"
+      ]
+    },
+    {
+      "asset_id": "healthy_english_first_dashboard_home_capture",
+      "status": "present",
+      "required": true,
+      "description": "A healthy English-first dashboard home screenshot captured from the public first-run path.",
+      "path": "docs/assets/storefront/dashboard-home-live-1440x900.png",
+      "must_not_be": [
+        "localized non-English default capture",
+        "degraded data capture"
+      ]
+    },
+    {
+      "asset_id": "healthy_english_first_command_tower_capture",
+      "status": "present",
+      "required": true,
+      "description": "A healthy English-first Command Tower screenshot from the same verified path.",
+      "path": "docs/assets/storefront/dashboard-command-tower-live-1440x900.png",
+      "must_not_be": [
+        "degraded data capture"
+      ]
+    },
+    {
+      "asset_id": "healthy_english_first_runs_capture",
+      "status": "present",
+      "required": true,
+      "description": "A healthy English-first Runs / Proof & Replay screenshot from the same verified path.",
+      "path": "docs/assets/storefront/dashboard-runs-live-1440x900.png",
+      "must_not_be": [
+        "degraded data capture"
+      ]
+    }
+  ],
+  "success_criteria": [
+    "All required assets exist as tracked files or release assets.",
+    "The captures come from a healthy backend-backed path, not a degraded local fallback.",
+    "The visible UI language is English-first.",
+    "The assets can be safely linked from the public first proven workflow story without overstating proof."
+  ]
+}

@@ -60,7 +60,7 @@ describe("dashboard home run-summary clarity", () => {
 
     expect(screen.getByRole("heading", { name: "Command Tower for Codex and Claude Code workflows" })).toBeInTheDocument();
     expect(
-      screen.getByText(/Start one workflow case, watch Command Tower, then inspect Proof & Replay\./)
+      screen.getByText(/See one proven workflow first, then choose the right adoption path\./)
     ).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Start first task" })).toHaveAttribute("href", "/pm");
     expect(screen.getAllByRole("link", { name: /Workflow Cases/ })[0]).toHaveAttribute("href", "/workflows");
@@ -78,8 +78,12 @@ describe("dashboard home run-summary clarity", () => {
     expect(screen.getByText("Release-proven first run")).toBeInTheDocument();
     expect(screen.getAllByRole("link", { name: /news_digest/i })[0]).toHaveAttribute("href", "/pm?template=news_digest");
     expect(screen.getByText("Proof state: official public baseline")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Open proof pack" })).toHaveAttribute(
+      "href",
+      "https://xiaojiou176-open.github.io/CortexPilot-public/use-cases/"
+    );
     expect(screen.getByText("Choose the right adoption path")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Open use-case guide" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "See first proven workflow" })).toHaveAttribute(
       "href",
       "https://xiaojiou176-open.github.io/CortexPilot-public/use-cases/"
     );
@@ -118,7 +122,7 @@ describe("dashboard home run-summary clarity", () => {
     );
     expect(screen.getByText("Live Workflow Case gallery")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open Workflow Cases" })).toHaveAttribute("href", "/workflows");
-    expect(screen.getByRole("link", { name: "Open use-case guide" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "See first proven workflow" })).toHaveAttribute(
       "href",
       "https://xiaojiou176-open.github.io/CortexPilot-public/use-cases/"
     );
@@ -142,7 +146,7 @@ describe("dashboard home run-summary clarity", () => {
     expect(zh.integrationCards).toHaveLength(en.integrationCards.length);
     expect(zh.firstTaskGuideSteps).toHaveLength(en.firstTaskGuideSteps.length);
     expect(en.aiSurfacesActionHref).toBe("/ai-surfaces/");
-    expect(en.publicTemplatesActionHref).toBe("/pm");
+    expect(en.publicTemplatesActionHref).toBe("/use-cases/");
     expect(zh.liveCaseGalleryActionHref).toBe("/workflows");
     expect(en.optionalApprovalStep.href).toBe("/god-mode");
     expect(zh.builderQuickstartCtaHref).toBe("/builders/");
@@ -165,7 +169,7 @@ describe("dashboard home run-summary clarity", () => {
       "href",
       "https://docs.example/cortexpilot/builders/"
     );
-    expect(screen.getByRole("link", { name: "Open use-case guide" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "See first proven workflow" })).toHaveAttribute(
       "href",
       "https://docs.example/cortexpilot/use-cases/"
     );
@@ -225,11 +229,15 @@ describe("dashboard home run-summary clarity", () => {
       "href",
       "https://xiaojiou176-open.github.io/CortexPilot-public/ai-surfaces/"
     );
+    expect(screen.getByRole("link", { name: "打开证明包" })).toHaveAttribute(
+      "href",
+      "https://xiaojiou176-open.github.io/CortexPilot-public/use-cases/"
+    );
     expect(screen.getByRole("link", { name: "打开 builder 快速入口" })).toHaveAttribute(
       "href",
       "https://xiaojiou176-open.github.io/CortexPilot-public/builders/"
     );
-    expect(screen.getByRole("link", { name: "打开 use-case 指南" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "查看首个已证明工作流" })).toHaveAttribute(
       "href",
       "https://xiaojiou176-open.github.io/CortexPilot-public/use-cases/"
     );

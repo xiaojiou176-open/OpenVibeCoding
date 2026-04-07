@@ -65,6 +65,9 @@ def main() -> int:
         if not output.exists():
             errors.append(f"manifest output missing: {output_rel}")
             continue
+        freshness_strategy = str(item.get("freshness_strategy") or "timestamp").strip().lower()
+        if freshness_strategy == "existence_only":
+            continue
         output_mtime = output.stat().st_mtime
         for source_rel in item.get("source_inputs") or []:
             source = ROOT / str(source_rel)

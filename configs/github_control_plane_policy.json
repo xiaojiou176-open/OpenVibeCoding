@@ -26,6 +26,22 @@
       "required": true,
       "mode": "api"
     },
+    "secret_scanning": {
+      "required": true,
+      "mode": "api"
+    },
+    "secret_scanning_push_protection": {
+      "required": true,
+      "mode": "api"
+    },
+    "secret_scanning_non_provider_patterns": {
+      "required": true,
+      "mode": "api"
+    },
+    "secret_scanning_validity_checks": {
+      "required": true,
+      "mode": "api"
+    },
     "dependabot_config": {
       "required": true,
       "mode": "repo_file",

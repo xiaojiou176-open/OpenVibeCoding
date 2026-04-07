@@ -8,7 +8,7 @@ const UI_COPY = {
       homePhase2: {
         heroTitle: "Command Tower for Codex and Claude Code workflows",
         heroSubtitle:
-          "Start one workflow case, watch Command Tower, then inspect Proof & Replay. CortexPilot keeps Codex and Claude Code work, MCP tools, evidence, and replay on one governed operator path.",
+          "See one proven workflow first, then choose the right adoption path. CortexPilot keeps Codex and Claude Code work, evidence, and replay on one governed operator path instead of scattered local scripts and logs.",
         startFirstTaskLabel: "Start first task",
         startNewTaskLabel: "Start new task",
         viewLatestRunsLabel: "View latest runs",
@@ -34,11 +34,11 @@ const UI_COPY = {
             desc: "Inspect evidence bundles, compare reruns, and replay failures before you trust the result.",
           },
         ],
-        publicTemplatesTitle: "Three public first-run cases",
+        publicTemplatesTitle: "One proven workflow, two showcase expansions",
         publicTemplatesDescription:
-          "Start with one public, read-only workflow case. `news_digest` is the official first public baseline; `topic_brief` and `page_brief` are showcase paths from the same front door.",
-        publicTemplatesActionLabel: "Open task creation",
-        publicTemplatesActionHref: "/pm",
+          "Start with `news_digest` first. It is the official public baseline. `topic_brief` and `page_brief` stay useful, but they are still showcase paths until they earn their own healthy proof bundles.",
+        publicTemplatesActionLabel: "Open proof pack",
+        publicTemplatesActionHref: "/use-cases/",
         publicTemplateCards: [
           {
             href: "/pm?template=news_digest",
@@ -127,8 +127,8 @@ const UI_COPY = {
         ],
         integrationTitle: "Choose the right adoption path",
         integrationDescription:
-          "Use the compatibility matrix as the front-door router, keep the use-case guide as the lighter proof-first side door, then open protocol, playbooks, packages, or AI surfaces only after the real job is clear.",
-        proofFirstActionLabel: "Open use-case guide",
+          "Use the compatibility matrix as the main router, keep the proof-first guide as the fastest way to believe the product story, then open protocol, playbooks, packages, or AI surfaces only after the real job is clear.",
+        proofFirstActionLabel: "See first proven workflow",
         proofFirstActionHref: "/use-cases/",
         integrationCards: [
           {
@@ -722,7 +722,7 @@ const UI_COPY = {
       homePhase2: {
         heroTitle: "面向 Codex 和 Claude Code 工作流的指挥塔",
         heroSubtitle:
-          "先启动一个工作流案例，再观察指挥塔，最后核对证明与回放。CortexPilot 把 Codex / Claude Code 工作、MCP 工具、证据和回放放进同一条受治理的操作路径。",
+          "先看一个已证明的工作流，再决定采用路径。CortexPilot 把 Codex / Claude Code 工作、证据和回放收进同一条受治理的操作路径，而不是散落在本地脚本和日志里。",
         startFirstTaskLabel: "启动首个任务",
         startNewTaskLabel: "启动新任务",
         viewLatestRunsLabel: "查看最近 runs",
@@ -748,11 +748,11 @@ const UI_COPY = {
             desc: "在真正信任结果前，先检查证据包、对比重跑和失败回放。",
           },
         ],
-        publicTemplatesTitle: "三个公开首跑 use case",
+        publicTemplatesTitle: "一个已证明工作流，两个展示扩展",
         publicTemplatesDescription:
-          "从一个公开、只读的 workflow case 开始。`news_digest` 是官方首个公开基线；`topic_brief` 和 `page_brief` 是同一前门下的展示路径。",
-        publicTemplatesActionLabel: "打开任务创建",
-        publicTemplatesActionHref: "/pm",
+          "先从 `news_digest` 开始。它是官方公开基线。`topic_brief` 和 `page_brief` 仍然有用，但在拿到各自健康证明包之前，它们仍属于展示路径。",
+        publicTemplatesActionLabel: "打开证明包",
+        publicTemplatesActionHref: "/use-cases/",
         publicTemplateCards: [
           {
             href: "/pm?template=news_digest",
@@ -841,8 +841,8 @@ const UI_COPY = {
         ],
         integrationTitle: "选择正确的采用路径",
         integrationDescription:
-          "先把 compatibility matrix 当成前门主路由，把 use-case guide 当成更轻的 proof-first 侧门，再在真正任务已经明确后进入协议、playbook、package 或 AI 页面，而不是在首页一次性读完所有说明。",
-        proofFirstActionLabel: "打开 use-case 指南",
+          "先把 compatibility matrix 当成主路由，把 proof-first 指南当成最快建立信任的入口，再在任务真正明确后进入协议、playbook、package 或 AI 页面。",
+        proofFirstActionLabel: "查看首个已证明工作流",
         proofFirstActionHref: "/use-cases/",
         integrationCards: [
           {

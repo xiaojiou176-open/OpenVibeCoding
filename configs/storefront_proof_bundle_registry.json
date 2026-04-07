@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "artifact_type": "cortexpilot_storefront_proof_bundle_registry",
+  "vocabulary_contract": {
+    "proven_workflow_label": "first proven workflow",
+    "proof_pack_label": "public proof pack",
+    "showcase_label": "showcase expansion"
+  },
+  "bundles": [
+    {
+      "bundle_id": "news_digest",
+      "task_template": "news_digest",
+      "proof_state": "release_proven",
+      "claim_scope": "official_first_public_baseline",
+      "authority_level": "repo_side_public_proof",
+      "public_entrypoint": "docs/use-cases/index.html",
+      "pack_manifest": "docs/releases/assets/news-digest-proof-pack-2026-03-27.json",
+      "safe_public_claims": [
+        "news_digest is the only official release-proven first public baseline today",
+        "the public trust bundle includes proof summary, benchmark summary, Workflow Case recap, and demo-status ledger",
+        "the benchmark remains a single-run baseline"
+      ],
+      "forbidden_claims": [
+        "topic_brief is equally release-proven today",
+        "page_brief is equally release-proven today",
+        "the current benchmark is a broad multi-run release average",
+        "current storefront captures prove a fully healthy end-to-end public session"
+      ],
+      "capture_contract": {
+        "healthy_live_capture_gif_present": true,
+        "healthy_english_first_public_capture_set_present": true,
+        "current_tracked_dashboard_captures": "healthy_english_first_backend_backed_local"
+      },
+      "missing_expected_artifacts": [
+        "broader_multi_round_benchmark"
+      ]
+    },
+    {
+      "bundle_id": "topic_brief",
+      "task_template": "topic_brief",
+      "proof_state": "showcase_only",
+      "claim_scope": "public_showcase_path",
+      "authority_level": "repo_side_story_surface",
+      "public_entrypoint": "docs/use-cases/index.html",
+      "safe_public_claims": [
+        "topic_brief is a public showcase path with search-backed evidence"
+      ],
+      "forbidden_claims": [
+        "topic_brief is an equally release-proven baseline today"
+      ],
+      "missing_expected_artifacts": [
+        "dedicated_healthy_proof_summary",
+        "dedicated_benchmark_summary",
+        "share_ready_recap"
+      ]
+    },
+    {
+      "bundle_id": "page_brief",
+      "task_template": "page_brief",
+      "proof_state": "showcase_only",
+      "claim_scope": "public_showcase_path",
+      "authority_level": "repo_side_story_surface",
+      "public_entrypoint": "docs/use-cases/index.html",
+      "safe_public_claims": [
+        "page_brief is a browser-backed public showcase path"
+      ],
+      "forbidden_claims": [
+        "page_brief is an equally release-proven baseline today"
+      ],
+      "missing_expected_artifacts": [
+        "dedicated_healthy_proof_summary",
+        "dedicated_benchmark_summary",
+        "share_ready_recap"
+      ]
+    }
+  ]
+}

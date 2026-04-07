@@ -15,6 +15,7 @@ npm run bootstrap
 ## 2. Run the main checks
 
 ```bash
+npm run ci
 npm run test
 npm run test:quick
 bash scripts/check_repo_hygiene.sh

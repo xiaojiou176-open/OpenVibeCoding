@@ -20,6 +20,8 @@ Work in CortexPilot as a contract-first engineering agent:
 ## Key Commands
 
 - bootstrap: `npm run bootstrap`
+- local fast CI: `npm run ci`
+- local strict CI: `npm run ci:strict`
 - fast verification: `npm run test:quick`
 - main local gate: `npm run test`
 - host safety scan: `npm run scan:host-process-risks`
@@ -54,12 +56,6 @@ Work in CortexPilot as a contract-first engineering agent:
 - current-run builders: `artifact_index/current_run_index`, `cost_profile`, `runner_health`, `slo`, `portal`, `provenance`.
 - docs and wrappers must not hand-maintain live current-run status; they must point readers back to the checker receipts.
 - if the current-run source manifest is missing, authoritative current-run reports must fail closed or run only in explicit advisory mode.
-- protected upstream/live-smoke receipts are route-exempt on `trusted_pr`,
-  `untrusted_pr`, and hosted-first `push_main`; those routes must not fail just
-  because manual closeout/provider credentials are absent
-- hosted `push_main` governance closeout also treats `upstream_report`,
-  `upstream_same_run_report`, and `current_run_consistency` as advisory when
-  the manifest already marks upstream/live smoke route-exempt
 <!-- GENERATED:current-run-evidence-summary:end -->
 
 <!-- GENERATED:coverage-summary:start -->

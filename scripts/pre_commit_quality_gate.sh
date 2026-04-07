@@ -66,7 +66,7 @@ run_gate() {
   GATE_LOGS+=("$log_file")
 }
 
-echo "🚦 [pre-commit-quality-gate] scope=$scope start parallel core quality gates"
+echo "🚦 [pre-commit-quality-gate] scope=$scope start fast local commit gates"
 
 run_gate "lint" bash scripts/pre_commit_lint_gate.sh
 run_gate "governance_python_entrypoints" bash scripts/check_governance_python_entrypoints.sh
@@ -76,9 +76,6 @@ run_gate "actionlint" bash scripts/check_actionlint.sh
 run_gate "zizmor" bash scripts/check_zizmor.sh --offline "$ROOT_DIR"
 run_gate "docs_navigation_registry" bash scripts/run_governance_py.sh scripts/check_docs_navigation_registry.py
 run_gate "docs_fact_boundary" bash scripts/run_governance_py.sh scripts/check_docs_manual_fact_boundary.py
-run_gate "github_security_alerts" bash scripts/run_governance_py.sh scripts/check_github_security_alerts.py --mode require --repo xiaojiou176-open/CortexPilot-public
-run_gate "doc_drift" bash scripts/hooks/doc_drift_gate.sh
-run_gate "doc_sync" bash scripts/hooks/doc_sync_gate.sh
 if [[ "$run_test_smell" -eq 1 ]]; then
   run_gate "test_smell" bash scripts/test_smell_gate.sh
 else

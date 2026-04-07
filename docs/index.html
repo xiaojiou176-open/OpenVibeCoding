@@ -266,39 +266,34 @@
       <section class="hero">
         <span class="eyebrow">Public landing source for CortexPilot</span>
         <nav class="mini-nav" aria-label="Top navigation">
+          <a href="./use-cases/">First proven workflow</a>
           <a href="./compatibility/">Compatibility matrix</a>
-          <a href="./agent-starters/">Agent starter kits</a>
-          <a href="./integrations/">Integration guide</a>
-          <a href="./skills/">Skills quickstart</a>
           <a href="./builders/">Builder quickstart</a>
-          <a href="./mcp/">Read-only MCP quickstart</a>
+          <a href="https://github.com/xiaojiou176-open/CortexPilot-public">Repository</a>
+          <a href="https://github.com/xiaojiou176-open/CortexPilot-public/releases">Releases</a>
         </nav>
         <h1>Command Tower for Codex and Claude Code workflows.</h1>
         <p class="lede">
-          CortexPilot is for teams that need more than “the agent replied.” Route Codex- and
-          Claude Code-style governed work through one command tower, keep every workflow case
-          reviewable, and attach MCP-readable proof plus replay to the same operating record.
-          The same front door also speaks to AI ops and platform teams that need
-          a shared operator view instead of scattered agent logs.
+          Start with one proven workflow, confirm the Workflow Case, then inspect Proof &amp; Replay.
+          CortexPilot gives Codex- and Claude Code-style teams one governed operator path instead
+          of scattered prompts, local scripts, and after-the-fact logs.
         </p>
         <p class="caption">
-          Current boundary: the public surface is still a repo/demo control plane, not a hosted operator product,
-          and the shipped MCP surface remains read-only.
+          Current boundary: this is a repo-backed operator control plane, not a hosted product, and the
+          shipped MCP surface remains read-only.
         </p>
         <div class="actions">
-          <a class="primary" href="./use-cases/">Open first success path</a>
-          <a class="secondary" href="./compatibility/">Start with compatibility matrix</a>
-          <a class="secondary" href="./agent-starters/">Open agent starter kits</a>
-          <a class="secondary" href="./ai-surfaces/">See AI + MCP + API surfaces</a>
+          <a class="primary" href="./use-cases/">See the first proven workflow</a>
+          <a class="secondary" href="./compatibility/">Choose the right adoption path</a>
         </div>
         <p class="caption">
-          Using Codex, Claude Code, OpenClaw, skills, or builders and not sure which door to open first?
-          Start with the <a href="./compatibility/">compatibility matrix</a>. Need release notes, the repo home, or the docs map instead? Open the
-          <a href="https://github.com/xiaojiou176-open/CortexPilot-public/releases">release page</a>, the
-          <a href="https://github.com/xiaojiou176-open/CortexPilot-public">repository</a>, the
-          <a href="https://github.com/xiaojiou176-open/CortexPilot-public/blob/main/docs/README.md">docs map</a>
-          or
-          <a href="https://github.com/xiaojiou176-open/CortexPilot-public/blob/main/docs/architecture/runtime-topology.md">runtime topology</a>.
+          After those two doors, go deeper through
+          <a href="./agent-starters/"> agent starter kits</a>,
+          <a href="./mcp/"> read-only MCP</a>,
+          <a href="./integrations/"> integrations</a>,
+          <a href="./skills/"> skills</a>,
+          <a href="./ai-surfaces/"> AI + MCP + API surfaces</a>, or the
+          <a href="./ecosystem/"> ecosystem map</a>.
         </p>
 
         <div class="panel">
@@ -308,9 +303,27 @@
             alt="CortexPilot flow from PM request to Command Tower to evidence and replay"
           />
           <p class="caption">
-            The public story should be simple: send one request, watch it move through Command Tower,
-            confirm the Workflow Case, then inspect Proof &amp; Replay.
+            The public story should stay simple: send one request, watch it move through Command Tower,
+            confirm the Workflow Case, then inspect Proof &amp; Replay before you trust the result.
           </p>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Why teams take CortexPilot seriously</h2>
+        <div class="grid">
+          <article class="grid-card">
+            <h3>One governed first loop</h3>
+            <p>It is not just “the model replied.” The same first loop keeps the request, case record, proof, and replay on one operator path.</p>
+          </article>
+          <article class="grid-card">
+            <h3>Share-ready Workflow Cases</h3>
+            <p>The strongest public slice is not a screenshot alone. It is the Workflow Case recap that lets other people review what happened without re-running the whole stack.</p>
+          </article>
+          <article class="grid-card">
+            <h3>Truthful boundary language</h3>
+            <p>CortexPilot explicitly says what is proven, what is still a showcase path, and what remains read-only or live-verified later.</p>
+          </article>
         </div>
       </section>
 
@@ -339,45 +352,30 @@
       <section class="section">
         <h2>Choose your path</h2>
         <p>
-          New here? Use this as the only decision layer on the homepage. Let the deeper pages carry the detail once you know which door fits the job.
+          New here? Keep the first decision simple: start with one proven workflow, choose the right adoption path,
+          then open deeper protocol or builder pages only after the job is clear.
         </p>
         <div class="grid">
           <article class="grid-card">
-            <h3>I want the fastest proof-first run</h3>
-            <p>Start with the public first-run cases if you want to see a governed workflow, a case record, and replayable proof before you read package internals.</p>
-            <p><a href="./use-cases/">Open use-case guide</a></p>
+            <h3>I want one proven workflow first</h3>
+            <p>Start here if you want the shortest honest story: one public baseline, one proof pack, and one share-ready Workflow Case recap before you read internals.</p>
+            <p><a href="./use-cases/">Open the first proven workflow</a></p>
           </article>
           <article class="grid-card">
-            <h3>I need the compatibility matrix</h3>
-            <p>Start here if your main question is “I use Codex, Claude Code, OpenClaw, skills, or builders. Which CortexPilot surface should I open first?”</p>
-            <p><a href="./compatibility/">Open compatibility matrix</a></p>
+            <h3>I need the adoption path</h3>
+            <p>Start here if your real question is “I use Codex, Claude Code, OpenClaw, skills, or builders. Which CortexPilot surface should I open first?”</p>
+            <p><a href="./compatibility/">Open the compatibility matrix</a></p>
           </article>
           <article class="grid-card">
-            <h3>I need copy-paste client configs</h3>
-            <p>Open the agent starter kits when your team already understands the boundary and now wants tracked Codex / Claude Code / OpenClaw setup files instead of reverse-engineering them from source.</p>
-            <p><a href="./agent-starters/">Open agent starter kits</a></p>
-          </article>
-          <article class="grid-card">
-            <h3>I need the protocol boundary</h3>
-            <p>Start with the read-only MCP quickstart if you want the shortest truthful map of what external tools can inspect today.</p>
-            <p><a href="./mcp/">Open read-only MCP quickstart</a></p>
-          </article>
-          <article class="grid-card">
-            <h3>I want the agent-integration map</h3>
-            <p>Start with the integration guide if you need the truthful answer to how Codex, Claude Code, and OpenClaw can use CortexPilot today without fake official-plugin claims.</p>
-            <p><a href="./integrations/">Open integration guide</a></p>
-          </article>
-          <article class="grid-card">
-            <h3>I need package entrypoints</h3>
-            <p>Start with the API and builder quickstarts if you want OpenAPI, contract-facing types, thin client helpers, and the shared frontend substrate.</p>
-            <p><a href="./api/">Open API and contract quickstart</a> · <a href="./builders/">Open builder quickstart</a></p>
+            <h3>I build on protocols or packages</h3>
+            <p>Start here once the boundary is clear and you need read-only MCP, OpenAPI, contract-facing types, or the thin builder surfaces.</p>
+            <p><a href="./mcp/">Open read-only MCP</a> · <a href="./api/">Open API quickstart</a> · <a href="./builders/">Open builder quickstart</a></p>
           </article>
         </div>
         <p class="caption">
-          Need the repo-owned playbook layer? Open the <a href="./skills/">skills quickstart</a>. Need the broader ecosystem framing?
-          Open the <a href="./ecosystem/">ecosystem map</a>. Need exact Codex / Claude Code / OpenClaw starter files? Open
-          <a href="./agent-starters/">agent starter kits</a>. Need the operator-layer overview? Open
-          <a href="./ai-surfaces/"> AI + MCP + API surfaces</a>.
+          Need exact starter files? Open <a href="./agent-starters/">agent starter kits</a>. Need the truthful Codex / Claude Code / OpenClaw map?
+          Open <a href="./integrations/">integrations</a>. Need repo-owned playbooks? Open <a href="./skills/">skills quickstart</a>.
+          Need the broader market framing? Open the <a href="./ecosystem/">ecosystem map</a>.
         </p>
       </section>
 
@@ -398,22 +396,14 @@
           </article>
         </div>
         <p class="caption">
-          Prompt 4 now adds two ecosystem-facing layers on top of this spine: a read-only MCP server for
-          structured control-plane reads, and an AI operator brief that explains current run state without
-          creating a second truth source.
-        </p>
-        <p class="caption">
-          Current boundary: MCP is read-only only, and CortexPilot is not a hosted operator product today.
-          Write-capable MCP remains gated, and `cortexpilot.ai` should not be treated as a live hosted front door.
+          Read-only MCP and the AI operator brief sit on top of this spine as inspection layers, not as second execution truths.
         </p>
       </section>
 
       <section class="section">
-        <h2>First success path</h2>
+        <h2>First proven workflow</h2>
         <p>
-          This file is the tracked source for the live GitHub Pages landing surface. The main calls to
-          action intentionally point to stable public Pages and GitHub URLs so the repo, releases, and docs map stay
-          verifiable. The host-compatible quickstart stays:
+          The shortest honest start is still repo-local. The host-compatible path stays:
         </p>
         <ol>
           <li><code>npm run bootstrap:host</code></li>
@@ -421,8 +411,14 @@
           <li><code>npm run dashboard:dev</code></li>
         </ol>
         <p class="caption">
+          In practice, a clean first pass should take about 5-10 minutes and end with four visible signals:
+          one request created from PM, one case visible in Command Tower, one Workflow Case you can confirm,
+          and one Proof &amp; Replay surface you can inspect before trusting the result.
+        </p>
+        <p class="caption">
           Official first public path: start with <code>news_digest</code> if you want the smallest release-proven
-          proof loop, then use <code>topic_brief</code> and <code>page_brief</code> as public showcase expansions.
+          proof loop. Treat <code>topic_brief</code> and <code>page_brief</code> as showcase expansions, not equally
+          proven baselines.
         </p>
         <div class="grid">
           <article class="grid-card">
@@ -442,8 +438,8 @@
           </article>
         </div>
         <p class="caption">
-          See the public distribution loop in
-          <a href="./use-cases/">the use-case and share-ready asset guide</a>.
+          See the full proof pack, benchmark summary, and share-ready Workflow Case recap in
+          <a href="./use-cases/"> the first proven workflow guide</a>.
         </p>
       </section>
     </main>

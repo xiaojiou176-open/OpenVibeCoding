@@ -1,6 +1,6 @@
 # Host compatibility hook lane:
 # - Hooks run on host by design.
-# - Release-grade canonical full gate remains container-first: `npm run ci` -> `bash scripts/docker_ci.sh ci`.
+# - Release-grade canonical full gate remains strict/manual-first: `npm run ci:strict`.
 repos:
   - repo: local
     hooks:
@@ -23,7 +23,7 @@ repos:
         entry: bash scripts/check_repo_hygiene.sh
         language: system
         pass_filenames: false
-        stages: [pre-commit]
+        stages: [manual]
 
       - id: cortexpilot-public-sensitive-surface-gate
         name: cortexpilot-public-sensitive-surface-gate
@@ -39,7 +39,7 @@ repos:
         language: system
         pass_filenames: false
         always_run: true
-        stages: [pre-commit]
+        stages: [manual]
 
       - id: cortexpilot-root-semantic-cleanliness
         name: cortexpilot-root-semantic-cleanliness

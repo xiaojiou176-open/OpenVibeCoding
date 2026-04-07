@@ -84,6 +84,5 @@ Avoid wording like:
 - `topic_brief` and `page_brief` remain showcase paths until they have their
   own healthy proof and benchmark bundles.
 - The missing storefront gaps still remain:
-  - no tracked healthy live-capture GIF
   - no broader multi-round public benchmark artifact
   - no confirmed live GitHub social preview upload

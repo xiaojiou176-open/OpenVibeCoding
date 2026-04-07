@@ -205,7 +205,7 @@ def test_intake_service_build_contract_artifacts_non_list(tmp_path: Path, monkey
     contract = service.build_contract(intake_id)
 
     assert isinstance(contract, dict)
-    assert contract.get("handoff_chain", {}).get("enabled") is True
+    assert "handoff_chain" not in contract
     artifacts = contract.get("inputs", {}).get("artifacts", [])
     assert isinstance(artifacts, list)
     assert any(item.get("name") == "search_requests.json" for item in artifacts)

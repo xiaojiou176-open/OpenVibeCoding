@@ -3,101 +3,340 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>CortexPilot | Public use cases and share-ready workflow assets</title>
+    <title>CortexPilot | First proven workflow and public proof pack</title>
     <meta
       name="description"
-      content="CortexPilot public use cases: news_digest, topic_brief, and page_brief, plus the first-run to proof to share loop and Workflow Case recap assets."
+      content="CortexPilot's first proven workflow: the news_digest public baseline, its proof pack, and the shortest proof-first loop before deeper adoption."
     />
     <link rel="canonical" href="https://xiaojiou176-open.github.io/CortexPilot-public/use-cases/" />
-    <meta property="og:title" content="CortexPilot | Public use cases and share-ready workflow assets" />
+    <meta property="og:title" content="CortexPilot | First proven workflow and public proof pack" />
     <meta
       property="og:description"
-      content="Public first-run packs, Workflow Case recap assets, and the proof-first discovery loop for CortexPilot."
+      content="The first proven workflow, proof pack, benchmark summary, and Workflow Case recap for CortexPilot."
     />
     <meta property="og:url" content="https://xiaojiou176-open.github.io/CortexPilot-public/use-cases/" />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="CortexPilot | Public use cases and share-ready workflow assets" />
+    <meta name="twitter:title" content="CortexPilot | First proven workflow and public proof pack" />
     <meta
       name="twitter:description"
-      content="Public first-run packs, Workflow Case recap assets, and the proof-first discovery loop for CortexPilot."
+      content="The first proven workflow, proof pack, benchmark summary, and Workflow Case recap for CortexPilot."
     />
+    <style>
+      :root {
+        --bg: #f4efe7;
+        --paper: rgba(255, 251, 244, 0.92);
+        --ink: #17232c;
+        --muted: #536673;
+        --accent: #9f4c26;
+        --accent-dark: #244157;
+        --line: #d8ccbb;
+        --success: #215f48;
+        --warn: #8d5319;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font: 16px/1.65 "Trebuchet MS", Verdana, sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 12% 12%, rgba(203, 115, 73, 0.16), transparent 22%),
+          radial-gradient(circle at 88% 8%, rgba(36, 65, 87, 0.14), transparent 18%),
+          linear-gradient(180deg, #f7f2ea 0%, #efe6d8 100%);
+      }
+
+      main {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 48px 20px 88px;
+      }
+
+      a {
+        color: var(--accent-dark);
+        text-underline-offset: 2px;
+      }
+
+      .mini-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+
+      .eyebrow {
+        display: inline-block;
+        margin-bottom: 14px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: rgba(36, 65, 87, 0.08);
+        color: var(--accent-dark);
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .hero,
+      .panel,
+      .callout {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 24px;
+      }
+
+      .hero {
+        padding: 28px;
+      }
+
+      .panel,
+      .callout {
+        padding: 22px;
+        margin-top: 24px;
+      }
+
+      h1,
+      h2 {
+        font-family: Georgia, "Times New Roman", serif;
+        line-height: 1.1;
+      }
+
+      h1 {
+        margin: 0 0 16px;
+        font-size: clamp(38px, 6vw, 60px);
+      }
+
+      h2 {
+        margin: 40px 0 14px;
+        font-size: 30px;
+      }
+
+      .lede {
+        color: var(--muted);
+        font-size: clamp(19px, 2.2vw, 24px);
+        margin: 0 0 14px;
+      }
+
+      .caption {
+        color: var(--muted);
+        margin: 10px 0 0;
+      }
+
+      .grid {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+
+      .card {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        padding: 18px;
+      }
+
+      .card h3 {
+        margin-top: 0;
+        margin-bottom: 10px;
+        font-size: 19px;
+      }
+
+      .badge {
+        display: inline-block;
+        margin-bottom: 10px;
+        padding: 5px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+      }
+
+      .badge.success {
+        background: rgba(33, 95, 72, 0.12);
+        color: var(--success);
+      }
+
+      .badge.warn {
+        background: rgba(141, 83, 25, 0.12);
+        color: var(--warn);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 14px;
+        background: rgba(255, 255, 255, 0.55);
+        border-radius: 18px;
+        overflow: hidden;
+      }
+
+      th,
+      td {
+        text-align: left;
+        padding: 10px;
+        border-bottom: 1px solid #ece4d9;
+        vertical-align: top;
+      }
+
+      th {
+        background: rgba(36, 65, 87, 0.06);
+      }
+
+      tr:last-child td {
+        border-bottom: none;
+      }
+
+      code {
+        background: rgba(36, 65, 87, 0.08);
+        border-radius: 6px;
+        padding: 2px 6px;
+        font-family: "SFMono-Regular", Menlo, monospace;
+      }
+
+      ul,
+      ol {
+        padding-left: 22px;
+      }
+    </style>
   </head>
   <body>
-    <main style="max-width:960px;margin:0 auto;padding:40px 20px;font:16px/1.6 system-ui,sans-serif;color:#17232c;">
-      <p>
+    <main>
+      <nav class="mini-nav" aria-label="Top navigation">
         <a href="../">Back to the public landing page</a>
         · <a href="../compatibility/">Compatibility matrix</a>
         · <a href="../ai-surfaces/">AI + MCP + API surfaces</a>
         · <a href="../ecosystem/">Ecosystem map</a>
         · <a href="../builders/">Builder quickstart</a>
-      </p>
-      <h1>Public use cases and share-ready assets</h1>
-      <p>
-        CortexPilot already has three public first-run cases. The goal here is
-        to make them easier to discover, explain, and reuse as proof-first
-        assets.
-      </p>
+      </nav>
+
+      <section class="hero">
+        <span class="eyebrow">The public proof-first entrypoint</span>
+        <h1>First proven workflow and public proof pack</h1>
+        <p class="lede">
+          Start here if you want the shortest honest CortexPilot story.
+          <strong>What can I run, inspect, and trust today before I dive into
+          the deeper protocol and builder surfaces?</strong>
+        </p>
+        <p class="caption">
+          The answer is still: start with <strong>news_digest</strong>. It is the
+          only official release-proven public baseline. <code>topic_brief</code> and
+          <code>page_brief</code> stay useful, but they remain showcase expansions
+          until they each have their own healthy proof and benchmark bundles.
+        </p>
+      </section>
+
+      <h2>The 10-minute proof-first loop</h2>
+      <ol>
+        <li>Start one `news_digest` run from the PM surface.</li>
+        <li>Watch it show up in Command Tower and confirm the Workflow Case exists.</li>
+        <li>Open Proof &amp; Replay and inspect the result before trusting it.</li>
+        <li>Reuse the Workflow Case recap as the share-ready proof asset.</li>
+      </ol>
       <p>
         If you arrived here from the
         <a href="../agent-starters/">agent starter kits</a>,
-        this page is the post-install proof target. In plain English: after you
-        paste one starter file into Codex, Claude Code, or OpenClaw, come back
-        here and make sure the same proof-first story still holds instead of
-        assuming the copied config already proved a real integration.
+        this page is the post-install proof target. In plain English: do not
+        assume the starter file already proved a real integration. Come back
+        here and make sure the same proof pack still holds.
       </p>
 
-      <h2>Release-proven first run</h2>
-      <ul>
-        <li><strong>news_digest</strong>: the official proof-oriented first public baseline</li>
-        <li><strong>topic_brief</strong>: a bounded topic brief with search-backed evidence, currently a public showcase path</li>
-        <li><strong>page_brief</strong>: a browser-backed brief over one URL, currently a public showcase path</li>
-      </ul>
+      <h2>What success should look like</h2>
+      <div class="grid">
+        <article class="card">
+          <span class="badge success">Visible run</span>
+          <h3>It shows up in the product</h3>
+          <p>One task exists in PM and one Workflow Case exists for that run. You are not relying on a shell success line alone.</p>
+        </article>
+        <article class="card">
+          <span class="badge success">Reviewable proof</span>
+          <h3>You can inspect what happened</h3>
+          <p>You can open proof, replay, and recap artifacts without guessing where they went or whether the run is real.</p>
+        </article>
+        <article class="card">
+          <span class="badge success">Honest boundary</span>
+          <h3>You know what is proven</h3>
+          <p>You can clearly explain why <strong>news_digest</strong> is proven today and why the other two paths are not yet equivalent.</p>
+        </article>
+      </div>
 
       <h2>Proof status by public case</h2>
-      <table style="width:100%;border-collapse:collapse;margin-top:12px;">
+      <table>
         <thead>
           <tr>
-            <th style="text-align:left;border-bottom:1px solid #d8d8d8;padding:8px;">Case</th>
-            <th style="text-align:left;border-bottom:1px solid #d8d8d8;padding:8px;">Current proof state</th>
-            <th style="text-align:left;border-bottom:1px solid #d8d8d8;padding:8px;">What to inspect today</th>
+            <th>Case</th>
+            <th>Current proof state</th>
+            <th>What to inspect today</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td style="padding:8px;border-bottom:1px solid #ececec;"><strong>news_digest</strong></td>
-            <td style="padding:8px;border-bottom:1px solid #ececec;">Official release-proven first public baseline</td>
-            <td style="padding:8px;border-bottom:1px solid #ececec;">
+            <td><strong>news_digest</strong></td>
+            <td>Official release-proven first public baseline</td>
+            <td>
               <a href="../releases/assets/news-digest-healthy-proof-2026-03-27.md">healthy proof summary</a>
               ·
               <a href="../releases/assets/news-digest-benchmark-summary-2026-03-27.md">single-run benchmark summary</a>
             </td>
           </tr>
           <tr>
-            <td style="padding:8px;border-bottom:1px solid #ececec;"><strong>topic_brief</strong></td>
-            <td style="padding:8px;border-bottom:1px solid #ececec;">Public showcase only; not yet equally release-proven</td>
-            <td style="padding:8px;border-bottom:1px solid #ececec;">Treat as discovery/story surface until a dedicated healthy proof and benchmark bundle exists.</td>
+            <td><strong>topic_brief</strong></td>
+            <td>Public showcase only; not yet equally release-proven</td>
+            <td>Treat as discovery/story surface until a dedicated healthy proof and benchmark bundle exists.</td>
           </tr>
           <tr>
-            <td style="padding:8px;"><strong>page_brief</strong></td>
-            <td style="padding:8px;">Public showcase only; browser-backed path, not yet equally release-proven</td>
-            <td style="padding:8px;">Treat as discovery/story surface until a dedicated healthy proof and benchmark bundle exists.</td>
+            <td><strong>page_brief</strong></td>
+            <td>Public showcase only; browser-backed path, not yet equally release-proven</td>
+            <td>Treat as discovery/story surface until a dedicated healthy proof and benchmark bundle exists.</td>
           </tr>
         </tbody>
       </table>
 
-      <h2>First run to proof to share</h2>
-      <ol>
-        <li>Start one public pack</li>
-        <li>Confirm it in Command Tower, Workflow Cases, and Proof &amp; Replay</li>
-        <li>Reuse the Workflow Case as a share-ready recap asset</li>
-      </ol>
-      <p>
-        For starter-kit users, the quickest truthful check today is still:
-        prove the repo-local path first, keep the host-tool integration
-        read-only, then confirm the same <strong>news_digest</strong>
-        proof/baseline/recap trio still makes sense for your setup.
-      </p>
+      <h2>The proof pack for <code>news_digest</code></h2>
+      <div class="callout">
+        This is the smallest reusable trust bundle on the public surface today:
+        one healthy proof summary, one single-run benchmark, one Workflow Case
+        recap, and one storefront status ledger that says what is still missing.
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Artifact</th>
+            <th>Why it matters</th>
+            <th>Open now</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Healthy proof summary</strong></td>
+            <td>Shows the tracked healthy result path for the official public baseline.</td>
+            <td><a href="../releases/assets/news-digest-healthy-proof-2026-03-27.md">Open proof summary</a></td>
+          </tr>
+          <tr>
+            <td><strong>Single-run benchmark summary</strong></td>
+            <td>Shows the current public performance baseline without pretending it is a broad benchmark campaign.</td>
+            <td><a href="../releases/assets/news-digest-benchmark-summary-2026-03-27.md">Open benchmark summary</a></td>
+          </tr>
+          <tr>
+            <td><strong>Workflow Case recap</strong></td>
+            <td>Shows the strongest share-ready artifact for why Workflow Cases matter outside the operator UI.</td>
+            <td><a href="../releases/assets/news-digest-workflow-case-recap-2026-03-27.md">Open recap asset</a></td>
+          </tr>
+          <tr>
+            <td><strong>Proof-pack manifest</strong></td>
+            <td>Shows the machine-readable directory of what is in the public trust bundle today and what is still missing.</td>
+            <td><a href="../releases/assets/news-digest-proof-pack-2026-03-27.json">Open proof-pack manifest</a></td>
+          </tr>
+          <tr>
+            <td><strong>Global proof-pack index</strong></td>
+            <td>Shows the storefront-wide index of proven bundles, showcase bundles, and current public proof gaps.</td>
+            <td><a href="../assets/storefront/proof-pack-index.json">Open proof-pack index</a></td>
+          </tr>
+          <tr>
+            <td><strong>Demo-status ledger</strong></td>
+            <td>Shows which storefront captures are healthy, degraded, missing, or still only explanation assets.</td>
+            <td><a href="../assets/storefront/demo-status.md">Open demo-status ledger</a></td>
+          </tr>
+        </tbody>
+      </table>
 
       <h2>Why this helps discovery</h2>
       <p>
@@ -119,6 +358,9 @@
         <li><a href="../releases/assets/news-digest-healthy-proof-2026-03-27.md">Tracked healthy proof summary for <code>news_digest</code></a></li>
         <li><a href="../releases/assets/news-digest-benchmark-summary-2026-03-27.md">Tracked single-run benchmark baseline for <code>news_digest</code></a></li>
         <li><a href="../releases/assets/news-digest-workflow-case-recap-2026-03-27.md">Tracked Workflow Case recap asset for <code>news_digest</code></a></li>
+        <li><a href="../releases/assets/news-digest-proof-pack-2026-03-27.json">Machine-readable proof-pack manifest for <code>news_digest</code></a></li>
+        <li><a href="../assets/storefront/proof-pack-index.json">Global proof-pack index across public proven and showcase bundles</a></li>
+        <li><a href="../assets/storefront/live-capture-requirements.json">Machine-readable live-capture contract for the tracked healthy GIF and English-first public capture set</a></li>
         <li><a href="../assets/storefront/demo-status.md">Demo-status ledger for healthy, degraded, and missing storefront assets</a></li>
         <li><a href="../assets/storefront/benchmark-methodology.md">Benchmark methodology and wording boundary</a></li>
       </ul>
@@ -127,7 +369,14 @@
       <ul>
         <li>The public healthy path is strongest for <strong>news_digest</strong>; the other two cases still need their own healthy proof and benchmark bundles.</li>
         <li>The current benchmark story is a tracked single-run baseline, not a broad release average.</li>
-        <li>The current recap story now has one tracked <strong>news_digest</strong> Workflow Case asset, but the storefront still lacks a healthy live-capture GIF and a broader benchmark artifact.</li>
+        <li>The current recap story now has one tracked <strong>news_digest</strong> Workflow Case asset, tracked healthy local captures and proof assets, and one remaining broader benchmark gap.</li>
+      </ul>
+
+      <h2>What we still do not claim</h2>
+      <ul>
+        <li>We do not claim that <strong>topic_brief</strong> or <strong>page_brief</strong> are equally release-proven yet.</li>
+        <li>We do not claim that a storyboard or degraded local capture counts as healthy end-to-end proof.</li>
+        <li>We do not claim that the current benchmark file is a broad multi-run release average.</li>
       </ul>
 
       <p>

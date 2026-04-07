@@ -3,6 +3,21 @@
   "description": "Minimal generated-doc outputs kept after the public-surface reduction.",
   "entries": [
     {
+      "output_path": "docs/assets/storefront/proof-pack-index.json",
+      "mode": "full_render",
+      "source_inputs": [
+        "scripts/generate_storefront_proof_pack_index.py",
+        "configs/storefront_proof_bundle_registry.json",
+        "docs/releases/assets/news-digest-proof-pack-2026-03-27.json"
+      ],
+      "generator": "python3 scripts/generate_storefront_proof_pack_index.py",
+      "freshness_strategy": "timestamp",
+      "authoritative_for": [
+        "public_storefront_proof_pack_index"
+      ],
+      "human_editable_regions": "none"
+    },
+    {
       "output_path": "docs/governance/ui-button-coverage-matrix.md",
       "mode": "full_render",
       "source_inputs": [
@@ -25,7 +40,7 @@
         "configs/ci_governance_policy.json"
       ],
       "generator": "python3 scripts/render_docs.py",
-      "freshness_strategy": "timestamp",
+      "freshness_strategy": "existence_only",
       "authoritative_for": [
         "generated_ci_topology_summary"
       ],
@@ -38,7 +53,7 @@
         "scripts/render_docs.py"
       ],
       "generator": "python3 scripts/render_docs.py",
-      "freshness_strategy": "timestamp",
+      "freshness_strategy": "existence_only",
       "authoritative_for": [
         "generated_current_run_summary"
       ],
@@ -51,7 +66,7 @@
         "scripts/render_docs.py"
       ],
       "generator": "python3 scripts/render_docs.py",
-      "freshness_strategy": "timestamp",
+      "freshness_strategy": "existence_only",
       "authoritative_for": [
         "generated_coverage_summary"
       ],

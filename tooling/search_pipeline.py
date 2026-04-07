@@ -275,24 +275,24 @@ def _build_digest_result(
             break
 
     normalized_status = str(status_override or "").strip().upper()
-    template_label = "资讯摘要" if task_template == "news_digest" else "主题简报"
+    template_label = "news digest" if task_template == "news_digest" else "topic brief"
 
     if normalized_status == "FAILED":
         summary = (
-            f"“{topic}”{template_label}未能完成。"
-            f" {failure_reason_zh or '检索链路未通过，请查看高级证据获取详细失败上下文。'}"
+            f"The {template_label} for '{topic}' did not complete successfully."
+            " Review failure_reason_zh and the evidence bundle for the detailed provider failure context."
         ).strip()
         status = "FAILED"
     elif digest_sources:
-        preview = "、".join(item["title"] for item in digest_sources[:3])
+        preview = ", ".join(item["title"] for item in digest_sources[:3])
         summary = (
-            f"已围绕“{topic}”汇总 {len(digest_sources)} 条公开来源，覆盖最近 {time_range} 的检索结果。"
-            f" 当前优先可读来源包括：{preview}。"
+            f"Collected {len(digest_sources)} public-source result(s) about '{topic}' from the last {time_range}."
+            f" Current readable source highlights: {preview}."
         )
         status = "SUCCESS"
         failure_reason_zh = None
     else:
-        summary = f"未检索到与“{topic}”相关的公开来源结果，请稍后重试或调整检索范围。"
+        summary = f"No public-source results were found for '{topic}'. Retry later or widen the search scope."
         status = "EMPTY"
         failure_reason_zh = failure_reason_zh or "未检索到公开来源结果"
 

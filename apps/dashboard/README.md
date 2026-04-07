@@ -82,7 +82,7 @@ finished consumer product.
 - The dashboard public-docs resolver still treats `/integrations/`,
   `/skills/`, and `/compatibility/` as first-class public docs routes so
   public-docs base overrides do not strand those CTA links on app-local paths.
-- The same public-home polish keeps the explicit `Open use-case guide` side
+- The same public-home polish keeps the explicit `See first proven workflow` side
   door routed through the public-docs resolver, so the proof-first walkthrough
   stays visible without turning the dashboard back into a second full routing
   matrix.

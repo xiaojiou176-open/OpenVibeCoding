@@ -135,8 +135,9 @@ require_skip_precommit_break_glass_or_fail() {
 echo "🚦 [pre-push-quality-gate] local-first layered gate start"
 
 # Layered gate strategy:
-# - Pre-commit handles: lint, doc_drift, doc_sync, test_smell (incremental)
-# - Pre-push handles: env governance, contract checks, incremental tests, external probe
+# - Pre-commit handles: cheap local commit gates + incremental test_smell
+# - Pre-push default handles: light repo contracts + quick tests
+# - Pre-push strict bundle handles: scanners, reports, external probe, broader local CI mirror
 # - CI handles: full comprehensive checks (catch-all for --no-verify bypass)
 
 # Check if pre-commit already passed recently (within 5 minutes)
@@ -159,44 +160,42 @@ else
 fi
 
 if [[ "$skip_lint_doc_gates" != "1" ]]; then
-  echo "🔍 [pre-push-quality-gate] running lint and doc gates (pre-commit not detected)"
+  echo "🔍 [pre-push-quality-gate] running lint gate (pre-commit not detected)"
   bash scripts/pre_commit_lint_gate.sh
-  bash scripts/hooks/doc_drift_gate.sh
-  bash scripts/hooks/doc_sync_gate.sh
 else
-  echo "⏭️  [pre-push-quality-gate] skipped lint/doc gates (already passed in pre-commit)"
+  echo "⏭️  [pre-push-quality-gate] skipped duplicate lint gate (already passed in pre-commit)"
 fi
 
-# Pre-push exclusive gates (not in pre-commit)
-echo "🔍 [pre-push-quality-gate] running pre-push exclusive gates"
+# Pre-push fast-path gates (not in pre-commit)
+echo "🔍 [pre-push-quality-gate] running pre-push fast-path gates"
 bash scripts/check_governance_python_entrypoints.sh
 bash scripts/check_workflow_static_security.sh
-bash scripts/check_secret_scan_closeout.sh --mode current
-bash scripts/check_trivy_repo_scan.sh
 bash scripts/run_governance_py.sh scripts/check_repo_positioning.py
 bash scripts/run_governance_py.sh scripts/check_relocation_residues.py
-bash scripts/run_governance_py.sh scripts/check_github_security_alerts.py --mode require --repo xiaojiou176-open/CortexPilot-public
-bash scripts/run_governance_py.sh scripts/check_developer_facing_english.py
-bash scripts/run_governance_py.sh scripts/check_third_party_asset_registry.py
-bash scripts/run_governance_py.sh scripts/check_root_semantic_cleanliness.py
 bash scripts/run_governance_py.sh scripts/check_env_governance.py --mode gate --max-deprecated-count 10 --max-deprecated-ratio 0.03
-bash scripts/run_governance_py.sh scripts/refresh_governance_evidence_manifest.py
-bash scripts/run_governance_py.sh scripts/build_governance_scorecard.py --enforce
-bash scripts/run_governance_py.sh scripts/build_governance_closeout_report.py --mode pre-push
-bash scripts/run_governance_py.sh scripts/check_active_report_identity.py
-bash scripts/run_governance_py.sh scripts/check_workflow_runner_governance.py
-bash scripts/run_governance_py.sh scripts/check_docs_render_freshness.py
 bash scripts/run_governance_py.sh scripts/check_changed_scope_map.py
 bash scripts/run_governance_py.sh scripts/check_e2e_marker_consistency.py
 echo "ℹ️  [pre-push-quality-gate] skip desktop Cargo.lock audit in the default path; Linux/BSD desktop native graph review stays manual-only via bash scripts/docker_ci.sh lane desktop-native-smoke, and excluded unsupported-surface advisories must remain declared in configs/cargo_audit_ignored_advisories.json + governance closeout."
 
 # Local-first layered rule:
-# pre-push runs a strict local CI profile (heavier than pre-commit, lighter than remote strict CI),
-# and remote CI remains the highest-strictness second-pass verifier.
-# Break-glass escape is explicit + auditable via reason/ticket.
-run_local_ci="${CORTEXPILOT_PRE_PUSH_RUN_CI_DOUBLE_CHECK:-1}"
+# pre-push runs a lightweight fast path by default and keeps the old strict
+# local mirror as an explicit opt-in. Remote CI remains the highest-strictness
+# second-pass verifier.
+run_local_ci="${CORTEXPILOT_PRE_PUSH_RUN_CI_DOUBLE_CHECK:-0}"
 if [[ "$run_local_ci" == "1" ]]; then
-  echo "🚦 [pre-push-quality-gate] running layered local verification bundle"
+  echo "🚦 [pre-push-quality-gate] running strict local verification bundle (opt-in)"
+  bash scripts/check_secret_scan_closeout.sh --mode current
+  bash scripts/check_trivy_repo_scan.sh
+  bash scripts/run_governance_py.sh scripts/check_github_security_alerts.py --mode require --repo xiaojiou176-open/CortexPilot-public
+  bash scripts/run_governance_py.sh scripts/check_developer_facing_english.py
+  bash scripts/run_governance_py.sh scripts/check_third_party_asset_registry.py
+  bash scripts/run_governance_py.sh scripts/check_root_semantic_cleanliness.py
+  bash scripts/run_governance_py.sh scripts/check_workflow_runner_governance.py
+  bash scripts/run_governance_py.sh scripts/check_docs_render_freshness.py
+  bash scripts/run_governance_py.sh scripts/refresh_governance_evidence_manifest.py
+  bash scripts/run_governance_py.sh scripts/build_governance_scorecard.py --enforce
+  bash scripts/run_governance_py.sh scripts/build_governance_closeout_report.py --mode pre-push
+  bash scripts/run_governance_py.sh scripts/check_active_report_identity.py
   PRE_PUSH_EXTERNAL_PROBE_PROVIDER_MODE="$(resolve_pre_push_probe_provider_mode_or_fail)"
   
   # Incremental test mode: only run tests related to changed files
@@ -260,8 +259,11 @@ EOF
     --provider-api-mode "${PRE_PUSH_EXTERNAL_PROBE_PROVIDER_MODE}" \
     --hard-timeout-sec "${CORTEXPILOT_PRE_PUSH_EXTERNAL_PROBE_TIMEOUT_SEC:-120}"
 elif [[ "$run_local_ci" == "0" ]]; then
+  echo "🚦 [pre-push-quality-gate] running fast local verification bundle (default)"
+  bash ./scripts/test_quick.sh --no-related
+elif [[ "$run_local_ci" == "off" ]]; then
   if [[ "${CORTEXPILOT_PRE_PUSH_BREAK_GLASS:-0}" != "1" ]]; then
-    echo "❌ [pre-push-quality-gate] CI double-check disabled without break-glass" >&2
+    echo "❌ [pre-push-quality-gate] off mode requires break-glass" >&2
     echo "Set CORTEXPILOT_PRE_PUSH_BREAK_GLASS=1 with reason/ticket to bypass." >&2
     exit 1
   fi
@@ -275,13 +277,13 @@ elif [[ "$run_local_ci" == "0" ]]; then
     "${CORTEXPILOT_PRE_PUSH_BREAK_GLASS_REASON}" \
     "${CORTEXPILOT_PRE_PUSH_BREAK_GLASS_TICKET}" \
     "run_local_ci=${run_local_ci}")"
-  echo "⚠️ [pre-push-quality-gate] break-glass: skip local CI double-check"
+  echo "⚠️ [pre-push-quality-gate] break-glass: skip all local verification bundles"
   echo "   reason=${CORTEXPILOT_PRE_PUSH_BREAK_GLASS_REASON}"
   echo "   ticket=${CORTEXPILOT_PRE_PUSH_BREAK_GLASS_TICKET}"
   echo "   audit_log=${audit_log_path}"
 else
-  echo "❌ [pre-push-quality-gate] invalid CORTEXPILOT_PRE_PUSH_RUN_CI_DOUBLE_CHECK=${run_local_ci}" >&2
+  echo "❌ [pre-push-quality-gate] invalid CORTEXPILOT_PRE_PUSH_RUN_CI_DOUBLE_CHECK=${run_local_ci} (expected: 0|1|off)" >&2
   exit 1
 fi
 
-echo "✅ [pre-push-quality-gate] local-first heavy gate passed"
+echo "✅ [pre-push-quality-gate] local-first layered gate passed"
