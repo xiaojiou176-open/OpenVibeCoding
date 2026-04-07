@@ -1,4 +1,5 @@
 import json
+import threading
 import time
 from pathlib import Path
 
@@ -294,6 +295,51 @@ def test_run_search_pipeline_with_verify(tmp_path: Path, monkeypatch) -> None:
     )
     assert verify_failing["ok"] is False
     assert verify_failing.get("verify_failures")
+
+
+def test_run_search_pipeline_serializes_allow_profile_browser_sessions(tmp_path: Path, monkeypatch) -> None:
+    runs_root = tmp_path / "runs"
+    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
+    store = RunStore(runs_root=runs_root)
+    run_id = store.create_run("task_search_serialized")
+
+    lock = threading.Lock()
+    active_calls = 0
+    max_concurrent = 0
+
+    class DummyToolRunner:
+        def run_search(self, query: str, provider: str = "chatgpt_web", browser_policy=None, policy_audit=None):
+            nonlocal active_calls, max_concurrent
+            del query, browser_policy, policy_audit
+            with lock:
+                active_calls += 1
+                max_concurrent = max(max_concurrent, active_calls)
+            time.sleep(0.01)
+            with lock:
+                active_calls -= 1
+            return {
+                "ok": True,
+                "provider": provider,
+                "results": [{"href": f"https://{provider}.example.com/result"}],
+                "verification": {"consistent": True},
+            }
+
+    request = {
+        "queries": ["alpha"],
+        "repeat": 2,
+        "parallel": 4,
+        "providers": ["chatgpt_web", "grok_web"],
+        "verify": {"providers": ["chatgpt_web"], "repeat": 1},
+        "browser_policy": {"profile_mode": "allow_profile"},
+    }
+    result = sched._run_search_pipeline(
+        run_id,
+        DummyToolRunner(),
+        request,
+        {"role": "SEARCHER", "agent_id": "agent-1"},
+    )
+    assert result["ok"] is True
+    assert max_concurrent == 1
 
 
 def test_orchestrator_replay_error_paths(tmp_path: Path, monkeypatch) -> None:

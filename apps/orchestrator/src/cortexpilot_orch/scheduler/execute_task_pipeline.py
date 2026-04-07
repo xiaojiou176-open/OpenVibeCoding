@@ -438,6 +438,12 @@ def run_execution_pipeline(
     if state.failure_reason:
         return state
 
+    assigned_role = agent_role_fn(assigned_agent)
+    if assigned_role in {"SEARCHER", "RESEARCHER"} and state.search_request is not None:
+        state.runner_summary = "Search pipeline completed successfully."
+        state.status = "SUCCESS"
+        return state
+
     task_execution_pipeline_module.snapshot_worktree = snapshot_worktree_fn
     task_execution_pipeline_module.validate_reviewer_isolation = validate_reviewer_isolation_fn
     task_execution_pipeline_module._collect_diff_text = collect_diff_text_fn

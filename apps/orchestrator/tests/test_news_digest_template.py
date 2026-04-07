@@ -59,6 +59,7 @@ def test_news_digest_intake_builds_contract_artifact(monkeypatch, tmp_path: Path
     assert contract["template_payload"]["sources"] == ["theverge.com", "techcrunch.com"]
     assert contract["owner_agent"]["role"] == "TECH_LEAD"
     assert contract["assigned_agent"]["role"] == "SEARCHER"
+    assert "handoff_chain" not in contract
     assert contract["tool_permissions"]["network"] == "allow"
     assert "search" in contract["tool_permissions"]["mcp_tools"]
     assert "search" in contract["mcp_tool_set"]
@@ -95,6 +96,8 @@ def test_news_digest_result_builder_and_search_payload() -> None:
     assert digest["status"] == "SUCCESS"
     assert digest["topic"] == "Seattle AI"
     assert len(digest["sources"]) == 2
+    assert digest["summary"].startswith("Collected 2 public-source result(s)")
+    assert "Title A, Title B." in digest["summary"]
 
     payload = search_payload_helpers.build_search_payload(
         "run-news",
@@ -331,4 +334,5 @@ def test_news_digest_result_writes_failed_report_when_search_pipeline_fails(monk
     assert digest_path.exists()
     digest_payload = json.loads(digest_path.read_text(encoding="utf-8"))
     assert digest_payload["status"] == "FAILED"
+    assert digest_payload["summary"].startswith("The news digest for 'Seattle AI' did not complete successfully.")
     assert "来源链路失败" in digest_payload["failure_reason_zh"]

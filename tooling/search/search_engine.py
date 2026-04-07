@@ -271,18 +271,43 @@ def _write_web_error_artifacts(artifacts_dir: Path, error: str, page: Any | None
 
 def _pick_chat_input_locator(page: Any) -> Any | None:
     selectors = (
-        "textarea",
-        "input[type='text']",
+        "[data-placeholder='Ask anything'][contenteditable='true']",
+        ".tiptap.ProseMirror[contenteditable='true']",
+        "[aria-label='Enter a prompt for Gemini'][contenteditable='true']",
         "[role='textbox'][contenteditable='true']",
         "[contenteditable='true'][role='textbox']",
-        "[aria-label='Enter a prompt for Gemini'][contenteditable='true']",
         ".ql-editor[contenteditable='true']",
+        "textarea",
+        "input[type='text']",
     )
     for selector in selectors:
         locator = page.locator(selector)
-        if locator.count() > 0:
+        if locator.count() <= 0:
+            continue
+        if not hasattr(locator, "nth"):
             return locator.first
+        for index in range(locator.count()):
+            candidate = locator.nth(index)
+            try:
+                if candidate.is_visible():
+                    return candidate
+            except Exception:  # noqa: BLE001
+                return locator.first
     return None
+
+
+def _activate_chat_input(locator: Any) -> None:
+    try:
+        locator.click(timeout=5000)
+        return
+    except Exception:
+        pass
+    try:
+        locator.click(timeout=5000, force=True)
+        return
+    except Exception:
+        pass
+    locator.focus()
 
 
 def _chat_provider_search(
@@ -353,7 +378,7 @@ def _chat_provider_search(
                 locator = _pick_chat_input_locator(page)
                 if locator is None:
                     raise RuntimeError("input box not found")
-                locator.click()
+                _activate_chat_input(locator)
                 locator.fill(query)
                 locator.press("Enter")
                 page.wait_for_timeout(3000)

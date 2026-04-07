@@ -515,6 +515,7 @@ def _apply_intake_contract_overrides(
         if "search" not in normalized_contract_mcp_tools:
             normalized_contract_mcp_tools.append("search")
         contract["mcp_tool_set"] = normalized_contract_mcp_tools
+        contract.pop("handoff_chain", None)
     return sync_role_contract(contract)
 
 
