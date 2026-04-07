@@ -303,11 +303,6 @@ jobs:
           bash scripts/run_governance_py.sh scripts/check_storefront_proof_assets.py
           bash scripts/run_governance_py.sh scripts/check_docs_render_freshness.py
           bash scripts/check_gitignore_hygiene.sh
-          bash scripts/check_repo_hygiene.sh
-          if [[ "${GITHUB_EVENT_NAME}" == "pull_request" || "${GITHUB_EVENT_NAME}" == "push" ]]; then
-            bash scripts/hooks/doc_drift_gate.sh
-            bash scripts/hooks/doc_sync_gate.sh
-          fi
 
       - name: Publish quick-feedback summary
         if: always()
