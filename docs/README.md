@@ -134,6 +134,8 @@ navigation set.
 
 ## Public CI Contract
 
+- active CI layers are `pre-commit`, `pre-push`, `hosted`, `nightly`, and `manual`
+- no sixth CI/profile/workflow layer exists in this repository
 - default public CI is hosted-first and GitHub-hosted
 - fork PRs stay on low-privilege checks only and must not touch secrets or
   live/external systems

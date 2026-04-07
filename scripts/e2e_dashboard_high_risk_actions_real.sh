@@ -25,7 +25,7 @@ is_truthy_flag() {
 TIMEOUT_PROFILE_INPUT="${CORTEXPILOT_E2E_TIMEOUT_PROFILE:-auto}"
 TIMEOUT_PROFILE_SOURCE="auto"
 if [[ "$TIMEOUT_PROFILE_INPUT" == "auto" ]]; then
-  if is_truthy_flag "${CORTEXPILOT_CI_NIGHTLY_FULL:-0}" || is_truthy_flag "${CORTEXPILOT_CI_WEEKLY_FULL:-0}"; then
+  if is_truthy_flag "${CORTEXPILOT_CI_NIGHTLY_FULL:-0}"; then
     TIMEOUT_PROFILE="nightly-full"
   else
     TIMEOUT_PROFILE="pr"

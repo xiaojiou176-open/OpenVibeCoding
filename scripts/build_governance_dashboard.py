@@ -276,7 +276,7 @@ def _build_markdown(payload: dict[str, Any]) -> str:
         f"- Generated At: `{payload['generated_at']}`",
         f"- Run ID: `{payload['run_id']}`",
         "",
-        "## Weekly 5 Metrics",
+        "## Governance 5 Metrics",
         "",
         "| Metric | Value | Notes |",
         "|---|---:|---|",

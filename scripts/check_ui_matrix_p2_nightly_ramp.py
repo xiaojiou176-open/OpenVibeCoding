@@ -20,7 +20,7 @@ class MatrixScope:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
-            "Compute weekly P2 PARTIAL/COVERED statistics and weekly target convergence "
+            "Compute nightly P2 PARTIAL/COVERED statistics and nightly ramp convergence "
             "with configurable fail-closed mode."
         )
     )
@@ -29,8 +29,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--surfaces", default="dashboard,desktop", help="Comma-separated surfaces")
     parser.add_argument("--partial-status", default="PARTIAL", help="Status label counted as PARTIAL")
     parser.add_argument("--covered-status", default="COVERED", help="Status label counted as COVERED")
-    parser.add_argument("--target-partial-max", type=int, required=True, help="Weekly target upper bound for PARTIAL count")
-    parser.add_argument("--target-covered-min", type=int, required=True, help="Weekly target lower bound for COVERED count")
+    parser.add_argument("--target-partial-max", type=int, required=True, help="Nightly ramp upper bound for PARTIAL count")
+    parser.add_argument("--target-covered-min", type=int, required=True, help="Nightly ramp lower bound for COVERED count")
     parser.add_argument(
         "--baseline-week-start",
         required=True,
@@ -39,10 +39,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--baseline-partial", type=int, required=True, help="Baseline PARTIAL count")
     parser.add_argument("--baseline-covered", type=int, required=True, help="Baseline COVERED count")
     parser.add_argument(
-        "--min-weekly-gap-reduction",
+        "--min-gap-reduction",
         type=float,
         default=0.0,
-        help="Minimum average weekly reduction of target gap.",
+        help="Minimum average reduction of target gap since the baseline window.",
     )
     parser.add_argument(
         "--as-of-date",
@@ -61,7 +61,7 @@ def parse_args() -> argparse.Namespace:
         default=1,
         help="Fail when scoped rows are fewer than this value (default: 1). Use 0 to disable.",
     )
-    parser.add_argument("--gate-name", default="ui-matrix-p2-weekly-target", help="Gate name in output")
+    parser.add_argument("--gate-name", default="ui-matrix-p2-nightly-ramp", help="Gate name in output")
     parser.add_argument("--report-out", default="", help="Optional output JSON report path")
     return parser.parse_args()
 
@@ -161,11 +161,11 @@ def main() -> int:
 
     days_elapsed = (as_of_date - baseline_date).days
     weeks_elapsed = max(1, (days_elapsed + 6) // 7)
-    avg_weekly_gap_reduction = (baseline_gap - current_gap) / float(weeks_elapsed)
+    avg_gap_reduction = (baseline_gap - current_gap) / float(weeks_elapsed)
 
     partial_target_pass = partial_count <= args.target_partial_max
     covered_target_pass = covered_count >= args.target_covered_min
-    convergence_target_pass = avg_weekly_gap_reduction >= args.min_weekly_gap_reduction
+    convergence_target_pass = avg_gap_reduction >= args.min_gap_reduction
     targets_pass = partial_target_pass and covered_target_pass and convergence_target_pass
 
     iso_year, iso_week, _ = as_of_date.isocalendar()
@@ -174,8 +174,8 @@ def main() -> int:
         f"scoped={len(scoped_rows)} partial={partial_count} covered={covered_count} todo={todo_count} "
         f"target_partial_max={args.target_partial_max} target_covered_min={args.target_covered_min} "
         f"gap={current_gap} baseline_gap={baseline_gap} weeks_elapsed={weeks_elapsed} "
-        f"avg_weekly_gap_reduction={avg_weekly_gap_reduction:.3f} "
-        f"target_min_weekly_gap_reduction={args.min_weekly_gap_reduction:.3f} "
+        f"avg_gap_reduction={avg_gap_reduction:.3f} "
+        f"target_min_gap_reduction={args.min_gap_reduction:.3f} "
         f"targets_pass={str(targets_pass).lower()} fail_closed_mode={args.fail_closed_mode}"
     )
     print(summary)
@@ -187,7 +187,7 @@ def main() -> int:
     }
 
     report = {
-        "report_type": "ui_matrix_p2_weekly_target",
+        "report_type": "ui_matrix_p2_nightly_ramp",
         "schema_version": 1,
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "gate_name": args.gate_name,
@@ -208,10 +208,10 @@ def main() -> int:
         "partial_count": partial_count,
         "covered_count": covered_count,
         "todo_count": todo_count,
-        "weekly_target": {
+        "nightly_ramp": {
             "partial_max": args.target_partial_max,
             "covered_min": args.target_covered_min,
-            "min_weekly_gap_reduction": args.min_weekly_gap_reduction,
+            "min_gap_reduction": args.min_gap_reduction,
         },
         "baseline": {
             "week_start_date": baseline_date.isoformat(),
@@ -222,7 +222,7 @@ def main() -> int:
         "convergence": {
             "weeks_elapsed": weeks_elapsed,
             "current_gap": current_gap,
-            "avg_weekly_gap_reduction": avg_weekly_gap_reduction,
+            "avg_gap_reduction": avg_gap_reduction,
         },
         "checks": {
             "partial_target_pass": partial_target_pass,
@@ -243,11 +243,11 @@ def main() -> int:
     if not targets_pass:
         if args.fail_closed_mode == "warn":
             print(
-                f"[{args.gate_name}] warning: weekly targets not met "
+                f"[{args.gate_name}] warning: nightly ramp targets not met "
                 "(mode=warn, exit=0; use mode=strict to fail-closed)"
             )
         if args.fail_closed_mode == "strict":
-            print(f"[{args.gate_name}] fail-closed: weekly targets not met")
+            print(f"[{args.gate_name}] fail-closed: nightly ramp targets not met")
             return 1
 
     return 0

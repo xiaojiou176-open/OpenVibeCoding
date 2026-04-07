@@ -95,7 +95,7 @@
     "ui:truth:gate": "bash scripts/ui_e2e_truth_gate.sh",
     "ui:ops:pr": "UI_REGRESSION_PROFILE=pr UI_REGRESSION_REQUIRE_FULL_STRICT=1 UI_REGRESSION_REQUIRE_CRITICAL_P2=1 UI_REGRESSION_CLICK_INVENTORY_REQUIRED=1 bash scripts/ui_regression_operational_gate.sh --profile pr",
     "ui:ops:nightly": "UI_REGRESSION_PROFILE=nightly bash scripts/ui_regression_operational_gate.sh --profile nightly",
-    "ui:ops:weekly": "UI_REGRESSION_PROFILE=weekly bash scripts/ui_regression_operational_gate.sh --profile weekly",
+    "ui:ops:manual": "UI_REGRESSION_PROFILE=manual bash scripts/ui_regression_operational_gate.sh --profile manual",
     "bench:e2e:speed": "bash scripts/bench_e2e_speed.sh",
     "bench:e2e:speed:dry-run": "bash scripts/bench_e2e_speed.sh --rounds 3 --ui-full-gemini-strict --dashboard-high-risk --dry-run",
     "bench:e2e:speed:report-only": "bash scripts/bench_e2e_speed.sh --report-only",

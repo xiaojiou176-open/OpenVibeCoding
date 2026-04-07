@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compute changed-scope quality metrics and generate weekly tuning suggestions.
+"""Compute changed-scope quality metrics and generate scheduled tuning suggestions.
 
 Inputs:
 - JSONL feedback records (one JSON object per line)
@@ -333,7 +333,7 @@ def render_markdown(
     suggestions: list[dict[str, Any]],
 ) -> str:
     lines: list[str] = []
-    lines.append("# Changed-Scope Weekly Quality Report")
+    lines.append("# Changed-Scope Quality Report")
     lines.append("")
     lines.append(f"- week: `{selected_week}`")
     lines.append(f"- input: `{input_path}`")
@@ -400,7 +400,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(
         description=(
             "Compute changed-scope hit-rate / false-positive-rate from PR feedback JSONL "
-            "and generate weekly rule tuning suggestions."
+            "and generate scheduled rule tuning suggestions."
         )
     )
     parser.add_argument(
@@ -460,7 +460,7 @@ def main() -> int:
             json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
         )
         (output_dir / "changed_scope_quality.summary.md").write_text(
-            "# Changed-Scope Weekly Quality Report\n\n- status: no_data\n",
+            "# Changed-Scope Quality Report\n\n- status: no_data\n",
             encoding="utf-8",
         )
         print("[CHANGED_SCOPE_QUALITY][WARN] no valid records, report generated")

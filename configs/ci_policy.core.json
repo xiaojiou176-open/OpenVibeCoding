@@ -37,8 +37,7 @@
     "execution": {
       "test_phase_parallel": true,
       "apply_retention": false,
-      "nightly_full": false,
-      "weekly_full": false
+      "nightly_full": false
     },
     "defaults": {
       "external_web_probe_url": "https://example.com",

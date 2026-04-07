@@ -1,8 +1,8 @@
-name: changed-scope-quality-weekly
+name: changed-scope-quality-nightly
 
 on:
   schedule:
-    - cron: '45 3 * * 1'
+    - cron: '45 3 * * *'
   workflow_dispatch:
     inputs:
       feedback_jsonl_path:
@@ -18,7 +18,7 @@ on:
       - 'configs/changed_scope/rule_tuning.json'
       - 'tests/fixtures/changed_scope/changed-scope-feedback.schema.json'
       - 'tests/fixtures/changed_scope/changed-scope-feedback.sample.jsonl'
-      - '.github/workflows/changed-scope-quality-weekly.yml'
+      - '.github/workflows/changed-scope-quality-nightly.yml'
 
 permissions:
   contents: read
@@ -90,7 +90,7 @@ jobs:
           summary_md=".runtime-cache/test_output/changed_scope_quality/${latest_week}/changed_scope_quality.summary.md"
           if [[ -f "${summary_md}" ]]; then
             {
-              echo "## changed-scope-quality-weekly"
+              echo "## changed-scope-quality-nightly"
               echo "- run_id: ${RUN_ID}"
               echo "- input: \`${INPUT_PATH}\`"
               echo "- sample_fallback_used: \`${SAMPLE_FALLBACK_USED}\`"
@@ -125,7 +125,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: changed-scope-quality-weekly-${{ github.run_id }}
+          name: changed-scope-quality-nightly-${{ github.run_id }}
           retention-days: 14
           if-no-files-found: warn
           path: |

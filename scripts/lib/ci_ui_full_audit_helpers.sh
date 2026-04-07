@@ -7,7 +7,7 @@ run_ci_ui_full_gemini_audit() {
   local ci_mode="${CI:-}"
   local ci_default_budget="0"
   if [ "$ui_full_budget_profile" = "auto" ]; then
-    if [ "${CORTEXPILOT_CI_NIGHTLY_FULL:-0}" = "1" ] || [ "${CORTEXPILOT_CI_WEEKLY_FULL:-0}" = "1" ]; then
+    if [ "${CORTEXPILOT_CI_NIGHTLY_FULL:-0}" = "1" ]; then
       ui_full_budget_profile="nightly_full"
     else
       ui_full_budget_profile="pr"

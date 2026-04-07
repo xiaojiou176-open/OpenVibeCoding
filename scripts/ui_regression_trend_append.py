@@ -9,7 +9,7 @@ from pathlib import Path
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Append ui regression trend snapshot.")
-    parser.add_argument("--profile", required=True, choices=["pr", "nightly", "weekly"], help="Run profile")
+    parser.add_argument("--profile", required=True, choices=["pr", "nightly", "manual"], help="Run profile")
     parser.add_argument("--p0-report", required=True, help="Path to p0 flake report")
     parser.add_argument("--p1-report", required=True, help="Path to p1 flake report")
     parser.add_argument(

@@ -15,7 +15,7 @@ RECENT_STREAK_SIZE_OVERRIDE=""
 RECENT_STREAK_WINDOWS_OVERRIDE=""
 RECENT_STREAK_STRICT_OVERRIDE=""
 RECENT_STREAK_WORKFLOW_FILE_OVERRIDE=""
-WEEKLY_TARGET_CHECK=0
+NIGHTLY_RAMP_CHECK=0
 
 usage() {
   cat <<'EOF'
@@ -30,7 +30,7 @@ Options:
   --p2-max-workers <N>          override P2 critical flake max workers
   --run-id <ID>                 set the run_id for this execution
   --check-recent-streak         enable recent passing-streak checks
-  --check-weekly-target         enable weekly P2 PARTIAL/COVERED target and convergence-speed checks
+  --check-nightly-ramp         enable nightly P2 PARTIAL/COVERED ramp and convergence-speed checks
   --recent-streak-size <N>      passing-streak window size (compat alias for windows=<N>)
   --recent-streak-windows <CSV> passing-streak windows (for example: 7,14)
   --recent-streak-strict        fail when history has fewer than N runs
@@ -70,8 +70,8 @@ while [[ $# -gt 0 ]]; do
       RECENT_STREAK_CHECK=1
       shift
       ;;
-    --check-weekly-target)
-      WEEKLY_TARGET_CHECK=1
+    --check-nightly-ramp)
+      NIGHTLY_RAMP_CHECK=1
       shift
       ;;
     --recent-streak-size)
@@ -184,7 +184,7 @@ def get_choice(d: dict, key: str, allowed: set[str], default: str) -> str:
         raise SystemExit(f"{key} must be one of {sorted(allowed)}")
     return normalized
 
-def resolve_p2_weekly_ramp_target(p2_weekly_target: dict, baseline: dict) -> dict:
+def resolve_p2_nightly_ramp_target(p2_nightly_ramp: dict, baseline: dict) -> dict:
     baseline_week_start = get_str(baseline, "week_start_date", "1970-01-01")
     try:
         baseline_date = datetime.fromisoformat(baseline_week_start).date()
@@ -195,34 +195,34 @@ def resolve_p2_weekly_ramp_target(p2_weekly_target: dict, baseline: dict) -> dic
     weeks_elapsed = max(1, (days_elapsed + 6) // 7)
 
     default_target = {
-        "target_partial_max": get_int(p2_weekly_target, "target_partial_max", 0, minimum=0),
-        "target_covered_min": get_int(p2_weekly_target, "target_covered_min", 0, minimum=0),
-        "min_weekly_gap_reduction": get_num(p2_weekly_target, "min_weekly_gap_reduction", 0.0, minimum=0.0),
+        "target_partial_max": get_int(p2_nightly_ramp, "target_partial_max", 0, minimum=0),
+        "target_covered_min": get_int(p2_nightly_ramp, "target_covered_min", 0, minimum=0),
+        "min_gap_reduction": get_num(p2_nightly_ramp, "min_gap_reduction", 0.0, minimum=0.0),
         "applied": False,
         "applied_week_offset": 0,
         "weeks_elapsed": weeks_elapsed,
     }
 
-    ramp_table = p2_weekly_target.get("ramp_table", [])
+    ramp_table = p2_nightly_ramp.get("ramp_table", [])
     if not ramp_table:
         return default_target
     if not isinstance(ramp_table, list):
-        raise SystemExit("ui_matrix.p2_weekly_target.ramp_table must be array")
+        raise SystemExit("ui_matrix.p2_nightly_ramp.ramp_table must be array")
 
     normalized_entries = []
     for idx, entry in enumerate(ramp_table):
         if not isinstance(entry, dict):
-            raise SystemExit(f"ui_matrix.p2_weekly_target.ramp_table[{idx}] must be object")
+            raise SystemExit(f"ui_matrix.p2_nightly_ramp.ramp_table[{idx}] must be object")
         week_offset = get_int(entry, "week_offset", 0, minimum=1)
         normalized_entries.append(
             {
                 "week_offset": week_offset,
                 "target_partial_max": get_int(entry, "target_partial_max", default_target["target_partial_max"], minimum=0),
                 "target_covered_min": get_int(entry, "target_covered_min", default_target["target_covered_min"], minimum=0),
-                "min_weekly_gap_reduction": get_num(
+                "min_gap_reduction": get_num(
                     entry,
-                    "min_weekly_gap_reduction",
-                    default_target["min_weekly_gap_reduction"],
+                    "min_gap_reduction",
+                    default_target["min_gap_reduction"],
                     minimum=0.0,
                 ),
             }
@@ -241,7 +241,7 @@ def resolve_p2_weekly_ramp_target(p2_weekly_target: dict, baseline: dict) -> dic
     return {
         "target_partial_max": selected["target_partial_max"],
         "target_covered_min": selected["target_covered_min"],
-        "min_weekly_gap_reduction": selected["min_weekly_gap_reduction"],
+        "min_gap_reduction": selected["min_gap_reduction"],
         "applied": True,
         "applied_week_offset": selected["week_offset"],
         "weeks_elapsed": weeks_elapsed,
@@ -259,13 +259,13 @@ if not isinstance(todo_gates, dict):
 p2_visibility = ui_matrix.get("p2_visibility_gate", {})
 if not isinstance(p2_visibility, dict):
     raise SystemExit("ui_matrix.p2_visibility_gate must be object")
-p2_weekly_target = ui_matrix.get("p2_weekly_target", {})
-if not isinstance(p2_weekly_target, dict):
-    raise SystemExit("ui_matrix.p2_weekly_target must be object")
-p2_weekly_baseline = p2_weekly_target.get("baseline", {})
-if not isinstance(p2_weekly_baseline, dict):
-    raise SystemExit("ui_matrix.p2_weekly_target.baseline must be object")
-p2_weekly_resolved = resolve_p2_weekly_ramp_target(p2_weekly_target, p2_weekly_baseline)
+p2_nightly_ramp = ui_matrix.get("p2_nightly_ramp", {})
+if not isinstance(p2_nightly_ramp, dict):
+    raise SystemExit("ui_matrix.p2_nightly_ramp must be object")
+p2_nightly_ramp_baseline = p2_nightly_ramp.get("baseline", {})
+if not isinstance(p2_nightly_ramp_baseline, dict):
+    raise SystemExit("ui_matrix.p2_nightly_ramp.baseline must be object")
+p2_nightly_ramp_resolved = resolve_p2_nightly_ramp_target(p2_nightly_ramp, p2_nightly_ramp_baseline)
 p2_critical = cfg.get("p2_critical_flake_gate", {})
 if not isinstance(p2_critical, dict):
     raise SystemExit("p2_critical_flake_gate must be object")
@@ -294,19 +294,19 @@ vars_map = {
     "P2_VISIBILITY_SURFACES": get_str(p2_visibility, "surfaces", "dashboard,desktop"),
     "P2_VISIBILITY_MIN_SCOPED": str(get_int(p2_visibility, "min_scoped", 1, minimum=0)),
     "P2_VISIBILITY_FAIL_ON_TODO": str(get_int(p2_visibility, "fail_on_todo", 0, minimum=0)),
-    "P2_WEEKLY_TARGET_ENABLED": "1" if get_bool(p2_weekly_target, "enabled", False) else "0",
-    "P2_WEEKLY_TARGET_TIERS": get_str(p2_weekly_target, "tiers", "P2"),
-    "P2_WEEKLY_TARGET_SURFACES": get_str(p2_weekly_target, "surfaces", "dashboard,desktop"),
-    "P2_WEEKLY_TARGET_PARTIAL_MAX": str(int(p2_weekly_resolved["target_partial_max"])),
-    "P2_WEEKLY_TARGET_COVERED_MIN": str(int(p2_weekly_resolved["target_covered_min"])),
-    "P2_WEEKLY_TARGET_BASELINE_WEEK_START": get_str(p2_weekly_baseline, "week_start_date", "1970-01-01"),
-    "P2_WEEKLY_TARGET_BASELINE_PARTIAL": str(get_int(p2_weekly_baseline, "partial_count", 0, minimum=0)),
-    "P2_WEEKLY_TARGET_BASELINE_COVERED": str(get_int(p2_weekly_baseline, "covered_count", 0, minimum=0)),
-    "P2_WEEKLY_TARGET_MIN_GAP_REDUCTION": str(float(p2_weekly_resolved["min_weekly_gap_reduction"])),
-    "P2_WEEKLY_TARGET_FAIL_CLOSED_MODE": get_choice(p2_weekly_target, "fail_closed_mode", {"off", "warn", "strict"}, "warn"),
-    "P2_WEEKLY_TARGET_RAMP_APPLIED": "1" if bool(p2_weekly_resolved["applied"]) else "0",
-    "P2_WEEKLY_TARGET_RAMP_WEEK_OFFSET": str(int(p2_weekly_resolved["applied_week_offset"])),
-    "P2_WEEKLY_TARGET_WEEKS_ELAPSED": str(int(p2_weekly_resolved["weeks_elapsed"])),
+    "P2_NIGHTLY_RAMP_ENABLED": "1" if get_bool(p2_nightly_ramp, "enabled", False) else "0",
+    "P2_NIGHTLY_RAMP_TIERS": get_str(p2_nightly_ramp, "tiers", "P2"),
+    "P2_NIGHTLY_RAMP_SURFACES": get_str(p2_nightly_ramp, "surfaces", "dashboard,desktop"),
+    "P2_NIGHTLY_RAMP_PARTIAL_MAX": str(int(p2_nightly_ramp_resolved["target_partial_max"])),
+    "P2_NIGHTLY_RAMP_COVERED_MIN": str(int(p2_nightly_ramp_resolved["target_covered_min"])),
+    "P2_NIGHTLY_RAMP_BASELINE_WEEK_START": get_str(p2_nightly_ramp_baseline, "week_start_date", "1970-01-01"),
+    "P2_NIGHTLY_RAMP_BASELINE_PARTIAL": str(get_int(p2_nightly_ramp_baseline, "partial_count", 0, minimum=0)),
+    "P2_NIGHTLY_RAMP_BASELINE_COVERED": str(get_int(p2_nightly_ramp_baseline, "covered_count", 0, minimum=0)),
+    "P2_NIGHTLY_RAMP_MIN_GAP_REDUCTION": str(float(p2_nightly_ramp_resolved["min_gap_reduction"])),
+    "P2_NIGHTLY_RAMP_FAIL_CLOSED_MODE": get_choice(p2_nightly_ramp, "fail_closed_mode", {"off", "warn", "strict"}, "warn"),
+    "P2_NIGHTLY_RAMP_APPLIED": "1" if bool(p2_nightly_ramp_resolved["applied"]) else "0",
+    "P2_NIGHTLY_RAMP_WEEK_OFFSET": str(int(p2_nightly_ramp_resolved["applied_week_offset"])),
+    "P2_NIGHTLY_RAMP_WEEKS_ELAPSED": str(int(p2_nightly_ramp_resolved["weeks_elapsed"])),
     "P2_CRITICAL_ENABLED": "1" if get_bool(p2_critical, "enabled", True) else "0",
     "P2_CRITICAL_COMMANDS_FILE": get_str(
         {"commands_file_resolved": commands_file_value},
@@ -568,13 +568,13 @@ if [[ "$P2_VISIBILITY_ENABLED" == "1" ]]; then
     "python3 scripts/check_ui_matrix_todo_gate.py --tiers P2 --surfaces \"$P2_VISIBILITY_SURFACES\" --min-scoped \"$P2_VISIBILITY_MIN_SCOPED\" --fail-on-todo \"$P2_VISIBILITY_FAIL_ON_TODO\" --gate-name ui-matrix-visible-p2-critical"
 fi
 
-P2_WEEKLY_TARGET_REPORT=""
-if [[ "$P2_WEEKLY_TARGET_ENABLED" == "1" && "$WEEKLY_TARGET_CHECK" == "1" ]]; then
-  P2_WEEKLY_TARGET_REPORT="$OUT_DIR/p2_weekly_target_report.json"
+P2_NIGHTLY_RAMP_REPORT=""
+if [[ "$P2_NIGHTLY_RAMP_ENABLED" == "1" && "$NIGHTLY_RAMP_CHECK" == "1" ]]; then
+  P2_NIGHTLY_RAMP_REPORT="$OUT_DIR/p2_nightly_ramp_report.json"
   run_step \
-    "ui_matrix_weekly_target_p2" \
+    "ui_matrix_nightly_ramp_p2" \
     "1" \
-    "python3 scripts/check_ui_matrix_p2_weekly_target.py --tiers \"$P2_WEEKLY_TARGET_TIERS\" --surfaces \"$P2_WEEKLY_TARGET_SURFACES\" --target-partial-max \"$P2_WEEKLY_TARGET_PARTIAL_MAX\" --target-covered-min \"$P2_WEEKLY_TARGET_COVERED_MIN\" --baseline-week-start \"$P2_WEEKLY_TARGET_BASELINE_WEEK_START\" --baseline-partial \"$P2_WEEKLY_TARGET_BASELINE_PARTIAL\" --baseline-covered \"$P2_WEEKLY_TARGET_BASELINE_COVERED\" --min-weekly-gap-reduction \"$P2_WEEKLY_TARGET_MIN_GAP_REDUCTION\" --fail-closed-mode \"$P2_WEEKLY_TARGET_FAIL_CLOSED_MODE\" --report-out \"$P2_WEEKLY_TARGET_REPORT\" --gate-name ui-matrix-weekly-target-p2"
+    "python3 scripts/check_ui_matrix_p2_nightly_ramp.py --tiers \"$P2_NIGHTLY_RAMP_TIERS\" --surfaces \"$P2_NIGHTLY_RAMP_SURFACES\" --target-partial-max \"$P2_NIGHTLY_RAMP_PARTIAL_MAX\" --target-covered-min \"$P2_NIGHTLY_RAMP_COVERED_MIN\" --baseline-week-start \"$P2_NIGHTLY_RAMP_BASELINE_WEEK_START\" --baseline-partial \"$P2_NIGHTLY_RAMP_BASELINE_PARTIAL\" --baseline-covered \"$P2_NIGHTLY_RAMP_BASELINE_COVERED\" --min-gap-reduction \"$P2_NIGHTLY_RAMP_MIN_GAP_REDUCTION\" --fail-closed-mode \"$P2_NIGHTLY_RAMP_FAIL_CLOSED_MODE\" --report-out \"$P2_NIGHTLY_RAMP_REPORT\" --gate-name ui-matrix-nightly-ramp-p2"
 fi
 
 P2_CRITICAL_REPORT=""
@@ -639,7 +639,7 @@ if [[ "$QUICK_MODE" != "1" ]]; then
   run_step "ci_disaster_drill" "1" "bash scripts/test_ci_disaster_drill.sh"
 fi
 
-python3 - "$STEPS_JSONL" "$SUMMARY_JSON" "$RUN_ID" "$CONFIG_FILE" "$QUICK_MODE" "$FAIL_CLOSED" "$P2_CRITICAL_REPORT" "$P2_WEEKLY_TARGET_REPORT" "$STREAK_JSON_REPORT" "$STREAK_SUMMARY_REPORT" "$RECENT_ROUTE_JSON_REPORT" "$RECENT_ROUTE_SUMMARY_REPORT" "$CURRENT_RUN_CONSISTENCY_JSON" "$CURRENT_RUN_CONSISTENCY_MD" <<'PY'
+python3 - "$STEPS_JSONL" "$SUMMARY_JSON" "$RUN_ID" "$CONFIG_FILE" "$QUICK_MODE" "$FAIL_CLOSED" "$P2_CRITICAL_REPORT" "$P2_NIGHTLY_RAMP_REPORT" "$STREAK_JSON_REPORT" "$STREAK_SUMMARY_REPORT" "$RECENT_ROUTE_JSON_REPORT" "$RECENT_ROUTE_SUMMARY_REPORT" "$CURRENT_RUN_CONSISTENCY_JSON" "$CURRENT_RUN_CONSISTENCY_MD" <<'PY'
 import json
 import sys
 from datetime import datetime, timezone
@@ -652,7 +652,7 @@ config_path = sys.argv[4]
 quick_mode = sys.argv[5] == "1"
 fail_closed = sys.argv[6] == "1"
 p2_critical_report = sys.argv[7]
-p2_weekly_target_report = sys.argv[8]
+p2_nightly_ramp_report = sys.argv[8]
 recent_streak_report = sys.argv[9]
 recent_streak_summary = sys.argv[10]
 recent_route_report = sys.argv[11]
@@ -686,7 +686,7 @@ payload = {
         "steps_jsonl": str(steps_path),
         "logs_dir": str(summary_path.parent / "logs"),
         "p2_critical_flake_report": p2_critical_report or None,
-        "p2_weekly_target_report": p2_weekly_target_report or None,
+        "p2_nightly_ramp_report": p2_nightly_ramp_report or None,
         "recent_streak_report": recent_streak_report or None,
         "recent_streak_summary": recent_streak_summary or None,
         "recent_route_report": recent_route_report or None,

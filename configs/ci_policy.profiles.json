@@ -4,7 +4,7 @@
     "version": "1.0.0",
     "layer": "profile",
     "schema": "schemas/ci_policy.schema.json",
-    "description": "Profile-level CI defaults (pr/nightly/weekly).",
+    "description": "Profile-level CI defaults (pr/nightly/manual).",
     "source_of_truth": [
       "scripts/ci.sh"
     ]
@@ -45,7 +45,7 @@
           "p1_max_threshold_percent": 1.0
         }
       },
-      "weekly": {
+      "manual": {
         "ui_flake": {
           "p0_iterations": 50,
           "p1_iterations": 50,

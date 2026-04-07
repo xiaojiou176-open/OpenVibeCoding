@@ -477,6 +477,20 @@ npm run test
 `npm run security:scan:closeout` only when you intentionally want the stricter
 closeout/manual layers.
 
+Current CI contract has five layers only:
+
+| Layer | What it owns | Default posture |
+| --- | --- | --- |
+| `pre-commit` | cheap local commit-time quality gates | automatic, local, fast |
+| `pre-push` | local fast verification before remote CI | automatic, local, still bounded |
+| `hosted` | GitHub-hosted base CI and required checks | automatic, remote, hosted-first |
+| `nightly` | scheduled heavier audits and analytics | automatic, scheduled, non-default |
+| `manual` | owner-invoked closeout or high-cost validation | explicit, protected, high-friction |
+
+There is no separate sixth CI layer anymore. Old extra-layer behavior now
+belongs either to `nightly` scheduled governance or to explicit `manual`
+verification.
+
 `npm run test:quick` now expects the dashboard clean-room install gate to
 prove `jsdom` itself can load, instead of pinning success to the presence of a
 specific transitive dependency layout such as `data-urls`.

@@ -42,6 +42,9 @@ Work in CortexPilot as a contract-first engineering agent:
 
 ## Generated Governance Context
 
+- active CI layers: `pre-commit`, `pre-push`, `hosted`, `nightly`, `manual`
+- do not reintroduce a sixth CI/profile/workflow layer; move scheduled heavy checks to `nightly` and explicit high-cost verification to `manual`
+
 <!-- GENERATED:ci-topology-summary:start -->
 - trust flow: `ci-trust-boundary -> quick-feedback -> hosted policy/core slices -> pr-release-critical-gates -> pr-ci-gate`
 - hosted policy/core slices: `policy-and-security, core-tests`

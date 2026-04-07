@@ -195,7 +195,7 @@
           "enum": [
             "pr",
             "nightly",
-            "weekly"
+            "manual"
           ]
         },
         "profiles": {
@@ -203,7 +203,7 @@
           "required": [
             "pr",
             "nightly",
-            "weekly"
+            "manual"
           ],
           "properties": {
             "pr": {
@@ -212,7 +212,7 @@
             "nightly": {
               "$ref": "#/$defs/profile_unit"
             },
-            "weekly": {
+            "manual": {
               "$ref": "#/$defs/profile_unit"
             }
           },

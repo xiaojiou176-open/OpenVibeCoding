@@ -24,7 +24,7 @@ on:
   schedule:
     # Daily run (Tuesday-Sunday): 03:00 UTC
     - cron: "0 3 * * 0,2-6"
-    # Weekly run: Monday 03:00 UTC
+    # Nightly full run: Monday 03:00 UTC
     - cron: "0 3 * * 1"
 
 permissions:

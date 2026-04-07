@@ -38,7 +38,7 @@ BREAK_GLASS_AUDIT_LOG="${UI_REGRESSION_BREAK_GLASS_AUDIT_LOG:-.runtime-cache/tes
 usage() {
   cat <<'EOF'
 Usage:
-  bash scripts/ui_regression_operational_gate.sh [--profile pr|nightly|weekly]
+  bash scripts/ui_regression_operational_gate.sh [--profile pr|nightly|manual]
 
 Env:
   UI_REGRESSION_PROFILE              default: pr
@@ -145,14 +145,14 @@ case "$PROFILE" in
     P0_THRESHOLD="${UI_REGRESSION_NIGHTLY_P0_THRESHOLD:-0.5}"
     P1_THRESHOLD="${UI_REGRESSION_NIGHTLY_P1_THRESHOLD:-1.0}"
     ;;
-  weekly)
-    P0_ITER="${UI_REGRESSION_WEEKLY_P0_ITER:-50}"
-    P1_ITER="${UI_REGRESSION_WEEKLY_P1_ITER:-50}"
-    P0_THRESHOLD="${UI_REGRESSION_WEEKLY_P0_THRESHOLD:-0.5}"
-    P1_THRESHOLD="${UI_REGRESSION_WEEKLY_P1_THRESHOLD:-1.0}"
+  manual)
+    P0_ITER="${UI_REGRESSION_MANUAL_P0_ITER:-50}"
+    P1_ITER="${UI_REGRESSION_MANUAL_P1_ITER:-50}"
+    P0_THRESHOLD="${UI_REGRESSION_MANUAL_P0_THRESHOLD:-0.5}"
+    P1_THRESHOLD="${UI_REGRESSION_MANUAL_P1_THRESHOLD:-1.0}"
     ;;
   *)
-    echo "❌ invalid profile: $PROFILE (allowed: pr|nightly|weekly)" >&2
+    echo "❌ invalid profile: $PROFILE (allowed: pr|nightly|manual)" >&2
     exit 2
     ;;
 esac

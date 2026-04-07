@@ -37,13 +37,7 @@ PY
   }
   echo "🚀 [STEP 8.7/12] Start: UI regression stability gate (flake)"
   if [ "${CORTEXPILOT_CI_UI_REGRESSION_FLAKE_GATE:-1}" = "1" ]; then
-    if [ "${CORTEXPILOT_CI_WEEKLY_FULL:-0}" = "1" ]; then
-      UI_REGRESSION_PROFILE="weekly"
-      default_p0_iter="50"
-      default_p1_iter="50"
-      default_p0_threshold="0.5"
-      default_p1_threshold="1.0"
-    elif [ "${CORTEXPILOT_CI_NIGHTLY_FULL:-0}" = "1" ]; then
+    if [ "${CORTEXPILOT_CI_NIGHTLY_FULL:-0}" = "1" ]; then
       UI_REGRESSION_PROFILE="nightly"
       default_p0_iter="20"
       default_p1_iter="20"

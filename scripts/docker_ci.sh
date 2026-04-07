@@ -833,7 +833,7 @@ run_lane_continuous_governance() {
   if [[ "${mode}" == "quick" ]]; then
     governance_args+=(--quick)
   else
-    governance_args+=(--check-weekly-target)
+    governance_args+=(--check-nightly-ramp)
   fi
 
   run_in_container_argv bash scripts/run_continuous_governance_ops.sh "${governance_args[@]}"

@@ -369,7 +369,7 @@ cat >"$custom_profile" <<'JSON'
           "p1_max_threshold_percent": 0.8
         }
       },
-      "weekly": {
+      "manual": {
         "ui_flake": {
           "p0_iterations": 50,
           "p1_iterations": 50,

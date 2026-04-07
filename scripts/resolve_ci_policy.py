@@ -241,7 +241,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(
         description="Resolve CI policy in shadow mode and emit auditable environment snapshot."
     )
-    parser.add_argument("--profile", default="pr", help="Policy profile name, e.g. pr/nightly/weekly")
+    parser.add_argument("--profile", default="pr", help="Policy profile name, e.g. pr/nightly/manual")
     parser.add_argument(
         "--output-json",
         default=str(DEFAULT_OUTPUT_PATH),
