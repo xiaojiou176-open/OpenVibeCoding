@@ -229,6 +229,7 @@
         <nav class="mini-nav" aria-label="Top navigation">
           <a href="../">Back to the public landing page</a>
           <a href="../compatibility/">Compatibility matrix</a>
+          <a href="https://github.com/xiaojiou176-open/CortexPilot-public/blob/main/DISTRIBUTION.md">Distribution contract</a>
           <a href="../agent-starters/">Agent starter kits</a>
           <a href="../ai-surfaces/">AI + MCP + API surfaces</a>
           <a href="../integrations/">Integration guide</a>
@@ -323,7 +324,10 @@
         <p>
           The current server is a repo-owned <strong>stdio JSON-RPC</strong> node. Run it from the repo root when you want the shortest proof that the public MCP story is real:
         </p>
-        <pre><code>PYTHONPATH=apps/orchestrator/src python3 -m cortexpilot_orch.cli mcp-readonly-server</code></pre>
+        <p>
+          Prerequisite: start from a bootstrapped CortexPilot checkout. The wrapper expects the orchestrator Python dependencies to exist already, so run <code>npm run bootstrap:host</code> first when you are setting up a fresh clone.
+        </p>
+        <pre><code>bash /absolute/path/to/CortexPilot/scripts/run_readonly_mcp.sh</code></pre>
         <p>
           Current tool set:
           <code>list_runs</code>,
@@ -343,6 +347,11 @@
           Want the client-specific config files after you prove the server is
           real? Open the <a href="../agent-starters/">agent starter kits</a>
           for tracked Codex / Claude Code / OpenClaw setup snippets.
+        </p>
+        <p>
+          Need the machine-readable contract too?
+          Open
+          <a href="https://github.com/xiaojiou176-open/CortexPilot-public/blob/main/configs/mcp_public_manifest.json">configs/mcp_public_manifest.json</a>.
         </p>
       </section>
 
@@ -373,17 +382,32 @@
               </tr>
               <tr>
                 <td><strong>Environment</strong></td>
-                <td><code>PYTHONPATH=apps/orchestrator/src</code></td>
-                <td>This exposes the orchestrator module path without inventing a separate package install story.</td>
+                <td>wrapper-owned</td>
+                <td>The tracked wrapper exports <code>PYTHONPATH=&lt;repo-root&gt;/apps/orchestrator/src</code> so clients do not need to reconstruct the Python module path themselves.</td>
               </tr>
               <tr>
                 <td><strong>Command</strong></td>
-                <td><code>python3 -m cortexpilot_orch.cli mcp-readonly-server</code></td>
-                <td>This is the truthful command surface wired by the repo today.</td>
+                <td><code>bash __CORTEXPILOT_REPO_ROOT__/scripts/run_readonly_mcp.sh</code></td>
+                <td>This is the shortest truthful startup command for stdio-capable clients today.</td>
+              </tr>
+              <tr>
+                <td><strong>Auth boundary</strong></td>
+                <td>repo-local read only</td>
+                <td>No hosted account, OAuth, or managed login layer exists in the current public contract.</td>
+              </tr>
+              <tr>
+                <td><strong>Config template</strong></td>
+                <td><code>examples/coding-agents/mcp/readonly.mcp.json.example</code></td>
+                <td>This is the tracked shared config template used across the current Codex / Claude Code / OpenClaw starter surfaces.</td>
               </tr>
             </tbody>
           </table>
         </div>
+        <p>
+          The wrapper keeps the public install story short, but the underlying runtime command stays
+          <code>python3 -m cortexpilot_orch.cli mcp-readonly-server</code> with
+          <code>PYTHONPATH=&lt;repo-root&gt;/apps/orchestrator/src</code>.
+        </p>
       </section>
 
       <section class="section">
@@ -420,8 +444,11 @@
         <h2>Where to read the current contract</h2>
         <ul>
           <li><a href="https://github.com/xiaojiou176-open/CortexPilot-public/blob/main/apps/orchestrator/src/cortexpilot_orch/mcp_readonly_server.py">read-only MCP server implementation</a></li>
+          <li><a href="https://github.com/xiaojiou176-open/CortexPilot-public/blob/main/configs/mcp_public_manifest.json">MCP public manifest</a></li>
+          <li><a href="https://github.com/xiaojiou176-open/CortexPilot-public/blob/main/scripts/run_readonly_mcp.sh">repo-owned startup wrapper</a></li>
           <li><a href="https://github.com/xiaojiou176-open/CortexPilot-public/blob/main/apps/orchestrator/README.md">orchestrator README</a></li>
           <li><a href="https://github.com/xiaojiou176-open/CortexPilot-public/blob/main/docs/architecture/mcp-and-operator-copilot-v1.md">MCP architecture baseline</a></li>
+          <li><a href="../distribution/">distribution status</a> for release, package, and public-boundary truth</li>
           <li><a href="../ai-surfaces/">AI + MCP + API surfaces</a> for the broader product map</li>
         </ul>
       </section>

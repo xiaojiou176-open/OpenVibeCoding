@@ -3,9 +3,11 @@
 `@cortexpilot/frontend-api-client` is the thin JavaScript/TypeScript client
 layer for CortexPilot frontend consumers.
 
-Current package boundary: this package is still a `private` workspace package.
-The truthful adoption path today is repo-local consumption, clone-and-reuse,
-or vendored internal reuse, not registry install from npm.
+Current package boundary: this package now carries publish-ready metadata and a
+registry-safe manifest, but no public registry release is live yet. The
+truthful adoption path today is still repo-local consumption, clone-and-reuse,
+vendored internal reuse, or local pack smoke until the first package release
+is published.
 
 ## What it exposes today
 
@@ -187,8 +189,9 @@ workflow instead of just reading the package in isolation:
 
 ## Vendored or shared-workspace recipe
 
-The package is still `private`, so the current truthful reuse path is
-shared-workspace or vendored-copy adoption, not `npm install`.
+The package manifest is repo-side publish-ready, but no npm release is live
+yet. The current truthful reuse path is still shared-workspace or
+vendored-copy adoption, not `npm install` from a public registry.
 
 ```bash
 git clone https://github.com/xiaojiou176-open/CortexPilot-public.git
@@ -237,7 +240,8 @@ Then keep the workflow small:
   operator mutation groundwork, not public write-capable MCP.
 - The control-plane starter is a builder convenience layer, not a second
   execution authority or a hosted SDK runtime.
-- This package is not published for public registry install today.
+- This package is publish-ready, but not published for public registry install
+  today.
 - Prompt 7-style frontend slices should treat `role_binding_read_model` and
   `workflow_case_read_model` as read-only operator surfaces; the task contract
   remains the execution authority.

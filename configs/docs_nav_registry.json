@@ -3,15 +3,6 @@
   "description": "Minimal navigation registry for the public documentation surface.",
   "entries": [
     {
-      "path": "docs/README.md",
-      "kind": "entrypoint",
-      "status": "active",
-      "canonical": true,
-      "generated": false,
-      "owner_surface": "docs",
-      "listed_in_primary_navigation": true
-    },
-    {
       "path": "docs/index.html",
       "kind": "entrypoint",
       "status": "active",
@@ -102,6 +93,15 @@
       "listed_in_primary_navigation": false
     },
     {
+      "path": "docs/releases/v0.1.0-alpha.2.md",
+      "kind": "reference",
+      "status": "active",
+      "canonical": true,
+      "generated": false,
+      "owner_surface": "docs",
+      "listed_in_primary_navigation": false
+    },
+    {
       "path": "docs/assets/storefront/demo-status.md",
       "kind": "reference",
       "status": "active",
@@ -166,6 +166,15 @@
     },
     {
       "path": "docs/compatibility/index.html",
+      "kind": "entrypoint",
+      "status": "active",
+      "canonical": true,
+      "generated": false,
+      "owner_surface": "docs",
+      "listed_in_primary_navigation": true
+    },
+    {
+      "path": "docs/distribution/index.html",
       "kind": "entrypoint",
       "status": "active",
       "canonical": true,

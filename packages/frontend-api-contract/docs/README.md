@@ -3,9 +3,10 @@
 `@cortexpilot/frontend-api-contract` is the repo-owned contract package for
 frontend-safe CortexPilot route names, query shapes, and generated types.
 
-Current package boundary: this package is still a `private` workspace package.
-The truthful adoption path today is repo-local consumption, clone-and-reuse,
-or vendored internal reuse, not registry install from npm.
+Current package boundary: this package now carries publish-ready metadata and a
+registry-safe manifest, but no public registry release is live yet. The
+truthful adoption path today is still repo-local consumption, clone-and-reuse,
+or vendored internal reuse until the first package release is published.
 
 ## What lives here
 
@@ -68,6 +69,7 @@ Then keep the CortexPilot package story honest:
 
 ## Key entrypoints
 
+- `../README.md`: package root README
 - `../index.d.ts`: current generated contract exports
 - `../ui-flow.d.ts`: generated UI-flow exports
 - `../../frontend-api-client/README.md`: thin client layer that sits above this contract package
@@ -78,7 +80,8 @@ Then keep the CortexPilot package story honest:
 If you are reusing this contract package outside the repo today, keep the
 boundary honest:
 
-- copy it as part of a vendored workspace or clone, not as an implied registry install
+- copy it as part of a vendored workspace or clone until the first package
+  release exists; do not imply a live registry install today
 - pair it with `@cortexpilot/frontend-api-client` when you want a runnable
   bootstrap path instead of raw route/type truth only
 - keep the public explanation anchored on compatibility / integrations /

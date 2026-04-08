@@ -11,6 +11,4 @@ if [ ! -f "${REPO_ROOT}/apps/orchestrator/src/cortexpilot_orch/cli.py" ]; then
   exit 1
 fi
 
-cd "${REPO_ROOT}"
-export PYTHONPATH="${REPO_ROOT}/apps/orchestrator/src${PYTHONPATH:+:${PYTHONPATH}}"
-exec python3 -m cortexpilot_orch.cli mcp-readonly-server
+exec "${REPO_ROOT}/scripts/run_readonly_mcp.sh"

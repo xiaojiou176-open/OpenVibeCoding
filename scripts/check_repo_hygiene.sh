@@ -401,7 +401,7 @@ for path in sorted(contract_root.glob("*")):
         print(path.relative_to(root).as_posix())
 PY
 )"
-allowed_contract_root_files=$'packages/frontend-api-contract/index.cjs\npackages/frontend-api-contract/index.d.ts\npackages/frontend-api-contract/index.js\npackages/frontend-api-contract/package.json\npackages/frontend-api-contract/ui-flow.cjs\npackages/frontend-api-contract/ui-flow.d.ts\npackages/frontend-api-contract/ui-flow.js\npackages/frontend-api-contract/ui-flow.ts'
+allowed_contract_root_files=$'packages/frontend-api-contract/README.md\npackages/frontend-api-contract/index.cjs\npackages/frontend-api-contract/index.d.ts\npackages/frontend-api-contract/index.js\npackages/frontend-api-contract/package.json\npackages/frontend-api-contract/ui-flow.cjs\npackages/frontend-api-contract/ui-flow.d.ts\npackages/frontend-api-contract/ui-flow.js\npackages/frontend-api-contract/ui-flow.ts'
 if [[ "$contract_root_files" != "$allowed_contract_root_files" ]]; then
   echo "❌ [hygiene] frontend-api-contract root file surface drift:" >&2
   printf '%s\n' "$contract_root_files" >&2

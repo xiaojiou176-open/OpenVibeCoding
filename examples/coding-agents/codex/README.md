@@ -12,6 +12,8 @@ This folder shows the narrowest truthful CortexPilot setup for Codex:
 - `../mcp/readonly.mcp.json.example`: shared read-only MCP config example
 - `../plugin-bundles/cortexpilot-coding-agent-bundle/`: compatible local skill
   bundle with Codex metadata plus the same repo-owned adoption router skill
+- `../plugin-bundles/cortexpilot-coding-agent-bundle/skills/cortexpilot-adoption-router/manifest.yaml`:
+  registry-shaped metadata for that shared skill
 
 ## Suggested setup
 

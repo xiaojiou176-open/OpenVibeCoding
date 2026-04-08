@@ -18,7 +18,29 @@ The public story is intentionally narrower than the full monorepo:
 Current public boundary: CortexPilot is a repo-backed operator control plane,
 not a hosted product, and the shipped MCP surface remains **read-only**.
 
-[Quickstart](#quickstart) · [First Proven Workflow](https://xiaojiou176-open.github.io/CortexPilot-public/use-cases/) · [Compatibility Matrix](https://xiaojiou176-open.github.io/CortexPilot-public/compatibility/) · [Docs](docs/README.md) · [Architecture](docs/architecture/runtime-topology.md) · [AI + MCP + API Surfaces](https://xiaojiou176-open.github.io/CortexPilot-public/ai-surfaces/) · [Builder Quickstart](https://xiaojiou176-open.github.io/CortexPilot-public/builders/) · [Releases](https://github.com/xiaojiou176-open/CortexPilot-public/releases)
+[Quickstart](#quickstart) · [First Proven Workflow](https://xiaojiou176-open.github.io/CortexPilot-public/use-cases/) · [Compatibility Matrix](https://xiaojiou176-open.github.io/CortexPilot-public/compatibility/) · [Distribution Contract](DISTRIBUTION.md) · [Distribution Status](https://xiaojiou176-open.github.io/CortexPilot-public/distribution/) · [Docs](docs/README.md) · [Architecture](docs/architecture/runtime-topology.md) · [AI + MCP + API Surfaces](https://xiaojiou176-open.github.io/CortexPilot-public/ai-surfaces/) · [Builder Quickstart](https://xiaojiou176-open.github.io/CortexPilot-public/builders/) · [Releases](https://github.com/xiaojiou176-open/CortexPilot-public/releases)
+
+## Official Distribution Story
+
+The shortest truthful answer today is:
+
+> CortexPilot officially ships a public repo, a public Pages front door, a repo-local read-only MCP surface, and proof-first starter materials. Hosted service, write-capable MCP, Docker distribution, registry submissions, and standalone package publication are still explicitly deferred.
+
+Use these buckets:
+
+- **Shipped now**: repo, Pages, proof-first docs, read-only MCP
+- **Starter-only**: Codex / Claude Code / OpenClaw local starter kits and bundle examples
+- **Publish-ready but deferred**:
+  `@cortexpilot/frontend-api-client`,
+  `@cortexpilot/frontend-api-contract`
+- **Workspace-only**: `@cortexpilot/frontend-shared` stays repo-owned and is
+  not marketed as a standalone package
+- **Deferred**: hosted operator, write-capable MCP, Docker image, npm/PyPI, and marketplace/registry submissions
+
+If you need the exact matrix instead of a one-line summary, open
+[DISTRIBUTION.md](DISTRIBUTION.md) or the public
+[Distribution Status](https://xiaojiou176-open.github.io/CortexPilot-public/distribution/)
+mirror.
 
 ![CortexPilot studio preview card](docs/assets/storefront/cortexpilot-studio-preview.svg)
 
@@ -30,6 +52,7 @@ not a hosted product, and the shipped MCP surface remains **read-only**.
 | --- | --- |
 | evaluate the product story | [First Proven Workflow](https://xiaojiou176-open.github.io/CortexPilot-public/use-cases/) |
 | choose the right Codex / Claude Code / OpenClaw / MCP / skills / builder path | [Compatibility Matrix](https://xiaojiou176-open.github.io/CortexPilot-public/compatibility/) |
+| see exactly what ships now vs. later | [Distribution Contract](DISTRIBUTION.md) and [Distribution Status](https://xiaojiou176-open.github.io/CortexPilot-public/distribution/) |
 | build on the protocol or package surfaces | [AI + MCP + API Surfaces](https://xiaojiou176-open.github.io/CortexPilot-public/ai-surfaces/) and [Builder Quickstart](https://xiaojiou176-open.github.io/CortexPilot-public/builders/) |
 
 The default public loop is simple: **start one workflow case, watch it move
@@ -668,14 +691,22 @@ gates can trace the maintenance decision end to end.
 The public release surface now has a live baseline. Use these entrypoints:
 
 - [GitHub Releases page](https://github.com/xiaojiou176-open/CortexPilot-public/releases)
-- [Live GitHub Release `v0.1.0-alpha.1`](https://github.com/xiaojiou176-open/CortexPilot-public/releases/tag/v0.1.0-alpha.1)
+- [Live GitHub Release `v0.1.0-alpha.2`](https://github.com/xiaojiou176-open/CortexPilot-public/releases/tag/v0.1.0-alpha.2)
 - [Live GitHub Pages site](https://xiaojiou176-open.github.io/CortexPilot-public/)
 - [Changelog](CHANGELOG.md)
 - [Public release checklist](docs/runbooks/public-release-checklist.md)
+- [Current release notes source](docs/releases/v0.1.0-alpha.2.md)
 - [First public release draft](docs/releases/first-public-release-draft.md)
 - [Tracked healthy `news_digest` proof summary](docs/releases/assets/news-digest-healthy-proof-2026-03-27.md)
 - [Tracked `news_digest` baseline summary](docs/releases/assets/news-digest-benchmark-summary-2026-03-27.md)
 - [Tracked `news_digest` Workflow Case recap](docs/releases/assets/news-digest-workflow-case-recap-2026-03-27.md)
+
+Release truth note: `v0.1.0-alpha.2` is the current published prerelease
+baseline and is intended to match the current released `main` snapshot. The
+historical first-baseline draft remains
+[docs/releases/first-public-release-draft.md](docs/releases/first-public-release-draft.md),
+while the current release note source is
+[docs/releases/v0.1.0-alpha.2.md](docs/releases/v0.1.0-alpha.2.md).
 
 Public repo hygiene stays fail-closed as well: token-like fixture coverage must
 use synthetic string assembly, and public path fixtures must use generic

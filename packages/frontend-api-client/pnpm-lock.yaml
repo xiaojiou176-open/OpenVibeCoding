@@ -9,14 +9,5 @@ importers:
   .:
     dependencies:
       '@cortexpilot/frontend-api-contract':
-        specifier: file:../frontend-api-contract
-        version: file:../frontend-api-contract
-
-packages:
-
-  '@cortexpilot/frontend-api-contract@file:../frontend-api-contract':
-    resolution: {directory: ../frontend-api-contract, type: directory}
-
-snapshots:
-
-  '@cortexpilot/frontend-api-contract@file:../frontend-api-contract': {}
+        specifier: workspace:^0.1.0
+        version: link:../frontend-api-contract

@@ -137,7 +137,8 @@ bash scripts/run_orchestrator_cli.sh --help
 
 ## Read-Only MCP + Copilot Notes
 
-- the repo-local MCP entry is `python -m cortexpilot_orch.cli mcp-readonly-server`
+- the shortest repo-local MCP entry for external stdio clients is `bash scripts/run_readonly_mcp.sh`
+- the underlying raw MCP runtime entry remains `python -m cortexpilot_orch.cli mcp-readonly-server`
 - the later-gated queue write pilot entry is `python -m cortexpilot_orch.cli mcp-queue-pilot-server`
 - copy-paste host-tool starters now live in `docs/agent-starters/index.html`,
   `docs/examples/agent-starters/`, and `examples/coding-agents/`, so Codex,

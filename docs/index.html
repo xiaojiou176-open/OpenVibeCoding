@@ -268,6 +268,7 @@
         <nav class="mini-nav" aria-label="Top navigation">
           <a href="./use-cases/">First proven workflow</a>
           <a href="./compatibility/">Compatibility matrix</a>
+          <a href="./distribution/">Distribution status</a>
           <a href="./builders/">Builder quickstart</a>
           <a href="https://github.com/xiaojiou176-open/CortexPilot-public">Repository</a>
           <a href="https://github.com/xiaojiou176-open/CortexPilot-public/releases">Releases</a>
@@ -282,9 +283,16 @@
           Current boundary: this is a repo-backed operator control plane, not a hosted product, and the
           shipped MCP surface remains read-only.
         </p>
+        <p class="caption">
+          Official distribution today is the public repo, the Pages front door, one proven workflow baseline,
+          the repo-local read-only MCP server, and local starter or bundle material. The thin client and
+          contract packages are publish-ready but not published yet, while the shared package stays workspace-only,
+          so no public package release, hosted operator, Docker image, or public write-capable MCP is live today.
+        </p>
         <div class="actions">
           <a class="primary" href="./use-cases/">See the first proven workflow</a>
           <a class="secondary" href="./compatibility/">Choose the right adoption path</a>
+          <a class="secondary" href="./distribution/">Open distribution status</a>
         </div>
         <p class="caption">
           After those two doors, go deeper through
@@ -307,6 +315,33 @@
             confirm the Workflow Case, then inspect Proof &amp; Replay before you trust the result.
           </p>
         </div>
+      </section>
+
+      <section class="section">
+        <h2>Official distribution story today</h2>
+        <div class="grid">
+          <article class="grid-card">
+            <h3>Shipped now</h3>
+            <p>Public repo, public Pages front door, proof-first docs, and one read-only MCP surface are the official distribution core today.</p>
+          </article>
+          <article class="grid-card">
+            <h3>Starter-only</h3>
+            <p>Codex, Claude Code, and OpenClaw starter kits plus the local bundle examples are adoption helpers, not published marketplace items.</p>
+          </article>
+          <article class="grid-card">
+            <h3>Build from clone</h3>
+            <p>The builder packages are real repo-owned entrypoints, but the truthful path is clone/workspace reuse or vendor copy, not registry install.</p>
+          </article>
+          <article class="grid-card">
+            <h3>Explicitly deferred</h3>
+            <p>Hosted operator service, write-capable MCP, Docker distribution, and registry submissions still sit outside the current official promise.</p>
+          </article>
+        </div>
+        <p>
+          Need the exact shipped/starter/internal/deferred ledger instead of the short version?
+          Open the
+          <a href="./distribution/">distribution status</a>.
+        </p>
       </section>
 
       <section class="section">

@@ -2,7 +2,37 @@
   "name": "@cortexpilot/frontend-shared",
   "version": "0.1.0",
   "private": true,
+  "description": "Shared frontend copy, locale, status-presentation, and UI-facing types for CortexPilot operator surfaces.",
+  "homepage": "https://xiaojiou176-open.github.io/CortexPilot-public/builders/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xiaojiou176-open/CortexPilot-public.git",
+    "directory": "packages/frontend-shared"
+  },
+  "bugs": {
+    "url": "https://github.com/xiaojiou176-open/CortexPilot-public/issues"
+  },
+  "license": "MIT",
+  "keywords": [
+    "cortexpilot",
+    "frontend",
+    "ui-copy",
+    "locale",
+    "status-presentation"
+  ],
   "type": "module",
+  "sideEffects": false,
+  "files": [
+    "README.md",
+    "statusPresentation.js",
+    "statusPresentation.ts",
+    "types.js",
+    "types.ts",
+    "uiCopy.js",
+    "uiCopy.ts",
+    "uiLocale.js",
+    "uiLocale.ts"
+  ],
   "exports": {
     "./statusPresentation": {
       "types": "./statusPresentation.ts",

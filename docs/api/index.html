@@ -248,7 +248,12 @@
           If your first question is instead about protocol-level inspection, read-only MCP, or how a coding-agent team should adopt the system truthfully, this page should route you to the better next click instead of making you reverse-engineer the package story from source.
         </p>
         <p class="lede">
-          Current package boundary: the package names referenced here are still <strong>private workspace packages</strong>. The truthful external adoption path today is clone-and-reuse or vendor-and-adapt, not registry install.
+          Current package boundary: <code>@cortexpilot/frontend-api-client</code> and
+          <code>@cortexpilot/frontend-api-contract</code> now carry publish-ready metadata,
+          but no public package release is live yet. The truthful external adoption path
+          today is still clone-and-reuse or vendor-and-adapt, while
+          <code>@cortexpilot/frontend-shared</code> remains a repo-owned presentation
+          substrate rather than a standalone registry story.
         </p>
         <div class="actions">
           <a class="button primary" href="#choose-the-shortest-starting-point">Open the builder path</a>
@@ -375,8 +380,13 @@
           </article>
           <article class="card">
             <span class="badge warn">Boundary</span>
-            <h3>Private workspace packages</h3>
-            <p>These package names are still <code>private</code> workspace packages. Until a real public publish exists, the truthful external path is clone/workspace reuse or vendor copy, not <code>npm install</code>.</p>
+            <h3>Publish-ready, not published</h3>
+            <p>The thin client and contract package are ready for a future public release, but no npm publication is live yet, so the truthful install path is still clone/workspace reuse or vendor copy rather than <code>npm install</code>.</p>
+          </article>
+          <article class="card">
+            <span class="badge warn">Boundary</span>
+            <h3>Shared stays repo-owned</h3>
+            <p><code>@cortexpilot/frontend-shared</code> remains the repo-owned presentation substrate for dashboard and desktop surfaces, not a standalone distribution unit today.</p>
           </article>
         </div>
       </section>
