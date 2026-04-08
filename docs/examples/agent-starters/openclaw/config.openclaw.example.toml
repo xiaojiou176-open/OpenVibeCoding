@@ -16,9 +16,6 @@ paths = [
 enabled = true
 
 [mcp.servers.cortexpilot]
-command = "python3"
-args = ["-m", "cortexpilot_orch.cli", "mcp-readonly-server"]
+command = "bash"
+args = ["__CORTEXPILOT_REPO_ROOT__/scripts/run_readonly_mcp.sh"]
 cwd = "__CORTEXPILOT_REPO_ROOT__"
-
-[mcp.servers.cortexpilot.env]
-PYTHONPATH = "__CORTEXPILOT_REPO_ROOT__/apps/orchestrator/src"

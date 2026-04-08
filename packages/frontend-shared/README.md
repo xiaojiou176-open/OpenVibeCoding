@@ -3,9 +3,10 @@
 Shared frontend-only presentation helpers and types for the dashboard and
 desktop operator surfaces.
 
-Current package boundary: this package is still a `private` workspace package.
-The truthful adoption path today is repo-local consumption, clone-and-reuse,
-or vendored internal reuse, not registry install from npm.
+Current package boundary: this package remains a repo-owned presentation
+substrate and is not treated as a standalone distribution unit today. The
+truthful adoption path is still repo-local consumption, clone-and-reuse, or
+vendored internal reuse rather than a separate public package story.
 
 ## What lives here
 
@@ -28,7 +29,7 @@ or vendored internal reuse, not registry install from npm.
   public SDK.
 - Public API contract types stay in `@cortexpilot/frontend-api-contract`.
 - Client entry points stay in `@cortexpilot/frontend-api-client`.
-- This package is not published for public registry install today.
+- This package is not treated as a standalone public package surface today.
 
 ## Human-readable entrypoints
 

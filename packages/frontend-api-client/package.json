@@ -1,10 +1,37 @@
 {
   "name": "@cortexpilot/frontend-api-client",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "description": "Thin frontend API client and repo-owned control-plane starter for CortexPilot dashboard, desktop, and web consumers.",
+  "homepage": "https://xiaojiou176-open.github.io/CortexPilot-public/builders/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xiaojiou176-open/CortexPilot-public.git",
+    "directory": "packages/frontend-api-client"
+  },
+  "bugs": {
+    "url": "https://github.com/xiaojiou176-open/CortexPilot-public/issues"
+  },
+  "license": "MIT",
+  "keywords": [
+    "cortexpilot",
+    "frontend",
+    "api-client",
+    "command-tower",
+    "workflow-cases",
+    "proof-and-replay"
+  ],
   "type": "module",
   "main": "./index.js",
   "types": "./index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "README.md",
+    "index.js",
+    "index.d.ts",
+    "src",
+    "examples/control_plane_starter.local.mjs"
+  ],
   "exports": {
     ".": {
       "types": "./index.d.ts",
@@ -13,7 +40,10 @@
     }
   },
   "dependencies": {
-    "@cortexpilot/frontend-api-contract": "file:../frontend-api-contract"
+    "@cortexpilot/frontend-api-contract": "workspace:^0.1.0"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "scripts": {
     "example:control-plane-starter": "node examples/control_plane_starter.local.mjs",

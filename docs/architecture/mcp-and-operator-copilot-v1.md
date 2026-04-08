@@ -20,7 +20,13 @@ second truth source or hide write behavior behind soft wording.
 
 ### Current entry
 
-Run the server from the repo root:
+For stdio-capable clients, the shortest repo-owned entry is:
+
+```bash
+bash /absolute/path/to/CortexPilot/scripts/run_readonly_mcp.sh
+```
+
+The underlying runtime command remains:
 
 ```bash
 PYTHONPATH=apps/orchestrator/src python3 -m cortexpilot_orch.cli mcp-readonly-server

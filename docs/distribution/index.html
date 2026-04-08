@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CortexPilot | Distribution status and release truth</title>
+    <meta
+      name="description"
+      content="Canonical distribution status for CortexPilot: what is shipped now, what stays starter-only or bundle-compatible, which packages are publish-ready but deferred, and what is still deferred."
+    />
+    <meta
+      name="keywords"
+      content="CortexPilot distribution status, CortexPilot release truth, read-only MCP, starter kits, builder packages, hosted deferred"
+    />
+    <link rel="canonical" href="https://xiaojiou176-open.github.io/CortexPilot-public/distribution/" />
+    <meta property="og:title" content="CortexPilot | Distribution status and release truth" />
+    <meta
+      property="og:description"
+      content="Exact current distribution matrix for CortexPilot across repo, Pages, read-only MCP, starter kits, builder packages, and deferred hosted or write-capable surfaces."
+    />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://xiaojiou176-open.github.io/CortexPilot-public/distribution/" />
+    <meta property="og:image" content="../assets/storefront/social-preview-1280x640.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="CortexPilot | Distribution status and release truth" />
+    <meta
+      name="twitter:description"
+      content="Canonical current distribution matrix for CortexPilot."
+    />
+    <meta name="twitter:image" content="../assets/storefront/social-preview-1280x640.png" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "CortexPilot distribution status and release truth",
+        "url": "https://xiaojiou176-open.github.io/CortexPilot-public/distribution/",
+        "description": "Canonical current distribution matrix for CortexPilot across shipped, starter-only, repo-owned, and deferred surfaces."
+      }
+    </script>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f7f1e7;
+        --panel: #fffaf3;
+        --ink: #17232c;
+        --muted: #556471;
+        --line: rgba(23, 35, 44, 0.12);
+        --accent: #8b4513;
+        --accent-soft: rgba(139, 69, 19, 0.1);
+        --accent-alt: #155e75;
+        --accent-alt-soft: rgba(21, 94, 117, 0.1);
+        --warn: #92400e;
+        --warn-soft: rgba(146, 64, 14, 0.1);
+        --shadow: 0 24px 60px rgba(23, 35, 44, 0.1);
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        background:
+          radial-gradient(circle at top right, rgba(139, 69, 19, 0.08), transparent 28%),
+          radial-gradient(circle at top left, rgba(21, 94, 117, 0.08), transparent 24%),
+          linear-gradient(180deg, #faf5ed 0%, #efe6da 100%);
+        color: var(--ink);
+        font: 16px/1.65 "Inter", "Segoe UI", system-ui, sans-serif;
+      }
+
+      main {
+        max-width: 1140px;
+        margin: 0 auto;
+        padding: 40px 20px 72px;
+      }
+
+      a { color: var(--accent-alt); }
+      a:hover { color: #0f4d60; }
+
+      .hero,
+      .section,
+      .table-shell {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        box-shadow: var(--shadow);
+      }
+
+      .hero,
+      .section {
+        padding: 28px;
+      }
+
+      .section { margin-top: 24px; }
+
+      .eyebrow,
+      .badge {
+        display: inline-flex;
+        width: fit-content;
+        padding: 7px 12px;
+        border-radius: 999px;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .eyebrow {
+        background: rgba(23, 35, 44, 0.08);
+        color: var(--muted);
+      }
+
+      .badge.shipped { background: var(--accent-alt-soft); color: var(--accent-alt); }
+      .badge.starter { background: var(--accent-soft); color: var(--accent); }
+      .badge.deferred { background: var(--warn-soft); color: var(--warn); }
+
+      h1, h2, h3 { margin: 0; line-height: 1.15; }
+      h1 { font-size: clamp(2.4rem, 4vw, 3.8rem); max-width: 13ch; }
+      h2 { font-size: 1.65rem; margin-bottom: 12px; }
+      p, li, td { color: var(--muted); }
+      .lede { font-size: 1.08rem; max-width: 78ch; }
+
+      .mini-nav,
+      .actions,
+      .pill-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        border-radius: 999px;
+        background: white;
+        border: 1px solid var(--line);
+        color: var(--ink);
+        font-weight: 600;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 16px;
+        border-radius: 999px;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .button.primary { background: var(--accent); color: white; }
+      .button.secondary {
+        border: 1px solid var(--line);
+        background: white;
+        color: var(--ink);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 16px;
+      }
+
+      .card {
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        background: white;
+        padding: 18px;
+      }
+
+      .table-shell {
+        margin-top: 24px;
+        overflow: hidden;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th, td {
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        font-size: 13px;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        background: rgba(23, 35, 44, 0.04);
+      }
+
+      tr:last-child td { border-bottom: none; }
+
+      code {
+        background: rgba(23, 35, 44, 0.06);
+        border-radius: 6px;
+        padding: 2px 6px;
+        font-family: "SFMono-Regular", Menlo, monospace;
+      }
+
+      @media (max-width: 720px) {
+        .hero, .section { padding: 22px; }
+        th, td { padding: 12px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="hero">
+        <span class="eyebrow">Public mirror of the root distribution contract</span>
+        <nav class="mini-nav" aria-label="Top navigation">
+          <a href="../">Back to the public landing page</a>
+          <a href="../use-cases/">First proven workflow</a>
+          <a href="../compatibility/">Compatibility matrix</a>
+          <a href="../mcp/">Read-only MCP quickstart</a>
+          <a href="../builders/">Builder quickstart</a>
+          <a href="../integrations/">Integration guide</a>
+          <a href="https://github.com/xiaojiou176-open/CortexPilot-public/releases">Latest GitHub release</a>
+        </nav>
+        <h1>Exact distribution status for CortexPilot.</h1>
+        <p class="lede">
+          The current first-class distribution story is intentionally narrower than the full monorepo:
+          <strong>public repo + GitHub Pages front door + one release-proven <code>news_digest</code> proof loop + one read-only stdio MCP surface + starter/local bundle examples</strong>.
+        </p>
+        <p class="lede">
+          The current package layer is real, but it is split on purpose:
+          <strong>@cortexpilot/frontend-api-client</strong> and
+          <strong>@cortexpilot/frontend-api-contract</strong> are
+          <strong>publish-ready but deferred</strong>, while
+          <strong>@cortexpilot/frontend-shared</strong> remains a
+          <strong>workspace-only presentation substrate</strong>.
+          Hosted operator service, write-capable MCP, Docker image distribution, and marketplace or registry submissions remain <strong>deferred</strong>.
+        </p>
+        <p class="lede">
+          This page is the public mirror of the root <a href="https://github.com/xiaojiou176-open/CortexPilot-public/blob/main/DISTRIBUTION.md"><code>DISTRIBUTION.md</code></a> contract.
+          If this page and the root contract ever drift, the root contract wins and the drift should be fixed in the next change set.
+        </p>
+        <div class="pill-row">
+          <span class="pill">Shipped now: repo, Pages, first proven workflow, read-only MCP</span>
+          <span class="pill">Starter-only or bundle-compatible: Codex / Claude Code / OpenClaw config seeds and the local coding-agent bundle</span>
+          <span class="pill">Publish-ready but deferred: frontend-api-client and frontend-api-contract; frontend-shared stays workspace-only</span>
+          <span class="pill">Deferred: Docker, hosted Render pilot, write-capable MCP, official listings</span>
+        </div>
+        <div class="actions">
+          <a class="button primary" href="#distribution-matrix">Open the distribution matrix</a>
+          <a class="button secondary" href="../use-cases/">Open the first proven workflow</a>
+          <a class="button secondary" href="../mcp/">Open the MCP quickstart</a>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Release truth</h2>
+        <div class="grid">
+          <article class="card">
+            <span class="badge shipped">Published today</span>
+            <h3>Latest GitHub release</h3>
+            <p><code>v0.1.0-alpha.2</code> is the latest published GitHub Release and the latest public semver tag.</p>
+          </article>
+          <article class="card">
+            <span class="badge deferred">Important boundary</span>
+            <h3>Current release and main are aligned</h3>
+            <p>The current prerelease is meant to match the current released <code>main</code> snapshot. If later commits land, restore explicit lag wording until the next tag is cut.</p>
+          </article>
+          <article class="card">
+            <span class="badge shipped">Repo-side draft</span>
+            <h3>Current release notes source</h3>
+            <p>Use <a href="https://github.com/xiaojiou176-open/CortexPilot-public/blob/main/docs/releases/v0.1.0-alpha.2.md"><code>docs/releases/v0.1.0-alpha.2.md</code></a> as the tracked repo-side release draft. Keep <code>first-public-release-draft.md</code> as the historical alpha.1 baseline.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Canonical MCP contract</h2>
+        <p>
+          The shipped public MCP surface is the repo-owned <strong>read-only stdio JSON-RPC</strong> server.
+          The shortest official startup path is the wrapper:
+        </p>
+        <pre><code>bash /absolute/path/to/CortexPilot/scripts/run_readonly_mcp.sh</code></pre>
+        <p>
+          For the machine-readable contract, use
+          <a href="https://github.com/xiaojiou176-open/CortexPilot-public/blob/main/configs/mcp_public_manifest.json"><code>configs/mcp_public_manifest.json</code></a>.
+          For the human quickstart, use <a href="../mcp/">the read-only MCP page</a>.
+        </p>
+      </section>
+
+      <section class="section" id="distribution-matrix">
+        <h2>Current distribution matrix</h2>
+        <div class="table-shell">
+          <table>
+            <thead>
+              <tr>
+                <th>Surface</th>
+                <th>Current status</th>
+                <th>Official claim</th>
+                <th>Install path</th>
+                <th>Protocol / Auth</th>
+                <th>Next action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>GitHub repo</strong></td>
+                <td><span class="badge shipped">shipped</span></td>
+                <td>The public repo is the canonical front door for source, docs, runbooks, and examples.</td>
+                <td><a href="https://github.com/xiaojiou176-open/CortexPilot-public">xiaojiou176-open/CortexPilot-public</a></td>
+                <td>None</td>
+                <td>Keep the root README short and truthful.</td>
+              </tr>
+              <tr>
+                <td><strong>GitHub Pages</strong></td>
+                <td><span class="badge shipped">shipped</span></td>
+                <td>The public Pages site is the canonical docs front door.</td>
+                <td><a href="https://xiaojiou176-open.github.io/CortexPilot-public/">Pages front door</a></td>
+                <td>None</td>
+                <td>Keep first-run and distribution truth aligned with the repo.</td>
+              </tr>
+              <tr>
+                <td><strong>First proven workflow</strong></td>
+                <td><span class="badge shipped">shipped</span></td>
+                <td><code>news_digest</code> is the only official release-proven public baseline today.</td>
+                <td><a href="../use-cases/">First proven workflow guide</a></td>
+                <td>Repo-local proof loop</td>
+                <td>Keep <code>topic_brief</code> and <code>page_brief</code> as showcase paths until their proof bundles exist.</td>
+              </tr>
+              <tr>
+                <td><strong>Read-only MCP</strong></td>
+                <td><span class="badge shipped">shipped</span></td>
+                <td>Repo-owned read-only MCP server for runs, workflows, approvals, compare, proof, and incident summaries.</td>
+                <td><code>bash /absolute/path/to/CortexPilot/scripts/run_readonly_mcp.sh</code></td>
+                <td>stdio JSON-RPC, read-only, no hosted account, no OAuth</td>
+                <td>Keep wrapper + manifest + starter files aligned; do not imply write-capable or hosted MCP.</td>
+              </tr>
+              <tr>
+                <td><strong>Codex starter</strong></td>
+                <td><span class="badge starter">starter-only</span></td>
+                <td>Local Codex-compatible MCP or bundle seed, not an official directory listing.</td>
+                <td><a href="../agent-starters/">Agent starter kits</a></td>
+                <td>Local config, stdio MCP</td>
+                <td>Keep receipt language explicit until a real listing exists.</td>
+              </tr>
+              <tr>
+                <td><strong>Claude Code starter</strong></td>
+                <td><span class="badge starter">starter-only</span></td>
+                <td>Project-local MCP and local <code>--plugin-dir</code> seed, not a marketplace listing.</td>
+                <td><a href="../agent-starters/">Agent starter kits</a></td>
+                <td>Local config, stdio MCP</td>
+                <td>Keep wording at starter-only until an official submission receipt exists.</td>
+              </tr>
+              <tr>
+                <td><strong>OpenClaw starter</strong></td>
+                <td><span class="badge starter">starter-only</span></td>
+                <td>Bundle-compatible local path around OpenClaw, not a live ClawHub item.</td>
+                <td><a href="../agent-starters/">Agent starter kits</a></td>
+                <td>Local config, stdio MCP</td>
+                <td>Keep it on the adjacent integration side unless a mapped native publish path is shipped and tested.</td>
+              </tr>
+              <tr>
+                <td><strong>Coding-agent bundle</strong></td>
+                <td><span class="badge starter">bundle-compatible</span></td>
+                <td>Portable local bundle for Codex / Claude Code / OpenClaw-compatible installs.</td>
+                <td><code>examples/coding-agents/plugin-bundles/cortexpilot-coding-agent-bundle/</code></td>
+                <td>Local bundle metadata + plugin-scoped read-only MCP</td>
+                <td>Keep local-first; do not call it a published listing.</td>
+              </tr>
+              <tr>
+                <td><strong>Repo-owned adoption-router skill</strong></td>
+                <td><span class="badge starter">publish-ready but deferred</span></td>
+                <td>Cross-tool skill artifact with <code>SKILL.md</code> plus <code>manifest.yaml</code> for Codex / Claude Code / OpenClaw-compatible installs.</td>
+                <td><code>examples/coding-agents/plugin-bundles/cortexpilot-coding-agent-bundle/skills/cortexpilot-adoption-router/</code></td>
+                <td>Repo-owned skill contract, bundle-scoped today, no live registry listing</td>
+                <td>Keep the artifact honest: metadata and semver are present, but any official registry submission is still a later external action.</td>
+              </tr>
+              <tr>
+                <td><strong>@cortexpilot/frontend-api-client</strong></td>
+                <td><span class="badge starter">publish-ready but deferred</span></td>
+                <td>Thin client helper with a publish-ready manifest, but no public npm release yet.</td>
+                <td><a href="../builders/">Builder quickstart</a></td>
+                <td>HTTP API, repo-local preview/apply contract, token story depends on backend</td>
+                <td>Keep the install story honest as clone/workspace reuse or vendor copy until the first npm release exists.</td>
+              </tr>
+              <tr>
+                <td><strong>@cortexpilot/frontend-api-contract</strong></td>
+                <td><span class="badge starter">publish-ready but deferred</span></td>
+                <td>Generated contract-facing package with a publish-ready manifest, but no public npm release yet.</td>
+                <td><a href="../api/">API quickstart</a></td>
+                <td>Generated route/query/type contract</td>
+                <td>Keep the install story honest as clone/workspace reuse or vendor copy until the first npm release exists.</td>
+              </tr>
+              <tr>
+                <td><strong>@cortexpilot/frontend-shared</strong></td>
+                <td><span class="badge starter">not a standalone distribution unit</span></td>
+                <td>Shared UI copy, locale, and status substrate for CortexPilot-owned surfaces.</td>
+                <td><a href="../builders/">Builder quickstart</a></td>
+                <td>Frontend-only presentation helpers</td>
+                <td>Keep repo-owned and workspace-only unless a separate reuse story is explicitly promoted later.</td>
+              </tr>
+              <tr>
+                <td><strong>Docker image distribution</strong></td>
+                <td><span class="badge deferred">deferred</span></td>
+                <td>CI Dockerfiles and local infra exist, but there is no public product Docker image distribution claim today.</td>
+                <td>None</td>
+                <td>Container / image story not yet public</td>
+                <td>Add only when container distribution becomes part of the official public contract.</td>
+              </tr>
+              <tr>
+                <td><strong>Hosted Render pilot</strong></td>
+                <td><span class="badge deferred">deferred</span></td>
+                <td>Repo-owned hosted blueprint exists for guarded future pilots; CortexPilot is not a hosted operator product today.</td>
+                <td><a href="https://github.com/xiaojiou176-open/CortexPilot-public/blob/main/docs/runbooks/render-hosted-operator-pilot.md">Render pilot runbook</a></td>
+                <td>HTTP / token / protected operator flow</td>
+                <td>Keep as future pilot groundwork, not a live hosted claim.</td>
+              </tr>
+              <tr>
+                <td><strong>Write-capable MCP</strong></td>
+                <td><span class="badge deferred">deferred</span></td>
+                <td>Public MCP remains read-only; queue preview or pilot groundwork does not upgrade the public contract.</td>
+                <td><a href="https://github.com/xiaojiou176-open/CortexPilot-public/blob/main/docs/runbooks/write-mcp-queue-pilot.md">Queue pilot runbook</a></td>
+                <td>Guarded operator-only, default-off</td>
+                <td>Keep outside the public promise until an owner-approved launch contract exists.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>What this page is for</h2>
+        <div class="grid">
+          <article class="card">
+            <h3>Use this page when</h3>
+            <p>You need the exact current answer to “what is official now, what is only starter material, what is still repo-owned, and what is deferred?”</p>
+          </article>
+          <article class="card">
+            <h3>Do not use this page to imply</h3>
+            <p>Hosted operator accounts, write-capable MCP, public Docker image distribution, official marketplace listings, or registry-installable packages that are not actually published yet.</p>
+          </article>
+          <article class="card">
+            <h3>Next best clicks</h3>
+            <p>Open <a href="../use-cases/">the first proven workflow</a> for proof-first validation, <a href="../mcp/">the MCP quickstart</a> for protocol truth, and <a href="../builders/">the builder quickstart</a> for repo-owned package reuse.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

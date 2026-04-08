@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "name": "cortexpilot-readonly",
+  "display_name": "CortexPilot Read-only MCP",
+  "status": "shipped",
+  "version": "0.1.0-alpha.2",
+  "version_truth": "This is the latest published GitHub release version and is intended to match the current released main snapshot. Re-check parity after later mainline commits before making broader release or registry claims.",
+  "release_represents_current_main": true,
+  "description": "Repo-owned read-only MCP server for CortexPilot runs, workflows, approvals, compare, proof, and incident summaries.",
+  "homepage": "https://xiaojiou176-open.github.io/CortexPilot-public/mcp/",
+  "distribution_page": "https://github.com/xiaojiou176-open/CortexPilot-public/blob/main/DISTRIBUTION.md",
+  "repository": "https://github.com/xiaojiou176-open/CortexPilot-public",
+  "transport": "stdio",
+  "protocol": "json-rpc",
+  "auth_boundary": {
+    "mode": "repo-local only",
+    "hosted_account": false,
+    "oauth": false,
+    "writes_enabled": false
+  },
+  "startup": {
+    "command": "bash",
+    "args": [
+      "/absolute/path/to/CortexPilot/scripts/run_readonly_mcp.sh"
+    ],
+    "working_directory": "optional",
+    "environment": {},
+    "notes": "For an interactive proof from the repo root, you can also run `bash scripts/run_readonly_mcp.sh`."
+  },
+  "portable_examples": [
+    {
+      "surface": "shared-mcp-json",
+      "path": "examples/coding-agents/mcp/readonly.mcp.json.example"
+    },
+    {
+      "surface": "codex",
+      "path": "docs/examples/agent-starters/codex/cortexpilot.config.toml"
+    },
+    {
+      "surface": "claude-code",
+      "path": "docs/examples/agent-starters/claude/project.mcp.json"
+    },
+    {
+      "surface": "openclaw",
+      "path": "docs/examples/agent-starters/openclaw/cortexpilot-server.json"
+    },
+    {
+      "surface": "openclaw-toml",
+      "path": "docs/examples/agent-starters/openclaw/config.openclaw.example.toml"
+    }
+  ],
+  "capabilities": {
+    "mode": "read-only",
+    "tools": [
+      "list_runs",
+      "get_run",
+      "get_run_events",
+      "get_run_reports",
+      "list_workflows",
+      "get_workflow",
+      "list_queue",
+      "get_pending_approvals",
+      "get_diff_gate_state",
+      "get_compare_summary",
+      "get_proof_summary",
+      "get_incident_summary"
+    ]
+  },
+  "source_of_truth": {
+    "cli_entrypoint": "apps/orchestrator/src/cortexpilot_orch/cli.py",
+    "wrapper": "scripts/run_readonly_mcp.sh",
+    "human_quickstart": "docs/mcp/index.html",
+    "distribution_status": "DISTRIBUTION.md"
+  },
+  "explicit_non_claims": [
+    "not a hosted MCP account",
+    "not a write-capable MCP surface",
+    "not an OAuth login flow",
+    "not a replacement for the orchestration runtime itself"
+  ]
+}

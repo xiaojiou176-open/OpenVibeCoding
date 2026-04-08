@@ -245,7 +245,12 @@
           If your team already understands the workflow and protocol boundary and now wants the shortest repo-owned package path, this page is the right next click.
         </p>
         <p class="lede">
-          Current package boundary: the package names referenced here are still <strong>private workspace packages</strong>. External teams should treat the current adoption path as clone/workspace reuse or vendor copy until a real publish path exists.
+          Current package boundary: <code>@cortexpilot/frontend-api-client</code> and
+          <code>@cortexpilot/frontend-api-contract</code> now carry publish-ready metadata,
+          but no public package release is live yet. The current official install path
+          is still clone/workspace reuse or vendor copy, while
+          <code>@cortexpilot/frontend-shared</code> remains a repo-owned presentation
+          substrate instead of a standalone package story.
         </p>
         <div class="actions">
           <a class="button primary" href="#choose-the-shortest-builder-entry">Choose the shortest builder entry</a>
@@ -321,8 +326,13 @@
           </article>
           <article class="card">
             <span class="badge warn">Boundary</span>
-            <h3>Not registry-installable yet</h3>
-            <p>The current package names are still <code>private</code> workspace packages. Until a real publish happens, the truthful external path is clone/workspace reuse or vendor copy.</p>
+            <h3>Publish-ready, not published</h3>
+            <p>The thin client and contract package are ready for a future release, but no npm publication is live yet. The truthful install path today is still clone/workspace reuse or vendor copy.</p>
+          </article>
+          <article class="card">
+            <span class="badge warn">Boundary</span>
+            <h3>Shared stays repo-owned</h3>
+            <p><code>@cortexpilot/frontend-shared</code> is useful, but it is still the repo-owned presentation substrate rather than a standalone distribution unit.</p>
           </article>
         </div>
       </section>

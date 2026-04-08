@@ -11,6 +11,9 @@ that the live notes, social preview, or other repository settings are current.
 - Repo-side docs can prove what is tracked in git.
 - Repo-side docs cannot prove that a live GitHub Release, social preview
   setting, or other repository setting has already been applied.
+- The latest published release can lag current `main`; if it does, README,
+  Pages, and `DISTRIBUTION.md` must say so directly instead of implying that
+  the newest docs and the newest tag are already the same snapshot.
 - Treat storyboard assets as explainers.
 - Treat degraded or local-only captures as real assets with limited proof value,
   not as healthy end-to-end proof.

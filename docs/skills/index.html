@@ -245,6 +245,13 @@
           instead of reconstructing Codex / Claude Code / OpenClaw config files
           from scratch.
         </p>
+        <p>
+          The current bundle now carries one registry-shaped skill artifact too:
+          <code>examples/coding-agents/plugin-bundles/cortexpilot-coding-agent-bundle/skills/cortexpilot-adoption-router/manifest.yaml</code>.
+          That makes the adoption-router skill package-ready across Codex /
+          Claude Code / OpenClaw style installs without pretending any live
+          marketplace or registry submission already exists.
+        </p>
       </section>
 
       <section class="section">
@@ -256,10 +263,13 @@
   README.md
   docs/README.md
   AGENTS.md
-  .agents/skills/&lt;chosen-skill&gt;/</code></pre>
+  .agents/skills/&lt;chosen-skill&gt;/
+    SKILL.md
+    manifest.yaml</code></pre>
         <ol>
           <li>Copy the three truth files first: <code>README.md</code>, <code>docs/README.md</code>, and <code>AGENTS.md</code>.</li>
           <li>Copy only the skill folders you truly want the agent to reuse; do not mirror the whole repo just to say “skills exist.”</li>
+          <li>Keep the tracked <code>manifest.yaml</code> with the skill whenever the host tool or future registry expects machine-readable metadata.</li>
           <li>Keep the skill paired with the same repo-owned read-only MCP command when the workflow needs machine-readable inspection.</li>
           <li>Preserve the stop-signs inside the skill: hosted, write-MCP, and plugin/store claims stay frozen until the repo truth changes.</li>
         </ol>
@@ -278,7 +288,7 @@
           </article>
           <article class="card">
             <h3>OpenClaw</h3>
-            <p>Use skills as an adaptation layer for repo truth. OpenClaw has real plugin and skills surfaces, but CortexPilot currently lands on the integration-and-skills side first rather than claiming an official shipped plugin.</p>
+            <p>Use skills as an adaptation layer for repo truth. OpenClaw has real plugin and skills surfaces, and CortexPilot now carries a ClawHub-shaped <code>manifest.yaml</code> for its shared adoption-router skill, but it still lands on the integration-and-skills side first rather than claiming an official shipped plugin.</p>
           </article>
         </div>
       </section>
@@ -322,7 +332,10 @@
             <p>
               OpenClaw already has real skills, a workspace path, and a public registry/catalog, so
               CortexPilot should fit as repo truth + proof + read-only MCP guidance rather than
-              pretending to be the native OpenClaw plugin itself.
+              pretending to be the native OpenClaw plugin itself. The tracked
+              <code>manifest.yaml</code> is there so the shared skill has
+              registry-shaped metadata ready when later external submission
+              actually happens.
             </p>
           </article>
         </div>
@@ -346,7 +359,7 @@
           <li>not a hosted skill registry service</li>
         </ul>
         <p>
-          The truthful product story is smaller but stronger: the repository already gives teams reusable, inspectable skill playbooks that align with the real Command Tower / MCP / Proof &amp; Replay contract.
+          The truthful product story is smaller but stronger: the repository already gives teams reusable, inspectable skill playbooks that align with the real Command Tower / MCP / Proof &amp; Replay contract, and the shared adoption-router skill now includes registry-shaped metadata without skipping ahead to a fake published-listing claim.
         </p>
       </section>
 

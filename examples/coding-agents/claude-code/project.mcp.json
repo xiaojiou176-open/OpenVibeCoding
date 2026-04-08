@@ -1,15 +1,11 @@
 {
   "mcpServers": {
     "cortexpilot-readonly": {
-      "command": "python3",
+      "command": "bash",
       "args": [
-        "-m",
-        "cortexpilot_orch.cli",
-        "mcp-readonly-server"
+        "__CORTEXPILOT_REPO_ROOT__/scripts/run_readonly_mcp.sh"
       ],
-      "env": {
-        "PYTHONPATH": "__CORTEXPILOT_REPO_ROOT__/apps/orchestrator/src"
-      }
+      "cwd": "__CORTEXPILOT_REPO_ROOT__"
     }
   }
 }

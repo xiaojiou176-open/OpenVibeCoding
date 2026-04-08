@@ -308,7 +308,7 @@ npm run dashboard:dev</code></pre>
                   bundle seed exist. No official marketplace submission receipt
                   is tracked here today.
                 </td>
-                <td><code>Claude Code-compatible starter / official marketplace pending</code></td>
+                <td><code>Claude Code-compatible starter / not listed</code></td>
               </tr>
               <tr>
                 <td><strong>OpenClaw</strong></td>
@@ -366,26 +366,26 @@ npm run dashboard:dev</code></pre>
 
       <section class="section">
         <h2>Codex</h2>
-        <p>Fastest repo-root setup:</p>
+        <p>Fastest raw direct CLI wiring if you are not copying the tracked config file yet:</p>
         <pre><code>codex mcp add cortexpilot-readonly \
-  --env PYTHONPATH=apps/orchestrator/src \
-  -- python3 -m cortexpilot_orch.cli mcp-readonly-server</code></pre>
+  -- bash /absolute/path/to/CortexPilot/scripts/run_readonly_mcp.sh</code></pre>
         <p>
           Need a durable config file instead of a one-line add command? Start from
           <a href="../examples/agent-starters/codex/cortexpilot.config.toml">the tracked Codex example</a>.
+          That tracked file is the canonical wrapper-based template.
         </p>
       </section>
 
       <section class="section">
         <h2>Claude Code</h2>
-        <p>Fastest shared project setup:</p>
+        <p>Fastest raw direct CLI wiring if you are not copying the tracked project file yet:</p>
         <pre><code>claude mcp add --transport stdio --scope project \
-  --env PYTHONPATH=apps/orchestrator/src \
   cortexpilot-readonly \
-  -- python3 -m cortexpilot_orch.cli mcp-readonly-server</code></pre>
+  -- bash /absolute/path/to/CortexPilot/scripts/run_readonly_mcp.sh</code></pre>
         <p>
           If you want the team-visible file checked into the repo root, start from
           <a href="../examples/agent-starters/claude/project.mcp.json">the tracked project <code>.mcp.json</code> example</a>.
+          That tracked file is the canonical wrapper-based template.
         </p>
       </section>
 
@@ -393,7 +393,7 @@ npm run dashboard:dev</code></pre>
         <h2>OpenClaw</h2>
         <p>Fastest OpenClaw-managed saved definition:</p>
         <pre><code>openclaw mcp set cortexpilot \
-  '{"command":"python3","args":["-m","cortexpilot_orch.cli","mcp-readonly-server"],"env":{"PYTHONPATH":"apps/orchestrator/src"},"cwd":"/absolute/path/to/CortexPilot"}'</code></pre>
+  '{"command":"bash","args":["/absolute/path/to/CortexPilot/scripts/run_readonly_mcp.sh"],"cwd":"/absolute/path/to/CortexPilot"}'</code></pre>
         <p>
           Need the JSON object as a tracked file first? Start from
           <a href="../examples/agent-starters/openclaw/cortexpilot-server.json">the tracked OpenClaw example</a>.
