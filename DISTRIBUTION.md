@@ -49,7 +49,7 @@ MCP / npm package release.
 | Claude Code starter | `starter-only` | Project-local `.claude` and `.mcp.json` starter | `examples/coding-agents/claude-code/` | local project wiring only | keep truthful; do not relabel as marketplace package |
 | OpenClaw starter | `starter-only` | Local config seed for the same read-only MCP and compatible bundle | `examples/coding-agents/openclaw/` | local config + local plugin path | keep truthful; do not relabel as ClawHub publication |
 | Cross-tool coding-agent bundle | `bundle-compatible` | Local bundle compatible with Codex local marketplace installs, Claude plugin-dir development, and OpenClaw local plugin loading | `examples/coding-agents/plugin-bundles/cortexpilot-coding-agent-bundle/` | local bundle metadata + repo-aware MCP wrapper | keep local-install contract; no published listing claim |
-| Repo-owned skill in the bundle | `starter-only` | Routing skill for honest adoption path selection | shipped inside the local bundle | repo-owned skill only | keep repo-owned; not a marketplace item |
+| Repo-owned skill in the bundle | `publish-ready but deferred` | Cross-tool routing skill with `SKILL.md` + `manifest.yaml` for honest adoption path selection across Codex / Claude Code / OpenClaw style installs | `examples/coding-agents/plugin-bundles/cortexpilot-coding-agent-bundle/skills/cortexpilot-adoption-router/` | repo-owned skill contract, bundle-scoped today, no live registry listing | keep truthful: package-ready metadata exists, but official marketplace / registry submissions are still later actions |
 | `@cortexpilot/frontend-api-client` | `publish-ready but deferred` | Thin JS/TS client for control-plane reads and guarded operator add-ons | package metadata + README are publish-ready, but the official install story is still clone / vendor reuse until the first npm release exists | HTTP API with token / mutation-role expectations | publish later only after the first public package release is intentionally cut |
 | `@cortexpilot/frontend-api-contract` | `publish-ready but deferred` | Generated route / query / type boundary for frontend consumers | package metadata + README are publish-ready, but the official install story is still clone / vendor reuse until the first npm release exists | typed contract layer only | publish later only after the first public package release is intentionally cut |
 | `@cortexpilot/frontend-shared` | `not standalone distribution unit` | Repo-owned presentation substrate for dashboard / desktop / future web surfaces | repo-local package only | frontend presentation helpers only | keep repo-owned for now |
@@ -60,16 +60,13 @@ MCP / npm package release.
 
 ## Version And Release Truth
 
-- The only live GitHub release today is `v0.1.0-alpha.1`.
-- That release is the first public storefront baseline and should be read as
-  the first public release snapshot, not as a claim that every post-release
-  hardening commit is already re-tagged.
-- Current `main` is ahead of tag commit `7fbc491`, so repo-side distribution
-  hardening after that baseline lives on `main` until a later tag/release is
-  cut.
-- Until the next release is created, README, Pages, and docs must describe the
-  current release truth as "first public baseline release + current main is
-  ahead", not "release fully matches current main".
+- The latest live GitHub release is `v0.1.0-alpha.2`.
+- `v0.1.0-alpha.2` is the current published prerelease baseline and is meant to
+  match the current released `main` snapshot.
+- `v0.1.0-alpha.1` remains the historical first public baseline, not the latest
+  release truth.
+- If `main` moves again after this release, README, Pages, and docs must return
+  to explicit lag wording until the next tag is cut.
 
 ## Canonical MCP Truth
 

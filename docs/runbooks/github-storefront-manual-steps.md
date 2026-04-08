@@ -55,25 +55,26 @@ If Discussions are disabled again in the future:
 
 - reflect that choice in `README.md` or `SUPPORT.md`
 
-## 5. First GitHub Release
+## 5. Latest GitHub Release
 
 Recommended release title:
 
-> CortexPilot v0.1.0-alpha.1 - first public prerelease baseline
+> CortexPilot v0.1.0-alpha.2 - distribution readiness baseline
 
 Draft notes source:
 
-- `docs/releases/first-public-release-draft.md`
+- `docs/releases/v0.1.0-alpha.2.md`
 
 Live release:
 
-- `https://github.com/xiaojiou176-open/CortexPilot-public/releases/tag/v0.1.0-alpha.1`
+- `https://github.com/xiaojiou176-open/CortexPilot-public/releases/tag/v0.1.0-alpha.2`
 
 Truth note:
 
-- treat `v0.1.0-alpha.1` as the latest published public baseline, not as an
-  automatic claim that current `main` is already re-tagged
-- if current `main` has moved ahead, keep `README.md` and `DISTRIBUTION.md`
+- treat `v0.1.0-alpha.2` as the latest published public baseline and current
+  released `main` snapshot
+- keep `v0.1.0-alpha.1` as the historical first public baseline
+- if current `main` moves ahead again, keep `README.md` and `DISTRIBUTION.md`
   explicit about that lag until the next release is cut
 
 ## 6. Pages / Landing

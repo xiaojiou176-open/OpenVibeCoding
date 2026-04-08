@@ -1,0 +1,58 @@
+schema_version: 1
+name: cortexpilot-adoption-router
+display_name: CortexPilot Adoption Router
+version: 0.1.0
+status: publish-ready-but-deferred
+summary: >
+  Repo-owned cross-tool skill that routes Codex, Claude Code, and OpenClaw-style
+  workflows to the right CortexPilot adoption lane without overclaiming hosted,
+  write-capable MCP, or published listing support.
+homepage: https://github.com/xiaojiou176-open/CortexPilot-public
+repository: https://github.com/xiaojiou176-open/CortexPilot-public
+license: MIT
+authors:
+  - name: CortexPilot
+entrypoints:
+  skill_markdown: SKILL.md
+  bundle_root: ../../
+  codex_plugin_metadata: ../../.codex-plugin/plugin.json
+  claude_plugin_metadata: ../../.claude-plugin/plugin.json
+  shared_mcp_config: ../../.mcp.json
+compatibility:
+  codex:
+    mode: local marketplace bundle or vendored skill
+    published_listing: false
+  claude_code:
+    mode: local plugin-dir bundle or vendored skill
+    published_listing: false
+  openclaw:
+    mode: local bundle or copied skill workspace item
+    published_listing: false
+capabilities:
+  - route to the truthful CortexPilot adoption lane
+  - keep read order anchored to repo docs and MCP truth
+  - preserve hosted, OAuth, and write-MCP stop signs
+boundaries:
+  hosted_operator: false
+  write_capable_mcp: false
+  oauth_login: false
+  official_listing_live: false
+canonical_docs:
+  - ../../README.md
+  - ../../../../README.md
+  - ../../../../docs/README.md
+  - ../../../../docs/compatibility/index.html
+  - ../../../../docs/integrations/index.html
+  - ../../../../docs/skills/index.html
+  - ../../../../docs/mcp/index.html
+distribution_notes:
+  shipped_shape: repo-owned skill artifact inside the local coding-agent bundle
+  current_claim: publish-ready metadata is present, but no external Codex / Claude Code / OpenClaw listing is live yet
+  later_phase:
+    - Codex directory submission
+    - Claude Code marketplace submission
+    - OpenClaw or ClawHub registry submission
+verification:
+  repo_commands:
+    - npm run docs:check
+    - bash scripts/check_repo_hygiene.sh

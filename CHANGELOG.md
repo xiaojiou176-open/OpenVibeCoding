@@ -6,6 +6,12 @@ All notable changes to this repository will be documented in this file.
 
 ### Changed
 
+- added a registry-shaped `manifest.yaml` for the repo-owned
+  `cortexpilot-adoption-router` skill inside the coding-agent bundle, then
+  synced the distribution contract, skills quickstart, and Codex / Claude Code /
+  OpenClaw starter docs so CortexPilot can truthfully describe one cross-tool
+  skill artifact as `publish-ready but deferred` without claiming any live
+  marketplace or registry listing
 - added a repo-owned workflow/dependency/security closeout lane by bootstrapping
   pinned `actionlint`, `zizmor`, `trivy`, `gitleaks`, and `trufflehog`
   binaries through `scripts/lib/release_tool_helpers.sh`; the same slice adds

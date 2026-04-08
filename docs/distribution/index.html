@@ -255,17 +255,17 @@
           <article class="card">
             <span class="badge shipped">Published today</span>
             <h3>Latest GitHub release</h3>
-            <p><code>v0.1.0-alpha.1</code> is the latest published GitHub Release and the latest public semver tag.</p>
+            <p><code>v0.1.0-alpha.2</code> is the latest published GitHub Release and the latest public semver tag.</p>
           </article>
           <article class="card">
             <span class="badge deferred">Important boundary</span>
-            <h3>Release is not the same thing as moving main</h3>
-            <p>Before any registry, marketplace, Docker, or broader distribution claim, cut a fresh release that matches the current <code>main</code> state instead of assuming parity from repo docs alone.</p>
+            <h3>Current release and main are aligned</h3>
+            <p>The current prerelease is meant to match the current released <code>main</code> snapshot. If later commits land, restore explicit lag wording until the next tag is cut.</p>
           </article>
           <article class="card">
             <span class="badge shipped">Repo-side draft</span>
             <h3>Current release notes source</h3>
-            <p>Use <a href="https://github.com/xiaojiou176-open/CortexPilot-public/blob/main/docs/releases/first-public-release-draft.md"><code>docs/releases/first-public-release-draft.md</code></a> as the tracked repo-side release draft, then verify parity against the live GitHub release page.</p>
+            <p>Use <a href="https://github.com/xiaojiou176-open/CortexPilot-public/blob/main/docs/releases/v0.1.0-alpha.2.md"><code>docs/releases/v0.1.0-alpha.2.md</code></a> as the tracked repo-side release draft. Keep <code>first-public-release-draft.md</code> as the historical alpha.1 baseline.</p>
           </article>
         </div>
       </section>
@@ -362,6 +362,14 @@
                 <td><code>examples/coding-agents/plugin-bundles/cortexpilot-coding-agent-bundle/</code></td>
                 <td>Local bundle metadata + plugin-scoped read-only MCP</td>
                 <td>Keep local-first; do not call it a published listing.</td>
+              </tr>
+              <tr>
+                <td><strong>Repo-owned adoption-router skill</strong></td>
+                <td><span class="badge starter">publish-ready but deferred</span></td>
+                <td>Cross-tool skill artifact with <code>SKILL.md</code> plus <code>manifest.yaml</code> for Codex / Claude Code / OpenClaw-compatible installs.</td>
+                <td><code>examples/coding-agents/plugin-bundles/cortexpilot-coding-agent-bundle/skills/cortexpilot-adoption-router/</code></td>
+                <td>Repo-owned skill contract, bundle-scoped today, no live registry listing</td>
+                <td>Keep the artifact honest: metadata and semver are present, but any official registry submission is still a later external action.</td>
               </tr>
               <tr>
                 <td><strong>@cortexpilot/frontend-api-client</strong></td>
