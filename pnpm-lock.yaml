@@ -36,8 +36,8 @@ importers:
         specifier: 1.2.4
         version: 1.2.4(@types/react@19.2.14)(react@19.2.4)
       axe-core:
-        specifier: 4.11.1
-        version: 4.11.1
+        specifier: 4.11.2
+        version: 4.11.2
       class-variance-authority:
         specifier: 0.7.1
         version: 0.7.1
@@ -52,7 +52,7 @@ importers:
         version: 2.2.0
       next:
         specifier: 16.2.1
-        version: 16.2.1(@babel/core@7.29.0)(@opentelemetry/api@1.9.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+        version: 16.2.1(@opentelemetry/api@1.9.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       playwright:
         specifier: 1.58.2
         version: 1.58.2
@@ -64,7 +64,7 @@ importers:
         version: 19.2.4(react@19.2.4)
       styled-jsx:
         specifier: 5.1.7
-        version: 5.1.7(@babel/core@7.29.0)(react@19.2.4)
+        version: 5.1.7(react@19.2.4)
     devDependencies:
       '@axe-core/cli':
         specifier: 4.10.2
@@ -1493,8 +1493,8 @@ packages:
     resolution: {integrity: sha512-Xm7bpRXnDSX2YE2YFfBk2FnF0ep6tmG7xPh8iHee8MIcrgq762Nkce856dYtJYLkuIoYZvGfTs/PbZhideTcEg==}
     engines: {node: '>=4'}
 
-  axe-core@4.11.1:
-    resolution: {integrity: sha512-BASOg+YwO2C+346x3LZOeoovTIoTrRqEsqMa6fmfAV0P+U9mFr9NsyOEpiYvFjbc64NMrSswhV50WdXzdb/Z5A==}
+  axe-core@4.11.2:
+    resolution: {integrity: sha512-byD6KPdvo72y/wj2T/4zGEvvlis+PsZsn/yPS3pEO+sFpcrqRpX/TJCxvVaEsNeMrfQbCr7w163YqoD9IYwHXw==}
     engines: {node: '>=4'}
 
   axios@1.14.0:
@@ -3271,7 +3271,7 @@ snapshots:
 
   '@axe-core/webdriverjs@4.11.1(selenium-webdriver@4.22.0)':
     dependencies:
-      axe-core: 4.11.1
+      axe-core: 4.11.2
       selenium-webdriver: 4.22.0
 
   '@babel/code-frame@7.29.0':
@@ -4506,7 +4506,7 @@ snapshots:
 
   axe-core@4.10.3: {}
 
-  axe-core@4.11.1: {}
+  axe-core@4.11.2: {}
 
   axios@1.14.0:
     dependencies:
@@ -5221,7 +5221,7 @@ snapshots:
     dependencies:
       '@paulirish/trace_engine': 0.0.61
       '@sentry/node': 9.47.1
-      axe-core: 4.11.1
+      axe-core: 4.11.2
       chrome-launcher: 1.2.1
       configstore: 7.1.0
       csp_evaluator: 1.1.5
@@ -5713,7 +5713,7 @@ snapshots:
 
   netmask@2.0.2: {}
 
-  next@16.2.1(@babel/core@7.29.0)(@opentelemetry/api@1.9.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
+  next@16.2.1(@opentelemetry/api@1.9.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
     dependencies:
       '@next/env': 16.2.1
       '@swc/helpers': 0.5.15
@@ -5722,7 +5722,7 @@ snapshots:
       postcss: 8.4.31
       react: 19.2.4
       react-dom: 19.2.4(react@19.2.4)
-      styled-jsx: 5.1.6(@babel/core@7.29.0)(react@19.2.4)
+      styled-jsx: 5.1.6(react@19.2.4)
     optionalDependencies:
       '@next/swc-darwin-arm64': 16.2.1
       '@next/swc-darwin-x64': 16.2.1
@@ -6166,19 +6166,15 @@ snapshots:
     dependencies:
       inline-style-parser: 0.2.7
 
-  styled-jsx@5.1.6(@babel/core@7.29.0)(react@19.2.4):
+  styled-jsx@5.1.6(react@19.2.4):
     dependencies:
       client-only: 0.0.1
       react: 19.2.4
-    optionalDependencies:
-      '@babel/core': 7.29.0
 
-  styled-jsx@5.1.7(@babel/core@7.29.0)(react@19.2.4):
+  styled-jsx@5.1.7(react@19.2.4):
     dependencies:
       client-only: 0.0.1
       react: 19.2.4
-    optionalDependencies:
-      '@babel/core': 7.29.0
 
   supports-color@7.2.0:
     dependencies:
