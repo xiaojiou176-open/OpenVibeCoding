@@ -691,19 +691,22 @@ gates can trace the maintenance decision end to end.
 The public release surface now has a live baseline. Use these entrypoints:
 
 - [GitHub Releases page](https://github.com/xiaojiou176-open/CortexPilot-public/releases)
-- [Live GitHub Release `v0.1.0-alpha.1`](https://github.com/xiaojiou176-open/CortexPilot-public/releases/tag/v0.1.0-alpha.1)
+- [Live GitHub Release `v0.1.0-alpha.2`](https://github.com/xiaojiou176-open/CortexPilot-public/releases/tag/v0.1.0-alpha.2)
 - [Live GitHub Pages site](https://xiaojiou176-open.github.io/CortexPilot-public/)
 - [Changelog](CHANGELOG.md)
 - [Public release checklist](docs/runbooks/public-release-checklist.md)
+- [Current release notes source](docs/releases/v0.1.0-alpha.2.md)
 - [First public release draft](docs/releases/first-public-release-draft.md)
 - [Tracked healthy `news_digest` proof summary](docs/releases/assets/news-digest-healthy-proof-2026-03-27.md)
 - [Tracked `news_digest` baseline summary](docs/releases/assets/news-digest-benchmark-summary-2026-03-27.md)
 - [Tracked `news_digest` Workflow Case recap](docs/releases/assets/news-digest-workflow-case-recap-2026-03-27.md)
 
-Release truth note: `v0.1.0-alpha.1` is the current public storefront baseline,
-but current `main` is ahead with post-release repo-side follow-through. Treat
-[DISTRIBUTION.md](DISTRIBUTION.md) as the live repo-side distribution contract
-until the next tag is cut.
+Release truth note: `v0.1.0-alpha.2` is the current published prerelease
+baseline and is intended to match the current released `main` snapshot. The
+historical first-baseline draft remains
+[docs/releases/first-public-release-draft.md](docs/releases/first-public-release-draft.md),
+while the current release note source is
+[docs/releases/v0.1.0-alpha.2.md](docs/releases/v0.1.0-alpha.2.md).
 
 Public repo hygiene stays fail-closed as well: token-like fixture coverage must
 use synthetic string assembly, and public path fixtures must use generic

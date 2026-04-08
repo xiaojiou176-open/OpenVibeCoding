@@ -7,6 +7,9 @@ This release is the first public storefront baseline for CortexPilot.
 Treat it as the first published baseline, not as a claim that current `main`
 and the latest public release are always the same snapshot.
 
+Historical note: the newer current release note source lives at
+`docs/releases/v0.1.0-alpha.2.md`.
+
 ## Why this release matters
 
 CortexPilot is not just an agent demo repository. It is a command tower for

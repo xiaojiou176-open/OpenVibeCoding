@@ -11,6 +11,11 @@ truthful CortexPilot position inside that ecosystem.
    examples/coding-agents/plugin-bundles/cortexpilot-coding-agent-bundle/
    ```
 
+   That bundle now includes
+   `skills/cortexpilot-adoption-router/manifest.yaml`, so the same repo-owned
+   skill already has ClawHub-style metadata even though no public listing is
+   live yet.
+
 2. Pair it with one of the tracked OpenClaw MCP/config examples:
 
    ```text
