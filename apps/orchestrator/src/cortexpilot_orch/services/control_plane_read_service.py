@@ -138,6 +138,7 @@ class ControlPlaneReadService:
         from cortexpilot_orch.api import main_run_views_helpers
         from cortexpilot_orch.api import main_state_store_helpers
         from cortexpilot_orch.config import load_config
+        from cortexpilot_orch.contract.compiler import build_role_binding_summary
         from cortexpilot_orch.queue import QueueStore
 
         cfg = load_config()
@@ -196,10 +197,18 @@ class ControlPlaneReadService:
             manifest = _as_record(_read_json(run_dir / "manifest.json", {}))
             if not manifest:
                 raise KeyError(f"run `{run_id}` not found")
+            contract = _load_contract(run_id)
+            normalized_contract = contract if isinstance(contract, dict) else {}
+            persisted_role_binding = _as_record(manifest.get("role_binding_summary"))
+            allowed_paths = _as_array(normalized_contract.get("allowed_paths"))
             return {
                 "run_id": run_id,
+                "task_id": manifest.get("task_id") or normalized_contract.get("task_id"),
+                "allowed_paths": allowed_paths,
+                "role_binding_read_model": persisted_role_binding
+                or build_role_binding_summary(normalized_contract),
                 "manifest": manifest,
-                "contract": _load_contract(run_id),
+                "contract": normalized_contract,
                 "status": _as_text(manifest.get("status")) or "UNKNOWN",
                 "last_event_ts": _last_event_ts(run_id),
             }

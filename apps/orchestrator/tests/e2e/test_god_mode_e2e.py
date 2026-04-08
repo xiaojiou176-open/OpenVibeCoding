@@ -1,4 +1,5 @@
 import json
+import shutil
 import subprocess
 import sys
 import time
@@ -104,8 +105,15 @@ def test_god_mode_approval_flow(tmp_path: Path) -> None:
         contract_path.write_text(json.dumps(contract), encoding="utf-8")
 
         existing = {item.name for item in runs_root.iterdir() if item.is_dir()}
+        uv_bin = shutil.which("uv") or "uv"
+        requirements_path = repo_root / "apps" / "orchestrator" / "requirements.txt"
         run_cmd = [
-            sys.executable,
+            uv_bin,
+            "run",
+            "--no-project",
+            "--with-requirements",
+            str(requirements_path),
+            "python",
             "-m",
             "cortexpilot_orch.cli",
             "run",

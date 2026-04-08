@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import os
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 
@@ -82,8 +83,20 @@ def test_mcp_readonly_server_lists_tools_and_calls_with_structured_content() -> 
 
 
 def _start_mcp_subprocess(repo_root: Path, env: dict[str, str]) -> subprocess.Popen[str]:
+    uv_bin = shutil.which("uv") or "uv"
+    requirements_path = repo_root / "apps" / "orchestrator" / "requirements.txt"
     return subprocess.Popen(
-        [sys.executable, "-m", "cortexpilot_orch.cli", "mcp-readonly-server"],
+        [
+            uv_bin,
+            "run",
+            "--no-project",
+            "--with-requirements",
+            str(requirements_path),
+            "python",
+            "-m",
+            "cortexpilot_orch.cli",
+            "mcp-readonly-server",
+        ],
         cwd=repo_root,
         env=env,
         stdin=subprocess.PIPE,

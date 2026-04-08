@@ -76,6 +76,22 @@ def free_port() -> int:
         return int(sock.getsockname()[1])
 
 
+def _orchestrator_cli_cmd(repo_root: Path, *args: str) -> list[str]:
+    uv_bin = shutil.which("uv") or "uv"
+    requirements_path = repo_root / "apps" / "orchestrator" / "requirements.txt"
+    return [
+        uv_bin,
+        "run",
+        "--no-project",
+        "--with-requirements",
+        str(requirements_path),
+        "python",
+        "-m",
+        "cortexpilot_orch.cli",
+        *args,
+    ]
+
+
 def wait_for_http(url: str, timeout_s: int, proc: "ManagedProcess") -> None:
     deadline = time.monotonic() + timeout_s
     last_error: str | None = None
@@ -158,10 +174,13 @@ class ManagedProcess:
 
 def build_env(repo_root: Path, runtime_root: Path, runs_root: Path, worktree_root: Path) -> dict[str, str]:
     base_env = os.environ.copy()
-    pythonpath = str(repo_root / "apps" / "orchestrator" / "src")
+    pythonpath_entries = [
+        str(repo_root / "apps" / "orchestrator" / "src"),
+        str(repo_root),
+    ]
     if base_env.get("PYTHONPATH"):
-        pythonpath = f"{pythonpath}{os.pathsep}{base_env['PYTHONPATH']}"
-    base_env["PYTHONPATH"] = pythonpath
+        pythonpath_entries.append(base_env["PYTHONPATH"])
+    base_env["PYTHONPATH"] = os.pathsep.join(pythonpath_entries)
     base_env["CORTEXPILOT_RUNTIME_ROOT"] = str(runtime_root)
     base_env["CORTEXPILOT_RUNS_ROOT"] = str(runs_root)
     base_env["CORTEXPILOT_WORKTREE_ROOT"] = str(worktree_root)
@@ -175,16 +194,7 @@ def build_env(repo_root: Path, runtime_root: Path, runs_root: Path, worktree_roo
 
 def start_api(repo_root: Path, env: dict[str, str], log_path: Path) -> tuple[ManagedProcess, int]:
     api_port = free_port()
-    api_cmd = [
-        sys.executable,
-        "-m",
-        "cortexpilot_orch.cli",
-        "serve",
-        "--host",
-        "127.0.0.1",
-        "--port",
-        str(api_port),
-    ]
+    api_cmd = _orchestrator_cli_cmd(repo_root, "serve", "--host", "127.0.0.1", "--port", str(api_port))
     return ManagedProcess(api_cmd, cwd=repo_root, env=env, log_path=log_path), api_port
 
 
@@ -228,14 +238,7 @@ def start_ui(repo_root: Path, env: dict[str, str], api_port: int, log_path: Path
 def run_contract(repo: Path, env: dict[str, str], contract: dict[str, Any], tmp_path: Path) -> str:
     contract_path = tmp_path / "contract.json"
     contract_path.write_text(json.dumps(contract), encoding="utf-8")
-    run_cmd = [
-        sys.executable,
-        "-m",
-        "cortexpilot_orch.cli",
-        "run",
-        str(contract_path),
-        "--mock",
-    ]
+    run_cmd = _orchestrator_cli_cmd(repo_root, "run", str(contract_path), "--mock")
     result = subprocess.run(run_cmd, cwd=repo, env=env, capture_output=True, text=True)
     if result.returncode != 0:
         raise RuntimeError(result.stderr)
@@ -245,14 +248,7 @@ def run_contract(repo: Path, env: dict[str, str], contract: dict[str, Any], tmp_
 def run_chain(repo: Path, env: dict[str, str], chain: dict[str, Any], tmp_path: Path) -> dict[str, Any]:
     chain_path = tmp_path / "chain.json"
     chain_path.write_text(json.dumps(chain, ensure_ascii=False, indent=2), encoding="utf-8")
-    run_cmd = [
-        sys.executable,
-        "-m",
-        "cortexpilot_orch.cli",
-        "run-chain",
-        str(chain_path),
-        "--mock",
-    ]
+    run_cmd = _orchestrator_cli_cmd(repo_root, "run-chain", str(chain_path), "--mock")
     result = subprocess.run(run_cmd, cwd=repo, env=env, capture_output=True, text=True)
     if result.returncode != 0:
         raise RuntimeError(result.stderr)
