@@ -1,11 +1,11 @@
 schema_version: 1
 name: cortexpilot-adoption-router
 display_name: CortexPilot Adoption Router
-version: 1.0.0
+version: 1.1.0
 summary: >
-  Public skill package that routes Codex, Claude Code, OpenHands, and OpenClaw
-  style workflows to the right CortexPilot adoption lane without overclaiming
-  hosted or write-capable support.
+  Public skill bundle for CortexPilot that packages MCP install guidance, a
+  read-only tool map, and a truthful lane-selection workflow for OpenHands and
+  OpenClaw style hosts.
 homepage: https://github.com/xiaojiou176-open/CortexPilot-public
 repository: https://github.com/xiaojiou176-open/CortexPilot-public
 license: MIT
@@ -15,23 +15,25 @@ entrypoints:
   skill_markdown: SKILL.md
 compatibility:
   openhands:
-    mode: skill directory
+    mode: skill directory plus published MCP config
     published_listing: false
   clawhub:
-    mode: skill publish
-    published_listing: false
+    mode: skill publish plus published MCP config
+    published_listing: true
 capabilities:
-  - route users to the truthful CortexPilot adoption lane
-  - preserve read-only MCP and starter-only boundaries
+  - install the published CortexPilot MCP package in host-specific config
+  - expose the stable read-only CortexPilot tool inventory
+  - route users to the truthful CortexPilot lane for runs, workflows, queue, and proof reads
   - keep hosted and write-capable claims gated
 boundaries:
   hosted_operator: false
   write_capable_mcp: false
   oauth_login: false
-  official_listing_live: false
+  official_listing_live: true
 distribution_notes:
-  current_claim: skill package is ready for registry submission, but no external registry listing should be claimed until it is confirmed live
+  current_claim: ClawHub listing is live; other hosts should only claim submission or live state when independently confirmed.
 verification:
   repo_commands:
     - npm run docs:check
     - bash scripts/check_repo_hygiene.sh
+    - printf '%s\n%s\n' '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"bundle-audit","version":"0.0.0"}}}' '{"jsonrpc":"2.0","id":2,"method":"tools/list","params":{}}' | uvx --from cortexpilot-orchestrator==0.1.0a4 cortexpilot-readonly-mcp

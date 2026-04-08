@@ -1,12 +1,17 @@
-This directory holds repo-tracked public skill artifacts for external skill registries.
+This directory holds CortexPilot public skill bundles for external skill
+registries.
 
-Each skill here must stay aligned with the current public CortexPilot boundary:
+Each bundle here must ship four things together:
 
-- public repo + Pages front door
-- read-only MCP only
-- local starter/bundle adoption
-- no hosted operator claim
-- no write-capable MCP claim
+- `SKILL.md`: the agent-facing instructions
+- `README.md`: the human-facing install and usage guide
+- `references/`: bundle-local install, tool-map, and lane notes
+- `manifest.yaml`: registry metadata for hosts such as ClawHub
 
-These skills may mirror repo-owned bundle surfaces, but they must not claim a live
-registry listing until the listing has been independently confirmed.
+The bundle is only valid if an agent can answer all four questions without
+leaving this directory:
+
+1. How do I install the published CortexPilot MCP package?
+2. Which read-only tools does the MCP expose?
+3. Which lane should I choose first?
+4. Which claims remain out of bounds?
