@@ -4,7 +4,7 @@
     "version": "1.0.0",
     "layer": "profile",
     "schema": "schemas/ci_policy.schema.json",
-    "description": "Profile-level CI defaults (pr/nightly/manual).",
+    "description": "UI policy defaults for the hosted PR subprofile (`pr`) plus the top-level nightly/manual lanes.",
     "source_of_truth": [
       "scripts/ci.sh"
     ]

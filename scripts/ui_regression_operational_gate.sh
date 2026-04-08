@@ -40,6 +40,8 @@ usage() {
 Usage:
   bash scripts/ui_regression_operational_gate.sh [--profile pr|nightly|manual]
 
+`pr` is the hosted PR subprofile, not a sixth top-level CI layer.
+
 Env:
   UI_REGRESSION_PROFILE              default: pr
   UI_REGRESSION_RUN_ID_PREFIX        default: ops_ui_regression
@@ -152,7 +154,7 @@ case "$PROFILE" in
     P1_THRESHOLD="${UI_REGRESSION_MANUAL_P1_THRESHOLD:-1.0}"
     ;;
   *)
-    echo "❌ invalid profile: $PROFILE (allowed: pr|nightly|manual)" >&2
+    echo "❌ invalid profile: $PROFILE (allowed: pr|nightly|manual; pr = hosted PR subprofile)" >&2
     exit 2
     ;;
 esac

@@ -136,6 +136,8 @@ navigation set.
 
 - active CI layers are `pre-commit`, `pre-push`, `hosted`, `nightly`, and `manual`
 - no sixth CI/profile/workflow layer exists in this repository
+- internal UI policy helpers may still say `pr`; that means the hosted PR
+  subprofile, not a sixth top-level CI layer
 - default public CI is hosted-first and GitHub-hosted
 - fork PRs stay on low-privilege checks only and must not touch secrets or
   live/external systems
