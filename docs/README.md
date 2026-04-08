@@ -66,7 +66,7 @@ navigation set.
 1. [runbooks/public-release-checklist.md](runbooks/public-release-checklist.md)
 2. [runbooks/storefront-share-kit.md](runbooks/storefront-share-kit.md)
 3. [runbooks/github-storefront-manual-steps.md](runbooks/github-storefront-manual-steps.md)
-4. [releases/v0.1.0-alpha.2.md](releases/v0.1.0-alpha.2.md)
+4. [releases/v0.1.0-alpha.3.md](releases/v0.1.0-alpha.3.md)
 5. [releases/first-public-release-draft.md](releases/first-public-release-draft.md)
 6. [assets/storefront/demo-status.md](assets/storefront/demo-status.md)
 7. [assets/storefront/benchmark-methodology.md](assets/storefront/benchmark-methodology.md)
@@ -88,7 +88,7 @@ navigation set.
 - `docs/runbooks/public-release-checklist.md`: user-facing GitHub release preparation checklist
 - `docs/runbooks/storefront-share-kit.md`: tracked punchline and sharing kit for storefront work
 - `docs/runbooks/github-storefront-manual-steps.md`: exact GitHub UI values and manual storefront steps
-- `docs/releases/v0.1.0-alpha.2.md`: repo-side draft source for the current published prerelease notes
+- `docs/releases/v0.1.0-alpha.3.md`: repo-side draft source for the current published prerelease notes
 - `docs/releases/first-public-release-draft.md`: repo-side draft source for the first public GitHub Release
 - `docs/assets/storefront/demo-status.md`: status ledger for tracked public demo and proof assets
 - `docs/assets/storefront/proof-pack-index.json`: machine-readable public proof bundle index for proven and showcase storefront slices

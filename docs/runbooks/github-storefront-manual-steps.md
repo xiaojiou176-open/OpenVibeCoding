@@ -59,19 +59,19 @@ If Discussions are disabled again in the future:
 
 Recommended release title:
 
-> CortexPilot v0.1.0-alpha.2 - distribution readiness baseline
+> CortexPilot v0.1.0-alpha.3 - storefront sync baseline
 
 Draft notes source:
 
-- `docs/releases/v0.1.0-alpha.2.md`
+- `docs/releases/v0.1.0-alpha.3.md`
 
 Live release:
 
-- `https://github.com/xiaojiou176-open/CortexPilot-public/releases/tag/v0.1.0-alpha.2`
+- `https://github.com/xiaojiou176-open/CortexPilot-public/releases/tag/v0.1.0-alpha.3`
 
 Truth note:
 
-- treat `v0.1.0-alpha.2` as the latest published public baseline and current
+- treat `v0.1.0-alpha.3` as the latest published public baseline and current
   released `main` snapshot
 - keep `v0.1.0-alpha.1` as the historical first public baseline
 - if current `main` moves ahead again, keep `README.md` and `DISTRIBUTION.md`

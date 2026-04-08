@@ -6,6 +6,7 @@ ones that still need a real capture pass.
 ## Present Today: Explainers And Supporting Assets
 
 - `hero-command-tower.svg`: public hero image
+- `command-tower-showcase-card.svg`: README and storefront showcase card
 - `first-loop-storyboard.svg`: shareable storyboard of the PM -> Command Tower -> Runs loop
 - `first-loop-storyboard.png`: static storyboard export
 - `first-loop-storyboard.gif`: storyboard animation export
@@ -34,7 +35,7 @@ ones that still need a real capture pass.
 | Healthy backend-backed `news_digest` public proof set | present | tracked proof summary: `docs/releases/assets/news-digest-healthy-proof-2026-03-27.md` |
 | Public benchmark artifact from a real tracked run | present | first tracked single-run baseline: `docs/releases/assets/news-digest-benchmark-summary-2026-03-27.md` |
 | Share-ready Workflow Case recap asset | present | tracked recap asset: `docs/releases/assets/news-digest-workflow-case-recap-2026-03-27.md` |
-| Published GitHub Release page/card | present | live release `v0.1.0-alpha.2` is the latest published prerelease baseline and current released `main` snapshot |
+| Published GitHub Release page/card | present | live release `v0.1.0-alpha.3` is the latest published prerelease baseline and current released `main` snapshot |
 
 ## Still Missing
 

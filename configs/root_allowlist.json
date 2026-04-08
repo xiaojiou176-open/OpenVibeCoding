@@ -10,6 +10,7 @@
     ".gitignore",
     ".gitleaks.toml",
     ".gitleaksignore",
+    ".nvmrc",
     ".pre-commit-config.yaml",
     ".runtime-cache",
     "AGENTS.md",

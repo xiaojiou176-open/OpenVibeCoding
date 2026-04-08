@@ -1,11 +1,11 @@
 # CortexPilot
 
-AI Work Command Tower for Codex and Claude Code workflows with Model Context
-Protocol (MCP)-readable proof, replay, and Workflow Cases.
+One request. One command tower. One proof pack you can inspect before you
+trust the run.
 
-CortexPilot gives Codex / Claude Code teams one governed path from the PM
-request to the Workflow Case to Proof & Replay, instead of scattered agents,
-logs, and local scripts.
+CortexPilot gives Codex / Claude Code teams one governed operator path from the
+PM request to the Workflow Case to Proof & Replay instead of scattered agents,
+local scripts, and after-the-fact logs.
 
 CortexPilot is a contract-first multi-agent orchestration repository.
 
@@ -19,6 +19,8 @@ Current public boundary: CortexPilot is a repo-backed operator control plane,
 not a hosted product, and the shipped MCP surface remains **read-only**.
 
 [Quickstart](#quickstart) · [First Proven Workflow](https://xiaojiou176-open.github.io/CortexPilot-public/use-cases/) · [Compatibility Matrix](https://xiaojiou176-open.github.io/CortexPilot-public/compatibility/) · [Distribution Contract](DISTRIBUTION.md) · [Distribution Status](https://xiaojiou176-open.github.io/CortexPilot-public/distribution/) · [Docs](docs/README.md) · [Architecture](docs/architecture/runtime-topology.md) · [AI + MCP + API Surfaces](https://xiaojiou176-open.github.io/CortexPilot-public/ai-surfaces/) · [Builder Quickstart](https://xiaojiou176-open.github.io/CortexPilot-public/builders/) · [Releases](https://github.com/xiaojiou176-open/CortexPilot-public/releases)
+
+![CortexPilot command tower showcase card](docs/assets/storefront/command-tower-showcase-card.svg)
 
 ## Official Distribution Story
 
@@ -45,6 +47,8 @@ mirror.
 ![CortexPilot studio preview card](docs/assets/storefront/cortexpilot-studio-preview.svg)
 
 ![CortexPilot command tower flow](docs/assets/storefront/hero-command-tower.svg)
+
+![CortexPilot first-loop storyboard](docs/assets/storefront/first-loop-storyboard.gif)
 
 ## Open The Right Door
 
@@ -691,22 +695,22 @@ gates can trace the maintenance decision end to end.
 The public release surface now has a live baseline. Use these entrypoints:
 
 - [GitHub Releases page](https://github.com/xiaojiou176-open/CortexPilot-public/releases)
-- [Live GitHub Release `v0.1.0-alpha.2`](https://github.com/xiaojiou176-open/CortexPilot-public/releases/tag/v0.1.0-alpha.2)
+- [Live GitHub Release `v0.1.0-alpha.3`](https://github.com/xiaojiou176-open/CortexPilot-public/releases/tag/v0.1.0-alpha.3)
 - [Live GitHub Pages site](https://xiaojiou176-open.github.io/CortexPilot-public/)
 - [Changelog](CHANGELOG.md)
 - [Public release checklist](docs/runbooks/public-release-checklist.md)
-- [Current release notes source](docs/releases/v0.1.0-alpha.2.md)
+- [Current release notes source](docs/releases/v0.1.0-alpha.3.md)
 - [First public release draft](docs/releases/first-public-release-draft.md)
 - [Tracked healthy `news_digest` proof summary](docs/releases/assets/news-digest-healthy-proof-2026-03-27.md)
 - [Tracked `news_digest` baseline summary](docs/releases/assets/news-digest-benchmark-summary-2026-03-27.md)
 - [Tracked `news_digest` Workflow Case recap](docs/releases/assets/news-digest-workflow-case-recap-2026-03-27.md)
 
-Release truth note: `v0.1.0-alpha.2` is the current published prerelease
+Release truth note: `v0.1.0-alpha.3` is the current published prerelease
 baseline and is intended to match the current released `main` snapshot. The
 historical first-baseline draft remains
 [docs/releases/first-public-release-draft.md](docs/releases/first-public-release-draft.md),
 while the current release note source is
-[docs/releases/v0.1.0-alpha.2.md](docs/releases/v0.1.0-alpha.2.md).
+[docs/releases/v0.1.0-alpha.3.md](docs/releases/v0.1.0-alpha.3.md).
 
 Public repo hygiene stays fail-closed as well: token-like fixture coverage must
 use synthetic string assembly, and public path fixtures must use generic

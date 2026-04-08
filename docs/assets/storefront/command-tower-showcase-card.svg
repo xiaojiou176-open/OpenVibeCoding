@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">CortexPilot showcase card</title>
+  <desc id="desc">A storefront card showing PM request, Command Tower, Workflow Case, and Proof and Replay in one public-facing visual.</desc>
+  <defs>
+    <linearGradient id="bg" x1="120" y1="60" x2="1160" y2="660" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#fbf6ed"/>
+      <stop offset="45%" stop-color="#efe3d2"/>
+      <stop offset="100%" stop-color="#d9e4ec"/>
+    </linearGradient>
+    <linearGradient id="accentA" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#cc6e42"/>
+      <stop offset="100%" stop-color="#8f4321"/>
+    </linearGradient>
+    <linearGradient id="accentB" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#27485d"/>
+      <stop offset="100%" stop-color="#152734"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="24" flood-color="#16232d" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <rect width="1280" height="720" fill="url(#bg)"/>
+  <circle cx="1110" cy="120" r="116" fill="#d07c51" opacity="0.18"/>
+  <circle cx="190" cy="610" r="138" fill="#27485d" opacity="0.10"/>
+
+  <text x="88" y="94" fill="#27485d" font-family="'Trebuchet MS', Verdana, sans-serif" font-size="20" font-weight="700" letter-spacing="0.08em">CORTEXPILOT PUBLIC SHOWCASE</text>
+  <text x="88" y="168" fill="#16232d" font-family="Georgia, 'Times New Roman', serif" font-size="66" font-weight="700">One request.</text>
+  <text x="88" y="242" fill="#16232d" font-family="Georgia, 'Times New Roman', serif" font-size="66" font-weight="700">One command tower.</text>
+  <text x="88" y="316" fill="#16232d" font-family="Georgia, 'Times New Roman', serif" font-size="66" font-weight="700">One proof pack you can inspect.</text>
+
+  <text x="88" y="382" fill="#4f616e" font-family="'Trebuchet MS', Verdana, sans-serif" font-size="25">
+    CortexPilot turns PM request -> Workflow Case -> Proof and Replay into one governed operator loop.
+  </text>
+  <text x="88" y="418" fill="#4f616e" font-family="'Trebuchet MS', Verdana, sans-serif" font-size="25">
+    Public boundary today: repo, Pages, one release-proven workflow, read-only MCP, starter packs.
+  </text>
+
+  <g filter="url(#shadow)">
+    <rect x="88" y="476" width="1088" height="168" rx="30" fill="#fffaf2" opacity="0.96"/>
+
+    <rect x="128" y="516" width="250" height="88" rx="22" fill="url(#accentA)"/>
+    <text x="154" y="552" fill="#fffaf2" font-family="'Trebuchet MS', Verdana, sans-serif" font-size="17" font-weight="700">PM request</text>
+    <text x="154" y="582" fill="#fffaf2" font-family="'Trebuchet MS', Verdana, sans-serif" font-size="14">one task enters with intent and acceptance</text>
+
+    <path d="M398 560 C450 560, 478 560, 530 560" fill="none" stroke="#9f4c26" stroke-width="6" stroke-linecap="round"/>
+    <polygon points="522,547 548,560 522,573" fill="#9f4c26"/>
+
+    <rect x="548" y="498" width="264" height="124" rx="24" fill="url(#accentB)"/>
+    <text x="578" y="536" fill="#fffaf2" font-family="'Trebuchet MS', Verdana, sans-serif" font-size="20" font-weight="700">Command Tower</text>
+    <text x="578" y="568" fill="#dfe8ee" font-family="'Trebuchet MS', Verdana, sans-serif" font-size="14">workflow posture, queue truth, run visibility</text>
+    <text x="578" y="592" fill="#dfe8ee" font-family="'Trebuchet MS', Verdana, sans-serif" font-size="14">without scattered shell logs or private scripts</text>
+
+    <path d="M828 560 C878 560, 904 560, 954 560" fill="none" stroke="#27485d" stroke-width="6" stroke-linecap="round"/>
+    <polygon points="946,547 972,560 946,573" fill="#27485d"/>
+
+    <rect x="972" y="516" width="164" height="88" rx="22" fill="#efe3d2"/>
+    <text x="996" y="552" fill="#16232d" font-family="'Trebuchet MS', Verdana, sans-serif" font-size="17" font-weight="700">Proof &amp; Replay</text>
+    <text x="996" y="582" fill="#4f616e" font-family="'Trebuchet MS', Verdana, sans-serif" font-size="14">inspect before you trust</text>
+  </g>
+</svg>

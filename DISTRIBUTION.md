@@ -60,8 +60,8 @@ MCP / npm package release.
 
 ## Version And Release Truth
 
-- The latest live GitHub release is `v0.1.0-alpha.2`.
-- `v0.1.0-alpha.2` is the current published prerelease baseline and is meant to
+- The latest live GitHub release is `v0.1.0-alpha.3`.
+- `v0.1.0-alpha.3` is the current published prerelease baseline and is meant to
   match the current released `main` snapshot.
 - `v0.1.0-alpha.1` remains the historical first public baseline, not the latest
   release truth.
