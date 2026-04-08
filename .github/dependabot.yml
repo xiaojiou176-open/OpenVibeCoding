@@ -3,42 +3,54 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "daily"
+      time: "03:00"
+      timezone: "UTC"
     open-pull-requests-limit: 5
     cooldown:
       default-days: 7
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "daily"
+      time: "03:00"
+      timezone: "UTC"
     open-pull-requests-limit: 5
     cooldown:
       default-days: 7
   - package-ecosystem: "npm"
     directory: "/apps/dashboard"
     schedule:
-      interval: "weekly"
+      interval: "daily"
+      time: "03:00"
+      timezone: "UTC"
     open-pull-requests-limit: 5
     cooldown:
       default-days: 7
   - package-ecosystem: "npm"
     directory: "/apps/desktop"
     schedule:
-      interval: "weekly"
+      interval: "daily"
+      time: "03:00"
+      timezone: "UTC"
     open-pull-requests-limit: 5
     cooldown:
       default-days: 7
   - package-ecosystem: "pip"
     directory: "/apps/orchestrator"
     schedule:
-      interval: "weekly"
+      interval: "daily"
+      time: "03:00"
+      timezone: "UTC"
     open-pull-requests-limit: 5
     cooldown:
       default-days: 7
   - package-ecosystem: "cargo"
     directory: "/apps/desktop/src-tauri"
     schedule:
-      interval: "weekly"
+      interval: "daily"
+      time: "03:00"
+      timezone: "UTC"
     open-pull-requests-limit: 5
     cooldown:
       default-days: 7

@@ -491,6 +491,9 @@ There is no separate sixth CI layer anymore. Old extra-layer behavior now
 belongs either to `nightly` scheduled governance or to explicit `manual`
 verification.
 
+Internal UI policy helpers still use `pr` as the hosted PR subprofile label.
+That label is not a sixth top-level CI layer alongside the five layers above.
+
 `npm run test:quick` now expects the dashboard clean-room install gate to
 prove `jsdom` itself can load, instead of pinning success to the presence of a
 specific transitive dependency layout such as `data-urls`.
