@@ -98,7 +98,7 @@ navigation set.
 - `docs/builders/index.html`: public builder quickstart hub for current client/contract/shared entrypoints, including the repo-owned control-plane starter path and its runnable local example
 - `docs/ecosystem/index.html`: public ecosystem positioning page for Codex / Claude Code / MCP plus adjacent comparison layers
 - `docs/compatibility/index.html`: public adoption matrix for choosing between Codex / Claude Code / OpenClaw / skills / builders / proof-first onboarding paths
-- `docs/distribution/index.html`: public mirror of the root `DISTRIBUTION.md` contract for shipped, starter-only, repo-owned, and deferred public surfaces, including release truth and package boundaries
+- `docs/distribution/index.html`: public mirror of the root `DISTRIBUTION.md` contract for shipped, starter-only or bundle-compatible, publish-ready but deferred, workspace-only, and deferred public surfaces, including release truth and package boundaries
 - `docs/agent-starters/index.html`: public copy-paste starter kits for Codex / Claude Code / OpenClaw teams that want tracked MCP config snippets plus the shortest repo-owned skills/bootstrap entrypoints
 - `docs/use-cases/index.html`: public first-run, proof, and share-ready asset guide
 - `docs/ai-surfaces/index.html`: public AI operator / read-only MCP / API entrypoint map for truthful discoverability
