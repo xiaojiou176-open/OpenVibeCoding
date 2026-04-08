@@ -11,6 +11,8 @@ workflows without inventing a published marketplace package.
 - `../mcp/readonly.mcp.json.example`: the shared read-only MCP config example
 - `../plugin-bundles/cortexpilot-coding-agent-bundle/`: a local plugin-dir
   bundle with the same skill plus plugin-scoped MCP wiring
+- `../plugin-bundles/cortexpilot-coding-agent-bundle/skills/cortexpilot-adoption-router/manifest.yaml`:
+  registry-shaped metadata for the shared skill artifact
 
 ## Suggested setup
 

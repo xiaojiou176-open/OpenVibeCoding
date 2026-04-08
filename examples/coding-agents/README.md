@@ -67,6 +67,7 @@ examples/coding-agents/
     .mcp.json
     README.md
     skills/cortexpilot-adoption-router/SKILL.md
+    skills/cortexpilot-adoption-router/manifest.yaml
 ```
 
 ## Shared read-only MCP wiring
@@ -101,6 +102,10 @@ That bundle is intended for:
 - pairing with the shared read-only MCP example above
 
 It is intentionally not framed as a published Codex Plugin Directory entry.
+What is now true, though, is that the shared bundle already carries a
+registry-shaped `manifest.yaml` for the bundled `cortexpilot-adoption-router`
+skill, so the repo can treat that skill as **publish-ready but deferred**
+without pretending an official Codex listing already exists.
 
 ## Claude Code
 
@@ -113,6 +118,8 @@ The example shows:
 - one subagent prompt
 - one tracked project-local `.mcp.json`
 - the shared read-only MCP config path to pair with them
+- one bundle-shipped `manifest.yaml` for the shared `cortexpilot-adoption-router`
+  skill
 
 ## OpenClaw
 
@@ -125,5 +132,7 @@ The truthful story is:
 - OpenClaw has native plugin and skills surfaces
 - CortexPilot currently ships a compatible local bundle example, not a
   published registry item
+- that bundle now includes a registry-shaped `manifest.yaml` for the shared
+  `cortexpilot-adoption-router` skill
 - pair the bundle with the shared read-only MCP config and repo-owned proof /
   replay surfaces
