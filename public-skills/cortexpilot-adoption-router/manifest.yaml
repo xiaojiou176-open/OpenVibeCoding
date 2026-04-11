@@ -1,39 +1,42 @@
 schema_version: 1
-name: cortexpilot-adoption-router
-display_name: CortexPilot Adoption Router
-version: 1.1.0
-summary: >
-  Public skill bundle for CortexPilot that packages MCP install guidance, a
-  read-only tool map, and a truthful lane-selection workflow for OpenHands and
-  OpenClaw style hosts.
-homepage: https://github.com/xiaojiou176-open/CortexPilot-public
-repository: https://github.com/xiaojiou176-open/CortexPilot-public
-license: MIT
-authors:
-  - name: CortexPilot
-entrypoints:
-  skill_markdown: SKILL.md
-compatibility:
-  openhands:
-    mode: skill directory plus published MCP config
-    published_listing: false
+artifact: public-skill-listing-manifest
+
+skill:
+  name: cortexpilot-adoption-router
+  display_name: CortexPilot Adoption Router
+  version: 1.1.1
+  entrypoint: SKILL.md
+  package_shape: skill-folder
+
+registry_targets:
   clawhub:
-    mode: skill publish plus published MCP config
-    published_listing: true
-capabilities:
-  - install the published CortexPilot MCP package in host-specific config
-  - expose the stable read-only CortexPilot tool inventory
-  - route users to the truthful CortexPilot lane for runs, workflows, queue, and proof reads
-  - keep hosted and write-capable claims gated
+    status: listed-live
+    package_shape: skill-folder
+    listing_url: https://www.clawhub.ai/skills/cortexpilot-adoption-router
+    submit_via: clawhub publish . --slug cortexpilot-adoption-router --name "CortexPilot Adoption Router" --version 1.1.1 --tags mcp,workflow,proof,read-only,cortexpilot
+  openhands-extensions:
+    status: review-pending
+    package_shape: skill-folder
+    submission_url: https://github.com/OpenHands/extensions/pull/151
+    submit_via: submit this folder as skills/cortexpilot-adoption-router/ in OpenHands/extensions
+
 boundaries:
-  hosted_operator: false
-  write_capable_mcp: false
-  oauth_login: false
-  official_listing_live: true
-distribution_notes:
-  current_claim: ClawHub listing is live; other hosts should only claim submission or live state when independently confirmed.
-verification:
-  repo_commands:
-    - npm run docs:check
-    - bash scripts/check_repo_hygiene.sh
-    - printf '%s\n%s\n' '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"bundle-audit","version":"0.0.0"}}}' '{"jsonrpc":"2.0","id":2,"method":"tools/list","params":{}}' | uvx --from cortexpilot-orchestrator==0.1.0a4 cortexpilot-readonly-mcp
+  product_identity: Secondary public adoption skill for CortexPilot's proof-first command tower through the published read-only MCP surface.
+  canonical_repo_version: 0.1.0a4
+  official_listing_state: clawhub-live-openhands-review-pending-other-hosts-pending
+  not_claimed:
+    - No hosted operator service is claimed
+    - No write-capable public MCP surface is claimed
+    - No first-party marketplace listing is claimed unless independently confirmed
+    - No live OpenHands/extensions listing is claimed until the PR lands
+
+pair_with:
+  - SKILL.md
+  - README.md
+  - references/README.md
+  - references/INSTALL.md
+  - references/OPENHANDS_MCP_CONFIG.json
+  - references/OPENCLAW_MCP_CONFIG.json
+  - references/CAPABILITIES.md
+  - references/DEMO.md
+  - references/TROUBLESHOOTING.md

@@ -108,25 +108,33 @@ def test_dashboard_e2e_happy_path(tmp_path: Path) -> None:
                 page.get_by_test_id("task-id").wait_for(timeout=20_000)
                 assert "e2e_happy" in page.get_by_test_id("task-id").inner_text()
                 page.get_by_test_id("allowed-paths-label").wait_for(timeout=20_000)
-                page.get_by_text("1 条路径").wait_for(timeout=20_000)
-                page.get_by_text("展开路径详情").click()
+                page.get_by_text("1 path").wait_for(timeout=20_000)
+                page.get_by_text("Expand path details").click()
                 page.get_by_test_id("allowed-paths-content").wait_for(timeout=20_000)
                 assert "mock_output.txt" in page.get_by_test_id("allowed-paths-content").inner_text()
                 page.get_by_test_id("event-timeline-title").wait_for(timeout=20_000)
                 page.get_by_test_id("detail-panel-title").wait_for(timeout=20_000)
+                page.get_by_test_id("detail-panel-title").scroll_into_view_if_needed()
+                page.get_by_test_id("tab-reports").scroll_into_view_if_needed()
 
-                # allow hydration before tab switch
+                # Wait until the detail-panel state actually flips to Reports
+                # instead of assuming the first click lands after hydration.
                 page.wait_for_timeout(500)
-                for _ in range(3):
-                    page.get_by_test_id("tab-reports").click()
+                for _ in range(10):
+                    page.get_by_role("tab", name="Reports").click()
                     try:
-                        page.get_by_test_id("replay-controls-title").wait_for(timeout=2_000)
-                        page.get_by_test_id("replay-compare-button").wait_for(timeout=2_000)
+                        page.wait_for_function(
+                            """() => document.querySelector('[data-testid="run-detail-active-tab-state"]')?.textContent?.includes('Reports')""",
+                            timeout=1_000,
+                        )
                         break
                     except PlaywrightTimeoutError:
-                        page.wait_for_timeout(300)
+                        page.wait_for_timeout(500)
                 else:
-                    page.get_by_test_id("replay-controls-title").wait_for(timeout=10_000)
+                    raise AssertionError("Reports tab never became active during the run-detail e2e flow.")
+
+                page.get_by_test_id("replay-controls-title").wait_for(timeout=10_000)
+                page.get_by_test_id("replay-compare-button").wait_for(timeout=10_000)
             except Exception:  # noqa: BLE001
                 artifacts_dir.mkdir(parents=True, exist_ok=True)
                 try:

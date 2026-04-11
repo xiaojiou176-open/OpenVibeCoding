@@ -18,6 +18,13 @@ docs inventory. This file is the human-readable summary of that registry.
 Daily local verification lives in the root [README](../README.md). Treat this
 file as the docs inventory map, not as a second CI manual.
 
+## Public Lane Order
+
+- `pure_mcp` is the primary public machine-readable lane.
+- `public-skills/cortexpilot-adoption-router/` is the secondary public adoption lane.
+- `examples/coding-agents/` and `examples/coding-agents/plugin-bundles/` are
+  starter/example lanes only; do not treat them as the canonical public root.
+
 For CI/security/documentation truth, prefer the machine-owned surfaces and
 repo-owned gates instead of restating the same rules here:
 

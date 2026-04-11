@@ -18,6 +18,12 @@ The public story is intentionally narrower than the full monorepo:
 Current public boundary: CortexPilot is a repo-backed operator control plane,
 not a hosted product, and the shipped MCP surface remains **read-only**.
 
+Current lane order is deliberate:
+
+- **Primary lane** = the read-only MCP package plus the Official MCP Registry entry
+- **Secondary lane** = the adoption-router public skill packet
+- **Companion/example lane** = local starter kits and coding-agent bundle examples, which are not the canonical public root
+
 [Quickstart](#quickstart) · [First Proven Workflow](https://xiaojiou176-open.github.io/CortexPilot-public/use-cases/) · [Compatibility Matrix](https://xiaojiou176-open.github.io/CortexPilot-public/compatibility/) · [Distribution Contract](DISTRIBUTION.md) · [Distribution Status](https://xiaojiou176-open.github.io/CortexPilot-public/distribution/) · [Docs](docs/README.md) · [Architecture](docs/architecture/runtime-topology.md) · [AI + MCP + API Surfaces](https://xiaojiou176-open.github.io/CortexPilot-public/ai-surfaces/) · [Builder Quickstart](https://xiaojiou176-open.github.io/CortexPilot-public/builders/) · [Releases](https://github.com/xiaojiou176-open/CortexPilot-public/releases)
 
 ![CortexPilot command tower showcase card](docs/assets/storefront/command-tower-showcase-card.svg)
@@ -26,13 +32,13 @@ not a hosted product, and the shipped MCP surface remains **read-only**.
 
 The shortest truthful answer today is:
 
-> CortexPilot officially ships a public repo, a public Pages front door, a repo-local read-only MCP surface, a published PyPI package, a live Official MCP Registry entry, and a live ClawHub skill. OpenHands/extensions and MCP.so submissions are filed with public receipts, while hosted service, write-capable MCP, Docker distribution, and standalone npm releases remain deferred.
+> CortexPilot officially ships a public repo, a public Pages front door, a repo-local read-only MCP surface, a published PyPI package, a live Official MCP Registry entry, and a live ClawHub skill. The adoption-router skill is the secondary public lane. Local coding-agent starters and bundle examples remain companion/example materials, not the canonical public root. OpenHands/extensions and MCP.so external receipts exist, while hosted service, write-capable MCP, Docker distribution, and standalone npm releases remain deferred.
 
 Use these buckets:
 
 - **Shipped now**: repo, Pages, proof-first docs, read-only MCP, PyPI package, Official MCP Registry entry, ClawHub skill
-- **Starter-only**: Codex / Claude Code / OpenClaw local starter kits and bundle examples
-- **Submitted externally**: `OpenHands/extensions#152` and `chatmcp/mcpso#1559` are filed and await host review
+- **Starter-only / example lane**: Codex / Claude Code / OpenClaw local starter kits and local coding-agent bundle examples
+- **Submitted externally**: `OpenHands/extensions#151` and `chatmcp/mcpso#1559` are public receipts and still await host acceptance
 - **Publish-ready but deferred**:
   `@cortexpilot/frontend-api-client`,
   `@cortexpilot/frontend-api-contract`

@@ -32,7 +32,7 @@ Use this skill when the user asks to:
 
 ## If the MCP is not connected yet
 
-Open `README.md` in this folder and follow `references/mcp-install.md`.
+Open `README.md` in this folder and follow `references/INSTALL.md`.
 Do not invent repo-local startup paths when the published package already
 exists.
 
@@ -76,6 +76,7 @@ Return a short answer with:
 
 ## Read next
 
-- `references/mcp-install.md`
-- `references/tool-map.md`
-- `references/example-tasks.md`
+- `references/INSTALL.md`
+- `references/CAPABILITIES.md`
+- `references/DEMO.md`
+- `references/TROUBLESHOOTING.md`

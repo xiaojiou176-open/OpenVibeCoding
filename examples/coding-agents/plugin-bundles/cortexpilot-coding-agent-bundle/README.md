@@ -6,6 +6,10 @@ This bundle keeps one repo-owned starter pack compatible with:
 - Claude Code local `--plugin-dir` development
 - OpenClaw compatible bundle installs from a local path or link
 
+It is a local example lane, not CortexPilot's canonical public root. The
+read-only MCP surface stays primary, and the adoption-router public skill
+packet stays secondary.
+
 ## What is inside
 
 - `.codex-plugin/plugin.json`: Codex bundle metadata

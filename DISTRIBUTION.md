@@ -15,12 +15,18 @@ change set.
 Today CortexPilot officially ships a public repo front door, a GitHub Pages
 product front door, one proof-first public workflow baseline, a repo-local
 read-only MCP server, a published PyPI package, a live Official MCP Registry
-entry, local coding-agent starter/bundle materials, and a live ClawHub skill.
+entry, and a live ClawHub skill.
 
 It does not yet officially ship a hosted operator service, a public write-capable
 MCP, a Docker distribution path, or standalone npm releases. OpenHands/extensions
 and MCP.so submissions are filed, but they still depend on external review or
 intake handling rather than repo-only publication.
+
+Lane order today is:
+
+1. `pure_mcp`
+2. `pure_skills`
+3. local starter/example bundle materials
 
 ## Status labels
 
@@ -54,9 +60,9 @@ intake handling rather than repo-only publication.
 | Claude Code starter | `starter-only` | Project-local `.claude` and `.mcp.json` starter | `examples/coding-agents/claude-code/` | local project wiring only | keep truthful; do not relabel as marketplace package |
 | OpenClaw starter | `starter-only` | Local config seed for the same read-only MCP and compatible bundle | `examples/coding-agents/openclaw/` | local config + local plugin path | keep truthful; do not relabel as ClawHub publication |
 | Cross-tool coding-agent bundle | `bundle-compatible` | Local bundle compatible with Codex local marketplace installs, Claude plugin-dir development, and OpenClaw local plugin loading | `examples/coding-agents/plugin-bundles/cortexpilot-coding-agent-bundle/` | local bundle metadata + repo-aware MCP wrapper | keep local-install contract; no published listing claim |
-| Repo-owned adoption-router skill | `shipped` | Cross-tool routing skill with `SKILL.md` + `manifest.yaml`, shared between the repo bundle and external skill distribution | `examples/coding-agents/plugin-bundles/cortexpilot-coding-agent-bundle/skills/cortexpilot-adoption-router/` | repo-owned skill contract, local bundle plus external skill publication | keep the repo bundle and published skill receipts aligned |
+| Repo-owned adoption-router skill | `shipped` | Cross-tool routing skill with `SKILL.md` + `manifest.yaml`, shared between the public skill packet, the repo bundle, and external skill distribution | `public-skills/cortexpilot-adoption-router/` | repo-owned skill contract, public skill packet plus local bundle example | keep the public packet, repo bundle, and published skill receipts aligned |
 | ClawHub skill (`cortexpilot-adoption-router`) | `shipped` | Published OpenClaw skill for honest CortexPilot adoption routing | `https://www.clawhub.ai/skills/cortexpilot-adoption-router` | skill registry, no hosted CortexPilot account, no write-capable MCP | keep the skill copy aligned with the repo bundle and public boundary |
-| OpenHands/extensions submission | `submitted-externally` | Public skill submission for the same adoption-router artifact | `https://github.com/OpenHands/extensions/pull/152` | host review flow, not live until merged | track review without overclaiming a merged listing |
+| OpenHands/extensions submission | `submitted-externally` | Public skill submission receipt for the same adoption-router artifact | `https://github.com/OpenHands/extensions/pull/151` | host review flow, not live until merged | track review without overclaiming a merged listing |
 | MCP.so submission | `submitted-externally` | Directory submission for the public read-only MCP server | `https://github.com/chatmcp/mcpso/issues/1559` | directory intake flow, not live until accepted | keep the issue body aligned with current package + registry truth |
 | `@cortexpilot/frontend-api-client` | `publish-ready but deferred` | Thin JS/TS client for control-plane reads and guarded operator add-ons | package metadata + README are publish-ready, but the official install story is still clone / vendor reuse until the first npm release exists | HTTP API with token / mutation-role expectations | publish later only after the first public package release is intentionally cut |
 | `@cortexpilot/frontend-api-contract` | `publish-ready but deferred` | Generated route / query / type boundary for frontend consumers | package metadata + README are publish-ready, but the official install story is still clone / vendor reuse until the first npm release exists | typed contract layer only | publish later only after the first public package release is intentionally cut |
@@ -95,7 +101,7 @@ intake handling rather than repo-only publication.
 These are intentionally outside repo-side completion:
 
 - publish npm packages
-- wait for OpenHands/extensions review on PR `#152`
+- wait for OpenHands/extensions review on PR `#151`
 - wait for MCP.so intake handling on issue `#1559`
 - publish a Docker image
 - deploy a live hosted operator service

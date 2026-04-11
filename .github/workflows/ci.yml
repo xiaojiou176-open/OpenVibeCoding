@@ -267,6 +267,11 @@ jobs:
           set -euo pipefail
           bash scripts/check_workflow_static_security.sh
 
+      - name: Host-process safety gate
+        run: |
+          set -euo pipefail
+          npm run scan:host-process-risks
+
       - name: Quick policy / doc / hygiene gates
         env:
           CORTEXPILOT_DOC_GATE_MODE: ci-diff

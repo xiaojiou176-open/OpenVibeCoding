@@ -5,6 +5,7 @@ const distDirFromEnv = process.env.NEXT_DIST_DIR?.trim();
 module.exports = {
   reactStrictMode: true,
   distDir: distDirFromEnv || undefined,
+  allowedDevOrigins: ["127.0.0.1"],
   experimental: {
     externalDir: true,
   },
