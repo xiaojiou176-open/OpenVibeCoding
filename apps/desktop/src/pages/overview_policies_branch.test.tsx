@@ -176,6 +176,7 @@ describe("overview + policies low-branch coverage", () => {
       )
       .mockRejectedValueOnce(new Error("policies error"))
       .mockResolvedValueOnce({
+        control_plane_runtime_policy: { completion_governance: { components: ["dod_checker", "reply_auditor", "continuation_policy"] } },
         agent_registry: "ALLOW_ALL",
         command_allowlist: { commands: ["run"] },
         forbidden_actions: null,
@@ -199,7 +200,9 @@ describe("overview + policies low-branch coverage", () => {
     fireEvent.click(screen.getByRole("button", { name: "Refresh" }));
     await waitFor(() => {
       expect(screen.queryByText("policies error")).not.toBeInTheDocument();
+      expect(screen.getByText("Control-plane runtime policy")).toBeInTheDocument();
       expect(screen.getByText("ALLOW_ALL")).toBeInTheDocument();
+      expect(screen.getByText(/"completion_governance": \{/)).toBeInTheDocument();
       expect(screen.getByText(/"commands": \[/)).toBeInTheDocument();
       expect(screen.getAllByText("No data").length).toBeGreaterThanOrEqual(2);
     });
