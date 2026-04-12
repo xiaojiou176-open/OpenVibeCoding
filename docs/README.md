@@ -43,6 +43,20 @@ repository entrypoint rather than a registered docs page.
 
 1. [../README.md](../README.md)
 
+## Internal Design Sources
+
+These files are repo-owned internal design truth, not public docs navigation
+pages.
+
+- `design-system/MASTER.md`: canonical visual/design constitution for the
+  command-tower product language across web and desktop
+- `design-system/pages/*.md`: page-level overrides for the key control-plane
+  surfaces
+- `.stitch/DESIGN.md`: Stitch-facing design summary for the same product
+  language
+- `.stitch/designs/*.prompt.md`: enhanced prompt pack for repo-owned Stitch
+  fallback until authenticated HTML/screenshot exports exist
+
 ## Primary Registered Docs
 
 These are the active registered docs that stay in the primary docs navigation.
@@ -116,6 +130,10 @@ navigation set.
 - `docs/api/index.html`: public API / contract quickstart page for OpenAPI, frontend client, and contract-facing types
 - `docs/integrations/index.html`: truthful coding-agent integration map for Codex / Claude Code / OpenClaw, including the no-fake-plugin boundary plus a lighter proof-first pointer back to `use-cases/`
 - `docs/skills/index.html`: repo-owned skills quickstart for teams adopting CortexPilot playbooks with coding agents, including a minimal vendored skill-pack layout and the same lighter proof-first pointer instead of a second chooser grid
+- `design-system/MASTER.md`: repo-owned design constitution for the command-tower identity; use it when web/desktop surfaces change so visual hierarchy does not drift back to generic dashboard tropes
+- `design-system/pages/*.md`: page-specific design overrides for `dashboard-home`, `command-tower`, `workflow-detail`, `run-detail`, and `desktop-overview`
+- `.stitch/DESIGN.md`: repo-owned Stitch fallback design source when authenticated screen generation is unavailable
+- `.stitch/designs/*.prompt.md`: enhanced prompt pack to feed Stitch later without reopening the product/visual direction debate
 - `apps/dashboard/README.md`: dashboard-owned module note for operator-surface wording, staged UI-audit build behavior, and control-plane/runtime-capability presentation changes
 - `apps/desktop/README.md`: desktop-owned module note for operator-surface locale/status hardening when desktop wording contracts change
 - `policies/agent_registry.json`: machine SSOT for role-contract defaults such as purpose, prompt ref, MCP bundle ref, downstream-role expectations, and fail-closed posture
