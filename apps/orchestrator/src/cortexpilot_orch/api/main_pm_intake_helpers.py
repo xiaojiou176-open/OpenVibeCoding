@@ -18,7 +18,12 @@ from cortexpilot_orch.cli_runtime_helpers import runs_root as resolve_runs_root
 from cortexpilot_orch.config import load_config
 from cortexpilot_orch.contract.compiler import build_role_binding_summary, sync_role_contract
 from cortexpilot_orch.observability.logger import log_event
-from cortexpilot_orch.planning.intake import IntakeService, _build_wave_plan, _build_worker_prompt_contracts
+from cortexpilot_orch.planning.intake import (
+    IntakeService,
+    _build_unblock_tasks_from_worker_contracts,
+    _build_wave_plan,
+    _build_worker_prompt_contracts,
+)
 from cortexpilot_orch.store.intake_store import IntakeStore
 from cortexpilot_orch.store.run_store import RunStore
 
@@ -169,9 +174,11 @@ def _persist_planning_artifacts_for_run(
 
     run_store = RunStore(runs_root=runs_root)
     run_dir = run_store.run_dir(run_id)
+    worker_prompt_contracts = _build_worker_prompt_contracts(plan_bundle, intake_payload)
     artifacts_to_write: list[tuple[str, Any]] = [
         ("planning_wave_plan.json", _build_wave_plan(plan_bundle)),
-        ("planning_worker_prompt_contracts.json", _build_worker_prompt_contracts(plan_bundle, intake_payload)),
+        ("planning_worker_prompt_contracts.json", worker_prompt_contracts),
+        ("planning_unblock_tasks.json", _build_unblock_tasks_from_worker_contracts(worker_prompt_contracts)),
     ]
     written: list[str] = []
     artifact_refs: list[dict[str, Any]] = []

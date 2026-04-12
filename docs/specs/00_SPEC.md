@@ -342,6 +342,17 @@
 - `harness_request` represents a proposed capability change; applying that
   change still depends on policy and approval boundaries.
 
+### 6.6 Unblock Task Contract
+
+- `schemas/unblock_task.v1.json` defines the first-class object shape for an
+  L0-managed independent temporary unblock assignment.
+- `unblock_task` is derived from worker continuation policy when
+  `on_blocked = spawn_independent_temporary_unblock_task`.
+- Intake preview may surface `unblock_tasks`, and run-local planning artifacts
+  may persist `planning_unblock_tasks.json` as an advisory planning artifact.
+- `unblock_task` does not replace `task_contract` as execution authority; it is
+  a read-only control-plane object for unblock coordination.
+
 ---
 
 ## 7. State Machine

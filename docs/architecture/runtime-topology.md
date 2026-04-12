@@ -58,6 +58,9 @@ flowchart LR
   alongside `plan_bundle`, `task_chain`, and `contract_preview`, so operator
   planning surfaces can speak in canon planner language without changing
   execution authority.
+- The same planning preview may now derive `unblock_tasks`, and run bundles may
+  persist `planning_unblock_tasks.json` when worker continuation policy says
+  blocked work should spawn an independent temporary unblock task.
 - Queue truth currently lives in `.runtime-cache/cortexpilot/queue.jsonl`; API
   and workflow surfaces read that queue state and derive `eligible` /
   `sla_state` instead of storing a second scheduler database.

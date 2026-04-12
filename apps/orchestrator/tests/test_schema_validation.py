@@ -276,6 +276,22 @@ def test_new_operator_report_and_task_pack_schemas_pass() -> None:
     }
     assert validator.validate_report(worker_prompt_contract, "worker_prompt_contract.v1.json")["prompt_contract_id"] == "worker-prompt-1"
 
+    unblock_task = {
+        "version": "v1",
+        "unblock_task_id": "unblock-worker-prompt-1",
+        "source_prompt_contract_id": "worker-prompt-1",
+        "objective": "Unblock the scoped worker assignment for Ship the preview artifact.",
+        "scope_hint": "Implement the preview artifact inside apps/orchestrator/src.",
+        "assigned_agent": {"role": "WORKER", "agent_id": "agent-1"},
+        "owner": "L0",
+        "mode": "independent_temporary_task",
+        "status": "proposed",
+        "trigger": "spawn_independent_temporary_unblock_task",
+        "reason": "an external blocker requires an L0-managed unblock task",
+        "verification_requirements": ["repo_hygiene"],
+    }
+    assert validator.validate_report(unblock_task, "unblock_task.v1.json")["unblock_task_id"] == "unblock-worker-prompt-1"
+
     context_pack = {
         "version": "v1",
         "pack_id": "ctx-pack-1",

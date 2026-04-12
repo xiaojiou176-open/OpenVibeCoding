@@ -66,12 +66,12 @@
       "bytes": 1842
     },
     "execution_plan_report.schema.json": {
-      "sha256": "211a6d5310adea65ddedb4bc61de4542879772f33b92d40335ad1cbb748c6afb",
-      "bytes": 7414
+      "sha256": "9175fefdde202bbc0a7234f8f5f8eab468b5f5583ceaf778cb6ab7d8311c2003",
+      "bytes": 7517
     },
     "execution_plan_report.v1.json": {
-      "sha256": "0c9d6ed72669bcf56fa59a5c2be832f71dd3615e854e0e6a4f6ff72e26d3de8f",
-      "bytes": 7410
+      "sha256": "7c0c07d36c4ba6f81f1962243514c984537f6398123f9f18395e7501823094be",
+      "bytes": 7513
     },
     "flight_plan_copilot_brief.v1.json": {
       "sha256": "555cdae186c13823ccbb716552ec023020eddea4babf3f0f07abfca8a149fab3",
@@ -292,6 +292,10 @@
     "worker_prompt_contract.v1.json": {
       "sha256": "6b8a4331f0903f265e565b5a634238a5525972360d6c00501891b7e109b02bec",
       "bytes": 4056
+    },
+    "unblock_task.v1.json": {
+      "sha256": "b5e225b38aebaf823fbc7bcbb38a515f9666734093500df5a28d48218afd35ef",
+      "bytes": 1891
     }
   }
 }

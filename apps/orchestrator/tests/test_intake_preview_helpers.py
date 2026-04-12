@@ -96,6 +96,9 @@ def test_intake_preview_builds_execution_plan_report(monkeypatch) -> None:
     assert report["wave_plan"]["worker_count"] == 1
     assert report["worker_prompt_contracts"][0]["prompt_contract_id"] == "plan-preview-1"
     assert report["worker_prompt_contracts"][0]["continuation_policy"]["on_blocked"] == "spawn_independent_temporary_unblock_task"
+    assert report["unblock_tasks"][0]["source_prompt_contract_id"] == "plan-preview-1"
+    assert report["unblock_tasks"][0]["trigger"] == "spawn_independent_temporary_unblock_task"
+    assert "planning_unblock_tasks.json" in report["predicted_artifacts"]
 
 
 def test_intake_preview_marks_manual_approval_when_env_requires_it(monkeypatch) -> None:
@@ -178,3 +181,4 @@ def test_intake_preview_marks_manual_approval_when_env_requires_it(monkeypatch) 
     assert report["warnings"]
     assert report["wave_plan"]["completion_policy_ref"].endswith("#/wave_completion_policy")
     assert report["worker_prompt_contracts"][0]["verification_requirements"] == ["repo_hygiene"]
+    assert report["unblock_tasks"][0]["owner"] == "L0"
