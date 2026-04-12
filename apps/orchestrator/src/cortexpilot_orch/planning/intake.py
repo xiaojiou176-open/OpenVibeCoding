@@ -585,6 +585,56 @@ def _build_worker_prompt_contracts(plan_bundle: dict[str, Any], payload: dict[st
     return contracts
 
 
+def _build_unblock_tasks_from_worker_contracts(worker_contracts: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    tasks: list[dict[str, Any]] = []
+    for contract in worker_contracts:
+        if not isinstance(contract, dict):
+            continue
+        continuation_policy = contract.get("continuation_policy") if isinstance(contract.get("continuation_policy"), dict) else {}
+        on_blocked = str(continuation_policy.get("on_blocked") or "").strip()
+        if on_blocked != "spawn_independent_temporary_unblock_task":
+            continue
+        assigned_agent = contract.get("assigned_agent") if isinstance(contract.get("assigned_agent"), dict) else {}
+        blocked_when = contract.get("blocked_when") if isinstance(contract.get("blocked_when"), list) else []
+        reason = next(
+            (
+                str(item).strip()
+                for item in blocked_when
+                if str(item).strip() and (
+                    "external blocker" in str(item).lower()
+                    or "unblock task" in str(item).lower()
+                )
+            ),
+            "an external blocker requires an L0-managed unblock task",
+        )
+        prompt_contract_id = str(contract.get("prompt_contract_id") or "").strip() or "worker-preview-1"
+        tasks.append(
+            {
+                "version": "v1",
+                "unblock_task_id": f"unblock-{prompt_contract_id}",
+                "source_prompt_contract_id": prompt_contract_id,
+                "objective": f"Unblock the scoped worker assignment for {contract.get('objective') or 'the current wave'}",
+                "scope_hint": str(contract.get("scope") or "").strip() or "No scope summary provided.",
+                "assigned_agent": {
+                    "role": str(assigned_agent.get("role") or "WORKER").strip() or "WORKER",
+                    "agent_id": str(assigned_agent.get("agent_id") or "agent-1").strip() or "agent-1",
+                },
+                "owner": "L0",
+                "mode": "independent_temporary_task",
+                "status": "proposed",
+                "trigger": on_blocked,
+                "reason": reason,
+                "verification_requirements": [
+                    str(item).strip()
+                    for item in contract.get("verification_requirements", [])
+                    if str(item).strip()
+                ]
+                or ["repo_hygiene"],
+            }
+        )
+    return tasks
+
+
 def _apply_intake_contract_overrides(
     contract: dict[str, Any],
     intake_payload: dict[str, Any],
@@ -1127,6 +1177,10 @@ class IntakeService:
         assigned_role = str(assigned_agent.get("role") or "WORKER").strip() or "WORKER"
         predicted_reports = _predicted_reports_for_task_template(task_template)
         predicted_artifacts = _predicted_artifacts_for_payload(normalized_payload)
+        worker_prompt_contracts = _build_worker_prompt_contracts(plan_bundle, normalized_payload)
+        unblock_tasks = _build_unblock_tasks_from_worker_contracts(worker_prompt_contracts)
+        if unblock_tasks and "planning_unblock_tasks.json" not in predicted_artifacts:
+            predicted_artifacts.append("planning_unblock_tasks.json")
         warnings: list[str] = []
         if requires_human_approval:
             warnings.append("Current policies suggest the run may require manual approval before execution can continue.")
@@ -1171,13 +1225,16 @@ class IntakeService:
             "plan_bundle": plan_bundle,
             "task_chain": task_chain,
             "wave_plan": _build_wave_plan(plan_bundle),
-            "worker_prompt_contracts": _build_worker_prompt_contracts(plan_bundle, normalized_payload),
+            "worker_prompt_contracts": worker_prompt_contracts,
+            "unblock_tasks": unblock_tasks,
             "role_contract_summary": contract_preview.get("role_contract") if isinstance(contract_preview.get("role_contract"), dict) else {},
             "contract_preview": contract_preview,
         }
         self._validator.validate_report(response["wave_plan"], "wave_plan.v1.json")
-        for contract in response["worker_prompt_contracts"]:
+        for contract in worker_prompt_contracts:
             self._validator.validate_report(contract, "worker_prompt_contract.v1.json")
+        for unblock_task in unblock_tasks:
+            self._validator.validate_report(unblock_task, "unblock_task.v1.json")
         self._validator.validate_report(response, "execution_plan_report.v1.json")
         return response
 

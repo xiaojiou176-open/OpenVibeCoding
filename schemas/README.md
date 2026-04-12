@@ -9,6 +9,7 @@ Machine-readable schemas for contracts, events, and policy validation.
 - `control_plane_runtime_policy.v1.json` — machine-readable command-tower runtime constitution for L0/L1/L2, wake policy, completion governance, and harness boundaries.
 - `wave_plan.v1.json` — wave-level orchestration preview artifact derived from intake planning.
 - `worker_prompt_contract.v1.json` — worker-scoped planner artifact for scope, reading list, continuation, and verification rules.
+- `unblock_task.v1.json` — L0-managed independent temporary unblock assignment derived from worker continuation policy.
 - `context_pack.v1.json` — explicit fallback handoff contract for context-pressure and role-switch situations.
 - `harness_request.v1.json` — capability-evolution request contract for session-local/project-local/global harness changes.
 - `approval_pack.v1.json` / `incident_pack.v1.json` / `run_compare_report.v1.json` — derived operator-readable decision packs for approval, failure triage, and replay compare surfaces.

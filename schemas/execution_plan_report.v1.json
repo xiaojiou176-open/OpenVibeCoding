@@ -182,6 +182,12 @@
         "type": "object"
       }
     },
+    "unblock_tasks": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
     "role_contract_summary": {
       "type": "object",
       "additionalProperties": false,
