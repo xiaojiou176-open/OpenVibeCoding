@@ -12,6 +12,8 @@ INSTALL_PACKAGE_IMPORT_METHOD="${CORTEXPILOT_DESKTOP_PNPM_IMPORT_METHOD:-copy}"
 INSTALL_SHAMEFULLY_HOIST="${CORTEXPILOT_DESKTOP_PNPM_SHAMEFULLY_HOIST:-1}"
 BASE_INSTALL_NODE_LINKER="$INSTALL_NODE_LINKER"
 BASE_INSTALL_SHAMEFULLY_HOIST="$INSTALL_SHAMEFULLY_HOIST"
+NETWORK_RETRY_ATTEMPTS=2
+NETWORK_RETRY_SLEEP_SECONDS=5
 INSTALL_LOG="$ROOT_DIR/.runtime-cache/logs/runtime/deps_install/install_desktop_deps.log"
 LOCK_DIR="$ROOT_DIR/.runtime-cache/cortexpilot/locks/install-desktop-deps.lock"
 LOCK_OWNER_FILE="$LOCK_DIR/owner"
@@ -159,6 +161,36 @@ run_install() {
   )
 }
 
+install_log_has_socket_timeout() {
+  [[ -f "$INSTALL_LOG" ]] || return 1
+  local content=""
+  content="$(<"$INSTALL_LOG")"
+  [[ "$content" == *"ERR_SOCKET_TIMEOUT"* || "$content" == *"Socket timeout"* ]]
+}
+
+run_install_with_network_retry() {
+  local context="$1"
+  local attempt=0
+  while true; do
+    if run_install; then
+      return 0
+    fi
+    if ! install_log_has_socket_timeout; then
+      return 1
+    fi
+    if (( attempt >= NETWORK_RETRY_ATTEMPTS )); then
+      return 1
+    fi
+    attempt=$((attempt + 1))
+    echo "⚠️ [install-desktop-deps] ${context}; transient npm registry socket timeout detected; retrying install (${attempt}/${NETWORK_RETRY_ATTEMPTS})" >&2
+    sleep "$NETWORK_RETRY_SLEEP_SECONDS"
+    if ! reset_app_node_modules; then
+      tail -n 80 "$INSTALL_LOG" >&2 || true
+      exit 1
+    fi
+  done
+}
+
 verify_typescript_toolchain() {
   (
     cd "$APP_DIR"
@@ -175,11 +207,16 @@ recover_with_fresh_store() {
     tail -n 80 "$INSTALL_LOG" >&2 || true
     exit 1
   fi
-  if ! run_install; then
+  if ! run_install_with_network_retry "fresh-store recovery install"; then
     if grep -q "ERR_PNPM_ENOENT" "$INSTALL_LOG"; then
       echo "⚠️ [install-desktop-deps] fresh-store recovery hit another ERR_PNPM_ENOENT; escalating to workspace-local pnpm store recovery" >&2
       recover_with_workspace_store "fresh-store ERR_PNPM_ENOENT persisted after desktop retry"
       return 0
+    fi
+    if install_log_has_socket_timeout; then
+      echo "❌ [install-desktop-deps] fresh-store recovery exhausted transient npm registry retries; tail follows" >&2
+      tail -n 80 "$INSTALL_LOG" >&2 || true
+      exit 1
     fi
     echo "❌ [install-desktop-deps] pnpm install failed after fresh-store recovery; tail follows" >&2
     tail -n 80 "$INSTALL_LOG" >&2 || true
@@ -206,10 +243,15 @@ recover_with_workspace_store() {
     tail -n 80 "$INSTALL_LOG" >&2 || true
     exit 1
   fi
-  if ! run_install; then
+  if ! run_install_with_network_retry "workspace-local recovery install"; then
     INSTALL_PACKAGE_IMPORT_METHOD="$previous_import_method"
     INSTALL_NODE_LINKER="$previous_node_linker"
     INSTALL_SHAMEFULLY_HOIST="$previous_shamefully_hoist"
+    if install_log_has_socket_timeout; then
+      echo "❌ [install-desktop-deps] workspace-local recovery exhausted transient npm registry retries; tail follows" >&2
+      tail -n 80 "$INSTALL_LOG" >&2 || true
+      exit 1
+    fi
     echo "❌ [install-desktop-deps] pnpm install failed after workspace-local recovery; tail follows" >&2
     tail -n 80 "$INSTALL_LOG" >&2 || true
     exit 1
@@ -238,18 +280,22 @@ reset_app_node_modules() {
   return 1
 }
 
-if ! run_install; then
+if ! run_install_with_network_retry "initial install"; then
   if grep -q "ERR_PNPM_ENOENT" "$INSTALL_LOG"; then
     recover_with_fresh_store "detected pnpm store ENOENT"
   elif grep -q "ERR_PNPM_ENOSPC" "$INSTALL_LOG" || grep -qi "no space left on device" "$INSTALL_LOG"; then
     recover_with_workspace_store "detected pnpm ENOSPC"
+  elif install_log_has_socket_timeout; then
+    echo "❌ [install-desktop-deps] pnpm install failed after transient npm registry retries; tail follows" >&2
+    tail -n 80 "$INSTALL_LOG" >&2 || true
+    exit 1
   elif grep -q "ERR_PNPM_ENOTDIR" "$INSTALL_LOG"; then
     echo "⚠️ [install-desktop-deps] detected app-local node_modules ENOTDIR; resetting desktop node_modules and retrying once" >&2
     if ! reset_app_node_modules; then
       tail -n 80 "$INSTALL_LOG" >&2 || true
       exit 1
     fi
-    if ! run_install; then
+    if ! run_install_with_network_retry "node_modules reset retry"; then
       echo "❌ [install-desktop-deps] pnpm install failed after node_modules reset; tail follows" >&2
       tail -n 80 "$INSTALL_LOG" >&2 || true
       exit 1

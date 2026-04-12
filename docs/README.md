@@ -240,7 +240,10 @@ navigation set.
   same patch; the current examples are `.runtime-cache/test_output/ci/` and
   `configs/pip_audit_ignored_advisories.json`, plus the dashboard and desktop
   ENOSPC recovery knobs plus the Docker daemon precheck retry knobs registered
-  in `configs/env.registry.json`; current CI contract changes also include the
+  in `configs/env.registry.json`, together with the bounded transient npm
+  registry socket-timeout retries inside
+  `scripts/install_dashboard_deps.sh` / `scripts/install_desktop_deps.sh`;
+  current CI contract changes also include the
   upstream receipt refresh fallback to `scripts/verify_upstream_slices.py --mode smoke`
   and the strict hosted-first live-provider rule that allows
   process env first and `~/.codex/config.toml` second while keeping dotenv and

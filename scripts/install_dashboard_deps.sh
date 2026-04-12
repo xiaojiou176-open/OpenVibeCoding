@@ -17,6 +17,8 @@ INSTALL_SHAMEFULLY_HOIST="${CORTEXPILOT_DASHBOARD_PNPM_SHAMEFULLY_HOIST:-1}"
 BASE_INSTALL_NODE_LINKER="$INSTALL_NODE_LINKER"
 BASE_INSTALL_PACKAGE_IMPORT_METHOD="$INSTALL_PACKAGE_IMPORT_METHOD"
 BASE_INSTALL_SHAMEFULLY_HOIST="$INSTALL_SHAMEFULLY_HOIST"
+NETWORK_RETRY_ATTEMPTS=2
+NETWORK_RETRY_SLEEP_SECONDS=5
 INSTALL_LOG="$ROOT_DIR/.runtime-cache/logs/runtime/deps_install/install_dashboard_deps.log"
 LOCK_DIR="${STATE_ROOT}/install-dashboard-deps.lock"
 LOCK_OWNER_FILE="$LOCK_DIR/owner"
@@ -34,6 +36,10 @@ log_contains() {
 
 install_log_has_partial_bin_warning() {
   log_contains "Failed to create bin at " && log_contains "ENOENT"
+}
+
+install_log_has_socket_timeout() {
+  log_contains "ERR_SOCKET_TIMEOUT" || log_contains "Socket timeout"
 }
 
 print_install_log_tail() {
@@ -225,6 +231,29 @@ run_install() {
   )
 }
 
+run_install_with_network_retry() {
+  local context="$1"
+  local attempt=0
+  while true; do
+    if run_install; then
+      return 0
+    fi
+    if ! install_log_has_socket_timeout; then
+      return 1
+    fi
+    if (( attempt >= NETWORK_RETRY_ATTEMPTS )); then
+      return 1
+    fi
+    attempt=$((attempt + 1))
+    echo "⚠️ [install-dashboard-deps] ${context}; transient npm registry socket timeout detected; retrying install (${attempt}/${NETWORK_RETRY_ATTEMPTS})" >&2
+    sleep "$NETWORK_RETRY_SLEEP_SECONDS"
+    if ! reset_app_node_modules; then
+      print_install_log_tail 80
+      exit 1
+    fi
+  done
+}
+
 reset_app_node_modules() {
   local target="$APP_DIR/node_modules"
   [[ -d "$target" ]] || return 0
@@ -306,10 +335,15 @@ recover_with_workspace_store() {
     print_install_log_tail 80
     exit 1
   fi
-  if ! run_install; then
+  if ! run_install_with_network_retry "workspace-local recovery install"; then
     INSTALL_PACKAGE_IMPORT_METHOD="$previous_import_method"
     INSTALL_NODE_LINKER="$previous_node_linker"
     INSTALL_SHAMEFULLY_HOIST="$previous_shamefully_hoist"
+    if install_log_has_socket_timeout; then
+      echo "❌ [install-dashboard-deps] workspace-local recovery exhausted transient npm registry retries; tail follows" >&2
+      print_install_log_tail 80
+      exit 1
+    fi
     echo "❌ [install-dashboard-deps] pnpm install failed after workspace-local recovery; tail follows" >&2
     print_install_log_tail 80
     exit 1
@@ -319,18 +353,22 @@ recover_with_workspace_store() {
   INSTALL_SHAMEFULLY_HOIST="$previous_shamefully_hoist"
 }
 
-if ! run_install; then
+if ! run_install_with_network_retry "initial install"; then
   if log_contains "ERR_PNPM_ENOENT"; then
     recover_with_fresh_store "detected pnpm store ENOENT"
   elif log_contains "ERR_PNPM_ENOSPC" || log_contains "no space left on device"; then
     recover_with_workspace_store "detected pnpm ENOSPC"
+  elif install_log_has_socket_timeout; then
+    echo "❌ [install-dashboard-deps] pnpm install failed after transient npm registry retries; tail follows" >&2
+    print_install_log_tail 80
+    exit 1
   elif log_contains "ERR_PNPM_ENOTDIR"; then
     echo "⚠️ [install-dashboard-deps] detected app-local node_modules ENOTDIR; resetting dashboard node_modules and retrying once" >&2
     if ! reset_app_node_modules; then
       print_install_log_tail 80
       exit 1
     fi
-    if ! run_install; then
+    if ! run_install_with_network_retry "node_modules reset retry"; then
       echo "❌ [install-dashboard-deps] pnpm install failed after node_modules reset; tail follows" >&2
       print_install_log_tail 80
       exit 1

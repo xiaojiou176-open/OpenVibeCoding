@@ -183,8 +183,11 @@ Work in CortexPilot as a contract-first engineering agent:
   same patch; current examples include `.runtime-cache/test_output/ci/` and
   `configs/pip_audit_ignored_advisories.json`, plus the dashboard
   and desktop install-time ENOSPC recovery knobs plus the Docker daemon
-  precheck retry knobs registered in `configs/env.registry.json`; current CI
-  credential/evidence examples also include the upstream receipt refresh
+  precheck retry knobs registered in `configs/env.registry.json`, and the
+  bounded transient npm registry socket-timeout retries inside
+  `scripts/install_dashboard_deps.sh` plus
+  `scripts/install_desktop_deps.sh`; current CI credential/evidence examples
+  also include the upstream receipt refresh
   fallback to `scripts/verify_upstream_slices.py --mode smoke` and the strict
   live-provider rule that resolves process env first and `~/.codex/config.toml`
   second while keeping dotenv and shell-export fallbacks disabled on mainline;
