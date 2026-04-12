@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
+import { getUiCopy, type UiLocale } from "@cortexpilot/frontend-shared/uiCopy";
+import { detectPreferredUiLocale } from "@cortexpilot/frontend-shared/uiLocale";
 import type { AgentCatalogPayload, AgentCatalogRecord, AgentStatusPayload, AgentStatusRecord, RoleCatalogRecord } from "../lib/types";
 import { fetchAgents, fetchAgentStatus } from "../lib/api";
 import { stageVariant } from "../lib/statusPresentation";
@@ -18,6 +20,8 @@ function stageBadgeVariant(stage: string | null | undefined): "default" | "succe
 }
 
 export function AgentsPage() {
+  const locale: UiLocale = detectPreferredUiLocale();
+  const agentsPageCopy = getUiCopy(locale).dashboard.agentsPage;
   const [agents, setAgents] = useState<AgentCatalogPayload>({ agents: [], locks: [], role_catalog: [] });
   const [agentStatus, setAgentStatus] = useState<AgentStatusPayload>({ agents: [] });
   const [loading, setLoading] = useState(true);
@@ -42,7 +46,7 @@ export function AgentsPage() {
         <td>
           <div className="stack-gap-2">
             <Badge>{roleEntry.role}</Badge>
-            <span className="muted">{roleEntry.purpose || "No role purpose published yet"}</span>
+            <span className="muted">{roleEntry.purpose || agentsPageCopy.roleCatalog.noRolePurpose}</span>
           </div>
         </td>
         <td className="muted">{formatBindingReadModelLabel(roleEntry.role_binding_read_model.skills_bundle_ref)}</td>
@@ -51,7 +55,7 @@ export function AgentsPage() {
         <td>
           <div className="stack-gap-2">
             <Badge className="ui-badge ui-badge--running">{roleEntry.role_binding_read_model.execution_authority}</Badge>
-            <span className="muted">Read-only derived mirror</span>
+            <span className="muted">{agentsPageCopy.roleCatalog.readOnlyMirror}</span>
           </div>
         </td>
       </tr>
@@ -82,26 +86,26 @@ export function AgentsPage() {
 
   return (
     <div className="content">
-      <div className="section-header"><div><h1 className="page-title">Agents</h1><p className="page-subtitle">Read-only role catalog, active state machines, and registered execution seats.</p></div><Button onClick={load} disabled={loading}>{loading ? "Refreshing..." : "Refresh"}</Button></div>
+      <div className="section-header"><div><h1 className="page-title">{agentsPageCopy.title}</h1><p className="page-subtitle">{agentsPageCopy.subtitle}</p></div><Button onClick={load} disabled={loading}>{loading ? (locale === "zh-CN" ? "刷新中..." : "Refreshing...") : (locale === "zh-CN" ? "刷新" : "Refresh")}</Button></div>
       {error && <div className="alert alert-danger" role="alert" aria-live="assertive">{error}</div>}
       {loading ? <div className="skeleton-stack-lg"><div className="skeleton skeleton-card-tall" /><div className="skeleton skeleton-card-tall" /></div> : (
         <div className="grid">
           <AgentsRoleConfigPanel roleCatalog={roleCatalog} onApplied={load} />
-          <div className="app-section"><h2 className="section-title">Role Catalog ({roleCatalog.length})</h2>
-            {roleCatalog.length === 0 ? <div className="empty-state-stack"><p className="muted">No role catalog entries yet</p></div> : (
-              <Card className="table-card"><table className="run-table"><thead><tr><th>Role</th><th>Skills bundle</th><th>MCP bundle</th><th>Runtime binding</th><th>Execution authority</th></tr></thead>
+          <div className="app-section"><h2 className="section-title">{agentsPageCopy.roleCatalog.title}</h2><p className="section-subtitle">{agentsPageCopy.roleCatalog.subtitle}</p>
+            {roleCatalog.length === 0 ? <div className="empty-state-stack"><p className="muted">{agentsPageCopy.roleCatalog.noMatches}</p></div> : (
+              <Card className="table-card"><table className="run-table"><thead><tr><th>{agentsPageCopy.roleCatalog.headers.role}</th><th>{agentsPageCopy.roleCatalog.headers.skillsBundle}</th><th>{agentsPageCopy.roleCatalog.headers.mcpBundle}</th><th>{agentsPageCopy.roleCatalog.headers.runtimeBinding}</th><th>{agentsPageCopy.roleCatalog.headers.executionAuthority}</th></tr></thead>
                 <tbody>{roleCatalog.map((roleEntry) => renderRoleCatalogRow(roleEntry))}</tbody></table></Card>
             )}
           </div>
           {runtimeStates.length > 0 && (
-            <div className="app-section"><h2 className="section-title">Active State Machines</h2>
-              <Card className="table-card"><table className="run-table"><thead><tr><th>Agent ID</th><th>Role</th><th>Status</th><th>Run ID</th></tr></thead>
+            <div className="app-section"><h2 className="section-title">{agentsPageCopy.stateMachine.title}</h2><p className="section-subtitle">{agentsPageCopy.stateMachine.subtitle}</p>
+              <Card className="table-card"><table className="run-table"><thead><tr><th>{agentsPageCopy.stateMachine.headers.agentId}</th><th>{agentsPageCopy.stateMachine.headers.role}</th><th>{agentsPageCopy.stateMachine.headers.flowStage}</th><th>{agentsPageCopy.stateMachine.headers.runId}</th></tr></thead>
                 <tbody>{runtimeStates.map((snapshot, index) => renderRuntimeRow(snapshot, index))}</tbody></table></Card>
             </div>
           )}
-          <div className="app-section"><h2 className="section-title">Registered Agents ({registry.length})</h2>
-            {registry.length === 0 ? <div className="empty-state-stack"><p className="muted">No agents are registered yet</p></div> : (
-              <Card className="table-card"><table className="run-table"><thead><tr><th>Agent ID</th><th>Role</th><th>Notes</th><th>Locks</th></tr></thead>
+          <div className="app-section"><h2 className="section-title">{agentsPageCopy.registeredInventory.title(registry.length)}</h2>
+            {registry.length === 0 ? <div className="empty-state-stack"><p className="muted">{agentsPageCopy.registeredInventory.emptyTitle}</p></div> : (
+              <Card className="table-card"><table className="run-table"><thead><tr><th>{agentsPageCopy.registeredInventory.headers.agentId}</th><th>{agentsPageCopy.registeredInventory.headers.role}</th><th>Notes</th><th>{agentsPageCopy.registeredInventory.headers.lockCount}</th></tr></thead>
                 <tbody>{registry.map((agent, index) => renderRegistryRow(agent, index))}</tbody></table></Card>
             )}
           </div>

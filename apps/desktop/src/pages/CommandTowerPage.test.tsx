@@ -235,7 +235,7 @@ describe("CommandTowerPage", () => {
     render(<CommandTowerPage />);
 
     await waitFor(() => {
-      expect(screen.getByText(/Full pipeline refresh failed/)).toBeInTheDocument();
+      expect(screen.getAllByText(/Full pipeline refresh failed/).length).toBeGreaterThan(0);
     });
     expect(screen.getByText("Backoff")).toBeInTheDocument();
 

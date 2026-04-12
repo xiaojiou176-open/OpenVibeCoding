@@ -44,6 +44,8 @@ test("renders run list items", () => {
   expect(within(row).getByRole("link", { name: "run-001" })).toHaveAttribute("href", "/runs/run-001");
   expect(within(row).getByText("Task: task-001")).toBeInTheDocument();
   expect(within(row).getByText("Completed")).toBeInTheDocument();
+  expect(within(row).getAllByText("The outcome is ready for proof review.").length).toBeGreaterThan(0);
+  expect(within(row).getByRole("link", { name: "Open run detail" })).toHaveAttribute("href", "/runs/run-001");
   expect(within(row).getByText(expectedTime)).toBeInTheDocument();
 });
 
@@ -82,7 +84,7 @@ test("renders placeholder when created_at missing", () => {
   const row = screen.getByRole("row", { name: /run-002/i });
   expect(within(row).getByRole("link", { name: "run-002" })).toBeInTheDocument();
   expect(within(row).getByText("Unknown")).toBeInTheDocument();
-  expect(within(row).getAllByText("-").length).toBeGreaterThan(0);
+  expect(within(row).getAllByText("This run has not reported a clear proof posture yet.").length).toBeGreaterThan(0);
 });
 
 test("handles null status without crashing", () => {
@@ -131,7 +133,7 @@ test("covers fallback fields and badge classes", () => {
   expect(within(row).getByText(/\(agent-2\)/)).toBeInTheDocument();
   expect(within(row).getByText("Failed")).toHaveClass("badge--failed");
   expect(row).toHaveClass("session-row--failed");
-  expect(within(row).getByText("WF_RUNNING")).toBeInTheDocument();
+  expect(within(row).getByText("Workflow: WF_RUNNING")).toBeInTheDocument();
   expect(within(row).getByText("diff gate")).toBeInTheDocument();
 });
 
@@ -202,15 +204,12 @@ test("renders concise failure summary with single-run actions only", () => {
   expect(screen.getByText("policy rejected")).toBeInTheDocument();
   expect(screen.getByText("needs approval")).toBeInTheDocument();
   expect(screen.getByText("assertion mismatch")).toBeInTheDocument();
-  expect(screen.queryByText(/^Failure type:/)).toBeNull();
-  expect(screen.queryByText(/^Recommended action:/)).toBeNull();
-  expect(screen.queryByRole("link", { name: "Bulk triage" })).toBeNull();
-  const singleActions = screen.getAllByRole("link", { name: "Open triage" });
-  expect(singleActions).toHaveLength(3);
-  expect(singleActions[0]).toHaveAttribute("href", "/events?run_id=run-gate");
-  expect(singleActions[1]).toHaveAttribute("href", "/events?run_id=run-manual");
-  expect(singleActions[2]).toHaveAttribute("href", "/events?run_id=run-product");
-  expect(singleActions[0]).toHaveAccessibleName("Open triage");
+  expect(screen.getAllByRole("link", { name: "Open Proof & Replay" })).toHaveLength(3);
+  const timelineLinks = screen.getAllByRole("link", { name: "Open event timeline" });
+  expect(timelineLinks).toHaveLength(3);
+  expect(timelineLinks[0]).toHaveAttribute("href", "/events?run_id=run-gate");
+  expect(timelineLinks[1]).toHaveAttribute("href", "/events?run_id=run-manual");
+  expect(timelineLinks[2]).toHaveAttribute("href", "/events?run_id=run-product");
 });
 
 test("keeps failure summary as the primary text and removes duplicate hint noise", () => {
@@ -230,9 +229,8 @@ test("keeps failure summary as the primary text and removes duplicate hint noise
   );
 
   const row = screen.getByRole("row", { name: /run-dup-hint/i });
-  expect(within(row).getByText("worker timeout")).toBeInTheDocument();
-  expect(within(row).queryByText(/^Failure type:/)).toBeNull();
-  expect(within(row).queryByText(/^Recommended action:/)).toBeNull();
+  expect(within(row).getAllByText("worker timeout").length).toBeGreaterThan(0);
+  expect(within(row).getByRole("link", { name: "Open Proof & Replay" })).toHaveAttribute("href", "/runs/run-dup-hint");
 });
 
 test("sanitizes dangerous diff html payloads", () => {

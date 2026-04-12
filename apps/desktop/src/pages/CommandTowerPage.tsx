@@ -411,9 +411,6 @@ export function CommandTowerPage({
         <Button onClick={openPrimarySession} disabled={sessions.length === 0}>
           {commandTowerCopy.actions.resumeWork}
         </Button>
-        <Button variant="ghost" onClick={openWebAnalysis}>
-          {commandTowerCopy.actions.openWebDeepAnalysis}
-        </Button>
       </div>
 
       {/* ─── Action Feedback ─── */}
@@ -423,20 +420,13 @@ export function CommandTowerPage({
         </div>
       )}
       <div className="row-gap-2">
-        <span className="muted text-xs">{commandTowerCopy.collapsedHint}</span>
         <Button variant="ghost" onClick={() => setAdvancedMode((p) => !p)} aria-expanded={advancedMode}>
           {advancedMode ? commandTowerCopy.actions.hideAdvancedDetail : commandTowerCopy.actions.showAdvancedDetail}
         </Button>
+        <Button variant="ghost" onClick={openWebAnalysis}>
+          {commandTowerCopy.actions.openWebDeepAnalysis}
+        </Button>
       </div>
-      <section className="ct-web-handoff" aria-label="Web analysis handoff">
-        <p>
-          {commandTowerCopy.webHandoffIntro}{" "}
-          <Button variant="ghost" onClick={openWebAnalysis}>
-            {commandTowerCopy.webAnalysisView}
-          </Button>
-          .
-        </p>
-      </section>
 
       {overview && (
         <div className="stats-grid">
@@ -449,44 +439,6 @@ export function CommandTowerPage({
       <p className="mono muted" role="status" aria-live="polite">
         {refreshHealth.label} · {freshness}
       </p>
-
-      {advancedMode ? (
-        <>
-      {/* ─── Filter Console ─── */}
-      <Card className="ct-filter-card">
-        <div className="row-between">
-          <div>
-            <h3 className="card-title-reset text-base fw-600">{commandTowerCopy.filterTitle}</h3>
-            <p className="ct-filter-hint">{commandTowerCopy.filterHint}</p>
-          </div>
-          {draftChanged && <Badge variant="warning">{commandTowerCopy.draftNotApplied}</Badge>}
-        </div>
-        <div className="ct-filter-controls">
-          <fieldset className="ct-filter-fieldset" aria-label={commandTowerCopy.statusLegend}>
-            <legend className="ct-filter-legend">{commandTowerCopy.statusLegend}</legend>
-            {STATUS_OPTIONS.map((st) => (
-              <label key={st} className="ct-filter-check">
-                <input type="checkbox" checked={draftStatuses.includes(st)} onChange={() => toggleDraftStatus(st)} />
-                <span>{st}</span>
-              </label>
-            ))}
-          </fieldset>
-          <label className="ct-filter-group">
-            <span className="ct-filter-label">{commandTowerCopy.projectKey}</span>
-            <Input ref={projectInputRef} className="ct-filter-input" value={draftProjectKey} onChange={(e) => setDraftProjectKey(e.target.value)} onKeyDown={handleFilterKeyDown} placeholder="cortexpilot" />
-          </label>
-          <label className="ct-filter-group ct-filter-group-sort">
-            <span className="ct-filter-label">{commandTowerCopy.sort}</span>
-            <Select className="ct-filter-input" value={draftSort} onChange={(e) => setDraftSort(e.target.value as SortMode)} onKeyDown={handleFilterKeyDown}>
-              {SORT_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
-            </Select>
-          </label>
-          <div className="row-gap-2">
-            <Button variant="primary" onClick={applyFilters} disabled={!draftChanged}>{commandTowerCopy.apply}</Button>
-            <Button variant="ghost" onClick={resetFilters}>{commandTowerCopy.reset}</Button>
-          </div>
-        </div>
-      </Card>
 
       {/* ─── Focus View ─── */}
       <div role="group" aria-label="Focus view switcher" className="ct-focus-group">
@@ -510,6 +462,16 @@ export function CommandTowerPage({
         <Badge variant={sectionBadgeVariant(sectionStatus.alerts)}>{commandTowerCopy.sectionLabels.alerts} {sectionStatusText(sectionStatus.alerts)}</Badge>
       </div>
 
+      <section className="ct-web-handoff" aria-label="Web analysis handoff">
+        <p>
+          {commandTowerCopy.webHandoffIntro}{" "}
+          <Button variant="ghost" onClick={openWebAnalysis}>
+            {commandTowerCopy.webAnalysisView}
+          </Button>
+          .
+        </p>
+      </section>
+
       {/* ─── Error Banner ─── */}
       {errorMessage && (
         <div className="alert alert-danger ct-error-banner" role="alert">
@@ -528,6 +490,50 @@ export function CommandTowerPage({
           </div>
         </div>
       )}
+
+      {advancedMode ? (
+        <>
+          <div className="row-gap-2">
+            <span className="muted text-xs">{commandTowerCopy.collapsedHint}</span>
+          </div>
+
+          {/* ─── Filter Console ─── */}
+          <Card className="ct-filter-card">
+            <div className="row-between">
+              <div>
+                <h3 className="card-title-reset text-base fw-600">{commandTowerCopy.filterTitle}</h3>
+                <p className="ct-filter-hint">{commandTowerCopy.filterHint}</p>
+              </div>
+              {draftChanged && <Badge variant="warning">{commandTowerCopy.draftNotApplied}</Badge>}
+            </div>
+            <div className="ct-filter-controls">
+              <fieldset className="ct-filter-fieldset" aria-label={commandTowerCopy.statusLegend}>
+                <legend className="ct-filter-legend">{commandTowerCopy.statusLegend}</legend>
+                {STATUS_OPTIONS.map((st) => (
+                  <label key={st} className="ct-filter-check">
+                    <input type="checkbox" checked={draftStatuses.includes(st)} onChange={() => toggleDraftStatus(st)} />
+                    <span>{st}</span>
+                  </label>
+                ))}
+              </fieldset>
+              <label className="ct-filter-group">
+                <span className="ct-filter-label">{commandTowerCopy.projectKey}</span>
+                <Input ref={projectInputRef} className="ct-filter-input" value={draftProjectKey} onChange={(e) => setDraftProjectKey(e.target.value)} onKeyDown={handleFilterKeyDown} placeholder="cortexpilot" />
+              </label>
+              <label className="ct-filter-group ct-filter-group-sort">
+                <span className="ct-filter-label">{commandTowerCopy.sort}</span>
+                <Select className="ct-filter-input" value={draftSort} onChange={(e) => setDraftSort(e.target.value as SortMode)} onKeyDown={handleFilterKeyDown}>
+                  {SORT_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+                </Select>
+              </label>
+              <div className="row-gap-2">
+                <Button variant="primary" onClick={applyFilters} disabled={!draftChanged}>{commandTowerCopy.apply}</Button>
+                <Button variant="ghost" onClick={resetFilters}>{commandTowerCopy.reset}</Button>
+              </div>
+            </div>
+          </Card>
+        </>
+      ) : null}
 
       {/* ─── Filter / Focus Empty States ─── */}
       {sessions.length === 0 && hasAppliedFilters && (
@@ -631,7 +637,7 @@ export function CommandTowerPage({
         </div>
 
         {/* ─── Drawer Panel ─── */}
-        {!drawerCollapsed && (
+        {advancedMode && !drawerCollapsed && (
           <aside className="ct-drawer-panel" role="complementary" aria-label={commandTowerCopy.drawer.ariaLabel}>
             <div className="ct-drawer-header">
               <span className="ct-drawer-title">{commandTowerCopy.drawer.title}</span>
@@ -730,8 +736,6 @@ export function CommandTowerPage({
           </aside>
         )}
       </div>
-        </>
-      ) : null}
     </div>
   );
 }

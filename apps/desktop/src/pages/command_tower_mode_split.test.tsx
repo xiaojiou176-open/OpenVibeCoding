@@ -73,7 +73,7 @@ describe("desktop command tower mode split", () => {
 
   it("shows execution-first and web-first governance navigation grouping", () => {
     render(<AppSidebar activePage="pm" onNavigate={vi.fn()} />);
-    expect(screen.getByRole("heading", { name: "Primary" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Core loop" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Governance" })).toBeInTheDocument();
   });
 
@@ -88,6 +88,27 @@ describe("desktop command tower mode split", () => {
     const sessionRow = await screen.findByRole("button", { name: /Open session pm-1/ });
     fireEvent.keyDown(sessionRow, { key: "Enter" });
     expect(onNavigateToSession).toHaveBeenCalledWith("pm-1");
+  });
+
+  it("shows command tower triage surfaces by default and keeps advanced controls secondary", async () => {
+    vi.mocked(fetchCommandTowerOverview).mockResolvedValue({
+      total_sessions: 2,
+      active_sessions: 1,
+      failed_sessions: 1,
+      blocked_sessions: 1,
+      failed_ratio: 0.5,
+      generated_at: "2026-02-20T00:00:00Z",
+      top_blockers: [{ pm_session_id: "pm-blocker", status: "blocked", objective: "Investigate refresh drift" }],
+    } as any);
+
+    render(<CommandTowerPage />);
+
+    expect(await screen.findByText("pm-1")).toBeInTheDocument();
+    expect(screen.getByText("Blocking hotspots")).toBeInTheDocument();
+    expect(screen.getByText("pm-blocker")).toBeInTheDocument();
+    expect(screen.getAllByText("Full refresh succeeded").length).toBeGreaterThan(0);
+    expect(screen.queryByRole("checkbox", { name: "active" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("complementary", { name: "Command Tower context drawer" })).not.toBeInTheDocument();
   });
 
   it("supports keyboard activation for session rows with Space key", async () => {

@@ -2094,7 +2094,8 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
         queueScheduledAt: "Queue scheduled at",
         queueDeadlineAt: "Queue deadline at",
         operatorRoleLabel: "Operator role",
-        roleGateReason: "NEXT_PUBLIC_CORTEXPILOT_OPERATOR_ROLE is not configured in this environment, so queue actions stay read-only.",
+        roleGateReason:
+          "This environment has not published an operator role yet, so queue actions remain read-only until the command tower can prove who is allowed to dispatch work.",
         queueSummary: (queueCount: number, eligibleCount: number) =>
           `Queued items visible: ${queueCount}. Ready now: ${eligibleCount}.`,
         queueLatestRun: "Queue latest run contract",
@@ -2873,7 +2874,7 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
           createFirstWorkflow: "先从 PM intake 创建第一条工作流案例，然后再回到这里派发排队工作。",
         },
         emptyTitle: "当前还没有工作流案例",
-        emptyHint: "第一次执行时会自动创建工作流案例。",
+        emptyHint: "先从 PM 入口创建第一条工作流案例，再回到这里确认 queue、proof 和下一步操作如何连成一条线。",
         tableCaption: "工作流列表",
         tableHeaders: {
           workflowId: "工作流 ID",
@@ -3338,7 +3339,8 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
         queueScheduledAt: "计划执行时间",
         queueDeadlineAt: "截止时间",
         operatorRoleLabel: "操作角色",
-        roleGateReason: "当前环境没有配置 NEXT_PUBLIC_CORTEXPILOT_OPERATOR_ROLE，所以队列动作保持只读。",
+        roleGateReason:
+          "当前环境还没有发布可执行的操作角色，所以队列动作保持只读；先确认这条 command tower 由谁负责，再回来推进队列。",
         queueSummary: (queueCount: number, eligibleCount: number) =>
           `当前可见队列项：${queueCount}。现在可执行：${eligibleCount}。`,
         queueLatestRun: "排入最新 Run 合约",

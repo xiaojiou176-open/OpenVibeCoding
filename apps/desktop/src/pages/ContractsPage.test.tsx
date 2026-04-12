@@ -63,6 +63,8 @@ describe("ContractsPage", () => {
       ] as any);
     const user = userEvent.setup();
     render(<ContractsPage />);
+    expect(screen.getByRole("heading", { name: /Contracts|合约/ })).toBeInTheDocument();
+    expect(screen.getByText(/contract desk|command tower 的 contract desk/i)).toBeInTheDocument();
     expect(await screen.findByText(/No contracts yet|暂无合约/)).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: /Refresh|刷新/ }));
     expect(await screen.findByText("task-1")).toBeInTheDocument();

@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
+import { getUiCopy, type UiLocale } from "@cortexpilot/frontend-shared/uiCopy";
+import { detectPreferredUiLocale } from "@cortexpilot/frontend-shared/uiLocale";
 import type { RunSummary } from "../lib/types";
 import { fetchRuns } from "../lib/api";
 import {
@@ -19,6 +21,8 @@ type RunsPageProps = {
 };
 
 export function RunsPage({ onNavigateToRun }: RunsPageProps) {
+  const locale: UiLocale = detectPreferredUiLocale();
+  const runsPageCopy = getUiCopy(locale).dashboard.runsPage;
   const [runs, setRuns] = useState<RunSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -48,10 +52,10 @@ export function RunsPage({ onNavigateToRun }: RunsPageProps) {
     <div className="content">
       <div className="section-header">
         <div>
-          <h1 className="page-title">Runs</h1>
-          <p className="page-subtitle">Review execution status, failure semantics, and next actions in one place.</p>
+          <h1 className="page-title">{runsPageCopy.title}</h1>
+          <p className="page-subtitle">{runsPageCopy.subtitle}</p>
         </div>
-        <Button onClick={load}>Refresh</Button>
+        <Button onClick={load}>{locale === "zh-CN" ? "刷新" : "Refresh"}</Button>
       </div>
 
       {error && <div className="alert alert-danger">{error}</div>}
@@ -64,7 +68,7 @@ export function RunsPage({ onNavigateToRun }: RunsPageProps) {
         </div>
       ) : runs.length === 0 ? (
         <div className="empty-state-stack">
-          <p className="muted">No runs yet.</p>
+          <p className="muted">{locale === "zh-CN" ? "当前还没有 runs。" : "No runs yet."}</p>
         </div>
       ) : (
         <Card className="table-card">

@@ -9,6 +9,7 @@ import { Card } from "../../components/ui/card";
 import RunList from "../../components/RunList";
 import { fetchRuns } from "../../lib/api";
 import { safeLoad } from "../../lib/serverPageData";
+import { statusVariant } from "../../lib/statusPresentation";
 
 type RunsPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
@@ -40,6 +41,11 @@ export default async function RunsPage({ searchParams }: RunsPageProps) {
   const failed = runs.filter((run) => String(run.status || "").toUpperCase().includes("FAIL")).length;
   const success = runs.filter((run) => ["SUCCESS", "DONE", "PASSED"].includes(String(run.status || "").toUpperCase())).length;
   const running = Math.max(runs.length - failed - success, 0);
+  const proofReady = runs.filter((run) => {
+    const outcomeType = String(run.outcome_type || "").trim().toLowerCase();
+    return statusVariant(run.status) === "success" || ["proof_ready", "share_ready", "release_ready"].includes(outcomeType);
+  }).length;
+  const hintedRuns = runs.filter((run) => String(run.action_hint_zh || "").trim()).length;
   const failureRate = runs.length > 0 ? failed / runs.length : 0;
   const highFailureMode = failed > 0 && failureRate >= 0.5;
   const distributionHeadline = highFailureMode
@@ -63,6 +69,9 @@ export default async function RunsPage({ searchParams }: RunsPageProps) {
   const governanceSubline = failed > 0
     ? runsPageCopy.operatorPrioritySubline
     : runsPageCopy.operatorPriorityClearSubline;
+  const operatorDeskNote = locale === "zh-CN"
+    ? `当前首屏把 ${proofReady} 个 proof-ready run 和 ${hintedRuns} 个带 action hint 的 run 放回同一张 operator list，不再只把 Runs 当失败分诊表。`
+    : `This first screen keeps ${proofReady} proof-ready runs and ${hintedRuns} runs with explicit operator hints in the same operator list, so Proof & Replay is not reduced to a failure queue.`;
   return (
     <main className="grid" aria-labelledby="runs-page-title">
       <header className="app-section">
@@ -82,6 +91,9 @@ export default async function RunsPage({ searchParams }: RunsPageProps) {
             <p className="mono muted">{warning}</p>
           </Card>
         ) : null}
+        <Card variant="compact">
+          <p className="mono muted">{operatorDeskNote}</p>
+        </Card>
         <div className="stats-grid">
           <Card asChild variant="metric">
             <article>

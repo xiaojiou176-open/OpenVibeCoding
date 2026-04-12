@@ -109,7 +109,8 @@ describe("workflows queue page", () => {
     expect(screen.getByText("1 个工作流 / 1 个队列项")).toBeInTheDocument();
     expect(screen.getByText("已有排队工作的案例：1")).toBeInTheDocument();
     expect(screen.getByText("队列：1 / SLA at_risk")).toBeInTheDocument();
-    expect(screen.getByRole("columnheader", { name: "工作流 ID" })).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", { name: "Workflow Case" })).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", { name: "权威 / Runtime" })).toBeInTheDocument();
   });
 
   it("runs next queued task from the web workflow surface", async () => {

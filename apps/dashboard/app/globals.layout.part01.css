@@ -449,7 +449,7 @@
 }
 
 .metric-value--warning {
-  color: var(--color-warning);
+  color: var(--color-warning-ink);
 }
 
 .page-title {
