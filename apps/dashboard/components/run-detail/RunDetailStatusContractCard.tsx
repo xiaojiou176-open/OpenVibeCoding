@@ -75,6 +75,25 @@ export default function RunDetailStatusContractCard({
   const allowedPaths = toArray(run.allowed_paths);
   const evidenceEntries = Object.entries(toObject(evidenceHashes));
   const artifactList = toArray(manifestArtifacts);
+  const artifactNames = artifactList
+    .map((item) => {
+      const record = toObject(item);
+      const artifactName = typeof record.name === "string" ? record.name : typeof record.path === "string" ? record.path : "";
+      return artifactName.trim();
+    })
+    .filter(Boolean);
+  const lifecycleArtifactLabels = [
+    artifactNames.includes("prompt_artifact") || artifactNames.includes("artifacts/prompt_artifact.json")
+      ? "Prompt artifact"
+      : "",
+    artifactNames.includes("planning_wave_plan") || artifactNames.includes("artifacts/planning_wave_plan.json")
+      ? "Wave plan"
+      : "",
+    artifactNames.includes("planning_worker_prompt_contracts") ||
+    artifactNames.includes("artifacts/planning_worker_prompt_contracts.json")
+      ? "Worker prompt contracts"
+      : "",
+  ].filter(Boolean);
   const roleBindingReadModel = run.role_binding_read_model;
 
   return (
@@ -221,6 +240,9 @@ export default function RunDetailStatusContractCard({
       ) : null}
       <div className="mono">Manifest artifacts:</div>
       <div className="mono muted">{artifactList.length} artifact{artifactList.length === 1 ? "" : "s"}</div>
+      {lifecycleArtifactLabels.length > 0 ? (
+        <div className="mono">Lifecycle artifacts: {lifecycleArtifactLabels.join(" / ")}</div>
+      ) : null}
       <details>
         <summary className="mono">Expand artifact list</summary>
         <pre className="mono">{JSON.stringify(artifactList, null, 2)}</pre>

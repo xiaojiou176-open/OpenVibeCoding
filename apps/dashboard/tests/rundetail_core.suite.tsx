@@ -167,7 +167,6 @@ describe("RunDetail core flows", () => {
       status: "RUNNING",
       allowed_paths: ["apps/dashboard"],
       contract: {},
-      manifest: {},
       role_binding_read_model: {
         authority: "contract-derived-read-model",
         source: "persisted from contract",
@@ -208,6 +207,13 @@ describe("RunDetail core flows", () => {
           },
         },
       },
+      manifest: {
+        artifacts: [
+          { name: "prompt_artifact", path: "artifacts/prompt_artifact.json" },
+          { name: "planning_wave_plan", path: "artifacts/planning_wave_plan.json" },
+          { name: "planning_worker_prompt_contracts", path: "artifacts/planning_worker_prompt_contracts.json" },
+        ],
+      },
     };
     const fetchMock = mockFetchFactory({ events: [], reports: [], availableRuns: [] });
     // @ts-expect-error test override
@@ -226,6 +232,7 @@ describe("RunDetail core flows", () => {
     expect(screen.getByText("Runtime binding: agents / cliproxyapi / gpt-5.4")).toBeInTheDocument();
     expect(screen.getByText("Runtime capability: standard-provider-path")).toBeInTheDocument();
     expect(screen.getByText("Tool execution: standard-provider-path / provider-path-required")).toBeInTheDocument();
+    expect(screen.getByText("Lifecycle artifacts: Prompt artifact / Wave plan / Worker prompt contracts")).toBeInTheDocument();
     expect(
       screen.getByText(
         "Read-only note: this mirrors the persisted binding summary. task_contract still owns execution authority.",
