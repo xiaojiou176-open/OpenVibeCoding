@@ -25,6 +25,7 @@ _TRIVIAL_ACCEPTANCE_COMMANDS = {
     "true",
     ":",
 }
+_TRIVIAL_ECHO_PAYLOADS = {"", "ok", "hello", "pass", "success", "done", "1"}
 
 
 def _coerce_timeout_sec(raw: object) -> float:
@@ -36,6 +37,16 @@ def _coerce_timeout_sec(raw: object) -> float:
     if not math.isfinite(timeout_sec) or timeout_sec <= 0:
         return float(_DEFAULT_TIMEOUT_SEC)
     return timeout_sec
+
+
+def _coerce_gate_result(gate: object) -> dict[str, object]:
+    if isinstance(gate, dict):
+        return gate
+    return {
+        "ok": False,
+        "reason": "invalid validate_command result",
+        "raw": repr(gate),
+    }
 
 
 def _now_ts() -> str:
@@ -145,9 +156,13 @@ def _is_trivial_acceptance_command(command: str) -> bool:
         return True
     if normalized in _TRIVIAL_ACCEPTANCE_COMMANDS:
         return True
-    if normalized.startswith("echo "):
-        payload = normalized[5:].strip().strip('"').strip("'")
-        if payload in {"", "ok", "hello", "pass", "success", "done", "1"}:
+    try:
+        tokens = shlex.split(command)
+    except ValueError:
+        return False
+    if tokens and tokens[0].lower() == "echo":
+        payload = " ".join(tokens[1:]).strip().lower()
+        if payload in _TRIVIAL_ECHO_PAYLOADS:
             return True
     return False
 
@@ -167,7 +182,7 @@ def _normalize_tests(test_items: Iterable[object]) -> list[dict[str, object]]:
             continue
         if isinstance(item, dict):
             cmd = item.get("cmd") or item.get("command")
-            if isinstance(cmd, str) and cmd.strip():
+            if isinstance(cmd, str):
                 timeout_sec = _coerce_timeout_sec(item.get("timeout_sec", _DEFAULT_TIMEOUT_SEC))
                 normalized.append(
                     {
@@ -233,7 +248,7 @@ def run_acceptance_tests(
     strict_nontrivial_enabled = (
         bool(strict_nontrivial) if strict_nontrivial is not None else _is_strict_nontrivial_enabled()
     )
-    has_must_pass = any(bool(test.get("must_pass", True)) for test in normalized)
+    has_must_pass = any(_coerce_must_pass(test.get("must_pass", True)) for test in normalized)
     if not has_must_pass:
         finished_at = _now_ts()
         report = _build_report(
@@ -277,12 +292,14 @@ def run_acceptance_tests(
                 "reason": "trivial acceptance command blocked",
             }
 
-        gate = validate_command(
-            command,
-            forbidden,
-            network_policy=network_policy,
-            policy_pack=policy_pack,
-            repo_root=worktree_root,
+        gate = _coerce_gate_result(
+            validate_command(
+                command,
+                forbidden,
+                network_policy=network_policy,
+                policy_pack=policy_pack,
+                repo_root=worktree_root,
+            )
         )
         if not gate.get("ok", False):
             finished_at = _now_ts()
@@ -416,12 +433,14 @@ def run_evals_gate(
 
     relative = script_path.relative_to(repo_root)
     command = f"bash {relative}"
-    gate = validate_command(
-        command,
-        forbidden_actions or [],
-        network_policy=network_policy,
-        policy_pack=policy_pack,
-        repo_root=repo_root,
+    gate = _coerce_gate_result(
+        validate_command(
+            command,
+            forbidden_actions or [],
+            network_policy=network_policy,
+            policy_pack=policy_pack,
+            repo_root=repo_root,
+        )
     )
     if not gate.get("ok", False):
         return {"ok": False, "reason": "tool gate violation", "gate": gate, "command": command}

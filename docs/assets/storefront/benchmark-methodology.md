@@ -8,6 +8,7 @@ inventing numbers.
 - Benchmark execution tooling exists:
   - `scripts/bench_e2e_speed.py`
   - `scripts/bench_e2e_speed.sh`
+  - `scripts/check_bench_e2e_speed_gate.py`
 - A first tracked public single-run baseline now exists at
   `docs/releases/assets/news-digest-benchmark-summary-2026-03-27.md`.
 - Broader multi-round public benchmark figures do **not** exist yet.
@@ -61,6 +62,23 @@ A tracked public benchmark artifact should include:
 - a pointer to the raw machine output location that was copied out of
   `.runtime-cache/`
 - enough metadata to show which happy path was exercised
+
+## Gate Contract
+
+Once a real benchmark summary exists, the repo-owned fail-closed gate is:
+
+```bash
+npm run bench:e2e:speed:gate
+```
+
+Default thresholds are driven by:
+
+- `CORTEXPILOT_BENCH_MAX_FAIL_RATE`
+- `CORTEXPILOT_BENCH_UI_FULL_GEMINI_STRICT_MAX_P95_SEC`
+- `CORTEXPILOT_BENCH_DASHBOARD_HIGH_RISK_E2E_MAX_P95_SEC`
+
+The gate is intentionally strict about artifact presence: if no benchmark
+summary exists yet, it fails instead of inventing a baseline.
 
 ## Anti-Fraud Rule
 

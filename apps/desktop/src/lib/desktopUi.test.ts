@@ -49,7 +49,7 @@ describe("desktopUi seed timeline", () => {
       ),
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "查看完整 Diff" }));
+    fireEvent.click(screen.getByRole("button", { name: "View full diff" }));
     expect(onViewDiff).toHaveBeenCalledWith("report-1");
   });
 
@@ -108,8 +108,8 @@ describe("desktopUi seed timeline", () => {
 
     render(createElement("div", null, renderChatEmbed(message as any, embed as any, chooseDecision)));
 
-    expect(screen.getByText("推荐")).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "选择" }));
+    expect(screen.getByText("Recommended")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Choose" }));
     expect(chooseDecision).toHaveBeenCalledWith("msg-decision", "decision-1", "fast");
   });
 
@@ -157,10 +157,11 @@ describe("desktopUi seed timeline", () => {
       )
     );
 
-    expect(screen.getByText("任务：")).toBeInTheDocument();
-    expect(screen.getAllByText("进行中")).toHaveLength(2);
-    expect(screen.getByText("等待")).toBeInTheDocument();
-    expect(screen.getByText("完成")).toBeInTheDocument();
-    expect(screen.getByLabelText("警报卡片")).toHaveClass("is-critical");
+    expect(screen.getByText("Task:")).toBeInTheDocument();
+    expect(screen.getByText("进行中")).toBeInTheDocument();
+    expect(screen.getAllByText("In progress")).toHaveLength(1);
+    expect(screen.getByText("Waiting")).toBeInTheDocument();
+    expect(screen.getByText("Done")).toBeInTheDocument();
+    expect(screen.getByLabelText("Alert card")).toHaveClass("is-critical");
   });
 });

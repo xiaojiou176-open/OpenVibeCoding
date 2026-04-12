@@ -72,6 +72,9 @@ flowchart LR
   `workflow_case_read_model` directly for operator inspection, but those UI
   cards remain read-only mirrors below `task_contract`.
 - Runtime artifacts (`manifest`, `events.jsonl`, reports) are generated per run.
+- Runs may now also persist `artifacts/prompt_artifact.json`, a contract-derived
+  snapshot of prompt/bundle/runtime-binding refs for that run. It is a
+  read-only audit artifact, not a second execution authority source.
 - Run detail views may now include derived decision packs such as
   `incident_pack.json`, while approval queues synthesize `approval_pack`
   summaries from run events plus manifest metadata. These are derived operator

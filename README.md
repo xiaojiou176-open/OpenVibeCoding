@@ -526,6 +526,8 @@ Default local verification path:
 npm run ci
 npm run test:quick
 npm run test
+npm run mutation:gate
+npm run bench:e2e:speed:gate
 ```
 
 `npm run ci` is now the hosted-aligned local fast gate. Use
@@ -533,6 +535,13 @@ npm run test
 `npm run scan:workflow-security`, `npm run scan:trivy`, and
 `npm run security:scan:closeout` only when you intentionally want the stricter
 closeout/manual layers.
+`npm run mutation:gate` is the root mutation entrypoint for the existing
+Orchestrator mutation profiles, `npm run bench:e2e:speed:gate` is the
+fail-closed benchmark gate that evaluates a real benchmark summary once a run
+has produced one, and `npm run coverage:repo` now points to the active
+coverage runner that prepares subproject dependencies before generating fresh
+repo-level coverage receipts. Use `npm run coverage:repo:aggregate` only when
+you intentionally want to re-aggregate already-existing coverage artifacts.
 
 Current CI contract has five layers only:
 

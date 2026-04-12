@@ -13,6 +13,7 @@ import { fetchTests } from "../lib/api";
 describe("TestsPage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.mocked(fetchTests).mockReset();
   });
 
   it("renders empty state and then status cards after refresh", async () => {
@@ -25,11 +26,11 @@ describe("TestsPage", () => {
           command: "pnpm test",
           failure_info: "snapshot mismatch",
         },
-      ] as any);
+    ] as any);
     const user = userEvent.setup();
     render(<TestsPage />);
-    expect(await screen.findByText("暂无测试记录")).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: "刷新" }));
+    expect(await screen.findByText("No test records yet")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Refresh" }));
     expect(await screen.findByText("回归检查")).toBeInTheDocument();
     expect(screen.getByText("pnpm test")).toBeInTheDocument();
     expect(screen.getByText("snapshot mismatch")).toBeInTheDocument();

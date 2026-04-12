@@ -42,6 +42,19 @@ def test_tests_gate_tool_gate_violation(tmp_path: Path, monkeypatch) -> None:
     assert result["reason"] == "tool gate violation"
 
 
+def test_tests_gate_tool_gate_non_dict_result_fails_closed(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setattr(tests_gate, "validate_command", lambda *args, **kwargs: False)
+
+    result = tests_gate.run_acceptance_tests(
+        tmp_path,
+        [{"name": "hygiene", "cmd": "bash scripts/check_repo_hygiene.sh", "must_pass": True}],
+    )
+
+    assert result["ok"] is False
+    assert result["reason"] == "tool gate violation"
+    assert result["gate"]["reason"] == "invalid validate_command result"
+
+
 def test_tests_gate_invalid_shlex(tmp_path: Path, monkeypatch) -> None:
     monkeypatch.setattr(tests_gate, "validate_command", lambda *args, **kwargs: {"ok": True})
     result = tests_gate.run_acceptance_tests(tmp_path, ['echo "unterminated'])
@@ -126,6 +139,16 @@ def test_tests_gate_strict_nontrivial_blocks_echo_numeric_payload(tmp_path: Path
     monkeypatch.setattr(tests_gate, "validate_command", lambda *args, **kwargs: {"ok": True})
 
     result = tests_gate.run_acceptance_tests(tmp_path, ['echo "1"'])
+
+    assert result["ok"] is False
+    assert result["reason"] == "trivial acceptance command blocked"
+
+
+def test_tests_gate_strict_nontrivial_blocks_echo_whitespace_payload(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setenv("CORTEXPILOT_ACCEPTANCE_STRICT_NONTRIVIAL", "1")
+    monkeypatch.setattr(tests_gate, "validate_command", lambda *args, **kwargs: {"ok": True})
+
+    result = tests_gate.run_acceptance_tests(tmp_path, ['echo "   "'])
 
     assert result["ok"] is False
     assert result["reason"] == "trivial acceptance command blocked"
@@ -284,6 +307,16 @@ def test_tests_gate_rejects_when_all_acceptance_tests_are_not_must_pass(tmp_path
     assert result["reason"] == "missing must_pass acceptance test"
 
 
+def test_tests_gate_blank_dict_command_reports_empty_command(tmp_path: Path) -> None:
+    result = tests_gate.run_acceptance_tests(
+        tmp_path,
+        [{"name": "blank", "cmd": "   ", "must_pass": True}],
+    )
+
+    assert result["ok"] is False
+    assert result["reason"] == "empty command"
+
+
 def test_run_evals_gate_blocks_tool_gate_violation(tmp_path: Path, monkeypatch) -> None:
     repo_root = tmp_path / "repo"
     worktree = repo_root / "worktree"
@@ -304,6 +337,30 @@ def test_run_evals_gate_blocks_tool_gate_violation(tmp_path: Path, monkeypatch) 
 
     assert result["ok"] is False
     assert result["reason"] == "tool gate violation"
+    assert called["run"] is False
+
+
+def test_run_evals_gate_non_dict_tool_gate_result_fails_closed(tmp_path: Path, monkeypatch) -> None:
+    repo_root = tmp_path / "repo"
+    worktree = repo_root / "worktree"
+    (repo_root / "scripts").mkdir(parents=True)
+    worktree.mkdir(parents=True)
+    (repo_root / "scripts" / "run_evals.sh").write_text("#!/usr/bin/env bash\necho evals\n", encoding="utf-8")
+
+    called: dict[str, bool] = {"run": False}
+
+    def _fake_run(*args, **kwargs):
+        called["run"] = True
+        return subprocess.CompletedProcess(args, 0, "ok", "")
+
+    monkeypatch.setattr(tests_gate, "validate_command", lambda *args, **kwargs: False)
+    _patch_tests_gate_subprocess(monkeypatch, _fake_run)
+
+    result = tests_gate.run_evals_gate(repo_root, worktree)
+
+    assert result["ok"] is False
+    assert result["reason"] == "tool gate violation"
+    assert result["gate"]["reason"] == "invalid validate_command result"
     assert called["run"] is False
 
 

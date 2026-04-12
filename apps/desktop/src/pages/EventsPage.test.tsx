@@ -30,7 +30,7 @@ describe("EventsPage", () => {
     const user = userEvent.setup();
     render(<EventsPage />);
 
-    const rowToggle = await screen.findByRole("button", { name: "查看事件详情 TEST_EVENT" });
+    const rowToggle = await screen.findByRole("button", { name: "View event details TEST_EVENT" });
     expect(rowToggle).toHaveAttribute("aria-expanded", "false");
 
     await user.click(rowToggle);
@@ -57,7 +57,7 @@ describe("EventsPage", () => {
     const user = userEvent.setup();
     render(<EventsPage />);
 
-    const rowToggle = await screen.findByRole("button", { name: "查看事件详情 KEYBOARD_EVENT" });
+    const rowToggle = await screen.findByRole("button", { name: "View event details KEYBOARD_EVENT" });
     rowToggle.focus();
     await user.keyboard("{Enter}");
     expect(rowToggle).toHaveAttribute("aria-expanded", "true");

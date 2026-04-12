@@ -125,13 +125,13 @@ describe("coverage sprint F: low-branch pages", () => {
       locks: [],
       role_catalog: [],
     } as FirstAgentsPayload);
-    expect(await screen.findByText(/活跃状态机|Active State Machines/)).toBeInTheDocument();
-    expect(screen.getByText(/注册代理 \(1\)|Registered Agents \(1\)/)).toBeInTheDocument();
+    expect(await screen.findByText("Execution lane triage")).toBeInTheDocument();
+    expect(screen.getByText("Registered execution seats (expandable, 1 items)")).toBeInTheDocument();
     expect(screen.getByText("run-12345678")).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: /刷新|Refresh/ }));
-    expect(await screen.findByText(/暂无注册代理|No agents are registered yet/)).toBeInTheDocument();
-    expect(screen.queryByText(/活跃状态机|Active state machines/)).not.toBeInTheDocument();
+    expect(await screen.findByText("No registered agents")).toBeInTheDocument();
+    expect(screen.queryByText("Execution lane triage")).not.toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: /刷新|Refresh/ }));
     const errorBanner = await screen.findByRole("alert");

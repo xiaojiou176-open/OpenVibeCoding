@@ -1,11 +1,36 @@
 from __future__ import annotations
 
 from collections.abc import Callable
+import hashlib
+import json
 from pathlib import Path
 from typing import Any
 
-from cortexpilot_orch.contract.compiler import build_role_binding_summary
+from cortexpilot_orch.contract.compiler import build_prompt_artifact, build_role_binding_summary
 from cortexpilot_orch.store.run_store import RunStore
+
+
+def _artifact_ref_for_path(path: Path, *, rel_path: str, name: str, media_type: str = "application/json") -> dict[str, Any]:
+    payload = path.read_bytes()
+    return {
+        "name": name,
+        "path": rel_path,
+        "sha256": hashlib.sha256(payload).hexdigest(),
+        "media_type": media_type,
+        "size_bytes": len(payload),
+    }
+
+
+def _append_manifest_artifact(manifest: dict[str, Any], ref: dict[str, Any]) -> None:
+    artifacts = manifest.get("artifacts") if isinstance(manifest.get("artifacts"), list) else []
+    key = (str(ref.get("name") or ""), str(ref.get("path") or ""))
+    for item in artifacts:
+        if not isinstance(item, dict):
+            continue
+        if (str(item.get("name") or ""), str(item.get("path") or "")) == key:
+            return
+    artifacts.append(ref)
+    manifest["artifacts"] = artifacts
 
 
 class ContractStateWriter:
@@ -208,5 +233,31 @@ def persist_contract_state(
             )
     store.write_task_contract(run_id, task_id, contract)
     store.write_active_contract(run_id, contract)
+    prompt_artifact = build_prompt_artifact(contract, run_id=run_id, task_id=task_id)
+    prompt_artifact_path = store.write_artifact(
+        run_id,
+        "prompt_artifact.json",
+        json.dumps(prompt_artifact, ensure_ascii=False, indent=2),
+    )
+    if manifest is not None:
+        _append_manifest_artifact(
+            manifest,
+            _artifact_ref_for_path(
+                prompt_artifact_path,
+                rel_path="artifacts/prompt_artifact.json",
+                name="prompt_artifact",
+            ),
+        )
+        write_manifest_fn(store, run_id, manifest)
+    store.append_event(
+        run_id,
+        {
+            "level": "INFO",
+            "event": "PROMPT_ARTIFACT_WRITTEN",
+            "run_id": run_id,
+            "task_id": task_id,
+            "meta": {"path": str(prompt_artifact_path.relative_to(store.run_dir(run_id)))},
+        },
+    )
     if ensure_evidence_bundle_fn is not None and failure_reason:
         ensure_evidence_bundle_fn(store, run_id, contract, failure_reason)

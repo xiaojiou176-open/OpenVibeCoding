@@ -463,6 +463,120 @@ def test_run_intake_strips_intake_only_template_fields_before_execution(monkeypa
     assert observed_contract["runtime_options"]["strict_acceptance"] is True
 
 
+def test_run_intake_persists_planning_artifacts_into_run_bundle(monkeypatch, tmp_path: Path) -> None:
+    runs_root = tmp_path / "runs"
+    runtime_contract_root = tmp_path / ".runtime-cache" / "cortexpilot" / "contracts"
+    intake_payload = {
+        "objective": "Ship one planning artifact bridge",
+        "constraints": ["truthful-public-surface"],
+        "search_queries": ["command tower planning artifact"],
+    }
+    response_payload = {
+        "plan_bundle": {
+            "bundle_id": "bundle-1",
+            "objective": "Ship one planning artifact bridge",
+            "owner_agent": {"role": "PM", "agent_id": "pm-1"},
+            "plans": [
+                {
+                    "plan_id": "worker-1",
+                    "assigned_agent": {"role": "WORKER", "agent_id": "worker-1"},
+                    "spec": "Persist the planning artifact into the run bundle.",
+                    "allowed_paths": ["apps/orchestrator"],
+                    "acceptance_tests": [{"name": "pytest", "cmd": "python3 -m pytest -q", "must_pass": True}],
+                    "mcp_tool_set": ["codex"],
+                    "required_outputs": [{"name": "task_result.json", "type": "report"}],
+                }
+            ],
+        }
+    }
+    intake_events: list[tuple[str, dict[str, object]]] = []
+
+    class _Store:
+        def append_event(self, intake_id: str, payload: dict[str, object]) -> None:
+            intake_events.append((intake_id, payload))
+
+        def read_intake(self, intake_id: str) -> dict[str, object]:
+            assert intake_id == "persist"
+            return intake_payload
+
+        def read_response(self, intake_id: str) -> dict[str, object]:
+            assert intake_id == "persist"
+            return response_payload
+
+    monkeypatch.setattr(helpers, "IntakeStore", lambda: _Store())
+    monkeypatch.setattr(
+        helpers,
+        "load_config",
+        lambda: types.SimpleNamespace(
+            repo_root=tmp_path,
+            runs_root=runs_root,
+            contract_root=tmp_path / "contracts",
+            runtime_contract_root=runtime_contract_root,
+        ),
+    )
+
+    class _BuildOK:
+        def build_contract(self, intake_id: str) -> dict[str, object]:
+            assert intake_id == "persist"
+            return {
+                "task_id": "task-persist",
+                "owner_agent": {"role": "PM", "agent_id": "pm-1"},
+                "assigned_agent": {"role": "WORKER", "agent_id": "worker-1"},
+                "inputs": {"spec": "repro", "artifacts": []},
+                "required_outputs": [{"name": "task_result.json", "type": "json", "acceptance": "ok"}],
+                "allowed_paths": ["apps/orchestrator"],
+                "forbidden_actions": [],
+                "acceptance_tests": [{"name": "pytest", "cmd": "python3 -m pytest -q", "must_pass": True}],
+                "tool_permissions": {
+                    "filesystem": "workspace-write",
+                    "shell": "on-request",
+                    "network": "deny",
+                    "mcp_tools": ["codex"],
+                },
+                "mcp_tool_set": ["codex"],
+                "timeout_retry": {"timeout_sec": 60, "max_retries": 0, "retry_backoff_sec": 0},
+                "rollback": {"strategy": "git_reset_hard", "baseline_ref": "HEAD"},
+                "evidence_links": [],
+                "log_refs": {"run_id": "", "paths": {}},
+            }
+
+    class _Orchestrator:
+        @staticmethod
+        def execute_task(contract_path: Path, mock_mode: bool = False) -> str:
+            del mock_mode
+            payload = json.loads(contract_path.read_text(encoding="utf-8"))
+            store = RunStore(runs_root=runs_root)
+            run_id = store.create_run(str(payload.get("task_id") or "task"))
+            store.write_manifest(run_id, {"run_id": run_id, "task_id": payload.get("task_id"), "status": "RUNNING", "repo": {}})
+            return run_id
+
+    result = helpers.run_intake(
+        "persist",
+        {"mock": True},
+        intake_service_cls=_BuildOK,
+        orchestration_service=_Orchestrator(),
+        error_detail_fn=lambda code: {"code": code},
+        current_request_id_fn=lambda: "req-persist",
+    )
+
+    run_id = result["run_id"]
+    wave_plan = json.loads((runs_root / run_id / "artifacts" / "planning_wave_plan.json").read_text(encoding="utf-8"))
+    worker_contracts = json.loads(
+        (runs_root / run_id / "artifacts" / "planning_worker_prompt_contracts.json").read_text(encoding="utf-8")
+    )
+    manifest = json.loads((runs_root / run_id / "manifest.json").read_text(encoding="utf-8"))
+
+    assert result["planning_artifacts"] == ["planning_wave_plan.json", "planning_worker_prompt_contracts.json"]
+    assert wave_plan["wave_id"] == "bundle-1"
+    assert wave_plan["objective"] == "Ship one planning artifact bridge"
+    assert worker_contracts[0]["prompt_contract_id"] == "worker-1"
+    assert worker_contracts[0]["continuation_policy"]["on_blocked"] == "spawn_independent_temporary_unblock_task"
+    artifact_names = [item["name"] for item in manifest["artifacts"]]
+    assert "planning_wave_plan" in artifact_names
+    assert "planning_worker_prompt_contracts" in artifact_names
+    assert intake_events[-1] == ("persist", {"event": "INTAKE_RUN", "run_id": run_id})
+
+
 def test_build_role_binding_summary_marks_skills_and_mcp_registry_refs_as_registry_backed() -> None:
     summary = build_role_binding_summary(
         {

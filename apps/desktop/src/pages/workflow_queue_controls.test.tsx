@@ -141,7 +141,7 @@ describe("workflow queue controls", () => {
         }),
       );
     });
-    expect(await screen.findByText("Queued task-queue.")).toBeInTheDocument();
+    expect(await screen.findByText("Queued task-queue. Refreshing the workflow view...")).toBeInTheDocument();
   });
 
   it("renders locale-aware workflow detail labels when zh-CN is requested", async () => {

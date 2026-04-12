@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime, timezone
+import importlib
 import json
 from pathlib import Path
 from typing import Any, Callable
@@ -40,9 +41,9 @@ class ControlPlaneReadService:
 
     @classmethod
     def from_api_main(cls) -> "ControlPlaneReadService":
-        from cortexpilot_orch.api import main as api_main
-        from cortexpilot_orch.api import main_state_store_helpers
-        from cortexpilot_orch.queue import QueueStore
+        api_main = importlib.import_module("cortexpilot_orch.api.main")
+        main_state_store_helpers = importlib.import_module("cortexpilot_orch.api.main_state_store_helpers")
+        QueueStore = importlib.import_module("cortexpilot_orch.queue").QueueStore
 
         def _list_workflows_readonly() -> list[dict[str, Any]]:
             workflows = list(
@@ -135,11 +136,11 @@ class ControlPlaneReadService:
 
     @classmethod
     def from_runtime(cls) -> "ControlPlaneReadService":
-        from cortexpilot_orch.api import main_run_views_helpers
-        from cortexpilot_orch.api import main_state_store_helpers
-        from cortexpilot_orch.config import load_config
-        from cortexpilot_orch.contract.compiler import build_role_binding_summary
-        from cortexpilot_orch.queue import QueueStore
+        main_run_views_helpers = importlib.import_module("cortexpilot_orch.api.main_run_views_helpers")
+        main_state_store_helpers = importlib.import_module("cortexpilot_orch.api.main_state_store_helpers")
+        load_config = importlib.import_module("cortexpilot_orch.config").load_config
+        build_role_binding_summary = importlib.import_module("cortexpilot_orch.contract.compiler").build_role_binding_summary
+        QueueStore = importlib.import_module("cortexpilot_orch.queue").QueueStore
 
         cfg = load_config()
         runs_root = cfg.runs_root
@@ -177,13 +178,35 @@ class ControlPlaneReadService:
                         return value
             return ""
 
+        def _run_sort_ts(run_dir: Path, manifest_record: dict[str, Any]) -> int:
+            manifest_path = run_dir / "manifest.json"
+            if manifest_path.exists():
+                return manifest_path.stat().st_mtime_ns
+            created_at = _as_text(manifest_record.get("created_at"))
+            if created_at:
+                try:
+                    return int(_parse_iso_ts(created_at).timestamp() * 1_000_000_000)
+                except Exception:
+                    pass
+            return run_dir.stat().st_mtime_ns
+
         def _list_runs_runtime() -> list[dict[str, Any]]:
             results: list[dict[str, Any]] = []
-            for run_dir in sorted(runs_root.glob("*"), key=lambda item: item.stat().st_mtime, reverse=True):
+            run_dirs = []
+            for run_dir in runs_root.glob("*"):
+                if not run_dir.is_dir():
+                    continue
                 manifest = _read_json(run_dir / "manifest.json", {})
                 manifest_record = _as_record(manifest)
                 if not manifest_record:
                     continue
+                run_dirs.append((run_dir, manifest_record, _run_sort_ts(run_dir, manifest_record)))
+
+            for run_dir, manifest_record, _sort_ts in sorted(
+                run_dirs,
+                key=lambda item: (item[2], item[0].name),
+                reverse=True,
+            ):
                 run_id = _as_text(manifest_record.get("run_id")) or run_dir.name
                 payload = dict(manifest_record)
                 payload["run_id"] = run_id

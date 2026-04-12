@@ -104,7 +104,9 @@ describe("useDesktopData", () => {
     const user = userEvent.setup();
     render(<HookHarness activePage="overview" />);
     await waitFor(() => {
-      expect(screen.getByTestId("live-error")).toHaveTextContent("总览数据拉取失败");
+      expect(screen.getByTestId("live-error")).toHaveTextContent(
+        "Failed to refresh overview data: the service is temporarily unavailable. Try again in a moment.",
+      );
     });
 
     overviewFail = false;
@@ -131,7 +133,9 @@ describe("useDesktopData", () => {
     );
     render(<HookHarness activePage="sessions" />);
     await waitFor(() => {
-      expect(screen.getByTestId("live-error")).toHaveTextContent("会话列表拉取失败");
+      expect(screen.getByTestId("live-error")).toHaveTextContent(
+        "Failed to refresh the session list: the service is temporarily unavailable. Try again in a moment.",
+      );
     });
   });
 
@@ -154,7 +158,9 @@ describe("useDesktopData", () => {
     );
     render(<HookHarness activePage="sessions" />);
     await waitFor(() => {
-      expect(screen.getByTestId("live-error")).toHaveTextContent("后端暂不可达，已进入退避重试");
+      expect(screen.getByTestId("live-error")).toHaveTextContent(
+        "The backend is currently unreachable. Backoff retry is active and local actions can continue.",
+      );
     });
   });
 
@@ -233,7 +239,9 @@ describe("useDesktopData", () => {
     try {
       render(<HookHarness activePage="sessions" />);
       await waitFor(() => {
-        expect(screen.getByTestId("live-error")).toHaveTextContent("当前网络离线，已暂停实时拉取。恢复联网后将自动重试。");
+        expect(screen.getByTestId("live-error")).toHaveTextContent(
+          "The network is offline. Live polling is paused and will retry automatically when connectivity returns.",
+        );
       });
     } finally {
       Object.defineProperty(window.navigator, "onLine", { configurable: true, value: originalOnLine });
@@ -260,7 +268,9 @@ describe("useDesktopData", () => {
 
     render(<HookHarness activePage="sessions" />);
     await waitFor(() => {
-      expect(screen.getByTestId("live-error")).toHaveTextContent("会话列表拉取失败：权限或认证异常，请确认登录状态。");
+      expect(screen.getByTestId("live-error")).toHaveTextContent(
+        "Failed to refresh the session list: authentication or permission check failed. Confirm your sign-in state.",
+      );
     });
   });
 
@@ -380,7 +390,7 @@ describe("useDesktopData", () => {
     try {
       render(<HookHarness activePage="gates" />);
       await waitFor(() => {
-        expect(screen.getByTestId("live-error")).toHaveTextContent("策略告警拉取失败");
+        expect(screen.getByTestId("live-error")).toHaveTextContent("Failed to refresh policy alerts");
       });
       expect(consoleSpy).toHaveBeenCalled();
     } finally {
