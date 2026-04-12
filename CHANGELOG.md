@@ -6,6 +6,10 @@ All notable changes to this repository will be documented in this file.
 
 ### Changed
 
+- pinned transitive dashboard security fixes through the maintained pnpm
+  override surfaces so `axios` now resolves to `1.15.0` and `basic-ftp` to
+  `5.2.2` in both the root and dashboard lockfiles, clearing the live
+  Dependabot alert chain without widening into unrelated dependency upgrades
 - added a registry-shaped `manifest.yaml` for the repo-owned
   `cortexpilot-adoption-router` skill inside the coding-agent bundle, then
   synced the distribution contract, skills quickstart, and Codex / Claude Code /

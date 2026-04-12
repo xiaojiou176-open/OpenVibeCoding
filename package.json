@@ -148,7 +148,8 @@
   "packageManager": "pnpm@10.22.0+sha512.bf049efe995b28f527fd2b41ae0474ce29186f7edcb3bf545087bd61fbbebb2bf75362d1307fda09c2d288e1e499787ac12d4fcb617a974718a6051f2eee741c",
   "pnpm": {
     "overrides": {
-      "basic-ftp": "5.2.0",
+      "axios": "1.15.0",
+      "basic-ftp": "5.2.2",
       "brace-expansion@5": "5.0.5",
       "cosmiconfig@7.1.0>yaml": "1.10.3",
       "lodash-es": "4.18.1",
