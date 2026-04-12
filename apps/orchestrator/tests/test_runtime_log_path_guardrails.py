@@ -37,6 +37,26 @@ def test_install_logs_use_dedicated_runtime_subdir() -> None:
     assert 'INSTALL_LOG="$ROOT_DIR/.runtime-cache/logs/runtime/deps_install/install_desktop_deps.log"' in desktop
 
 
+def test_install_scripts_fail_closed_on_low_headroom_workspace_recovery() -> None:
+    dash = _read("scripts/install_dashboard_deps.sh")
+    desktop = _read("scripts/install_desktop_deps.sh")
+    assert 'MIN_ENOSPC_RECOVERY_HEADROOM_GIB="${CORTEXPILOT_DASHBOARD_ENOSPC_MIN_HEADROOM_GIB:-3}"' in dash
+    assert 'MIN_ENOSPC_RECOVERY_HEADROOM_GIB="${CORTEXPILOT_DESKTOP_ENOSPC_MIN_HEADROOM_GIB:-3}"' in desktop
+    assert "workspace-local ENOSPC recovery requires at least" in dash
+    assert "workspace-local ENOSPC recovery requires at least" in desktop
+
+
+def test_install_scripts_cleanup_failed_workspace_retry_store_on_exit() -> None:
+    dash = _read("scripts/install_dashboard_deps.sh")
+    desktop = _read("scripts/install_desktop_deps.sh")
+    assert "cleanup_active_workspace_retry_store" in dash
+    assert "cleanup_active_workspace_retry_store" in desktop
+    assert "WORKSPACE_RETRY_STORE_ACTIVE=1" in dash
+    assert "WORKSPACE_RETRY_STORE_ACTIVE=1" in desktop
+    assert "trap 'handle_exit' EXIT" in dash
+    assert "trap 'handle_exit' EXIT" in desktop
+
+
 def test_ci_perf_log_uses_dedicated_runtime_subdir() -> None:
     text = _read("scripts/lib/ci_step9_helpers.sh")
     assert 'PERF_API_LOG=".runtime-cache/logs/runtime/ci_perf/ci_perf_api.log"' in text

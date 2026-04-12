@@ -18,6 +18,8 @@ INSTALL_LOG="$ROOT_DIR/.runtime-cache/logs/runtime/deps_install/install_desktop_
 LOCK_DIR="$ROOT_DIR/.runtime-cache/cortexpilot/locks/install-desktop-deps.lock"
 LOCK_OWNER_FILE="$LOCK_DIR/owner"
 LOCK_HELD=0
+MIN_ENOSPC_RECOVERY_HEADROOM_GIB="${CORTEXPILOT_DESKTOP_ENOSPC_MIN_HEADROOM_GIB:-3}"
+WORKSPACE_RETRY_STORE_ACTIVE=0
 
 cortexpilot_maybe_auto_prune_machine_cache "$ROOT_DIR" "install_desktop_deps"
 
@@ -38,6 +40,23 @@ release_install_lock() {
     rm -rf "$LOCK_DIR"
   fi
   LOCK_HELD=0
+}
+
+cleanup_active_workspace_retry_store() {
+  local exit_code="${1:-0}"
+  if [[ "$WORKSPACE_RETRY_STORE_ACTIVE" != "1" ]]; then
+    return 0
+  fi
+  if [[ "$exit_code" -eq 0 ]]; then
+    return 0
+  fi
+  retire_store_dir "${STORE_DIR:-}"
+}
+
+handle_exit() {
+  local exit_code=$?
+  cleanup_active_workspace_retry_store "$exit_code"
+  release_install_lock
 }
 
 acquire_install_lock() {
@@ -105,6 +124,26 @@ cleanup_stale_workspace_retry_stores() {
   shopt -u nullglob
 }
 
+print_disk_headroom() {
+  echo "ℹ️ [install-desktop-deps] filesystem headroom:" >&2
+  df -h "$ROOT_DIR" >&2 || true
+}
+
+workspace_recovery_headroom_ready() {
+  local available_kib=""
+  available_kib="$(df -Pk "$ROOT_DIR" 2>/dev/null | awk 'NR==2 {print $4}')"
+  if [[ ! "$available_kib" =~ ^[0-9]+$ ]]; then
+    available_kib=0
+  fi
+  local required_kib=$((MIN_ENOSPC_RECOVERY_HEADROOM_GIB * 1024 * 1024))
+  if (( available_kib >= required_kib )); then
+    return 0
+  fi
+  echo "❌ [install-desktop-deps] workspace-local ENOSPC recovery requires at least ${MIN_ENOSPC_RECOVERY_HEADROOM_GIB}GiB free; skipping recovery to avoid leaving another partial retry store behind" >&2
+  print_disk_headroom
+  return 1
+}
+
 retire_store_dir() {
   local target="$1"
   [[ -e "$target" ]] || return 0
@@ -130,7 +169,9 @@ if [[ -d "$ROOT_DIR/node_modules" ]]; then
 fi
 
 acquire_install_lock
-trap 'release_install_lock' EXIT INT TERM
+trap 'handle_exit' EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
 STORE_DIR="$(resolve_writable_store_dir "$STORE_DIR")"
 cleanup_stale_retry_stores
@@ -227,8 +268,12 @@ recover_with_fresh_store() {
 recover_with_workspace_store() {
   local reason="$1"
   echo "⚠️ [install-desktop-deps] ${reason}; switching to workspace-local pnpm store + hardlink import mode and resetting desktop node_modules" >&2
+  if ! workspace_recovery_headroom_ready; then
+    exit 1
+  fi
   retire_store_dir "$STORE_DIR"
   STORE_DIR="$(workspace_retry_store_dir)"
+  WORKSPACE_RETRY_STORE_ACTIVE=1
   cleanup_stale_workspace_retry_stores
   local previous_import_method="$INSTALL_PACKAGE_IMPORT_METHOD"
   local previous_node_linker="$INSTALL_NODE_LINKER"
@@ -247,10 +292,14 @@ recover_with_workspace_store() {
     INSTALL_PACKAGE_IMPORT_METHOD="$previous_import_method"
     INSTALL_NODE_LINKER="$previous_node_linker"
     INSTALL_SHAMEFULLY_HOIST="$previous_shamefully_hoist"
+    cleanup_failed_workspace_recovery "$STORE_DIR"
     if install_log_has_socket_timeout; then
       echo "❌ [install-desktop-deps] workspace-local recovery exhausted transient npm registry retries; tail follows" >&2
       tail -n 80 "$INSTALL_LOG" >&2 || true
       exit 1
+    fi
+    if grep -q "ERR_PNPM_ENOSPC" "$INSTALL_LOG" || grep -qi "no space left on device" "$INSTALL_LOG"; then
+      print_disk_headroom
     fi
     echo "❌ [install-desktop-deps] pnpm install failed after workspace-local recovery; tail follows" >&2
     tail -n 80 "$INSTALL_LOG" >&2 || true
@@ -259,6 +308,7 @@ recover_with_workspace_store() {
   INSTALL_PACKAGE_IMPORT_METHOD="$previous_import_method"
   INSTALL_NODE_LINKER="$previous_node_linker"
   INSTALL_SHAMEFULLY_HOIST="$previous_shamefully_hoist"
+  WORKSPACE_RETRY_STORE_ACTIVE=0
 }
 
 reset_app_node_modules() {
@@ -278,6 +328,15 @@ reset_app_node_modules() {
 
   echo "❌ [install-desktop-deps] unable to reset desktop node_modules at $target" >&2
   return 1
+}
+
+cleanup_failed_workspace_recovery() {
+  local failed_store_dir="$1"
+  retire_store_dir "$failed_store_dir"
+  WORKSPACE_RETRY_STORE_ACTIVE=0
+  if ! reset_app_node_modules; then
+    echo "⚠️ [install-desktop-deps] unable to remove partial desktop node_modules after failed workspace-local recovery" >&2
+  fi
 }
 
 if ! run_install_with_network_retry "initial install"; then

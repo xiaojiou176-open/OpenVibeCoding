@@ -239,9 +239,9 @@ navigation set.
   dependency audit contract, sync this summary and the root entrypoints in the
   same patch; the current examples are `.runtime-cache/test_output/ci/` and
   `configs/pip_audit_ignored_advisories.json`, plus the dashboard and desktop
-  ENOSPC recovery knobs plus the Docker daemon precheck retry knobs registered
-  in `configs/env.registry.json`, together with the bounded transient npm
-  registry socket-timeout retries inside
+  ENOSPC recovery knobs, the minimum-headroom fail-fast thresholds, and the
+  Docker daemon precheck retry knobs registered in `configs/env.registry.json`,
+  together with the bounded transient npm registry socket-timeout retries inside
   `scripts/install_dashboard_deps.sh` / `scripts/install_desktop_deps.sh`;
   current CI contract changes also include the
   upstream receipt refresh fallback to `scripts/verify_upstream_slices.py --mode smoke`
