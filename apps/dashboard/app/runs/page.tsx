@@ -94,6 +94,26 @@ export default async function RunsPage({ searchParams }: RunsPageProps) {
         <Card variant="compact">
           <p className="mono muted">{operatorDeskNote}</p>
         </Card>
+        <div className="toolbar toolbar--mt" role="group" aria-label={runsPageCopy.filterAriaLabel}>
+          <Button asChild variant={statusFilter === "" ? "default" : "ghost"}>
+            <Link href="/runs">{runsPageCopy.filters.all}</Link>
+          </Button>
+          <Button asChild variant={statusFilter === "FAILED" ? "warning" : "ghost"}>
+            <Link href="/runs?status=FAILED">{runsPageCopy.filters.failed}</Link>
+          </Button>
+          <Button asChild variant={statusFilter === "RUNNING" ? "secondary" : "ghost"}>
+            <Link href="/runs?status=RUNNING">{runsPageCopy.filters.running}</Link>
+          </Button>
+          <Button asChild variant={statusFilter === "SUCCESS" ? "secondary" : "ghost"}>
+            <Link href="/runs?status=SUCCESS">{runsPageCopy.filters.success}</Link>
+          </Button>
+        </div>
+        {runs.length > visibleRuns.length ? (
+          <p className="mono muted" role="status">
+            {runsPageCopy.firstScreenLimit(visibleRuns.length)}
+          </p>
+        ) : null}
+        <RunList runs={visibleRuns} locale={locale} />
         <div className="stats-grid">
           <Card asChild variant="metric">
             <article>
@@ -127,26 +147,6 @@ export default async function RunsPage({ searchParams }: RunsPageProps) {
             </article>
           </Card>
         </div>
-        <div className="toolbar toolbar--mt" role="group" aria-label={runsPageCopy.filterAriaLabel}>
-          <Button asChild variant={statusFilter === "" ? "default" : "ghost"}>
-            <Link href="/runs">{runsPageCopy.filters.all}</Link>
-          </Button>
-          <Button asChild variant={statusFilter === "FAILED" ? "warning" : "ghost"}>
-            <Link href="/runs?status=FAILED">{runsPageCopy.filters.failed}</Link>
-          </Button>
-          <Button asChild variant={statusFilter === "RUNNING" ? "secondary" : "ghost"}>
-            <Link href="/runs?status=RUNNING">{runsPageCopy.filters.running}</Link>
-          </Button>
-          <Button asChild variant={statusFilter === "SUCCESS" ? "secondary" : "ghost"}>
-            <Link href="/runs?status=SUCCESS">{runsPageCopy.filters.success}</Link>
-          </Button>
-        </div>
-        {runs.length > visibleRuns.length ? (
-          <p className="mono muted" role="status">
-            {runsPageCopy.firstScreenLimit(visibleRuns.length)}
-          </p>
-        ) : null}
-        <RunList runs={visibleRuns} locale={locale} />
       </section>
     </main>
   );

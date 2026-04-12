@@ -133,7 +133,8 @@ describe("workflows queue page", () => {
     const view = await WorkflowsPage();
     render(view);
 
-    expect(screen.getByRole("button", { name: "Run next queued task" })).toBeDisabled();
-    expect(screen.getByText(/has not published an operator role yet|当前环境还没有发布可执行的操作角色/)).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Run next queued task" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /打开 PM 入口|Open PM intake/ })).toHaveAttribute("href", "/pm");
+    expect(screen.getByText(/No workflow cases yet|当前还没有工作流案例/)).toBeInTheDocument();
   });
 });

@@ -6,6 +6,7 @@ import { statusCtaFromCanonical, toCanonicalStatusFuzzy } from "@cortexpilot/fro
 import Link from "next/link";
 import type { BadgeVariant } from "../../components/ui/badge";
 import { Badge } from "../../components/ui/badge";
+import { Button } from "../../components/ui/button";
 import { Card } from "../../components/ui/card";
 import { fetchQueue, fetchWorkflows } from "../../lib/api";
 import { safeLoad } from "../../lib/serverPageData";
@@ -178,7 +179,9 @@ export default async function WorkflowsPage() {
           </div>
           <Badge>{workflowListPageCopy.countsBadge(workflows.length, queueItems.length)}</Badge>
         </div>
-        <WorkflowQueueMutationControls queueCount={queueItems.length} eligibleCount={eligibleQueueCount} compact />
+        {workflows.length > 0 || queueItems.length > 0 ? (
+          <WorkflowQueueMutationControls queueCount={queueItems.length} eligibleCount={eligibleQueueCount} compact disableRunNextWhenEmpty />
+        ) : null}
       </header>
       <section className="stats-grid" aria-label={workflowListPageCopy.summaryAriaLabel}>
         <article className="metric-card">
@@ -206,6 +209,9 @@ export default async function WorkflowsPage() {
             <div className="empty-state-stack">
               <span className="muted">{workflowListPageCopy.emptyTitle}</span>
               <span className="mono muted">{workflowListPageCopy.emptyHint}</span>
+              <Button asChild variant="default">
+                <Link href="/pm">打开 PM 入口</Link>
+              </Button>
             </div>
           </Card>
         ) : (

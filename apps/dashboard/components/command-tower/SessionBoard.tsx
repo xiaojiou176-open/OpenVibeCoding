@@ -122,9 +122,38 @@ function sessionPrimaryLabel(session: PmSessionSummary): string {
   }
   const objective = String(session.objective || "").trim();
   if (objective) {
+    const looksLikePromptDump =
+      objective.length > 42
+      || /^[A-Z0-9 _./:-]{24,}$/.test(objective)
+      || /\b(please|create|review|public|prompt|spec|task)\b/i.test(objective);
+    if (looksLikePromptDump) {
+      return `Session ${session.pm_session_id.slice(-6)}`;
+    }
     return objective.length > 28 ? `${objective.slice(0, 28)}...` : objective;
   }
   return "Untitled session";
+}
+
+function sessionObjectivePreview(session: PmSessionSummary): string | undefined {
+  const objective = String(session.objective || "").trim();
+  if (!objective) {
+    return undefined;
+  }
+  const looksLikePromptDump =
+    objective.length > 42
+    || /^[A-Z0-9 _./:-]{24,}$/.test(objective)
+    || /\b(please|create|review|public|prompt|spec|task)\b/i.test(objective);
+  if (looksLikePromptDump) {
+    return "Original request available in session details.";
+  }
+  return objective.length > 72 ? `${objective.slice(0, 72)}...` : objective;
+}
+
+function shouldShowSuccessRate(session: PmSessionSummary, grouped: GroupedSession): boolean {
+  if (grouped.failedRuns > 0) {
+    return false;
+  }
+  return session.run_count >= 2 || grouped.successRuns > 0;
 }
 
 function sessionRowClass(session: PmSessionSummary): string {
@@ -247,6 +276,9 @@ export default function SessionBoard({ sessions, snapshotStatus }: SessionBoardP
                       ) : null}
                     </div>
                     <div className="mono muted">{sessionExecutionLabel(session)}</div>
+                    {sessionObjectivePreview(session) ? (
+                      <div className="cell-sub mono muted">{sessionObjectivePreview(session)}</div>
+                    ) : null}
                     <div className="toolbar toolbar--mt" role="group" aria-label="Session actions">
                       <Link className="run-link" href={`/command-tower/sessions/${encodeURIComponent(session.pm_session_id)}`}>
                         Session details
@@ -295,7 +327,7 @@ export default function SessionBoard({ sessions, snapshotStatus }: SessionBoardP
                       ) : null}
                     </div>
                     <div className="mono muted">Runs {session.run_count} · Success {grouped.successRuns}</div>
-                    {!compactFailureView ? (
+                    {!compactFailureView && shouldShowSuccessRate(session, grouped) ? (
                       <div className="run-detail-chip-row run-detail-inline-gap">
                         <Badge variant="running">Success rate {progress}%</Badge>
                         <progress
@@ -305,6 +337,10 @@ export default function SessionBoard({ sessions, snapshotStatus }: SessionBoardP
                           value={progress}
                           className="run-progress"
                         />
+                      </div>
+                    ) : !compactFailureView ? (
+                      <div className="run-detail-chip-row run-detail-inline-gap">
+                        <Badge variant="default">Early sample</Badge>
                       </div>
                     ) : null}
                   </td>

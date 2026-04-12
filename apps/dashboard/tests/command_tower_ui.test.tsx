@@ -151,11 +151,11 @@ describe("command tower ui surfaces", () => {
     );
 
     const sessionExpectations = [
-      { id: "pm-active", status: "active", health: "Running", completion: "Success rate 0%" },
+      { id: "pm-active", status: "active", health: "Running", completion: "Early sample" },
       { id: "pm-paused", status: "paused", health: "Blocked", completion: "Success rate 50%" },
-      { id: "pm-failed", status: "failed", health: "High risk", completion: "Success rate 0%" },
+      { id: "pm-failed", status: "failed", health: "High risk", completion: "Failure path 1" },
       { id: "pm-done", status: "done", health: "Stable", completion: "Success rate 100%" },
-      { id: "pm-unknown", status: "unknown", health: "Not started", completion: "Success rate 0%", stale: true },
+      { id: "pm-unknown", status: "unknown", health: "Not started", completion: "Early sample", stale: true },
       { id: "pm-stale", status: "done", health: "Stable", completion: "Success rate 100%", stale: true },
     ];
 
@@ -167,9 +167,14 @@ describe("command tower ui surfaces", () => {
         `/command-tower/sessions/${item.id}`,
       );
       const progressbar = rowScope.queryByRole("progressbar", { name: `Session ${item.id} success rate` });
+      const earlySample = rowScope.queryByText("Early sample");
+      const failureBadge = rowScope.queryByText(/Failure path/);
       const completionSignal =
-        progressbar?.getAttribute("aria-valuetext") ?? rowScope.getByText(/Failure path/).textContent;
-      expect(completionSignal).toBe(progressbar ? item.completion : "Failure path 1");
+        progressbar?.getAttribute("aria-valuetext")
+        ?? earlySample?.textContent
+        ?? failureBadge?.textContent
+        ?? null;
+      expect(completionSignal).toBe(item.completion);
       expectSessionAnnouncement(row, item.status, item.health, { stale: Boolean(item.stale) });
     });
 
