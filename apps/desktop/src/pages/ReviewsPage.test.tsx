@@ -33,10 +33,10 @@ describe("ReviewsPage", () => {
     ] as any);
     const user = userEvent.setup();
     render(<ReviewsPage />);
-    expect(screen.getByRole("button", { name: "刷新中..." })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Refreshing..." })).toBeDisabled();
     resolveFirstFetch([]);
-    expect(await screen.findByText("暂无评审记录")).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: "刷新" }));
+    expect(await screen.findByText("No review records yet")).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Refresh" }));
     expect(await screen.findByText("run-1")).toBeInTheDocument();
     expect(screen.getByText("looks good")).toBeInTheDocument();
     expect(screen.getByText("Scope: ok")).toBeInTheDocument();

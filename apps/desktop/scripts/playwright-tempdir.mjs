@@ -14,7 +14,7 @@ function sanitizeScope(scope) {
 function resolveTempRoot(scriptDir) {
   const runnerTemp = normalizeValue(process.env.RUNNER_TEMP);
   if (runnerTemp) return resolve(runnerTemp);
-  return resolve(scriptDir, "..", "..", "..", ".runtime-cache", "temp");
+  return resolve(scriptDir, "..", "..", "..", ".runtime-cache", "cache", "tmp");
 }
 
 export function configurePlaywrightTempDir(scope) {

@@ -51,9 +51,9 @@ describe("ChainPanel", () => {
       />
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "简洁视图" }));
-    fireEvent.click(screen.getByRole("button", { name: "详细视图" }));
-    fireEvent.click(screen.getByRole("button", { name: "Chain 优先" }));
+    fireEvent.click(screen.getByRole("button", { name: "Compact view" }));
+    fireEvent.click(screen.getByRole("button", { name: "Detailed view" }));
+    fireEvent.click(screen.getByRole("button", { name: "Chain first" }));
 
     expect(setChainDisplayMode).toHaveBeenCalledWith("compact");
     expect(setChainDisplayMode).toHaveBeenCalledWith("detail");
@@ -79,7 +79,7 @@ describe("ChainPanel", () => {
       />
     );
 
-    const legend = screen.getByLabelText("节点状态说明");
+    const legend = screen.getByLabelText("Node status legend");
     const items = legend.querySelectorAll("li");
     expect(items).toHaveLength(2);
     expect(items[0]).toHaveClass("is-active");

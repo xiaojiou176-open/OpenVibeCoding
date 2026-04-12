@@ -27,7 +27,9 @@ if (pool !== requestedPool) {
 }
 const shouldEmitHtmlCoverage = !process.env.CI || process.env.CORTEXPILOT_COVERAGE_HTML === "1";
 const coverageReporter = shouldEmitHtmlCoverage ? ["text", "html", "json-summary"] : ["text", "json-summary"];
-const coverageReportsDirectory = path.resolve(process.cwd(), "coverage");
+const coverageReportsDirectory = process.env.CORTEXPILOT_DASHBOARD_COVERAGE_DIR
+  ? path.resolve(process.env.CORTEXPILOT_DASHBOARD_COVERAGE_DIR)
+  : path.resolve(process.cwd(), "coverage");
 const coverageClean = !serialCoverageMode;
 const coverageProcessingConcurrency = serialCoverageMode ? 1 : undefined;
 const testTimeout = process.env.CI ? 45000 : 15000;

@@ -7,13 +7,13 @@ describe("uiError", () => {
   });
 
   it("maps network-style messages", () => {
-    expect(sanitizeUiError(new Error("Network timeout"), "加载失败")).toContain("未连接到本地服务");
-    expect(sanitizeUiError(new Error("fetch failed"), "加载失败")).toContain("未连接到本地服务");
+    expect(sanitizeUiError(new Error("Network timeout"), "Load failed")).toContain("unable to reach the local service");
+    expect(sanitizeUiError(new Error("fetch failed"), "Load failed")).toContain("unable to reach the local service");
   });
 
   it("maps auth-style messages", () => {
-    expect(sanitizeUiError(new Error("401 unauthorized"), "加载失败")).toContain("权限或认证异常");
-    expect(sanitizeUiError(new Error("token invalid"), "加载失败")).toContain("权限或认证异常");
+    expect(sanitizeUiError(new Error("401 unauthorized"), "Load failed")).toContain("authentication or permission check failed");
+    expect(sanitizeUiError(new Error("token invalid"), "Load failed")).toContain("authentication or permission check failed");
   });
 
   it("keeps generic fallback for unknown errors", () => {
@@ -21,7 +21,7 @@ describe("uiError", () => {
   });
 
   it("maps backend 5xx-style messages", () => {
-    expect(sanitizeUiError(new Error("API /path failed: 503"), "加载失败")).toContain("服务暂时不可用");
+    expect(sanitizeUiError(new Error("API /path failed: 503"), "Load failed")).toContain("service is temporarily unavailable");
   });
 
   it("extracts detail from unknown payload", () => {

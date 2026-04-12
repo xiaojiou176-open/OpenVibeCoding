@@ -25,6 +25,8 @@ DEFAULT_DASH_REPORT = (
 DEFAULT_DESKTOP_REPORT = (
     ROOT_DIR / ".runtime-cache" / "test_output" / "repo_coverage" / "desktop" / "coverage-summary.json"
 )
+DEFAULT_COVERAGE_DATA_DIR = ROOT_DIR / ".runtime-cache" / "cache" / "test" / "coverage" / "repo_coverage_gate"
+DEFAULT_HYPOTHESIS_DATA_DIR = ROOT_DIR / ".runtime-cache" / "cache" / "hypothesis" / "repo_coverage_gate"
 DEFAULT_THRESHOLD = float(os.environ.get("CORTEXPILOT_REPO_COVERAGE_GATE_THRESHOLD", "95"))
 
 
@@ -178,8 +180,17 @@ def run_command(command: list[str], env_overrides: dict[str, str] | None = None)
         raise RuntimeError(f"command failed (exit={result.returncode}): {' '.join(command)}")
 
 
+def _prepare_coverage_file(path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.unlink(missing_ok=True)
+    for stale_path in path.parent.glob(f"{path.name}.*"):
+        stale_path.unlink(missing_ok=True)
+
+
 def run_orchestrator_coverage(report_path: Path, pytest_target: str, pytest_mark: str) -> None:
     report_path.parent.mkdir(parents=True, exist_ok=True)
+    coverage_file = DEFAULT_COVERAGE_DATA_DIR / ".coverage"
+    _prepare_coverage_file(coverage_file)
     override = os.getenv("CORTEXPILOT_PYTHON", "").strip()
     toolchain_python = ROOT_DIR / ".runtime-cache" / "cache" / "toolchains" / "python" / "current" / "bin" / "python"
     python_bin = Path(override) if override else toolchain_python
@@ -201,11 +212,22 @@ def run_orchestrator_coverage(report_path: Path, pytest_target: str, pytest_mark
         f"--cov-report=json:{report_path}",
         "--cov-fail-under=0",
     ]
-    run_command(command, env_overrides={"PYTHONPATH": "apps/orchestrator/src"})
+    try:
+        run_command(
+            command,
+            env_overrides={
+                "PYTHONPATH": "apps/orchestrator/src",
+                "COVERAGE_FILE": str(coverage_file),
+                "HYPOTHESIS_STORAGE_DIRECTORY": str(DEFAULT_HYPOTHESIS_DATA_DIR),
+            },
+        )
+    finally:
+        _prepare_coverage_file(coverage_file)
 
 
 def run_dashboard_coverage(report_path: Path, test_targets: list[str]) -> None:
     report_path.parent.mkdir(parents=True, exist_ok=True)
+    run_command(["bash", "scripts/install_dashboard_deps.sh"])
     command = [
         "pnpm",
         "--dir",
@@ -225,11 +247,19 @@ def run_dashboard_coverage(report_path: Path, test_targets: list[str]) -> None:
         f"--coverage.reportsDirectory={report_path.parent}",
     ]
     command.extend(test_targets)
-    run_command(command, env_overrides={"CI": "1", "CORTEXPILOT_COVERAGE_HTML": "0"})
+    run_command(
+        command,
+        env_overrides={
+            "CI": "1",
+            "CORTEXPILOT_COVERAGE_HTML": "0",
+            "CORTEXPILOT_DASHBOARD_COVERAGE_DIR": str(report_path.parent),
+        },
+    )
 
 
 def run_desktop_coverage(report_path: Path, test_targets: list[str]) -> None:
     report_path.parent.mkdir(parents=True, exist_ok=True)
+    run_command(["bash", "scripts/install_desktop_deps.sh"])
     command = [
         "pnpm",
         "--dir",
@@ -247,7 +277,15 @@ def run_desktop_coverage(report_path: Path, test_targets: list[str]) -> None:
         f"--coverage.reportsDirectory={report_path.parent}",
     ]
     command.extend(test_targets)
-    run_command(command)
+    run_command(
+        command,
+        env_overrides={
+            "CI": "1",
+            "CORTEXPILOT_COVERAGE_HTML": "0",
+            "CORTEXPILOT_DESKTOP_COVERAGE_DIR": str(report_path.parent),
+            "CORTEXPILOT_DESKTOP_COVERAGE_RUN_ID": "repo-coverage-gate",
+        },
+    )
 
 
 def aggregate_repo_totals(project_totals: dict[str, CoverageTotals]) -> CoverageTotals:
