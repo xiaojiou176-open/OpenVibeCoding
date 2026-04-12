@@ -17,8 +17,9 @@ from cortexpilot_orch.cli_runtime_helpers import runs_root as resolve_runs_root
 from cortexpilot_orch.config import load_config
 from cortexpilot_orch.contract.compiler import build_role_binding_summary, sync_role_contract
 from cortexpilot_orch.observability.logger import log_event
-from cortexpilot_orch.planning.intake import IntakeService
+from cortexpilot_orch.planning.intake import IntakeService, _build_wave_plan, _build_worker_prompt_contracts
 from cortexpilot_orch.store.intake_store import IntakeStore
+from cortexpilot_orch.store.run_store import RunStore
 
 
 _TRUTHY_VALUES = {"1", "true", "yes", "y", "on"}
@@ -116,6 +117,55 @@ def _strip_intake_only_contract_fields(contract: dict[str, Any]) -> dict[str, An
     for key in _INTAKE_ONLY_CONTRACT_FIELDS:
         sanitized.pop(key, None)
     return sanitized
+
+
+def _safe_read_intake_store_payload(store: object, method_name: str, intake_id: str) -> dict[str, Any]:
+    reader = getattr(store, method_name, None)
+    if not callable(reader):
+        return {}
+    try:
+        payload = reader(intake_id)
+    except Exception:
+        return {}
+    return payload if isinstance(payload, dict) else {}
+
+
+def _persist_planning_artifacts_for_run(
+    *,
+    intake_id: str,
+    run_id: str,
+    runs_root: Path,
+) -> list[str]:
+    intake_store = IntakeStore()
+    intake_payload = _safe_read_intake_store_payload(intake_store, "read_intake", intake_id)
+    response_payload = _safe_read_intake_store_payload(intake_store, "read_response", intake_id)
+    plan_bundle = response_payload.get("plan_bundle") if isinstance(response_payload.get("plan_bundle"), dict) else None
+    if not intake_payload or not isinstance(plan_bundle, dict):
+        return []
+
+    run_store = RunStore(runs_root=runs_root)
+    artifacts_to_write: list[tuple[str, Any]] = [
+        ("planning_wave_plan.json", _build_wave_plan(plan_bundle)),
+        ("planning_worker_prompt_contracts.json", _build_worker_prompt_contracts(plan_bundle, intake_payload)),
+    ]
+    written: list[str] = []
+    for filename, payload in artifacts_to_write:
+        if payload in ({}, [], None):
+            continue
+        run_store.write_artifact(run_id, filename, json.dumps(payload, ensure_ascii=False, indent=2))
+        written.append(filename)
+
+    if written:
+        run_store.append_event(
+            run_id,
+            {
+                "level": "INFO",
+                "event": "PLANNING_ARTIFACTS_WRITTEN",
+                "run_id": run_id,
+                "meta": {"intake_id": intake_id, "artifacts": written},
+            },
+        )
+    return written
 
 
 def configure_pm_session_aggregation(
@@ -597,10 +647,16 @@ def run_intake(
         )
 
     IntakeStore().append_event(intake_id, {"event": "INTAKE_RUN", "run_id": run_id})
+    planning_artifacts = _persist_planning_artifacts_for_run(
+        intake_id=intake_id,
+        run_id=run_id,
+        runs_root=runs_root,
+    )
     return {
         "ok": True,
         "run_id": run_id,
         "contract_path": str(contract_path),
         "strict_acceptance": bool(runtime_options.get("strict_acceptance", False)),
         "role_binding_summary": build_role_binding_summary(contract),
+        "planning_artifacts": planning_artifacts,
     }
