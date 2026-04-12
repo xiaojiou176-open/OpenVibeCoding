@@ -155,3 +155,11 @@ def test_persist_contract_state_writes_role_binding_summary_to_manifest(tmp_path
 
     written = json.loads((store._runs_root / run_id / "manifest.json").read_text(encoding="utf-8"))
     assert written["role_binding_summary"] == build_role_binding_summary(contract)
+    prompt_artifact = json.loads(
+        (store._runs_root / run_id / "artifacts" / "prompt_artifact.json").read_text(encoding="utf-8")
+    )
+    assert prompt_artifact["artifact_type"] == "prompt_artifact"
+    assert prompt_artifact["execution_authority"] == "task_contract"
+    assert prompt_artifact["run_id"] == run_id
+    assert prompt_artifact["task_id"] == "task-role-binding-summary"
+    assert prompt_artifact["role_binding_summary"] == build_role_binding_summary(contract)

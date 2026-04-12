@@ -421,6 +421,53 @@ def build_role_binding_summary(contract: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def build_prompt_artifact(
+    contract: dict[str, Any],
+    *,
+    run_id: str = "",
+    task_id: str = "",
+) -> dict[str, Any]:
+    role_contract = contract.get("role_contract") if isinstance(contract.get("role_contract"), dict) else {}
+    if not role_contract:
+        role_contract = _build_role_contract(contract, _load_agent_registry())
+    assigned_agent = contract.get("assigned_agent") if isinstance(contract.get("assigned_agent"), dict) else {}
+    role = str(
+        assigned_agent.get("role")
+        or (role_contract.get("identity", {}) if isinstance(role_contract.get("identity"), dict) else {}).get("role")
+        or "WORKER"
+    ).strip().upper() or "WORKER"
+    role_contract = _merge_role_config_defaults(
+        role_contract,
+        _find_role_config_defaults(_load_role_config_registry(), role),
+    )
+    identity = role_contract.get("identity") if isinstance(role_contract.get("identity"), dict) else {}
+    runtime_binding_raw = role_contract.get("runtime_binding") if isinstance(role_contract.get("runtime_binding"), dict) else {}
+    runtime_binding = {
+        "runner": _normalize_optional_ref(runtime_binding_raw.get("runner")),
+        "provider": _normalize_optional_ref(runtime_binding_raw.get("provider")),
+        "model": _normalize_optional_ref(runtime_binding_raw.get("model")),
+    }
+    resolved_task_id = str(task_id or contract.get("task_id") or "").strip()
+    return {
+        "artifact_type": "prompt_artifact",
+        "version": "v1",
+        "source": "contract-derived",
+        "execution_authority": "task_contract",
+        "run_id": str(run_id or "").strip(),
+        "task_id": resolved_task_id,
+        "assigned_agent": {
+            "role": role,
+            "agent_id": str(identity.get("agent_id") or assigned_agent.get("agent_id") or "").strip(),
+        },
+        "purpose": str(role_contract.get("purpose") or "").strip(),
+        "system_prompt_ref": _normalize_optional_ref(role_contract.get("system_prompt_ref")),
+        "skills_bundle_ref": _normalize_optional_ref(role_contract.get("skills_bundle_ref")),
+        "mcp_bundle_ref": _normalize_optional_ref(role_contract.get("mcp_bundle_ref")),
+        "runtime_binding": runtime_binding,
+        "role_binding_summary": build_role_binding_summary(contract),
+    }
+
+
 def _build_role_contract(contract: dict[str, Any], registry: dict[str, Any] | None) -> dict[str, Any]:
     assigned_agent = contract.get("assigned_agent") if isinstance(contract.get("assigned_agent"), dict) else {}
     role = str(assigned_agent.get("role") or "WORKER").strip().upper() or "WORKER"

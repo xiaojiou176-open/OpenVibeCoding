@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 from collections.abc import Callable
+import json
 from pathlib import Path
 from typing import Any
 
-from cortexpilot_orch.contract.compiler import build_role_binding_summary
+from cortexpilot_orch.contract.compiler import build_prompt_artifact, build_role_binding_summary
 from cortexpilot_orch.store.run_store import RunStore
 
 
@@ -208,5 +209,21 @@ def persist_contract_state(
             )
     store.write_task_contract(run_id, task_id, contract)
     store.write_active_contract(run_id, contract)
+    prompt_artifact = build_prompt_artifact(contract, run_id=run_id, task_id=task_id)
+    prompt_artifact_path = store.write_artifact(
+        run_id,
+        "prompt_artifact.json",
+        json.dumps(prompt_artifact, ensure_ascii=False, indent=2),
+    )
+    store.append_event(
+        run_id,
+        {
+            "level": "INFO",
+            "event": "PROMPT_ARTIFACT_WRITTEN",
+            "run_id": run_id,
+            "task_id": task_id,
+            "meta": {"path": str(prompt_artifact_path.relative_to(store.run_dir(run_id)))},
+        },
+    )
     if ensure_evidence_bundle_fn is not None and failure_reason:
         ensure_evidence_bundle_fn(store, run_id, contract, failure_reason)
