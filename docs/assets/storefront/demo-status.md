@@ -35,7 +35,7 @@ ones that still need a real capture pass.
 | Healthy backend-backed `news_digest` public proof set | present | tracked proof summary: `docs/releases/assets/news-digest-healthy-proof-2026-03-27.md` |
 | Public benchmark artifact from a real tracked run | present | first tracked single-run baseline: `docs/releases/assets/news-digest-benchmark-summary-2026-03-27.md` |
 | Share-ready Workflow Case recap asset | present | tracked recap asset: `docs/releases/assets/news-digest-workflow-case-recap-2026-03-27.md` |
-| Published GitHub Release page/card | present | live release `v0.1.0-alpha.3` is the latest published prerelease baseline and current released `main` snapshot |
+| Published GitHub Release page/card | present | live release `v0.1.0-alpha.3` is the latest published prerelease baseline, but the repo has moved ahead and the tag now represents a lagging published snapshot |
 
 ## Still Missing
 
@@ -64,8 +64,8 @@ The public storytelling shorthand is now:
 - `social-preview-1280x640.png` is a repo-tracked upload candidate for the GitHub social preview setting, not proof that the live GitHub setting has already been applied.
 - `docs/releases/first-public-release-draft.md` remains the repo-side draft source that fed the published release notes.
 - the live GitHub Release page currently represents the latest published public
-  baseline and current released `main` snapshot; if later commits land, repo
-  docs must restore explicit lag wording until the next tag is cut.
+  baseline, not the current `main` snapshot; keep explicit lag wording in repo
+  docs until the next tag is cut.
 - `docs/releases/assets/news-digest-healthy-proof-2026-03-27.md` and the two
   copied screenshots are repo-tracked evidence from a successful local run,
   not proof that the live GitHub Release page has already been published.

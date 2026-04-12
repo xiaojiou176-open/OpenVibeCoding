@@ -713,7 +713,9 @@ The public release surface now has a live baseline. Use these entrypoints:
 - [Tracked `news_digest` Workflow Case recap](docs/releases/assets/news-digest-workflow-case-recap-2026-03-27.md)
 
 Release truth note: `v0.1.0-alpha.3` is the current published prerelease
-baseline and is intended to match the current released `main` snapshot. The
+baseline, but the local `main` branch has already moved ahead of that tag. Use
+it as the latest published snapshot, not as proof that the current `main`
+snapshot is already released. The
 historical first-baseline draft remains
 [docs/releases/first-public-release-draft.md](docs/releases/first-public-release-draft.md),
 while the current release note source is
@@ -735,9 +737,10 @@ Feedback.
 ## What’s Next
 
 - configure the GitHub social preview with the tracked PNG asset
-- add a tracked healthy demo/GIF
 - expand the current single-run benchmark baseline into a broader public
   benchmark artifact
+- cut the next GitHub Release when maintainers want the published tag to catch
+  up with the newer `main` snapshot
 - publish a verified fallback private security reporting channel if maintainers
   want the public security surface to be fully closed
 

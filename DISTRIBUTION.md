@@ -74,16 +74,16 @@ Lane order today is:
 ## Version And Release Truth
 
 - The latest live GitHub release is `v0.1.0-alpha.3`.
-- `v0.1.0-alpha.3` is the current published prerelease baseline and is meant to
-  match the current released `main` snapshot.
+- `v0.1.0-alpha.3` is the current published prerelease baseline, but it is no
+  longer the current `main` snapshot.
 - The latest published public package for the read-only MCP is
   `cortexpilot-orchestrator==0.1.0a4`.
 - The latest Official MCP Registry entry points to
   `io.github.xiaojiou176-open/cortexpilot-readonly@0.1.0a4`.
 - `v0.1.0-alpha.1` remains the historical first public baseline, not the latest
   release truth.
-- If `main` moves again after this release, README, Pages, and docs must return
-  to explicit lag wording until the next tag is cut.
+- README, Pages, and manifest surfaces must keep explicit lag wording whenever
+  the published release tag trails `main`.
 
 ## Canonical MCP Truth
 
