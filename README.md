@@ -647,12 +647,15 @@ governance manifest refresh falls back to `scripts/verify_upstream_slices.py --m
 to regenerate the receipts instead of failing on missing files alone.
 Dashboard dependency installs now also carry an ENOSPC recovery branch that
 retries with a workspace-local pnpm store and the registered dashboard install
-env knobs when copy-heavy CI or local maintenance installs run out of disk, and
+env knobs when copy-heavy CI or local maintenance installs run out of disk;
+that recovery path now also fails closed behind a registered minimum-headroom
+threshold so low-disk hosts do not keep churning partial retry stores, and
 dashboard/desktop clean-room installs now retry bounded transient npm registry
 socket timeouts before they fail closed.
 Desktop dependency installs now mirror the same ENOSPC recovery strategy,
 including the registered desktop install env knobs that scope hardlink imports
-to the recovery attempt and move retry stores onto workspace-local temp roots.
+to the recovery attempt, gate workspace-local recovery on registered minimum
+headroom, and move retry stores onto workspace-local temp roots.
 Docker-backed GitHub-hosted maintenance lanes now retry daemon prechecks with
 bounded backoff and registered retry knobs before failing closed on a transient
 socket refusal.
