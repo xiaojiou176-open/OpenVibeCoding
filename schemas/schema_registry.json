@@ -193,10 +193,6 @@
       "sha256": "771100fbbad00e09e3ee8b4fec888e07e36c6f18ac9e5ae02a9bed6d9f1d219a",
       "bytes": 581
     },
-    "schema_registry.json": {
-      "sha256": "ba5590a6953e3b9d61108b89ac28a0297d8b86ca83f02cc3ccb51ba956d545d6",
-      "bytes": 8535
-    },
     "search_requests.v1.json": {
       "sha256": "e74f48f215fdf9035e284ee4f7a0f931b4a88f320c90a93ab36dcb96d17fd684",
       "bytes": 2270
