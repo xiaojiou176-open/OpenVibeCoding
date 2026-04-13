@@ -109,4 +109,56 @@ describe("planner page", () => {
     expect(screen.getAllByRole("button", { name: "Run next queued task" })).toHaveLength(2);
     expect(screen.getByText("Planning inspection archive")).toBeInTheDocument();
   });
+
+  it("renders the launch-stage empty planner desk when no planning artifacts exist", async () => {
+    vi.mocked(fetchRuns).mockResolvedValue([] as never);
+
+    render(await PlannerPage());
+
+    expect(screen.getByText("Seed the first planning wave")).toBeInTheDocument();
+    expect(screen.getByText("No planning artifacts are visible yet.")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Open PM intake" })).toHaveAttribute("href", "/pm");
+    expect(screen.getByRole("link", { name: "Open Command Tower" })).toHaveAttribute("href", "/command-tower");
+    expect(screen.getByRole("link", { name: "Open Workflow Cases" })).toHaveAttribute("href", "/workflows");
+  });
+
+  it("surfaces continuation-selected waves as ready-to-resume planning rows", async () => {
+    vi.mocked(fetchArtifact).mockImplementation(async (_runId: string, name: string) => {
+      if (name === "planning_wave_plan.json") {
+        return {
+          name,
+          data: {
+            objective: "Resume the continuation lane",
+            worker_count: 1,
+            wake_policy_ref: "policies/control_plane_runtime_policy.json#/wake_policy",
+          },
+        } as never;
+      }
+      if (name === "planning_worker_prompt_contracts.json") {
+        return {
+          name,
+          data: [{ prompt_contract_id: "worker-1" }],
+        } as never;
+      }
+      return {
+        name,
+        data: [],
+      } as never;
+    });
+    vi.mocked(fetchReports).mockResolvedValue([
+      {
+        name: "completion_governance_report.json",
+        data: {
+          overall_verdict: "continue_same_session",
+          continuation_decision: { selected_action: "continue_same_session" },
+        },
+      },
+    ] as never);
+
+    render(await PlannerPage());
+
+    expect(screen.getByText("Priority queue: Continuation already selected: continue_same_session")).toBeInTheDocument();
+    expect(screen.getAllByText("Resume the continuation lane").length).toBeGreaterThan(0);
+    expect(screen.getAllByRole("link", { name: "Open run detail" })[0]).toHaveAttribute("href", "/runs/run-plan-1");
+  });
 });

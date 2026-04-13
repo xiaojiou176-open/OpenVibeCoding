@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { RunComparePage } from "./RunComparePage";
@@ -68,7 +68,7 @@ describe("RunComparePage decision surface", () => {
     render(<RunComparePage runId="run-compare-1" onBack={vi.fn()} />);
 
     expect(await screen.findByText("Decision summary")).toBeInTheDocument();
-    expect(screen.getByText("Decision needed")).toBeInTheDocument();
+    expect(within(screen.getByLabelText("Current compare verdict")).getByText("Decision needed")).toBeInTheDocument();
     expect(screen.getByText("Key deltas")).toBeInTheDocument();
     expect(screen.getByText(/Incident: A gate blocked the run\./)).toBeInTheDocument();
     expect(screen.getByText(/Proof: Proof artifacts are ready\./)).toBeInTheDocument();

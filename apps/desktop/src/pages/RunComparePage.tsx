@@ -60,11 +60,12 @@ export function RunComparePage({ runId, onBack }: Props) {
   const mismatchedCount = asNumber(compareSummary.mismatched_count);
   const missingCount = asNumber(compareSummary.missing_count);
   const extraCount = asNumber(compareSummary.extra_count);
+  const missingReportsCount = asNumber(compareSummary.missing_reports_count);
   const failedChecksCount = asNumber(compareSummary.failed_report_checks_count);
   const evidenceOk = asBoolean(compareSummary.evidence_ok);
   const llmParamsOk = asBoolean(compareSummary.llm_params_ok);
   const llmSnapshotOk = asBoolean(compareSummary.llm_snapshot_ok);
-  const totalDelta = mismatchedCount + missingCount + extraCount + failedChecksCount;
+  const totalDelta = mismatchedCount + missingCount + extraCount + missingReportsCount + failedChecksCount;
   const compareDecision =
     Object.keys(compareSummary).length === 0
       ? {
@@ -80,9 +81,26 @@ export function RunComparePage({ runId, onBack }: Props) {
         }
       : {
           badge: "Decision needed",
-          summary: "Compare found deltas between the current run and its baseline, so this result needs operator review before you trust it.",
-          nextAction: "Review the deltas below, then decide whether to replay, investigate, or keep the current run blocked.",
-        };
+        summary: "Compare found deltas between the current run and its baseline, so this result needs operator review before you trust it.",
+        nextAction: "Review the deltas below, then decide whether to replay, investigate, or keep the current run blocked.",
+      };
+  const hasCompareReport = Object.keys(runCompareReport).length > 0;
+  const displayBadge = hasCompareReport ? compareDecision.badge : "Observation only";
+  const displaySummary = hasCompareReport
+    ? compareDecision.summary
+    : "This compare surface does not have a `run_compare_report` yet, so only the raw replay state is available.";
+  const displayNextAction = hasCompareReport
+    ? compareDecision.nextAction
+    : "Go back to Run Detail, run replay compare, and refresh this surface once the compare report exists.";
+  const verdictBadge = !hasCompareReport ? "Observation only" : compareDecision.badge;
+  const verdictSummary = !hasCompareReport
+    ? "No structured compare report exists yet, so this room stays in observation mode."
+    : compareDecision.badge === "Stable baseline"
+      ? "The baseline, evidence chain, and LLM posture all align, so this run can move into proof review or promotion."
+      : "A delta is present. Review the compare before you trust or promote this run.";
+  const evidenceStatus = hasCompareReport ? (evidenceOk ? "OK" : "Needs review") : "Unavailable";
+  const llmParamsStatus = hasCompareReport ? (llmParamsOk ? "OK" : "Changed") : "Unavailable";
+  const llmSnapshotStatus = hasCompareReport ? (llmSnapshotOk ? "OK" : "Changed") : "Unavailable";
 
   if (loading) {
     return <div className="content"><div className="skeleton-stack-lg"><div className="skeleton skeleton-row" /></div></div>;
@@ -93,10 +111,29 @@ export function RunComparePage({ runId, onBack }: Props) {
 
   return (
     <div className="content">
-      <Button variant="ghost" className="mb-2" onClick={onBack}>Back to run detail</Button>
-      <div className="section-header">
-        <div><h1 className="page-title">Run Compare</h1><p className="page-subtitle">Structured replay comparison for one run and its selected baseline.</p></div>
-        <Badge>{runId}</Badge>
+      <div className="compare-stage-shell">
+        <div className="compare-stage-copy">
+          <span className="cell-sub mono muted">OpenVibeCoding / desktop compare room</span>
+          <div className="section-header">
+            <div><h1 className="page-title">Run Compare</h1><p className="page-subtitle">Structured replay comparison for one run and its selected baseline.</p></div>
+            <Badge>{runId}</Badge>
+          </div>
+          <div className="toolbar">
+            <Button variant="ghost" onClick={onBack}>Back to run detail</Button>
+          </div>
+        </div>
+        <Card className="compare-stage-verdict" aria-label="Current compare verdict">
+          <CardHeader><CardTitle>Current verdict</CardTitle></CardHeader>
+          <CardBody>
+            <div className="stack-gap-2">
+              <Badge variant={!hasCompareReport ? "warning" : compareDecision.badge === "Stable baseline" ? "success" : compareDecision.badge === "No compare report" ? "warning" : "failed"}>
+                {verdictBadge}
+              </Badge>
+              <p>{verdictSummary}</p>
+              <p className="muted">{displayNextAction}</p>
+            </div>
+          </CardBody>
+        </Card>
       </div>
       <div className="mb-4">
         <DesktopCopilotPanel
@@ -107,25 +144,43 @@ export function RunComparePage({ runId, onBack }: Props) {
           loadBrief={() => fetchOperatorCopilotBrief(runId)}
         />
       </div>
-      <div className="grid-2">
-        <Card>
+      <div className="grid-2 compare-stage-grid">
+        <Card className="compare-stage-decision">
           <CardHeader><CardTitle>Decision summary</CardTitle></CardHeader>
           <CardBody>
             <div className="stack-gap-2">
-              <Badge>{compareDecision.badge}</Badge>
-              <p>{compareDecision.summary}</p>
-              <p className="muted">{compareDecision.nextAction}</p>
+              <Badge>{displayBadge}</Badge>
+              <p>{displaySummary}</p>
+              <p className="muted">{displayNextAction}</p>
+              <div className="compare-signal-grid">
+                <div className="compare-signal-card">
+                  <span className="cell-sub mono muted">Mismatched hashes</span>
+                  <strong>{mismatchedCount}</strong>
+                </div>
+                <div className="compare-signal-card">
+                  <span className="cell-sub mono muted">Missing artifacts</span>
+                  <strong>{missingCount}</strong>
+                </div>
+                <div className="compare-signal-card">
+                  <span className="cell-sub mono muted">Failed report checks</span>
+                  <strong>{failedChecksCount}</strong>
+                </div>
+              </div>
             </div>
           </CardBody>
         </Card>
-        <Card>
+        <Card className="compare-stage-next">
           <CardHeader><CardTitle>Key deltas</CardTitle></CardHeader>
           <CardBody>
             <div className="data-list">
               <div className="data-list-row"><span className="data-list-label">Mismatched</span><span className="data-list-value mono">{mismatchedCount}</span></div>
               <div className="data-list-row"><span className="data-list-label">Missing</span><span className="data-list-value mono">{missingCount}</span></div>
               <div className="data-list-row"><span className="data-list-label">Extra</span><span className="data-list-value mono">{extraCount}</span></div>
+              <div className="data-list-row"><span className="data-list-label">Missing reports</span><span className="data-list-value mono">{missingReportsCount}</span></div>
               <div className="data-list-row"><span className="data-list-label">Failed checks</span><span className="data-list-value mono">{failedChecksCount}</span></div>
+              <div className="data-list-row"><span className="data-list-label">Evidence chain</span><span className="data-list-value mono">{evidenceStatus}</span></div>
+              <div className="data-list-row"><span className="data-list-label">LLM params</span><span className="data-list-value mono">{llmParamsStatus}</span></div>
+              <div className="data-list-row"><span className="data-list-label">LLM snapshot</span><span className="data-list-value mono">{llmSnapshotStatus}</span></div>
             </div>
             {incidentPack.summary ? <p className="muted mt-2">Incident: {String(incidentPack.summary)}</p> : null}
             {proofPack.summary ? <p className="muted">Proof: {String(proofPack.summary)}</p> : null}

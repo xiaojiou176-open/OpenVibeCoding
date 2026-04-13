@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -79,14 +79,64 @@ describe("run compare decision surface", () => {
 
     expect(screen.getByText("Decision summary")).toBeInTheDocument();
     expect(screen.getByText("Decision needed")).toBeInTheDocument();
-    expect(screen.getByText(/comparison found at least one delta/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/comparison found at least one delta/i).length).toBeGreaterThan(0);
     expect(screen.getByText("Key deltas")).toBeInTheDocument();
     expect(screen.getByText("Mismatched hashes")).toBeInTheDocument();
-    expect(screen.getByText("2")).toBeInTheDocument();
+    expect(within(screen.getByLabelText("Compare signal highlights")).getByText("2")).toBeInTheDocument();
     expect(screen.getByText(/Incident: A blocking gate stopped the run\./)).toBeInTheDocument();
     expect(screen.getByText("AI compare copilot")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Explain these deltas" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open run detail" })).toHaveAttribute("href", "/runs/run-compare-1");
     expect(screen.getByText("Evidence archive")).toBeInTheDocument();
+  });
+
+  it("renders a stable baseline verdict when every compare signal is aligned", async () => {
+    vi.mocked(fetchReports).mockResolvedValue([
+      {
+        name: "run_compare_report.json",
+        data: {
+          report_type: "run_compare_report",
+          run_id: "run-compare-1",
+          baseline_run_id: "run-baseline-1",
+          status: "pass",
+          compare_summary: {
+            mismatched_count: 0,
+            missing_count: 0,
+            extra_count: 0,
+            missing_reports_count: 0,
+            failed_report_checks_count: 0,
+            evidence_ok: true,
+            llm_params_ok: true,
+            llm_snapshot_ok: true,
+          },
+        },
+      },
+    ] as never);
+
+    render(await RunComparePage({ params: Promise.resolve({ id: "run-compare-1" }) }));
+
+    expect(screen.getAllByText("Stable baseline").length).toBeGreaterThan(0);
+    expect(screen.getByText(/matches the selected baseline/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/promote, approve, or share the current result/i).length).toBeGreaterThan(0);
+  });
+
+  it("keeps compare in observation mode when no compare report exists yet", async () => {
+    vi.mocked(fetchReports).mockResolvedValue([
+      {
+        name: "proof_pack.json",
+        data: {
+          report_type: "proof_pack",
+          summary: "Proof exists but compare has not been generated yet.",
+        },
+      },
+    ] as never);
+
+    render(await RunComparePage({ params: Promise.resolve({ id: "run-compare-1" }) }));
+
+    expect(screen.getAllByText("Observation only").length).toBeGreaterThan(0);
+    expect(screen.getByText(/does not have a `run_compare_report` yet/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/run replay compare, and refresh this page/i).length).toBeGreaterThan(0);
+    expect(screen.getByText("Operator choreography")).toBeInTheDocument();
+    expect(screen.getByText(/Evidence chain: Unavailable/i)).toBeInTheDocument();
   });
 });

@@ -289,6 +289,47 @@ export default async function Home() {
         showFirstTaskGuide={!hasRunHistory}
       />
 
+      <section className="app-section" aria-label="Risk and status summary">
+        {warning ? (
+          <Card variant="compact" role="status" aria-live="polite">
+            <p className="ct-home-empty-text">Some home data is degraded. Core entry actions and the latest snapshot remain available.</p>
+            <p className="mono muted">{warningText}</p>
+          </Card>
+        ) : null}
+        <div className="stats-grid">
+          <article className="metric-card">
+            <p className="metric-label">Risk summary</p>
+            <p className={`metric-value ${riskSummaryClass}`}>{riskSummaryTitle}</p>
+            <p className={`cell-sub mono ${latestRunStatusClass}`}>
+              Latest status: {hasDegradedRunsData ? "Data degraded" : hasRunHistory ? statusLabelEn(latestRun?.status) : "No runs yet"}
+            </p>
+            <p className={`cell-sub mono ${hasDegradedRunsData ? "cell-warning" : latestFailure ? "cell-danger" : "muted"}`}>
+              Failure category: {hasDegradedRunsData ? "unavailable while data is degraded" : String(latestFailureCategory)}
+            </p>
+            <p className="cell-sub mono muted">{formatLocalTime(latestRun?.last_event_ts || latestRun?.created_at)}</p>
+            <Link href={latestFailureGovernanceHref} className="cell-sub mono">
+              {hasDegradedRunsData ? "Governance entry: inspect data sources and the run list" : latestFailureGovernanceLabel}
+            </Link>
+          </article>
+          <article className="metric-card">
+            <p className="metric-label">Status distribution across the last 12 runs</p>
+            <p className={`metric-value ${distributionValueClass}`}>{`Success ${successCount} / Running ${runningCount} / Failed ${failedCount}`}</p>
+            <div className="inline-stack" aria-label="Failure-rate risk signal">
+              <progress
+                className="run-progress"
+                max={Math.max(statusSampleCount, 1)}
+                value={failedCount}
+                aria-label={`Failure share ${failedCount}/${statusSampleCount}`}
+              />
+              <Badge variant={distributionRiskBadgeVariant} role="status" aria-live="polite">
+                {`${distributionRiskText} (${failureRatePercent}%)`}
+              </Badge>
+            </div>
+            <p className="cell-sub mono muted">Total: {hasDegradedRunsData ? "-" : statusSampleCount}</p>
+          </article>
+        </div>
+      </section>
+
       <section className="app-section" aria-labelledby="dashboard-case-gallery-live-title">
         <div className="section-header">
           <div>
@@ -350,47 +391,6 @@ export default async function Home() {
             })}
           </div>
         )}
-      </section>
-
-      <section className="app-section" aria-label="Risk and status summary">
-        {warning ? (
-          <Card variant="compact" role="status" aria-live="polite">
-            <p className="ct-home-empty-text">Some home data is degraded. Core entry actions and the latest snapshot remain available.</p>
-            <p className="mono muted">{warningText}</p>
-          </Card>
-        ) : null}
-        <div className="stats-grid">
-          <article className="metric-card">
-            <p className="metric-label">Risk summary</p>
-            <p className={`metric-value ${riskSummaryClass}`}>{riskSummaryTitle}</p>
-            <p className={`cell-sub mono ${latestRunStatusClass}`}>
-              Latest status: {hasDegradedRunsData ? "Data degraded" : hasRunHistory ? statusLabelEn(latestRun?.status) : "No runs yet"}
-            </p>
-            <p className={`cell-sub mono ${hasDegradedRunsData ? "cell-warning" : latestFailure ? "cell-danger" : "muted"}`}>
-              Failure category: {hasDegradedRunsData ? "unavailable while data is degraded" : String(latestFailureCategory)}
-            </p>
-            <p className="cell-sub mono muted">{formatLocalTime(latestRun?.last_event_ts || latestRun?.created_at)}</p>
-            <Link href={latestFailureGovernanceHref} className="cell-sub mono">
-              {hasDegradedRunsData ? "Governance entry: inspect data sources and the run list" : latestFailureGovernanceLabel}
-            </Link>
-          </article>
-          <article className="metric-card">
-            <p className="metric-label">Status distribution across the last 12 runs</p>
-            <p className={`metric-value ${distributionValueClass}`}>{`Success ${successCount} / Running ${runningCount} / Failed ${failedCount}`}</p>
-            <div className="inline-stack" aria-label="Failure-rate risk signal">
-              <progress
-                className="run-progress"
-                max={Math.max(statusSampleCount, 1)}
-                value={failedCount}
-                aria-label={`Failure share ${failedCount}/${statusSampleCount}`}
-              />
-              <Badge variant={distributionRiskBadgeVariant} role="status" aria-live="polite">
-                {`${distributionRiskText} (${failureRatePercent}%)`}
-              </Badge>
-            </div>
-            <p className="cell-sub mono muted">Total: {hasDegradedRunsData ? "-" : statusSampleCount}</p>
-          </article>
-        </div>
       </section>
 
       <section className="app-section" aria-labelledby="dashboard-latest-runs-title">
