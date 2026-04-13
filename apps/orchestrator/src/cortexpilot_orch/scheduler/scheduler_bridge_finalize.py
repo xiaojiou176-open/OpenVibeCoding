@@ -519,9 +519,22 @@ def finalize_run(
                     "suggested_action": str(continuation_decision.get("selected_action") or "none"),
                     "notes": str(continuation_decision.get("summary") or "n/a"),
                 }
-            report_validator.validate_report(final_task_result, "task_result.v1.json")
-            store.write_report(run_id, "task_result", final_task_result)
-            store.write_task_result(run_id, task_id, final_task_result)
+            try:
+                report_validator.validate_report(final_task_result, "task_result.v1.json")
+            except Exception as exc:  # noqa: BLE001
+                failure_reason = failure_reason or f"task_result schema invalid: {exc}"
+                status = "FAILURE"
+                append_gate_failed_fn(
+                    store,
+                    run_id,
+                    "schema_validation",
+                    str(exc),
+                    schema="task_result.v1.json",
+                    path="reports/task_result.json",
+                )
+            else:
+                store.write_report(run_id, "task_result", final_task_result)
+                store.write_task_result(run_id, task_id, final_task_result)
         store.write_report(run_id, "completion_governance_report", completion_governance_report)
         store.append_event(
             run_id,
