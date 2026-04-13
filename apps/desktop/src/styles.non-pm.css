@@ -306,6 +306,62 @@
   overflow-y: auto;
 }
 
+/* =========================================
+   Compare stage
+   ========================================= */
+
+.compare-stage-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(320px, 0.9fr);
+  gap: var(--space-4);
+  align-items: stretch;
+}
+
+.compare-stage-copy {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.compare-stage-verdict,
+.compare-stage-decision,
+.compare-stage-next {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 48%),
+    linear-gradient(145deg, color-mix(in srgb, var(--color-bg-surface) 88%, var(--color-bg-elevated)), var(--color-bg-elevated));
+}
+
+.compare-stage-grid {
+  align-items: start;
+}
+
+.compare-signal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.compare-signal-card {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-subtle);
+}
+
+.compare-signal-card strong {
+  font-size: var(--text-lg);
+  line-height: 1.1;
+}
+
+@media (max-width: 1040px) {
+  .compare-stage-shell,
+  .compare-stage-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .ui-card pre,
 .card pre {
   margin: 0;

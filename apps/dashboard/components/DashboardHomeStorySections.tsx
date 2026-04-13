@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { DEFAULT_UI_LOCALE, getUiCopy, type UiLocale } from "@cortexpilot/frontend-shared/uiCopy";
 import { resolveDashboardPublicDocsHref } from "../lib/env";
+import { Badge } from "./ui/badge";
 import { Button, type ButtonVariant } from "./ui/button";
 import { Card } from "./ui/card";
 import { useDashboardLocale } from "./DashboardLocaleContext";
@@ -211,12 +212,64 @@ export default function DashboardHomeStorySections({
           variant: "secondary" as ButtonVariant,
         }
       : null;
+  const briefingSignals =
+    locale === "zh-CN"
+      ? [
+          {
+            kicker: "现在发生什么",
+            title: hasRunHistory ? `${runningCount} 条 live run 在推进` : "系统还没进入第一条 run",
+            desc: hasRunHistory
+              ? "先从 command tower 读当前状态，再决定要不要切到 Workflow Cases。"
+              : "先把第一条任务送进系统，首页才会进入真正的值班节奏。",
+          },
+          {
+            kicker: "当前堵点",
+            title: failedCount > 0 ? `${failedCount} 条 run 需要分诊` : "目前没有主导性的失败面",
+            desc:
+              failedCount > 0
+                ? "高风险或失败 run 需要先看治理入口，而不是继续派更多任务。"
+                : "现在更像是建立第一条主循环，而不是处理事故。",
+          },
+          {
+            kicker: "下一步",
+            title: shellCopy.primaryAction,
+            desc:
+              hasRunHistory
+                ? "先读 tower，再派发；不要一上来把首页当成跳转墙。"
+                : "从 PM 入口开始，用第一条任务把整个 command loop 跑起来。",
+          },
+        ]
+      : [
+          {
+            kicker: "Now live",
+            title: hasRunHistory ? `${runningCount} live runs are moving` : "The first run has not started yet",
+            desc: hasRunHistory
+              ? "Read the command tower before you branch into Workflow Cases or proof."
+              : "Start one task first. The cockpit only becomes real once a run exists.",
+          },
+          {
+            kicker: "Current risk",
+            title: failedCount > 0 ? `${failedCount} runs need triage` : "No blocker is dominating the board",
+            desc:
+              failedCount > 0
+                ? "Handle the failing lane before you queue more work."
+                : "The current job is to establish the first durable loop, not to chase noise.",
+          },
+          {
+            kicker: "Next move",
+            title: shellCopy.primaryAction,
+            desc:
+              hasRunHistory
+                ? "Scan the tower first, then decide whether to dispatch or investigate."
+                : "Start from PM intake and let the first task teach the rest of the system.",
+          },
+        ];
 
   return (
     <>
       <header className="app-section">
-        <div className="section-header">
-          <div>
+        <div className="home-briefing-shell">
+          <div className="home-briefing-copy">
             <p className="cell-sub mono muted">{shellCopy.eyebrow}</p>
             <h1 id="dashboard-home-title" className="page-title">
               {shellCopy.heroTitle}
@@ -227,17 +280,48 @@ export default function DashboardHomeStorySections({
                 ? "首页第一屏先回答四件事：你现在在哪、系统正在发生什么、哪里堵住了、下一步该进哪条操作路径。"
                 : "The first screen should answer four questions immediately: where you are, what is happening now, what is blocked, and which surface to open next."}
             </p>
-          </div>
-          <nav aria-label="Home primary actions">
-            <Button asChild variant="default">
-              <Link href={primaryActionHref} prefetch>{shellCopy.primaryAction}</Link>
-            </Button>
-            {topSecondaryAction ? (
-              <Button asChild variant={topSecondaryAction.variant}>
-                <Link href={topSecondaryAction.href}>{topSecondaryAction.label}</Link>
+            <div className="home-briefing-directive">
+              <span className="cell-sub mono muted">Command deck doctrine</span>
+              <p>
+                {locale === "zh-CN"
+                  ? "把首页当作值班交接简报，而不是导航页：先定主动作，再给风险，再给第二层导览。"
+                  : "Treat the home page like an operator handoff briefing: primary action first, risk second, second-layer routes last."}
+              </p>
+            </div>
+            <nav aria-label="Home primary actions" className="home-briefing-actions">
+              <Button asChild variant="default">
+                <Link href={primaryActionHref} prefetch>{shellCopy.primaryAction}</Link>
               </Button>
-            ) : null}
-          </nav>
+              {topSecondaryAction ? (
+                <Button asChild variant={topSecondaryAction.variant}>
+                  <Link href={topSecondaryAction.href}>{topSecondaryAction.label}</Link>
+                </Button>
+              ) : null}
+            </nav>
+          </div>
+          <Card className="home-briefing-panel">
+            <div className="home-briefing-panel-head">
+              <span className="cell-sub mono muted">
+                {locale === "zh-CN" ? "首屏先回答的三件事" : "Three answers before you scroll"}
+              </span>
+              <Badge variant={failedCount > 0 ? "warning" : hasRunHistory ? "running" : "default"}>
+                {failedCount > 0
+                  ? locale === "zh-CN" ? "先看风险" : "Risk first"
+                  : hasRunHistory
+                    ? locale === "zh-CN" ? "进入值班态" : "Operator mode"
+                    : locale === "zh-CN" ? "先建主循环" : "Start the loop"}
+              </Badge>
+            </div>
+            <div className="home-briefing-signal-list">
+              {briefingSignals.map((item) => (
+                <div key={item.kicker} className="home-briefing-signal">
+                  <span className="cell-sub mono muted">{item.kicker}</span>
+                  <strong>{item.title}</strong>
+                  <p>{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </Card>
         </div>
       </header>
 
@@ -250,12 +334,12 @@ export default function DashboardHomeStorySections({
             <p>{shellCopy.deskDescription}</p>
           </div>
         </div>
-        <div className="quick-grid">
+        <div className="home-command-grid">
           {controlDeskCards.map((item) => (
-            <Link key={item.title} href={item.href} className="quick-card">
-              <span className="quick-card-desc">{item.badge}</span>
-              <span className="quick-card-title">{item.title}</span>
-              <span className="quick-card-desc">{item.desc}</span>
+            <Link key={item.title} href={item.href} className="home-command-card">
+              <span className="home-command-kicker">{item.badge}</span>
+              <span className="home-command-title">{item.title}</span>
+              <span className="home-command-desc">{item.desc}</span>
             </Link>
           ))}
         </div>
@@ -270,15 +354,19 @@ export default function DashboardHomeStorySections({
             <p>{shellCopy.loopDescription}</p>
           </div>
         </div>
-        <div className="quick-grid">
+        <ol className="home-loop-rail" aria-label={shellCopy.loopTitle}>
           {operatorLoopCards.map((item) => (
-            <Link key={item.title} href={item.href} className="quick-card">
-              <span className="quick-card-desc">{item.badge}</span>
-              <span className="quick-card-title">{item.title}</span>
-              <span className="quick-card-desc">{item.desc}</span>
-            </Link>
+            <li key={item.title} className="home-loop-step">
+              <Link href={item.href} className="home-loop-link">
+                <span className="home-loop-index">{item.badge}</span>
+                <span className="home-loop-body">
+                  <span className="home-loop-title">{item.title}</span>
+                  <span className="home-loop-desc">{item.desc}</span>
+                </span>
+              </Link>
+            </li>
           ))}
-        </div>
+        </ol>
       </section>
 
       <section className="app-section" aria-labelledby="dashboard-second-layer-guides-title">

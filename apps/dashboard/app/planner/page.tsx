@@ -25,6 +25,18 @@ type PlannerRow = {
   plannedWorkerCount: number;
 };
 
+type PlannerPriorityState = {
+  title: string;
+  summary: string;
+  tone: "failed" | "warning" | "running";
+  primaryHref: string;
+  primaryLabel: string;
+  secondaryHref: string;
+  secondaryLabel: string;
+  objective: string;
+  runId: string;
+};
+
 function asRecord(value: JsonValue | null | undefined): Record<string, JsonValue> | null {
   return value && typeof value === "object" && !Array.isArray(value) ? (value as Record<string, JsonValue>) : null;
 }
@@ -205,6 +217,70 @@ function plannerTriage(text: ReturnType<typeof plannerText>, row: PlannerRow) {
   };
 }
 
+function plannerPriorityRank(row: PlannerRow) {
+  if (!row.completionGovernance) return 0;
+  if (row.workerContracts.length === 0 || row.plannedWorkerCount > row.workerContracts.length) return 1;
+  if (row.unblockTasks.length > 0) return 2;
+  const continuationDecision =
+    row.completionGovernance?.continuation_decision &&
+    typeof row.completionGovernance.continuation_decision === "object" &&
+    !Array.isArray(row.completionGovernance.continuation_decision)
+      ? (row.completionGovernance.continuation_decision as Record<string, JsonValue>)
+      : null;
+  const selectedAction = String(continuationDecision?.selected_action || "").trim();
+  if (selectedAction && selectedAction !== "-") return 3;
+  return 4;
+}
+
+function plannerPriorityState(text: ReturnType<typeof plannerText>, rows: PlannerRow[]): PlannerPriorityState {
+  if (rows.length === 0) {
+    return {
+      title:
+        text.title === "规划桌"
+          ? "先让第一条规划 wave 进入系统"
+          : "Seed the first planning wave",
+      summary:
+        text.title === "规划桌"
+          ? "当前还没有可见的规划产物。先从 PM 入口发起第一条任务，再回来用规划桌做 triage 和 dispatch。"
+          : "No planning artifact is visible yet. Start the first task from PM intake, then return here once the wave plan and worker contract exist.",
+      tone: "warning",
+      primaryHref: "/pm",
+      primaryLabel: text.openPm,
+      secondaryHref: "/command-tower",
+      secondaryLabel: text.openTower,
+      objective: "-",
+      runId: "-",
+    };
+  }
+  const leadRow = [...rows].sort((a, b) => plannerPriorityRank(a) - plannerPriorityRank(b))[0];
+  const triage = plannerTriage(text, leadRow);
+  const objective = String(leadRow.wavePlan?.objective || leadRow.run.task_id || "-").trim() || "-";
+  const runId = String(leadRow.run.run_id || "-");
+  const tone =
+    !leadRow.completionGovernance || leadRow.workerContracts.length < leadRow.plannedWorkerCount
+      ? "failed"
+      : leadRow.unblockTasks.length > 0
+        ? "warning"
+        : "running";
+  return {
+    title:
+      text.title === "规划桌"
+        ? `优先处理：${triage.label}`
+        : `Priority queue: ${triage.label}`,
+    summary:
+      text.title === "规划桌"
+        ? `最该先看的 wave 是「${objective}」。先处理这条 triage，再决定是否继续派发、回到 workflow case，还是直接进证明室。`
+        : `The highest-priority wave right now is "${objective}". Resolve this triage first, then decide whether to dispatch more work, return to Workflow Cases, or move into Proof & Replay.`,
+    tone,
+    primaryHref: triage.nextHref,
+    primaryLabel: triage.nextLabel,
+    secondaryHref: triage.secondaryHref,
+    secondaryLabel: triage.secondaryLabel,
+    objective,
+    runId,
+  };
+}
+
 async function loadPlannerRows(runs: RunSummary[]): Promise<PlannerRow[]> {
   const candidateRuns = runs.slice(0, 8);
   const rows = await Promise.all(
@@ -269,34 +345,51 @@ export default async function PlannerPage() {
   const text = plannerText(locale);
   const { data: runs, warning } = await safeLoad(fetchRuns, [] as RunSummary[], "Run list");
   const rows = await loadPlannerRows(Array.isArray(runs) ? runs : []);
+  const sortedRows = [...rows].sort((a, b) => plannerPriorityRank(a) - plannerPriorityRank(b));
   const totalWorkerContracts = rows.reduce((sum, row) => sum + row.workerContracts.length, 0);
   const totalUnblockTasks = rows.reduce((sum, row) => sum + row.unblockTasks.length, 0);
   const wakeAnchoredRuns = rows.filter((row) => Boolean(row.wavePlan?.wake_policy_ref)).length;
+  const priority = plannerPriorityState(text, sortedRows);
 
   return (
     <main className="grid" aria-labelledby="planner-page-title">
       <header className="app-section">
-        <div className="section-header">
-          <div>
-            <p className="cell-sub mono muted">OpenVibeCoding / planner desk</p>
-            <h1 id="planner-page-title" className="page-title">{text.title}</h1>
-            <p className="page-subtitle">{text.subtitle}</p>
+        <div className="planner-hero-shell">
+          <div className="planner-hero-copy">
+            <div>
+              <p className="cell-sub mono muted">OpenVibeCoding / planner desk</p>
+              <h1 id="planner-page-title" className="page-title">{text.title}</h1>
+              <p className="page-subtitle">{text.subtitle}</p>
+            </div>
+            <div className="planner-primary-actions">
+              <Button asChild>
+                <Link href={priority.primaryHref}>{priority.primaryLabel}</Link>
+              </Button>
+              <Button asChild variant="secondary">
+                <Link href={priority.secondaryHref}>{priority.secondaryLabel}</Link>
+              </Button>
+              <Button asChild variant="ghost">
+                <Link href="/workflows">{text.actions.workflows}</Link>
+              </Button>
+              <Button asChild variant="ghost">
+                <Link href="/runs">{text.actions.proof}</Link>
+              </Button>
+            </div>
           </div>
-          <Badge>{rows.length} rows</Badge>
-        </div>
-        <div className="toolbar">
-          <Button asChild>
-            <Link href="/pm">{text.actions.pm}</Link>
-          </Button>
-          <Button asChild variant="secondary">
-            <Link href="/command-tower">{text.actions.tower}</Link>
-          </Button>
-          <Button asChild variant="secondary">
-            <Link href="/workflows">{text.actions.workflows}</Link>
-          </Button>
-          <Button asChild variant="secondary">
-            <Link href="/runs">{text.actions.proof}</Link>
-          </Button>
+          <Card className={`planner-priority-card planner-priority-card--${priority.tone}`}>
+            <div className="planner-priority-head">
+              <span className="cell-sub mono muted">
+                {text.title === "规划桌" ? "当前最该先处理的波次" : "First thing to resolve"}
+              </span>
+              <Badge variant={priority.tone}>{rows.length} rows</Badge>
+            </div>
+            <strong className="planner-priority-title">{priority.title}</strong>
+            <p className="planner-priority-summary">{priority.summary}</p>
+            <div className="planner-priority-meta">
+              <span className="cell-sub mono">{text.table.objective}: {priority.objective}</span>
+              <span className="cell-sub mono">{text.table.run}: {priority.runId}</span>
+            </div>
+          </Card>
         </div>
       </header>
 
@@ -304,18 +397,22 @@ export default async function PlannerPage() {
         <article className="metric-card">
           <p className="metric-label">{text.metrics.runs}</p>
           <p className="metric-value">{rows.length}</p>
+          <p className="cell-sub mono muted">{text.title === "规划桌" ? "有多少条 wave 已经进入规划读面" : "How many waves already have visible planning surfaces."}</p>
         </article>
         <article className="metric-card">
           <p className="metric-label">{text.metrics.workers}</p>
           <p className="metric-value">{totalWorkerContracts}</p>
+          <p className="cell-sub mono muted">{text.title === "规划桌" ? "先看 contract 是否补齐，再决定是否继续派工" : "Check whether worker contracts are complete before dispatching more work."}</p>
         </article>
         <article className="metric-card">
           <p className="metric-label">{text.metrics.unblock}</p>
           <p className="metric-value">{totalUnblockTasks}</p>
+          <p className="cell-sub mono muted">{text.title === "规划桌" ? "unblock task 不该埋进原始报告里" : "Queued unblock tasks should stay visible above the raw artifacts."}</p>
         </article>
         <article className="metric-card">
           <p className="metric-label">{text.metrics.wake}</p>
           <p className="metric-value">{wakeAnchoredRuns}</p>
+          <p className="cell-sub mono muted">{text.title === "规划桌" ? "wake policy 是否挂上，决定它是不是可续跑的 planning wave" : "Wake-policy posture tells you whether the planning wave is resumable."}</p>
         </article>
       </section>
 
@@ -326,10 +423,27 @@ export default async function PlannerPage() {
       ) : null}
 
       {rows.length === 0 ? (
-        <Card>
+        <Card className="planner-empty-stage">
           <div className="empty-state-stack">
             <span className="muted">{text.empty}</span>
             <span className="mono muted">{text.note}</span>
+          </div>
+          <div className="planner-empty-grid">
+            <Link href="/pm" className="planner-empty-card">
+              <span className="cell-sub mono muted">01</span>
+              <strong>{text.openPm}</strong>
+              <span>{text.title === "规划桌" ? "先把第一条目标、约束和验收口径写清，再回来让 planner desk 真正开机。" : "Start the first wave from PM intake, then return here once the planning surface exists."}</span>
+            </Link>
+            <Link href="/command-tower" className="planner-empty-card">
+              <span className="cell-sub mono muted">02</span>
+              <strong>{text.openTower}</strong>
+              <span>{text.title === "规划桌" ? "如果系统已经在跑，只是规划产物还没挂出来，就先回 tower 看当前谁在动。" : "If work is already running but planning artifacts are missing, scan the tower before you dispatch anything else."}</span>
+            </Link>
+            <Link href="/workflows" className="planner-empty-card">
+              <span className="cell-sub mono muted">03</span>
+              <strong>{text.openWorkflow}</strong>
+              <span>{text.title === "规划桌" ? "Workflow Case 是 durable state，不是首页解释文；当 planning row 出现后，回这里继续追。" : "Workflow Cases keep the durable state once the planner row becomes real."}</span>
+            </Link>
           </div>
         </Card>
       ) : (
@@ -351,7 +465,7 @@ export default async function PlannerPage() {
                 </tr>
               </thead>
               <tbody>
-                {rows.map((row) => {
+                {sortedRows.map((row) => {
                   const runId = String(row.run.run_id || "-");
                   const objective = String(row.wavePlan?.objective || row.run.task_id || "-").trim() || "-";
                   const triage = plannerTriage(text, row);
@@ -383,20 +497,22 @@ export default async function PlannerPage() {
                         </Badge>
                       </td>
                       <td>
-                        <div className="toolbar">
+                        <div className="planner-row-actions">
                           <Button asChild>
                             <Link href={triage.nextHref}>{triage.nextLabel}</Link>
                           </Button>
-                          <Button asChild variant="secondary">
+                          <Button asChild variant="ghost">
                             <Link href={triage.secondaryHref}>{triage.secondaryLabel}</Link>
                           </Button>
+                          <div className="planner-row-queue">
+                            <WorkflowQueueMutationControls
+                              latestRunId={runId}
+                              compact
+                              showQueueLatest
+                              locale={locale}
+                            />
+                          </div>
                         </div>
-                        <WorkflowQueueMutationControls
-                          latestRunId={runId}
-                          compact
-                          showQueueLatest
-                          locale={locale}
-                        />
                       </td>
                     </tr>
                   );
@@ -411,7 +527,7 @@ export default async function PlannerPage() {
               <div className="collapsible-body">
                 <p className="mono muted mb-4">{text.inspectionSubtitle}</p>
                 <div className="grid-2">
-                  {rows.map((row) => {
+                  {sortedRows.map((row) => {
                     const runId = String(row.run.run_id || "-");
                     const objective = String(row.wavePlan?.objective || row.run.task_id || "-").trim() || "-";
                     const continuationSummary = String(
@@ -426,12 +542,14 @@ export default async function PlannerPage() {
                         <div className="stack-gap-2">
                           <span className="card-header-title">{objective}</span>
                           <span className="mono muted">{runId}</span>
-                          <span className="mono muted">{text.wakeLabel}: {String(row.wavePlan?.wake_policy_ref || "-")}</span>
-                          <span className="mono muted">{text.governanceLabel}: {String(row.completionGovernance?.overall_verdict || "-")}</span>
-                          <span className="mono muted">{text.plannedWorkersLabel}: {row.plannedWorkerCount || 0}</span>
-                          <span className="mono muted">{text.contractsLabel}: {row.workerContracts.length}</span>
-                          <span className="mono muted">{text.unblockLabel}: {row.unblockTasks.length}</span>
-                          <span className="mono muted">Continuation: {continuationSummary}</span>
+                          <div className="planner-archive-list">
+                            <span className="mono muted">{text.wakeLabel}: {String(row.wavePlan?.wake_policy_ref || "-")}</span>
+                            <span className="mono muted">{text.governanceLabel}: {String(row.completionGovernance?.overall_verdict || "-")}</span>
+                            <span className="mono muted">{text.plannedWorkersLabel}: {row.plannedWorkerCount || 0}</span>
+                            <span className="mono muted">{text.contractsLabel}: {row.workerContracts.length}</span>
+                            <span className="mono muted">{text.unblockLabel}: {row.unblockTasks.length}</span>
+                            <span className="mono muted">Continuation: {continuationSummary}</span>
+                          </div>
                           <WorkflowQueueMutationControls
                             latestRunId={runId}
                             compact

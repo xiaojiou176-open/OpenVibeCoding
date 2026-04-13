@@ -79,10 +79,10 @@ describe("run compare decision surface", () => {
 
     expect(screen.getByText("Decision summary")).toBeInTheDocument();
     expect(screen.getByText("Decision needed")).toBeInTheDocument();
-    expect(screen.getByText(/comparison found at least one delta/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/comparison found at least one delta/i).length).toBeGreaterThan(0);
     expect(screen.getByText("Key deltas")).toBeInTheDocument();
     expect(screen.getByText("Mismatched hashes")).toBeInTheDocument();
-    expect(screen.getByText("2")).toBeInTheDocument();
+    expect(screen.getAllByText("2").length).toBeGreaterThan(0);
     expect(screen.getByText(/Incident: A blocking gate stopped the run\./)).toBeInTheDocument();
     expect(screen.getByText("AI compare copilot")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Explain these deltas" })).toBeInTheDocument();

@@ -68,6 +68,15 @@ Avoid Inter, generic serif fonts, and oversized startup-style hero typography.
 - Show the operator loop before adoption/router content.
 - Include a philosophy band for Prompt / Context / Harness Engineering.
 
+### planner
+- Make one priority wave obvious above the fold.
+- Treat the desk as triage-first, artifact-second.
+- Empty state must still read like an operational launch deck.
+
+### run-compare
+- Turn the page into a compare truth room with one verdict band, one signal strip, and one clear next action.
+- Keep evidence archive folded into the second layer.
+
 ### command-tower
 - Make risk and next action obvious above the fold.
 - Use dense but calm structure.
@@ -80,3 +89,6 @@ Avoid Inter, generic serif fonts, and oversized startup-style hero typography.
 
 ### desktop-overview
 - Mirror the web loop with denser operator affordances.
+
+### desktop-run-compare
+- Mirror the web truth room, but compress it into a denser desktop operator panel.

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Badge } from "../../../../components/ui/badge";
+import { Button } from "../../../../components/ui/button";
 import { Card } from "../../../../components/ui/card";
-import ControlPlaneStatusCallout from "../../../../components/control-plane/ControlPlaneStatusCallout";
 import OperatorCopilotPanel from "../../../../components/control-plane/OperatorCopilotPanel";
 import { fetchReports, fetchRun } from "../../../../lib/api";
 import { safeLoad } from "../../../../lib/serverPageData";
@@ -93,51 +93,93 @@ export default async function RunComparePage({
   const compareSummary = asRecord(runCompareReport.compare_summary);
   const decision = compareDecision(compareSummary);
   const hasCompareReport = Object.keys(runCompareReport).length > 0;
+  const displayBadge = hasCompareReport ? decision.badge : "Observation only";
+  const displaySummary = hasCompareReport
+    ? decision.summary
+    : "This compare surface does not have a `run_compare_report` yet, so only the raw replay state is available.";
+  const displayNextAction = hasCompareReport
+    ? decision.nextAction
+    : "Go back to Run Detail, run replay compare, and refresh this page once the report exists.";
+  const verdictTitle = !hasCompareReport
+    ? "Observation mode only."
+    : decision.tone === "success"
+      ? "Baseline is stable."
+      : "A comparison decision is required.";
+  const verdictSummary = !hasCompareReport
+    ? "No structured compare report exists yet, so this room stays in observation mode."
+    : decision.tone === "success"
+      ? "The baseline, evidence chain, and LLM posture all align, so this run can move forward into proof review or promotion."
+      : "A delta is present. Review the compare before you trust or promote this run.";
+  const compareTone = !hasCompareReport ? "warning" : decision.tone === "success" ? "success" : decision.tone === "failed" ? "failed" : "warning";
 
   return (
     <main className="grid" aria-labelledby="run-compare-page-title">
       <section className="app-section">
-        <div className="section-header">
-          <div>
+        <div className="compare-room-shell">
+          <div className="compare-room-copy">
+            <p className="cell-sub mono muted">OpenVibeCoding / compare truth room</p>
             <h1 id="run-compare-page-title">Run compare</h1>
             <p>Review the structured replay comparison without digging through the full Run Detail report stack.</p>
+            <p className="cell-sub mono muted">
+              Keep this room verdict-first: what changed, how serious it is, and what the operator should do next.
+            </p>
           </div>
-          <div className="toolbar">
-            <Badge className="mono">{id}</Badge>
-            <Link href={`/runs/${encodeURIComponent(id)}`}>Back to run detail</Link>
-          </div>
+          <Card className={`compare-verdict-card compare-verdict-card--${compareTone}`}>
+            <div className="compare-verdict-head">
+              <span className="cell-sub mono muted">Current verdict</span>
+              <Badge variant={compareTone}>{displayBadge}</Badge>
+            </div>
+            <strong className="compare-verdict-title">{verdictTitle}</strong>
+            <p className="compare-verdict-summary">{verdictSummary}</p>
+            <p className="cell-sub mono">{displayNextAction}</p>
+          </Card>
         </div>
-        {!hasCompareReport ? (
-          <ControlPlaneStatusCallout
-            title="Compare report unavailable"
-            summary="This compare surface does not have a `run_compare_report` yet, so only the raw replay state is available."
-            nextAction="Go back to Run Detail, run replay compare, and refresh this page once the report exists."
-            tone="warning"
-            badgeLabel="Observation only"
-            actions={[
-              { href: `/runs/${encodeURIComponent(id)}`, label: "Back to run detail" },
-            ]}
+        <div className="toolbar compare-toolbar-row">
+          <Badge className="mono">{id}</Badge>
+          <Link href={`/runs/${encodeURIComponent(id)}`}>Back to run detail</Link>
+        </div>
+        <div className="compare-primary-grid">
+          <Card className={`compare-decision-card compare-decision-card--${compareTone}`}>
+            <h2 className="section-title">Decision summary</h2>
+            <p>{displaySummary}</p>
+            <div className="compare-signal-grid" aria-label="Compare signal highlights">
+              {[
+                { label: "Hash deltas", value: compareSummary.mismatched_count },
+                { label: "Artifact gaps", value: compareSummary.missing_count },
+                { label: "Unexpected extras", value: compareSummary.extra_count },
+                { label: "Report gaps", value: compareSummary.missing_reports_count },
+                { label: "Check failures", value: compareSummary.failed_report_checks_count },
+              ].map((item) => (
+                <div key={item.label} className="compare-signal-card">
+                  <span className="cell-sub mono muted">{item.label}</span>
+                  <strong>{String(item.value ?? 0)}</strong>
+                </div>
+              ))}
+            </div>
+            <div className="toolbar">
+              <Button asChild variant="ghost">
+                <Link href={`/runs/${encodeURIComponent(id)}`}>Open run detail</Link>
+              </Button>
+            </div>
+          </Card>
+          <Card className="compare-next-card">
+            <h2 className="section-title">Next operator step</h2>
+            <p className="muted">Use compare as a decision surface first, raw JSON second.</p>
+            <p className="mono">{displayNextAction}</p>
+            {incidentPack.summary ? <p className="mono">Incident: {String(incidentPack.summary)}</p> : null}
+            {proofPack.summary ? <p className="mono">Proof: {String(proofPack.summary)}</p> : null}
+          </Card>
+        </div>
+        <Card className="compare-copilot-card">
+          <OperatorCopilotPanel
+            runId={id}
+            title="AI compare copilot"
+            intro="Generate one explanation-first brief for the current compare, proof, incident, queue, and approval posture before you trust the delta."
+            buttonLabel="Explain these deltas"
           />
-        ) : (
-          <ControlPlaneStatusCallout
-            title="Decision summary"
-            summary={decision.summary}
-            nextAction={decision.nextAction}
-            tone={decision.tone}
-            badgeLabel={decision.badge}
-            actions={[
-              { href: `/runs/${encodeURIComponent(id)}`, label: "Open run detail" },
-            ]}
-          />
-        )}
-        <OperatorCopilotPanel
-          runId={id}
-          title="AI compare copilot"
-          intro="Generate one explanation-first brief for the current compare, proof, incident, queue, and approval posture before you trust the delta."
-          buttonLabel="Explain these deltas"
-        />
+        </Card>
         <div className="grid grid-2">
-          <Card>
+          <Card className="compare-delta-card">
             <h3>Key deltas</h3>
             <div className="data-list">
               {decision.keyDeltas.map((item) => (
@@ -148,13 +190,13 @@ export default async function RunComparePage({
               ))}
             </div>
           </Card>
-          <Card>
+          <Card className="compare-archive-card">
             <h3>Next operator step</h3>
             <div className="stack-gap-2">
-              <p className="muted">Use compare as a decision surface first, raw JSON second.</p>
-              <p className="mono">{decision.nextAction}</p>
-              {incidentPack.summary ? <p className="mono">Incident: {String(incidentPack.summary)}</p> : null}
-              {proofPack.summary ? <p className="mono">Proof: {String(proofPack.summary)}</p> : null}
+              <p className="muted">Keep the second card decision-oriented too. Treat this as operator choreography, not a duplicate summary.</p>
+              <p className="mono">{hasCompareReport ? "Compare first → proof second → replay only after the verdict is clear." : "No compare report yet → return to Run Detail, generate compare, then re-open this room."}</p>
+              <p className="mono">Evidence chain: {asBoolean(compareSummary.evidence_ok) ? "OK" : "Needs review"}</p>
+              <p className="mono">LLM params: {asBoolean(compareSummary.llm_params_ok) ? "OK" : "Changed"} · Snapshot: {asBoolean(compareSummary.llm_snapshot_ok) ? "OK" : "Changed"}</p>
             </div>
           </Card>
           <Card asChild>
