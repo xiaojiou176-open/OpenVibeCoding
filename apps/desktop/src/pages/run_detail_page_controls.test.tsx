@@ -22,6 +22,7 @@ vi.mock("../lib/api", () => ({
   fetchEvents: vi.fn(),
   fetchDiff: vi.fn(),
   fetchReports: vi.fn(),
+  fetchArtifact: vi.fn(),
   fetchOperatorCopilotBrief: vi.fn(),
   fetchToolCalls: vi.fn(),
   fetchChainSpec: vi.fn(),
@@ -47,6 +48,7 @@ import {
   fetchEvents,
   fetchDiff,
   fetchReports,
+  fetchArtifact,
   fetchOperatorCopilotBrief,
   fetchToolCalls,
   fetchChainSpec,
@@ -95,6 +97,7 @@ describe("RunDetailPage p0 controls", () => {
     vi.mocked(fetchEvents).mockReset();
     vi.mocked(fetchDiff).mockReset();
     vi.mocked(fetchReports).mockReset();
+    vi.mocked(fetchArtifact).mockReset();
     vi.mocked(fetchToolCalls).mockReset();
     vi.mocked(fetchChainSpec).mockReset();
     vi.mocked(fetchAgentStatus).mockReset();
@@ -121,6 +124,7 @@ describe("RunDetailPage p0 controls", () => {
     ] as any);
     vi.mocked(fetchDiff).mockResolvedValue({ diff: "" } as any);
     vi.mocked(fetchReports).mockResolvedValue([] as any);
+    vi.mocked(fetchArtifact).mockResolvedValue({ data: [] } as any);
     vi.mocked(fetchOperatorCopilotBrief).mockResolvedValue({
       report_type: "operator_copilot_brief",
       generated_at: "2026-03-31T12:00:00Z",
@@ -255,12 +259,57 @@ describe("RunDetailPage p0 controls", () => {
   });
 
   it("renders locale-aware operator labels on run detail when zh-CN is requested", async () => {
+    vi.mocked(fetchRun).mockResolvedValueOnce(
+      makeRun({
+        manifest: {
+          artifacts: [
+            { name: "planning_worker_prompt_contracts", path: "artifacts/planning_worker_prompt_contracts.json" },
+            { name: "planning_unblock_tasks", path: "artifacts/planning_unblock_tasks.json" },
+          ],
+        },
+      }),
+    );
+    vi.mocked(fetchArtifact)
+      .mockResolvedValueOnce({
+        data: [
+          {
+            prompt_contract_id: "worker-zh",
+            continuation_policy: {
+              on_incomplete: "reply_auditor_reprompt_and_continue_same_session",
+              on_blocked: "spawn_independent_temporary_unblock_task",
+            },
+            done_definition: { acceptance_checks: ["repo_hygiene", "test_report"] },
+          },
+        ],
+      } as any)
+      .mockResolvedValueOnce({
+        data: [
+          {
+            unblock_task_id: "unblock-zh",
+            owner: "L0",
+            mode: "independent_temporary_task",
+            trigger: "spawn_independent_temporary_unblock_task",
+          },
+        ],
+      } as any);
+
     render(<RunDetailPage runId="run-zh" onBack={vi.fn()} locale="zh-CN" />);
 
     expect(await screen.findByText("AI 操作员副驾驶")).toBeInTheDocument();
     expect(screen.getByText("Run 总览")).toBeInTheDocument();
     expect(screen.getByText("执行角色")).toBeInTheDocument();
     expect(screen.getByText("证据与可追溯性")).toBeInTheDocument();
+    expect(screen.getByText("完成治理摘要")).toBeInTheDocument();
+    expect(screen.queryByText("Worker prompt contracts")).toBeNull();
+    expect(screen.getByText("工作者提示合约")).toBeInTheDocument();
+    expect(screen.getByText("未完成时")).toBeInTheDocument();
+    expect(screen.getByText("阻塞时")).toBeInTheDocument();
+    expect(screen.getByText("解阻塞任务")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "这些摘要来自持久化的工作者提示合约和解阻塞任务；它们只提供参考，`task_contract` 仍然掌握执行权威。",
+      ),
+    ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "运行中" })).toHaveAttribute("title", "暂停实时更新");
     expect(screen.getByRole("button", { name: /事件时间线（1）/ })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "回放对比" })).toBeInTheDocument();
@@ -320,8 +369,37 @@ describe("RunDetailPage p0 controls", () => {
             },
           },
         },
+        manifest: {
+          artifacts: [
+            { name: "planning_worker_prompt_contracts", path: "artifacts/planning_worker_prompt_contracts.json" },
+            { name: "planning_unblock_tasks", path: "artifacts/planning_unblock_tasks.json" },
+          ],
+        },
       }),
     );
+    vi.mocked(fetchArtifact)
+      .mockResolvedValueOnce({
+        data: [
+          {
+            prompt_contract_id: "worker-1",
+            continuation_policy: {
+              on_incomplete: "reply_auditor_reprompt_and_continue_same_session",
+              on_blocked: "spawn_independent_temporary_unblock_task",
+            },
+            done_definition: { acceptance_checks: ["repo_hygiene", "test_report"] },
+          },
+        ],
+      } as any)
+      .mockResolvedValueOnce({
+        data: [
+          {
+            unblock_task_id: "unblock-worker-1",
+            owner: "L0",
+            mode: "independent_temporary_task",
+            trigger: "spawn_independent_temporary_unblock_task",
+          },
+        ],
+      } as any);
 
     render(<RunDetailPage runId="run-binding" onBack={vi.fn()} />);
 
@@ -338,6 +416,13 @@ describe("RunDetailPage p0 controls", () => {
         "Read-only note: this mirrors the persisted binding summary. task_contract still owns execution authority.",
       ),
     ).toBeInTheDocument();
+    expect(screen.getByText("Completion governance")).toBeInTheDocument();
+    expect(screen.getByText("Worker prompt contracts")).toBeInTheDocument();
+    expect(screen.getByText("On incomplete")).toBeInTheDocument();
+    expect(screen.getByText("On blocked")).toBeInTheDocument();
+    expect(screen.getByText("Unblock tasks")).toBeInTheDocument();
+    expect(screen.getByText("Unblock owner")).toBeInTheDocument();
+    expect(screen.getByText("L0")).toBeInTheDocument();
   });
 
   it("recovers from error state after retry load", async () => {
@@ -702,5 +787,115 @@ describe("RunDetailPage p0 controls", () => {
     await user.click(screen.getByRole("button", { name: /Change diff/ }));
     expect(screen.getByText("new diff payload")).toBeInTheDocument();
     expect(screen.queryByText("old diff payload")).toBeNull();
+  });
+
+  it("ignores stale artifact summaries when runId switches during artifact loads", async () => {
+    const oldPlanning = createDeferred<{ data: Array<Record<string, unknown>> }>();
+
+    vi.mocked(fetchRun)
+      .mockResolvedValueOnce(
+        makeRun({
+          run_id: "run-old",
+          task_id: "task-old",
+          manifest: {
+            artifacts: [
+              { name: "planning_worker_prompt_contracts", path: "artifacts/planning_worker_prompt_contracts.json" },
+              { name: "planning_unblock_tasks", path: "artifacts/planning_unblock_tasks.json" },
+            ],
+          },
+        }),
+      )
+      .mockResolvedValueOnce(
+        makeRun({
+          run_id: "run-new",
+          task_id: "task-new",
+          manifest: {
+            artifacts: [
+              { name: "planning_worker_prompt_contracts", path: "artifacts/planning_worker_prompt_contracts.json" },
+              { name: "planning_unblock_tasks", path: "artifacts/planning_unblock_tasks.json" },
+            ],
+          },
+        }),
+      );
+    vi.mocked(fetchEvents)
+      .mockResolvedValueOnce([{ ts: "2026-02-19T00:00:01Z", event: "OLD_EVENT", level: "INFO" }] as any)
+      .mockResolvedValueOnce([{ ts: "2026-02-19T00:00:02Z", event: "NEW_EVENT", level: "INFO" }] as any);
+    vi.mocked(fetchArtifact).mockImplementation((requestedRunId, artifactName) => {
+      if (requestedRunId === "run-old" && artifactName === "planning_worker_prompt_contracts.json") {
+        return oldPlanning.promise as Promise<any>;
+      }
+      if (requestedRunId === "run-old" && artifactName === "planning_unblock_tasks.json") {
+        return Promise.resolve({
+          data: [
+            {
+              unblock_task_id: "unblock-old",
+              owner: "old-owner",
+              mode: "old-mode",
+              trigger: "old-trigger",
+            },
+          ],
+        } as any);
+      }
+      if (requestedRunId === "run-new" && artifactName === "planning_worker_prompt_contracts.json") {
+        return Promise.resolve({
+          data: [
+            {
+              prompt_contract_id: "worker-new",
+              continuation_policy: {
+                on_incomplete: "new-incomplete",
+                on_blocked: "new-blocked",
+              },
+              done_definition: { acceptance_checks: ["new-check"] },
+            },
+          ],
+        } as any);
+      }
+      if (requestedRunId === "run-new" && artifactName === "planning_unblock_tasks.json") {
+        return Promise.resolve({
+          data: [
+            {
+              unblock_task_id: "unblock-new",
+              owner: "new-owner",
+              mode: "new-mode",
+              trigger: "new-trigger",
+            },
+          ],
+        } as any);
+      }
+      return Promise.resolve({ data: [] } as any);
+    });
+
+    const { rerender } = render(<RunDetailPage runId="run-old" onBack={vi.fn()} />);
+    await waitFor(() => {
+      expect(fetchArtifact).toHaveBeenCalledWith("run-old", "planning_worker_prompt_contracts.json");
+    });
+
+    rerender(<RunDetailPage runId="run-new" onBack={vi.fn()} />);
+    expect(await screen.findByRole("heading", { name: "run-new" })).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText("new-owner")).toBeInTheDocument();
+      expect(screen.getByText("new-incomplete")).toBeInTheDocument();
+    });
+
+    await act(async () => {
+      oldPlanning.resolve({
+        data: [
+          {
+            prompt_contract_id: "worker-old",
+            continuation_policy: {
+              on_incomplete: "old-incomplete",
+              on_blocked: "old-blocked",
+            },
+            done_definition: { acceptance_checks: ["old-check"] },
+          },
+        ],
+      });
+      await Promise.resolve();
+    });
+
+    expect(screen.getByText("new-owner")).toBeInTheDocument();
+    expect(screen.getByText("new-incomplete")).toBeInTheDocument();
+    expect(screen.queryByText("old-incomplete")).toBeNull();
+    expect(screen.queryByText("old-owner")).toBeNull();
   });
 });

@@ -793,6 +793,18 @@ export type UiCopy = {
         toolExecution: string;
         readOnlyNote: string;
       };
+      completionGovernance: {
+        title: string;
+        workerPromptContracts: string;
+        unblockTasks: string;
+        onIncomplete: string;
+        onBlocked: string;
+        doneChecks: string;
+        unblockOwner: string;
+        unblockMode: string;
+        unblockTrigger: string;
+        advisoryNote: string;
+      };
       fieldLabels: {
         runId: string;
         taskId: string;
@@ -2006,6 +2018,19 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
           toolExecution: "Tool execution",
           readOnlyNote:
             "Read-only note: this mirrors the persisted binding summary. task_contract still owns execution authority.",
+        },
+        completionGovernance: {
+          title: "Completion governance",
+          workerPromptContracts: "Worker prompt contracts",
+          unblockTasks: "Unblock tasks",
+          onIncomplete: "On incomplete",
+          onBlocked: "On blocked",
+          doneChecks: "DoD checks",
+          unblockOwner: "Unblock owner",
+          unblockMode: "Unblock mode",
+          unblockTrigger: "Unblock trigger",
+          advisoryNote:
+            "Derived from persisted worker prompt contracts and unblock tasks. These summaries stay advisory; task_contract still owns execution authority.",
         },
         fieldLabels: {
           runId: "Run ID",
@@ -3251,6 +3276,19 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
           toolExecution: "工具执行",
           readOnlyNote:
             "只读说明：这里展示的是持久化的角色绑定摘要镜像；`task_contract` 仍然掌握执行权威。",
+        },
+        completionGovernance: {
+          title: "完成治理摘要",
+          workerPromptContracts: "工作者提示合约",
+          unblockTasks: "解阻塞任务",
+          onIncomplete: "未完成时",
+          onBlocked: "阻塞时",
+          doneChecks: "完成定义检查",
+          unblockOwner: "解阻塞负责人",
+          unblockMode: "解阻塞模式",
+          unblockTrigger: "解阻塞触发器",
+          advisoryNote:
+            "这些摘要来自持久化的工作者提示合约和解阻塞任务；它们只提供参考，`task_contract` 仍然掌握执行权威。",
         },
         fieldLabels: {
           runId: "Run ID",

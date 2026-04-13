@@ -13,7 +13,7 @@ import {
 } from "../lib/types";
 import {
   fetchRun, fetchEvents, fetchDiff, fetchReports, fetchToolCalls, fetchChainSpec,
-  fetchAgentStatus, fetchRuns, rollbackRun, rejectRun, replayRun, promoteEvidence, fetchOperatorCopilotBrief,
+  fetchAgentStatus, fetchRuns, fetchArtifact, rollbackRun, rejectRun, replayRun, promoteEvidence, fetchOperatorCopilotBrief,
   type EventsStream,
   openEventsStream,
 } from "../lib/api";
@@ -113,6 +113,7 @@ function isTerminalEvent(event: EventRecord): boolean {
 
 export function RunDetailPage({ runId, onBack, onOpenCompare = () => {}, locale = DEFAULT_UI_LOCALE }: RunDetailPageProps) {
   const runDetailCopy = getUiCopy(locale).desktop.runDetail;
+  const completionGovernanceCopy = runDetailCopy.completionGovernance;
   const [run, setRun] = useState<RunDetailPayload | null>(null);
   const [events, setEvents] = useState<EventRecord[]>([]);
   const [diff, setDiff] = useState("");
@@ -123,6 +124,8 @@ export function RunDetailPage({ runId, onBack, onOpenCompare = () => {}, locale 
   const [availableRuns, setAvailableRuns] = useState<RunSummary[]>([]);
   const [baselineRunId, setBaselineRunId] = useState("");
   const [replayResult, setReplayResult] = useState<Record<string, JsonValue> | null>(null);
+  const [planningContracts, setPlanningContracts] = useState<Array<Record<string, JsonValue>>>([]);
+  const [unblockTasks, setUnblockTasks] = useState<Array<Record<string, JsonValue>>>([]);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -184,6 +187,38 @@ export function RunDetailPage({ runId, onBack, onOpenCompare = () => {}, locale 
         setAgentStatus(toArr(d?.agents));
       }
       if (runsRes.status === "fulfilled") setAvailableRuns(toArr(runsRes.value));
+
+      const artifacts = toArr((runData as any)?.manifest?.artifacts);
+      const hasPlanningContractsArtifact = artifacts.some((item) => {
+        const record = asRecord(item);
+        return toStr(record.name, "") === "planning_worker_prompt_contracts" || toStr(record.path, "") === "artifacts/planning_worker_prompt_contracts.json";
+      });
+      const hasUnblockTasksArtifact = artifacts.some((item) => {
+        const record = asRecord(item);
+        return toStr(record.name, "") === "planning_unblock_tasks" || toStr(record.path, "") === "artifacts/planning_unblock_tasks.json";
+      });
+
+      const [planningContractsArtifactRes, unblockTasksArtifactRes] = await Promise.allSettled([
+        hasPlanningContractsArtifact
+          ? fetchArtifact(runId, "planning_worker_prompt_contracts.json")
+          : Promise.resolve(null),
+        hasUnblockTasksArtifact
+          ? fetchArtifact(runId, "planning_unblock_tasks.json")
+          : Promise.resolve(null),
+      ]);
+      if (loadToken !== loadTokenRef.current) {
+        return;
+      }
+      setPlanningContracts(
+        planningContractsArtifactRes.status === "fulfilled" && planningContractsArtifactRes.value
+          ? toArr(planningContractsArtifactRes.value.data as Array<Record<string, JsonValue>>)
+          : [],
+      );
+      setUnblockTasks(
+        unblockTasksArtifactRes.status === "fulfilled" && unblockTasksArtifactRes.value
+          ? toArr(unblockTasksArtifactRes.value.data as Array<Record<string, JsonValue>>)
+          : [],
+      );
     } catch (err) {
       setError(sanitizeUiError(err, "Run detail failed to load"));
     } finally {
@@ -376,6 +411,32 @@ export function RunDetailPage({ runId, onBack, onOpenCompare = () => {}, locale 
   const roleBindingReadModel = run.role_binding_read_model;
   const isTerminal = isTerminalStatus(run.status);
   const pendingApprovals = events.filter(ev => (ev.event || "").toUpperCase() === "HUMAN_APPROVAL_REQUIRED");
+  const continuationOnIncomplete = Array.from(
+    new Set(
+      planningContracts
+        .map((contract) => toStr(asRecord(asRecord(contract).continuation_policy).on_incomplete, ""))
+        .filter(Boolean),
+    ),
+  );
+  const continuationOnBlocked = Array.from(
+    new Set(
+      planningContracts
+        .map((contract) => toStr(asRecord(asRecord(contract).continuation_policy).on_blocked, ""))
+        .filter(Boolean),
+    ),
+  );
+  const doneChecks = Array.from(
+    new Set(
+      planningContracts.flatMap((contract) =>
+        toArr(asRecord(asRecord(contract).done_definition).acceptance_checks as unknown[] | null | undefined)
+          .map((item) => toStr(item, ""))
+          .filter(Boolean),
+      ),
+    ),
+  );
+  const unblockOwners = Array.from(new Set(unblockTasks.map((task) => toStr(asRecord(task).owner, "")).filter(Boolean)));
+  const unblockModes = Array.from(new Set(unblockTasks.map((task) => toStr(asRecord(task).mode, "")).filter(Boolean)));
+  const unblockTriggers = Array.from(new Set(unblockTasks.map((task) => toStr(asRecord(task).trigger, "")).filter(Boolean)));
   const semanticType = outcomeSemantic(run.outcome_type, run.status, run.failure_class, run.failure_code);
   const outcomeSemanticText = outcomeSemanticLabel(
     run.outcome_type,
@@ -483,6 +544,36 @@ export function RunDetailPage({ runId, onBack, onOpenCompare = () => {}, locale 
                   <div className="data-list-row"><span className="data-list-label">{runDetailCopy.bindingReadModel.toolExecution}</span><span className="data-list-value mono">{formatRoleBindingRuntimeCapabilitySummary(roleBindingReadModel)}</span></div>
                 </div>
                 <div className="muted text-xs">{runDetailCopy.bindingReadModel.readOnlyNote}</div>
+              </div>
+            ) : null}
+            {planningContracts.length > 0 || unblockTasks.length > 0 ? (
+              <div className="stack-gap-2 mt-3" data-testid="run-detail-completion-governance">
+                <div className="muted text-xs fw-500">{completionGovernanceCopy.title}</div>
+                <div className="data-list">
+                  <div className="data-list-row"><span className="data-list-label">{completionGovernanceCopy.workerPromptContracts}</span><span className="data-list-value mono">{planningContracts.length}</span></div>
+                  {unblockTasks.length > 0 ? (
+                    <div className="data-list-row"><span className="data-list-label">{completionGovernanceCopy.unblockTasks}</span><span className="data-list-value mono">{unblockTasks.length}</span></div>
+                  ) : null}
+                  {continuationOnIncomplete.length > 0 ? (
+                    <div className="data-list-row"><span className="data-list-label">{completionGovernanceCopy.onIncomplete}</span><span className="data-list-value mono">{continuationOnIncomplete.join(" / ")}</span></div>
+                  ) : null}
+                  {continuationOnBlocked.length > 0 ? (
+                    <div className="data-list-row"><span className="data-list-label">{completionGovernanceCopy.onBlocked}</span><span className="data-list-value mono">{continuationOnBlocked.join(" / ")}</span></div>
+                  ) : null}
+                  {doneChecks.length > 0 ? (
+                    <div className="data-list-row"><span className="data-list-label">{completionGovernanceCopy.doneChecks}</span><span className="data-list-value mono">{doneChecks.join(" / ")}</span></div>
+                  ) : null}
+                  {unblockOwners.length > 0 ? (
+                    <div className="data-list-row"><span className="data-list-label">{completionGovernanceCopy.unblockOwner}</span><span className="data-list-value mono">{unblockOwners.join(" / ")}</span></div>
+                  ) : null}
+                  {unblockModes.length > 0 ? (
+                    <div className="data-list-row"><span className="data-list-label">{completionGovernanceCopy.unblockMode}</span><span className="data-list-value mono">{unblockModes.join(" / ")}</span></div>
+                  ) : null}
+                  {unblockTriggers.length > 0 ? (
+                    <div className="data-list-row"><span className="data-list-label">{completionGovernanceCopy.unblockTrigger}</span><span className="data-list-value mono">{unblockTriggers.join(" / ")}</span></div>
+                  ) : null}
+                </div>
+                <div className="muted text-xs">{completionGovernanceCopy.advisoryNote}</div>
               </div>
             ) : null}
           </CardBody>
