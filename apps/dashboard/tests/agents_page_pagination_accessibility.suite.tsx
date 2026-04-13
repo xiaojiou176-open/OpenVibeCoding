@@ -102,7 +102,7 @@ describe("agents page pagination semantics", () => {
     expect(screen.getByText("Failure-led queue")).toBeInTheDocument();
     expect(screen.getByText("Registered capacity")).toBeInTheDocument();
     expect(screen.getByText("Pending scheduling backlog")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Role catalog (read-only first screen)" })).toBeInTheDocument();
+    expect(screen.getByText("Role desk (read-only mirror)")).toBeInTheDocument();
 
     expect(screen.queryByRole("link", { name: "Previous" })).toBeNull();
     expect(screen.queryByRole("link", { name: "Next" })).toBeNull();
