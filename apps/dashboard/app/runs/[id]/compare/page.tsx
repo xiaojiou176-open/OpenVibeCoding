@@ -222,7 +222,11 @@ export default async function RunComparePage({
           <Card className="compare-archive-card">
             <h3>{choreographyTitle}</h3>
             <div className="stack-gap-2">
-              <p className="muted">Keep the second card decision-oriented too. Treat this as operator choreography, not a duplicate summary.</p>
+              <p className="muted">
+                {hasCompareReport
+                  ? "Keep the second card decision-oriented too. Treat this as operator choreography, not a duplicate summary."
+                  : "Observation mode stays honest here: missing compare data should pause judgment and point you back to replay."}
+              </p>
               <p className="mono">{hasCompareReport ? "Compare first → proof second → replay only after the verdict is clear." : "No compare report yet → return to Run Detail, generate compare, then re-open this room."}</p>
               <p className="mono">Evidence chain: {evidenceStatus}</p>
               <p className="mono">LLM params: {llmParamsStatus} · Snapshot: {llmSnapshotStatus}</p>

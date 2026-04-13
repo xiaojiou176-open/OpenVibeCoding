@@ -437,8 +437,8 @@ describe("dashboard home run-summary clarity", () => {
     expect(screen.getByText("plan / delegate / track / resume / prove")).toBeInTheDocument();
     expect(screen.getByText("OpenVibeCoding command tower")).toBeInTheDocument();
     expect(screen.getByLabelText("Platform status overview")).toBeInTheDocument();
-    expect(screen.getByText("Governance view")).toBeInTheDocument();
-    expect(screen.getByText("Live verification required")).toBeInTheDocument();
-    expect(screen.getByText("Page-level status")).toBeInTheDocument();
+    expect(screen.getByText("Operator shell")).toBeInTheDocument();
+    expect(screen.getByText("Live read-back")).toBeInTheDocument();
+    expect(screen.getByText("Page contract")).toBeInTheDocument();
   });
 });

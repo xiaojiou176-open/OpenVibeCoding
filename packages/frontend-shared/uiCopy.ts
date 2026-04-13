@@ -1334,9 +1334,9 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
       localeToggleAriaLabel: "Switch to Chinese",
       localeToggleButtonLabel: "中文",
       badges: {
-        governanceView: "Governance view",
-        liveVerificationRequired: "Live verification required",
-        pageLevelStatus: "Page-level status",
+        governanceView: "Operator shell",
+        liveVerificationRequired: "Live read-back",
+        pageLevelStatus: "Page contract",
       },
       approval: {
         pageTitle: "Manual approvals",
@@ -2629,9 +2629,9 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
       localeToggleAriaLabel: "切换到英文",
       localeToggleButtonLabel: "EN",
       badges: {
-        governanceView: "治理视图",
-        liveVerificationRequired: "需要实时核验",
-        pageLevelStatus: "页面级状态",
+        governanceView: "操作壳层",
+        liveVerificationRequired: "实时回读",
+        pageLevelStatus: "页面契约",
       },
       approval: {
         pageTitle: "人工审批",

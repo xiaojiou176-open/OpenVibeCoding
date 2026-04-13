@@ -411,7 +411,9 @@ export default async function PlannerPage() {
               <span className="cell-sub mono muted">
                 {text.title === "规划桌" ? "当前最该先处理的波次" : "First thing to resolve"}
               </span>
-              <Badge variant={priority.tone}>{rows.length} rows</Badge>
+              <Badge variant={priority.tone}>
+                {rows.length === 0 ? (locale === "zh-CN" ? "发车模式" : "Launch mode") : `${rows.length} rows`}
+              </Badge>
             </div>
             <strong className="planner-priority-title">{priority.title}</strong>
             <p className="planner-priority-summary">{priority.summary}</p>
