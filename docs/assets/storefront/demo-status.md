@@ -75,6 +75,6 @@ The public storytelling shorthand is now:
   historical blocker receipt from an earlier failed benchmark route.
 - `docs/releases/assets/news-digest-healthy-proof-route-2026-03-27.md` remains
   a historical blocker receipt from earlier failed healthy-proof attempts.
-- `https://xiaojiou176-open.github.io/CortexPilot-public/` is now the live GitHub
+- `https://xiaojiou176-open.github.io/OpenVibeCoding/` is now the live GitHub
   Pages site backed by `main` / `/docs`.
 - None of these captures should be described as proof of live hosted readiness, live GitHub publication state, or broad production-scale stability.

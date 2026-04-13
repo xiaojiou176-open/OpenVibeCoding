@@ -7,7 +7,7 @@ type DashboardPublicEnvKey =
   | "NEXT_PUBLIC_API_BASE"
   | "NEXT_PUBLIC_PM_COPY_VARIANT";
 
-const DEFAULT_DASHBOARD_PUBLIC_DOCS_BASE_URL = "https://xiaojiou176-open.github.io/CortexPilot-public";
+const DEFAULT_DASHBOARD_PUBLIC_DOCS_BASE_URL = "https://xiaojiou176-open.github.io/OpenVibeCoding";
 const DASHBOARD_PUBLIC_DOCS_PATH_RE = /^\/(ai-surfaces|api|builders|compatibility|ecosystem|integrations|mcp|skills|use-cases)(?:\/|$)/;
 
 function readPublicEnv(key: DashboardPublicEnvKey): string {

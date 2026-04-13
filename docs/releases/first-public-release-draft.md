@@ -60,10 +60,10 @@ happy-path baseline for proof-oriented copy and future benchmark publication.
 - confirm the GitHub social preview in repository settings before calling the
   release live-public complete
 - verify the current GitHub Release page at
-  `https://github.com/xiaojiou176-open/CortexPilot-public/releases/tag/v0.1.0-alpha.1`
+  `https://github.com/xiaojiou176-open/OpenVibeCoding/releases/tag/v0.1.0-alpha.1`
   still matches this repo-side draft instead of assuming it does
 - verify the live GitHub Pages site at
-  `https://xiaojiou176-open.github.io/CortexPilot-public/` is serving the
+  `https://xiaojiou176-open.github.io/OpenVibeCoding/` is serving the
   current landing copy instead of inferring that from git alone
 - verify whether GitHub Discussions, release visibility, and subscriber flows
   are currently enabled in the live repository settings

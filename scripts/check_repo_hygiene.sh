@@ -263,7 +263,7 @@ else
 fi
 
 info "Running GitHub security alerts gate"
-if ! github_security_alerts_output="$(run_governance_py scripts/check_github_security_alerts.py --mode "$GITHUB_ALERTS_MODE" --repo xiaojiou176-open/CortexPilot-public 2>&1)"; then
+if ! github_security_alerts_output="$(run_governance_py scripts/check_github_security_alerts.py --mode "$GITHUB_ALERTS_MODE" 2>&1)"; then
   echo "$github_security_alerts_output"
   fail "GitHub security alerts gate failed"
   violations=$((violations + 1))

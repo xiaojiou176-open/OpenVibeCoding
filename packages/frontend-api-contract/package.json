@@ -3,14 +3,14 @@
   "version": "0.1.0",
   "private": false,
   "description": "Generated frontend-safe route, query, and type contract surface for CortexPilot control-plane consumers.",
-  "homepage": "https://xiaojiou176-open.github.io/CortexPilot-public/api/",
+  "homepage": "https://xiaojiou176-open.github.io/OpenVibeCoding/api/",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xiaojiou176-open/CortexPilot-public.git",
+    "url": "git+https://github.com/xiaojiou176-open/OpenVibeCoding.git",
     "directory": "packages/frontend-api-contract"
   },
   "bugs": {
-    "url": "https://github.com/xiaojiou176-open/CortexPilot-public/issues"
+    "url": "https://github.com/xiaojiou176-open/OpenVibeCoding/issues"
   },
   "license": "MIT",
   "keywords": [

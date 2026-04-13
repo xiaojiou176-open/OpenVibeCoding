@@ -146,7 +146,7 @@ Work in CortexPilot as a contract-first engineering agent:
   module-local README changes
 - when the live public GitHub surface moves or changes repository URLs, sync the
   root docs/security/storefront entrypoints in the same patch so repo-side
-  links do not drift behind the published `CortexPilot-public` surface
+  links do not drift behind the published `OpenVibeCoding` surface
 - when security reporting wording changes, keep `SECURITY.md`, `SUPPORT.md`,
   issue template contact links, and the root README aligned in the same patch
 - when security-scan or fixture-hygiene work changes tracked test literals or

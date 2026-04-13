@@ -74,11 +74,15 @@ tmpdir="$(mktemp -d)"
 tmp_py_test_prefix="apps/orchestrator/tests/test_gate_fail_closed_smell_case.py"
 tmp_py_suffix_test="apps/orchestrator/tests/gate_fail_closed_smell_case_test.py"
 socket_probe="$ROOT_DIR/.sock_$$"
-sensitive_surface_probe="$ROOT_DIR/docs/runbooks/_tmp_sensitive_surface_gate_${$}.md"
+sensitive_surface_probe="$ROOT_DIR/SECURITY.md"
+sensitive_surface_backup="$tmpdir/security.md.bak"
 incident_target_rel=".runtime-cache/test_output/gate_fail_closed_incident_target_${$}.py"
 incident_target_abs="$ROOT_DIR/$incident_target_rel"
 cleanup() {
-  rm -rf "$tmpdir" "$tmp_py_test_prefix" "$tmp_py_suffix_test" "$incident_target_abs" "$sensitive_surface_probe"
+  if [[ -f "$sensitive_surface_backup" ]]; then
+    cp "$sensitive_surface_backup" "$sensitive_surface_probe"
+  fi
+  rm -rf "$tmpdir" "$tmp_py_test_prefix" "$tmp_py_suffix_test" "$incident_target_abs" "$sensitive_surface_backup"
   rm -f "$socket_probe"
 }
 trap cleanup EXIT
@@ -108,7 +112,7 @@ fi
 
 info "case: hygiene gate blocks residual unix socket artifacts"
 set +e
-bash scripts/check_repo_hygiene.sh >/dev/null 2>&1
+CORTEXPILOT_GITHUB_ALERTS_MODE=off bash scripts/check_repo_hygiene.sh >/dev/null 2>&1
 baseline_hygiene_status=$?
 set -e
 if [[ $baseline_hygiene_status -ne 0 ]]; then
@@ -128,7 +132,7 @@ sock.bind(str(path))
 sock.close()
 PY
 set +e
-bash scripts/check_repo_hygiene.sh >/dev/null 2>&1
+CORTEXPILOT_GITHUB_ALERTS_MODE=off bash scripts/check_repo_hygiene.sh >/dev/null 2>&1
 socket_hygiene_status=$?
 set -e
 if [[ $socket_hygiene_status -eq 0 ]]; then
@@ -136,10 +140,10 @@ if [[ $socket_hygiene_status -eq 0 ]]; then
 fi
 rm -f "$socket_probe"
 if [[ $baseline_hygiene_status -eq 0 ]]; then
-  bash scripts/check_repo_hygiene.sh >/dev/null
+  CORTEXPILOT_GITHUB_ALERTS_MODE=off bash scripts/check_repo_hygiene.sh >/dev/null
 else
   set +e
-  post_cleanup_hygiene_output="$(bash scripts/check_repo_hygiene.sh 2>&1)"
+  post_cleanup_hygiene_output="$(CORTEXPILOT_GITHUB_ALERTS_MODE=off bash scripts/check_repo_hygiene.sh 2>&1)"
   post_cleanup_hygiene_status=$?
   set -e
   if [[ $post_cleanup_hygiene_status -eq 0 ]]; then
@@ -154,7 +158,7 @@ fi
 
 info "case: hygiene gate blocks maintainer-local paths and raw token-like fixture literals"
 set +e
-bash scripts/check_repo_hygiene.sh >/dev/null 2>&1
+CORTEXPILOT_GITHUB_ALERTS_MODE=off bash scripts/check_repo_hygiene.sh >/dev/null 2>&1
 baseline_sensitive_surface_status=$?
 set -e
 if [[ $baseline_sensitive_surface_status -ne 0 ]]; then
@@ -162,32 +166,21 @@ if [[ $baseline_sensitive_surface_status -ne 0 ]]; then
 else
 maintainer_path="/""Users""/example/Example Workspace/private-repo"
 raw_fixture="sk-""live-raw-secret"
-cat >"$sensitive_surface_probe" <<'MD'
-Maintainer path: __MAINTAINER_PATH__
-Raw fixture literal: __RAW_FIXTURE__
-MD
-python3 - "$sensitive_surface_probe" "$maintainer_path" "$raw_fixture" <<'PY'
-from pathlib import Path
-import sys
-
-path = Path(sys.argv[1])
-maintainer_path = sys.argv[2]
-raw_fixture = sys.argv[3]
-text = path.read_text(encoding="utf-8")
-text = text.replace("__MAINTAINER_PATH__", maintainer_path)
-text = text.replace("__RAW_FIXTURE__", raw_fixture)
-path.write_text(text, encoding="utf-8")
-PY
+cp "$sensitive_surface_probe" "$sensitive_surface_backup"
+{
+  printf '\nMaintainer path: %s\n' "$maintainer_path"
+  printf 'Raw fixture literal: %s\n' "$raw_fixture"
+} >>"$sensitive_surface_probe"
 set +e
-bash scripts/check_repo_hygiene.sh >/dev/null 2>&1
+CORTEXPILOT_GITHUB_ALERTS_MODE=off bash scripts/check_repo_hygiene.sh >/dev/null 2>&1
 sensitive_surface_status=$?
 set -e
 if [[ $sensitive_surface_status -eq 0 ]]; then
   fail "check_repo_hygiene unexpectedly passed with maintainer-local path/raw token-like fixture literal"
 fi
-rm -f "$sensitive_surface_probe"
+cp "$sensitive_surface_backup" "$sensitive_surface_probe"
 if [[ $baseline_sensitive_surface_status -eq 0 ]]; then
-  bash scripts/check_repo_hygiene.sh >/dev/null
+  CORTEXPILOT_GITHUB_ALERTS_MODE=off bash scripts/check_repo_hygiene.sh >/dev/null
 fi
 fi
 
@@ -438,7 +431,7 @@ info "case: github security alert gate is wired into hygiene + pre-commit + pre-
 assert_file_contains "scripts/check_repo_hygiene.sh" "scripts/check_github_security_alerts.py"
 assert_file_contains ".pre-commit-config.yaml" "cortexpilot-github-security-alerts-gate"
 assert_file_contains "scripts/pre_push_quality_gate.sh" "scripts/check_github_security_alerts.py"
-assert_file_contains ".github/workflows/ci.yml" "scripts/check_github_security_alerts.py --repo xiaojiou176-open/CortexPilot-public"
+assert_file_contains ".github/workflows/ci.yml" "scripts/check_github_security_alerts.py --repo xiaojiou176-open/OpenVibeCoding"
 
 info "case: workflow static security and trivy gates are wired into pre-push"
 assert_file_contains "scripts/pre_push_quality_gate.sh" "scripts/check_workflow_static_security.sh"

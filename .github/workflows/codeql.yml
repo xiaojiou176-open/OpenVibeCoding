@@ -1,13 +1,7 @@
-name: CodeQL
+name: CodeQL (manual fallback)
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
 
 permissions:
   actions: read

@@ -3,9 +3,9 @@
   "name": "io.github.xiaojiou176-open/cortexpilot-readonly",
   "title": "CortexPilot Read-only MCP",
   "description": "Read-only MCP surface for CortexPilot command-tower, workflow proof, queue state, replay, and incident inspection.",
-  "websiteUrl": "https://xiaojiou176-open.github.io/CortexPilot-public/mcp/",
+  "websiteUrl": "https://xiaojiou176-open.github.io/OpenVibeCoding/mcp/",
   "repository": {
-    "url": "https://github.com/xiaojiou176-open/CortexPilot-public",
+    "url": "https://github.com/xiaojiou176-open/OpenVibeCoding",
     "source": "github"
   },
   "version": "0.1.0a4",

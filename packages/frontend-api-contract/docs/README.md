@@ -37,10 +37,10 @@ Use this package when you want:
 
 ## Shortest truthful onboarding order
 
-1. Start with the public [compatibility matrix](https://xiaojiou176-open.github.io/CortexPilot-public/compatibility/) when your team still needs the shortest “which adoption ladder fits us?” answer.
-2. Continue to the public [agent starter kits](https://xiaojiou176-open.github.io/CortexPilot-public/agent-starters/) when your next move is wiring a real Codex / Claude Code / OpenClaw config instead of only reading the route map.
-3. Continue to the public [API quickstart](https://xiaojiou176-open.github.io/CortexPilot-public/api/) when you want the human-readable HTTP boundary.
-4. Continue to the public [builder quickstart](https://xiaojiou176-open.github.io/CortexPilot-public/builders/) when you want the package map.
+1. Start with the public [compatibility matrix](https://xiaojiou176-open.github.io/OpenVibeCoding/compatibility/) when your team still needs the shortest “which adoption ladder fits us?” answer.
+2. Continue to the public [agent starter kits](https://xiaojiou176-open.github.io/OpenVibeCoding/agent-starters/) when your next move is wiring a real Codex / Claude Code / OpenClaw config instead of only reading the route map.
+3. Continue to the public [API quickstart](https://xiaojiou176-open.github.io/OpenVibeCoding/api/) when you want the human-readable HTTP boundary.
+4. Continue to the public [builder quickstart](https://xiaojiou176-open.github.io/OpenVibeCoding/builders/) when you want the package map.
 5. Import `@cortexpilot/frontend-api-contract` when you are working inside the same repo or a vendored workspace copy and need generated route/query/type truth without backend imports.
 
 ## Ecosystem reality anchors

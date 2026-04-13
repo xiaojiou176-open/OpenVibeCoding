@@ -3,14 +3,14 @@
   "version": "0.1.0",
   "private": false,
   "description": "Thin frontend API client and repo-owned control-plane starter for CortexPilot dashboard, desktop, and web consumers.",
-  "homepage": "https://xiaojiou176-open.github.io/CortexPilot-public/builders/",
+  "homepage": "https://xiaojiou176-open.github.io/OpenVibeCoding/builders/",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xiaojiou176-open/CortexPilot-public.git",
+    "url": "git+https://github.com/xiaojiou176-open/OpenVibeCoding.git",
     "directory": "packages/frontend-api-client"
   },
   "bugs": {
-    "url": "https://github.com/xiaojiou176-open/CortexPilot-public/issues"
+    "url": "https://github.com/xiaojiou176-open/OpenVibeCoding/issues"
   },
   "license": "MIT",
   "keywords": [

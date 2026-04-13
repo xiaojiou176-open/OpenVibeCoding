@@ -50,8 +50,8 @@ Lane order today is:
 
 | Surface | Current status | Official claim | Install path | Protocol / Auth | Next action |
 | --- | --- | --- | --- | --- | --- |
-| GitHub repo | `shipped` | Canonical public source, docs, code, and release front door | `https://github.com/xiaojiou176-open/CortexPilot-public` | none | keep sharp and truthful |
-| GitHub Pages | `shipped` | Canonical public product front door | `https://xiaojiou176-open.github.io/CortexPilot-public/` | none | keep first screen compressed |
+| GitHub repo | `shipped` | Canonical public source, docs, code, and release front door | `https://github.com/xiaojiou176-open/OpenVibeCoding` | none | keep sharp and truthful |
+| GitHub Pages | `shipped` | Canonical public product front door | `https://xiaojiou176-open.github.io/OpenVibeCoding/` | none | keep first screen compressed |
 | First proven workflow (`news_digest`) | `shipped` | Official public proof-first baseline | `docs/use-cases/index.html` and tracked proof assets | read-only proof / replay story | keep as the only release-proven public workflow |
 | Read-only MCP | `shipped` | Repo-owned stdio JSON-RPC MCP for machine-readable inspection only | bootstrapped repo checkout + `bash __CORTEXPILOT_REPO_ROOT__/scripts/run_readonly_mcp.sh` or the tracked starter templates | `stdio`, JSON-RPC 2.0, read-only, repo-local, no hosted auth, no OAuth | keep artifactized through `configs/mcp_public_manifest.json` |
 | PyPI package (`cortexpilot-orchestrator`) | `shipped` | Published package for the public read-only MCP runtime | `https://pypi.org/project/cortexpilot-orchestrator/0.1.0a4/` | package install only | keep package README, entrypoints, and version markers aligned with registry truth |

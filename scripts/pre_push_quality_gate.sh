@@ -186,7 +186,7 @@ if [[ "$run_local_ci" == "1" ]]; then
   echo "🚦 [pre-push-quality-gate] running strict local verification bundle (opt-in)"
   bash scripts/check_secret_scan_closeout.sh --mode current
   bash scripts/check_trivy_repo_scan.sh
-  bash scripts/run_governance_py.sh scripts/check_github_security_alerts.py --mode require --repo xiaojiou176-open/CortexPilot-public
+  bash scripts/run_governance_py.sh scripts/check_github_security_alerts.py --mode require
   bash scripts/run_governance_py.sh scripts/check_developer_facing_english.py
   bash scripts/run_governance_py.sh scripts/check_third_party_asset_registry.py
   bash scripts/run_governance_py.sh scripts/check_root_semantic_cleanliness.py

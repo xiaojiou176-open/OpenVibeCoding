@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://xiaojiou176-open.github.io/CortexPilot-public/sitemap.xml
+Sitemap: https://xiaojiou176-open.github.io/OpenVibeCoding/sitemap.xml

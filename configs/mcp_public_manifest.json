@@ -7,9 +7,9 @@
   "version_truth": "This is the latest published public read-only MCP package version for registry and package-manager installs. The latest GitHub release tag can differ; re-check PyPI, Official MCP Registry, and the repo release page before broadening claims.",
   "release_represents_current_main": false,
   "description": "Repo-owned read-only MCP server for CortexPilot runs, workflows, approvals, compare, proof, and incident summaries.",
-  "homepage": "https://xiaojiou176-open.github.io/CortexPilot-public/mcp/",
-  "distribution_page": "https://github.com/xiaojiou176-open/CortexPilot-public/blob/main/DISTRIBUTION.md",
-  "repository": "https://github.com/xiaojiou176-open/CortexPilot-public",
+  "homepage": "https://xiaojiou176-open.github.io/OpenVibeCoding/mcp/",
+  "distribution_page": "https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/DISTRIBUTION.md",
+  "repository": "https://github.com/xiaojiou176-open/OpenVibeCoding",
   "transport": "stdio",
   "protocol": "json-rpc",
   "auth_boundary": {

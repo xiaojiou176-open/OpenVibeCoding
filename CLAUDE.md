@@ -71,7 +71,7 @@ This file mirrors the root AI entrypoint for tools that prefer `CLAUDE.md`.
   alone
 - when the live public GitHub surface moves or changes repository URLs, sync
   the root docs/security/storefront entrypoints in the same patch so
-  repo-side links do not drift behind the published `CortexPilot-public`
+  repo-side links do not drift behind the published `OpenVibeCoding`
   surface
 - when security reporting wording changes, keep `SECURITY.md`, `SUPPORT.md`,
   issue template contact links, and the root README aligned in the same patch

@@ -35,7 +35,7 @@ repos:
 
       - id: cortexpilot-github-security-alerts-gate
         name: cortexpilot-github-security-alerts-gate
-        entry: bash scripts/run_governance_py.sh scripts/check_github_security_alerts.py --mode require --repo xiaojiou176/CortexPilot-public
+        entry: bash scripts/run_governance_py.sh scripts/check_github_security_alerts.py --mode require
         language: system
         pass_filenames: false
         always_run: true

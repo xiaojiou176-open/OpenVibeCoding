@@ -7,8 +7,8 @@ summary: >
   Repo-owned cross-tool skill that routes Codex, Claude Code, and OpenClaw-style
   workflows to the right CortexPilot adoption lane without overclaiming hosted,
   write-capable MCP, or published listing support.
-homepage: https://github.com/xiaojiou176-open/CortexPilot-public
-repository: https://github.com/xiaojiou176-open/CortexPilot-public
+homepage: https://github.com/xiaojiou176-open/OpenVibeCoding
+repository: https://github.com/xiaojiou176-open/OpenVibeCoding
 license: MIT
 authors:
   - name: CortexPilot

@@ -36,13 +36,13 @@ vendored internal reuse rather than a separate public package story.
 If you want the public explanation for how this shared substrate fits into
 Codex / Claude Code / OpenClaw workflows, use:
 
-- [Compatibility matrix](https://xiaojiou176-open.github.io/CortexPilot-public/compatibility/)
-- [Integration guide](https://xiaojiou176-open.github.io/CortexPilot-public/integrations/)
-- [Agent starter kits](https://xiaojiou176-open.github.io/CortexPilot-public/agent-starters/)
-- [Read-only MCP quickstart](https://xiaojiou176-open.github.io/CortexPilot-public/mcp/)
-- [API quickstart](https://xiaojiou176-open.github.io/CortexPilot-public/api/)
+- [Compatibility matrix](https://xiaojiou176-open.github.io/OpenVibeCoding/compatibility/)
+- [Integration guide](https://xiaojiou176-open.github.io/OpenVibeCoding/integrations/)
+- [Agent starter kits](https://xiaojiou176-open.github.io/OpenVibeCoding/agent-starters/)
+- [Read-only MCP quickstart](https://xiaojiou176-open.github.io/OpenVibeCoding/mcp/)
+- [API quickstart](https://xiaojiou176-open.github.io/OpenVibeCoding/api/)
 - [Contract package guide](../frontend-api-contract/docs/README.md)
-- [Skills quickstart](https://xiaojiou176-open.github.io/CortexPilot-public/skills/)
+- [Skills quickstart](https://xiaojiou176-open.github.io/OpenVibeCoding/skills/)
 
 ## Ecosystem reality anchors
 
