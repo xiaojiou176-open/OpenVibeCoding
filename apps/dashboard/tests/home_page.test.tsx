@@ -58,11 +58,11 @@ describe("dashboard home run-summary clarity", () => {
   it("renders first-run CTA and onboarding guidance when no runs", async () => {
     render(await Home());
 
-    expect(screen.getByRole("heading", { name: "The command tower for AI engineering" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "The open command tower for AI engineering" })).toBeInTheDocument();
     expect(
       screen.getByText(/Stop babysitting AI coding work\./)
     ).toBeInTheDocument();
-    expect(screen.getByText("Three engineering layers behind the command tower")).toBeInTheDocument();
+    expect(screen.getByText("Method layer, not the hero")).toBeInTheDocument();
     expect(screen.getByText("Prompt Engineering")).toBeInTheDocument();
     expect(screen.getByText("Context Engineering")).toBeInTheDocument();
     expect(screen.getByText("Harness Engineering")).toBeInTheDocument();
@@ -86,7 +86,7 @@ describe("dashboard home run-summary clarity", () => {
       "href",
       "https://xiaojiou176-open.github.io/CortexPilot-public/use-cases/"
     );
-    expect(screen.getByText("Choose the right adoption path")).toBeInTheDocument();
+    expect(screen.getByText("Extended surfaces")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "See first proven workflow" })).toHaveAttribute(
       "href",
       "https://xiaojiou176-open.github.io/CortexPilot-public/use-cases/"
@@ -125,7 +125,7 @@ describe("dashboard home run-summary clarity", () => {
       "https://xiaojiou176-open.github.io/CortexPilot-public/api/"
     );
     expect(screen.getByText("Live Workflow Case gallery")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Open Workflow Cases" })).toHaveAttribute("href", "/workflows");
+    expect(screen.getAllByRole("link", { name: "Open Workflow Cases" })[0]).toHaveAttribute("href", "/workflows");
     expect(screen.getByRole("link", { name: "See first proven workflow" })).toHaveAttribute(
       "href",
       "https://xiaojiou176-open.github.io/CortexPilot-public/use-cases/"
@@ -135,7 +135,7 @@ describe("dashboard home run-summary clarity", () => {
     expect(screen.getByText("Stable: no recent failed runs (0%)")).toHaveClass("badge--success");
     expect(screen.getByRole("progressbar", { name: "Failure share 0/0" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "View all runs" })).toHaveAttribute("href", "/runs");
-    expect(screen.queryByRole("link", { name: "Open Command Tower" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Open Command Tower" })).toHaveAttribute("href", "/command-tower");
     expect(screen.queryByRole("link", { name: "Quick approval" })).not.toBeInTheDocument();
   }, 30000);
 
@@ -226,9 +226,9 @@ describe("dashboard home run-summary clarity", () => {
 
     render(await Home());
 
-    expect(screen.getByRole("heading", { name: "AI 工程的指挥塔" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "面向 AI 工程的开放指挥塔" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "启动首个任务" })).toHaveAttribute("href", "/pm");
-    expect(screen.getByText("选择正确的采用路径")).toBeInTheDocument();
+    expect(screen.getByText("延伸入口")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "打开 AI + MCP + API 页面" })).toHaveAttribute(
       "href",
       "https://xiaojiou176-open.github.io/CortexPilot-public/ai-surfaces/"
@@ -416,7 +416,7 @@ describe("dashboard home run-summary clarity", () => {
   });
 
   it("renders the public shell with English-first layout metadata and chrome copy", () => {
-    expect(metadata.title).toBe("CortexPilot | The command tower for AI engineering");
+    expect(metadata.title).toBe("OpenVibeCoding | The open command tower for AI engineering");
     expect(metadata.description).toContain("Stop babysitting AI coding work.");
 
     render(
@@ -427,8 +427,9 @@ describe("dashboard home run-summary clarity", () => {
 
     expect(screen.getByRole("link", { name: "Skip to dashboard content" })).toHaveAttribute("href", "#dashboard-content");
     expect(screen.getAllByLabelText("Dashboard navigation").length).toBeGreaterThan(0);
-    expect(screen.getByText("Plan · Delegate · Track · Resume · Prove")).toBeInTheDocument();
-    expect(screen.getByText("AI engineering command tower")).toBeInTheDocument();
+    expect(screen.getByText("OpenVibeCoding")).toBeInTheDocument();
+    expect(screen.getByText("plan / delegate / track / resume / prove")).toBeInTheDocument();
+    expect(screen.getByText("OpenVibeCoding command tower")).toBeInTheDocument();
     expect(screen.getByLabelText("Platform status overview")).toBeInTheDocument();
     expect(screen.getByText("Governance view")).toBeInTheDocument();
     expect(screen.getByText("Live verification required")).toBeInTheDocument();

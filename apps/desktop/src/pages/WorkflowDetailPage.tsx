@@ -128,6 +128,35 @@ export function WorkflowDetailPage({ workflowId, onBack, onNavigateToRun, locale
     <div className="content">
       <Button variant="ghost" className="mb-2" onClick={onBack}>{workflowDetailCopy.backToList}</Button>
       <div className="section-header"><div><h1 className="page-title mono">{workflowData.workflow.workflow_id}</h1></div><Badge variant={statusVariant(workflowData.workflow.status)}>{statusLabelDesktop(workflowData.workflow.status, locale)}</Badge></div>
+      <div className="grid-2 mb-3">
+        <Card>
+          <CardHeader>
+            <CardTitle>{workflowDetailCopy.nextOperatorActionTitle}</CardTitle>
+          </CardHeader>
+          <CardBody>
+            <div className="stack-gap-2">
+              <div className="mono">{recommendedAction}</div>
+              <div className="muted">{workflowDetailCopy.nextOperatorActionHint}</div>
+            </div>
+          </CardBody>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>{workflowDetailCopy.summaryTitle}</CardTitle>
+          </CardHeader>
+          <CardBody>
+            <div className="stack-gap-2">
+              <div className="mono">{workflowDetailCopy.summaryLabels.status}: {statusLabelDesktop(workflowData.workflow.status || "-", locale)}</div>
+              <div className="mono">{workflowDetailCopy.summaryLabels.objective}: {workflowData.workflow.objective || "-"}</div>
+              <div className="mono">{workflowDetailCopy.summaryLabels.owner}: {workflowData.workflow.owner_pm || "-"}</div>
+              <div className="mono">{workflowDetailCopy.summaryLabels.project}: {workflowData.workflow.project_key || "-"}</div>
+              <div className="mono">{workflowDetailCopy.summaryLabels.verdict}: {workflowData.workflow.verdict || "-"}</div>
+              <div className="mono">{workflowDetailCopy.summaryLabels.pmSessions}: {(workflowData.workflow.pm_session_ids || []).join(", ") || "-"}</div>
+              <div className="mono">{workflowDetailCopy.summaryLabels.summary}: {workflowData.workflow.summary || "-"}</div>
+            </div>
+          </CardBody>
+        </Card>
+      </div>
       <div className="row-gap-2 mb-2">
         <Input
           type="number"
@@ -166,33 +195,6 @@ export function WorkflowDetailPage({ workflowId, onBack, onNavigateToRun, locale
         />
       </div>
       <div className="grid-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>{workflowDetailCopy.nextOperatorActionTitle}</CardTitle>
-          </CardHeader>
-          <CardBody>
-            <div className="stack-gap-2">
-              <div className="mono">{recommendedAction}</div>
-              <div className="muted">{workflowDetailCopy.nextOperatorActionHint}</div>
-            </div>
-          </CardBody>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>{workflowDetailCopy.summaryTitle}</CardTitle>
-          </CardHeader>
-          <CardBody>
-            <div className="stack-gap-2">
-              <div className="mono">{workflowDetailCopy.summaryLabels.status}: {statusLabelDesktop(workflowData.workflow.status || "-", locale)}</div>
-              <div className="mono">{workflowDetailCopy.summaryLabels.objective}: {workflowData.workflow.objective || "-"}</div>
-              <div className="mono">{workflowDetailCopy.summaryLabels.owner}: {workflowData.workflow.owner_pm || "-"}</div>
-              <div className="mono">{workflowDetailCopy.summaryLabels.project}: {workflowData.workflow.project_key || "-"}</div>
-              <div className="mono">{workflowDetailCopy.summaryLabels.verdict}: {workflowData.workflow.verdict || "-"}</div>
-              <div className="mono">{workflowDetailCopy.summaryLabels.pmSessions}: {(workflowData.workflow.pm_session_ids || []).join(", ") || "-"}</div>
-              <div className="mono">{workflowDetailCopy.summaryLabels.summary}: {workflowData.workflow.summary || "-"}</div>
-            </div>
-          </CardBody>
-        </Card>
         <Card>
           <CardHeader>
             <CardTitle>{workflowDetailCopy.readModelTitle}</CardTitle>

@@ -1065,21 +1065,21 @@ export type UiCopy = {
 
 const UI_COPY: Record<UiLocale, UiCopy> = {
   en: {
-    brandTitle: "CortexPilot",
-    brandSubtitle: "Plan · Delegate · Track · Resume · Prove",
+    brandTitle: "OpenVibeCoding",
+    brandSubtitle: "plan / delegate / track / resume / prove",
     dashboard: {
       homePhase2: {
-        heroTitle: "The command tower for AI engineering",
+        heroTitle: "The open command tower for AI engineering",
         heroSubtitle:
-          "Stop babysitting AI coding work. CortexPilot plans, delegates, tracks, resumes, and proves long-running engineering work across Codex and Claude Code while keeping one governed operator path, one case record, and one proof trail.",
+          "Stop babysitting AI coding work. AI coding does not lack models. It lacks a command tower. OpenVibeCoding gives teams one governed operator path to plan, delegate, track, resume, and prove long-running engineering work across Codex and Claude Code.",
         startFirstTaskLabel: "Start first task",
         startNewTaskLabel: "Start new task",
         viewLatestRunsLabel: "View latest runs",
         investigateHighRiskFailuresLabel: "Investigate high-risk failures",
         handleLatestFailureLabel: "Handle latest failure",
-        productSpineTitle: "Plan, delegate, track, resume, and prove",
+        productSpineTitle: "One open command tower, five moves",
         productSpineDescription:
-          "The first screen should explain the operator loop, then anchor it on the three truth surfaces that keep the loop honest: Command Tower, Workflow Cases, and Proof & Replay.",
+          "Start from the live command deck, not the adoption catalog. The loop stays simple: plan, delegate, track, resume, and prove through Command Tower, Workflow Cases, and Proof & Replay.",
         productSpineCards: [
           {
             href: "/command-tower",
@@ -1136,7 +1136,7 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
         ],
         publicAdvantagesTitle: "Three engineering layers behind the command tower",
         publicAdvantagesDescription:
-          "CortexPilot is not just one more prompt wrapper. It turns prompt, context, and harness decisions into explicit product surfaces so long-running work keeps moving when humans step away.",
+          "OpenVibeCoding is not just one more prompt wrapper. It turns prompt, context, and harness decisions into explicit product surfaces so long-running work keeps moving when humans step away.",
         publicAdvantageCards: [
           {
             href: "/pm",
@@ -1163,7 +1163,7 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
           {
             badge: "Primary workflow binding",
             title: "Codex workflows",
-            desc: "Use CortexPilot when Codex-driven work needs one command tower, one case record, and one replayable proof path.",
+            desc: "Use OpenVibeCoding when Codex-driven work needs one command tower, one case record, and one replayable proof path.",
             href: "/command-tower",
             prefetch: true,
           },
@@ -1190,7 +1190,7 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
         ],
         integrationTitle: "Choose the right adoption path",
         integrationDescription:
-          "Use the compatibility matrix as the main router, keep the proof-first guide as the fastest way to believe the product story, then open protocol, playbooks, packages, or AI surfaces only after the real job is clear.",
+          "Once the command deck is clear, use the router to choose the right proof-first, protocol, playbook, package, or ecosystem lane without turning the homepage into a docs catalog.",
         proofFirstActionLabel: "See first proven workflow",
         proofFirstActionHref: "/use-cases/",
         integrationCards: [
@@ -1215,7 +1215,7 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
         ],
         aiSurfacesTitle: "AI surfaces in the real workflow",
         aiSurfacesDescription:
-          "AI in CortexPilot is not a floating chat box. It already shows up as a pre-run advisor, a workflow-level explainer, and a run/compare operator brief.",
+          "AI in OpenVibeCoding is not a floating chat box. It already shows up as a pre-run advisor, a workflow-level explainer, and a run/compare operator brief.",
         aiSurfacesActionLabel: "Open AI + MCP + API surfaces",
         aiSurfacesActionHref: "/ai-surfaces/",
         aiSurfaceCards: [
@@ -1327,7 +1327,7 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
       },
       skipToMainContent: "Skip to dashboard content",
       navigationAriaLabel: "Dashboard navigation",
-      topbarTitle: "AI engineering command tower",
+      topbarTitle: "OpenVibeCoding command tower",
       platformStatusAriaLabel: "Platform status overview",
       lowFrequencyToolsLabel: "Low-frequency tools",
       localeToggleAriaLabel: "Switch to Chinese",
@@ -1575,8 +1575,8 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
         },
       },
       runDetailPage: {
-        title: "Run detail",
-        subtitle: "Follow one run across status, event evidence, and replay comparison.",
+        title: "Proof room",
+        subtitle: "Follow one run across live status, event evidence, and replay comparison before you trust the result.",
         openCompareSurface: "Open compare surface",
         degradedTitle: "Run detail is partially degraded",
         degradedNextAction:
@@ -1637,7 +1637,7 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
           owner: "Owner",
           project: "Project",
           verdict: "Verdict",
-          runs: "Runs",
+          runs: "Proof & Replay",
         },
       },
       workflowListPage: {
@@ -1669,7 +1669,7 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
           status: "Status",
           namespace: "Namespace",
           taskQueue: "Task queue",
-          runs: "Runs",
+          runs: "Proof & Replay",
         },
         verdictPrefix: "verdict",
         queueSummary: (count: number, slaState: string) => `queue: ${count} / SLA ${slaState}`,
@@ -1709,9 +1709,9 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
           `The first screen is capped at the latest ${visibleCount} runs so proof review stays readable.`,
       },
       contractsPage: {
-        title: "Contracts",
+        title: "Contract desk",
         subtitle:
-          "Use the contract desk to inspect execution authority, bundle posture, runtime binding, and guardrails before trusting a task to continue.",
+          "Use the contract desk to inspect execution authority, bundle posture, runtime binding, and the next contract blocker before trusting a task to continue.",
         countsBadge: (contractCount: number) => `${contractCount} contracts`,
         searchLabel: "Search",
         searchPlaceholder: "Filter by task_id / run_id / path",
@@ -1751,7 +1751,7 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
         showAll: "Show all",
       },
       agentsPage: {
-        title: "Agents",
+        title: "Role desk",
         subtitle:
           "Open the role desk to confirm execution seats, runtime bindings, and scheduler posture. Treat capacity numbers as supporting evidence, not the product story.",
         openCommandTower: "Open command tower",
@@ -1881,16 +1881,16 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
         overview: "Overview",
         pmIntake: "PM intake",
         commandTower: "Command Tower",
-        runs: "Runs",
+        runs: "Proof & Replay",
         quickApproval: "Quick approval",
         search: "Search",
-        agents: "Agents",
+        agents: "Role desk",
         workflowCases: "Workflow Cases",
         events: "Events",
         reviews: "Reviews",
         diffGate: "Diff gate",
         tests: "Tests",
-        contracts: "Contracts",
+        contracts: "Contract desk",
         policies: "Policies",
         locks: "Locks",
         worktrees: "Worktrees",
@@ -1898,9 +1898,9 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
     },
     desktop: {
       sectionPrimary: "Core loop",
-      sectionAdvanced: "Inspectors",
-      sectionGovernance: "Governance",
-      shellAriaLabel: "CortexPilot Command Tower desktop shell",
+      sectionAdvanced: "Command deck",
+      sectionGovernance: "Desks & controls",
+      shellAriaLabel: "OpenVibeCoding command tower desktop shell",
       skipToMainContent: "Skip to main content",
       workspacePickerLabel: "Workspace picker",
       selectWorkspace: "Select workspace",
@@ -1910,7 +1910,7 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
       localeToggleButtonLabel: "中文",
       commandTower: {
         title: "Command Tower",
-        subtitle: "Desktop stays focused on execution and operator decisions; deeper governance analysis moves to the web view.",
+        subtitle: "OpenVibeCoding on desktop stays focused on execution and operator decisions; deeper governance analysis still moves to the web view.",
         currentModePrefix: "Current mode:",
         badges: {
           liveRefresh: "Live refresh",
@@ -2239,9 +2239,9 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
         },
       },
       overview: {
-        title: "Operator overview",
+        title: "Command deck overview",
         subtitle:
-          "Follow the primary path: start one workflow case, watch Command Tower, confirm the Workflow Case, then verify Proof & Replay. Only open approvals when the flow asks for one.",
+          "OpenVibeCoding starts with one loop: start the task, watch Command Tower, confirm the Workflow Case, then verify Proof & Replay. Only open approvals when the flow asks for one.",
         refreshData: "Refresh data",
         metricsAriaLabel: "Overview metrics",
         metricLabels: {
@@ -2338,19 +2338,19 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
         overview: "Overview",
         pmIntake: "PM intake",
         commandTower: "Command Tower",
-        runs: "Runs",
-        runDetail: "Run Detail",
+        runs: "Proof & Replay",
+        runDetail: "Proof room",
         runCompare: "Run Compare",
         workflowCases: "Workflow Cases",
         workflowCaseDetail: "Workflow Case Detail",
         quickApproval: "Quick approval",
         search: "Search",
         events: "Events",
-        contracts: "Contracts",
+        contracts: "Contract desk",
         reviews: "Reviews",
         tests: "Tests",
         policies: "Policies",
-        agents: "Agents",
+        agents: "Role desk",
         locks: "Locks",
         worktrees: "Worktrees",
         diffGate: "Diff gate",
@@ -2359,21 +2359,21 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
     },
   },
   "zh-CN": {
-    brandTitle: "CortexPilot",
+    brandTitle: "OpenVibeCoding",
     brandSubtitle: "规划 · 派工 · 追踪 · 续跑 · 验真",
     dashboard: {
       homePhase2: {
-        heroTitle: "AI 工程的指挥塔",
+        heroTitle: "面向 AI 工程的开放指挥塔",
         heroSubtitle:
-          "别再盯着 AI coding 一步一步催了。CortexPilot 会围绕 Codex / Claude Code 去规划、派工、追踪、续跑和验真，把长期工程任务收进一条受治理的操作路径、一份案例记录和一套可核对的证明链。",
+          "别再盯着 AI coding 一步一步催了。AI coding 不缺模型，缺的是指挥塔。OpenVibeCoding 会围绕 Codex / Claude Code 去规划、派工、追踪、续跑和验真，把长期工程任务收进一条可治理、可续跑、可验真的操作路径。",
         startFirstTaskLabel: "启动首个任务",
         startNewTaskLabel: "启动新任务",
         viewLatestRunsLabel: "查看最近 runs",
         investigateHighRiskFailuresLabel: "排查高风险失败",
         handleLatestFailureLabel: "处理最近失败",
-        productSpineTitle: "规划、派工、追踪、续跑、验真",
+        productSpineTitle: "一个开放指挥塔，五个动作",
         productSpineDescription:
-          "首页先讲操作主循环，再用三块真相面把这条主线钉牢：Command Tower、Workflow Cases 和 Proof & Replay。",
+          "首页先讲 live command deck，再把主循环钉在三块真相面上：Command Tower、Workflow Cases 和 Proof & Replay。",
         productSpineCards: [
           {
             href: "/command-tower",
@@ -2430,7 +2430,7 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
         ],
         publicAdvantagesTitle: "指挥塔背后的三层工程能力",
         publicAdvantagesDescription:
-          "CortexPilot 不是再包一层花哨 prompt，而是把 prompt、context 和 harness 这三类最容易失控的东西，都拉进显式、可检查、可演进的系统里。",
+          "OpenVibeCoding 不是再包一层花哨 prompt，而是把 prompt、context 和 harness 这三类最容易失控的东西，都拉进显式、可检查、可演进的系统里。",
         publicAdvantageCards: [
           {
             href: "/pm",
@@ -2457,7 +2457,7 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
           {
             badge: "主工作流绑定",
             title: "Codex 工作流",
-            desc: "当 Codex 驱动的工作需要统一指挥塔、案例记录和可回放证明路径时，就该由 CortexPilot 承接。",
+            desc: "当 Codex 驱动的工作需要统一指挥塔、案例记录和可回放证明路径时，就该由 OpenVibeCoding 承接。",
             href: "/command-tower",
             prefetch: true,
           },
@@ -2484,7 +2484,7 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
         ],
         integrationTitle: "选择正确的采用路径",
         integrationDescription:
-          "先把 compatibility matrix 当成主路由，把 proof-first 指南当成最快建立信任的入口，再在任务真正明确后进入协议、playbook、package 或 AI 页面。",
+          "先把 command deck 认清，再把 compatibility matrix 当成主路由，把 proof-first 指南当成最快建立信任的入口，最后再进入协议、playbook、package 或 AI 页面。",
         proofFirstActionLabel: "查看首个已证明工作流",
         proofFirstActionHref: "/use-cases/",
         integrationCards: [
@@ -2509,7 +2509,7 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
         ],
         aiSurfacesTitle: "AI 功能已经进入主工作流",
         aiSurfacesDescription:
-          "CortexPilot 里的 AI 不是漂浮聊天框。它已经分别出现在执行前建议、工作流解释，以及运行/对比的操作摘要里。",
+          "OpenVibeCoding 里的 AI 不是漂浮聊天框。它已经分别出现在执行前建议、工作流解释，以及运行/对比的操作摘要里。",
         aiSurfacesActionLabel: "打开 AI + MCP + API 页面",
         aiSurfacesActionHref: "/ai-surfaces/",
         aiSurfaceCards: [
@@ -2621,7 +2621,7 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
       },
       skipToMainContent: "跳到控制台主内容",
       navigationAriaLabel: "控制台导航",
-      topbarTitle: "AI 工程指挥塔",
+      topbarTitle: "OpenVibeCoding 指挥塔",
       platformStatusAriaLabel: "平台状态概览",
       lowFrequencyToolsLabel: "低频工具",
       localeToggleAriaLabel: "切换到英文",
@@ -2869,8 +2869,8 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
         },
       },
       runDetailPage: {
-        title: "运行详情",
-        subtitle: "沿着状态、事件证据和回放对比，完整跟踪这一条 Run。",
+        title: "证明室",
+        subtitle: "沿着实时状态、事件证据和回放对比，完整跟踪这一条 Run，再决定是否信任结果。",
         openCompareSurface: "打开对比视图",
         degradedTitle: "运行详情当前处于部分降级状态",
         degradedNextAction:
@@ -2999,7 +2999,7 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
           `首屏只显示最新 ${visibleCount} 条 runs，避免证明复核面一上来就过载。`,
       },
       contractsPage: {
-        title: "合约",
+        title: "合约桌",
         subtitle:
           "把这里当成 command tower 的 contract desk：先确认执行权、bundle 姿态、runtime 绑定和护栏，再决定这条任务应不应该继续往前跑。",
         countsBadge: (contractCount: number) => `${contractCount} 份合约`,
@@ -3041,7 +3041,7 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
         showAll: "显示全部",
       },
       agentsPage: {
-        title: "代理",
+        title: "角色桌",
         subtitle:
           "把这里当成 role / control-plane desk：先确认哪些执行 lane 失稳、哪些 seats 真实绑定、scheduler 当前卡在哪，再往下钻 task 细节。",
         openCommandTower: "打开指挥塔",
@@ -3166,16 +3166,16 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
         overview: "总览",
         pmIntake: "PM 入口",
         commandTower: "指挥塔",
-        runs: "运行记录",
+        runs: "Proof & Replay",
         quickApproval: "快速审批",
         search: "检索",
-        agents: "代理",
+        agents: "角色桌",
         workflowCases: "工作流案例",
         events: "事件流",
         reviews: "评审",
         diffGate: "差异门禁",
         tests: "测试",
-        contracts: "合约",
+        contracts: "合约桌",
         policies: "策略",
         locks: "锁管理",
         worktrees: "工作树",
@@ -3184,8 +3184,8 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
     desktop: {
       sectionPrimary: "核心主线",
       sectionAdvanced: "检查与治理",
-      sectionGovernance: "治理",
-      shellAriaLabel: "CortexPilot 指挥塔桌面端",
+      sectionGovernance: "桌面与控制",
+      shellAriaLabel: "OpenVibeCoding 指挥塔桌面端",
       skipToMainContent: "跳到主内容",
       workspacePickerLabel: "工作区切换器",
       selectWorkspace: "选择工作区",
@@ -3195,7 +3195,7 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
       localeToggleButtonLabel: "EN",
       commandTower: {
         title: "指挥塔",
-        subtitle: "桌面端聚焦执行与操作决策；更深的治理分析留给 Web 视图。",
+        subtitle: "OpenVibeCoding 的桌面端聚焦执行与操作决策；更深的治理分析仍留给 Web 视图。",
         currentModePrefix: "当前模式：",
         badges: {
           liveRefresh: "实时刷新",
@@ -3521,9 +3521,9 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
         },
       },
       overview: {
-        title: "新手起步",
+        title: "指挥面总览",
         subtitle:
-          "首次使用建议先走一遍单主流程：先创建一个工作流案例，再看 Command Tower，然后确认 Workflow Case，最后核对 Proof & Replay。只有真的出现人工确认时，才进入审批面。",
+          "OpenVibeCoding 的第一条主循环是：发起任务、观察指挥塔、确认 Workflow Case、再检查 Proof & Replay。只有在流程要求时才进入审批。",
         refreshData: "刷新数据",
         metricsAriaLabel: "总览指标",
         metricLabels: {
@@ -3615,19 +3615,19 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
         overview: "总览",
         pmIntake: "PM 入口",
         commandTower: "指挥塔",
-        runs: "运行记录",
-        runDetail: "运行详情",
+        runs: "Proof & Replay",
+        runDetail: "证明室",
         runCompare: "运行对比",
         workflowCases: "工作流案例",
         workflowCaseDetail: "工作流案例详情",
         quickApproval: "快速审批",
         search: "检索",
         events: "事件流",
-        contracts: "合约",
+        contracts: "合约桌",
         reviews: "评审",
         tests: "测试",
         policies: "策略",
-        agents: "代理",
+        agents: "角色桌",
         locks: "锁管理",
         worktrees: "工作树",
         diffGate: "差异门禁",

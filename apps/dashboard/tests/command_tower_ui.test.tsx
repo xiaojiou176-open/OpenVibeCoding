@@ -251,7 +251,7 @@ describe("command tower ui surfaces", () => {
   });
 
   it("exports command tower metadata for route-level discoverability", () => {
-    expect(commandTowerMetadata.title).toBe("Command Tower | CortexPilot");
+    expect(commandTowerMetadata.title).toBe("Command Tower | OpenVibeCoding");
     expect(commandTowerMetadata.description).toContain("Workflow Cases");
   });
 

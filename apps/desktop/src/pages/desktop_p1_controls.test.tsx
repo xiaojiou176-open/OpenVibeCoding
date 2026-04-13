@@ -456,7 +456,7 @@ describe("desktop p1 controls", () => {
     const onNavigate = vi.fn();
 
     const agents = render(<AgentsPage />);
-    expect(await screen.findByRole("heading", { name: /代理|Agents/ })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: /角色桌|Role desk|代理|Agents/ })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: /刷新|Refresh/ }));
     await waitFor(() => expect(fetchAgents).toHaveBeenCalledTimes(2));
     agents.unmount();
@@ -468,7 +468,7 @@ describe("desktop p1 controls", () => {
     changeGates.unmount();
 
     const contracts = render(<ContractsPage />);
-    expect(await screen.findByRole("heading", { name: /合约|Contracts/ })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: /合约桌|Contract desk|合约|Contracts/ })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: /刷新|Refresh/ }));
     await waitFor(() => expect(fetchContracts).toHaveBeenCalledTimes(2));
     contracts.unmount();
@@ -492,7 +492,7 @@ describe("desktop p1 controls", () => {
     locks.unmount();
 
     const overview = render(<OverviewPage onNavigate={onNavigate} onNavigateToRun={vi.fn()} />);
-    expect(await screen.findByRole("heading", { name: /新手起步|Operator overview/ })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: /指挥面总览|Command deck overview|新手起步|Operator overview/ })).toBeInTheDocument();
     const recentExceptionsSection = screen.getByRole("region", { name: /最近异常|Recent exceptions/ });
     fireEvent.click(within(recentExceptionsSection).getByRole("button", { name: /查看全部异常|View all exceptions/ }));
     expect(onNavigate).toHaveBeenCalledWith("events");

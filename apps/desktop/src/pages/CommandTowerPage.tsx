@@ -68,6 +68,7 @@ export function CommandTowerPage({
   locale?: UiLocale;
 }) {
   const commandTowerCopy = getUiCopy(locale).desktop.commandTower;
+  const shellEyebrow = locale === "zh-CN" ? "OpenVibeCoding / 实时指挥塔" : "OpenVibeCoding / live command tower";
   const liveBadgeTextResolved = (mode: LiveMode) =>
     mode === "paused"
       ? commandTowerCopy.badges.paused
@@ -374,7 +375,11 @@ export function CommandTowerPage({
   if (loading) return (
     <div className="content">
       <div className="section-header">
-        <div><h1 className="page-title">{commandTowerCopy.title}</h1><p className="page-subtitle">Loading live session monitoring and operator context...</p></div>
+        <div>
+          <p className="cell-sub mono muted">{shellEyebrow}</p>
+          <h1 className="page-title">{commandTowerCopy.title}</h1>
+          <p className="page-subtitle">Loading live session monitoring and operator context...</p>
+        </div>
       </div>
       <div className="skeleton-stack-lg">
         <div className="stats-grid"><div className="skeleton skeleton-card" /><div className="skeleton skeleton-card" /><div className="skeleton skeleton-card" /><div className="skeleton skeleton-card" /></div>
@@ -390,6 +395,7 @@ export function CommandTowerPage({
       {/* ─── Header ─── */}
       <div className="section-header">
         <div>
+          <p className="cell-sub mono muted">{shellEyebrow}</p>
           <h1 className="page-title">{commandTowerCopy.title}</h1>
           <p className="page-subtitle">{commandTowerCopy.subtitle}</p>
           <p className="mono muted text-xs">{commandTowerCopy.currentModePrefix} {workMode}</p>

@@ -2,6 +2,9 @@
 
 This repository keeps its public documentation intentionally small.
 
+The public route pages now speak as **OpenVibeCoding**, the public shell for
+the CortexPilot runtime and repo surfaces.
+
 The product spine stays stable across the docs entrypoints:
 
 - **Command Tower** for live operator visibility
@@ -9,8 +12,9 @@ The product spine stays stable across the docs entrypoints:
 - **Proof & Replay** for evidence, compare, and replay review
 
 `docs/index.html` is the current tracked GitHub Pages landing source for the
-public docs surface. `docs/README.md` remains the repo-side documentation
-summary for contributors and maintainers.
+OpenVibeCoding public shell. `docs/README.md` remains the repo-side
+documentation summary for contributors and maintainers who still need the
+CortexPilot runtime inventory.
 
 `configs/docs_nav_registry.json` is the machine source of truth for the active
 docs inventory. This file is the human-readable summary of that registry.

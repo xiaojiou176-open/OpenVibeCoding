@@ -12,9 +12,9 @@ import type { CommandTowerOverviewPayload, PmSessionSummary } from "../../lib/ty
 import type { UiLocale } from "@cortexpilot/frontend-shared/uiCopy";
 
 export const metadata: Metadata = {
-  title: "Command Tower | CortexPilot",
+  title: "Command Tower | OpenVibeCoding",
   description:
-    "Monitor live operator visibility, PM sessions, and governed coding-agent work from the CortexPilot Command Tower with linked Workflow Cases.",
+    "Monitor live operator visibility, linked Workflow Cases, blockers, and next operator actions from the OpenVibeCoding command tower cockpit.",
 };
 
 async function CommandTowerHomeSection({ locale }: { locale: UiLocale }) {

@@ -19,9 +19,52 @@ function stageBadgeVariant(stage: string | null | undefined): "default" | "succe
   return "default";
 }
 
-export function AgentsPage() {
+type AgentsPageProps = {
+  onNavigate?: (page: "command-tower" | "contracts" | "runs") => void;
+  onNavigateToRun?: (runId: string) => void;
+};
+
+function isAttentionStage(stage: unknown): boolean {
+  const token = String(stage ?? "").toUpperCase();
+  return ["FAIL", "ERROR", "BLOCK", "DENY", "REJECT", "CANCEL"].some((part) => token.includes(part));
+}
+
+export function AgentsPage({ onNavigate, onNavigateToRun }: AgentsPageProps = {}) {
   const locale: UiLocale = detectPreferredUiLocale();
   const agentsPageCopy = getUiCopy(locale).dashboard.agentsPage;
+  const shellCopy =
+    locale === "zh-CN"
+      ? {
+          deckTitle: "先看角色风险桌",
+          deckSubtitle: "先确认哪条执行 lane 失稳、哪些 seats 真在带锁、scheduler 有没有把任务挂在半空，再去看目录和库存。",
+          openTower: "打开指挥塔",
+          openProof: "打开证明室",
+          openContractDesk: "打开合约桌",
+          riskTitle: "失稳执行 lane",
+          riskHint: "先处理 failed / blocked / denied 这些状态，再决定是否调整角色默认值。",
+          seatsTitle: "在线执行 seats",
+          seatsHint: "这些 seats 代表真的在跑或正持锁的角色，不只是 catalog 条目。",
+          schedulerTitle: "待处理调度姿态",
+          schedulerHint: "没有 agent_id 的 runtime 状态说明还有任务挂在空中，需要先回 tower 处理。",
+          nextActionHintWithRun: "先回到对应 run 看 proof / status，再决定是否改 role config。",
+          nextActionHintWithoutRun: "这条状态还没有稳定 run 身份，先回指挥塔处理调度姿态。",
+        }
+      : {
+          deckTitle: "Start with the role risk desk",
+          deckSubtitle:
+            "Check which execution lanes are unstable, which seats are actively holding work, and whether the scheduler left any task hanging before you browse the catalog.",
+          openTower: "Open command tower",
+          openProof: "Open proof room",
+          openContractDesk: "Open contract desk",
+          riskTitle: "Execution lanes needing attention",
+          riskHint: "Handle failed / blocked / denied lanes before you change role defaults.",
+          seatsTitle: "Live execution seats",
+          seatsHint: "These seats are actively running or holding locks, not just catalog entries.",
+          schedulerTitle: "Scheduler posture needing action",
+          schedulerHint: "Runtime rows without an agent_id mean work is still hanging and should go back to the tower first.",
+          nextActionHintWithRun: "Return to the related run first, then decide whether the role config needs to change.",
+          nextActionHintWithoutRun: "This lane still needs tower triage before you trust the role desk to fix it.",
+        };
   const [agents, setAgents] = useState<AgentCatalogPayload>({ agents: [], locks: [], role_catalog: [] });
   const [agentStatus, setAgentStatus] = useState<AgentStatusPayload>({ agents: [] });
   const [loading, setLoading] = useState(true);
@@ -39,6 +82,10 @@ export function AgentsPage() {
   const registry = Array.isArray(agents.agents) ? agents.agents : [];
   const roleCatalog = Array.isArray(agents.role_catalog) ? agents.role_catalog : [];
   const runtimeStates = Array.isArray(agentStatus.agents) ? agentStatus.agents : [];
+  const riskStates = runtimeStates.filter((snapshot) => isAttentionStage(snapshot.stage));
+  const activeSeats = registry.filter((agent) => Number(agent.lock_count || 0) > 0).length;
+  const unassignedStatuses = runtimeStates.filter((snapshot) => !String(snapshot.agent_id || "").trim()).length;
+  const firstRiskRun = riskStates.find((snapshot) => String(snapshot.run_id || "").trim())?.run_id;
 
   function renderRoleCatalogRow(roleEntry: RoleCatalogRecord) {
     return (
@@ -90,24 +137,76 @@ export function AgentsPage() {
       {error && <div className="alert alert-danger" role="alert" aria-live="assertive">{error}</div>}
       {loading ? <div className="skeleton-stack-lg"><div className="skeleton skeleton-card-tall" /><div className="skeleton skeleton-card-tall" /></div> : (
         <div className="grid">
+          <section className="app-section" aria-label={shellCopy.deckTitle}>
+            <div className="section-header">
+              <div>
+                <h2 className="section-title">{shellCopy.deckTitle}</h2>
+                <p className="section-subtitle">{shellCopy.deckSubtitle}</p>
+              </div>
+              {onNavigate ? (
+                <div className="toolbar">
+                  <Button variant="secondary" onClick={() => onNavigate("command-tower")}>{shellCopy.openTower}</Button>
+                  <Button variant="secondary" onClick={() => onNavigate("contracts")}>{shellCopy.openContractDesk}</Button>
+                  {firstRiskRun && onNavigateToRun ? (
+                    <Button onClick={() => onNavigateToRun(String(firstRiskRun))}>{shellCopy.openProof}</Button>
+                  ) : null}
+                </div>
+              ) : null}
+            </div>
+            <div className="stats-grid" aria-label={agentsPageCopy.summaryAriaLabel}>
+              <article className="metric-card">
+                <p className="metric-label">{shellCopy.riskTitle}</p>
+                <p className={`metric-value ${riskStates.length > 0 ? "metric-value--warning" : "metric-value--success"}`}>{riskStates.length}</p>
+                <p className="muted text-xs">{shellCopy.riskHint}</p>
+              </article>
+              <article className="metric-card">
+                <p className="metric-label">{shellCopy.seatsTitle}</p>
+                <p className="metric-value metric-value--primary">{activeSeats}</p>
+                <p className="muted text-xs">{shellCopy.seatsHint}</p>
+              </article>
+              <article className="metric-card">
+                <p className="metric-label">{shellCopy.schedulerTitle}</p>
+                <p className={`metric-value ${unassignedStatuses > 0 ? "metric-value--warning" : "metric-value--success"}`}>{unassignedStatuses}</p>
+                <p className="muted text-xs">{shellCopy.schedulerHint}</p>
+              </article>
+            </div>
+          </section>
           <AgentsRoleConfigPanel roleCatalog={roleCatalog} onApplied={load} />
-          <div className="app-section"><h2 className="section-title">{agentsPageCopy.roleCatalog.title}</h2><p className="section-subtitle">{agentsPageCopy.roleCatalog.subtitle}</p>
-            {roleCatalog.length === 0 ? <div className="empty-state-stack"><p className="muted">{agentsPageCopy.roleCatalog.noMatches}</p></div> : (
-              <Card className="table-card"><table className="run-table"><thead><tr><th>{agentsPageCopy.roleCatalog.headers.role}</th><th>{agentsPageCopy.roleCatalog.headers.skillsBundle}</th><th>{agentsPageCopy.roleCatalog.headers.mcpBundle}</th><th>{agentsPageCopy.roleCatalog.headers.runtimeBinding}</th><th>{agentsPageCopy.roleCatalog.headers.executionAuthority}</th></tr></thead>
-                <tbody>{roleCatalog.map((roleEntry) => renderRoleCatalogRow(roleEntry))}</tbody></table></Card>
-            )}
-          </div>
           {runtimeStates.length > 0 && (
             <div className="app-section"><h2 className="section-title">{agentsPageCopy.stateMachine.title}</h2><p className="section-subtitle">{agentsPageCopy.stateMachine.subtitle}</p>
               <Card className="table-card"><table className="run-table"><thead><tr><th>{agentsPageCopy.stateMachine.headers.agentId}</th><th>{agentsPageCopy.stateMachine.headers.role}</th><th>{agentsPageCopy.stateMachine.headers.flowStage}</th><th>{agentsPageCopy.stateMachine.headers.runId}</th></tr></thead>
                 <tbody>{runtimeStates.map((snapshot, index) => renderRuntimeRow(snapshot, index))}</tbody></table></Card>
+              <p className="muted text-xs mt-3">
+                {firstRiskRun ? shellCopy.nextActionHintWithRun : shellCopy.nextActionHintWithoutRun}
+              </p>
             </div>
           )}
-          <div className="app-section"><h2 className="section-title">{agentsPageCopy.registeredInventory.title(registry.length)}</h2>
-            {registry.length === 0 ? <div className="empty-state-stack"><p className="muted">{agentsPageCopy.registeredInventory.emptyTitle}</p></div> : (
-              <Card className="table-card"><table className="run-table"><thead><tr><th>{agentsPageCopy.registeredInventory.headers.agentId}</th><th>{agentsPageCopy.registeredInventory.headers.role}</th><th>Notes</th><th>{agentsPageCopy.registeredInventory.headers.lockCount}</th></tr></thead>
-                <tbody>{registry.map((agent, index) => renderRegistryRow(agent, index))}</tbody></table></Card>
-            )}
+          <div className="app-section">
+            <details className="collapsible">
+              <summary>
+                <h2 className="section-title">{agentsPageCopy.roleCatalog.title}</h2>
+                <p className="section-subtitle">{agentsPageCopy.roleCatalog.subtitle}</p>
+              </summary>
+              <div className="collapsible-body">
+                {roleCatalog.length === 0 ? <div className="empty-state-stack"><p className="muted">{agentsPageCopy.roleCatalog.noMatches}</p></div> : (
+                  <Card className="table-card"><table className="run-table"><thead><tr><th>{agentsPageCopy.roleCatalog.headers.role}</th><th>{agentsPageCopy.roleCatalog.headers.skillsBundle}</th><th>{agentsPageCopy.roleCatalog.headers.mcpBundle}</th><th>{agentsPageCopy.roleCatalog.headers.runtimeBinding}</th><th>{agentsPageCopy.roleCatalog.headers.executionAuthority}</th></tr></thead>
+                    <tbody>{roleCatalog.map((roleEntry) => renderRoleCatalogRow(roleEntry))}</tbody></table></Card>
+                )}
+              </div>
+            </details>
+          </div>
+          <div className="app-section">
+            <details className="collapsible">
+              <summary>
+                <h2 className="section-title">{agentsPageCopy.registeredInventory.title(registry.length)}</h2>
+              </summary>
+              <div className="collapsible-body">
+                {registry.length === 0 ? <div className="empty-state-stack"><p className="muted">{agentsPageCopy.registeredInventory.emptyTitle}</p></div> : (
+                  <Card className="table-card"><table className="run-table"><thead><tr><th>{agentsPageCopy.registeredInventory.headers.agentId}</th><th>{agentsPageCopy.registeredInventory.headers.role}</th><th>Notes</th><th>{agentsPageCopy.registeredInventory.headers.lockCount}</th></tr></thead>
+                    <tbody>{registry.map((agent, index) => renderRegistryRow(agent, index))}</tbody></table></Card>
+                )}
+              </div>
+            </details>
           </div>
         </div>
       )}

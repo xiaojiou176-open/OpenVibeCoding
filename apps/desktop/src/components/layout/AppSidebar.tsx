@@ -121,15 +121,18 @@ type AppSidebarProps = {
   locale?: UiLocale;
 };
 
+const PUBLIC_BRAND_TITLE = "OpenVibeCoding";
+const PUBLIC_BRAND_SUBTITLE = "plan / delegate / track / resume / prove";
+
 export function AppSidebar({ activePage, onNavigate, locale = DEFAULT_UI_LOCALE }: AppSidebarProps) {
   const uiCopy = getUiCopy(locale);
   const navSections: NavSection[] = [
     {
       title: uiCopy.desktop.sectionPrimary,
       items: [
+        { page: "command-tower", label: uiCopy.desktop.labels.commandTower, icon: "tower" },
         { page: "pm", label: uiCopy.desktop.labels.pmIntake, icon: "message" },
         { page: "search", label: uiCopy.desktop.labels.search, icon: "search" },
-        { page: "command-tower", label: uiCopy.desktop.labels.commandTower, icon: "tower" },
       ],
     },
     {
@@ -164,11 +167,11 @@ export function AppSidebar({ activePage, onNavigate, locale = DEFAULT_UI_LOCALE 
           type="button"
           unstyled
           className="brand-link sidebar-brand-reset"
-          onClick={() => onNavigate("pm")}
+          onClick={() => onNavigate("command-tower")}
         >
-          {uiCopy.brandTitle}
+          {PUBLIC_BRAND_TITLE}
         </Button>
-        <p className="sidebar-subtitle">{uiCopy.brandSubtitle}</p>
+        <p className="sidebar-subtitle">{PUBLIC_BRAND_SUBTITLE}</p>
       </div>
       <nav className="sidebar-nav" aria-label="Page group navigation">
         {navSections.map((section) => (

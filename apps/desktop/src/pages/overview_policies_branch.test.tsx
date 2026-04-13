@@ -45,7 +45,7 @@ describe("overview + policies low-branch coverage", () => {
 
     render(<OverviewPage onNavigate={onNavigate} onNavigateToRun={onNavigateToRun} />);
 
-    expect(await screen.findByRole("heading", { name: "Operator overview" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "Command deck overview" })).toBeInTheDocument();
     const failedRatio = await screen.findByText("22.0%");
     expect(failedRatio.className).toContain("metric-value--danger");
     const failedRunLink = await screen.findByRole("button", { name: /run-failed-/ });
@@ -75,7 +75,7 @@ describe("overview + policies low-branch coverage", () => {
     vi.mocked(fetchAllEvents).mockRejectedValue(new Error("events failed"));
 
     render(<OverviewPage onNavigate={onNavigate} onNavigateToRun={onNavigateToRun} />);
-    expect(await screen.findByRole("heading", { name: "Operator overview" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "Command deck overview" })).toBeInTheDocument();
 
     expect(await screen.findByText("Total sessions")).toBeInTheDocument();
     expect(screen.getAllByText("No runs yet. Start your first request from the PM entrypoint.").length).toBeGreaterThanOrEqual(2);
@@ -100,7 +100,7 @@ describe("overview + policies low-branch coverage", () => {
     ] as any);
 
     render(<OverviewPage onNavigate={onNavigate} onNavigateToRun={onNavigateToRun} />);
-    expect(await screen.findByRole("heading", { name: "Operator overview" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "Command deck overview" })).toBeInTheDocument();
 
     const failedRatio = await screen.findByText("5.0%");
     expect(failedRatio.className).toContain("metric-value--success");
@@ -130,9 +130,9 @@ describe("overview + policies low-branch coverage", () => {
 
     render(<OverviewPage onNavigate={onNavigate} onNavigateToRun={onNavigateToRun} locale="zh-CN" />);
 
-    expect(await screen.findByRole("heading", { name: "新手起步" })).toBeInTheDocument();
-    expect(screen.getByText("主步骤")).toBeInTheDocument();
-    expect(screen.getByText("当前进展")).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "指挥面总览" })).toBeInTheDocument();
+    expect(await screen.findByText("主步骤")).toBeInTheDocument();
+    expect(await screen.findByText("先看这四件事")).toBeInTheDocument();
     expect(screen.getAllByText("运行中").length).toBeGreaterThan(0);
     expect(screen.getByText("最近异常")).toBeInTheDocument();
     expect(screen.getByText("任务 task-zh 需要关注")).toBeInTheDocument();
@@ -158,7 +158,7 @@ describe("overview + policies low-branch coverage", () => {
 
     render(<OverviewPage onNavigate={onNavigate} onNavigateToRun={onNavigateToRun} locale="zh-CN" />);
 
-    expect(await screen.findByRole("heading", { name: "新手起步" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "指挥面总览" })).toBeInTheDocument();
     expect(screen.getByText("运行中")).toBeInTheDocument();
     expect(screen.getByText("任务 task-zh 需要关注")).toBeInTheDocument();
     expect(screen.getByText(/级别 WARN · Run evt-run-zh/)).toBeInTheDocument();

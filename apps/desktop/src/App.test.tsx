@@ -727,7 +727,7 @@ describe("Desktop command center shell", { timeout: 15000 }, () => {
     const pageNavigation = await screen.findByRole("navigation", { name: /页面组导航|Page group navigation/ });
     await user.click(within(pageNavigation).getByRole("button", { name: /指挥塔|Command Tower/ }));
     await screen.findByText(
-      /Desktop 聚焦执行动作与异常裁决；治理分析默认转到 Web 深度视图。|Desktop stays focused on execution and operator decisions/,
+      /OpenVibeCoding 的桌面端聚焦执行与操作决策；更深的治理分析仍留给 Web 视图。|OpenVibeCoding on desktop stays focused on execution and operator decisions/,
     );
     expect(await screen.findByRole("button", { name: /暂停自动更新|Pause auto-refresh/ })).toBeInTheDocument();
 
@@ -837,7 +837,7 @@ describe("Desktop command center shell", { timeout: 15000 }, () => {
     render(<App />);
 
     await user.click(screen.getByRole("button", { name: /指挥塔|Command Tower/ }));
-    await screen.findByText(/Desktop 聚焦执行动作与异常裁决；治理分析默认转到 Web 深度视图。|Desktop stays focused on execution and operator decisions/);
+    await screen.findByText(/OpenVibeCoding 的桌面端聚焦执行与操作决策；更深的治理分析仍留给 Web 视图。|OpenVibeCoding on desktop stays focused on execution and operator decisions/);
 
     expect(screen.getByRole("button", { name: /更新进展|Refresh progress/ })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /暂停自动更新|Pause auto-refresh/ })).toBeInTheDocument();
@@ -847,22 +847,23 @@ describe("Desktop command center shell", { timeout: 15000 }, () => {
   it("covers sidebar governance routes and keeps topbar title in sync", async () => {
     const user = userEvent.setup();
     render(<App />);
+    const pageNavigation = await screen.findByRole("navigation", { name: /页面组导航|Page group navigation/ });
 
     const routeCases = [
-      { nav: /运行记录|Runs/, title: "Runs" },
+      { nav: /运行记录|Proof & Replay|Runs/, title: "Proof & Replay" },
       { nav: /工作流|Workflow Cases|Workflows/, title: "Workflow Cases" },
       { nav: /事件流|Events/, title: "Events" },
-      { nav: /合约|Contracts/, title: "Contracts" },
+      { nav: /合约桌|Contracts|Contract desk/, title: "Contract desk" },
       { nav: /评审|Reviews/, title: "Reviews" },
       { nav: /测试|Tests/, title: "Tests" },
       { nav: /策略|Policies/, title: "Policies" },
-      { nav: /代理|Agents/, title: "Agents" },
+      { nav: /角色桌|Agents|Role desk/, title: "Role desk" },
       { nav: /锁管理|Locks/, title: "Locks" },
       { nav: /工作树|Worktrees/, title: "Worktrees" },
     ] as const;
 
     for (const routeCase of routeCases) {
-      await user.click(screen.getByRole("button", { name: routeCase.nav }));
+      await user.click(within(pageNavigation).getByRole("button", { name: routeCase.nav }));
       await waitFor(() => {
         expectTopbarTitle(routeCase.title);
       });
@@ -926,11 +927,12 @@ describe("Desktop command center shell", { timeout: 15000 }, () => {
 
     const user = userEvent.setup();
     render(<App />);
+    const pageNavigation = await screen.findByRole("navigation", { name: /页面组导航|Page group navigation/ });
 
-    await user.click(screen.getByRole("button", { name: /运行记录|Runs/ }));
+    await user.click(within(pageNavigation).getByRole("button", { name: /运行记录|Proof & Replay|Runs/ }));
     await user.click(await screen.findByRole("button", { name: "run-detail-t" }));
     await waitFor(() => {
-      expectTopbarTitle("Run Detail");
+      expectTopbarTitle("Proof room");
     });
   });
 
@@ -1440,7 +1442,7 @@ describe("Desktop command center shell", { timeout: 15000 }, () => {
     await expectActiveSession("pm-live-1");
 
     fireEvent.keyDown(window, { key: "m", altKey: true });
-    expect(await screen.findByRole("heading", { name: /新手起步|Operator overview/ })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: /指挥面总览|Command deck overview/ })).toBeInTheDocument();
     fireEvent.keyDown(window, { key: "2", altKey: true });
     expect(await screen.findByLabelText(/继续对话|Continue the conversation/)).toBeInTheDocument();
 
