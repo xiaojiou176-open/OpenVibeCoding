@@ -252,7 +252,7 @@ function plannerPriorityState(text: ReturnType<typeof plannerText>, rows: Planne
       runId: "-",
     };
   }
-  const leadRow = [...rows].sort((a, b) => plannerPriorityRank(a) - plannerPriorityRank(b))[0];
+  const leadRow = rows[0];
   const triage = plannerTriage(text, leadRow);
   const objective = String(leadRow.wavePlan?.objective || leadRow.run.task_id || "-").trim() || "-";
   const runId = String(leadRow.run.run_id || "-");

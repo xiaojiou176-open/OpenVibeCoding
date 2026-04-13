@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import type { ReactNode } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -82,7 +82,7 @@ describe("run compare decision surface", () => {
     expect(screen.getAllByText(/comparison found at least one delta/i).length).toBeGreaterThan(0);
     expect(screen.getByText("Key deltas")).toBeInTheDocument();
     expect(screen.getByText("Mismatched hashes")).toBeInTheDocument();
-    expect(screen.getAllByText("2").length).toBeGreaterThan(0);
+    expect(within(screen.getByLabelText("Compare signal highlights")).getByText("2")).toBeInTheDocument();
     expect(screen.getByText(/Incident: A blocking gate stopped the run\./)).toBeInTheDocument();
     expect(screen.getByText("AI compare copilot")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Explain these deltas" })).toBeInTheDocument();
@@ -136,5 +136,7 @@ describe("run compare decision surface", () => {
     expect(screen.getAllByText("Observation only").length).toBeGreaterThan(0);
     expect(screen.getByText(/does not have a `run_compare_report` yet/i)).toBeInTheDocument();
     expect(screen.getAllByText(/run replay compare, and refresh this page/i).length).toBeGreaterThan(0);
+    expect(screen.getByText("Operator choreography")).toBeInTheDocument();
+    expect(screen.getByText(/Evidence chain: Unavailable/i)).toBeInTheDocument();
   });
 });

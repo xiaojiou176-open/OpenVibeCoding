@@ -98,6 +98,9 @@ export function RunComparePage({ runId, onBack }: Props) {
     : compareDecision.badge === "Stable baseline"
       ? "The baseline, evidence chain, and LLM posture all align, so this run can move into proof review or promotion."
       : "A delta is present. Review the compare before you trust or promote this run.";
+  const evidenceStatus = hasCompareReport ? (evidenceOk ? "OK" : "Needs review") : "Unavailable";
+  const llmParamsStatus = hasCompareReport ? (llmParamsOk ? "OK" : "Changed") : "Unavailable";
+  const llmSnapshotStatus = hasCompareReport ? (llmSnapshotOk ? "OK" : "Changed") : "Unavailable";
 
   if (loading) {
     return <div className="content"><div className="skeleton-stack-lg"><div className="skeleton skeleton-row" /></div></div>;
@@ -119,7 +122,7 @@ export function RunComparePage({ runId, onBack }: Props) {
             <Button variant="ghost" onClick={onBack}>Back to run detail</Button>
           </div>
         </div>
-        <Card className="compare-stage-verdict">
+        <Card className="compare-stage-verdict" aria-label="Current compare verdict">
           <CardHeader><CardTitle>Current verdict</CardTitle></CardHeader>
           <CardBody>
             <div className="stack-gap-2">
@@ -175,9 +178,9 @@ export function RunComparePage({ runId, onBack }: Props) {
               <div className="data-list-row"><span className="data-list-label">Extra</span><span className="data-list-value mono">{extraCount}</span></div>
               <div className="data-list-row"><span className="data-list-label">Missing reports</span><span className="data-list-value mono">{missingReportsCount}</span></div>
               <div className="data-list-row"><span className="data-list-label">Failed checks</span><span className="data-list-value mono">{failedChecksCount}</span></div>
-              <div className="data-list-row"><span className="data-list-label">Evidence chain</span><span className="data-list-value mono">{evidenceOk ? "OK" : "Needs review"}</span></div>
-              <div className="data-list-row"><span className="data-list-label">LLM params</span><span className="data-list-value mono">{llmParamsOk ? "OK" : "Changed"}</span></div>
-              <div className="data-list-row"><span className="data-list-label">LLM snapshot</span><span className="data-list-value mono">{llmSnapshotOk ? "OK" : "Changed"}</span></div>
+              <div className="data-list-row"><span className="data-list-label">Evidence chain</span><span className="data-list-value mono">{evidenceStatus}</span></div>
+              <div className="data-list-row"><span className="data-list-label">LLM params</span><span className="data-list-value mono">{llmParamsStatus}</span></div>
+              <div className="data-list-row"><span className="data-list-label">LLM snapshot</span><span className="data-list-value mono">{llmSnapshotStatus}</span></div>
             </div>
             {incidentPack.summary ? <p className="muted mt-2">Incident: {String(incidentPack.summary)}</p> : null}
             {proofPack.summary ? <p className="muted">Proof: {String(proofPack.summary)}</p> : null}

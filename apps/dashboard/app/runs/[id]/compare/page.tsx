@@ -93,6 +93,9 @@ export default async function RunComparePage({
   const compareSummary = asRecord(runCompareReport.compare_summary);
   const decision = compareDecision(compareSummary);
   const hasCompareReport = Object.keys(runCompareReport).length > 0;
+  const evidenceStatus = hasCompareReport ? (asBoolean(compareSummary.evidence_ok) ? "OK" : "Needs review") : "Unavailable";
+  const llmParamsStatus = hasCompareReport ? (asBoolean(compareSummary.llm_params_ok) ? "OK" : "Changed") : "Unavailable";
+  const llmSnapshotStatus = hasCompareReport ? (asBoolean(compareSummary.llm_snapshot_ok) ? "OK" : "Changed") : "Unavailable";
   const displayBadge = hasCompareReport ? decision.badge : "Observation only";
   const displaySummary = hasCompareReport
     ? decision.summary
@@ -191,12 +194,12 @@ export default async function RunComparePage({
             </div>
           </Card>
           <Card className="compare-archive-card">
-            <h3>Next operator step</h3>
+            <h3>Operator choreography</h3>
             <div className="stack-gap-2">
               <p className="muted">Keep the second card decision-oriented too. Treat this as operator choreography, not a duplicate summary.</p>
               <p className="mono">{hasCompareReport ? "Compare first → proof second → replay only after the verdict is clear." : "No compare report yet → return to Run Detail, generate compare, then re-open this room."}</p>
-              <p className="mono">Evidence chain: {asBoolean(compareSummary.evidence_ok) ? "OK" : "Needs review"}</p>
-              <p className="mono">LLM params: {asBoolean(compareSummary.llm_params_ok) ? "OK" : "Changed"} · Snapshot: {asBoolean(compareSummary.llm_snapshot_ok) ? "OK" : "Changed"}</p>
+              <p className="mono">Evidence chain: {evidenceStatus}</p>
+              <p className="mono">LLM params: {llmParamsStatus} · Snapshot: {llmSnapshotStatus}</p>
             </div>
           </Card>
           <Card asChild>
