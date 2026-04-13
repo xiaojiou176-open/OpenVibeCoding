@@ -109,6 +109,10 @@ export function RunComparePage({ runId, onBack }: Props) {
   const displayNextAction = hasCompareReport
     ? compareDecision.nextAction
     : "Go back to Run Detail, run replay compare, and refresh this surface once the compare report exists.";
+  const actionPanelTitle = hasCompareReport ? "Key deltas" : "Recovery path";
+  const actionPanelIntro = hasCompareReport
+    ? ""
+    : "No compare report exists yet, so this panel stays focused on the shortest recovery path.";
   const verdictBadge = !hasCompareReport ? "Observation only" : compareDecision.badge;
   const verdictSummary = !hasCompareReport
     ? "No structured compare report exists yet, so this room stays in observation mode."
@@ -200,8 +204,9 @@ export function RunComparePage({ runId, onBack }: Props) {
           </CardBody>
         </Card>
         <Card className="compare-stage-next">
-          <CardHeader><CardTitle>Key deltas</CardTitle></CardHeader>
+          <CardHeader><CardTitle>{actionPanelTitle}</CardTitle></CardHeader>
           <CardBody>
+            {actionPanelIntro ? <p className="muted">{actionPanelIntro}</p> : null}
             <div className="data-list">
               {deltaRows.map((item) => (
                 <div key={item.label} className="data-list-row">

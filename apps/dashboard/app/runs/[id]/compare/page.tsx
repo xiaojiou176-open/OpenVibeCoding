@@ -130,6 +130,11 @@ export default async function RunComparePage({
   const displayNextAction = hasCompareReport
     ? decision.nextAction
     : "Go back to Run Detail, run replay compare, and refresh this page once the report exists.";
+  const actionPanelTitle = hasCompareReport ? "Next operator step" : "Recovery path";
+  const actionPanelIntro = hasCompareReport
+    ? "Use compare as a decision surface first, raw JSON second."
+    : "No compare report exists yet, so this card stays focused on the shortest recovery path.";
+  const choreographyTitle = hasCompareReport ? "Operator choreography" : "Observation posture";
   const verdictTitle = !hasCompareReport
     ? "Observation mode only."
     : decision.tone === "success"
@@ -187,8 +192,8 @@ export default async function RunComparePage({
             </div>
           </Card>
           <Card className="compare-next-card">
-            <h2 className="section-title">Next operator step</h2>
-            <p className="muted">Use compare as a decision surface first, raw JSON second.</p>
+            <h2 className="section-title">{actionPanelTitle}</h2>
+            <p className="muted">{actionPanelIntro}</p>
             <p className="mono">{displayNextAction}</p>
             {incidentPack.summary ? <p className="mono">Incident: {String(incidentPack.summary)}</p> : null}
             {proofPack.summary ? <p className="mono">Proof: {String(proofPack.summary)}</p> : null}
@@ -215,7 +220,7 @@ export default async function RunComparePage({
             </div>
           </Card>
           <Card className="compare-archive-card">
-            <h3>Operator choreography</h3>
+            <h3>{choreographyTitle}</h3>
             <div className="stack-gap-2">
               <p className="muted">Keep the second card decision-oriented too. Treat this as operator choreography, not a duplicate summary.</p>
               <p className="mono">{hasCompareReport ? "Compare first → proof second → replay only after the verdict is clear." : "No compare report yet → return to Run Detail, generate compare, then re-open this room."}</p>

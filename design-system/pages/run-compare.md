@@ -18,6 +18,7 @@ Tell the operator:
 - The raw evidence archive must remain collapsed and visually subordinate.
 - When no compare report exists, the room must explicitly read as observation mode rather than pretending a verdict exists.
 - Observation mode must never show synthetic failure posture. Use `Missing`, `Pending`, or `Unavailable` until the compare report exists.
+- In observation mode, the second primary card should read like a `Recovery path`, not like a duplicate delta explainer.
 
 ## Avoid
 

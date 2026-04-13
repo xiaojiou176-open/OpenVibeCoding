@@ -235,11 +235,11 @@ export default async function Home() {
   const latestFailureHint = firstEnglishText(latestFailure?.action_hint_zh) || "inspect failure events";
   const latestFailureGovernanceHref = latestFailure ? "/events" : "/runs";
   const latestFailureGovernanceLabel = latestFailure
-    ? `Governance entry: ${latestFailureHint}`
-    : "Governance entry: open runs";
+    ? `Next action: ${latestFailureHint}`
+    : "Next action: open runs";
   const riskSummaryTitle =
     hasDegradedRunsData
-      ? "Data degraded"
+      ? "Degraded inputs"
       : !hasRunHistory
       ? "Waiting for first run"
       : failureRate >= 0.5 || latestRunIsFailed
@@ -298,17 +298,17 @@ export default async function Home() {
         ) : null}
         <div className="stats-grid">
           <article className="metric-card">
-            <p className="metric-label">Risk summary</p>
+            <p className="metric-label">Operator risk bulletin</p>
             <p className={`metric-value ${riskSummaryClass}`}>{riskSummaryTitle}</p>
             <p className={`cell-sub mono ${latestRunStatusClass}`}>
-              Latest status: {hasDegradedRunsData ? "Data degraded" : hasRunHistory ? statusLabelEn(latestRun?.status) : "No runs yet"}
+              Current posture: {hasDegradedRunsData ? "Degraded inputs" : hasRunHistory ? statusLabelEn(latestRun?.status) : "No runs yet"}
             </p>
             <p className={`cell-sub mono ${hasDegradedRunsData ? "cell-warning" : latestFailure ? "cell-danger" : "muted"}`}>
-              Failure category: {hasDegradedRunsData ? "unavailable while data is degraded" : String(latestFailureCategory)}
+              Primary risk: {hasDegradedRunsData ? "run list unavailable" : String(latestFailureCategory)}
             </p>
             <p className="cell-sub mono muted">{formatLocalTime(latestRun?.last_event_ts || latestRun?.created_at)}</p>
             <Link href={latestFailureGovernanceHref} className="cell-sub mono">
-              {hasDegradedRunsData ? "Governance entry: inspect data sources and the run list" : latestFailureGovernanceLabel}
+              {hasDegradedRunsData ? "Next action: inspect data sources and the run list" : latestFailureGovernanceLabel}
             </Link>
           </article>
           <article className="metric-card">

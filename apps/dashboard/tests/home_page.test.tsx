@@ -134,8 +134,8 @@ describe("dashboard home run-summary clarity", () => {
       "href",
       "https://xiaojiou176-open.github.io/OpenVibeCoding/use-cases/"
     );
-    expect(screen.getByText("Risk summary")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Governance entry: open runs" })).toHaveAttribute("href", "/runs");
+    expect(screen.getByText("Operator risk bulletin")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Next action: open runs" })).toHaveAttribute("href", "/runs");
     expect(screen.getByText("Stable: no recent failed runs (0%)")).toHaveClass("badge--success");
     expect(screen.getByRole("progressbar", { name: "Failure share 0/0" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "View all runs" })).toHaveAttribute("href", "/runs");
@@ -277,9 +277,9 @@ describe("dashboard home run-summary clarity", () => {
     ] as never[]);
 
     render(await Home());
-    expect(screen.getByText("Risk summary")).toBeInTheDocument();
-    expect(screen.getByText("Failure category: Manual review required")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Governance entry: inspect failure events" })).toHaveAttribute("href", "/events");
+    expect(screen.getByText("Operator risk bulletin")).toBeInTheDocument();
+    expect(screen.getByText("Primary risk: Manual review required")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Next action: inspect failure events" })).toHaveAttribute("href", "/events");
     expect(screen.queryByText(/^manual$/i)).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Run run-1" })).toHaveAttribute("href", "/runs/run-1");
     expect(screen.getByText(/Task: task-1 · Manual review required/)).toBeInTheDocument();
@@ -411,10 +411,10 @@ describe("dashboard home run-summary clarity", () => {
 
     render(await Home());
 
-    expect(screen.getByText("Data degraded")).toHaveClass("metric-value--warning");
-    expect(screen.getByText("Latest status: Data degraded")).toBeInTheDocument();
-    expect(screen.getByText("Failure category: unavailable while data is degraded")).toHaveClass("cell-warning");
-    expect(screen.getByRole("link", { name: "Governance entry: inspect data sources and the run list" })).toHaveAttribute("href", "/runs");
+    expect(screen.getByText("Degraded inputs")).toHaveClass("metric-value--warning");
+    expect(screen.getByText("Current posture: Degraded inputs")).toBeInTheDocument();
+    expect(screen.getByText("Primary risk: run list unavailable")).toHaveClass("cell-warning");
+    expect(screen.getByRole("link", { name: "Next action: inspect data sources and the run list" })).toHaveAttribute("href", "/runs");
     expect(screen.getByText("Data degraded: the run list is temporarily unavailable (0%)")).toHaveClass("badge--warning");
     expect(screen.getByText("Total: -")).toBeInTheDocument();
 
