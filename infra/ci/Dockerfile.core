@@ -26,14 +26,30 @@ ARG APT_SHELLCHECK_VERSION=0.9.0-1
 ARG APT_BUILD_ESSENTIAL_VERSION=12.10ubuntu1
 ARG TARGETARCH
 
-ENV DEBIAN_FRONTEND=noninteractive     COREPACK_ENABLE_DOWNLOAD_PROMPT=0     PLAYWRIGHT_BROWSERS_PATH=/ms-playwright     PNPM_HOME=/usr/local/share/pnpm     CARGO_HOME=/usr/local/cargo     RUSTUP_HOME=/usr/local/rustup     PATH=/usr/local/share/pnpm:/usr/local/cargo/bin:$PATH
+ENV DEBIAN_FRONTEND=noninteractive     COREPACK_ENABLE_DOWNLOAD_PROMPT=0     PLAYWRIGHT_BROWSERS_PATH=/ms-playwright     PNPM_HOME=/usr/local/share/pnpm     CARGO_HOME=/usr/local/cargo     RUSTUP_HOME=/usr/local/rustup     PIP_DEFAULT_TIMEOUT=120     PIP_DISABLE_PIP_VERSION_CHECK=1     PIP_PROGRESS_BAR=off     PATH=/usr/local/share/pnpm:/usr/local/cargo/bin:$PATH
 
 RUN apt-get update     && apt-get install -y --no-install-recommends       build-essential=${APT_BUILD_ESSENTIAL_VERSION}       curl=${APT_CURL_VERSION}       ca-certificates=${APT_CA_CERTIFICATES_VERSION}       git=${APT_GIT_VERSION}       jq=${APT_JQ_VERSION}       pkg-config=${APT_PKG_CONFIG_VERSION}       xz-utils=${APT_XZ_UTILS_VERSION}       python3-venv=${APT_PYTHON3_VENV_VERSION}       ripgrep=${APT_RIPGREP_VERSION}       shellcheck=${APT_SHELLCHECK_VERSION}     && rm -rf /var/lib/apt/lists/*
 
 RUN case "${TARGETARCH}" in       amd64)         node_arch="x64";         node_sha256="${NODE_SHA256_AMD64}";         ;;       arm64)         node_arch="arm64";         node_sha256="${NODE_SHA256_ARM64}";         ;;       *) echo "unsupported TARGETARCH=${TARGETARCH}" >&2; exit 1 ;;     esac     && curl -fsSL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-${node_arch}.tar.xz"       -o /tmp/node.tar.xz     && echo "${node_sha256}  /tmp/node.tar.xz" | sha256sum -c -     && tar -xJf /tmp/node.tar.xz -C /usr/local --strip-components=1     && rm -f /tmp/node.tar.xz
 
-RUN python3 -m pip install --break-system-packages --no-cache-dir "uv==${UV_VERSION}"
-RUN python3 -m pip install --break-system-packages --no-cache-dir "playwright==${PLAYWRIGHT_PYTHON_VERSION}"
+RUN set -eu; \
+    install_with_retry() { \
+      package="$1"; \
+      attempt=1; \
+      while [ "$attempt" -le 4 ]; do \
+        if python3 -m pip install --break-system-packages --no-cache-dir --retries 5 --timeout "${PIP_DEFAULT_TIMEOUT}" "$package"; then \
+          return 0; \
+        fi; \
+        if [ "$attempt" -eq 4 ]; then \
+          echo "pip install failed for ${package} after ${attempt} attempts" >&2; \
+          return 1; \
+        fi; \
+        sleep "$((attempt * 5))"; \
+        attempt=$((attempt + 1)); \
+      done; \
+    }; \
+    install_with_retry "uv==${UV_VERSION}"; \
+    install_with_retry "playwright==${PLAYWRIGHT_PYTHON_VERSION}"
 
 RUN case "${TARGETARCH}" in       amd64)         gitleaks_arch="x64";         gitleaks_sha256="${GITLEAKS_SHA256_AMD64}";         ;;       arm64)         gitleaks_arch="arm64";         gitleaks_sha256="${GITLEAKS_SHA256_ARM64}";         ;;       *) echo "unsupported TARGETARCH=${TARGETARCH}" >&2; exit 1 ;;     esac     && curl -fsSL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_${gitleaks_arch}.tar.gz"       -o /tmp/gitleaks.tar.gz     && echo "${gitleaks_sha256}  /tmp/gitleaks.tar.gz" | sha256sum -c -     && tar -xzf /tmp/gitleaks.tar.gz -C /tmp     && install /tmp/gitleaks /usr/local/bin/gitleaks     && rm -f /tmp/gitleaks.tar.gz /tmp/gitleaks
 
