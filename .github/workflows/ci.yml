@@ -297,7 +297,7 @@ jobs:
           export CORTEXPILOT_GITHUB_ALERTS_MODE="${github_alert_mode}"
           bash scripts/check_governance_python_entrypoints.sh
           bash scripts/run_governance_py.sh scripts/check_repo_positioning.py
-          bash scripts/run_governance_py.sh scripts/check_github_security_alerts.py --mode "${github_alert_mode}" --repo xiaojiou176-open/CortexPilot-public
+          bash scripts/run_governance_py.sh scripts/check_github_security_alerts.py --mode "${github_alert_mode}" --repo xiaojiou176-open/OpenVibeCoding
           bash scripts/run_governance_py.sh scripts/check_env_governance.py --mode gate --max-deprecated-count 10 --max-deprecated-ratio 0.03
           bash scripts/run_governance_py.sh scripts/check_workflow_runner_governance.py
           bash scripts/run_governance_py.sh scripts/check_ci_governance_policy.py

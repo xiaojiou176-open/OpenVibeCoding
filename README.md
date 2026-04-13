@@ -32,7 +32,7 @@ Current lane order is deliberate:
 - **Secondary lane** = the adoption-router public skill packet
 - **Companion/example lane** = local starter kits and coding-agent bundle examples, which are not the canonical public root
 
-[Quickstart](#quickstart) · [First Proven Workflow](https://xiaojiou176-open.github.io/CortexPilot-public/use-cases/) · [Compatibility Matrix](https://xiaojiou176-open.github.io/CortexPilot-public/compatibility/) · [Distribution Contract](DISTRIBUTION.md) · [Distribution Status](https://xiaojiou176-open.github.io/CortexPilot-public/distribution/) · [Docs](docs/README.md) · [Architecture](docs/architecture/runtime-topology.md) · [AI + MCP + API Surfaces](https://xiaojiou176-open.github.io/CortexPilot-public/ai-surfaces/) · [Builder Quickstart](https://xiaojiou176-open.github.io/CortexPilot-public/builders/) · [Releases](https://github.com/xiaojiou176-open/CortexPilot-public/releases)
+[Quickstart](#quickstart) · [First Proven Workflow](https://xiaojiou176-open.github.io/OpenVibeCoding/use-cases/) · [Compatibility Matrix](https://xiaojiou176-open.github.io/OpenVibeCoding/compatibility/) · [Distribution Contract](DISTRIBUTION.md) · [Distribution Status](https://xiaojiou176-open.github.io/OpenVibeCoding/distribution/) · [Docs](docs/README.md) · [Architecture](docs/architecture/runtime-topology.md) · [AI + MCP + API Surfaces](https://xiaojiou176-open.github.io/OpenVibeCoding/ai-surfaces/) · [Builder Quickstart](https://xiaojiou176-open.github.io/OpenVibeCoding/builders/) · [Releases](https://github.com/xiaojiou176-open/OpenVibeCoding/releases)
 
 ![CortexPilot command tower showcase card](docs/assets/storefront/command-tower-showcase-card.svg)
 
@@ -63,7 +63,7 @@ Use these buckets:
 
 If you need the exact matrix instead of a one-line summary, open
 [DISTRIBUTION.md](DISTRIBUTION.md) or the public
-[Distribution Status](https://xiaojiou176-open.github.io/CortexPilot-public/distribution/)
+[Distribution Status](https://xiaojiou176-open.github.io/OpenVibeCoding/distribution/)
 mirror.
 
 ![CortexPilot studio preview card](docs/assets/storefront/cortexpilot-studio-preview.svg)
@@ -76,10 +76,10 @@ mirror.
 
 | If you're here to... | Open this first |
 | --- | --- |
-| evaluate the product story | [First Proven Workflow](https://xiaojiou176-open.github.io/CortexPilot-public/use-cases/) |
-| choose the right Codex / Claude Code / OpenClaw / MCP / skills / builder path | [Compatibility Matrix](https://xiaojiou176-open.github.io/CortexPilot-public/compatibility/) |
-| see exactly what ships now vs. later | [Distribution Contract](DISTRIBUTION.md) and [Distribution Status](https://xiaojiou176-open.github.io/CortexPilot-public/distribution/) |
-| build on the protocol or package surfaces | [AI + MCP + API Surfaces](https://xiaojiou176-open.github.io/CortexPilot-public/ai-surfaces/) and [Builder Quickstart](https://xiaojiou176-open.github.io/CortexPilot-public/builders/) |
+| evaluate the product story | [First Proven Workflow](https://xiaojiou176-open.github.io/OpenVibeCoding/use-cases/) |
+| choose the right Codex / Claude Code / OpenClaw / MCP / skills / builder path | [Compatibility Matrix](https://xiaojiou176-open.github.io/OpenVibeCoding/compatibility/) |
+| see exactly what ships now vs. later | [Distribution Contract](DISTRIBUTION.md) and [Distribution Status](https://xiaojiou176-open.github.io/OpenVibeCoding/distribution/) |
+| build on the protocol or package surfaces | [AI + MCP + API Surfaces](https://xiaojiou176-open.github.io/OpenVibeCoding/ai-surfaces/) and [Builder Quickstart](https://xiaojiou176-open.github.io/OpenVibeCoding/builders/) |
 
 The default public loop is simple: **start one workflow case, watch it move
 through Command Tower, then inspect Proof & Replay before you trust the
@@ -105,7 +105,7 @@ A clean first pass should let you:
 - inspect **Proof & Replay** before trusting the result
 
 For the public product story, the current official first proven workflow is
-[`news_digest`](https://xiaojiou176-open.github.io/CortexPilot-public/use-cases/).
+[`news_digest`](https://xiaojiou176-open.github.io/OpenVibeCoding/use-cases/).
 `topic_brief` and `page_brief` are still public showcase paths, not equally
 release-proven baselines.
 
@@ -148,8 +148,8 @@ If you need the deeper bundle/runtime/read-model details, open the focused
 entrypoints instead of treating the root README like the whole control-plane
 manual:
 
-- [AI + MCP + API Surfaces](https://xiaojiou176-open.github.io/CortexPilot-public/ai-surfaces/)
-- [Builder Quickstart](https://xiaojiou176-open.github.io/CortexPilot-public/builders/)
+- [AI + MCP + API Surfaces](https://xiaojiou176-open.github.io/OpenVibeCoding/ai-surfaces/)
+- [Builder Quickstart](https://xiaojiou176-open.github.io/OpenVibeCoding/builders/)
 - [Contract Entry Points](packages/frontend-api-contract/docs/README.md)
 - [Spec](docs/specs/00_SPEC.md)
 
@@ -437,16 +437,16 @@ truthful order is:
    - Codex CLI / IDE
    - Claude Code overview / MCP
    - OpenClaw repo / skills / ClawHub
-2. Use the public [compatibility matrix](https://xiaojiou176-open.github.io/CortexPilot-public/compatibility/)
+2. Use the public [compatibility matrix](https://xiaojiou176-open.github.io/OpenVibeCoding/compatibility/)
    to choose the right OpenVibeCoding entrypoint.
 3. Pick the first OpenVibeCoding lane based on the job:
-   - [read-only MCP](https://xiaojiou176-open.github.io/CortexPilot-public/mcp/)
+   - [read-only MCP](https://xiaojiou176-open.github.io/OpenVibeCoding/mcp/)
      for protocol inspection
-   - [skills quickstart](https://xiaojiou176-open.github.io/CortexPilot-public/skills/)
+   - [skills quickstart](https://xiaojiou176-open.github.io/OpenVibeCoding/skills/)
      for repeatable playbooks
-   - [builder quickstart](https://xiaojiou176-open.github.io/CortexPilot-public/builders/)
+   - [builder quickstart](https://xiaojiou176-open.github.io/OpenVibeCoding/builders/)
      for package-level reuse
-   - [use cases](https://xiaojiou176-open.github.io/CortexPilot-public/use-cases/)
+   - [use cases](https://xiaojiou176-open.github.io/OpenVibeCoding/use-cases/)
      for proof-first rollout
 4. When package reuse is the real next step, run the repo-owned starter example
    instead of reconstructing the flow from prose:
@@ -760,9 +760,9 @@ gates can trace the maintenance decision end to end.
 
 The public release surface now has a live baseline. Use these entrypoints:
 
-- [GitHub Releases page](https://github.com/xiaojiou176-open/CortexPilot-public/releases)
-- [Live GitHub Release `v0.1.0-alpha.3`](https://github.com/xiaojiou176-open/CortexPilot-public/releases/tag/v0.1.0-alpha.3)
-- [Live GitHub Pages site](https://xiaojiou176-open.github.io/CortexPilot-public/)
+- [GitHub Releases page](https://github.com/xiaojiou176-open/OpenVibeCoding/releases)
+- [Live GitHub Release `v0.1.0-alpha.3`](https://github.com/xiaojiou176-open/OpenVibeCoding/releases/tag/v0.1.0-alpha.3)
+- [Live GitHub Pages site](https://xiaojiou176-open.github.io/OpenVibeCoding/)
 - [Changelog](CHANGELOG.md)
 - [Public release checklist](docs/runbooks/public-release-checklist.md)
 - [Current release notes source](docs/releases/v0.1.0-alpha.3.md)

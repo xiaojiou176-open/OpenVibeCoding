@@ -12,14 +12,14 @@
       name="keywords"
       content="OpenVibeCoding builder quickstart, CortexPilot runtime, frontend API client, frontend API contract, shared UI substrate, Codex builders, Claude Code builders, OpenClaw builders"
     />
-    <link rel="canonical" href="https://xiaojiou176-open.github.io/CortexPilot-public/builders/" />
+    <link rel="canonical" href="https://xiaojiou176-open.github.io/OpenVibeCoding/builders/" />
     <meta property="og:title" content="OpenVibeCoding | Builder quickstart" />
     <meta
       property="og:description"
       content="Current builder entrypoints for the CortexPilot API client, contract package, shared UI substrate, and read-only MCP-aware control-plane reads."
     />
     <meta property="og:image" content="../assets/storefront/social-preview-1280x640.png" />
-    <meta property="og:url" content="https://xiaojiou176-open.github.io/CortexPilot-public/builders/" />
+    <meta property="og:url" content="https://xiaojiou176-open.github.io/OpenVibeCoding/builders/" />
     <meta property="og:type" content="article" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="OpenVibeCoding | Builder quickstart" />
@@ -33,7 +33,7 @@
         "@context": "https://schema.org",
         "@type": "TechArticle",
         "headline": "OpenVibeCoding builder quickstart",
-        "url": "https://xiaojiou176-open.github.io/CortexPilot-public/builders/",
+        "url": "https://xiaojiou176-open.github.io/OpenVibeCoding/builders/",
         "description": "Current builder entrypoints for the CortexPilot API client, contract package, shared UI substrate, and read-only MCP-aware control-plane reads."
       }
     </script>
@@ -305,19 +305,19 @@
             <span class="badge primary">Client</span>
             <h3>Frontend API client</h3>
             <p>Use the repo-owned client when you are consuming CortexPilot from a clone or vendored workspace and want convenience helpers for command-tower overview, runs, Workflow Cases, approvals, and role-config preview reads.</p>
-            <p><a href="https://github.com/xiaojiou176-open/CortexPilot-public/blob/main/packages/frontend-api-client/README.md">Open package README</a></p>
+            <p><a href="https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/packages/frontend-api-client/README.md">Open package README</a></p>
           </article>
           <article class="card">
             <span class="badge primary">Contract</span>
             <h3>Generated type edge</h3>
             <p>Use the contract package when you are already inside the same repo or a vendored workspace copy and want route/query/type boundaries without importing backend modules into your frontend surface.</p>
-            <p><a href="https://github.com/xiaojiou176-open/CortexPilot-public/blob/main/packages/frontend-api-contract/docs/README.md">Open contract package guide</a></p>
+            <p><a href="https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/packages/frontend-api-contract/docs/README.md">Open contract package guide</a></p>
           </article>
           <article class="card">
             <span class="badge primary">Shared UI</span>
             <h3>Presentation substrate</h3>
             <p>Use the shared package when you are reusing CortexPilot from a clone or vendored workspace and want brand copy, locale, and status presentation to stay aligned across dashboard, desktop, and future web consumers.</p>
-            <p><a href="https://github.com/xiaojiou176-open/CortexPilot-public/blob/main/packages/frontend-shared/README.md">Open shared README</a></p>
+            <p><a href="https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/packages/frontend-shared/README.md">Open shared README</a></p>
           </article>
           <article class="card">
             <span class="badge warn">Boundary</span>
@@ -366,7 +366,7 @@
           <li>Use the repo-owned starter example as the first proof that your workspace wiring is correct.</li>
           <li>Only promote to guarded operator actions such as <code>--apply</code> after preview works and your team accepts the trusted-operator boundary.</li>
         </ol>
-        <pre><code>git clone https://github.com/xiaojiou176-open/CortexPilot-public.git
+        <pre><code>git clone https://github.com/xiaojiou176-open/OpenVibeCoding.git
 cd CortexPilot-public
 npm run bootstrap:host
 node packages/frontend-api-client/examples/control_plane_starter.local.mjs \

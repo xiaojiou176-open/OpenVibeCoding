@@ -85,9 +85,9 @@ describe("dashboard env helpers", () => {
   it("uses the default public docs base when the env override is absent", () => {
     delete process.env.NEXT_PUBLIC_CORTEXPILOT_PUBLIC_DOCS_BASE_URL;
 
-    expect(resolveDashboardPublicDocsBaseUrl()).toBe("https://xiaojiou176-open.github.io/CortexPilot-public");
+    expect(resolveDashboardPublicDocsBaseUrl()).toBe("https://xiaojiou176-open.github.io/OpenVibeCoding");
     expect(resolveDashboardPublicDocsHref("/ai-surfaces/")).toBe(
-      "https://xiaojiou176-open.github.io/CortexPilot-public/ai-surfaces/"
+      "https://xiaojiou176-open.github.io/OpenVibeCoding/ai-surfaces/"
     );
   });
 
@@ -112,8 +112,8 @@ describe("dashboard env helpers", () => {
     process.env.NEXT_PUBLIC_CORTEXPILOT_PUBLIC_DOCS_BASE_URL = "https://docs.example/cortexpilot";
 
     expect(resolveDashboardPublicDocsHref("/pm")).toBe("/pm");
-    expect(resolveDashboardPublicDocsHref("https://github.com/xiaojiou176-open/CortexPilot-public")).toBe(
-      "https://github.com/xiaojiou176-open/CortexPilot-public"
+    expect(resolveDashboardPublicDocsHref("https://github.com/xiaojiou176-open/OpenVibeCoding")).toBe(
+      "https://github.com/xiaojiou176-open/OpenVibeCoding"
     );
   });
 

@@ -12,13 +12,13 @@
       name="keywords"
       content="OpenVibeCoding API, CortexPilot OpenAPI, frontend API client, contract types, Codex API workflow, Claude Code API workflow, OpenClaw builder path"
     />
-    <link rel="canonical" href="https://xiaojiou176-open.github.io/CortexPilot-public/api/" />
+    <link rel="canonical" href="https://xiaojiou176-open.github.io/OpenVibeCoding/api/" />
     <meta property="og:title" content="OpenVibeCoding | API and contract quickstart" />
     <meta
       property="og:description"
       content="API and contract quickstart for OpenVibeCoding across OpenAPI, thin frontend API helpers, and contract-facing types."
     />
-    <meta property="og:url" content="https://xiaojiou176-open.github.io/CortexPilot-public/api/" />
+    <meta property="og:url" content="https://xiaojiou176-open.github.io/OpenVibeCoding/api/" />
     <meta property="og:type" content="article" />
     <meta property="og:image" content="../assets/storefront/social-preview-1280x640.png" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -33,7 +33,7 @@
         "@context": "https://schema.org",
         "@type": "TechArticle",
         "headline": "OpenVibeCoding API and contract quickstart",
-        "url": "https://xiaojiou176-open.github.io/CortexPilot-public/api/",
+        "url": "https://xiaojiou176-open.github.io/OpenVibeCoding/api/",
         "description": "API and contract quickstart for OpenVibeCoding across OpenAPI, thin frontend API helpers, and contract-facing types."
       }
     </script>
@@ -309,25 +309,25 @@
             <span class="badge primary">OpenAPI</span>
             <h3>Machine-facing contract</h3>
             <p>Use the public OpenAPI document when you want the raw HTTP route contract before client or UI sugar.</p>
-            <p><a href="https://github.com/xiaojiou176-open/CortexPilot-public/blob/main/docs/api/openapi.cortexpilot.json">Open OpenAPI document</a></p>
+            <p><a href="https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/docs/api/openapi.cortexpilot.json">Open OpenAPI document</a></p>
           </article>
           <article class="card">
             <span class="badge primary">Client</span>
             <h3>Thin frontend API helpers</h3>
             <p>Use <code>@cortexpilot/frontend-api-client</code> when you are working inside a clone, shared workspace, or vendored internal package path and want convenience helpers over runs, Workflow Cases, approvals, and command-tower reads.</p>
-            <p><a href="https://github.com/xiaojiou176-open/CortexPilot-public/blob/main/packages/frontend-api-client/README.md">Open client README</a></p>
+            <p><a href="https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/packages/frontend-api-client/README.md">Open client README</a></p>
           </article>
           <article class="card">
             <span class="badge primary">Contract</span>
             <h3>Generated type boundary</h3>
             <p>Use <code>@cortexpilot/frontend-api-contract</code> when you are inside the same repo or a vendored workspace copy and want route/query/type boundaries without importing backend modules.</p>
-            <p><a href="https://github.com/xiaojiou176-open/CortexPilot-public/blob/main/packages/frontend-api-contract/docs/README.md">Open contract guide</a></p>
+            <p><a href="https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/packages/frontend-api-contract/docs/README.md">Open contract guide</a></p>
           </article>
           <article class="card">
             <span class="badge primary">Shared substrate</span>
             <h3>Locale and presentation reuse</h3>
             <p>Use <code>@cortexpilot/frontend-shared</code> when you are reusing CortexPilot from a clone or vendored workspace and need shared copy, locale helpers, and status presentation across dashboard and desktop surfaces.</p>
-            <p><a href="https://github.com/xiaojiou176-open/CortexPilot-public/blob/main/packages/frontend-shared/README.md">Open shared README</a></p>
+            <p><a href="https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/packages/frontend-shared/README.md">Open shared README</a></p>
           </article>
         </div>
       </section>
@@ -338,7 +338,7 @@
           Teams that want the shortest repo-owned starter should begin with <code>createControlPlaneStarter(...)</code> on top of the client when they are working inside a clone or vendored workspace copy, because it bundles the current overview + agents + contracts + role config bootstrap path without implying a hosted SDK platform.
         </p>
         <p>
-          The repo-owned <a href="https://github.com/xiaojiou176-open/CortexPilot-public/blob/main/packages/frontend-api-client/examples/control_plane_starter.local.mjs">starter example</a> shows the same bootstrap + preview path as runnable code instead of leaving builders to reconstruct it from prose alone.
+          The repo-owned <a href="https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/packages/frontend-api-client/examples/control_plane_starter.local.mjs">starter example</a> shows the same bootstrap + preview path as runnable code instead of leaving builders to reconstruct it from prose alone.
         </p>
         <pre><code>node packages/frontend-api-client/examples/control_plane_starter.local.mjs \
   --base-url http://127.0.0.1:10000 \

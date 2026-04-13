@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
   - name: Security report
-    url: https://github.com/xiaojiou176-open/CortexPilot-public/blob/main/SECURITY.md
+    url: https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/SECURITY.md
     about: Do not open a public issue for vulnerabilities; use SECURITY.md for the live GitHub advisory form path. A second verified fallback private channel is still a maintainer follow-up item, not a public issue workflow.
   - name: Support guide
-    url: https://github.com/xiaojiou176-open/CortexPilot-public/blob/main/SUPPORT.md
+    url: https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/SUPPORT.md
     about: Use SUPPORT.md for public bugs, docs fixes, and usage questions before opening an issue.

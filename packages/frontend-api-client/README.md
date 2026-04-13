@@ -179,9 +179,9 @@ workflow instead of just reading the package in isolation:
      [skills docs](https://docs.openclaw.ai/tools/skills),
      [ClawHub](https://github.com/openclaw/clawhub)
 2. Use CortexPilot's
-   [compatibility matrix](https://xiaojiou176-open.github.io/CortexPilot-public/compatibility/)
+   [compatibility matrix](https://xiaojiou176-open.github.io/OpenVibeCoding/compatibility/)
    and
-   [integration guide](https://xiaojiou176-open.github.io/CortexPilot-public/integrations/)
+   [integration guide](https://xiaojiou176-open.github.io/OpenVibeCoding/integrations/)
    to pick the first truthful CortexPilot lane.
 3. Keep this package together with `@cortexpilot/frontend-api-contract` and
    `@cortexpilot/frontend-shared` inside one clone or vendored workspace copy.
@@ -195,7 +195,7 @@ yet. The current truthful reuse path is still shared-workspace or
 vendored-copy adoption, not `npm install` from a public registry.
 
 ```bash
-git clone https://github.com/xiaojiou176-open/CortexPilot-public.git
+git clone https://github.com/xiaojiou176-open/OpenVibeCoding.git
 cd CortexPilot-public
 npm run bootstrap:host
 node packages/frontend-api-client/examples/control_plane_starter.local.mjs \
@@ -253,11 +253,11 @@ If you are onboarding a Codex / Claude Code / OpenClaw workflow and want the
 repo's truthful public explanation before you read the package internals, start
 here:
 
-- [Integration guide](https://xiaojiou176-open.github.io/CortexPilot-public/integrations/)
-- [Compatibility matrix](https://xiaojiou176-open.github.io/CortexPilot-public/compatibility/)
-- [Agent starter kits](https://xiaojiou176-open.github.io/CortexPilot-public/agent-starters/)
-- [Read-only MCP quickstart](https://xiaojiou176-open.github.io/CortexPilot-public/mcp/)
-- [API quickstart](https://xiaojiou176-open.github.io/CortexPilot-public/api/)
-- [Builder quickstart](https://xiaojiou176-open.github.io/CortexPilot-public/builders/)
+- [Integration guide](https://xiaojiou176-open.github.io/OpenVibeCoding/integrations/)
+- [Compatibility matrix](https://xiaojiou176-open.github.io/OpenVibeCoding/compatibility/)
+- [Agent starter kits](https://xiaojiou176-open.github.io/OpenVibeCoding/agent-starters/)
+- [Read-only MCP quickstart](https://xiaojiou176-open.github.io/OpenVibeCoding/mcp/)
+- [API quickstart](https://xiaojiou176-open.github.io/OpenVibeCoding/api/)
+- [Builder quickstart](https://xiaojiou176-open.github.io/OpenVibeCoding/builders/)
 - [Contract package guide](../frontend-api-contract/docs/README.md)
-- [Skills quickstart](https://xiaojiou176-open.github.io/CortexPilot-public/skills/)
+- [Skills quickstart](https://xiaojiou176-open.github.io/OpenVibeCoding/skills/)

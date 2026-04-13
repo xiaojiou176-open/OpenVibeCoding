@@ -10,7 +10,7 @@ Recommended About text:
 
 Website field:
 
-- `https://xiaojiou176-open.github.io/CortexPilot-public/`
+- `https://xiaojiou176-open.github.io/OpenVibeCoding/`
 
 ## 2. Topics
 
@@ -67,7 +67,7 @@ Draft notes source:
 
 Live release:
 
-- `https://github.com/xiaojiou176-open/CortexPilot-public/releases/tag/v0.1.0-alpha.3`
+- `https://github.com/xiaojiou176-open/OpenVibeCoding/releases/tag/v0.1.0-alpha.3`
 
 Truth note:
 
@@ -82,7 +82,7 @@ Truth note:
 Current live state:
 
 - GitHub Pages is enabled from `main` / `/docs`
-- live URL: `https://xiaojiou176-open.github.io/CortexPilot-public/`
+- live URL: `https://xiaojiou176-open.github.io/OpenVibeCoding/`
 - the GitHub Website field now points to that URL
 
 If the Pages source changes in the future:

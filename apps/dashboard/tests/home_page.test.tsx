@@ -88,51 +88,51 @@ describe("dashboard home run-summary clarity", () => {
     expect(screen.getByText("Proof state: official public baseline")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open proof pack" })).toHaveAttribute(
       "href",
-      "https://xiaojiou176-open.github.io/CortexPilot-public/use-cases/"
+      "https://xiaojiou176-open.github.io/OpenVibeCoding/use-cases/"
     );
     expect(screen.getByText("Extended surfaces")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "See first proven workflow" })).toHaveAttribute(
       "href",
-      "https://xiaojiou176-open.github.io/CortexPilot-public/use-cases/"
+      "https://xiaojiou176-open.github.io/OpenVibeCoding/use-cases/"
     );
     expect(screen.queryByRole("link", { name: "Open compatibility matrix" })).not.toBeInTheDocument();
     expect(screen.getByText("Compatibility matrix").closest("a")).toHaveAttribute(
       "href",
-      "https://xiaojiou176-open.github.io/CortexPilot-public/compatibility/"
+      "https://xiaojiou176-open.github.io/OpenVibeCoding/compatibility/"
     );
     expect(screen.getByText("Integration guide").closest("a")).toHaveAttribute(
       "href",
-      "https://xiaojiou176-open.github.io/CortexPilot-public/integrations/"
+      "https://xiaojiou176-open.github.io/OpenVibeCoding/integrations/"
     );
     expect(screen.getByText("Skills quickstart").closest("a")).toHaveAttribute(
       "href",
-      "https://xiaojiou176-open.github.io/CortexPilot-public/skills/"
+      "https://xiaojiou176-open.github.io/OpenVibeCoding/skills/"
     );
     expect(screen.getByRole("link", { name: "Open AI + MCP + API surfaces" })).toHaveAttribute(
       "href",
-      "https://xiaojiou176-open.github.io/CortexPilot-public/ai-surfaces/"
+      "https://xiaojiou176-open.github.io/OpenVibeCoding/ai-surfaces/"
     );
     expect(screen.getByRole("link", { name: "Open ecosystem map" })).toHaveAttribute(
       "href",
-      "https://xiaojiou176-open.github.io/CortexPilot-public/ecosystem/"
+      "https://xiaojiou176-open.github.io/OpenVibeCoding/ecosystem/"
     );
     expect(screen.getByRole("link", { name: "Open builder quickstart" })).toHaveAttribute(
       "href",
-      "https://xiaojiou176-open.github.io/CortexPilot-public/builders/"
+      "https://xiaojiou176-open.github.io/OpenVibeCoding/builders/"
     );
     expect(screen.getByText("Read-only MCP quickstart").closest("a")).toHaveAttribute(
       "href",
-      "https://xiaojiou176-open.github.io/CortexPilot-public/mcp/"
+      "https://xiaojiou176-open.github.io/OpenVibeCoding/mcp/"
     );
     expect(screen.getByText("API and contract quickstart").closest("a")).toHaveAttribute(
       "href",
-      "https://xiaojiou176-open.github.io/CortexPilot-public/api/"
+      "https://xiaojiou176-open.github.io/OpenVibeCoding/api/"
     );
     expect(screen.getByText("Live Workflow Case gallery")).toBeInTheDocument();
     expect(screen.getAllByRole("link", { name: "Open Workflow Cases" })[0]).toHaveAttribute("href", "/workflows");
     expect(screen.getByRole("link", { name: "See first proven workflow" })).toHaveAttribute(
       "href",
-      "https://xiaojiou176-open.github.io/CortexPilot-public/use-cases/"
+      "https://xiaojiou176-open.github.io/OpenVibeCoding/use-cases/"
     );
     expect(screen.getByText("Risk summary")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Governance entry: open runs" })).toHaveAttribute("href", "/runs");
@@ -237,28 +237,28 @@ describe("dashboard home run-summary clarity", () => {
     expect(screen.getByText("延伸入口")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "打开 AI + MCP + API 页面" })).toHaveAttribute(
       "href",
-      "https://xiaojiou176-open.github.io/CortexPilot-public/ai-surfaces/"
+      "https://xiaojiou176-open.github.io/OpenVibeCoding/ai-surfaces/"
     );
     expect(screen.getByRole("link", { name: "打开证明包" })).toHaveAttribute(
       "href",
-      "https://xiaojiou176-open.github.io/CortexPilot-public/use-cases/"
+      "https://xiaojiou176-open.github.io/OpenVibeCoding/use-cases/"
     );
     expect(screen.getByRole("link", { name: "打开 builder 快速入口" })).toHaveAttribute(
       "href",
-      "https://xiaojiou176-open.github.io/CortexPilot-public/builders/"
+      "https://xiaojiou176-open.github.io/OpenVibeCoding/builders/"
     );
     expect(screen.getByRole("link", { name: "查看首个已证明工作流" })).toHaveAttribute(
       "href",
-      "https://xiaojiou176-open.github.io/CortexPilot-public/use-cases/"
+      "https://xiaojiou176-open.github.io/OpenVibeCoding/use-cases/"
     );
     expect(screen.queryByRole("link", { name: "打开 compatibility matrix" })).not.toBeInTheDocument();
     expect(screen.getByText("Compatibility matrix").closest("a")).toHaveAttribute(
       "href",
-      "https://xiaojiou176-open.github.io/CortexPilot-public/compatibility/"
+      "https://xiaojiou176-open.github.io/OpenVibeCoding/compatibility/"
     );
     expect(screen.getByText("Integration guide").closest("a")).toHaveAttribute(
       "href",
-      "https://xiaojiou176-open.github.io/CortexPilot-public/integrations/"
+      "https://xiaojiou176-open.github.io/OpenVibeCoding/integrations/"
     );
     expect(screen.getAllByText("Read-only MCP quickstart").length).toBeGreaterThan(0);
     expect(screen.getAllByText("API and contract quickstart").length).toBeGreaterThan(0);
