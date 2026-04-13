@@ -74,5 +74,6 @@ describe("RunComparePage decision surface", () => {
     expect(screen.getByText(/Proof: Proof artifacts are ready\./)).toBeInTheDocument();
     expect(screen.getByText("AI compare copilot")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Explain these deltas" })).toBeInTheDocument();
+    expect(screen.getByText("Evidence archive")).toBeInTheDocument();
   });
 });

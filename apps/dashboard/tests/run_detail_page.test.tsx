@@ -40,8 +40,10 @@ describe("run detail page copy", () => {
   it("renders the English-first page title and summary copy", async () => {
     render(await RunDetailPage({ params: Promise.resolve({ id: "run-1" }) }));
 
-    expect(screen.getByTestId("run-detail-title")).toHaveTextContent("Run detail");
-    expect(screen.getByText("Follow one run across status, event evidence, and replay comparison.")).toBeInTheDocument();
+    expect(screen.getByTestId("run-detail-title")).toHaveTextContent("Proof room");
+    expect(
+      screen.getByText("Follow one run across live status, event evidence, and replay comparison before you trust the result."),
+    ).toBeInTheDocument();
     expect(screen.getByText("AI operator copilot")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Generate operator brief" })).toBeInTheDocument();
     expect(screen.getByTestId("run-detail-stub")).toHaveTextContent("run-1");
@@ -55,8 +57,8 @@ describe("run detail page copy", () => {
 
     render(await RunDetailPage({ params: Promise.resolve({ id: "run-zh" }) }));
 
-    expect(screen.getByTestId("run-detail-title")).toHaveTextContent("运行详情");
-    expect(screen.getByText("沿着状态、事件证据和回放对比，完整跟踪这一条 Run。")).toBeInTheDocument();
+    expect(screen.getByTestId("run-detail-title")).toHaveTextContent("证明室");
+    expect(screen.getByText("沿着实时状态、事件证据和回放对比，完整跟踪这一条 Run，再决定是否信任结果。")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "打开对比视图" })).toHaveAttribute("href", "/runs/run-zh/compare");
   });
 

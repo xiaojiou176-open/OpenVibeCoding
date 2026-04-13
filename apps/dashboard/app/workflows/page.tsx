@@ -19,9 +19,9 @@ import {
 import WorkflowQueueMutationControls from "./WorkflowQueueMutationControls";
 
 export const metadata: Metadata = {
-  title: "Workflow Cases | CortexPilot",
+  title: "Workflow Cases | OpenVibeCoding",
   description:
-    "Review Workflow Cases, queue posture, linked runs, and next operator actions inside the CortexPilot Command Tower.",
+    "Review Workflow Cases, queue posture, linked runs, and next operator actions inside the OpenVibeCoding command tower.",
 };
 
 function statusBadgeVariant(status: string | undefined): BadgeVariant {
@@ -174,6 +174,7 @@ export default async function WorkflowsPage() {
       <header className="app-section">
         <div className="section-header">
           <div>
+            <p className="cell-sub mono muted">OpenVibeCoding / workflow desk</p>
             <h1 id="workflows-page-title" className="page-title">{workflowListPageCopy.title}</h1>
             <p className="page-subtitle">{workflowListPageCopy.subtitle}</p>
           </div>

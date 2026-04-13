@@ -3,38 +3,38 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>CortexPilot | The command tower for AI engineering</title>
+    <title>OpenVibeCoding | The open command tower for AI engineering</title>
     <meta
       name="description"
-      content="Stop babysitting AI coding work. CortexPilot is the command tower for AI engineering: it plans, delegates, tracks, resumes, and proves long-running work across Codex and Claude Code with Workflow Cases, read-only MCP truth, and replayable proof."
+      content="Stop babysitting AI coding work. OpenVibeCoding is the open command tower for AI engineering: the public shell for the CortexPilot runtime that helps teams plan / delegate / track / resume / prove long-running Codex and Claude Code work with Workflow Cases, read-only MCP truth, and replayable proof."
     />
     <meta
       name="keywords"
-      content="CortexPilot, command tower for AI engineering, Codex, Claude Code, MCP, Model Context Protocol, Workflow Cases, proof and replay, prompt engineering, context engineering, harness engineering"
+      content="OpenVibeCoding, CortexPilot runtime, open command tower for AI engineering, Codex, Claude Code, MCP, Model Context Protocol, Workflow Cases, proof and replay, prompt engineering, context engineering, harness engineering"
     />
     <link rel="canonical" href="https://xiaojiou176-open.github.io/CortexPilot-public/" />
-    <meta property="og:title" content="CortexPilot | The command tower for AI engineering" />
+    <meta property="og:title" content="OpenVibeCoding | The open command tower for AI engineering" />
     <meta
       property="og:description"
-      content="The command tower for AI engineering. CortexPilot keeps long-running Codex and Claude Code work moving with Workflow Cases, read-only MCP truth, and proof-first replay instead of scattered chats."
+      content="The open command tower for AI engineering. OpenVibeCoding keeps long-running Codex and Claude Code work moving with Workflow Cases, read-only MCP truth, and proof-first replay on top of the CortexPilot runtime."
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://xiaojiou176-open.github.io/CortexPilot-public/" />
     <meta property="og:image" content="./assets/storefront/social-preview-1280x640.png" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="CortexPilot | The command tower for AI engineering" />
+    <meta name="twitter:title" content="OpenVibeCoding | The open command tower for AI engineering" />
     <meta
       name="twitter:description"
-      content="Stop babysitting AI coding work. CortexPilot plans, delegates, tracks, resumes, and proves long-running engineering work across Codex and Claude Code."
+      content="Stop babysitting AI coding work. OpenVibeCoding helps teams plan / delegate / track / resume / prove long-running engineering work across Codex and Claude Code."
     />
     <meta name="twitter:image" content="./assets/storefront/social-preview-1280x640.png" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "WebSite",
-        "name": "CortexPilot",
+        "name": "OpenVibeCoding",
         "url": "https://xiaojiou176-open.github.io/CortexPilot-public/",
-        "description": "The command tower for AI engineering. CortexPilot plans, delegates, tracks, resumes, and proves long-running work across Codex and Claude Code with Workflow Cases, read-only MCP truth, and replayable proof.",
+        "description": "The open command tower for AI engineering. OpenVibeCoding is the public shell for the CortexPilot runtime and helps teams plan / delegate / track / resume / prove long-running Codex and Claude Code work with Workflow Cases, read-only MCP truth, and replayable proof.",
         "keywords": [
           "Codex",
           "Claude Code",
@@ -56,10 +56,10 @@
         "mainEntity": [
           {
             "@type": "Question",
-            "name": "Is CortexPilot an official Codex or Claude Code plugin?",
+            "name": "Is OpenVibeCoding an official Codex or Claude Code plugin?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "No. Codex now has official plugin surfaces and OpenClaw has official plugin and skills surfaces, but CortexPilot currently ships workflow-aligned integrations, repo-owned skills, read-only MCP, and local bundle examples rather than a published listing."
+              "text": "No. OpenVibeCoding is the public shell for the CortexPilot repo/runtime. Codex now has official plugin surfaces and OpenClaw has official plugin and skills surfaces, but the current public story still ships workflow-aligned integrations, repo-owned skills, read-only MCP, and local bundle examples rather than a published listing."
             }
           },
           {
@@ -67,7 +67,7 @@
             "name": "Is the public MCP surface write-capable?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "No. CortexPilot's current public MCP contract is read-only, and write-capable mutation remains outside the public promise."
+              "text": "No. OpenVibeCoding's current public MCP contract is read-only, and write-capable mutation on the underlying CortexPilot runtime remains outside the public promise."
             }
           },
           {
@@ -264,7 +264,7 @@
   <body>
     <main>
       <section class="hero">
-        <span class="eyebrow">Public landing source for CortexPilot</span>
+        <span class="eyebrow">Public landing source for OpenVibeCoding</span>
         <nav class="mini-nav" aria-label="Top navigation">
           <a href="./use-cases/">First proven workflow</a>
           <a href="./compatibility/">Compatibility matrix</a>
@@ -273,14 +273,16 @@
           <a href="https://github.com/xiaojiou176-open/CortexPilot-public">Repository</a>
           <a href="https://github.com/xiaojiou176-open/CortexPilot-public/releases">Releases</a>
         </nav>
-        <h1>The command tower for AI engineering.</h1>
+        <h1>The open command tower for AI engineering.</h1>
         <p class="lede">
-          Stop babysitting AI coding work. CortexPilot plans, delegates, tracks, resumes, and proves long-running work
-          across Codex and Claude Code by turning PM request -&gt; Workflow Case -&gt; Proof &amp; Replay into one governed
-          command-tower loop.
+          Stop babysitting AI coding work. OpenVibeCoding is the public shell for the CortexPilot runtime.
+          AI coding does not lack models. It lacks a command tower. It helps teams
+          <strong>plan / delegate / track / resume / prove</strong> long-running work across
+          Codex and Claude Code by turning PM request -&gt; Workflow Case -&gt; Proof &amp; Replay
+          into one governed command-tower loop.
         </p>
         <p class="caption">
-          Current boundary: this is a repo-backed AI engineering command tower and a
+          Current boundary: OpenVibeCoding is a repo-backed public shell over the CortexPilot runtime and a
           repo-backed operator control plane, not a hosted product, and the shipped MCP surface remains read-only.
         </p>
         <p class="caption">
@@ -309,7 +311,7 @@
           <img
             class="hero-image"
             src="./assets/storefront/command-tower-showcase-card.svg"
-            alt="CortexPilot showcase card showing PM request, Command Tower, and Proof and Replay"
+            alt="OpenVibeCoding showcase card showing PM request, Command Tower, and Proof and Replay"
           />
           <p class="caption">
             The public story should stay simple: one request enters, one Workflow Case becomes
@@ -322,7 +324,7 @@
           <img
             class="hero-image"
             src="./assets/storefront/first-loop-storyboard.gif"
-            alt="CortexPilot storyboard showing the first public loop from PM request to evidence"
+            alt="OpenVibeCoding storyboard showing the first public loop from PM request to evidence"
           />
           <p class="caption">
             This tracked storyboard is the shareable first-loop asset: it shows the same public
@@ -344,7 +346,7 @@
           </article>
           <article class="grid-card">
             <h3>Submitted externally</h3>
-            <p>OpenHands/extensions and MCP.so now have filed public submissions, but those hosts still need to accept them before CortexPilot can call those listings live.</p>
+            <p>OpenHands/extensions and MCP.so now have filed public submissions, but those hosts still need to accept them before OpenVibeCoding can call those listings live.</p>
           </article>
           <article class="grid-card">
             <h3>Explicitly deferred</h3>
@@ -359,7 +361,7 @@
       </section>
 
       <section class="section">
-        <h2>Why teams take CortexPilot seriously</h2>
+        <h2>Why teams take OpenVibeCoding seriously</h2>
         <div class="grid">
           <article class="grid-card">
             <h3>Prompt Engineering</h3>
@@ -380,12 +382,12 @@
         <h2>FAQ</h2>
         <div class="grid">
           <article class="grid-card">
-            <h3>Is CortexPilot an official Codex or Claude Code plugin?</h3>
-            <p>Not today. Codex now has official plugin surfaces and OpenClaw has official plugin and skills surfaces, but CortexPilot currently ships workflow-aligned integrations, repo-owned skills, read-only MCP, and local bundle examples rather than a published listing.</p>
+            <h3>Is OpenVibeCoding an official Codex or Claude Code plugin?</h3>
+            <p>Not today. OpenVibeCoding is the public shell for the CortexPilot repo/runtime. Codex now has official plugin surfaces and OpenClaw has official plugin and skills surfaces, but the current public story still ships workflow-aligned integrations, repo-owned skills, read-only MCP, and local bundle examples rather than a published listing.</p>
           </article>
           <article class="grid-card">
             <h3>Is the public MCP surface write-capable?</h3>
-            <p>CortexPilot's current public MCP contract is read-only, and write-capable mutation remains outside the public promise.</p>
+            <p>OpenVibeCoding's current public MCP contract is read-only, and write-capable mutation on the underlying CortexPilot runtime remains outside the public promise.</p>
           </article>
           <article class="grid-card">
             <h3>Where does OpenClaw fit today?</h3>
@@ -412,7 +414,7 @@
           </article>
           <article class="grid-card">
             <h3>I need the adoption path</h3>
-            <p>Start here if your real question is “I use Codex, Claude Code, OpenClaw, skills, or builders. Which CortexPilot surface should I open first?”</p>
+            <p>Start here if your real question is “I use Codex, Claude Code, OpenClaw, skills, or builders. Which OpenVibeCoding surface should I open first?”</p>
             <p><a href="./compatibility/">Open the compatibility matrix</a></p>
           </article>
           <article class="grid-card">

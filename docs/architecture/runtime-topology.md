@@ -70,6 +70,11 @@ flowchart LR
   - `artifacts/harness_request.json`
   when runtime governance detects a fallback handoff condition or a capability
   blocker that should become a tracked Harness Request.
+- When finalize queues a continuation contract for the same session, the
+  contract now carries the generated `context_pack.json` back into
+  `inputs.artifacts`, and runner instruction assembly appends a compact
+  Context Pack fallback note so the follow-up run sees the handoff summary as
+  live execution input instead of a detached read-only side file.
 - When continuation policy selects the unblock branch during finalize, the same
   runtime may advance `planning_unblock_tasks.json` from `proposed` to `queued`
   and emit `UNBLOCK_TASK_QUEUED`, so the unblock path is no longer only a

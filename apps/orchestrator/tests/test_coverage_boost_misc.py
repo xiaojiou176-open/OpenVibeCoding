@@ -73,7 +73,7 @@ def test_mcp_gate_and_concurrency_paths(tmp_path: Path, monkeypatch) -> None:
     assert invalid_mode["ok"] is False
 
 
-def test_runner_common_branches(monkeypatch) -> None:
+def test_runner_common_branches(monkeypatch, tmp_path: Path) -> None:
     contract = {"task_id": "task-1"}
     monkeypatch.setenv("CORTEXPILOT_RUN_ID", "run-env")
     assert runner_common.resolve_run_id(contract) == "run-env"
@@ -108,6 +108,32 @@ def test_runner_common_branches(monkeypatch) -> None:
     assert runner_common.extract_instruction({"inputs": {"spec": "x"}}) == "x"
     assert runner_common.extract_instruction({"instruction": "inst"}) == "inst"
     assert runner_common.extract_instruction({"objective": "obj"}) == "obj"
+    context_pack = tmp_path / "context_pack.json"
+    context_pack.write_text(
+        json.dumps(
+            {
+                "trigger_reason": "contamination",
+                "source_session_id": "thread-1",
+                "global_state_summary": "Need explicit handoff.",
+                "actor_handoff_summary": "Resume from proof room.",
+                "required_reads": ["contract.json", "reports/task_result.json"],
+            },
+            ensure_ascii=False,
+        ),
+        encoding="utf-8",
+    )
+    instruction = runner_common.extract_instruction(
+        {
+            "inputs": {
+                "spec": "continue task",
+                "artifacts": [{"name": "context_pack.json", "uri": str(context_pack)}],
+            }
+        },
+        tmp_path,
+    )
+    assert "continue task" in instruction
+    assert "Context Pack Fallback" in instruction
+    assert "trigger_reason: contamination" in instruction
 
     assert runner_common.extract_required_output({"required_outputs": [{"name": "a.txt"}]}) == "a.txt"
     assert runner_common.extract_required_output({"required_outputs": ["b.txt"]}) == "b.txt"

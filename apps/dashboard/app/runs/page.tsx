@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import Link from "next/link";
+import type { Metadata } from "next";
 import { getUiCopy } from "@cortexpilot/frontend-shared/uiCopy";
 import { normalizeUiLocale, UI_LOCALE_STORAGE_KEY } from "@cortexpilot/frontend-shared/uiLocale";
 
@@ -13,6 +14,12 @@ import { statusVariant } from "../../lib/statusPresentation";
 
 type RunsPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
+
+export const metadata: Metadata = {
+  title: "Proof & Replay | OpenVibeCoding",
+  description:
+    "Inspect latest outcomes, replay posture, failure clues, and next operator actions from the OpenVibeCoding proof and replay surface.",
 };
 
 function queryValue(value: string | string[] | undefined): string {
@@ -77,6 +84,7 @@ export default async function RunsPage({ searchParams }: RunsPageProps) {
       <header className="app-section">
         <div className="section-header">
           <div>
+            <p className="cell-sub mono muted">OpenVibeCoding / proof and replay</p>
             <h1 id="runs-page-title" className="page-title">{runsPageCopy.title}</h1>
             <p className="page-subtitle">{runsPageCopy.subtitle}</p>
           </div>
@@ -94,26 +102,6 @@ export default async function RunsPage({ searchParams }: RunsPageProps) {
         <Card variant="compact">
           <p className="mono muted">{operatorDeskNote}</p>
         </Card>
-        <div className="toolbar toolbar--mt" role="group" aria-label={runsPageCopy.filterAriaLabel}>
-          <Button asChild variant={statusFilter === "" ? "default" : "ghost"}>
-            <Link href="/runs">{runsPageCopy.filters.all}</Link>
-          </Button>
-          <Button asChild variant={statusFilter === "FAILED" ? "warning" : "ghost"}>
-            <Link href="/runs?status=FAILED">{runsPageCopy.filters.failed}</Link>
-          </Button>
-          <Button asChild variant={statusFilter === "RUNNING" ? "secondary" : "ghost"}>
-            <Link href="/runs?status=RUNNING">{runsPageCopy.filters.running}</Link>
-          </Button>
-          <Button asChild variant={statusFilter === "SUCCESS" ? "secondary" : "ghost"}>
-            <Link href="/runs?status=SUCCESS">{runsPageCopy.filters.success}</Link>
-          </Button>
-        </div>
-        {runs.length > visibleRuns.length ? (
-          <p className="mono muted" role="status">
-            {runsPageCopy.firstScreenLimit(visibleRuns.length)}
-          </p>
-        ) : null}
-        <RunList runs={visibleRuns} locale={locale} />
         <div className="stats-grid">
           <Card asChild variant="metric">
             <article>
@@ -147,6 +135,26 @@ export default async function RunsPage({ searchParams }: RunsPageProps) {
             </article>
           </Card>
         </div>
+        <div className="toolbar toolbar--mt" role="group" aria-label={runsPageCopy.filterAriaLabel}>
+          <Button asChild variant={statusFilter === "" ? "default" : "ghost"}>
+            <Link href="/runs">{runsPageCopy.filters.all}</Link>
+          </Button>
+          <Button asChild variant={statusFilter === "FAILED" ? "warning" : "ghost"}>
+            <Link href="/runs?status=FAILED">{runsPageCopy.filters.failed}</Link>
+          </Button>
+          <Button asChild variant={statusFilter === "RUNNING" ? "secondary" : "ghost"}>
+            <Link href="/runs?status=RUNNING">{runsPageCopy.filters.running}</Link>
+          </Button>
+          <Button asChild variant={statusFilter === "SUCCESS" ? "secondary" : "ghost"}>
+            <Link href="/runs?status=SUCCESS">{runsPageCopy.filters.success}</Link>
+          </Button>
+        </div>
+        {runs.length > visibleRuns.length ? (
+          <p className="mono muted" role="status">
+            {runsPageCopy.firstScreenLimit(visibleRuns.length)}
+          </p>
+        ) : null}
+        <RunList runs={visibleRuns} locale={locale} />
       </section>
     </main>
   );

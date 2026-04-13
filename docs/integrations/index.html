@@ -3,17 +3,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>CortexPilot | Coding-agent integrations for Codex, Claude Code, and OpenClaw</title>
+    <title>OpenVibeCoding | Coding-agent integrations for Codex, Claude Code, and OpenClaw</title>
     <meta
       name="description"
-      content="Truthful CortexPilot integration guide for Codex, Claude Code, and OpenClaw: read-only MCP, API/client entrypoints, repo-owned skills, and the current no-fake-plugin boundary."
+      content="Truthful OpenVibeCoding integration guide for Codex, Claude Code, and OpenClaw: read-only MCP, API/client entrypoints, repo-owned skills, and the current no-fake-plugin boundary on top of the CortexPilot runtime."
     />
     <meta
       name="keywords"
-      content="CortexPilot, Codex, Claude Code, OpenClaw, coding agent integrations, MCP, plugin, skills, workflow cases, proof and replay"
+      content="OpenVibeCoding, CortexPilot runtime, Codex, Claude Code, OpenClaw, coding agent integrations, MCP, plugin, skills, workflow cases, proof and replay"
     />
     <link rel="canonical" href="https://xiaojiou176-open.github.io/CortexPilot-public/integrations/" />
-    <meta property="og:title" content="CortexPilot | Coding-agent integrations for Codex, Claude Code, and OpenClaw" />
+    <meta property="og:title" content="OpenVibeCoding | Coding-agent integrations for Codex, Claude Code, and OpenClaw" />
     <meta
       property="og:description"
       content="Truthful integration map for Codex, Claude Code, and OpenClaw with read-only MCP, API/client entrypoints, repo-owned skills, and no fake official-plugin claims."
@@ -22,7 +22,7 @@
     <meta property="og:url" content="https://xiaojiou176-open.github.io/CortexPilot-public/integrations/" />
     <meta property="og:image" content="../assets/storefront/social-preview-1280x640.png" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="CortexPilot | Coding-agent integrations for Codex, Claude Code, and OpenClaw" />
+    <meta name="twitter:title" content="OpenVibeCoding | Coding-agent integrations for Codex, Claude Code, and OpenClaw" />
     <meta
       name="twitter:description"
       content="Truthful integration map for Codex, Claude Code, and OpenClaw with read-only MCP, API/client entrypoints, repo-owned skills, and no fake official-plugin claims."
@@ -32,7 +32,7 @@
       {
         "@context": "https://schema.org",
         "@type": "TechArticle",
-        "headline": "CortexPilot coding-agent integrations for Codex, Claude Code, and OpenClaw",
+        "headline": "OpenVibeCoding coding-agent integrations for Codex, Claude Code, and OpenClaw",
         "url": "https://xiaojiou176-open.github.io/CortexPilot-public/integrations/",
         "description": "Truthful integration guide for Codex, Claude Code, and OpenClaw using read-only MCP, repo-owned skills, and current API or builder entrypoints."
       }
@@ -44,10 +44,10 @@
         "mainEntity": [
           {
             "@type": "Question",
-            "name": "Is CortexPilot an official Codex or Claude Code plugin?",
+            "name": "Is OpenVibeCoding an official Codex or Claude Code plugin?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "No. Codex now has official plugin surfaces and OpenClaw has official plugin and skills surfaces, but CortexPilot currently ships workflow compatibility, read-only MCP, repo-owned skills, builder entrypoints, and local bundle examples rather than a published listing."
+              "text": "No. OpenVibeCoding is the public shell for the CortexPilot repo/runtime. Codex now has official plugin surfaces and OpenClaw has official plugin and skills surfaces, but the current public story still ships workflow compatibility, read-only MCP, repo-owned skills, builder entrypoints, and local bundle examples rather than a published listing."
             }
           },
           {
@@ -55,7 +55,7 @@
             "name": "Where does OpenClaw fit today?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "OpenClaw stays in the adjacent coding-agent layer. CortexPilot can still provide read-only MCP, proof and replay, and skill-pack guidance around it without claiming a first-class native plugin."
+              "text": "OpenClaw stays in the adjacent coding-agent layer. OpenVibeCoding can still provide read-only MCP, proof and replay, and skill-pack guidance around it without claiming a first-class native plugin."
             }
           },
           {
@@ -68,10 +68,10 @@
           },
           {
             "@type": "Question",
-            "name": "Does this page mean CortexPilot is hosted or write-capable through MCP?",
+            "name": "Does this page mean OpenVibeCoding is hosted or write-capable through MCP?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "No. The current public MCP contract is read-only, and CortexPilot should not be described as a hosted operator product today."
+              "text": "No. The current public MCP contract is read-only, and OpenVibeCoding should not be described as a hosted operator product today."
             }
           }
         ]
@@ -197,20 +197,20 @@
         </nav>
         <h1>Codex, Claude Code, and OpenClaw integrations.</h1>
         <p class="lede">
-          CortexPilot already fits into modern coding-agent workflows, but the truthful entrypoint is
+          OpenVibeCoding is the public shell for the CortexPilot runtime, and it already fits into modern coding-agent workflows, but the truthful entrypoint is
           <strong>not</strong> “install our official plugin.” The truthful story today is:
           <strong>read-only MCP</strong>, <strong>repo-owned skills</strong>, <strong>API/client entrypoints</strong>,
           and <strong>Workflow Cases + Proof &amp; Replay</strong> as the common operating record.
         </p>
         <p class="lede">
-          Use this page when you want the shortest honest answer to: “How do I actually use CortexPilot with
+          Use this page when you want the shortest honest answer to: “How do I actually use OpenVibeCoding with
           Codex, Claude Code, or OpenClaw right now?”
         </p>
         <p class="lede">
           The safe product positioning is <strong>workflow-aligned</strong> and <strong>read-only MCP-compatible</strong>.
           Codex now has official plugin surfaces, Claude Code currently exposes project-level MCP / hooks / subagent surfaces,
           and OpenClaw already has plugin + skills hosts of its own. Keep <strong>plugin</strong> wording narrow:
-          for CortexPilot, the default public story is still integrations + skills + MCP plus local bundle examples, not a published listing.
+          for OpenVibeCoding, the default public story is still integrations + skills + MCP plus local bundle examples, not a published listing.
         </p>
         <div class="actions">
           <a class="button primary" href="../mcp/">Open read-only MCP quickstart</a>
@@ -234,7 +234,7 @@
               <tr>
                 <th>Surface</th>
                 <th>Works today</th>
-                <th>How CortexPilot fits</th>
+                <th>How OpenVibeCoding fits</th>
                 <th>What we must not claim</th>
               </tr>
             </thead>
@@ -243,7 +243,7 @@
                 <td><strong>Codex</strong></td>
                 <td>Yes</td>
                 <td>Command Tower, Workflow Cases, Proof &amp; Replay, read-only MCP, repo-owned skills, and API/client entrypoints all fit Codex-style governed coding loops.</td>
-                <td>Do not call CortexPilot a published Codex directory entry or an OpenAI-managed integration surface.</td>
+                <td>Do not call OpenVibeCoding a published Codex directory entry or an OpenAI-managed integration surface.</td>
               </tr>
               <tr>
                 <td><strong>Claude Code</strong></td>
@@ -254,7 +254,7 @@
               <tr>
                 <td><strong>OpenClaw</strong></td>
                 <td>Bundle-compatible only when explicitly mapped</td>
-                <td>OpenClaw belongs in the adjacent coding-agent layer. CortexPilot can still provide read-only MCP, skill-pack guidance, and proof/case review surfaces around it without pretending the same first-class binding as Codex / Claude Code.</td>
+                <td>OpenClaw belongs in the adjacent coding-agent layer. OpenVibeCoding can still provide read-only MCP, skill-pack guidance, and proof/case review surfaces around it without pretending the same first-class binding as Codex / Claude Code.</td>
                 <td>Do not present OpenClaw support as an official plugin, native OpenClaw plugin, or first-class product binding unless a real mapped bundle or native plugin ships and is tested.</td>
               </tr>
             </tbody>
@@ -275,7 +275,7 @@
               and the <a href="https://developers.openai.com/codex/ide">IDE install path</a>.
             </p>
             <p>
-              CortexPilot should wrap Codex workflows with Command Tower, Workflow Cases,
+              OpenVibeCoding should wrap Codex workflows with Command Tower, Workflow Cases,
               Proof &amp; Replay, read-only MCP, and repo-owned skills or local bundle examples.
               It should not be framed as a published Codex directory entry or an OpenAI-managed surface.
             </p>
@@ -290,7 +290,7 @@
               <a href="https://code.claude.com/docs/en/mcp">Claude Code MCP docs</a>.
             </p>
             <p>
-              CortexPilot should fit as the governed review/proof/control-plane layer around
+              OpenVibeCoding should fit as the governed review/proof/control-plane layer around
               those workflows. It should not be framed as a Claude Code marketplace listing
               or Anthropic-managed plugin surface.
             </p>
@@ -305,7 +305,7 @@
               and the <a href="https://github.com/openclaw/clawhub">ClawHub registry/catalog</a>.
             </p>
             <p>
-              OpenClaw already has its own skills and plugin/catalog reality. CortexPilot should
+              OpenClaw already has its own skills and plugin/catalog reality. OpenVibeCoding should
               therefore land on the integration, proof, replay, and read-only MCP side first,
               not pretend it already ships a native OpenClaw plugin.
             </p>
@@ -321,7 +321,7 @@
               <tr>
                 <th>Platform</th>
                 <th>Official surface exists?</th>
-                <th>Current CortexPilot state</th>
+                <th>Current OpenVibeCoding state</th>
                 <th>Do not overclaim</th>
               </tr>
             </thead>
@@ -330,7 +330,7 @@
                 <td><strong>Codex</strong></td>
                 <td>Yes. Official plugins surface exists.</td>
                 <td>Public starter docs, one local marketplace example, and one portable local bundle exist. There is still no official Codex listing receipt tracked here today.</td>
-                <td>Do not say CortexPilot is listed in an OpenAI-managed directory unless you have the listing URL or receipt.</td>
+                <td>Do not say OpenVibeCoding is listed in an OpenAI-managed directory unless you have the listing URL or receipt.</td>
               </tr>
               <tr>
                 <td><strong>Claude Code</strong></td>
@@ -375,7 +375,7 @@
               <tr>
                 <th>Ecosystem</th>
                 <th>Start here</th>
-                <th>Then use CortexPilot for</th>
+                <th>Then use OpenVibeCoding for</th>
                 <th>Stop sign</th>
               </tr>
             </thead>
@@ -384,7 +384,7 @@
                 <td><strong>Codex</strong></td>
                 <td>Codex CLI / IDE docs</td>
                 <td>Compatibility matrix → read-only MCP or proof-first use case → builder starter if package reuse is needed</td>
-                <td>Do not call CortexPilot a published Codex directory entry.</td>
+                <td>Do not call OpenVibeCoding a published Codex directory entry.</td>
               </tr>
               <tr>
                 <td><strong>Claude Code</strong></td>
@@ -395,8 +395,8 @@
               <tr>
                 <td><strong>OpenClaw</strong></td>
                 <td>OpenClaw repo + skills docs + ClawHub</td>
-                <td>Use CortexPilot as the adjacent review/proof/read-only MCP layer, then map packages or skills only when a concrete workflow really needs them</td>
-                <td>Do not present CortexPilot as a native OpenClaw plugin unless a mapped path is shipped and tested.</td>
+                <td>Use OpenVibeCoding as the adjacent review/proof/read-only MCP layer, then map packages or skills only when a concrete workflow really needs them</td>
+                <td>Do not present OpenVibeCoding as a native OpenClaw plugin unless a mapped path is shipped and tested.</td>
               </tr>
             </tbody>
           </table>
@@ -465,19 +465,19 @@ node packages/frontend-api-client/examples/control_plane_starter.local.mjs \
         <div class="grid">
           <article class="card">
             <h3>Good wording</h3>
-            <p>“CortexPilot works with Codex and Claude Code workflows through Workflow Cases, Proof &amp; Replay, read-only MCP, repo-owned skills, and builder entrypoints.”</p>
+            <p>“OpenVibeCoding works with Codex and Claude Code workflows through Workflow Cases, Proof &amp; Replay, read-only MCP, repo-owned skills, and builder entrypoints.”</p>
           </article>
           <article class="card">
             <h3>Bad wording</h3>
-            <p>“CortexPilot already ships the official Codex / Claude Code / OpenClaw listing.”</p>
+            <p>“OpenVibeCoding already ships the official Codex / Claude Code / OpenClaw listing.”</p>
           </article>
           <article class="card">
             <h3>Good wording</h3>
-            <p>“OpenClaw stays in the adjacent coding-agent layer and can use CortexPilot as a bundle-compatible review surface when the mapped path is explicitly shipped and tested.”</p>
+            <p>“OpenClaw stays in the adjacent coding-agent layer and can use OpenVibeCoding as a bundle-compatible review surface when the mapped path is explicitly shipped and tested.”</p>
           </article>
           <article class="card">
             <h3>Bad wording</h3>
-            <p>“OpenClaw is a first-class officially supported plugin surface inside CortexPilot today.”</p>
+            <p>“OpenClaw is a first-class officially supported plugin surface inside OpenVibeCoding today.”</p>
           </article>
         </div>
       </section>
@@ -487,19 +487,19 @@ node packages/frontend-api-client/examples/control_plane_starter.local.mjs \
         <div class="grid">
           <article class="card">
             <h3>Is this an official Codex or Claude Code plugin page?</h3>
-            <p>No. Codex now has official plugin surfaces and OpenClaw has official plugin and skills surfaces, but CortexPilot currently ships workflow compatibility, read-only MCP, repo-owned skills, builder entrypoints, and local bundle examples rather than a published listing.</p>
+            <p>No. OpenVibeCoding is the public shell for the CortexPilot repo/runtime. Codex now has official plugin surfaces and OpenClaw has official plugin and skills surfaces, but the current public story still ships workflow compatibility, read-only MCP, repo-owned skills, builder entrypoints, and local bundle examples rather than a published listing.</p>
           </article>
           <article class="card">
             <h3>Where does OpenClaw fit today?</h3>
-            <p>OpenClaw stays in the adjacent coding-agent layer. CortexPilot can still provide read-only MCP, proof and replay, and skill-pack guidance around it without claiming a first-class native plugin.</p>
+            <p>OpenClaw stays in the adjacent coding-agent layer. OpenVibeCoding can still provide read-only MCP, proof and replay, and skill-pack guidance around it without claiming a first-class native plugin.</p>
           </article>
           <article class="card">
             <h3>Should a new team start from MCP, builders, or skills?</h3>
             <p>Start from read-only MCP when the first need is protocol inspection, from builders or API when the first need is package-level integration, and from skills when the first need is repeatable operating playbooks.</p>
           </article>
           <article class="card">
-            <h3>Does this page mean CortexPilot is hosted or write-capable through MCP?</h3>
-            <p>No. The current public MCP contract is read-only, and CortexPilot should not be described as a hosted operator product today.</p>
+            <h3>Does this page mean OpenVibeCoding is hosted or write-capable through MCP?</h3>
+            <p>No. The current public MCP contract is read-only, and OpenVibeCoding should not be described as a hosted operator product today.</p>
           </article>
         </div>
       </section>

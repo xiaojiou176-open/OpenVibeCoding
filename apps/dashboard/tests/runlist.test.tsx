@@ -257,10 +257,10 @@ test("keeps contrast-safe muted and badge text tokens in dashboard globals", () 
   })();
   const css = readCssBundle(cssPath);
 
-  expect(css).toContain("--color-text-muted: #4b5563;");
-  expect(css).toContain("--color-success-ink: #065f46;");
-  expect(css).toContain("--color-warning-ink: #92400e;");
-  expect(css).toContain("--color-danger-ink: #b91c1c;");
+  expect(css).toContain("--color-text-muted: #9fb0c8;");
+  expect(css).toContain("--color-success-ink: #7fe0b7;");
+  expect(css).toContain("--color-warning-ink: #f2c27d;");
+  expect(css).toContain("--color-danger-ink: #f0aaaa;");
   expect(css).toContain(".quick-card-desc");
   expect(css).toContain(".ct-home-filter-desc");
   expect(css).toContain(".sidebar-link");

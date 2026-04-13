@@ -84,9 +84,9 @@ export async function generateMetadata({
   const workflowId = safeDecodeParam(id);
   const titleSuffix = workflowId ? ` · ${workflowId}` : "";
   return {
-    title: `Workflow Case detail${titleSuffix} | CortexPilot`,
+    title: `Workflow Case detail${titleSuffix} | OpenVibeCoding`,
     description:
-      "Inspect one Workflow Case across risk, queue posture, linked runs, event timeline, and the next operator action inside CortexPilot.",
+      "Inspect one Workflow Case across risk, queue posture, linked runs, event timeline, and the next operator action inside the OpenVibeCoding command tower.",
   };
 }
 
@@ -143,6 +143,7 @@ export default async function WorkflowDetailPage({
         <header className="app-section">
           <div className="section-header">
             <div>
+              <p className="cell-sub mono muted">OpenVibeCoding / workflow case detail</p>
               <h1 id="workflow-detail-title">{workflowDetailPageCopy.title}</h1>
               <p>{workflowDetailPageCopy.subtitle}</p>
             </div>
@@ -212,6 +213,7 @@ export default async function WorkflowDetailPage({
       <header className="app-section">
         <div className="section-header">
           <div>
+            <p className="cell-sub mono muted">OpenVibeCoding / workflow case detail</p>
             <h1 id="workflow-detail-title">{workflowDetailPageCopy.title}</h1>
             <p>{workflowDetailPageCopy.subtitle}</p>
           </div>

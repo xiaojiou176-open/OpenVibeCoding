@@ -49,6 +49,27 @@ export function OverviewPage({ onNavigate, onNavigateToRun, locale = "en" }: Ove
   const [events, setEvents] = useState<EventRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const overviewCopy = getUiCopy(locale).desktop.overview;
+  const shellCopy =
+    locale === "zh-CN"
+      ? {
+          eyebrow: "OpenVibeCoding / 指挥总览",
+          commandDeckTitle: "先看这四件事",
+          commandDeckSubtitle: "第一屏先回答现在在发生什么、哪里堵住了、风险是否在上升、下一步该进哪条操作面。",
+          nextActionTitle: "下一步",
+          nextActionQueued: "回到 Command Tower 继续盯 live 队列",
+          nextActionRunning: "打开 Workflow Cases 继续沿 durable state 推进",
+          nextActionClear: "从 PM 入口继续派发新任务",
+        }
+      : {
+          eyebrow: "OpenVibeCoding / command overview",
+          commandDeckTitle: "Start with these four checks",
+          commandDeckSubtitle:
+            "The first screen should tell you what is moving, what is blocked, whether risk is rising, and which surface to open next.",
+          nextActionTitle: "Next operator action",
+          nextActionQueued: "Return to the command tower and keep the live queue in view",
+          nextActionRunning: "Open Workflow Cases and continue from the durable state",
+          nextActionClear: "Return to PM intake and queue the next task",
+        };
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -119,6 +140,17 @@ export function OverviewPage({ onNavigate, onNavigateToRun, locale = "en" }: Ove
       hint: blockedEvents.length > 0 ? overviewCopy.progressCards.riskEventsHint : overviewCopy.progressCards.riskEventsEmpty,
       variant: blockedEvents.length > 0 ? "metric-value--danger" : "metric-value--success",
     },
+    {
+      title: shellCopy.nextActionTitle,
+      value: failedRuns.length > 0 ? overviewCopy.viewAllExceptions : runningRuns.length > 0 ? overviewCopy.viewAllRuns : overviewCopy.quickActions.step1Label,
+      hint:
+        failedRuns.length > 0
+          ? shellCopy.nextActionQueued
+          : runningRuns.length > 0
+            ? shellCopy.nextActionRunning
+            : shellCopy.nextActionClear,
+      variant: failedRuns.length > 0 ? "metric-value--warning" : "metric-value--primary",
+    },
   ];
 
   const recentExceptions = [
@@ -150,11 +182,30 @@ export function OverviewPage({ onNavigate, onNavigateToRun, locale = "en" }: Ove
       {/* Header */}
       <header className="section-header">
         <div>
+          <p className="cell-sub mono muted">{shellCopy.eyebrow}</p>
           <h1 id="overview-title" className="page-title">{overviewCopy.title}</h1>
           <p className="page-subtitle">{overviewCopy.subtitle}</p>
         </div>
         <Button onClick={load} aria-label={overviewCopy.refreshData}>{overviewCopy.refreshData}</Button>
       </header>
+
+      <section className="app-section" aria-labelledby="progress-title">
+        <div className="section-header">
+          <div>
+            <h2 id="progress-title" className="section-title">{shellCopy.commandDeckTitle}</h2>
+            <p>{shellCopy.commandDeckSubtitle}</p>
+          </div>
+        </div>
+        <div className="stats-grid">
+          {progressCards.map((card) => (
+            <article key={card.title} className="metric-card">
+              <p className="metric-label">{card.title}</p>
+              <p className={`metric-value ${card.variant}`}>{card.value}</p>
+              <p className="muted text-xs">{card.hint}</p>
+            </article>
+          ))}
+        </div>
+      </section>
 
       {/* Metrics */}
       <section className="app-section" aria-label={overviewCopy.metricsAriaLabel}>
@@ -205,20 +256,6 @@ export function OverviewPage({ onNavigate, onNavigateToRun, locale = "en" }: Ove
             <span className="quick-card-title">{overviewCopy.approvalCheckpoint}</span>
             <span className="quick-card-desc">{overviewCopy.approvalCheckpointDesc}</span>
           </Button>
-        </div>
-      </section>
-
-      {/* Current progress */}
-      <section className="app-section" aria-labelledby="progress-title">
-        <h2 id="progress-title" className="section-title">{overviewCopy.currentProgressTitle}</h2>
-        <div className="stats-grid">
-          {progressCards.map((card) => (
-            <article key={card.title} className="metric-card">
-              <p className="metric-label">{card.title}</p>
-              <p className={`metric-value ${card.variant}`}>{card.value}</p>
-              <p className="muted text-xs">{card.hint}</p>
-            </article>
-          ))}
         </div>
       </section>
 

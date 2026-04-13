@@ -419,78 +419,6 @@ export default async function AgentsPage({ searchParams }: AgentsPageProps) {
           <p className="cell-sub mono muted">{agentsPageCopy.metricSublines.schedulerHint(lockedAgentCount)}</p>
         </article>
       </section>
-      <RoleConfigControlPlane roleCatalog={roleCatalogAll} />
-      <section className="app-section" aria-labelledby="agents-role-catalog-title">
-        <div className="section-header">
-          <div>
-            <h2 className="sr-only">Role catalog (read-only first screen)</h2>
-            <h2 id="agents-role-catalog-title" className="section-title">{agentsPageCopy.roleCatalog.title}</h2>
-            <p className="mono muted">{agentsPageCopy.roleCatalog.subtitle}</p>
-          </div>
-          <div className="toolbar" role="group" aria-label="Role catalog entry">
-            <Button asChild variant="secondary" aria-label="Go to the full registered agent list">
-              <Link href="#agents-registered-title">{agentsPageCopy.roleCatalog.fullList}</Link>
-            </Button>
-          </div>
-        </div>
-        <Card variant="table">
-          {payloadWarning ? (
-            <p className="mono muted">{agentsPageCopy.roleCatalog.registryUnavailable}</p>
-          ) : roleCatalog.length === 0 ? (
-            <p className="mono muted">{agentsPageCopy.roleCatalog.noMatches}</p>
-          ) : (
-            <table className="run-table">
-              <thead>
-                <tr>
-                  <th scope="col">{agentsPageCopy.roleCatalog.headers.role}</th>
-                  <th scope="col">{agentsPageCopy.roleCatalog.headers.skillsBundle}</th>
-                  <th scope="col">{agentsPageCopy.roleCatalog.headers.mcpBundle}</th>
-                  <th scope="col">{agentsPageCopy.roleCatalog.headers.runtimeBinding}</th>
-                  <th scope="col">{agentsPageCopy.roleCatalog.headers.executionAuthority}</th>
-                  <th scope="col">{agentsPageCopy.roleCatalog.headers.registeredSeats}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {roleCatalog.map((roleEntry) => (
-                  <tr key={`role-catalog:${roleEntry.role}`}>
-                    <th scope="row">
-                      <div className="stack-gap-2">
-                        <Badge>{roleEntry.role}</Badge>
-                        <span className="muted">{roleEntry.purpose || agentsPageCopy.roleCatalog.noRolePurpose}</span>
-                      </div>
-                    </th>
-                    <td>
-                      <span className="mono muted">
-                        {formatBindingReadModelLabel(roleEntry.role_binding_read_model?.skills_bundle_ref)}
-                      </span>
-                    </td>
-                    <td>
-                      <span className="mono muted">
-                        {formatBindingReadModelLabel(roleEntry.role_binding_read_model?.mcp_bundle_ref)}
-                      </span>
-                    </td>
-                    <td><span className="mono muted">{formatRoleBindingRuntimeSummary(roleEntry.role_binding_read_model)}</span></td>
-                    <td>
-                      <div className="stack-gap-2">
-                        <Badge variant="running">{roleEntry.role_binding_read_model.execution_authority}</Badge>
-                        <span className="muted">{agentsPageCopy.roleCatalog.readOnlyMirror}</span>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="stack-gap-2">
-                        <span className="cell-primary">{roleEntry.registered_agent_count}</span>
-                        <span className="mono muted">
-                          {roleEntry.locked_agent_count} {agentsPageCopy.roleCatalog.lockedSuffix}
-                        </span>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </Card>
-      </section>
       <section className="app-section" aria-labelledby="agents-ops-title">
         <div className="section-header">
           <div>
@@ -530,7 +458,6 @@ export default async function AgentsPage({ searchParams }: AgentsPageProps) {
           </Button>
         </form>
       </section>
-
       {/* ── Active State Machine ── */}
       <section className="app-section" aria-labelledby="agents-state-machine-title">
         <div className="section-header">
@@ -784,6 +711,84 @@ export default async function AgentsPage({ searchParams }: AgentsPageProps) {
                 </table>
               </div>
             )}
+          </details>
+        </Card>
+      </section>
+
+      <RoleConfigControlPlane roleCatalog={roleCatalogAll} />
+      <section className="app-section" aria-labelledby="agents-role-catalog-title">
+        <Card asChild>
+          <details>
+            <summary className="section-title" id="agents-role-catalog-title">
+              {agentsPageCopy.roleCatalog.title}
+            </summary>
+            <div className="section-header mt-2">
+              <div>
+                <p className="mono muted">{agentsPageCopy.roleCatalog.subtitle}</p>
+              </div>
+              <div className="toolbar" role="group" aria-label="Role catalog entry">
+                <Button asChild variant="secondary" aria-label="Go to the full registered agent list">
+                  <Link href="#agents-registered-title">{agentsPageCopy.roleCatalog.fullList}</Link>
+                </Button>
+              </div>
+            </div>
+            <div className="table-card mt-2">
+              {payloadWarning ? (
+                <p className="mono muted">{agentsPageCopy.roleCatalog.registryUnavailable}</p>
+              ) : roleCatalog.length === 0 ? (
+                <p className="mono muted">{agentsPageCopy.roleCatalog.noMatches}</p>
+              ) : (
+                <table className="run-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">{agentsPageCopy.roleCatalog.headers.role}</th>
+                      <th scope="col">{agentsPageCopy.roleCatalog.headers.skillsBundle}</th>
+                      <th scope="col">{agentsPageCopy.roleCatalog.headers.mcpBundle}</th>
+                      <th scope="col">{agentsPageCopy.roleCatalog.headers.runtimeBinding}</th>
+                      <th scope="col">{agentsPageCopy.roleCatalog.headers.executionAuthority}</th>
+                      <th scope="col">{agentsPageCopy.roleCatalog.headers.registeredSeats}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {roleCatalog.map((roleEntry) => (
+                      <tr key={`role-catalog:${roleEntry.role}`}>
+                        <th scope="row">
+                          <div className="stack-gap-2">
+                            <Badge>{roleEntry.role}</Badge>
+                            <span className="muted">{roleEntry.purpose || agentsPageCopy.roleCatalog.noRolePurpose}</span>
+                          </div>
+                        </th>
+                        <td>
+                          <span className="mono muted">
+                            {formatBindingReadModelLabel(roleEntry.role_binding_read_model?.skills_bundle_ref)}
+                          </span>
+                        </td>
+                        <td>
+                          <span className="mono muted">
+                            {formatBindingReadModelLabel(roleEntry.role_binding_read_model?.mcp_bundle_ref)}
+                          </span>
+                        </td>
+                        <td><span className="mono muted">{formatRoleBindingRuntimeSummary(roleEntry.role_binding_read_model)}</span></td>
+                        <td>
+                          <div className="stack-gap-2">
+                            <Badge variant="running">{roleEntry.role_binding_read_model.execution_authority}</Badge>
+                            <span className="muted">{agentsPageCopy.roleCatalog.readOnlyMirror}</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div className="stack-gap-2">
+                            <span className="cell-primary">{roleEntry.registered_agent_count}</span>
+                            <span className="mono muted">
+                              {roleEntry.locked_agent_count} {agentsPageCopy.roleCatalog.lockedSuffix}
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
           </details>
         </Card>
       </section>

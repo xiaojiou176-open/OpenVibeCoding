@@ -166,8 +166,8 @@ describe("desktop p0 misc controls", () => {
     const onNavigateToRun = vi.fn();
 
     const overview = render(<OverviewPage onNavigate={onNavigate} onNavigateToRun={onNavigateToRun} />);
-    expect(await screen.findByRole("heading", { name: /新手起步|Operator overview/ })).toBeInTheDocument();
-    expect(screen.getByText(/首次使用建议先走一遍单主流程|follow the primary path/i)).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: /指挥面总览|Command deck overview|新手起步|Operator overview/ })).toBeInTheDocument();
+    expect(screen.getByText(/OpenVibeCoding 的第一条主循环是|OpenVibeCoding starts with one loop/i)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /主步骤 1 · 发需求|Step 1 · Brief PM/ })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /主步骤 2 · 看进度|Step 2 · Watch progress/ })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /主步骤 3 · 看案例|Step 3 · Review Workflow Cases/ })).toBeInTheDocument();

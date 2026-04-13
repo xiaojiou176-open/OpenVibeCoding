@@ -352,6 +352,10 @@
   blocker, the runtime may now persist:
   - `artifacts/context_pack.json`
   - `artifacts/harness_request.json`
+- When finalize selects the same-session continuation branch, the queued
+  follow-up contract may carry `context_pack.json` back through
+  `inputs.artifacts`, and runner instruction assembly may project a compact
+  Context Pack appendix into the live worker instruction.
 - These runtime-generated artifacts remain read-back coordination objects. They
   do not replace `task_contract` as execution authority.
 

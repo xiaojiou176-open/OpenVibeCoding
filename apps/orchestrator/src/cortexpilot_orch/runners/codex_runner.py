@@ -172,7 +172,7 @@ class CodexRunner:
         mock_mode: bool = False,
     ) -> dict[str, Any]:
         run_id = runner_common.resolve_run_id(contract)
-        instruction = runner_common.extract_instruction(contract)
+        instruction = runner_common.extract_instruction(contract, worktree_path)
         if not instruction:
             return runner_common.failure_result(contract, "missing instruction")
         mcp_only = os.getenv("CORTEXPILOT_MCP_ONLY", "1").strip().lower() in {"1", "true", "yes"}

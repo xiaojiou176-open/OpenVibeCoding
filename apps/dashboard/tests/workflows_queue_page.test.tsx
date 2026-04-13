@@ -79,7 +79,7 @@ describe("workflows queue page", () => {
   });
 
   it("exports workflow list metadata for route-level discoverability", () => {
-    expect(workflowsMetadata.title).toBe("Workflow Cases | CortexPilot");
+    expect(workflowsMetadata.title).toBe("Workflow Cases | OpenVibeCoding");
     expect(workflowsMetadata.description).toContain("queue posture");
   });
 

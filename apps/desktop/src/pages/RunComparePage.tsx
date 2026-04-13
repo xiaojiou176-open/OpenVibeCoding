@@ -132,20 +132,31 @@ export function RunComparePage({ runId, onBack }: Props) {
           </CardBody>
         </Card>
         <Card>
-          <CardHeader><CardTitle>Compare summary</CardTitle></CardHeader>
-          <CardBody><pre>{JSON.stringify(compareSummary, null, 2)}</pre></CardBody>
-        </Card>
-        <Card>
-          <CardHeader><CardTitle>Run compare report</CardTitle></CardHeader>
-          <CardBody><pre>{JSON.stringify(runCompareReport, null, 2)}</pre></CardBody>
-        </Card>
-        <Card>
-          <CardHeader><CardTitle>Replay report</CardTitle></CardHeader>
-          <CardBody><pre>{JSON.stringify(replayReport, null, 2)}</pre></CardBody>
-        </Card>
-        <Card>
-          <CardHeader><CardTitle>Run snapshot</CardTitle></CardHeader>
-          <CardBody><pre>{JSON.stringify(run, null, 2)}</pre></CardBody>
+          <CardHeader><CardTitle>Evidence archive</CardTitle></CardHeader>
+          <CardBody>
+            <details>
+              <summary className="mono">Open raw compare payloads</summary>
+              <div className="stack-gap-3 mt-3">
+                <p className="muted">Keep the decision layer in front. Open the raw compare payloads only when you need to inspect the evidence stack.</p>
+                <Card>
+                  <CardHeader><CardTitle>Compare summary</CardTitle></CardHeader>
+                  <CardBody><pre>{JSON.stringify(compareSummary, null, 2)}</pre></CardBody>
+                </Card>
+                <Card>
+                  <CardHeader><CardTitle>Run compare report</CardTitle></CardHeader>
+                  <CardBody><pre>{JSON.stringify(runCompareReport, null, 2)}</pre></CardBody>
+                </Card>
+                <Card>
+                  <CardHeader><CardTitle>Replay report</CardTitle></CardHeader>
+                  <CardBody><pre>{JSON.stringify(replayReport, null, 2)}</pre></CardBody>
+                </Card>
+                <Card>
+                  <CardHeader><CardTitle>Run snapshot</CardTitle></CardHeader>
+                  <CardBody><pre>{JSON.stringify(run, null, 2)}</pre></CardBody>
+                </Card>
+              </div>
+            </details>
+          </CardBody>
         </Card>
       </div>
     </div>

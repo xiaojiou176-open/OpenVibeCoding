@@ -11,7 +11,7 @@
     "test:ct-regression": "DASHBOARD_VITEST_POOL=${DASHBOARD_VITEST_POOL:-forks} vitest run --config vitest.config.mts --coverage --coverage.thresholds.lines=0 --coverage.thresholds.statements=0 --coverage.thresholds.functions=0 --coverage.thresholds.branches=0 tests/command_tower_ui.test.tsx tests/command_tower_async_home.suite.tsx tests/command_tower_async_session.suite.tsx",
     "ui:audit": "bash ../../scripts/ui_audit_gate.sh",
     "lint": "npm run typecheck",
-    "typecheck": "tsc --noEmit -p tsconfig.json"
+    "typecheck": "tsc --noEmit -p tsconfig.typecheck.json"
   },
   "dependencies": {
     "@cortexpilot/frontend-api-client": "file:../../packages/frontend-api-client",

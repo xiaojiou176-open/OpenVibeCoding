@@ -3,38 +3,38 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>CortexPilot | Skills quickstart for coding-agent teams</title>
+    <title>OpenVibeCoding | Skills quickstart for coding-agent teams</title>
     <meta
       name="description"
-      content="Skills quickstart for CortexPilot: repo-owned skill packs, when to use them, how they map to Codex and Claude Code workflows, and how to keep them truthful for adjacent tools such as OpenClaw."
+      content="Skills quickstart for OpenVibeCoding: repo-owned skill packs, when to use them, how they map to Codex and Claude Code workflows, and how to keep them truthful for adjacent tools such as OpenClaw."
     />
     <meta
       name="keywords"
-      content="CortexPilot, skills, Codex skills, Claude Code skills, OpenClaw skills, repo-owned playbooks, agent workflows, MCP"
+      content="OpenVibeCoding, CortexPilot runtime, skills, Codex skills, Claude Code skills, OpenClaw skills, repo-owned playbooks, agent workflows, MCP"
     />
     <link rel="canonical" href="https://xiaojiou176-open.github.io/CortexPilot-public/skills/" />
-    <meta property="og:title" content="CortexPilot | Skills quickstart for coding-agent teams" />
+    <meta property="og:title" content="OpenVibeCoding | Skills quickstart for coding-agent teams" />
     <meta
       property="og:description"
-      content="Repo-owned skills quickstart for Codex, Claude Code, and adjacent coding-agent workflows using CortexPilot."
+      content="Repo-owned skills quickstart for Codex, Claude Code, and adjacent coding-agent workflows using OpenVibeCoding."
     />
     <meta property="og:type" content="article" />
     <meta property="og:url" content="https://xiaojiou176-open.github.io/CortexPilot-public/skills/" />
     <meta property="og:image" content="../assets/storefront/social-preview-1280x640.png" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="CortexPilot | Skills quickstart for coding-agent teams" />
+    <meta name="twitter:title" content="OpenVibeCoding | Skills quickstart for coding-agent teams" />
     <meta
       name="twitter:description"
-      content="Repo-owned skills quickstart for Codex, Claude Code, and adjacent coding-agent workflows using CortexPilot."
+      content="Repo-owned skills quickstart for Codex, Claude Code, and adjacent coding-agent workflows using OpenVibeCoding."
     />
     <meta name="twitter:image" content="../assets/storefront/social-preview-1280x640.png" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "TechArticle",
-        "headline": "CortexPilot skills quickstart for coding-agent teams",
+        "headline": "OpenVibeCoding skills quickstart for coding-agent teams",
         "url": "https://xiaojiou176-open.github.io/CortexPilot-public/skills/",
-        "description": "Repo-owned skills quickstart for Codex, Claude Code, and adjacent coding-agent workflows using CortexPilot."
+        "description": "Repo-owned skills quickstart for Codex, Claude Code, and adjacent coding-agent workflows using OpenVibeCoding."
       }
     </script>
     <script type="application/ld+json">
@@ -44,10 +44,10 @@
         "mainEntity": [
           {
             "@type": "Question",
-            "name": "Are CortexPilot skills the same thing as a plugin marketplace?",
+            "name": "Are OpenVibeCoding skills the same thing as a plugin marketplace?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "No. CortexPilot skills are repo-owned playbooks that guide agent behavior around the repo's real docs, MCP, contracts, and workflow boundaries."
+              "text": "No. OpenVibeCoding skills are repo-owned playbooks that guide agent behavior around the repo's real docs, MCP, contracts, and workflow boundaries."
             }
           },
           {
@@ -63,7 +63,7 @@
             "name": "How should OpenClaw teams interpret this page?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "OpenClaw belongs in the adjacent coding-agent layer. Use this page as an adaptation guide for repo truth, not as a claim that CortexPilot already ships an official OpenClaw plugin package."
+              "text": "OpenClaw belongs in the adjacent coding-agent layer. Use this page as an adaptation guide for repo truth, not as a claim that OpenVibeCoding already ships an official OpenClaw plugin package."
             }
           },
           {
@@ -193,8 +193,8 @@
         </nav>
         <h1>Skills quickstart for coding-agent teams.</h1>
         <p class="lede">
-          CortexPilot already ships a public, repo-owned skills quickstart here. The truthful adoption path today is:
-          <strong>reuse repo-owned playbooks</strong> for Codex / Claude Code workflows, and adapt the same playbooks for adjacent tools such as OpenClaw without pretending CortexPilot is already a listed or shipped item inside those official plugin ecosystems.
+          OpenVibeCoding is the public shell for the CortexPilot runtime, and it already ships a public, repo-owned skills quickstart here. The truthful adoption path today is:
+          <strong>reuse repo-owned playbooks</strong> for Codex / Claude Code workflows, and adapt the same playbooks for adjacent tools such as OpenClaw without pretending OpenVibeCoding is already a listed or shipped item inside those official plugin ecosystems.
         </p>
         <div class="actions">
           <a class="button primary" href="#how-to-use-skills-today">Open the adoption path</a>
@@ -211,7 +211,7 @@
       </section>
 
       <section class="section" id="how-to-use-skills-today">
-        <h2>What a CortexPilot skill is</h2>
+        <h2>What an OpenVibeCoding skill is</h2>
         <div class="grid">
           <article class="card">
             <span class="badge">Playbook</span>
@@ -289,7 +289,7 @@
           </article>
           <article class="card">
             <h3>OpenClaw</h3>
-            <p>Use skills as an adaptation layer for repo truth. OpenClaw has real plugin and skills surfaces, and CortexPilot now carries a ClawHub-shaped <code>manifest.yaml</code> for its shared adoption-router skill, but it still lands on the integration-and-skills side first rather than claiming an official shipped plugin.</p>
+            <p>Use skills as an adaptation layer for repo truth. OpenClaw has real plugin and skills surfaces, and OpenVibeCoding now carries a ClawHub-shaped <code>manifest.yaml</code> for its shared adoption-router skill, but it still lands on the integration-and-skills side first rather than claiming an official shipped plugin.</p>
           </article>
         </div>
       </section>
@@ -306,7 +306,7 @@
               and <a href="https://developers.openai.com/codex/ide">IDE install</a>.
             </p>
             <p>
-              CortexPilot skills should act as repo-owned operating contracts around those workflows,
+              OpenVibeCoding skills should act as repo-owned operating contracts around those workflows,
               not as a replacement for Codex's own native surfaces.
             </p>
           </article>
@@ -318,7 +318,7 @@
               and <a href="https://code.claude.com/docs/en/mcp">MCP docs</a>.
             </p>
             <p>
-              CortexPilot skills should carry the repo's own read order, truth layers, and safety rails
+              OpenVibeCoding skills should carry the repo's own read order, truth layers, and safety rails
               into Claude Code workflows without implying a marketplace listing.
             </p>
           </article>
@@ -332,7 +332,7 @@
             </p>
             <p>
               OpenClaw already has real skills, a workspace path, and a public registry/catalog, so
-              CortexPilot should fit as repo truth + proof + read-only MCP guidance rather than
+              OpenVibeCoding should fit as repo truth + proof + read-only MCP guidance rather than
               pretending to be the native OpenClaw plugin itself. The tracked
               <code>manifest.yaml</code> is there so the shared skill has
               registry-shaped metadata ready when later external submission
@@ -346,7 +346,7 @@
         <h2>Truthful adoption ladder</h2>
         <ol>
           <li>Start from the native ecosystem docs first, so you know what the host tool already provides.</li>
-          <li>Use CortexPilot skills to carry the repo's own read order, safety rails, and done semantics into that workflow.</li>
+          <li>Use OpenVibeCoding skills to carry the repo's own read order, safety rails, and done semantics into that workflow.</li>
           <li>Pair the skill with the repo's truthful entrypoints: compatibility matrix, read-only MCP, builder packages, and proof-first use cases.</li>
           <li>For OpenClaw specifically, treat the official skills workspace and ClawHub registry as the native host surface, then adapt CortexPilot playbooks around it instead of relabeling CortexPilot as the native plugin.</li>
         </ol>
@@ -379,7 +379,7 @@ sed -n '1,220p' AGENTS.md</code></pre>
         <div class="grid">
           <article class="card">
             <h3>Are skills the same as a plugin marketplace?</h3>
-            <p>No. CortexPilot skills are repo-owned playbooks that guide agent behavior around the repo's real docs, MCP, contracts, and workflow boundaries.</p>
+            <p>No. OpenVibeCoding skills are repo-owned playbooks that guide agent behavior around the repo's real docs, MCP, contracts, and workflow boundaries.</p>
           </article>
           <article class="card">
             <h3>Can Codex and Claude Code teams use these today?</h3>
@@ -387,7 +387,7 @@ sed -n '1,220p' AGENTS.md</code></pre>
           </article>
           <article class="card">
             <h3>How should OpenClaw teams interpret this page?</h3>
-            <p>OpenClaw belongs in the adjacent coding-agent layer. Use this page as an adaptation guide for repo truth, not as a claim that CortexPilot already ships an official OpenClaw plugin package.</p>
+            <p>OpenClaw belongs in the adjacent coding-agent layer. Use this page as an adaptation guide for repo truth, not as a claim that OpenVibeCoding already ships an official OpenClaw plugin package.</p>
           </article>
           <article class="card">
             <h3>Does this page imply a hosted skill registry or write-capable MCP?</h3>
