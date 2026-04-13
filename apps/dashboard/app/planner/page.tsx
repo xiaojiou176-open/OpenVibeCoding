@@ -350,6 +350,36 @@ export default async function PlannerPage() {
   const totalUnblockTasks = rows.reduce((sum, row) => sum + row.unblockTasks.length, 0);
   const wakeAnchoredRuns = rows.filter((row) => Boolean(row.wavePlan?.wake_policy_ref)).length;
   const priority = plannerPriorityState(text, sortedRows);
+  const emptyChecklist =
+    locale === "zh-CN"
+      ? [
+          {
+            title: "锁定目标和验收口径",
+            desc: "先在 PM 入口把 objective、constraints 和 done signal 讲清楚，planner 才能开始工作。",
+          },
+          {
+            title: "把第一条 wave 送进系统",
+            desc: "没有真实 wave plan，就不会有 triage queue，也不会有 planner 的优先级排序。",
+          },
+          {
+            title: "回到 planner 做 dispatch",
+            desc: "等 planning artifact 出现后，再回来决定是去 tower、workflow case，还是 proof & replay。",
+          },
+        ]
+      : [
+          {
+            title: "Lock the objective and the done signal",
+            desc: "Write the objective, constraints, and acceptance bar in PM intake before you expect the planner to triage anything.",
+          },
+          {
+            title: "Send the first wave into the system",
+            desc: "Without a real wave plan there is no triage queue, no worker-contract posture, and no planner priority order.",
+          },
+          {
+            title: "Return here for dispatch",
+            desc: "Once the planning artifacts exist, come back here to choose whether the next move belongs in tower, workflow cases, or proof.",
+          },
+        ];
 
   return (
     <main className="grid" aria-labelledby="planner-page-title">
@@ -424,26 +454,42 @@ export default async function PlannerPage() {
 
       {rows.length === 0 ? (
         <Card className="planner-empty-stage">
-          <div className="empty-state-stack">
-            <span className="muted">{text.empty}</span>
-            <span className="mono muted">{text.note}</span>
-          </div>
-          <div className="planner-empty-grid">
-            <Link href="/pm" className="planner-empty-card">
-              <span className="cell-sub mono muted">01</span>
+          <div className="planner-empty-shell">
+            <div className="planner-empty-brief">
+              <span className="cell-sub mono muted">Planner launch checklist</span>
+              <strong className="planner-empty-title">
+                {locale === "zh-CN" ? "先把第一条规划 wave 发车，再回来做真正的 triage。" : "Start the first planning wave, then come back for real triage."}
+              </strong>
+              <p className="planner-empty-summary">{text.note}</p>
+              <div className="planner-empty-checklist" aria-label="Planner launch checklist">
+                {emptyChecklist.map((item, index) => (
+                  <div key={item.title} className="planner-empty-check">
+                    <span className="cell-sub mono muted">{String(index + 1).padStart(2, "0")}</span>
+                    <div className="planner-empty-check-body">
+                      <strong>{item.title}</strong>
+                      <span>{item.desc}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="planner-empty-grid">
+              <Link href="/pm" className="planner-empty-card">
+                <span className="cell-sub mono muted">DISPATCH · 01</span>
               <strong>{text.openPm}</strong>
               <span>{text.title === "规划桌" ? "先把第一条目标、约束和验收口径写清，再回来让 planner desk 真正开机。" : "Start the first wave from PM intake, then return here once the planning surface exists."}</span>
-            </Link>
-            <Link href="/command-tower" className="planner-empty-card">
-              <span className="cell-sub mono muted">02</span>
+              </Link>
+              <Link href="/command-tower" className="planner-empty-card">
+                <span className="cell-sub mono muted">OBSERVE · 02</span>
               <strong>{text.openTower}</strong>
               <span>{text.title === "规划桌" ? "如果系统已经在跑，只是规划产物还没挂出来，就先回 tower 看当前谁在动。" : "If work is already running but planning artifacts are missing, scan the tower before you dispatch anything else."}</span>
-            </Link>
-            <Link href="/workflows" className="planner-empty-card">
-              <span className="cell-sub mono muted">03</span>
+              </Link>
+              <Link href="/workflows" className="planner-empty-card">
+                <span className="cell-sub mono muted">RESUME · 03</span>
               <strong>{text.openWorkflow}</strong>
               <span>{text.title === "规划桌" ? "Workflow Case 是 durable state，不是首页解释文；当 planning row 出现后，回这里继续追。" : "Workflow Cases keep the durable state once the planner row becomes real."}</span>
-            </Link>
+              </Link>
+            </div>
           </div>
         </Card>
       ) : (

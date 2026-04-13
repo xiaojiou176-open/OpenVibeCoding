@@ -138,5 +138,9 @@ describe("run compare decision surface", () => {
     expect(screen.getAllByText(/run replay compare, and refresh this page/i).length).toBeGreaterThan(0);
     expect(screen.getByText("Operator choreography")).toBeInTheDocument();
     expect(screen.getByText(/Evidence chain: Unavailable/i)).toBeInTheDocument();
+    expect(screen.getByText("Compare posture")).toBeInTheDocument();
+    expect(screen.getByText("Awaiting report")).toBeInTheDocument();
+    expect(screen.getByText("Compare report")).toBeInTheDocument();
+    expect(screen.getByText("Replay compare")).toBeInTheDocument();
   });
 });

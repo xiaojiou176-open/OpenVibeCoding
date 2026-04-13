@@ -16,6 +16,7 @@ Make the operator understand, in one glance:
 - Metrics are supporting instrumentation, not the hero.
 - `worker contracts`, `unblock tasks`, and `wake policy` must read like planning posture, not like raw artifact counts.
 - Empty state should still feel operational: show the next three moves, not a blank warehouse.
+- Empty state should read like a launch checklist on the left and dispatch routes on the right, not three equal empty cards floating in space.
 - Inspection archive is second-layer only; it may deepen the planning picture, but it must never repeat the triage row one-to-one.
 
 ## Avoid

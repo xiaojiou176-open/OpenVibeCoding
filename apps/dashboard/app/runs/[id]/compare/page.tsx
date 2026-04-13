@@ -77,6 +77,23 @@ function compareDecision(copy: Record<string, unknown>): {
   };
 }
 
+function observationSignalCards(): Array<{ label: string; value: string }> {
+  return [
+    { label: "Compare report", value: "Missing" },
+    { label: "Evidence posture", value: "Unavailable" },
+    { label: "Next move", value: "Replay compare" },
+  ];
+}
+
+function observationDeltaRows(): Array<{ label: string; value: string }> {
+  return [
+    { label: "Compare posture", value: "Awaiting report" },
+    { label: "Evidence chain", value: "Unavailable" },
+    { label: "LLM params", value: "Unavailable" },
+    { label: "LLM snapshot", value: "Unavailable" },
+  ];
+}
+
 export default async function RunComparePage({
   params,
 }: {
@@ -93,6 +110,16 @@ export default async function RunComparePage({
   const compareSummary = asRecord(runCompareReport.compare_summary);
   const decision = compareDecision(compareSummary);
   const hasCompareReport = Object.keys(runCompareReport).length > 0;
+  const signalCards = hasCompareReport
+    ? [
+        { label: "Hash deltas", value: compareSummary.mismatched_count },
+        { label: "Artifact gaps", value: compareSummary.missing_count },
+        { label: "Unexpected extras", value: compareSummary.extra_count },
+        { label: "Report gaps", value: compareSummary.missing_reports_count },
+        { label: "Check failures", value: compareSummary.failed_report_checks_count },
+      ]
+    : observationSignalCards();
+  const deltaRows = hasCompareReport ? decision.keyDeltas : observationDeltaRows();
   const evidenceStatus = hasCompareReport ? (asBoolean(compareSummary.evidence_ok) ? "OK" : "Needs review") : "Unavailable";
   const llmParamsStatus = hasCompareReport ? (asBoolean(compareSummary.llm_params_ok) ? "OK" : "Changed") : "Unavailable";
   const llmSnapshotStatus = hasCompareReport ? (asBoolean(compareSummary.llm_snapshot_ok) ? "OK" : "Changed") : "Unavailable";
@@ -146,16 +173,10 @@ export default async function RunComparePage({
             <h2 className="section-title">Decision summary</h2>
             <p>{displaySummary}</p>
             <div className="compare-signal-grid" aria-label="Compare signal highlights">
-              {[
-                { label: "Hash deltas", value: compareSummary.mismatched_count },
-                { label: "Artifact gaps", value: compareSummary.missing_count },
-                { label: "Unexpected extras", value: compareSummary.extra_count },
-                { label: "Report gaps", value: compareSummary.missing_reports_count },
-                { label: "Check failures", value: compareSummary.failed_report_checks_count },
-              ].map((item) => (
+              {signalCards.map((item) => (
                 <div key={item.label} className="compare-signal-card">
                   <span className="cell-sub mono muted">{item.label}</span>
-                  <strong>{String(item.value ?? 0)}</strong>
+                  <strong>{String(item.value)}</strong>
                 </div>
               ))}
             </div>
@@ -185,7 +206,7 @@ export default async function RunComparePage({
           <Card className="compare-delta-card">
             <h3>Key deltas</h3>
             <div className="data-list">
-              {decision.keyDeltas.map((item) => (
+              {deltaRows.map((item) => (
                 <div key={item.label} className="data-list-row">
                   <span className="data-list-label">{item.label}</span>
                   <span className="data-list-value mono">{String(item.value)}</span>

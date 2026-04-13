@@ -27,6 +27,23 @@ function asBoolean(value: JsonValue | undefined): boolean {
   return value === true;
 }
 
+function observationSignalCards() {
+  return [
+    { label: "Compare report", value: "Missing" },
+    { label: "Evidence posture", value: "Unavailable" },
+    { label: "Next move", value: "Replay compare" },
+  ];
+}
+
+function observationDeltaRows() {
+  return [
+    { label: "Compare posture", value: "Awaiting report" },
+    { label: "Evidence chain", value: "Unavailable" },
+    { label: "LLM params", value: "Unavailable" },
+    { label: "LLM snapshot", value: "Unavailable" },
+  ];
+}
+
 export function RunComparePage({ runId, onBack }: Props) {
   const [run, setRun] = useState<RunDetailPayload | null>(null);
   const [reports, setReports] = useState<ReportRecord[]>([]);
@@ -101,6 +118,25 @@ export function RunComparePage({ runId, onBack }: Props) {
   const evidenceStatus = hasCompareReport ? (evidenceOk ? "OK" : "Needs review") : "Unavailable";
   const llmParamsStatus = hasCompareReport ? (llmParamsOk ? "OK" : "Changed") : "Unavailable";
   const llmSnapshotStatus = hasCompareReport ? (llmSnapshotOk ? "OK" : "Changed") : "Unavailable";
+  const signalCards = hasCompareReport
+    ? [
+        { label: "Mismatched hashes", value: String(mismatchedCount) },
+        { label: "Missing artifacts", value: String(missingCount) },
+        { label: "Failed report checks", value: String(failedChecksCount) },
+      ]
+    : observationSignalCards();
+  const deltaRows = hasCompareReport
+    ? [
+        { label: "Mismatched", value: String(mismatchedCount) },
+        { label: "Missing", value: String(missingCount) },
+        { label: "Extra", value: String(extraCount) },
+        { label: "Missing reports", value: String(missingReportsCount) },
+        { label: "Failed checks", value: String(failedChecksCount) },
+        { label: "Evidence chain", value: evidenceStatus },
+        { label: "LLM params", value: llmParamsStatus },
+        { label: "LLM snapshot", value: llmSnapshotStatus },
+      ]
+    : observationDeltaRows();
 
   if (loading) {
     return <div className="content"><div className="skeleton-stack-lg"><div className="skeleton skeleton-row" /></div></div>;
@@ -153,18 +189,12 @@ export function RunComparePage({ runId, onBack }: Props) {
               <p>{displaySummary}</p>
               <p className="muted">{displayNextAction}</p>
               <div className="compare-signal-grid">
-                <div className="compare-signal-card">
-                  <span className="cell-sub mono muted">Mismatched hashes</span>
-                  <strong>{mismatchedCount}</strong>
-                </div>
-                <div className="compare-signal-card">
-                  <span className="cell-sub mono muted">Missing artifacts</span>
-                  <strong>{missingCount}</strong>
-                </div>
-                <div className="compare-signal-card">
-                  <span className="cell-sub mono muted">Failed report checks</span>
-                  <strong>{failedChecksCount}</strong>
-                </div>
+                {signalCards.map((item) => (
+                  <div key={item.label} className="compare-signal-card">
+                    <span className="cell-sub mono muted">{item.label}</span>
+                    <strong>{item.value}</strong>
+                  </div>
+                ))}
               </div>
             </div>
           </CardBody>
@@ -173,14 +203,12 @@ export function RunComparePage({ runId, onBack }: Props) {
           <CardHeader><CardTitle>Key deltas</CardTitle></CardHeader>
           <CardBody>
             <div className="data-list">
-              <div className="data-list-row"><span className="data-list-label">Mismatched</span><span className="data-list-value mono">{mismatchedCount}</span></div>
-              <div className="data-list-row"><span className="data-list-label">Missing</span><span className="data-list-value mono">{missingCount}</span></div>
-              <div className="data-list-row"><span className="data-list-label">Extra</span><span className="data-list-value mono">{extraCount}</span></div>
-              <div className="data-list-row"><span className="data-list-label">Missing reports</span><span className="data-list-value mono">{missingReportsCount}</span></div>
-              <div className="data-list-row"><span className="data-list-label">Failed checks</span><span className="data-list-value mono">{failedChecksCount}</span></div>
-              <div className="data-list-row"><span className="data-list-label">Evidence chain</span><span className="data-list-value mono">{evidenceStatus}</span></div>
-              <div className="data-list-row"><span className="data-list-label">LLM params</span><span className="data-list-value mono">{llmParamsStatus}</span></div>
-              <div className="data-list-row"><span className="data-list-label">LLM snapshot</span><span className="data-list-value mono">{llmSnapshotStatus}</span></div>
+              {deltaRows.map((item) => (
+                <div key={item.label} className="data-list-row">
+                  <span className="data-list-label">{item.label}</span>
+                  <span className="data-list-value mono">{item.value}</span>
+                </div>
+              ))}
             </div>
             {incidentPack.summary ? <p className="muted mt-2">Incident: {String(incidentPack.summary)}</p> : null}
             {proofPack.summary ? <p className="muted">Proof: {String(proofPack.summary)}</p> : null}

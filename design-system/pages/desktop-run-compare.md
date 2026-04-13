@@ -16,6 +16,7 @@ Preserve the same decision language as web compare while taking advantage of des
 - The verdict card and the key-delta card should feel like one operator panel, not unrelated cards.
 - Back navigation belongs in chrome, not as the loudest action on the page.
 - Bring `evidence chain`, `LLM params`, and `LLM snapshot` into the desktop view so parity does not drift.
+- Observation mode must stay honest. Missing compare data should read as `Missing` or `Unavailable`, not as a false negative.
 
 ## Avoid
 

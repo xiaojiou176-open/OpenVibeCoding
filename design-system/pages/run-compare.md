@@ -17,6 +17,7 @@ Tell the operator:
 - The copilot stays secondary to the verdict; it explains the room, but it does not outrank the decision.
 - The raw evidence archive must remain collapsed and visually subordinate.
 - When no compare report exists, the room must explicitly read as observation mode rather than pretending a verdict exists.
+- Observation mode must never show synthetic failure posture. Use `Missing`, `Pending`, or `Unavailable` until the compare report exists.
 
 ## Avoid
 

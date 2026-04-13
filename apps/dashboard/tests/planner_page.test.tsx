@@ -116,7 +116,9 @@ describe("planner page", () => {
     render(await PlannerPage());
 
     expect(screen.getByText("Seed the first planning wave")).toBeInTheDocument();
-    expect(screen.getByText("No planning artifacts are visible yet.")).toBeInTheDocument();
+    expect(screen.getByText("Planner launch checklist")).toBeInTheDocument();
+    expect(screen.getByText("Start the first planning wave, then come back for real triage.")).toBeInTheDocument();
+    expect(screen.getByText("Lock the objective and the done signal")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open PM intake" })).toHaveAttribute("href", "/pm");
     expect(screen.getByRole("link", { name: "Open Command Tower" })).toHaveAttribute("href", "/command-tower");
     expect(screen.getByRole("link", { name: "Open Workflow Cases" })).toHaveAttribute("href", "/workflows");
