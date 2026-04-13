@@ -517,6 +517,80 @@ describe("RunDetailPage p0 controls", () => {
     expect(screen.getByText("Worker prompt contracts")).toBeInTheDocument();
   });
 
+  it("reads context pack and harness request artifacts when runtime governance produced them", async () => {
+    vi.mocked(fetchRun).mockResolvedValueOnce(
+      makeRun({
+        manifest: {
+          artifacts: [
+            { name: "context_pack", path: "artifacts/context_pack.json" },
+            { name: "harness_request", path: "artifacts/harness_request.json" },
+          ],
+        },
+      }),
+    );
+    vi.mocked(fetchReports).mockResolvedValueOnce([
+      {
+        name: "completion_governance_report.json",
+        data: {
+          authority: "runtime-evaluated-read-back",
+          source: "reports/completion_governance_report.json",
+          execution_authority: "task_contract",
+          overall_verdict: "continue_same_session",
+          dod_checker: {
+            status: "failed",
+            summary: "Need follow-up.",
+            required_checks: ["repo_hygiene"],
+            unmet_checks: ["run_status"],
+          },
+          reply_auditor: {
+            status: "needs_follow_up",
+            summary: "Reply was incomplete.",
+          },
+          continuation_decision: {
+            selected_action: "reply_auditor_reprompt_and_continue_same_session",
+            summary: "Queued follow-up contract for the same session.",
+            action_source: "continuation_policy.on_incomplete",
+          },
+          context_pack: {
+            status: "generated",
+            summary: "Generated ctx-pack-run-001 for fallback handoff.",
+          },
+          harness_request: {
+            status: "approval_required",
+            summary: "Generated harness-run-001 with approval_required policy verdict.",
+          },
+        },
+      },
+    ] as any);
+    vi.mocked(fetchArtifact)
+      .mockResolvedValueOnce({
+        data: {
+          pack_id: "ctx-pack-run-001",
+          trigger_reason: "contamination",
+        },
+      } as any)
+      .mockResolvedValueOnce({
+        data: {
+          request_id: "harness-run-001",
+          scope: "project-local",
+          approval_required: true,
+        },
+      } as any);
+
+    render(<RunDetailPage runId="run-governance-artifacts" onBack={vi.fn()} />);
+
+    expect(await screen.findByRole("heading", { name: "run-001" })).toBeInTheDocument();
+    expect(screen.getByText("Context Pack ID")).toBeInTheDocument();
+    expect(screen.getByText("ctx-pack-run-001")).toBeInTheDocument();
+    expect(screen.getByText("Context Pack trigger")).toBeInTheDocument();
+    expect(screen.getByText("contamination")).toBeInTheDocument();
+    expect(screen.getByText("Harness Request ID")).toBeInTheDocument();
+    expect(screen.getByText("harness-run-001")).toBeInTheDocument();
+    expect(screen.getByText("Harness Request scope")).toBeInTheDocument();
+    expect(screen.getByText("project-local")).toBeInTheDocument();
+    expect(screen.getByText("Harness approval required")).toBeInTheDocument();
+  });
+
   it("recovers from error state after retry load", async () => {
     const user = userEvent.setup();
     vi.mocked(fetchRun).mockRejectedValueOnce(new Error("first fail"));

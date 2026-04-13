@@ -43,6 +43,8 @@ type RunDetailStatusContractCardProps = {
   planningContractsError: string;
   unblockTasks: Array<Record<string, unknown>>;
   unblockTasksError: string;
+  contextPackArtifact: Record<string, unknown> | null;
+  harnessRequestArtifact: Record<string, unknown> | null;
   onOpenLogs: () => void;
   onOpenReports: () => void;
   failedTerminalActionFeedback: string;
@@ -74,6 +76,8 @@ export default function RunDetailStatusContractCard({
   planningContractsError,
   unblockTasks,
   unblockTasksError,
+  contextPackArtifact,
+  harnessRequestArtifact,
   onOpenLogs,
   onOpenReports,
   failedTerminalActionFeedback,
@@ -139,6 +143,8 @@ export default function RunDetailStatusContractCard({
   const runtimeContinuationDecision = toObject(runtimeCompletionGovernance.continuation_decision);
   const runtimeContextPack = toObject(runtimeCompletionGovernance.context_pack);
   const runtimeHarnessRequest = toObject(runtimeCompletionGovernance.harness_request);
+  const contextPackRecord = toObject(contextPackArtifact);
+  const harnessRequestRecord = toObject(harnessRequestArtifact);
   const runtimeDodRequiredChecks = Array.from(
     new Set(
       toArray(runtimeDodChecker.required_checks as unknown[] | null | undefined)
@@ -343,9 +349,24 @@ export default function RunDetailStatusContractCard({
               {toDisplayText(runtimeContextPack.summary) !== "-" ? (
                 <div className="mono">{completionGovernanceCopy.contextPackSummary}: {toDisplayText(runtimeContextPack.summary)}</div>
               ) : null}
+              {toDisplayText(contextPackRecord.pack_id) !== "-" ? (
+                <div className="mono">{completionGovernanceCopy.contextPackId}: {toDisplayText(contextPackRecord.pack_id)}</div>
+              ) : null}
+              {toDisplayText(contextPackRecord.trigger_reason) !== "-" ? (
+                <div className="mono">{completionGovernanceCopy.contextPackTrigger}: {toDisplayText(contextPackRecord.trigger_reason)}</div>
+              ) : null}
               <div className="mono">{completionGovernanceCopy.harnessRequest}: {toDisplayText(runtimeHarnessRequest.status)}</div>
               {toDisplayText(runtimeHarnessRequest.summary) !== "-" ? (
                 <div className="mono">{completionGovernanceCopy.harnessRequestSummary}: {toDisplayText(runtimeHarnessRequest.summary)}</div>
+              ) : null}
+              {toDisplayText(harnessRequestRecord.request_id) !== "-" ? (
+                <div className="mono">{completionGovernanceCopy.harnessRequestId}: {toDisplayText(harnessRequestRecord.request_id)}</div>
+              ) : null}
+              {toDisplayText(harnessRequestRecord.scope) !== "-" ? (
+                <div className="mono">{completionGovernanceCopy.harnessRequestScope}: {toDisplayText(harnessRequestRecord.scope)}</div>
+              ) : null}
+              {harnessRequestRecord.approval_required !== undefined ? (
+                <div className="mono">{completionGovernanceCopy.harnessRequestApproval}: {toDisplayText(harnessRequestRecord.approval_required)}</div>
               ) : null}
               <div className="mono muted">{completionGovernanceCopy.runtimeNote}</div>
             </div>

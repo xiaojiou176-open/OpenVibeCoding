@@ -126,6 +126,8 @@ export function RunDetailPage({ runId, onBack, onOpenCompare = () => {}, locale 
   const [replayResult, setReplayResult] = useState<Record<string, JsonValue> | null>(null);
   const [planningContracts, setPlanningContracts] = useState<Array<Record<string, JsonValue>>>([]);
   const [unblockTasks, setUnblockTasks] = useState<Array<Record<string, JsonValue>>>([]);
+  const [contextPackArtifact, setContextPackArtifact] = useState<Record<string, JsonValue> | null>(null);
+  const [harnessRequestArtifact, setHarnessRequestArtifact] = useState<Record<string, JsonValue> | null>(null);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -197,13 +199,27 @@ export function RunDetailPage({ runId, onBack, onOpenCompare = () => {}, locale 
         const record = asRecord(item);
         return toStr(record.name, "") === "planning_unblock_tasks" || toStr(record.path, "") === "artifacts/planning_unblock_tasks.json";
       });
+      const hasContextPackArtifact = artifacts.some((item) => {
+        const record = asRecord(item);
+        return toStr(record.name, "") === "context_pack" || toStr(record.path, "") === "artifacts/context_pack.json";
+      });
+      const hasHarnessRequestArtifact = artifacts.some((item) => {
+        const record = asRecord(item);
+        return toStr(record.name, "") === "harness_request" || toStr(record.path, "") === "artifacts/harness_request.json";
+      });
 
-      const [planningContractsArtifactRes, unblockTasksArtifactRes] = await Promise.allSettled([
+      const [planningContractsArtifactRes, unblockTasksArtifactRes, contextPackArtifactRes, harnessRequestArtifactRes] = await Promise.allSettled([
         hasPlanningContractsArtifact
           ? fetchArtifact(runId, "planning_worker_prompt_contracts.json")
           : Promise.resolve(null),
         hasUnblockTasksArtifact
           ? fetchArtifact(runId, "planning_unblock_tasks.json")
+          : Promise.resolve(null),
+        hasContextPackArtifact
+          ? fetchArtifact(runId, "context_pack.json")
+          : Promise.resolve(null),
+        hasHarnessRequestArtifact
+          ? fetchArtifact(runId, "harness_request.json")
           : Promise.resolve(null),
       ]);
       if (loadToken !== loadTokenRef.current) {
@@ -218,6 +234,16 @@ export function RunDetailPage({ runId, onBack, onOpenCompare = () => {}, locale 
         unblockTasksArtifactRes.status === "fulfilled" && unblockTasksArtifactRes.value
           ? toArr(unblockTasksArtifactRes.value.data as Array<Record<string, JsonValue>>)
           : [],
+      );
+      setContextPackArtifact(
+        contextPackArtifactRes.status === "fulfilled" && contextPackArtifactRes.value && contextPackArtifactRes.value.data && typeof contextPackArtifactRes.value.data === "object"
+          ? (contextPackArtifactRes.value.data as Record<string, JsonValue>)
+          : null,
+      );
+      setHarnessRequestArtifact(
+        harnessRequestArtifactRes.status === "fulfilled" && harnessRequestArtifactRes.value && harnessRequestArtifactRes.value.data && typeof harnessRequestArtifactRes.value.data === "object"
+          ? (harnessRequestArtifactRes.value.data as Record<string, JsonValue>)
+          : null,
       );
     } catch (err) {
       setError(sanitizeUiError(err, "Run detail failed to load"));
@@ -444,6 +470,8 @@ export function RunDetailPage({ runId, onBack, onOpenCompare = () => {}, locale 
   const runtimeContinuationDecision = asRecord(completionGovernanceReport.continuation_decision);
   const runtimeContextPack = asRecord(completionGovernanceReport.context_pack);
   const runtimeHarnessRequest = asRecord(completionGovernanceReport.harness_request);
+  const contextPackRecord = asRecord(contextPackArtifact);
+  const harnessRequestRecord = asRecord(harnessRequestArtifact);
   const runtimeDodRequiredChecks = Array.from(
     new Set(
       toArr(runtimeDodChecker.required_checks as unknown[] | null | undefined)
@@ -606,9 +634,24 @@ export function RunDetailPage({ runId, onBack, onOpenCompare = () => {}, locale 
                       {toStr(runtimeContextPack.summary, "") ? (
                         <div className="data-list-row"><span className="data-list-label">{completionGovernanceCopy.contextPackSummary}</span><span className="data-list-value">{toStr(runtimeContextPack.summary, "")}</span></div>
                       ) : null}
+                      {toStr(contextPackRecord.pack_id, "") ? (
+                        <div className="data-list-row"><span className="data-list-label">{completionGovernanceCopy.contextPackId}</span><span className="data-list-value mono">{toStr(contextPackRecord.pack_id, "")}</span></div>
+                      ) : null}
+                      {toStr(contextPackRecord.trigger_reason, "") ? (
+                        <div className="data-list-row"><span className="data-list-label">{completionGovernanceCopy.contextPackTrigger}</span><span className="data-list-value mono">{toStr(contextPackRecord.trigger_reason, "")}</span></div>
+                      ) : null}
                       <div className="data-list-row"><span className="data-list-label">{completionGovernanceCopy.harnessRequest}</span><span className="data-list-value mono">{toStr(runtimeHarnessRequest.status)}</span></div>
                       {toStr(runtimeHarnessRequest.summary, "") ? (
                         <div className="data-list-row"><span className="data-list-label">{completionGovernanceCopy.harnessRequestSummary}</span><span className="data-list-value">{toStr(runtimeHarnessRequest.summary, "")}</span></div>
+                      ) : null}
+                      {toStr(harnessRequestRecord.request_id, "") ? (
+                        <div className="data-list-row"><span className="data-list-label">{completionGovernanceCopy.harnessRequestId}</span><span className="data-list-value mono">{toStr(harnessRequestRecord.request_id, "")}</span></div>
+                      ) : null}
+                      {toStr(harnessRequestRecord.scope, "") ? (
+                        <div className="data-list-row"><span className="data-list-label">{completionGovernanceCopy.harnessRequestScope}</span><span className="data-list-value mono">{toStr(harnessRequestRecord.scope, "")}</span></div>
+                      ) : null}
+                      {harnessRequestRecord.approval_required !== undefined ? (
+                        <div className="data-list-row"><span className="data-list-label">{completionGovernanceCopy.harnessRequestApproval}</span><span className="data-list-value mono">{toStr(harnessRequestRecord.approval_required)}</span></div>
                       ) : null}
                     </div>
                     <div className="muted text-xs">{completionGovernanceCopy.runtimeNote}</div>

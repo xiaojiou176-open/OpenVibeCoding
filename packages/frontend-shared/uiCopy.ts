@@ -812,8 +812,13 @@ export type UiCopy = {
         selectedUnblockTask: string;
         contextPack: string;
         contextPackSummary: string;
+        contextPackId: string;
+        contextPackTrigger: string;
         harnessRequest: string;
         harnessRequestSummary: string;
+        harnessRequestId: string;
+        harnessRequestScope: string;
+        harnessRequestApproval: string;
         runtimeNote: string;
         planningFallbackTitle: string;
         workerPromptContracts: string;
@@ -2059,8 +2064,13 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
           selectedUnblockTask: "Selected unblock task",
           contextPack: "Context Pack",
           contextPackSummary: "Context Pack summary",
+          contextPackId: "Context Pack ID",
+          contextPackTrigger: "Context Pack trigger",
           harnessRequest: "Harness Request",
           harnessRequestSummary: "Harness Request summary",
+          harnessRequestId: "Harness Request ID",
+          harnessRequestScope: "Harness Request scope",
+          harnessRequestApproval: "Harness approval required",
           runtimeNote:
             "Runtime-evaluated read-back: this report reflects the live completion evaluator. task_contract still owns execution authority; this report does not replace the contract.",
           planningFallbackTitle: "Planning advisory fallback",
@@ -3339,8 +3349,13 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
           selectedUnblockTask: "选中的解阻塞任务",
           contextPack: "Context Pack",
           contextPackSummary: "Context Pack 摘要",
+          contextPackId: "Context Pack ID",
+          contextPackTrigger: "Context Pack 触发器",
           harnessRequest: "Harness Request",
           harnessRequestSummary: "Harness Request 摘要",
+          harnessRequestId: "Harness Request ID",
+          harnessRequestScope: "Harness Request 范围",
+          harnessRequestApproval: "Harness 审批要求",
           runtimeNote:
             "运行时只读回读：这份报告反映的是 live completion evaluator 的结论；`task_contract` 仍然掌握执行权威，这份报告不是第二份执行合同。",
           planningFallbackTitle: "规划期 advisory 摘要",

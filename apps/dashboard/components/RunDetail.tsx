@@ -83,6 +83,8 @@ export default function RunDetail({
   const [planningContractsError, setPlanningContractsError] = useState("");
   const [unblockTasks, setUnblockTasks] = useState<Array<Record<string, unknown>>>([]);
   const [unblockTasksError, setUnblockTasksError] = useState("");
+  const [contextPackArtifact, setContextPackArtifact] = useState<Record<string, unknown> | null>(null);
+  const [harnessRequestArtifact, setHarnessRequestArtifact] = useState<Record<string, unknown> | null>(null);
   const [chainSpecError, setChainSpecError] = useState("");
   const [chainSpecLoading, setChainSpecLoading] = useState(false);
   const [liveEnabled, setLiveEnabled] = useState(true);
@@ -149,6 +151,18 @@ export default function RunDetail({
     const name = toStringOr(record.name, "");
     const path = toStringOr(record.path, "");
     return name === "planning_unblock_tasks" || path === "artifacts/planning_unblock_tasks.json";
+  });
+  const hasContextPackArtifact = manifestArtifacts.some((item) => {
+    const record = toObject(item);
+    const name = toStringOr(record.name, "");
+    const path = toStringOr(record.path, "");
+    return name === "context_pack" || path === "artifacts/context_pack.json";
+  });
+  const hasHarnessRequestArtifact = manifestArtifacts.some((item) => {
+    const record = toObject(item);
+    const name = toStringOr(record.name, "");
+    const path = toStringOr(record.path, "");
+    return name === "harness_request" || path === "artifacts/harness_request.json";
   });
   const observability = toObject(run?.manifest?.observability);
   const summaryGroups = ["reports/", "events.jsonl", "contract.json", "other"];
@@ -321,6 +335,40 @@ export default function RunDetail({
       alive = false;
     };
   }, [hasUnblockTasksArtifact, run?.run_id]);
+
+  useEffect(() => {
+    let alive = true;
+    async function loadGovernanceArtifacts() {
+      if (!run?.run_id) {
+        if (alive) {
+          setContextPackArtifact(null);
+          setHarnessRequestArtifact(null);
+        }
+        return;
+      }
+      const [contextPackRes, harnessRequestRes] = await Promise.allSettled([
+        hasContextPackArtifact ? fetchArtifact(run.run_id, "context_pack.json") : Promise.resolve(null),
+        hasHarnessRequestArtifact ? fetchArtifact(run.run_id, "harness_request.json") : Promise.resolve(null),
+      ]);
+      if (!alive) {
+        return;
+      }
+      setContextPackArtifact(
+        contextPackRes.status === "fulfilled" && contextPackRes.value?.data && typeof contextPackRes.value.data === "object"
+          ? (contextPackRes.value.data as Record<string, unknown>)
+          : null,
+      );
+      setHarnessRequestArtifact(
+        harnessRequestRes.status === "fulfilled" && harnessRequestRes.value?.data && typeof harnessRequestRes.value.data === "object"
+          ? (harnessRequestRes.value.data as Record<string, unknown>)
+          : null,
+      );
+    }
+    void loadGovernanceArtifacts();
+    return () => {
+      alive = false;
+    };
+  }, [hasContextPackArtifact, hasHarnessRequestArtifact, run?.run_id]);
 
   useEffect(() => {
     let alive = true;
@@ -540,6 +588,8 @@ export default function RunDetail({
           planningContractsError={planningContractsError}
           unblockTasks={unblockTasks}
           unblockTasksError={unblockTasksError}
+          contextPackArtifact={contextPackArtifact}
+          harnessRequestArtifact={harnessRequestArtifact}
           onOpenLogs={() => handleFailedTerminalAction("logs")}
           onOpenReports={() => handleFailedTerminalAction("reports")}
           failedTerminalActionFeedback={failedTerminalActionFeedback}

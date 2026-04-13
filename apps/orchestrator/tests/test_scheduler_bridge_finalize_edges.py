@@ -292,12 +292,21 @@ def test_finalize_run_writes_completion_governance_report_and_updates_task_resul
     completion_governance = json.loads((run_dir / "reports" / "completion_governance_report.json").read_text(encoding="utf-8"))
     assert completion_governance["overall_verdict"] == "queue_unblock_task"
     assert completion_governance["continuation_decision"]["selected_action"] == "spawn_independent_temporary_unblock_task"
+    assert "Queued unblock contract" in completion_governance["continuation_decision"]["summary"]
 
     task_result = json.loads((run_dir / "reports" / "task_result.json").read_text(encoding="utf-8"))
     assert task_result["next_steps"]["suggested_action"] == "spawn_independent_temporary_unblock_task"
 
     unblock_tasks = json.loads((artifacts_dir / "planning_unblock_tasks.json").read_text(encoding="utf-8"))
     assert unblock_tasks[0]["status"] == "queued"
+    unblock_contract = json.loads((artifacts_dir / "unblock_task_contract.json").read_text(encoding="utf-8"))
+    assert unblock_contract["task_id"] == "unblock-worker-1"
+    assert unblock_contract["parent_task_id"] == "task-completion-governance"
+    assert unblock_contract["assigned_agent"].get("codex_thread_id") in {"", None}
+    queue_lines = (tmp_path / "queue.jsonl").read_text(encoding="utf-8").splitlines()
+    queue_items = [json.loads(line) for line in queue_lines if line.strip()]
+    assert queue_items[-1]["task_id"] == "unblock-worker-1"
+    assert queue_items[-1]["source_run_id"] == run_id
 
 
 def test_finalize_run_writes_context_pack_and_harness_request_artifacts(tmp_path: Path) -> None:
@@ -411,3 +420,12 @@ def test_finalize_run_writes_context_pack_and_harness_request_artifacts(tmp_path
     assert harness_request["scope"] == "project-local"
     assert harness_request["approval_required"] is True
     assert harness_request["requested_capabilities"]["mcp_servers"] == ["runtime-governance"]
+    continuation_contract = json.loads((artifacts_dir / "continuation_task_contract.json").read_text(encoding="utf-8"))
+    assert continuation_contract["parent_task_id"] == "task-context-harness"
+    assert continuation_contract["assigned_agent"]["codex_thread_id"] == "thread-ctx"
+    artifact_names = [item["name"] for item in continuation_contract["inputs"]["artifacts"]]
+    assert "context_pack.json" in artifact_names
+    queue_lines = (tmp_path / "queue.jsonl").read_text(encoding="utf-8").splitlines()
+    queue_items = [json.loads(line) for line in queue_lines if line.strip()]
+    assert queue_items[-1]["task_id"] == continuation_contract["task_id"]
+    assert queue_items[-1]["source_run_id"] == run_id

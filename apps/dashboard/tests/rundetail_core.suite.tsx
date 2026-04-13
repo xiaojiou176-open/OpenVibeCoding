@@ -371,6 +371,92 @@ describe("RunDetail core flows", () => {
     expect(screen.getByText("Worker prompt contracts: 1")).toBeInTheDocument();
   });
 
+  it("reads context pack and harness request artifacts when runtime governance produced them", async () => {
+    const run = {
+      run_id: "run_runtime_artifacts",
+      task_id: "task_runtime_artifacts",
+      status: "FAILURE",
+      allowed_paths: ["README.md"],
+      contract: { task_id: "task_runtime_artifacts" },
+      manifest: {
+        artifacts: [
+          { name: "context_pack", path: "artifacts/context_pack.json" },
+          { name: "harness_request", path: "artifacts/harness_request.json" },
+        ],
+      },
+    };
+    const reports = [
+      {
+        name: "completion_governance_report.json",
+        data: {
+          authority: "runtime-evaluated-read-back",
+          source: "reports/completion_governance_report.json",
+          execution_authority: "task_contract",
+          overall_verdict: "continue_same_session",
+          dod_checker: { status: "failed", summary: "Need follow-up.", required_checks: ["repo_hygiene"], unmet_checks: ["run_status"] },
+          reply_auditor: { status: "needs_follow_up", summary: "Reply was incomplete." },
+          continuation_decision: {
+            selected_action: "reply_auditor_reprompt_and_continue_same_session",
+            summary: "Queued follow-up contract for the same session.",
+            action_source: "continuation_policy.on_incomplete",
+          },
+          context_pack: { status: "generated", summary: "Generated ctx-pack-run_runtime_artifacts for fallback handoff." },
+          harness_request: { status: "approval_required", summary: "Generated harness-run_runtime_artifacts with approval_required policy verdict." },
+        },
+      },
+    ];
+    const fetchMock = mockFetchFactory({
+      events: [],
+      reports,
+      availableRuns: [],
+    });
+    const baseFetch = fetchMock as unknown as typeof global.fetch;
+    global.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
+      const url = typeof input === "string" ? input : input instanceof URL ? input.toString() : input.url;
+      if (url.includes("/api/runs/run_runtime_artifacts/artifacts?name=context_pack.json")) {
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({
+            data: {
+              pack_id: "ctx-pack-run_runtime_artifacts",
+              trigger_reason: "contamination",
+            },
+          }),
+          text: async () => "",
+        } as Response;
+      }
+      if (url.includes("/api/runs/run_runtime_artifacts/artifacts?name=harness_request.json")) {
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({
+            data: {
+              request_id: "harness-run_runtime_artifacts",
+              scope: "project-local",
+              approval_required: true,
+            },
+          }),
+          text: async () => "",
+        } as Response;
+      }
+      return baseFetch(input, init);
+    };
+
+    render(<RunDetail run={run as any} events={[]} diff="" reports={reports as any} />);
+    await act(async () => {
+      await flushPromises();
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText("Context Pack ID: ctx-pack-run_runtime_artifacts")).toBeInTheDocument();
+    });
+    expect(screen.getByText("Context Pack trigger: contamination")).toBeInTheDocument();
+    expect(screen.getByText("Harness Request ID: harness-run_runtime_artifacts")).toBeInTheDocument();
+    expect(screen.getByText("Harness Request scope: project-local")).toBeInTheDocument();
+    expect(screen.getByText("Harness approval required: true")).toBeInTheDocument();
+  });
+
   it("uses SSE transport and consumes stream events", async () => {
     const run = {
       run_id: "run_sse",
