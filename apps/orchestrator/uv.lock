@@ -234,7 +234,7 @@ pyjwt==2.12.1
     #   mcp
 pyparsing==3.3.2
     # via pip-requirements-parser
-pytest==9.0.2
+pytest==9.0.3
     # via
     #   -r apps/orchestrator/requirements.txt
     #   pytest-cov
