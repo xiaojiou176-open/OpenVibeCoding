@@ -113,6 +113,7 @@ function isTerminalEvent(event: EventRecord): boolean {
 
 export function RunDetailPage({ runId, onBack, onOpenCompare = () => {}, locale = DEFAULT_UI_LOCALE }: RunDetailPageProps) {
   const runDetailCopy = getUiCopy(locale).desktop.runDetail;
+  const completionGovernanceCopy = runDetailCopy.completionGovernance;
   const [run, setRun] = useState<RunDetailPayload | null>(null);
   const [events, setEvents] = useState<EventRecord[]>([]);
   const [diff, setDiff] = useState("");
@@ -197,27 +198,27 @@ export function RunDetailPage({ runId, onBack, onOpenCompare = () => {}, locale 
         return toStr(record.name, "") === "planning_unblock_tasks" || toStr(record.path, "") === "artifacts/planning_unblock_tasks.json";
       });
 
-      if (hasPlanningContractsArtifact) {
-        try {
-          const artifact = await fetchArtifact(runId, "planning_worker_prompt_contracts.json");
-          setPlanningContracts(toArr(artifact.data as Array<Record<string, JsonValue>>));
-        } catch {
-          setPlanningContracts([]);
-        }
-      } else {
-        setPlanningContracts([]);
+      const [planningContractsArtifactRes, unblockTasksArtifactRes] = await Promise.allSettled([
+        hasPlanningContractsArtifact
+          ? fetchArtifact(runId, "planning_worker_prompt_contracts.json")
+          : Promise.resolve(null),
+        hasUnblockTasksArtifact
+          ? fetchArtifact(runId, "planning_unblock_tasks.json")
+          : Promise.resolve(null),
+      ]);
+      if (loadToken !== loadTokenRef.current) {
+        return;
       }
-
-      if (hasUnblockTasksArtifact) {
-        try {
-          const artifact = await fetchArtifact(runId, "planning_unblock_tasks.json");
-          setUnblockTasks(toArr(artifact.data as Array<Record<string, JsonValue>>));
-        } catch {
-          setUnblockTasks([]);
-        }
-      } else {
-        setUnblockTasks([]);
-      }
+      setPlanningContracts(
+        planningContractsArtifactRes.status === "fulfilled" && planningContractsArtifactRes.value
+          ? toArr(planningContractsArtifactRes.value.data as Array<Record<string, JsonValue>>)
+          : [],
+      );
+      setUnblockTasks(
+        unblockTasksArtifactRes.status === "fulfilled" && unblockTasksArtifactRes.value
+          ? toArr(unblockTasksArtifactRes.value.data as Array<Record<string, JsonValue>>)
+          : [],
+      );
     } catch (err) {
       setError(sanitizeUiError(err, "Run detail failed to load"));
     } finally {
@@ -547,32 +548,32 @@ export function RunDetailPage({ runId, onBack, onOpenCompare = () => {}, locale 
             ) : null}
             {planningContracts.length > 0 || unblockTasks.length > 0 ? (
               <div className="stack-gap-2 mt-3" data-testid="run-detail-completion-governance">
-                <div className="muted text-xs fw-500">Completion governance</div>
+                <div className="muted text-xs fw-500">{completionGovernanceCopy.title}</div>
                 <div className="data-list">
-                  <div className="data-list-row"><span className="data-list-label">Worker prompt contracts</span><span className="data-list-value mono">{planningContracts.length}</span></div>
+                  <div className="data-list-row"><span className="data-list-label">{completionGovernanceCopy.workerPromptContracts}</span><span className="data-list-value mono">{planningContracts.length}</span></div>
                   {unblockTasks.length > 0 ? (
-                    <div className="data-list-row"><span className="data-list-label">Unblock tasks</span><span className="data-list-value mono">{unblockTasks.length}</span></div>
+                    <div className="data-list-row"><span className="data-list-label">{completionGovernanceCopy.unblockTasks}</span><span className="data-list-value mono">{unblockTasks.length}</span></div>
                   ) : null}
                   {continuationOnIncomplete.length > 0 ? (
-                    <div className="data-list-row"><span className="data-list-label">On incomplete</span><span className="data-list-value mono">{continuationOnIncomplete.join(" / ")}</span></div>
+                    <div className="data-list-row"><span className="data-list-label">{completionGovernanceCopy.onIncomplete}</span><span className="data-list-value mono">{continuationOnIncomplete.join(" / ")}</span></div>
                   ) : null}
                   {continuationOnBlocked.length > 0 ? (
-                    <div className="data-list-row"><span className="data-list-label">On blocked</span><span className="data-list-value mono">{continuationOnBlocked.join(" / ")}</span></div>
+                    <div className="data-list-row"><span className="data-list-label">{completionGovernanceCopy.onBlocked}</span><span className="data-list-value mono">{continuationOnBlocked.join(" / ")}</span></div>
                   ) : null}
                   {doneChecks.length > 0 ? (
-                    <div className="data-list-row"><span className="data-list-label">DoD checks</span><span className="data-list-value mono">{doneChecks.join(" / ")}</span></div>
+                    <div className="data-list-row"><span className="data-list-label">{completionGovernanceCopy.doneChecks}</span><span className="data-list-value mono">{doneChecks.join(" / ")}</span></div>
                   ) : null}
                   {unblockOwners.length > 0 ? (
-                    <div className="data-list-row"><span className="data-list-label">Unblock owner</span><span className="data-list-value mono">{unblockOwners.join(" / ")}</span></div>
+                    <div className="data-list-row"><span className="data-list-label">{completionGovernanceCopy.unblockOwner}</span><span className="data-list-value mono">{unblockOwners.join(" / ")}</span></div>
                   ) : null}
                   {unblockModes.length > 0 ? (
-                    <div className="data-list-row"><span className="data-list-label">Unblock mode</span><span className="data-list-value mono">{unblockModes.join(" / ")}</span></div>
+                    <div className="data-list-row"><span className="data-list-label">{completionGovernanceCopy.unblockMode}</span><span className="data-list-value mono">{unblockModes.join(" / ")}</span></div>
                   ) : null}
                   {unblockTriggers.length > 0 ? (
-                    <div className="data-list-row"><span className="data-list-label">Unblock trigger</span><span className="data-list-value mono">{unblockTriggers.join(" / ")}</span></div>
+                    <div className="data-list-row"><span className="data-list-label">{completionGovernanceCopy.unblockTrigger}</span><span className="data-list-value mono">{unblockTriggers.join(" / ")}</span></div>
                   ) : null}
                 </div>
-                <div className="muted text-xs">Derived from persisted worker prompt contracts and unblock tasks. These summaries stay advisory; task_contract still owns execution authority.</div>
+                <div className="muted text-xs">{completionGovernanceCopy.advisoryNote}</div>
               </div>
             ) : null}
           </CardBody>
