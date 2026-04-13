@@ -1,6 +1,6 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { ContractsPage } from "./ContractsPage";
 
@@ -12,7 +12,12 @@ import { fetchContracts } from "../lib/api";
 
 describe("ContractsPage", () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.resetAllMocks();
+    vi.mocked(fetchContracts).mockResolvedValue([] as any);
+  });
+
+  afterEach(() => {
+    cleanup();
   });
 
   it("renders empty state and then contract details after refresh", async () => {
@@ -63,11 +68,14 @@ describe("ContractsPage", () => {
       ] as any);
     const user = userEvent.setup();
     render(<ContractsPage />);
-    expect(screen.getByRole("heading", { name: /Contracts|合约/ })).toBeInTheDocument();
-    expect(screen.getByText(/contract desk|command tower 的 contract desk/i)).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: /Contract desk|合约桌|Contracts|合约/ })).toBeInTheDocument();
+    expect(screen.getByText(/contract desk|command tower 的 contract desk/i, { selector: "p.page-subtitle" })).toBeInTheDocument();
     expect(await screen.findByText(/No contracts yet|暂无合约/)).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: /Refresh|刷新/ }));
-    expect(await screen.findByText("task-1")).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { level: 2, name: /Contract triage queue|先处理哪份 contract/ })).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getAllByText("task-1").length).toBeGreaterThan(0);
+    });
     expect(screen.getByText("apps/desktop/src")).toBeInTheDocument();
     expect(screen.getByText("pnpm test")).toBeInTheDocument();
     expect(screen.getByText(/"shell": "allow"/)).toBeInTheDocument();

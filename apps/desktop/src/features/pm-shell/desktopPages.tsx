@@ -72,7 +72,7 @@ export function getDesktopPageTitle(page: DesktopPageKey, locale: UiLocale): str
     search: localized.search,
     "change-gates": localized.diffGate,
   };
-  return titles[page] || "CortexPilot Command Tower";
+  return titles[page] || "OpenVibeCoding Command Tower";
 }
 
 const OverviewPage = lazy(async () => {
@@ -208,7 +208,7 @@ export function renderDesktopPage({
     case "events":
       return <EventsPage />;
     case "contracts":
-      return <ContractsPage />;
+      return <ContractsPage onNavigate={navigate} onNavigateToRun={navigateToRun} />;
     case "reviews":
       return <ReviewsPage />;
     case "tests":
@@ -216,7 +216,7 @@ export function renderDesktopPage({
     case "policies":
       return <PoliciesPage />;
     case "agents":
-      return <AgentsPage />;
+      return <AgentsPage onNavigate={navigate} onNavigateToRun={navigateToRun} />;
     case "locks":
       return <LocksPage />;
     case "worktrees":

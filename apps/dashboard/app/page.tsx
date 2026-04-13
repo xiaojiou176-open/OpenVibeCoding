@@ -261,6 +261,12 @@ export default async function Home() {
       : "metric-value--success";
   const warningText =
     firstEnglishText(warning) || "The run list is temporarily unavailable. Try again soon.";
+  const governanceDeckTitle =
+    locale === "zh-CN" ? "治理桌与放行控制" : "Governance desks and release controls";
+  const governanceDeckDescription =
+    locale === "zh-CN"
+      ? "这些页面承接审批、contract、role 和治理控制，但它们不再定义首页第一印象。"
+      : "These rooms handle approvals, contracts, role posture, and release controls, but they no longer define the homepage first impression.";
 
   return (
     <main className="grid" aria-labelledby="dashboard-home-title">
@@ -279,6 +285,7 @@ export default async function Home() {
         hasRunHistory={hasRunHistory}
         latestFailureGovernanceHref={latestFailureGovernanceHref}
         locale={locale}
+        runningCount={runningCount}
         showFirstTaskGuide={!hasRunHistory}
       />
 
@@ -476,26 +483,26 @@ export default async function Home() {
         <div className="section-header">
           <div>
             <h2 id="dashboard-advanced-title" className="section-title">
-              Advanced / Operator
+              {governanceDeckTitle}
             </h2>
-            <p>These entry points keep the original governance power, but they now live in an advanced zone instead of defining the public first impression.</p>
+            <p>{governanceDeckDescription}</p>
           </div>
         </div>
         <div className="quick-grid">
-          <Link href="/command-tower" className="quick-card">
-            <span className="quick-card-desc">Advanced</span>
-            <span className="quick-card-title">Command Tower</span>
-            <span className="quick-card-desc">Watch sessions, alerts, and pipeline health.</span>
-          </Link>
-          <Link href="/runs" className="quick-card">
-            <span className="quick-card-desc">Operator</span>
-            <span className="quick-card-title">Proof &amp; Replay</span>
-            <span className="quick-card-desc">Inspect run details, compare reruns, replay evidence, and review governed actions.</span>
-          </Link>
           <Link href="/god-mode" className="quick-card">
             <span className="quick-card-desc">Governance</span>
             <span className="quick-card-title">Approvals and release control</span>
             <span className="quick-card-desc">Enter manual approval only when a review item requires it.</span>
+          </Link>
+          <Link href="/contracts" className="quick-card">
+            <span className="quick-card-desc">Authority</span>
+            <span className="quick-card-title">Contract desk</span>
+            <span className="quick-card-desc">Inspect execution authority, bundle posture, and contract blockers before a run continues.</span>
+          </Link>
+          <Link href="/agents" className="quick-card">
+            <span className="quick-card-desc">Role posture</span>
+            <span className="quick-card-title">Role desk</span>
+            <span className="quick-card-desc">Check execution seats, runtime bindings, and scheduler posture without turning the homepage into a registry dump.</span>
           </Link>
         </div>
       </section>

@@ -19,7 +19,7 @@ describe("command tower page SSR query reproduction", () => {
   });
 
   it("publishes route-level metadata for discoverability", () => {
-    expect(metadata.title).toBe("Command Tower | CortexPilot");
+    expect(metadata.title).toBe("Command Tower | OpenVibeCoding");
     expect(String(metadata.description)).toContain("operator visibility");
   });
 });

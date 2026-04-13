@@ -87,5 +87,6 @@ describe("run compare decision surface", () => {
     expect(screen.getByText("AI compare copilot")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Explain these deltas" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Open run detail" })).toHaveAttribute("href", "/runs/run-compare-1");
+    expect(screen.getByText("Evidence archive")).toBeInTheDocument();
   });
 });

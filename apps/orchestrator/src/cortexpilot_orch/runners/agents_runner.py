@@ -278,7 +278,7 @@ class AgentsRunner:
         mock_mode: bool = False,
     ) -> dict[str, Any]:
         run_id = _resolve_run_id(contract)
-        instruction = _extract_instruction(contract)
+        instruction = _extract_instruction(contract, worktree_path)
         task_id = contract.get("task_id", "task")
         transcript_recorder = agents_events.TranscriptRecorder(self._store, run_id, task_id)
         _record_transcript = transcript_recorder.record

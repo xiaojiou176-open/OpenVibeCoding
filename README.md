@@ -1,12 +1,20 @@
-# CortexPilot
+# OpenVibeCoding
 
-The command tower for AI engineering.
+The open command tower for AI engineering.
 
-Stop babysitting AI coding work. CortexPilot helps teams plan, delegate, track,
-resume, and prove long-running engineering work across Codex and Claude Code
-instead of juggling scattered chats, local scripts, and after-the-fact logs.
+Stop babysitting AI coding work.
+
+AI coding does not lack models. It lacks a command tower.
+
+OpenVibeCoding is the public shell for the CortexPilot repo and runtime
+compatibility layer. It helps teams plan / delegate / track / resume / prove
+long-running engineering work across Codex and Claude Code instead of
+juggling scattered chats, local scripts, and after-the-fact logs.
 
 CortexPilot is a contract-first multi-agent orchestration repository.
+
+The underlying repository, runtime, package, and compatibility names remain
+`CortexPilot` where that internal surface is the truthful identifier.
 
 The public story is intentionally narrower than the full monorepo:
 
@@ -14,8 +22,9 @@ The public story is intentionally narrower than the full monorepo:
 - **Choose the right adoption path second**
 - **Open MCP / API / builder / skills surfaces only after the real job is clear**
 
-Current public boundary: CortexPilot is a repo-backed AI engineering command
-tower, not a hosted product, and the shipped MCP surface remains **read-only**.
+Current public boundary: OpenVibeCoding is a repo-backed public shell over the
+CortexPilot runtime, not a hosted product, and the shipped MCP surface remains
+**read-only**.
 
 Current lane order is deliberate:
 
@@ -31,7 +40,14 @@ Current lane order is deliberate:
 
 The shortest truthful answer today is:
 
-> CortexPilot officially ships a public repo, a public Pages front door, a repo-local read-only MCP surface, a published PyPI package, a live Official MCP Registry entry, and a live ClawHub skill. The adoption-router skill is the secondary public lane. Local coding-agent starters and bundle examples remain companion/example materials, not the canonical public root. OpenHands/extensions and MCP.so external receipts exist, while hosted service, write-capable MCP, Docker distribution, and standalone npm releases remain deferred.
+> OpenVibeCoding currently ships through the public CortexPilot repo, a public
+> Pages front door, a repo-local read-only MCP surface, a published PyPI
+> package, a live Official MCP Registry entry, and a live ClawHub skill. The
+> adoption-router skill is the secondary public lane. Local coding-agent
+> starters and bundle examples remain companion/example materials, not the
+> canonical public root. OpenHands/extensions and MCP.so external receipts
+> exist, while hosted service, write-capable MCP, Docker distribution, and
+> standalone npm releases remain deferred.
 
 Use these buckets:
 
@@ -99,11 +115,11 @@ release, new task templates, and storefront updates.
 If you need contributor setup instead of product evaluation, jump to the
 [30-minute onboarding guide](docs/runbooks/onboarding-30min.md).
 
-## Why CortexPilot Exists
+## Why OpenVibeCoding Exists
 
-Most agent demos stop at "the model replied." CortexPilot is built for the next
-question: **can we inspect what happened, review what changed, classify the
-workflow case, and rerun it without guessing?**
+Most agent demos stop at "the model replied." OpenVibeCoding is built for the
+next question: **can we inspect what happened, review what changed, classify
+the workflow case, and rerun it without guessing?**
 
 The deeper product claim is straightforward:
 
@@ -119,7 +135,7 @@ The engineering philosophy underneath that loop is equally explicit:
 - **Context Engineering**: keep the right material in the right head, and treat explicit handoff as a fallback rather than the default loop.
 - **Harness Engineering**: move work through contracts, runtime bindings, approvals, and proof surfaces so the system can keep operating safely.
 
-This repository combines:
+The CortexPilot runtime underneath that public shell combines:
 
 - **Command Tower**: one operator surface for governed AI work, live run visibility, queue posture, and L0-style oversight
 - **Workflow Cases**: one stable operating record that ties request, verdict, proof, and linked runs together
@@ -189,7 +205,7 @@ If the first success path fails, go here next:
 
 ## The First Loop
 
-The clearest way to understand CortexPilot is:
+The clearest way to understand OpenVibeCoding is:
 
 1. **PM**: describe the task and acceptance target
 2. **Workflow Case**: confirm the case identity, queue state, and operating verdict
@@ -214,9 +230,10 @@ repository should be judged on.
   `Switchyard /v1/runtime/invoke` for intake/operator-style chat paths, but
   MCP tool execution still needs a tool-capable provider path and therefore
   fails closed instead of pretending Switchyard already has tool parity
-- CortexPilot is still **not** a hosted operator service; `cortexpilot.ai`
-  should be treated as a marketing/holding domain until the public contract,
-  support boundary, and live surface materially change
+- the CortexPilot runtime under OpenVibeCoding is still **not** a hosted
+  operator service; `cortexpilot.ai` should be treated as a marketing/holding
+  domain until the public contract, support boundary, and live surface
+  materially change
 
 ## Public CI Safety Model
 
@@ -322,7 +339,7 @@ release-proven until they have their own healthy proof and benchmark artifacts.
 
 Use these names as ecosystem anchors, not as co-brands or partnership claims.
 
-- **Codex**: primary workflow audience; CortexPilot is built for governed
+- **Codex**: primary workflow audience; OpenVibeCoding is built for governed
   Codex-style coding runs that need cases, approvals, and replayable proof.
 - **Claude Code**: primary workflow audience alongside Codex; the same
   Command Tower / Workflow Case / Proof & Replay spine applies.
@@ -340,7 +357,7 @@ Use these names as ecosystem anchors, not as co-brands or partnership claims.
 ## Official Ecosystem Anchors
 
 When a team asks "what is real on their side?", start from the native surfaces
-below before you explain where CortexPilot fits:
+below before you explain where OpenVibeCoding fits:
 
 - **Codex**:
   - repo: [openai/codex](https://github.com/openai/codex)
@@ -359,21 +376,21 @@ below before you explain where CortexPilot fits:
   - skills docs: [docs.openclaw.ai/tools/skills](https://docs.openclaw.ai/tools/skills)
   - registry/catalog: [openclaw/clawhub](https://github.com/openclaw/clawhub)
 
-These anchors matter because CortexPilot should fit around the real ecosystem
+These anchors matter because OpenVibeCoding should fit around the real ecosystem
 surfaces that already exist:
 
 - **Codex**: Codex now has real plugin surfaces of its own, including local
-  marketplace installs and a curated official directory. CortexPilot should sit
+  marketplace installs and a curated official directory. OpenVibeCoding should sit
   around Codex workflows with command tower, proof, replay, read-only MCP, and
   repo-owned skills or local bundle examples until a real published listing
   exists.
 - **Claude Code**: Claude Code's current native surfaces include plugins, MCP,
-  hooks, subagents, and project configuration. CortexPilot should wrap those
+  hooks, subagents, and project configuration. OpenVibeCoding should wrap those
   governed workflows with command tower, proof, replay, read-only MCP, and
-  repo-owned starter kits rather than pretending a published CortexPilot
+  repo-owned starter kits rather than pretending a published OpenVibeCoding
   marketplace listing already exists.
 - **OpenClaw**: adjacent integration layer with real skills and plugin/catalog
-  surfaces on its side, while CortexPilot stays on the review/proof/read-only
+  surfaces on its side, while OpenVibeCoding stays on the review/proof/read-only
   integration side unless a mapped native path is explicitly shipped and
   tested.
 
@@ -387,13 +404,13 @@ The strongest public loop is now:
 3. Reuse the Workflow Case as a **share-ready recap asset** instead of keeping
    it trapped inside a single operator page.
 
-That turns CortexPilot from “a repo you can run” into “a repo you can show,
+That turns OpenVibeCoding from “a repo you can run” into “a repo you can show,
 review, and hand off.”
 
 ## Builder Entry Points
 
 These are the current public-facing entry points for teams that want to build
-around CortexPilot without pretending a full SDK platform already exists:
+around OpenVibeCoding without pretending a full SDK platform already exists:
 
 - [packages/frontend-api-client/README.md](packages/frontend-api-client/README.md): thin JavaScript/TypeScript client entry points for dashboard, desktop, and web surfaces, including the repo-owned `createControlPlaneStarter(...)` bootstrap path for overview + agents + contracts + role-config integration.
 - [packages/frontend-api-contract/docs/README.md](packages/frontend-api-contract/docs/README.md): human-readable contract package guide for generated frontend-safe route/query/type imports.
@@ -413,7 +430,7 @@ If your team needs starter assets instead of only wording, open:
 
 ## Shortest Cross-Ecosystem Adoption Order
 
-If you are integrating CortexPilot into a coding-agent workflow, the shortest
+If you are integrating OpenVibeCoding into a coding-agent workflow, the shortest
 truthful order is:
 
 1. Confirm the native ecosystem surface first:
@@ -421,8 +438,8 @@ truthful order is:
    - Claude Code overview / MCP
    - OpenClaw repo / skills / ClawHub
 2. Use the public [compatibility matrix](https://xiaojiou176-open.github.io/CortexPilot-public/compatibility/)
-   to choose the right CortexPilot entrypoint.
-3. Pick the first CortexPilot lane based on the job:
+   to choose the right OpenVibeCoding entrypoint.
+3. Pick the first OpenVibeCoding lane based on the job:
    - [read-only MCP](https://xiaojiou176-open.github.io/CortexPilot-public/mcp/)
      for protocol inspection
    - [skills quickstart](https://xiaojiou176-open.github.io/CortexPilot-public/skills/)
@@ -445,7 +462,7 @@ truthful order is:
 
 ## Best Fit
 
-CortexPilot is a strong fit if you are building or evaluating:
+OpenVibeCoding is a strong fit if you are building or evaluating:
 
 - agent workflows that need **reviewable evidence**
 - orchestration systems that need **replay / re-exec**
@@ -454,7 +471,7 @@ CortexPilot is a strong fit if you are building or evaluating:
 
 ## Not A Fit
 
-CortexPilot is not the right choice if you want:
+OpenVibeCoding is not the right choice if you want:
 
 - a polished hosted SaaS product
 - write-capable agent control-plane mutations through MCP today
@@ -488,7 +505,7 @@ The current stage freeze keeps two high-risk directions explicitly constrained:
 - **Hosted operator surface** remains **No-Go**.
 - `cortexpilot.ai` is still a weak marketing/holding domain, not a production
   front door.
-- The current public contract still describes CortexPilot as source code plus
+- The current public contract still describes OpenVibeCoding as source code plus
   operator/demo surfaces, not as a hosted service.
 - Reopen hosted only if the public boundary, support contract, privacy/security
   wording, and live front door materially change together.

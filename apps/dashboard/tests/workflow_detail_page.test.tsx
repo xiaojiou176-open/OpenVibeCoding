@@ -138,7 +138,7 @@ describe("workflow detail page", () => {
     await expect(
       generateMetadata({ params: Promise.resolve({ id: "wf-1" }) }),
     ).resolves.toMatchObject({
-      title: "Workflow Case detail · wf-1 | CortexPilot",
+      title: "Workflow Case detail · wf-1 | OpenVibeCoding",
     });
   });
 
@@ -231,7 +231,7 @@ describe("workflow detail page", () => {
     });
     render(view);
 
-    expect(screen.getByText("Runs: 0")).toBeInTheDocument();
+    expect(screen.getByText("Proof & Replay: 0")).toBeInTheDocument();
     expect(screen.getAllByText("High-risk state").length).toBeGreaterThan(0);
     expect(screen.getByText("No related runs")).toBeInTheDocument();
     expect(screen.queryByRole("link", { name: "bad-shape" })).not.toBeInTheDocument();

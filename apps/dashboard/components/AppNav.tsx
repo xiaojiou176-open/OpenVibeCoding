@@ -25,6 +25,7 @@ function buildNavSections(locale: UiLocale): NavSection[] {
       items: [
         { href: "/", label: uiCopy.dashboard.labels.overview, icon: "grid" },
         { href: "/pm", label: uiCopy.dashboard.labels.pmIntake, icon: "message" },
+        { href: "/planner", label: uiCopy.dashboard.labels.planner, icon: "map" },
         { href: "/command-tower", label: uiCopy.dashboard.labels.commandTower, icon: "tower" },
         { href: "/workflows", label: uiCopy.dashboard.labels.workflowCases, icon: "workflow" },
         { href: "/runs", label: uiCopy.dashboard.labels.runs, icon: "play" },
@@ -80,6 +81,12 @@ const ICON_MAP: Record<string, ReactElement> = {
       <circle cx="12" cy="8" r="2" />
       <circle cx="4" cy="12" r="2" />
       <path d="M6 4h4l2 4M6 12h4l2-4" />
+    </svg>
+  ),
+  map: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M2.5 3.5l3-1.5 5 2 3-1.5v10l-3 1.5-5-2-3 1.5z" />
+      <path d="M5.5 2v10M10.5 4v10" />
     </svg>
   ),
   activity: (

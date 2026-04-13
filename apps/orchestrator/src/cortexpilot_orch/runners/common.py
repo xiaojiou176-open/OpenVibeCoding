@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import os
 from pathlib import Path
 from typing import Any
@@ -104,14 +105,73 @@ def coerce_task_result(
     return result
 
 
-def extract_instruction(contract: dict[str, Any]) -> str:
+def _resolve_context_pack_path(contract: dict[str, Any], worktree_path: Path | None) -> Path | None:
     inputs = contract.get("inputs")
+    if not isinstance(inputs, dict):
+        return None
+    artifacts = inputs.get("artifacts")
+    if not isinstance(artifacts, list):
+        return None
+    for artifact in artifacts:
+        if not isinstance(artifact, dict):
+            continue
+        if str(artifact.get("name") or "").strip() != "context_pack.json":
+            continue
+        uri = str(artifact.get("uri") or "").strip()
+        if not uri:
+            return None
+        candidate = Path(uri)
+        if candidate.is_absolute():
+            return candidate
+        if worktree_path is None:
+            return None
+        return (worktree_path / candidate).resolve()
+    return None
+
+
+def _context_pack_instruction_appendix(contract: dict[str, Any], worktree_path: Path | None) -> str:
+    context_pack_path = _resolve_context_pack_path(contract, worktree_path)
+    if context_pack_path is None or not context_pack_path.exists():
+        return ""
+    try:
+        payload = json.loads(context_pack_path.read_text(encoding="utf-8"))
+    except Exception:  # noqa: BLE001
+        return ""
+    if not isinstance(payload, dict):
+        return ""
+    trigger_reason = str(payload.get("trigger_reason") or "").strip()
+    source_session_id = str(payload.get("source_session_id") or "").strip()
+    global_state_summary = str(payload.get("global_state_summary") or "").strip()
+    actor_handoff_summary = str(payload.get("actor_handoff_summary") or "").strip()
+    required_reads = payload.get("required_reads") if isinstance(payload.get("required_reads"), list) else []
+    normalized_reads = [str(item).strip() for item in required_reads if str(item).strip()]
+    appendix_lines = [
+        "Context Pack Fallback (repo-generated):",
+        *(f"- trigger_reason: {trigger_reason}" for _ in [0] if trigger_reason),
+        *(f"- source_session_id: {source_session_id}" for _ in [0] if source_session_id),
+        *(f"- global_state_summary: {global_state_summary}" for _ in [0] if global_state_summary),
+        *(f"- actor_handoff_summary: {actor_handoff_summary}" for _ in [0] if actor_handoff_summary),
+        *(f"- required_reads: {', '.join(normalized_reads)}" for _ in [0] if normalized_reads),
+    ]
+    if len(appendix_lines) == 1:
+        return ""
+    return "\n".join(appendix_lines)
+
+
+def extract_instruction(contract: dict[str, Any], worktree_path: Path | None = None) -> str:
+    inputs = contract.get("inputs")
+    instruction = ""
     if isinstance(inputs, dict):
         spec = inputs.get("spec")
         if isinstance(spec, str) and spec.strip():
-            return spec
-    fallback = contract.get("instruction") or contract.get("objective") or ""
-    return fallback
+            instruction = spec
+    if not instruction:
+        fallback = contract.get("instruction") or contract.get("objective") or ""
+        instruction = str(fallback)
+    appendix = _context_pack_instruction_appendix(contract, worktree_path)
+    if appendix:
+        return f"{instruction}\n\n{appendix}".strip()
+    return instruction
 
 
 def extract_required_output(contract: dict[str, Any]) -> str | None:

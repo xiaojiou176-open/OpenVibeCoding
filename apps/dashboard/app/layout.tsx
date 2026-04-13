@@ -4,9 +4,9 @@ import WebVitalsBridge from "../components/WebVitalsBridge";
 import "./globals.css";
 
 export const metadata = {
-  title: "CortexPilot | The command tower for AI engineering",
+  title: "OpenVibeCoding | The open command tower for AI engineering",
   description:
-    "Stop babysitting AI coding work. CortexPilot plans, delegates, tracks, resumes, and proves long-running engineering work across Codex and Claude Code with Workflow Cases, read-only MCP truth, and replayable proof.",
+    "Stop babysitting AI coding work. AI coding does not lack models. It lacks a command tower. OpenVibeCoding is the public shell for the CortexPilot runtime across Codex, Claude Code, Workflow Cases, and replayable proof.",
 };
 
 export const dynamic = "force-dynamic";

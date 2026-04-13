@@ -149,7 +149,7 @@ def run_langgraph_contract_subflow(
     run_store: RunStore,
     mock_mode: bool = False,
 ) -> dict[str, Any]:
-    del worktree_path, schema_path
+    del schema_path
 
     task_id = _task_id(contract)
     audit_base = {
@@ -192,7 +192,7 @@ def run_langgraph_contract_subflow(
 
     input_state = {
         "task_id": task_id,
-        "instruction": runner_common.extract_instruction(contract),
+        "instruction": runner_common.extract_instruction(contract, worktree_path),
         "mock_mode": bool(mock_mode),
     }
 

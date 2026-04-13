@@ -80,11 +80,11 @@ describe("AgentsPage", () => {
 
     render(<AgentsPage />);
 
-    expect(await screen.findByRole("heading", { name: /Agents|代理/ })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { level: 1, name: /Role desk|角色桌|Agents|代理/ })).toBeInTheDocument();
     expect(
       screen.getAllByText(/role desk|control-plane desk|role \/ control-plane desk/i).length,
     ).toBeGreaterThan(0);
-    expect(screen.getByRole("heading", { name: /Role desk|角色 desk/ })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 2, name: /Role desk \(read-only mirror\)|角色 desk|Role desk/ })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: /Execution lane triage|执行 lane 分诊/ })).toBeInTheDocument();
     expect(screen.getByText(/Registered execution seats|已注册执行 seats/)).toBeInTheDocument();
 

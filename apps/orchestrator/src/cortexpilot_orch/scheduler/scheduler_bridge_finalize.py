@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 from collections.abc import Callable
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -343,11 +344,96 @@ def finalize_run(
                 "source_run_id": run_id,
                 "priority": 0,
                 "reason": reason,
+                **_wake_policy_queue_metadata(reason=reason),
             },
         )
         return {
             "artifact_path": str(artifact_path),
             "queue_item": queue_item,
+        }
+
+    def _load_wake_policy() -> tuple[dict[str, Any], str]:
+        default_ref = "policies/control_plane_runtime_policy.json#/wake_policy"
+        default_policy = {
+            "primary_mode": "event_driven",
+            "fallback_mode": "polling",
+            "active_wave_interval_seconds": 60,
+            "idle_interval_min_seconds": 300,
+            "idle_interval_max_seconds": 600,
+        }
+        artifact_path = run_dir / "artifacts" / "planning_wave_plan.json"
+        if not artifact_path.exists():
+            return default_policy, default_ref
+        try:
+            payload = json.loads(artifact_path.read_text(encoding="utf-8"))
+        except Exception:  # noqa: BLE001
+            return default_policy, default_ref
+        if not isinstance(payload, dict):
+            return default_policy, default_ref
+        wake_policy_ref = str(payload.get("wake_policy_ref") or default_ref).strip() or default_ref
+        policy_path_text, _, fragment = wake_policy_ref.partition("#")
+        candidate = (Path(__file__).resolve().parents[5] / policy_path_text).resolve()
+        if not candidate.exists():
+            return default_policy, wake_policy_ref
+        try:
+            policy_payload = json.loads(candidate.read_text(encoding="utf-8"))
+        except Exception:  # noqa: BLE001
+            return default_policy, wake_policy_ref
+        node: Any = policy_payload
+        if fragment:
+            for part in fragment.lstrip("/").split("/"):
+                if not part:
+                    continue
+                if not isinstance(node, dict):
+                    return default_policy, wake_policy_ref
+                node = node.get(part)
+        if not isinstance(node, dict):
+            return default_policy, wake_policy_ref
+        merged = dict(default_policy)
+        for key in default_policy:
+            if key in node:
+                merged[key] = node[key]
+        return merged, wake_policy_ref
+
+    def _iso_or_now(value: str) -> datetime:
+        normalized = str(value or "").strip()
+        if normalized:
+            try:
+                return datetime.fromisoformat(normalized.replace("Z", "+00:00")).astimezone(timezone.utc)
+            except ValueError:
+                pass
+        return datetime.now(timezone.utc)
+
+    def _wake_policy_queue_metadata(*, reason: str) -> dict[str, Any]:
+        wake_policy, wake_policy_ref = _load_wake_policy()
+        base_dt = _iso_or_now(finished_at)
+        try:
+            active_seconds = max(int(wake_policy.get("active_wave_interval_seconds") or 60), 1)
+        except (TypeError, ValueError):
+            active_seconds = 60
+        try:
+            idle_min_seconds = max(int(wake_policy.get("idle_interval_min_seconds") or 300), 1)
+        except (TypeError, ValueError):
+            idle_min_seconds = 300
+        try:
+            idle_max_seconds = max(int(wake_policy.get("idle_interval_max_seconds") or 600), idle_min_seconds)
+        except (TypeError, ValueError):
+            idle_max_seconds = max(idle_min_seconds, 600)
+        if reason == "completion_governance_on_incomplete":
+            scheduled_at = base_dt
+            deadline_at = base_dt + timedelta(seconds=active_seconds)
+            wake_stage = "active_wave"
+        else:
+            scheduled_at = base_dt + timedelta(seconds=idle_min_seconds)
+            deadline_at = base_dt + timedelta(seconds=idle_max_seconds)
+            wake_stage = "polling_fallback"
+        return {
+            "scheduled_at": scheduled_at.isoformat(),
+            "deadline_at": deadline_at.isoformat(),
+            "wake_policy_ref": wake_policy_ref,
+            "wake_primary_mode": str(wake_policy.get("primary_mode") or "event_driven"),
+            "wake_fallback_mode": str(wake_policy.get("fallback_mode") or "polling"),
+            "wake_stage": wake_stage,
         }
 
     if isinstance(final_task_result, dict):
