@@ -54,6 +54,10 @@ export default function DashboardHomeStorySections({
           adoptionTitle: "延伸入口",
           adoptionDescription:
             "公共文档与生态入口保留在后排，避免抢走 command tower 的第一印象。",
+          guidesTitle: "第二层导览，不抢首屏",
+          guidesDescription:
+            "方法层、模板层和生态入口保留，但收进更安静的第二层，避免首页继续像站点目录墙。",
+          guidesSummary: "展开第二层导览",
         }
       : {
           eyebrow: "OpenVibeCoding / command tower entry",
@@ -76,6 +80,10 @@ export default function DashboardHomeStorySections({
           adoptionTitle: "Extended surfaces",
           adoptionDescription:
             "Public docs and ecosystem entry points stay in the second layer so the command tower remains the first impression.",
+          guidesTitle: "Second-layer guides, not the first impression",
+          guidesDescription:
+            "Keep methods, templates, and ecosystem routes available, but move them into a calmer second layer so the home page stops reading like a route catalog.",
+          guidesSummary: "Open second-layer guides",
         };
   const adoptionCards = [
     homePhase2Copy.integrationCards[0],
@@ -273,92 +281,97 @@ export default function DashboardHomeStorySections({
         </div>
       </section>
 
-      <section className="app-section" aria-labelledby="dashboard-public-advantages-title">
+      <section className="app-section" aria-labelledby="dashboard-second-layer-guides-title">
         <div className="section-header">
           <div>
-            <h2 id="dashboard-public-advantages-title" className="section-title">
-              {shellCopy.methodTitle}
+            <h2 id="dashboard-second-layer-guides-title" className="section-title">
+              {shellCopy.guidesTitle}
             </h2>
-            <p>{shellCopy.methodDescription}</p>
+            <p>{shellCopy.guidesDescription}</p>
           </div>
         </div>
-        <div className="quick-grid">
-          {homePhase2Copy.publicAdvantageCards.map((item) => (
-            <Link key={item.title} href={resolveHomeHref(item.href)} className="quick-card">
-              <span className="quick-card-title">{item.title}</span>
-              <span className="quick-card-desc">{item.desc}</span>
-            </Link>
-          ))}
-        </div>
-      </section>
+        <Card asChild>
+          <details data-testid="home-second-layer-guides">
+            <summary className="quick-card-title">{shellCopy.guidesSummary}</summary>
+            <div className="stack-gap-4 mt-2">
+              <div className="section-header">
+                <div>
+                  <h3 className="section-title">{shellCopy.methodTitle}</h3>
+                  <p>{shellCopy.methodDescription}</p>
+                </div>
+              </div>
+              <div className="quick-grid">
+                {homePhase2Copy.publicAdvantageCards.map((item) => (
+                  <Link key={item.title} href={resolveHomeHref(item.href)} className="quick-card">
+                    <span className="quick-card-title">{item.title}</span>
+                    <span className="quick-card-desc">{item.desc}</span>
+                  </Link>
+                ))}
+              </div>
 
-      <section className="app-section" aria-labelledby="dashboard-public-templates-title">
-        <div className="section-header">
-          <div>
-            <h2 id="dashboard-public-templates-title" className="section-title">
-              {shellCopy.templatesTitle}
-            </h2>
-            <p>{shellCopy.templatesDescription}</p>
-          </div>
-          <nav aria-label="Public task template actions">
-            <Button asChild variant="secondary">
-              <Link href={resolveHomeHref(homePhase2Copy.publicTemplatesActionHref)}>
-                {homePhase2Copy.publicTemplatesActionLabel}
-              </Link>
-            </Button>
-          </nav>
-        </div>
-        <div className="quick-grid">
-          {homePhase2Copy.publicTemplateCards.map((item) => (
-            <Link key={item.title} href={resolveHomeHref(item.href)} className="quick-card">
-              <span className="quick-card-desc">{item.badge}</span>
-              <span className="quick-card-title">{item.title}</span>
-              <span className="quick-card-desc">{item.desc}</span>
-              <span className="cell-sub mono">Best for: {item.bestFor}</span>
-              <span className="cell-sub mono">Try with: {item.example}</span>
-              <span className="cell-sub mono">{item.proof}</span>
-              <span className="cell-sub mono">{item.fields.join(" · ")}</span>
-            </Link>
-          ))}
-        </div>
-      </section>
+              <div className="section-header">
+                <div>
+                  <h3 className="section-title">{shellCopy.templatesTitle}</h3>
+                  <p>{shellCopy.templatesDescription}</p>
+                </div>
+                <nav aria-label="Public task template actions">
+                  <Button asChild variant="secondary">
+                    <Link href={resolveHomeHref(homePhase2Copy.publicTemplatesActionHref)}>
+                      {homePhase2Copy.publicTemplatesActionLabel}
+                    </Link>
+                  </Button>
+                </nav>
+              </div>
+              <div className="quick-grid">
+                {homePhase2Copy.publicTemplateCards.map((item) => (
+                  <Link key={item.title} href={resolveHomeHref(item.href)} className="quick-card">
+                    <span className="quick-card-desc">{item.badge}</span>
+                    <span className="quick-card-title">{item.title}</span>
+                    <span className="quick-card-desc">{item.desc}</span>
+                    <span className="cell-sub mono">Best for: {item.bestFor}</span>
+                    <span className="cell-sub mono">Try with: {item.example}</span>
+                    <span className="cell-sub mono">{item.proof}</span>
+                    <span className="cell-sub mono">{item.fields.join(" · ")}</span>
+                  </Link>
+                ))}
+              </div>
 
-      <section className="app-section" aria-labelledby="dashboard-integration-adoption-title">
-        <div className="section-header">
-          <div>
-            <h2 id="dashboard-integration-adoption-title" className="section-title">
-              {shellCopy.adoptionTitle}
-            </h2>
-            <p>{shellCopy.adoptionDescription}</p>
-          </div>
-          <nav aria-label="Adoption and proof-first actions">
-            <Button asChild variant="secondary">
-              <Link href={resolveHomeHref(homePhase2Copy.proofFirstActionHref)}>{homePhase2Copy.proofFirstActionLabel}</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link href={resolveHomeHref(homePhase2Copy.aiSurfacesActionHref)}>{homePhase2Copy.aiSurfacesActionLabel}</Link>
-            </Button>
-          </nav>
-        </div>
-        <div className="quick-grid">
-          {adoptionCards.map((item) => {
-            const href = resolveHomeHref(item.href);
-            return (
-              <Link key={item.title} href={href} className="quick-card" prefetch={item.prefetch ?? href.startsWith("/")}>
-                <span className="quick-card-desc">{item.badge}</span>
-                <span className="quick-card-title">{item.title}</span>
-                <span className="quick-card-desc">{item.desc}</span>
-              </Link>
-            );
-          })}
-        </div>
-        <p>
-          Need the broader ecosystem framing? <Link href={resolveHomeHref(homePhase2Copy.ecosystemActionHref)}>{homePhase2Copy.ecosystemAction}</Link>.
-          Need the full package ladder in one place?{" "}
-          <Link href={resolveHomeHref(homePhase2Copy.builderQuickstartCtaHref)}>
-            {homePhase2Copy.builderQuickstartCtaLabel}
-          </Link>.
-        </p>
+              <div className="section-header">
+                <div>
+                  <h3 className="section-title">{shellCopy.adoptionTitle}</h3>
+                  <p>{shellCopy.adoptionDescription}</p>
+                </div>
+                <nav aria-label="Adoption and proof-first actions">
+                  <Button asChild variant="secondary">
+                    <Link href={resolveHomeHref(homePhase2Copy.proofFirstActionHref)}>{homePhase2Copy.proofFirstActionLabel}</Link>
+                  </Button>
+                  <Button asChild variant="secondary">
+                    <Link href={resolveHomeHref(homePhase2Copy.aiSurfacesActionHref)}>{homePhase2Copy.aiSurfacesActionLabel}</Link>
+                  </Button>
+                </nav>
+              </div>
+              <div className="quick-grid">
+                {adoptionCards.map((item) => {
+                  const href = resolveHomeHref(item.href);
+                  return (
+                    <Link key={item.title} href={href} className="quick-card" prefetch={item.prefetch ?? href.startsWith("/")}>
+                      <span className="quick-card-desc">{item.badge}</span>
+                      <span className="quick-card-title">{item.title}</span>
+                      <span className="quick-card-desc">{item.desc}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+              <p>
+                Need the broader ecosystem framing? <Link href={resolveHomeHref(homePhase2Copy.ecosystemActionHref)}>{homePhase2Copy.ecosystemAction}</Link>.
+                Need the full package ladder in one place?{" "}
+                <Link href={resolveHomeHref(homePhase2Copy.builderQuickstartCtaHref)}>
+                  {homePhase2Copy.builderQuickstartCtaLabel}
+                </Link>.
+              </p>
+            </div>
+          </details>
+        </Card>
       </section>
 
       {showFirstTaskGuide ? (

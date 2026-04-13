@@ -1,48 +1,48 @@
 /* =========================================
-   CortexPilot Command Tower Desktop — Unified Design System
-   Matches Dashboard's token architecture
+   OpenVibeCoding Command Tower Desktop — Unified Design System
+   Dark-neutral command deck baseline
    ========================================= */
 
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 
   /* ── Core Palette (mirroring Dashboard) ── */
-  --color-bg: #f9fafb;
-  --color-bg-elevated: #ffffff;
-  --color-bg-surface: #f3f4f6;
-  --color-surface-subtle: #f3f4f6;
-  --color-surface-hover: #e5e7eb;
-  --color-text-primary: #111827;
-  --color-text-secondary: #4b5563;
-  --color-text-muted: #6b7280;
-  --color-text-tertiary: #d1d5db;
-  --color-primary: #2563eb;
-  --color-primary-hover: #1d4ed8;
-  --color-primary-soft: rgba(37, 99, 235, 0.08);
-  --color-primary-muted: rgba(37, 99, 235, 0.04);
-  --color-border: #e5e7eb;
-  --color-border-strong: #d1d5db;
-  --color-border-subtle: #f3f4f6;
-  --color-focus-ring: #2563eb;
+  --color-bg: #0b1220;
+  --color-bg-elevated: #111a2e;
+  --color-bg-surface: #17233b;
+  --color-surface-subtle: #142038;
+  --color-surface-hover: #1b2a45;
+  --color-text-primary: #e8eef8;
+  --color-text-secondary: #b7c6db;
+  --color-text-muted: #9fb0c8;
+  --color-text-tertiary: #8396b3;
+  --color-primary: #1fb981;
+  --color-primary-hover: #17a16f;
+  --color-primary-soft: rgba(31, 185, 129, 0.12);
+  --color-primary-muted: rgba(31, 185, 129, 0.06);
+  --color-border: rgba(159, 176, 200, 0.16);
+  --color-border-strong: rgba(159, 176, 200, 0.28);
+  --color-border-subtle: rgba(159, 176, 200, 0.1);
+  --color-focus-ring: #1fb981;
 
   /* ── Semantic Status ── */
-  --color-success: #059669;
-  --color-success-bg: rgba(5, 150, 105, 0.06);
-  --color-success-ink: #065f46;
-  --color-warning: #d97706;
-  --color-warning-bg: rgba(217, 119, 6, 0.06);
-  --color-warning-ink: #92400e;
-  --color-danger: #dc2626;
-  --color-danger-bg: rgba(220, 38, 38, 0.05);
-  --color-danger-ink: #b91c1c;
-  --color-info-bg: rgba(37, 99, 235, 0.05);
+  --color-success: #1fb981;
+  --color-success-bg: rgba(31, 185, 129, 0.12);
+  --color-success-ink: #7fe0b7;
+  --color-warning: #e59a2f;
+  --color-warning-bg: rgba(229, 154, 47, 0.12);
+  --color-warning-ink: #f2c27d;
+  --color-danger: #d95c5c;
+  --color-danger-bg: rgba(217, 92, 92, 0.12);
+  --color-danger-ink: #f0aaaa;
+  --color-info-bg: rgba(31, 185, 129, 0.06);
 
   /* ── Shadows ── */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
-  --shadow-glow-primary: 0 0 20px rgba(37, 99, 235, 0.08);
+  --shadow-sm: 0 1px 2px rgba(4, 7, 13, 0.38), 0 0 0 1px rgba(232, 238, 248, 0.03);
+  --shadow-md: 0 6px 18px rgba(4, 7, 13, 0.42), 0 0 0 1px rgba(232, 238, 248, 0.04);
+  --shadow-lg: 0 14px 36px rgba(4, 7, 13, 0.48), 0 0 0 1px rgba(232, 238, 248, 0.05);
+  --shadow-xl: 0 24px 54px rgba(4, 7, 13, 0.55);
+  --shadow-glow-primary: 0 0 18px rgba(31, 185, 129, 0.14);
 
   /* ── Radius ── */
   --radius-xs: 4px;
@@ -111,61 +111,60 @@
   /* ── Aliases (for backward compat with existing components) ── */
   --color-pm: var(--color-primary);
   --color-pm-hover: var(--color-primary-hover);
-  --color-pm-strong: #1e40af;
-  --color-worker: #059669;
+  --color-pm-strong: #7fe0b7;
+  --color-worker: #1fb981;
   --color-reviewer: #7c3aed;
   --color-warn: var(--color-warning);
-  --color-white: #ffffff;
-  --color-inverse-text: #ffffff;
-  --color-amber-strong: #b45309;
-  --color-success-strong: #047857;
-  --color-danger-strong: #b91c1c;
-  --color-ghost-hover: rgba(0, 0, 0, 0.04);
+  --color-white: var(--color-bg-elevated);
+  --color-inverse-text: #08131c;
+  --color-amber-strong: #f2c27d;
+  --color-success-strong: #7fe0b7;
+  --color-danger-strong: #f0aaaa;
+  --color-ghost-hover: rgba(232, 238, 248, 0.06);
   --color-user-bubble-bg: var(--color-primary-muted);
-  --color-user-bubble-border: rgba(37, 99, 235, 0.15);
+  --color-user-bubble-border: rgba(31, 185, 129, 0.18);
   --color-pm-bubble-bg: var(--color-bg-elevated);
   --color-active-border: var(--color-primary);
   --color-active-surface: var(--color-primary-soft);
   --color-focus-outline: var(--color-focus-ring);
-  --color-titlebar-bg: rgba(255, 255, 255, 0.85);
+  --color-titlebar-bg: rgba(17, 26, 46, 0.84);
   --color-card-bg: var(--color-bg-elevated);
   --color-surface: var(--color-bg-surface);
-  --color-border-strong: #d1d5db;
 
   /* Gradient / brand */
-  --color-gradient-overlay-pm: linear-gradient(135deg, rgba(37, 99, 235, 0.04), transparent);
-  --color-gradient-overlay-worker: linear-gradient(135deg, rgba(5, 150, 105, 0.04), transparent);
+  --color-gradient-overlay-pm: linear-gradient(135deg, rgba(31, 185, 129, 0.08), transparent);
+  --color-gradient-overlay-worker: linear-gradient(135deg, rgba(229, 154, 47, 0.08), transparent);
   --color-gradient-brand-red: #ef4444;
   --color-gradient-brand-yellow: #eab308;
   --color-gradient-brand-green: #22c55e;
 
   /* Status borders */
-  --color-warn-border-soft: rgba(217, 119, 6, 0.25);
-  --color-warn-surface-soft: rgba(217, 119, 6, 0.06);
-  --color-danger-border-strong: rgba(220, 38, 38, 0.35);
-  --color-danger-surface-soft: rgba(220, 38, 38, 0.06);
-  --color-success-border-strong: rgba(5, 150, 105, 0.35);
-  --color-success-surface-soft: rgba(5, 150, 105, 0.06);
-  --color-pm-border-strong: rgba(37, 99, 235, 0.35);
-  --color-overlay-backdrop: rgba(0, 0, 0, 0.4);
-  --color-overlay-critical-backdrop: rgba(127, 29, 29, 0.35);
+  --color-warn-border-soft: rgba(229, 154, 47, 0.3);
+  --color-warn-surface-soft: rgba(229, 154, 47, 0.08);
+  --color-danger-border-strong: rgba(217, 92, 92, 0.36);
+  --color-danger-surface-soft: rgba(217, 92, 92, 0.08);
+  --color-success-border-strong: rgba(31, 185, 129, 0.36);
+  --color-success-surface-soft: rgba(31, 185, 129, 0.08);
+  --color-pm-border-strong: rgba(31, 185, 129, 0.35);
+  --color-overlay-backdrop: rgba(8, 12, 22, 0.48);
+  --color-overlay-critical-backdrop: rgba(96, 31, 31, 0.4);
 
   /* Chain tokens */
   --color-chain-peek-border: var(--color-primary);
-  --color-chain-peek-shadow: rgba(37, 99, 235, 0.3);
-  --color-chain-peek-shadow-transparent: rgba(37, 99, 235, 0);
-  --chain-node-working-border: rgba(37, 99, 235, 0.6);
-  --chain-node-working-surface: rgba(37, 99, 235, 0.08);
-  --chain-node-working-shadow: rgba(37, 99, 235, 0.15);
-  --chain-node-done-border: rgba(5, 150, 105, 0.5);
-  --chain-node-done-surface: rgba(5, 150, 105, 0.06);
-  --chain-node-done-shadow: rgba(5, 150, 105, 0.1);
-  --chain-node-failed-border: rgba(220, 38, 38, 0.6);
-  --chain-node-failed-surface: rgba(220, 38, 38, 0.06);
-  --chain-node-failed-shadow: rgba(220, 38, 38, 0.15);
-  --chain-node-waiting-border: rgba(217, 119, 6, 0.45);
-  --chain-node-waiting-surface: rgba(217, 119, 6, 0.06);
-  --chain-node-waiting-shadow: rgba(217, 119, 6, 0.1);
+  --color-chain-peek-shadow: rgba(31, 185, 129, 0.24);
+  --color-chain-peek-shadow-transparent: rgba(31, 185, 129, 0);
+  --chain-node-working-border: rgba(31, 185, 129, 0.55);
+  --chain-node-working-surface: rgba(31, 185, 129, 0.1);
+  --chain-node-working-shadow: rgba(31, 185, 129, 0.14);
+  --chain-node-done-border: rgba(31, 185, 129, 0.45);
+  --chain-node-done-surface: rgba(31, 185, 129, 0.08);
+  --chain-node-done-shadow: rgba(31, 185, 129, 0.12);
+  --chain-node-failed-border: rgba(217, 92, 92, 0.55);
+  --chain-node-failed-surface: rgba(217, 92, 92, 0.08);
+  --chain-node-failed-shadow: rgba(217, 92, 92, 0.14);
+  --chain-node-waiting-border: rgba(229, 154, 47, 0.45);
+  --chain-node-waiting-surface: rgba(229, 154, 47, 0.08);
+  --chain-node-waiting-shadow: rgba(229, 154, 47, 0.12);
   --chain-node-idle-border: var(--color-border);
   --chain-node-idle-surface: var(--color-bg-elevated);
   --chain-node-idle-shadow: transparent;
@@ -174,110 +173,9 @@
   --chain-edge-failed: var(--color-danger);
   --chain-grid-color: var(--color-border-subtle);
 
-  --font-ui: "Inter", -apple-system, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Helvetica Neue", sans-serif;
+  --font-ui: "Manrope", "Avenir Next", "SF Pro Text", -apple-system, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  --font-display: "Space Grotesk", "Manrope", "Avenir Next", sans-serif;
   --font-mono: "JetBrains Mono", "SF Mono", "Cascadia Code", "Fira Code", ui-monospace, monospace;
-}
-
-/* ── Dark Mode ── */
-@media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: dark;
-    --color-bg: #09090b;
-    --color-bg-elevated: #0f0f11;
-    --color-bg-surface: #161618;
-    --color-surface-subtle: #1c1c1f;
-    --color-surface-hover: #232326;
-    --color-text-primary: #fafafa;
-    --color-text-secondary: #a0a0ab;
-    --color-text-muted: #8b8b95;
-    --color-text-tertiary: #4e4e56;
-    --color-primary: #3b82f6;
-    --color-primary-hover: #2563eb;
-    --color-primary-soft: rgba(59, 130, 246, 0.15);
-    --color-primary-muted: rgba(59, 130, 246, 0.08);
-    --color-border: #27272a;
-    --color-border-strong: #3f3f46;
-    --color-border-subtle: #1e1e21;
-    --color-focus-ring: #3b82f6;
-    --color-success: #22c55e;
-    --color-success-bg: rgba(34, 197, 94, 0.10);
-    --color-success-ink: #4ade80;
-    --color-warning: #eab308;
-    --color-warning-bg: rgba(234, 179, 8, 0.10);
-    --color-warning-ink: #facc15;
-    --color-danger: #ef4444;
-    --color-danger-bg: rgba(239, 68, 68, 0.10);
-    --color-danger-ink: #f87171;
-    --color-info-bg: rgba(59, 130, 246, 0.10);
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.03);
-    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.04);
-    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
-    --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.6);
-    --shadow-glow-primary: 0 0 24px rgba(59, 130, 246, 0.15);
-    --color-pm: #3b82f6;
-    --color-pm-hover: #2563eb;
-    --color-pm-strong: #93c5fd;
-    --color-worker: #22c55e;
-    --color-reviewer: #a78bfa;
-    --color-white: #161618;
-    --color-inverse-text: #fafafa;
-    --color-amber-strong: #facc15;
-    --color-success-strong: #4ade80;
-    --color-danger-strong: #f87171;
-    --color-ghost-hover: rgba(255, 255, 255, 0.06);
-    --color-user-bubble-bg: rgba(59, 130, 246, 0.12);
-    --color-user-bubble-border: rgba(59, 130, 246, 0.25);
-    --color-pm-bubble-bg: var(--color-bg-surface);
-    --color-titlebar-bg: rgba(9, 9, 11, 0.8);
-    --color-card-bg: var(--color-bg-elevated);
-    --color-surface: var(--color-bg-surface);
-    --color-warn-border-soft: rgba(234, 179, 8, 0.3);
-    --color-warn-surface-soft: rgba(234, 179, 8, 0.08);
-    --color-danger-border-strong: rgba(239, 68, 68, 0.4);
-    --color-danger-surface-soft: rgba(239, 68, 68, 0.08);
-    --color-success-border-strong: rgba(34, 197, 94, 0.4);
-    --color-success-surface-soft: rgba(34, 197, 94, 0.08);
-    --color-pm-border-strong: rgba(59, 130, 246, 0.4);
-    --color-overlay-backdrop: rgba(0, 0, 0, 0.6);
-    --color-overlay-critical-backdrop: rgba(127, 29, 29, 0.5);
-    --chain-node-working-border: rgba(59, 130, 246, 0.6);
-    --chain-node-working-surface: rgba(59, 130, 246, 0.12);
-    --chain-node-working-shadow: rgba(59, 130, 246, 0.2);
-    --chain-node-done-border: rgba(34, 197, 94, 0.5);
-    --chain-node-done-surface: rgba(34, 197, 94, 0.10);
-    --chain-node-done-shadow: rgba(34, 197, 94, 0.15);
-    --chain-node-failed-border: rgba(239, 68, 68, 0.6);
-    --chain-node-failed-surface: rgba(239, 68, 68, 0.10);
-    --chain-node-failed-shadow: rgba(239, 68, 68, 0.2);
-    --chain-node-waiting-border: rgba(234, 179, 8, 0.5);
-    --chain-node-waiting-surface: rgba(234, 179, 8, 0.08);
-    --chain-node-waiting-shadow: rgba(234, 179, 8, 0.12);
-    --chain-node-idle-border: var(--color-border);
-    --chain-node-idle-surface: var(--color-bg-surface);
-    --chain-edge-active: var(--color-primary);
-    --chain-edge-done: var(--color-success);
-    --chain-edge-failed: var(--color-danger);
-    --chain-grid-color: var(--color-border);
-    --topbar-bg-solid: color-mix(in srgb, var(--color-bg-elevated) 85%, transparent);
-    --metric-overlay-color: color-mix(in srgb, var(--color-bg-elevated) 96%, var(--color-white) 4%);
-    --metric-overlay-accent: color-mix(in srgb, var(--color-primary) 3%, transparent);
-    --badge-success-border-soft: color-mix(in srgb, var(--color-success) 20%, transparent);
-    --badge-warning-border-soft: color-mix(in srgb, var(--color-warning) 20%, transparent);
-    --badge-danger-border-soft: color-mix(in srgb, var(--color-danger) 20%, transparent);
-    --badge-info-border-soft: color-mix(in srgb, var(--color-primary) 20%, transparent);
-    --btn-warning-border-soft: color-mix(in srgb, var(--color-warning) 30%, transparent);
-    --btn-danger-border-soft: color-mix(in srgb, var(--color-danger) 30%, transparent);
-  }
-
-  .topbar {
-    background: var(--topbar-bg-solid);
-    backdrop-filter: blur(12px) saturate(180%);
-    -webkit-backdrop-filter: blur(12px) saturate(180%);
-  }
-
-  .metric-card::before {
-    background: linear-gradient(160deg, var(--metric-overlay-color) 0%, transparent 50%);
-  }
 }
 
 /* =========================================

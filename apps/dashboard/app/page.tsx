@@ -261,12 +261,6 @@ export default async function Home() {
       : "metric-value--success";
   const warningText =
     firstEnglishText(warning) || "The run list is temporarily unavailable. Try again soon.";
-  const commandDeckTitle =
-    locale === "zh-CN" ? "先打开实时指挥面" : "Open the live command deck first";
-  const commandDeckDescription =
-    locale === "zh-CN"
-      ? "首页先把 Command Tower、Workflow Cases 和 Proof & Replay 顶到第一层。采用路线、生态入口和 package 说明留在后面，不再抢走首屏主语义。"
-      : "Put Command Tower, Workflow Cases, and Proof & Replay in the first operator read. Adoption routes, ecosystem ladders, and package surfaces come after the command deck, not before it.";
   const governanceDeckTitle =
     locale === "zh-CN" ? "治理桌与放行控制" : "Governance desks and release controls";
   const governanceDeckDescription =
@@ -294,57 +288,6 @@ export default async function Home() {
         runningCount={runningCount}
         showFirstTaskGuide={!hasRunHistory}
       />
-
-      <section className="app-section" aria-labelledby="dashboard-command-deck-title">
-        <div className="section-header">
-          <div>
-            <h2 id="dashboard-command-deck-title" className="section-title">
-              {commandDeckTitle}
-            </h2>
-            <p>{commandDeckDescription}</p>
-          </div>
-          <nav aria-label="Command deck primary actions">
-            <Button asChild>
-              <Link href="/command-tower">Open Command Tower</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link href="/workflows">Open Workflow Cases</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link href="/runs">Open Proof &amp; Replay</Link>
-            </Button>
-          </nav>
-        </div>
-        <div className="quick-grid">
-          <Link href="/command-tower" className="quick-card">
-            <span className="quick-card-desc">{locale === "zh-CN" ? "Live cockpit" : "Live cockpit"}</span>
-            <span className="quick-card-title">Command Tower</span>
-            <span className="quick-card-desc">
-              {locale === "zh-CN"
-                ? "先看系统现在在干嘛、风险在哪、下一步该去哪。"
-                : "See what is moving now, what is risky, and where the next operator action belongs."}
-            </span>
-          </Link>
-          <Link href="/workflows" className="quick-card">
-            <span className="quick-card-desc">{locale === "zh-CN" ? "Durable case record" : "Durable case record"}</span>
-            <span className="quick-card-title">Workflow Cases</span>
-            <span className="quick-card-desc">
-              {locale === "zh-CN"
-                ? "把 request、queue、verdict、linked runs 和 next action 绑在同一张案例桌上。"
-                : "Keep request, queue posture, verdict, linked runs, and the next action on one durable case desk."}
-            </span>
-          </Link>
-          <Link href="/runs" className="quick-card">
-            <span className="quick-card-desc">{locale === "zh-CN" ? "Truth room" : "Truth room"}</span>
-            <span className="quick-card-title">Proof &amp; Replay</span>
-            <span className="quick-card-desc">
-              {locale === "zh-CN"
-                ? "先核证据、compare 和 replay，再决定是否信任或放行结果。"
-                : "Inspect evidence, compare posture, and replay state before you trust or promote the result."}
-            </span>
-          </Link>
-        </div>
-      </section>
 
       <section className="app-section" aria-labelledby="dashboard-case-gallery-live-title">
         <div className="section-header">

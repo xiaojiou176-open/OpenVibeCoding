@@ -157,21 +157,33 @@ export default async function RunComparePage({
               {proofPack.summary ? <p className="mono">Proof: {String(proofPack.summary)}</p> : null}
             </div>
           </Card>
-          <Card>
-            <h3>Run compare report</h3>
-            <pre className="mono">{JSON.stringify(runCompareReport, null, 2)}</pre>
-          </Card>
-          <Card>
-            <h3>Compare summary</h3>
-            <pre className="mono">{JSON.stringify(compareSummary, null, 2)}</pre>
-          </Card>
-          <Card>
-            <h3>Replay report</h3>
-            <pre className="mono">{JSON.stringify(replayReport, null, 2)}</pre>
-          </Card>
-          <Card>
-            <h3>Run snapshot</h3>
-            <pre className="mono">{JSON.stringify(run, null, 2)}</pre>
+          <Card asChild>
+            <details className="collapsible">
+              <summary>Evidence archive</summary>
+              <div className="collapsible-body stack-gap-4">
+                <p className="muted">
+                  Keep the first screen decision-first. Open the raw compare payload only when you need to inspect the underlying proof.
+                </p>
+                <div className="grid grid-2">
+                  <Card>
+                    <h3>Run compare report</h3>
+                    <pre className="mono">{JSON.stringify(runCompareReport, null, 2)}</pre>
+                  </Card>
+                  <Card>
+                    <h3>Compare summary</h3>
+                    <pre className="mono">{JSON.stringify(compareSummary, null, 2)}</pre>
+                  </Card>
+                  <Card>
+                    <h3>Replay report</h3>
+                    <pre className="mono">{JSON.stringify(replayReport, null, 2)}</pre>
+                  </Card>
+                  <Card>
+                    <h3>Run snapshot</h3>
+                    <pre className="mono">{JSON.stringify(run, null, 2)}</pre>
+                  </Card>
+                </div>
+              </div>
+            </details>
           </Card>
         </div>
       </section>

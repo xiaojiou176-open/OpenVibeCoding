@@ -57,11 +57,15 @@ describe("dashboard home run-summary clarity", () => {
 
   it("renders first-run CTA and onboarding guidance when no runs", async () => {
     render(await Home());
+    const secondLayerGuides = screen.getByTestId("home-second-layer-guides");
+    secondLayerGuides.setAttribute("open", "");
 
     expect(screen.getByRole("heading", { name: "The open command tower for AI engineering" })).toBeInTheDocument();
     expect(
       screen.getByText(/Stop babysitting AI coding work\./)
     ).toBeInTheDocument();
+    expect(screen.getByText("Second-layer guides, not the first impression")).toBeInTheDocument();
+    expect(screen.getByText("Open second-layer guides")).toBeInTheDocument();
     expect(screen.getByText("Method layer, not the hero")).toBeInTheDocument();
     expect(screen.getByText("Prompt Engineering")).toBeInTheDocument();
     expect(screen.getByText("Context Engineering")).toBeInTheDocument();
@@ -135,7 +139,7 @@ describe("dashboard home run-summary clarity", () => {
     expect(screen.getByText("Stable: no recent failed runs (0%)")).toHaveClass("badge--success");
     expect(screen.getByRole("progressbar", { name: "Failure share 0/0" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "View all runs" })).toHaveAttribute("href", "/runs");
-    expect(screen.getByRole("link", { name: "Open Command Tower" })).toHaveAttribute("href", "/command-tower");
+    expect(screen.getByText("Live command tower").closest("a")).toHaveAttribute("href", "/command-tower");
     expect(screen.queryByRole("link", { name: "Quick approval" })).not.toBeInTheDocument();
   }, 30000);
 
@@ -225,6 +229,8 @@ describe("dashboard home run-summary clarity", () => {
     });
 
     render(await Home());
+    const secondLayerGuides = screen.getByTestId("home-second-layer-guides");
+    secondLayerGuides.setAttribute("open", "");
 
     expect(screen.getByRole("heading", { name: "面向 AI 工程的开放指挥塔" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "启动首个任务" })).toHaveAttribute("href", "/pm");

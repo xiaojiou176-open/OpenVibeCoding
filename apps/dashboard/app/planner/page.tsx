@@ -8,11 +8,12 @@ import { Card } from "../../components/ui/card";
 import { fetchArtifact, fetchReports, fetchRun, fetchRuns } from "../../lib/api";
 import { safeLoad } from "../../lib/serverPageData";
 import type { JsonValue, ReportRecord, RunDetailPayload, RunSummary } from "../../lib/types";
+import WorkflowQueueMutationControls from "../workflows/WorkflowQueueMutationControls";
 
 export const metadata: Metadata = {
   title: "Planner desk | OpenVibeCoding",
   description:
-    "Review wave plans, worker prompt contracts, wake-policy posture, and continuation governance from one planner-facing desk.",
+    "Triages wave plans, worker prompt contracts, unblock tasks, and continuation governance from one planner-facing control desk.",
 };
 
 type PlannerRow = {
@@ -21,6 +22,7 @@ type PlannerRow = {
   workerContracts: Record<string, JsonValue>[];
   unblockTasks: Record<string, JsonValue>[];
   completionGovernance: Record<string, JsonValue> | null;
+  plannedWorkerCount: number;
 };
 
 function asRecord(value: JsonValue | null | undefined): Record<string, JsonValue> | null {
@@ -57,9 +59,10 @@ function plannerText(locale: "en" | "zh-CN") {
   if (locale === "zh-CN") {
     return {
       title: "规划桌",
-      subtitle: "把 wave plan、worker prompt contracts、wake policy 和 continuation governance 摆到同一张桌上，不用再来回翻 Run 详情。",
+      subtitle: "先做分诊，再看细节。把 wave plan、worker prompt contracts、wake policy 和 completion governance 放到同一张控制桌上，直接回答下一步该派谁、该回哪里、该继续还是该解阻塞。",
       actions: {
         pm: "打开 PM 入口",
+        tower: "打开 Command Tower",
         workflows: "打开工作流案例",
         proof: "打开 Proof & Replay",
       },
@@ -72,26 +75,40 @@ function plannerText(locale: "en" | "zh-CN") {
       table: {
         run: "Run",
         objective: "Wave objective",
-        workers: "Workers",
-        continuation: "Continuation",
+        blocker: "当前分诊",
         next: "下一步",
       },
       empty: "当前还没有可见的规划产物。",
-      note: "这张桌子仍然是 read-only planner surface，但它已经把规划对象从 PM 侧栏和 run 细节里拎出来，变成了一等入口。",
+      note: "这张桌子保持 `task_contract` 仍是唯一执行权威，但它已经不再只是 read-only 摆件：现在先做规划分诊，再决定回 PM、Workflow Cases、Command Tower 还是 Proof & Replay。",
       openRun: "打开证明室",
       openWorkflow: "打开工作流案例",
+      openTower: "打开 Command Tower",
+      openPm: "打开 PM 入口",
       wakeLabel: "Wake policy",
       governanceLabel: "Governance verdict",
       unblockLabel: "Unblock tasks",
       contractsLabel: "Worker contracts",
+      plannedWorkersLabel: "Planned workers",
+      triageTitle: "规划分诊队列",
+      triageSubtitle: "先确认哪条 wave 缺 worker contract、哪条已经进入 continuation、哪条该优先处理 unblock，再去下一张桌子。",
+      inspectionTitle: "规划细节档案",
+      inspectionSubtitle: "把原始 planning artifact 留在第二层阅读，同时保留 planner desk 自己的 queue / dispatch 控制，不再让它只是一个跳转台。",
+      blocker: {
+        missingGovernance: "缺 completion governance",
+        missingContracts: "缺 worker prompt contract",
+        hasUnblock: "有 unblock 任务待看",
+        continuation: "已选 continuation",
+        reviewProof: "回证明室看真实结果",
+      },
     };
   }
   return {
     title: "Planner desk",
     subtitle:
-      "Bring wave plans, worker prompt contracts, wake-policy posture, and continuation governance into one planner-facing desk instead of hiding them inside PM sidebars and run detail.",
+      "Start with planning triage. Bring wave plans, worker prompt contracts, wake-policy posture, and completion governance into one control desk so the operator can decide who moves next, what is blocked, and where truth lives.",
     actions: {
       pm: "Open PM intake",
+      tower: "Open Command Tower",
       workflows: "Open Workflow Cases",
       proof: "Open Proof & Replay",
     },
@@ -104,18 +121,87 @@ function plannerText(locale: "en" | "zh-CN") {
     table: {
       run: "Run",
       objective: "Wave objective",
-      workers: "Workers",
-      continuation: "Continuation",
-      next: "Next read",
+      blocker: "Current triage",
+      next: "Next action",
     },
     empty: "No planning artifacts are visible yet.",
-    note: "This is still a read-only planner surface, but it turns planning objects into a first-class desk instead of leaving them trapped in PM sidebars and run detail.",
+    note: "The task contract still owns execution authority, but this desk now acts as the planning control layer: triage first, then decide whether to return to PM intake, Workflow Cases, Command Tower, or Proof & Replay.",
     openRun: "Open run detail",
     openWorkflow: "Open Workflow Cases",
+    openTower: "Open Command Tower",
+    openPm: "Open PM intake",
     wakeLabel: "Wake policy",
     governanceLabel: "Governance verdict",
     unblockLabel: "Unblock tasks",
     contractsLabel: "Worker contracts",
+    plannedWorkersLabel: "Planned workers",
+    triageTitle: "Planner triage queue",
+    triageSubtitle:
+      "Confirm which wave is missing worker contracts, which one already selected a continuation path, and which one should send you to unblock review next.",
+    inspectionTitle: "Planning inspection archive",
+    inspectionSubtitle:
+      "Keep the raw planning artifacts in a second layer while the desk itself keeps minimal queue and dispatch controls close to the triage row.",
+    blocker: {
+      missingGovernance: "Missing completion governance",
+      missingContracts: "Missing worker prompt contract",
+      hasUnblock: "Queued unblock tasks need review",
+      continuation: "Continuation already selected",
+      reviewProof: "Return to proof for live result review",
+    },
+  };
+}
+
+function plannerTriage(text: ReturnType<typeof plannerText>, row: PlannerRow) {
+  const continuationDecision =
+    row.completionGovernance?.continuation_decision &&
+    typeof row.completionGovernance.continuation_decision === "object" &&
+    !Array.isArray(row.completionGovernance.continuation_decision)
+      ? (row.completionGovernance.continuation_decision as Record<string, JsonValue>)
+      : null;
+  const selectedAction = String(continuationDecision?.selected_action || "").trim();
+
+  if (!row.completionGovernance) {
+    return {
+      label: text.blocker.missingGovernance,
+      nextLabel: text.openPm,
+      nextHref: "/pm",
+      secondaryLabel: text.openTower,
+      secondaryHref: "/command-tower",
+    };
+  }
+  if (row.workerContracts.length === 0 || row.plannedWorkerCount > row.workerContracts.length) {
+    return {
+      label: text.blocker.missingContracts,
+      nextLabel: text.openPm,
+      nextHref: "/pm",
+      secondaryLabel: text.openTower,
+      secondaryHref: "/command-tower",
+    };
+  }
+  if (row.unblockTasks.length > 0) {
+    return {
+      label: text.blocker.hasUnblock,
+      nextLabel: text.openWorkflow,
+      nextHref: "/workflows",
+      secondaryLabel: text.openRun,
+      secondaryHref: `/runs/${encodeURIComponent(String(row.run.run_id || ""))}`,
+    };
+  }
+  if (selectedAction && selectedAction !== "-") {
+    return {
+      label: `${text.blocker.continuation}: ${selectedAction}`,
+      nextLabel: text.openRun,
+      nextHref: `/runs/${encodeURIComponent(String(row.run.run_id || ""))}`,
+      secondaryLabel: text.openTower,
+      secondaryHref: "/command-tower",
+    };
+  }
+  return {
+    label: text.blocker.reviewProof,
+    nextLabel: text.openRun,
+    nextHref: `/runs/${encodeURIComponent(String(row.run.run_id || ""))}`,
+    secondaryLabel: text.openWorkflow,
+    secondaryHref: "/workflows",
   };
 }
 
@@ -169,6 +255,9 @@ async function loadPlannerRows(runs: RunSummary[]): Promise<PlannerRow[]> {
         workerContracts: asRecordArray((workerContractsResult.data as { data?: JsonValue } | null)?.data),
         unblockTasks: asRecordArray((unblockTasksResult.data as { data?: JsonValue } | null)?.data),
         completionGovernance: asRecord(completionGovernanceRecord?.data as JsonValue | undefined),
+        plannedWorkerCount: Number(
+          asRecord((wavePlanResult.data as { data?: JsonValue } | null)?.data)?.worker_count || 0,
+        ),
       } satisfies PlannerRow;
     }),
   );
@@ -198,6 +287,9 @@ export default async function PlannerPage() {
         <div className="toolbar">
           <Button asChild>
             <Link href="/pm">{text.actions.pm}</Link>
+          </Button>
+          <Button asChild variant="secondary">
+            <Link href="/command-tower">{text.actions.tower}</Link>
           </Button>
           <Button asChild variant="secondary">
             <Link href="/workflows">{text.actions.workflows}</Link>
@@ -241,79 +333,120 @@ export default async function PlannerPage() {
           </div>
         </Card>
       ) : (
-        <Card variant="table">
-          <table className="run-table">
-            <thead>
-              <tr>
-                <th scope="col">{text.table.run}</th>
-                <th scope="col">{text.table.objective}</th>
-                <th scope="col">{text.table.workers}</th>
-                <th scope="col">{text.table.continuation}</th>
-                <th scope="col">{text.table.next}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row) => {
-                const runId = String(row.run.run_id || "-");
-                const objective = String(row.wavePlan?.objective || row.run.task_id || "-").trim() || "-";
-                const workerCount = Number(row.wavePlan?.worker_count || row.workerContracts.length || 0);
-                const continuationSummary = String(
-                  row.completionGovernance?.continuation_decision &&
-                    typeof row.completionGovernance.continuation_decision === "object" &&
-                    !Array.isArray(row.completionGovernance.continuation_decision)
-                    ? (row.completionGovernance.continuation_decision as Record<string, JsonValue>).selected_action || "-"
-                    : "-",
-                );
-                return (
-                  <tr key={runId}>
-                    <th scope="row">
-                      <div className="stack-gap-2">
-                        <Link href={`/runs/${encodeURIComponent(runId)}`}>{runId}</Link>
-                        <span className="mono muted">{String(row.run.workflow_status || row.run.status || "-")}</span>
-                      </div>
-                    </th>
-                    <td>
-                      <div className="stack-gap-2">
-                        <span>{objective}</span>
-                        <span className="mono muted">
-                          {text.wakeLabel}: {String(row.wavePlan?.wake_policy_ref || "-")}
-                        </span>
-                        <span className="mono muted">
-                          {text.governanceLabel}: {String(row.completionGovernance?.overall_verdict || "-")}
-                        </span>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="stack-gap-2">
-                        <Badge>{workerCount}</Badge>
-                        <span className="mono muted">
-                          {text.contractsLabel}: {row.workerContracts.length}
-                        </span>
-                        <span className="mono muted">
-                          {text.unblockLabel}: {row.unblockTasks.length}
-                        </span>
-                      </div>
-                    </td>
-                    <td>
-                      <span className="mono muted">{continuationSummary}</span>
-                    </td>
-                    <td>
-                      <div className="toolbar">
-                        <Button asChild>
-                          <Link href={`/runs/${encodeURIComponent(runId)}`}>{text.openRun}</Link>
-                        </Button>
-                        <Button asChild variant="secondary">
-                          <Link href="/workflows">{text.openWorkflow}</Link>
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-          <p className="mono muted mt-4">{text.note}</p>
-        </Card>
+        <div className="stack-gap-4">
+          <Card variant="table">
+            <div className="section-header">
+              <div>
+                <h2 className="section-title">{text.triageTitle}</h2>
+                <p>{text.triageSubtitle}</p>
+              </div>
+            </div>
+            <table className="run-table">
+              <thead>
+                <tr>
+                  <th scope="col">{text.table.run}</th>
+                  <th scope="col">{text.table.objective}</th>
+                  <th scope="col">{text.table.blocker}</th>
+                  <th scope="col">{text.table.next}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((row) => {
+                  const runId = String(row.run.run_id || "-");
+                  const objective = String(row.wavePlan?.objective || row.run.task_id || "-").trim() || "-";
+                  const triage = plannerTriage(text, row);
+                  return (
+                    <tr key={runId}>
+                      <th scope="row">
+                        <div className="stack-gap-2">
+                          <Link href={`/runs/${encodeURIComponent(runId)}`}>{runId}</Link>
+                          <span className="mono muted">{String(row.run.workflow_status || row.run.status || "-")}</span>
+                        </div>
+                      </th>
+                      <td>
+                        <div className="stack-gap-2">
+                          <span>{objective}</span>
+                          <span className="mono muted">
+                            {text.wakeLabel}: {String(row.wavePlan?.wake_policy_ref || "-")}
+                          </span>
+                          <span className="mono muted">
+                            {text.governanceLabel}: {String(row.completionGovernance?.overall_verdict || "-")}
+                          </span>
+                          <span className="mono muted">
+                            {text.plannedWorkersLabel}: {row.plannedWorkerCount || 0} · {text.contractsLabel}: {row.workerContracts.length} · {text.unblockLabel}: {row.unblockTasks.length}
+                          </span>
+                        </div>
+                      </td>
+                      <td>
+                        <Badge variant={row.unblockTasks.length > 0 ? "warning" : row.completionGovernance ? "running" : "failed"}>
+                          {triage.label}
+                        </Badge>
+                      </td>
+                      <td>
+                        <div className="toolbar">
+                          <Button asChild>
+                            <Link href={triage.nextHref}>{triage.nextLabel}</Link>
+                          </Button>
+                          <Button asChild variant="secondary">
+                            <Link href={triage.secondaryHref}>{triage.secondaryLabel}</Link>
+                          </Button>
+                        </div>
+                        <WorkflowQueueMutationControls
+                          latestRunId={runId}
+                          compact
+                          showQueueLatest
+                          locale={locale}
+                        />
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            <p className="mono muted mt-4">{text.note}</p>
+          </Card>
+          <Card asChild>
+            <details className="collapsible">
+              <summary>{text.inspectionTitle}</summary>
+              <div className="collapsible-body">
+                <p className="mono muted mb-4">{text.inspectionSubtitle}</p>
+                <div className="grid-2">
+                  {rows.map((row) => {
+                    const runId = String(row.run.run_id || "-");
+                    const objective = String(row.wavePlan?.objective || row.run.task_id || "-").trim() || "-";
+                    const continuationSummary = String(
+                      row.completionGovernance?.continuation_decision &&
+                        typeof row.completionGovernance.continuation_decision === "object" &&
+                        !Array.isArray(row.completionGovernance.continuation_decision)
+                        ? (row.completionGovernance.continuation_decision as Record<string, JsonValue>).selected_action || "-"
+                        : "-",
+                    );
+                    return (
+                      <Card key={`inspection:${runId}`} variant="detail">
+                        <div className="stack-gap-2">
+                          <span className="card-header-title">{objective}</span>
+                          <span className="mono muted">{runId}</span>
+                          <span className="mono muted">{text.wakeLabel}: {String(row.wavePlan?.wake_policy_ref || "-")}</span>
+                          <span className="mono muted">{text.governanceLabel}: {String(row.completionGovernance?.overall_verdict || "-")}</span>
+                          <span className="mono muted">{text.plannedWorkersLabel}: {row.plannedWorkerCount || 0}</span>
+                          <span className="mono muted">{text.contractsLabel}: {row.workerContracts.length}</span>
+                          <span className="mono muted">{text.unblockLabel}: {row.unblockTasks.length}</span>
+                          <span className="mono muted">Continuation: {continuationSummary}</span>
+                          <WorkflowQueueMutationControls
+                            latestRunId={runId}
+                            compact
+                            showQueueLatest
+                            locale={locale}
+                          />
+                        </div>
+                      </Card>
+                    );
+                  })}
+                </div>
+              </div>
+            </details>
+          </Card>
+        </div>
       )}
     </main>
   );
