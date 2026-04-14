@@ -91,7 +91,7 @@ def main() -> int:
 
     routes, coverage = collect_route_rows(items, per_route_limit=args.per_route_limit)
     payload_out = {
-        "report_type": "cortexpilot_ci_recent_route_reports",
+        "report_type": "openvibecoding_ci_recent_route_reports",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "repo": args.repo,
         "per_route_limit": args.per_route_limit,

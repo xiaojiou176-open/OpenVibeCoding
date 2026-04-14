@@ -16,7 +16,7 @@ if str(ORCH_SRC) not in sys.path:
 
 from tooling.search.search_engine import search_verify
 from tooling.search_pipeline import write_search_results, write_verification, write_purified_summary
-from cortexpilot_orch.store.run_store import RunStore
+from openvibecoding_orch.store.run_store import RunStore
 
 _RUN_ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$")
 

@@ -21,7 +21,7 @@ Machine-readable schemas for contracts, events, and policy validation.
 - `task_pack_manifest.v1.json` — source-owned manifest schema for registry-driven task packs under `contracts/packs/`, including `input_fields` and evidence hints.
 - `pm_intake_request.v1.json` — operator intake request contract; `template_payload` is open-shaped here and finalized by pack-specific runtime validation.
 - `queue_item.v1.json` / `scheduled_run.v1.json` / `sla_state.v1.json` — runtime queue and schedule/SLA contracts for operator surfaces and queue governance gates.
-- `workflow_case.v1.json` — persisted workflow-case snapshot stored under `.runtime-cache/cortexpilot/workflow-cases/`.
+- `workflow_case.v1.json` — persisted workflow-case snapshot stored under `.runtime-cache/openvibecoding/workflow-cases/`.
 - `CHANGELOG.md` — schema evolution notes.
 
 ## Rules

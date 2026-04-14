@@ -9,9 +9,9 @@ from pathlib import Path
 import pytest
 from fastapi import FastAPI, HTTPException
 
-from cortexpilot_orch.api import main_pm_intake_helpers as helpers
-from cortexpilot_orch.contract.compiler import build_role_binding_summary
-from cortexpilot_orch.store.run_store import RunStore
+from openvibecoding_orch.api import main_pm_intake_helpers as helpers
+from openvibecoding_orch.contract.compiler import build_role_binding_summary
+from openvibecoding_orch.store.run_store import RunStore
 
 
 def test_configure_pm_session_aggregation_delegates(monkeypatch) -> None:
@@ -284,7 +284,7 @@ def test_run_intake_error_branches_and_success(monkeypatch, tmp_path: Path) -> N
         lambda: types.SimpleNamespace(
             repo_root=tmp_path,
             contract_root=tmp_path / "contracts",
-            runtime_contract_root=tmp_path / ".runtime-cache" / "cortexpilot" / "contracts",
+            runtime_contract_root=tmp_path / ".runtime-cache" / "openvibecoding" / "contracts",
         ),
     )
 
@@ -386,7 +386,7 @@ def test_run_intake_error_branches_and_success(monkeypatch, tmp_path: Path) -> N
 
 
 def test_run_intake_strips_intake_only_template_fields_before_execution(monkeypatch, tmp_path: Path) -> None:
-    from cortexpilot_orch.contract.validator import ContractValidator
+    from openvibecoding_orch.contract.validator import ContractValidator
 
     monkeypatch.setattr(helpers, "IntakeStore", lambda: types.SimpleNamespace(append_event=lambda *_a, **_k: None))
     monkeypatch.setattr(
@@ -396,7 +396,7 @@ def test_run_intake_strips_intake_only_template_fields_before_execution(monkeypa
             repo_root=tmp_path,
             runs_root=tmp_path / "runs",
             contract_root=tmp_path / "contracts",
-            runtime_contract_root=tmp_path / ".runtime-cache" / "cortexpilot" / "contracts",
+            runtime_contract_root=tmp_path / ".runtime-cache" / "openvibecoding" / "contracts",
         ),
     )
 
@@ -465,7 +465,7 @@ def test_run_intake_strips_intake_only_template_fields_before_execution(monkeypa
 
 def test_run_intake_persists_planning_artifacts_into_run_bundle(monkeypatch, tmp_path: Path) -> None:
     runs_root = tmp_path / "runs"
-    runtime_contract_root = tmp_path / ".runtime-cache" / "cortexpilot" / "contracts"
+    runtime_contract_root = tmp_path / ".runtime-cache" / "openvibecoding" / "contracts"
     intake_payload = {
         "objective": "Ship one planning artifact bridge",
         "constraints": ["truthful-public-surface"],
@@ -656,11 +656,11 @@ def test_run_intake_returns_run_id_before_background_execution_finishes(monkeypa
         lambda: types.SimpleNamespace(
             repo_root=tmp_path,
             contract_root=tmp_path / "contracts",
-            runtime_contract_root=tmp_path / ".runtime-cache" / "cortexpilot" / "contracts",
+            runtime_contract_root=tmp_path / ".runtime-cache" / "openvibecoding" / "contracts",
         ),
     )
 
-    runs_root = tmp_path / ".runtime-cache" / "cortexpilot" / "runs"
+    runs_root = tmp_path / ".runtime-cache" / "openvibecoding" / "runs"
     started = threading.Event()
     release = threading.Event()
 
@@ -707,7 +707,7 @@ def test_run_intake_surfaces_background_error_when_no_run_id_observed(monkeypatc
         lambda: types.SimpleNamespace(
             repo_root=tmp_path,
             contract_root=tmp_path / "contracts",
-            runtime_contract_root=tmp_path / ".runtime-cache" / "cortexpilot" / "contracts",
+            runtime_contract_root=tmp_path / ".runtime-cache" / "openvibecoding" / "contracts",
         ),
     )
 
@@ -749,7 +749,7 @@ def test_run_intake_prefers_configured_runs_root_for_run_discovery(monkeypatch, 
             repo_root=tmp_path / "wrong-repo-root",
             runs_root=runs_root,
             contract_root=tmp_path / "contracts",
-            runtime_contract_root=tmp_path / ".runtime-cache" / "cortexpilot" / "contracts",
+            runtime_contract_root=tmp_path / ".runtime-cache" / "openvibecoding" / "contracts",
         ),
     )
 

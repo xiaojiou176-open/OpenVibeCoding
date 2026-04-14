@@ -2,12 +2,12 @@
   "task_id": "task_backend_example",
   "owner_agent": {
     "role": "WORKER",
-    "agent_id": "cortexpilot-worker-1",
+    "agent_id": "openvibecoding-worker-1",
     "codex_thread_id": ""
   },
   "assigned_agent": {
     "role": "WORKER",
-    "agent_id": "cortexpilot-worker-1",
+    "agent_id": "openvibecoding-worker-1",
     "codex_thread_id": ""
   },
   "inputs": {
@@ -16,7 +16,7 @@
   },
   "required_outputs": [
     {
-      "name": "apps/orchestrator/src/cortexpilot_orch/cli.py",
+      "name": "apps/orchestrator/src/openvibecoding_orch/cli.py",
       "type": "file",
       "acceptance": "CLI 仍可正常启动且命令完整"
     }

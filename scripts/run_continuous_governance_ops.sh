@@ -404,10 +404,10 @@ if [[ -n "$RECENT_STREAK_WORKFLOW_FILE_OVERRIDE" ]]; then
 fi
 
 HARD_FAIL=0
-ENV_FLAKY_MAX_RETRIES="${CORTEXPILOT_CONT_GOV_ENV_FLAKY_MAX_RETRIES:-1}"
+ENV_FLAKY_MAX_RETRIES="${OPENVIBECODING_CONT_GOV_ENV_FLAKY_MAX_RETRIES:-1}"
 
 if ! [[ "$ENV_FLAKY_MAX_RETRIES" =~ ^[0-9]+$ ]]; then
-  echo "❌ [continuous-governance] CORTEXPILOT_CONT_GOV_ENV_FLAKY_MAX_RETRIES must be non-negative integer" >&2
+  echo "❌ [continuous-governance] OPENVIBECODING_CONT_GOV_ENV_FLAKY_MAX_RETRIES must be non-negative integer" >&2
   exit 2
 fi
 
@@ -623,13 +623,13 @@ if [[ -n "${GH_TOKEN:-}" && -n "${GITHUB_REPOSITORY:-}" ]]; then
     "python3 scripts/summarize_recent_ci_route_reports.py --repo \"$GITHUB_REPOSITORY\" --out-json \"$RECENT_ROUTE_JSON_REPORT\" --out-markdown \"$RECENT_ROUTE_SUMMARY_REPORT\""
 fi
 
-if [[ -f ".runtime-cache/cortexpilot/reports/ci/current_run/source_manifest.json" ]]; then
+if [[ -f ".runtime-cache/openvibecoding/reports/ci/current_run/source_manifest.json" ]]; then
   CURRENT_RUN_CONSISTENCY_JSON="$OUT_DIR/current_run_consistency.json"
   CURRENT_RUN_CONSISTENCY_MD="$OUT_DIR/current_run_consistency.md"
   run_step \
     "ci_current_run_consistency" \
     "1" \
-    "python3 scripts/check_ci_current_run_sources.py --source-manifest .runtime-cache/cortexpilot/reports/ci/current_run/source_manifest.json --out-json \"$CURRENT_RUN_CONSISTENCY_JSON\" --out-markdown \"$CURRENT_RUN_CONSISTENCY_MD\""
+    "python3 scripts/check_ci_current_run_sources.py --source-manifest .runtime-cache/openvibecoding/reports/ci/current_run/source_manifest.json --out-json \"$CURRENT_RUN_CONSISTENCY_JSON\" --out-markdown \"$CURRENT_RUN_CONSISTENCY_MD\""
 fi
 
 run_step "ci_governance_policy" "1" "python3 scripts/check_ci_governance_policy.py"
@@ -671,7 +671,7 @@ required_failed = [s for s in steps if s.get("required") and s.get("status") != 
 overall_status = "failed" if required_failed else "passed"
 
 payload = {
-    "report_type": "cortexpilot_continuous_governance_summary",
+    "report_type": "openvibecoding_continuous_governance_summary",
     "schema_version": 1,
     "generated_at": datetime.now(timezone.utc).isoformat(),
     "run_id": run_id,

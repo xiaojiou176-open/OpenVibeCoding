@@ -3,9 +3,9 @@ import json
 import subprocess
 from pathlib import Path
 
-from cortexpilot_orch.runners import app_server_runner as app_server_module
-from cortexpilot_orch.runners.app_server_runner import AppServerRunner
-from cortexpilot_orch.store.run_store import RunStore
+from openvibecoding_orch.runners import app_server_runner as app_server_module
+from openvibecoding_orch.runners.app_server_runner import AppServerRunner
+from openvibecoding_orch.store.run_store import RunStore
 
 
 def _base_contract(task_id: str = "task_app") -> dict:
@@ -35,7 +35,7 @@ def _base_contract(task_id: str = "task_app") -> dict:
 def _prepare(tmp_path: Path, task_id: str, monkeypatch) -> tuple[RunStore, str, Path, Path]:
     store = RunStore(runs_root=tmp_path)
     run_id = store.create_run(task_id)
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", run_id)
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", run_id)
 
     worktree = tmp_path / f"worktree_{task_id}"
     worktree.mkdir(parents=True, exist_ok=True)
@@ -73,7 +73,7 @@ def test_app_server_helper_functions(monkeypatch, tmp_path: Path) -> None:
 
     schema_path = tmp_path / "schema.json"
     schema_path.write_text("{\"type\":\"object\"}", encoding="utf-8")
-    monkeypatch.setenv("CORTEXPILOT_CODEX_MODEL", "gpt-test")
+    monkeypatch.setenv("OPENVIBECODING_CODEX_MODEL", "gpt-test")
     params = app_server_module._build_turn_params(contract, "instruction", worktree, schema_path)
     assert params["cwd"] == str(worktree)
     assert params["model"] == "gpt-test"

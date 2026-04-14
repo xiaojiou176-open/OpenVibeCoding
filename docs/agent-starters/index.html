@@ -10,7 +10,7 @@
     />
     <meta
       name="keywords"
-      content="OpenVibeCoding, CortexPilot runtime, Codex MCP, Claude Code MCP, OpenClaw MCP, agent starter kit, read-only MCP, skills, builder integration"
+      content="OpenVibeCoding, OpenVibeCoding runtime, Codex MCP, Claude Code MCP, OpenClaw MCP, agent starter kit, read-only MCP, skills, builder integration"
     />
     <link rel="canonical" href="https://xiaojiou176-open.github.io/OpenVibeCoding/agent-starters/" />
     <meta property="og:title" content="OpenVibeCoding | Agent starter kits for Codex, Claude Code, and OpenClaw" />
@@ -228,7 +228,7 @@
           <article class="card">
             <span class="badge primary">Repo-root first</span>
             <h3>Start from a real clone</h3>
-            <p>The fastest truthful setup is still a real CortexPilot clone. OpenVibeCoding is the public shell, but these kits still assume you are wiring the client from the repo root or from a vendored workspace copy.</p>
+            <p>The fastest truthful setup is still a real OpenVibeCoding clone. OpenVibeCoding is the public shell, but these kits still assume you are wiring the client from the repo root or from a vendored workspace copy.</p>
           </article>
           <article class="card">
             <span class="badge primary">Read-only only</span>
@@ -251,13 +251,13 @@
           That keeps adoption honest and stops one copied config file from pretending it already proved a real integration.
         </p>
         <ol>
-          <li>Start from a real CortexPilot clone and run the repo-local proof-first path.</li>
+          <li>Start from a real OpenVibeCoding clone and run the repo-local proof-first path.</li>
           <li>Copy exactly one tracked starter file or one local bundle seed.</li>
           <li>Keep the first host-tool integration read-only and repo-root scoped.</li>
           <li>Confirm success by checking the same proof-first surfaces, not by assuming the pasted file was enough.</li>
         </ol>
         <pre><code>npm run bootstrap:host
-CORTEXPILOT_HOST_COMPAT=1 bash scripts/test_quick.sh --no-related
+OPENVIBECODING_HOST_COMPAT=1 bash scripts/test_quick.sh --no-related
 npm run dev</code></pre>
         <p>
           This repo-local full-stack path starts the orchestrator API and the dashboard together on localhost, so the browser can use the operator loop without exposing a bearer token on the client.
@@ -352,7 +352,7 @@ npm run dev</code></pre>
               <tr>
                 <td><strong>Codex</strong></td>
                 <td>Use <code>codex mcp add</code> for a repo-root stdio server or drop the TOML snippet into <code>~/.codex/config.toml</code> / <code>.codex/config.toml</code>.</td>
-                <td><a href="../examples/agent-starters/codex/cortexpilot.config.toml">codex/cortexpilot.config.toml</a></td>
+                <td><a href="../examples/agent-starters/codex/openvibecoding.config.toml">codex/openvibecoding.config.toml</a></td>
                 <td><a href="https://developers.openai.com/codex/mcp/">OpenAI Codex MCP docs</a></td>
               </tr>
               <tr>
@@ -364,7 +364,7 @@ npm run dev</code></pre>
               <tr>
                 <td><strong>OpenClaw</strong></td>
                 <td>Use <code>openclaw mcp set</code> with one JSON object when you want OpenClaw-managed outbound MCP server definitions.</td>
-                <td><a href="../examples/agent-starters/openclaw/cortexpilot-server.json">openclaw/cortexpilot-server.json</a></td>
+                <td><a href="../examples/agent-starters/openclaw/openvibecoding-server.json">openclaw/openvibecoding-server.json</a></td>
                 <td><a href="https://docs.openclaw.ai/cli/mcp">OpenClaw MCP docs</a></td>
               </tr>
             </tbody>
@@ -375,11 +375,11 @@ npm run dev</code></pre>
       <section class="section">
         <h2>Codex</h2>
         <p>Fastest raw direct CLI wiring if you are not copying the tracked config file yet:</p>
-        <pre><code>codex mcp add cortexpilot-readonly \
-  -- bash /absolute/path/to/CortexPilot/scripts/run_readonly_mcp.sh</code></pre>
+        <pre><code>codex mcp add openvibecoding-readonly \
+  -- bash /absolute/path/to/OpenVibeCoding/scripts/run_openvibecoding_readonly_mcp.sh</code></pre>
         <p>
           Need a durable config file instead of a one-line add command? Start from
-          <a href="../examples/agent-starters/codex/cortexpilot.config.toml">the tracked Codex example</a>.
+          <a href="../examples/agent-starters/codex/openvibecoding.config.toml">the tracked Codex example</a>.
           That tracked file is the canonical wrapper-based template.
         </p>
       </section>
@@ -388,8 +388,8 @@ npm run dev</code></pre>
         <h2>Claude Code</h2>
         <p>Fastest raw direct CLI wiring if you are not copying the tracked project file yet:</p>
         <pre><code>claude mcp add --transport stdio --scope project \
-  cortexpilot-readonly \
-  -- bash /absolute/path/to/CortexPilot/scripts/run_readonly_mcp.sh</code></pre>
+  openvibecoding-readonly \
+  -- bash /absolute/path/to/OpenVibeCoding/scripts/run_openvibecoding_readonly_mcp.sh</code></pre>
         <p>
           If you want the team-visible file checked into the repo root, start from
           <a href="../examples/agent-starters/claude/project.mcp.json">the tracked project <code>.mcp.json</code> example</a>.
@@ -400,11 +400,11 @@ npm run dev</code></pre>
       <section class="section">
         <h2>OpenClaw</h2>
         <p>Fastest OpenClaw-managed saved definition:</p>
-        <pre><code>openclaw mcp set cortexpilot \
-  '{"command":"bash","args":["/absolute/path/to/CortexPilot/scripts/run_readonly_mcp.sh"],"cwd":"/absolute/path/to/CortexPilot"}'</code></pre>
+        <pre><code>openclaw mcp set openvibecoding \
+  '{"command":"bash","args":["/absolute/path/to/OpenVibeCoding/scripts/run_openvibecoding_readonly_mcp.sh"],"cwd":"/absolute/path/to/OpenVibeCoding"}'</code></pre>
         <p>
           Need the JSON object as a tracked file first? Start from
-          <a href="../examples/agent-starters/openclaw/cortexpilot-server.json">the tracked OpenClaw example</a>.
+          <a href="../examples/agent-starters/openclaw/openvibecoding-server.json">the tracked OpenClaw example</a>.
         </p>
       </section>
 
@@ -430,7 +430,7 @@ npm run dev</code></pre>
               <tr>
                 <td><strong>Claude Code</strong></td>
                 <td>Added the project <code>.mcp.json</code> or copied the local <code>--plugin-dir</code> seed.</td>
-                <td>Copy the tracked <code>cortexpilot-proof</code> command from the Claude example, then use it to route back to Workflow Cases, Proof &amp; Replay, and the tracked <code>news_digest</code> assets.</td>
+                <td>Copy the tracked <code>openvibecoding-proof</code> command from the Claude example, then use it to route back to Workflow Cases, Proof &amp; Replay, and the tracked <code>news_digest</code> assets.</td>
                 <td>You can keep the repo-local proof-first loop, the project config stays read-only, and the Claude starter is still described as local/project adoption rather than a marketplace listing.</td>
               </tr>
               <tr>
@@ -466,20 +466,20 @@ npm run dev</code></pre>
                 <td><strong>Codex</strong></td>
                 <td>
                   <a href="../examples/agent-starters/codex/marketplace.example.json">codex/marketplace.example.json</a>
-                  + <code>examples/coding-agents/plugin-bundles/cortexpilot-coding-agent-bundle/</code>
+                  + <code>examples/coding-agents/plugin-bundles/openvibecoding-coding-agent-bundle/</code>
                 </td>
-                <td>Copy the tracked local marketplace seed, replace its <code>__CORTEXPILOT_REPO_ROOT__</code> placeholder with the absolute path to your repo checkout, then keep the same read-only MCP server definition beside it.</td>
+                <td>Copy the tracked local marketplace seed, replace its <code>__OPENVIBECODING_REPO_ROOT__</code> placeholder with the absolute path to your repo checkout, then keep the same read-only MCP server definition beside it.</td>
               </tr>
               <tr>
                 <td><strong>Claude Code</strong></td>
-                <td><code>examples/coding-agents/plugin-bundles/cortexpilot-coding-agent-bundle/</code></td>
+                <td><code>examples/coding-agents/plugin-bundles/openvibecoding-coding-agent-bundle/</code></td>
                 <td>Use the same bundle for local <code>--plugin-dir</code> development, or keep the lighter project-local <code>.claude</code> + <code>.mcp.json</code> path when plugin packaging is unnecessary.</td>
               </tr>
               <tr>
                 <td><strong>OpenClaw</strong></td>
                 <td>
                   <a href="../examples/agent-starters/openclaw/config.openclaw.example.toml">openclaw/config.openclaw.example.toml</a>
-                  + <code>examples/coding-agents/plugin-bundles/cortexpilot-coding-agent-bundle/</code>
+                  + <code>examples/coding-agents/plugin-bundles/openvibecoding-coding-agent-bundle/</code>
                 </td>
                 <td>Load the same compatible bundle through <code>plugins.load.paths</code> and keep OpenVibeCoding positioned as the proof / replay / read-only layer rather than a published registry item.</td>
               </tr>
@@ -504,7 +504,7 @@ npm run dev</code></pre>
           <article class="card">
             <span class="badge primary">Codex seed</span>
             <h3>Codex-specific working agreement</h3>
-            <p>Use <a href="https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/policies/agents/codex/AGENTS.cortexpilot.md"><code>policies/agents/codex/AGENTS.cortexpilot.md</code></a> when you want a narrower Codex-governed seed file beside the repo-wide contract.</p>
+            <p>Use <a href="https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/policies/agents/codex/AGENTS.openvibecoding.md"><code>policies/agents/codex/AGENTS.openvibecoding.md</code></a> when you want a narrower Codex-governed seed file beside the repo-wide contract.</p>
           </article>
         </div>
         <p>
@@ -528,7 +528,7 @@ npm run dev</code></pre>
             <span class="badge primary">Codex</span>
             <h3>Local plugin-bundle example</h3>
             <p>Use the tracked local bundle example when you want a repo-owned Codex-compatible bundle without claiming a published directory listing.</p>
-            <p><a href="https://github.com/xiaojiou176-open/OpenVibeCoding/tree/main/examples/coding-agents/plugin-bundles/cortexpilot-coding-agent-bundle">Open bundle example</a></p>
+            <p><a href="https://github.com/xiaojiou176-open/OpenVibeCoding/tree/main/examples/coding-agents/plugin-bundles/openvibecoding-coding-agent-bundle">Open bundle example</a></p>
           </article>
           <article class="card">
             <span class="badge primary">Claude Code</span>

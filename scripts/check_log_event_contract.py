@@ -20,10 +20,10 @@ def _load_schema() -> dict[str, Any]:
     return json.loads((ROOT / "schemas" / "log_event.v2.json").read_text(encoding="utf-8"))
 
 
-def _cortexpilot_python() -> str:
-    env_python = str(os.environ.get("CORTEXPILOT_PYTHON", "")).strip()
-    machine_cache_root = str(os.environ.get("CORTEXPILOT_MACHINE_CACHE_ROOT", "")).strip()
-    toolchain_cache_root = str(os.environ.get("CORTEXPILOT_TOOLCHAIN_CACHE_ROOT", "")).strip()
+def _openvibecoding_python() -> str:
+    env_python = str(os.environ.get("OPENVIBECODING_PYTHON", "")).strip()
+    machine_cache_root = str(os.environ.get("OPENVIBECODING_MACHINE_CACHE_ROOT", "")).strip()
+    toolchain_cache_root = str(os.environ.get("OPENVIBECODING_TOOLCHAIN_CACHE_ROOT", "")).strip()
     runner_temp = str(os.environ.get("RUNNER_TEMP", "")).strip()
     xdg_cache_home = str(os.environ.get("XDG_CACHE_HOME", "")).strip()
     home_cache = str((Path.home() / ".cache")).strip()
@@ -32,11 +32,11 @@ def _cortexpilot_python() -> str:
         if toolchain_cache_root:
             machine_cache_root = str(Path(toolchain_cache_root).expanduser().parent)
         elif runner_temp:
-            machine_cache_root = str(Path(runner_temp).expanduser() / "cortexpilot-machine-cache")
+            machine_cache_root = str(Path(runner_temp).expanduser() / "openvibecoding-machine-cache")
         elif xdg_cache_home:
-            machine_cache_root = str(Path(xdg_cache_home).expanduser() / "cortexpilot")
+            machine_cache_root = str(Path(xdg_cache_home).expanduser() / "openvibecoding")
         else:
-            machine_cache_root = str(Path(home_cache).expanduser() / "cortexpilot")
+            machine_cache_root = str(Path(home_cache).expanduser() / "openvibecoding")
 
     if not toolchain_cache_root:
         toolchain_cache_root = str(Path(machine_cache_root).expanduser() / "toolchains")
@@ -44,7 +44,7 @@ def _cortexpilot_python() -> str:
     candidates = [
         Path(env_python).expanduser() if env_python else None,
         Path(toolchain_cache_root).expanduser() / "python" / "current" / "bin" / "python",
-        Path.home() / ".cache" / "cortexpilot" / "toolchains" / "python" / "current" / "bin" / "python",
+        Path.home() / ".cache" / "openvibecoding" / "toolchains" / "python" / "current" / "bin" / "python",
         ROOT / ".runtime-cache" / "cache" / "toolchains" / "python" / "current" / "bin" / "python",
     ]
     for candidate in candidates:
@@ -54,7 +54,7 @@ def _cortexpilot_python() -> str:
         [
             "bash",
             "-lc",
-            "bash scripts/bootstrap.sh python >/dev/null && source scripts/lib/toolchain_env.sh && cortexpilot_python_bin \"$PWD\"",
+            "bash scripts/bootstrap.sh python >/dev/null && source scripts/lib/toolchain_env.sh && openvibecoding_python_bin \"$PWD\"",
         ],
         cwd=ROOT,
         check=False,
@@ -116,12 +116,12 @@ from pathlib import Path
 
 root = Path.cwd()
 sys.path.insert(0, str(root / "apps" / "orchestrator" / "src"))
-from cortexpilot_orch.observability.logger import JsonLineFormatter
+from openvibecoding_orch.observability.logger import JsonLineFormatter
 
 formatter = JsonLineFormatter()
-record = logging.LogRecord("cortexpilot", logging.INFO, "<log-contract>", 1, "evt", (), None)
+record = logging.LogRecord("openvibecoding", logging.INFO, "<log-contract>", 1, "evt", (), None)
 record.component = "api"
-record.service = "cortexpilot-orchestrator"
+record.service = "openvibecoding-orchestrator"
 record.event = "API_REQUEST_COMPLETED"
 record.run_id = "run_backend_sample"
 record.request_id = "req_backend_sample"
@@ -134,7 +134,7 @@ record.meta = {"status": 200}
 print(formatter.format(record))
 """
     result = subprocess.run(
-        [_cortexpilot_python(), "-c", script],
+        [_openvibecoding_python(), "-c", script],
         cwd=ROOT,
         check=True,
         capture_output=True,
@@ -178,20 +178,20 @@ def _machine_sample(name: str, *, domain: str, surface: str, service: str, lane:
         meta_json = json.dumps({"sample": True, "source_kind": source_kind})
         command = (
             "source scripts/lib/log_event.sh && "
-            "CORTEXPILOT_CI_LOG_EVENT_PATH="
+            "OPENVIBECODING_CI_LOG_EVENT_PATH="
             f"{json.dumps(str(log_path))} "
-            "CORTEXPILOT_LOG_RUN_ID=run_ci_sample "
-            "CORTEXPILOT_LOG_REQUEST_ID=req_ci_sample "
-            "CORTEXPILOT_LOG_TRACE_ID=trace_ci_sample "
-            "CORTEXPILOT_LOG_SESSION_ID=session_ci_sample "
-            "CORTEXPILOT_LOG_TEST_ID=test_ci_sample "
-            "CORTEXPILOT_LOG_ARTIFACT_KIND=governance_report "
-            f"CORTEXPILOT_LOG_DOMAIN={domain} "
-            f"CORTEXPILOT_LOG_SURFACE={surface} "
-            f"CORTEXPILOT_LOG_SERVICE={service} "
-            f"CORTEXPILOT_LOG_LANE={lane} "
-            f"CORTEXPILOT_LOG_META_JSON={shlex.quote(meta_json)} "
-            f"log_ci_event \"$PWD\" \"{name}\" \"{name.upper()}_CONTRACT_SAMPLE\" \"info\" \"$CORTEXPILOT_LOG_META_JSON\""
+            "OPENVIBECODING_LOG_RUN_ID=run_ci_sample "
+            "OPENVIBECODING_LOG_REQUEST_ID=req_ci_sample "
+            "OPENVIBECODING_LOG_TRACE_ID=trace_ci_sample "
+            "OPENVIBECODING_LOG_SESSION_ID=session_ci_sample "
+            "OPENVIBECODING_LOG_TEST_ID=test_ci_sample "
+            "OPENVIBECODING_LOG_ARTIFACT_KIND=governance_report "
+            f"OPENVIBECODING_LOG_DOMAIN={domain} "
+            f"OPENVIBECODING_LOG_SURFACE={surface} "
+            f"OPENVIBECODING_LOG_SERVICE={service} "
+            f"OPENVIBECODING_LOG_LANE={lane} "
+            f"OPENVIBECODING_LOG_META_JSON={shlex.quote(meta_json)} "
+            f"log_ci_event \"$PWD\" \"{name}\" \"{name.upper()}_CONTRACT_SAMPLE\" \"info\" \"$OPENVIBECODING_LOG_META_JSON\""
         )
         subprocess.run(["bash", "-lc", command], cwd=ROOT, check=True, capture_output=True, text=True)
         lines = log_path.read_text(encoding="utf-8").splitlines()
@@ -201,7 +201,7 @@ def _machine_sample(name: str, *, domain: str, surface: str, service: str, lane:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Validate CortexPilot log_event.v2 contract across all emitters.")
+    parser = argparse.ArgumentParser(description="Validate OpenVibeCoding log_event.v2 contract across all emitters.")
     parser.add_argument("--output", default=str(DEFAULT_OUTPUT))
     args = parser.parse_args()
 
@@ -210,8 +210,8 @@ def main() -> int:
         "backend": _backend_sample(),
         "dashboard": _node_sample("dashboard", "pm_shell", "pm_send_attempt"),
         "desktop": _node_sample("desktop", "ux_telemetry", "pm_send_blocked"),
-        "ci": _machine_sample("ci_contract", domain="ci", surface="ci", service="cortexpilot-ci", lane="ci"),
-        "governance": _machine_sample("governance_contract", domain="governance", surface="ci", service="cortexpilot-governance", lane="governance"),
+        "ci": _machine_sample("ci_contract", domain="ci", surface="ci", service="openvibecoding-ci", lane="ci"),
+        "governance": _machine_sample("governance_contract", domain="governance", surface="ci", service="openvibecoding-governance", lane="governance"),
     }
 
     errors: list[str] = []

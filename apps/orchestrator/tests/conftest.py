@@ -8,8 +8,8 @@ sys.dont_write_bytecode = True
 
 @pytest.fixture(autouse=True)
 def _allow_codex_exec(monkeypatch):
-    monkeypatch.setenv("CORTEXPILOT_ALLOW_CODEX_EXEC", "1")
-    monkeypatch.setenv("CORTEXPILOT_API_AUTH_REQUIRED", "0")
+    monkeypatch.setenv("OPENVIBECODING_ALLOW_CODEX_EXEC", "1")
+    monkeypatch.setenv("OPENVIBECODING_API_AUTH_REQUIRED", "0")
     yield
 
 
@@ -17,7 +17,7 @@ def _allow_codex_exec(monkeypatch):
 def _default_codex_home(monkeypatch, tmp_path_factory):
     codex_home = tmp_path_factory.mktemp("codex_home")
     monkeypatch.setenv("CODEX_HOME", str(codex_home))
-    monkeypatch.setenv("CORTEXPILOT_CODEX_BASE_HOME", str(codex_home))
+    monkeypatch.setenv("OPENVIBECODING_CODEX_BASE_HOME", str(codex_home))
     if not Path(codex_home).exists():
         Path(codex_home).mkdir(parents=True, exist_ok=True)
     config_path = Path(codex_home) / "config.toml"

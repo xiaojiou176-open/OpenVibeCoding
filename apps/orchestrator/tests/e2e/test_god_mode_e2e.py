@@ -50,7 +50,7 @@ def _approve(api_port: int, run_id: str) -> None:
         req = urllib.request.Request(
             url,
             data=payload,
-            headers={"Content-Type": "application/json", "x-cortexpilot-role": "TECH_LEAD"},
+            headers={"Content-Type": "application/json", "x-openvibecoding-role": "TECH_LEAD"},
         )
         try:
             with urllib.request.urlopen(req, timeout=5) as resp:
@@ -72,9 +72,9 @@ def test_god_mode_approval_flow(tmp_path: Path) -> None:
     runs_root.mkdir(parents=True, exist_ok=True)
 
     base_env = build_env(repo_root, runtime_root, runs_root, worktree_root)
-    base_env["CORTEXPILOT_GOD_MODE_ON_REQUEST"] = "1"
-    base_env["CORTEXPILOT_GOD_MODE_REQUIRED"] = "1"
-    base_env["CORTEXPILOT_GOD_MODE_TIMEOUT_SEC"] = "12"
+    base_env["OPENVIBECODING_GOD_MODE_ON_REQUEST"] = "1"
+    base_env["OPENVIBECODING_GOD_MODE_REQUIRED"] = "1"
+    base_env["OPENVIBECODING_GOD_MODE_TIMEOUT_SEC"] = "12"
     api_proc, api_port = start_api(repo_root, base_env, tmp_path / "api.log")
 
     try:
@@ -115,7 +115,7 @@ def test_god_mode_approval_flow(tmp_path: Path) -> None:
             str(requirements_path),
             "python",
             "-m",
-            "cortexpilot_orch.cli",
+            "openvibecoding_orch.cli",
             "run",
             str(contract_path),
             "--mock",

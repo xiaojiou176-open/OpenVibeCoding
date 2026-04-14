@@ -3,9 +3,9 @@ import json
 import subprocess
 from pathlib import Path
 
-from cortexpilot_orch.scheduler import scheduler as sched
-from cortexpilot_orch.scheduler.scheduler import Orchestrator
-from cortexpilot_orch.store.run_store import RunStore
+from openvibecoding_orch.scheduler import scheduler as sched
+from openvibecoding_orch.scheduler.scheduler import Orchestrator
+from openvibecoding_orch.store.run_store import RunStore
 
 
 def _git(cmd: list[str], cwd: Path) -> None:
@@ -97,13 +97,13 @@ def test_scheduler_mcp_only_block_branch(monkeypatch, tmp_path: Path) -> None:
     runs_root = runtime_root / "runs"
     worktree_root = runtime_root / "worktrees"
     monkeypatch.chdir(repo)
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(worktree_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(worktree_root))
 
-    monkeypatch.setenv("CORTEXPILOT_MCP_ONLY", "1")
-    monkeypatch.setenv("CORTEXPILOT_RUNNER", "codex")
-    monkeypatch.setenv("CORTEXPILOT_ALLOW_CODEX_EXEC", "0")
+    monkeypatch.setenv("OPENVIBECODING_MCP_ONLY", "1")
+    monkeypatch.setenv("OPENVIBECODING_RUNNER", "codex")
+    monkeypatch.setenv("OPENVIBECODING_ALLOW_CODEX_EXEC", "0")
 
     monkeypatch.setattr(sched, "ensure_tracing", lambda: {"enabled": True, "backend": "off"})
     monkeypatch.setattr(sched, "check_schema_registry", lambda *_args, **_kwargs: {"status": "ok"})
@@ -128,14 +128,14 @@ def test_scheduler_temporal_notify_required_failure_and_diagnostic_root(monkeypa
     worktree_root = runtime_root / "worktrees"
     diagnostic_root = runtime_root / "runs_diagnostic"
     monkeypatch.chdir(repo)
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(worktree_root))
-    monkeypatch.setenv("CORTEXPILOT_DIAGNOSTIC_RUNS_ROOT", str(diagnostic_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(worktree_root))
+    monkeypatch.setenv("OPENVIBECODING_DIAGNOSTIC_RUNS_ROOT", str(diagnostic_root))
 
-    monkeypatch.setenv("CORTEXPILOT_RUNNER", "codex")
-    monkeypatch.setenv("CORTEXPILOT_ALLOW_CODEX_EXEC", "1")
-    monkeypatch.setenv("CORTEXPILOT_MCP_ONLY", "0")
+    monkeypatch.setenv("OPENVIBECODING_RUNNER", "codex")
+    monkeypatch.setenv("OPENVIBECODING_ALLOW_CODEX_EXEC", "1")
+    monkeypatch.setenv("OPENVIBECODING_MCP_ONLY", "0")
 
     monkeypatch.setattr(sched, "ensure_tracing", lambda: {"enabled": True, "backend": "off"})
     monkeypatch.setattr(sched, "check_schema_registry", lambda *_args, **_kwargs: {"status": "ok"})
@@ -164,14 +164,14 @@ def test_scheduler_chain_child_skips_diagnostic_root(monkeypatch, tmp_path: Path
     worktree_root = runtime_root / "worktrees"
     diagnostic_root = runtime_root / "runs_diagnostic"
     monkeypatch.chdir(repo)
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(worktree_root))
-    monkeypatch.setenv("CORTEXPILOT_DIAGNOSTIC_RUNS_ROOT", str(diagnostic_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(worktree_root))
+    monkeypatch.setenv("OPENVIBECODING_DIAGNOSTIC_RUNS_ROOT", str(diagnostic_root))
 
-    monkeypatch.setenv("CORTEXPILOT_RUNNER", "codex")
-    monkeypatch.setenv("CORTEXPILOT_ALLOW_CODEX_EXEC", "1")
-    monkeypatch.setenv("CORTEXPILOT_MCP_ONLY", "0")
+    monkeypatch.setenv("OPENVIBECODING_RUNNER", "codex")
+    monkeypatch.setenv("OPENVIBECODING_ALLOW_CODEX_EXEC", "1")
+    monkeypatch.setenv("OPENVIBECODING_MCP_ONLY", "0")
 
     monkeypatch.setattr(sched, "ensure_tracing", lambda: {"enabled": True})
     monkeypatch.setattr(sched, "check_schema_registry", lambda *_args, **_kwargs: {"status": "ok"})
@@ -268,10 +268,10 @@ def _prepare_runtime_env(monkeypatch, repo: Path, tmp_path: Path, suffix: str) -
     runs_root = runtime_root / "runs"
     worktree_root = runtime_root / "worktrees"
     monkeypatch.chdir(repo)
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(worktree_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNNER", "agents")
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(worktree_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNNER", "agents")
     return runtime_root, runs_root, worktree_root
 
 
@@ -334,8 +334,8 @@ def test_scheduler_human_approval_force_unlock_denied(monkeypatch, tmp_path: Pat
     _init_repo_with_policy(repo)
     _, runs_root, _ = _prepare_runtime_env(monkeypatch, repo, tmp_path, "force_unlock")
 
-    monkeypatch.setenv("CORTEXPILOT_FORCE_UNLOCK", "1")
-    monkeypatch.setenv("CORTEXPILOT_GOD_MODE_TIMEOUT_SEC", "2")
+    monkeypatch.setenv("OPENVIBECODING_FORCE_UNLOCK", "1")
+    monkeypatch.setenv("OPENVIBECODING_GOD_MODE_TIMEOUT_SEC", "2")
     monkeypatch.setattr(sched, "_await_human_approval", lambda *args, **kwargs: False)
 
     contract_path = repo / "contract_force_unlock.json"
@@ -354,7 +354,7 @@ def test_scheduler_human_approval_override_paths_denied(monkeypatch, tmp_path: P
     _init_repo_with_policy(repo)
     _, runs_root, _ = _prepare_runtime_env(monkeypatch, repo, tmp_path, "override")
 
-    monkeypatch.setenv("CORTEXPILOT_GOD_MODE_TIMEOUT_SEC", "2")
+    monkeypatch.setenv("OPENVIBECODING_GOD_MODE_TIMEOUT_SEC", "2")
     monkeypatch.setattr(sched, "_await_human_approval", lambda *args, **kwargs: False)
     monkeypatch.setattr(sched, "_detect_agents_overrides", lambda *_args, **_kwargs: ["apps/orchestrator/src"])
 
@@ -374,7 +374,7 @@ def test_scheduler_human_approval_danger_fs_denied(monkeypatch, tmp_path: Path) 
     _init_repo_with_policy(repo)
     _, runs_root, _ = _prepare_runtime_env(monkeypatch, repo, tmp_path, "danger_fs")
 
-    monkeypatch.setenv("CORTEXPILOT_GOD_MODE_TIMEOUT_SEC", "2")
+    monkeypatch.setenv("OPENVIBECODING_GOD_MODE_TIMEOUT_SEC", "2")
     monkeypatch.setattr(sched, "_await_human_approval", lambda *args, **kwargs: False)
     monkeypatch.setattr(sched.policy_pipeline, "filesystem_policy", lambda _contract: "danger-full-access")
 
@@ -394,7 +394,7 @@ def test_scheduler_human_approval_wide_paths_denied(monkeypatch, tmp_path: Path)
     _init_repo_with_policy(repo)
     _, runs_root, _ = _prepare_runtime_env(monkeypatch, repo, tmp_path, "wide_paths")
 
-    monkeypatch.setenv("CORTEXPILOT_GOD_MODE_TIMEOUT_SEC", "2")
+    monkeypatch.setenv("OPENVIBECODING_GOD_MODE_TIMEOUT_SEC", "2")
     monkeypatch.setattr(sched, "_await_human_approval", lambda *args, **kwargs: False)
     monkeypatch.setattr(sched, "find_wide_paths", lambda _paths: ["**/*"])
 
@@ -434,8 +434,8 @@ def test_scheduler_lock_auto_cleanup_released_event(monkeypatch, tmp_path: Path)
     _init_repo_with_policy(repo)
     _, runs_root, _ = _prepare_runtime_env(monkeypatch, repo, tmp_path, "lock_cleanup")
 
-    monkeypatch.setenv("CORTEXPILOT_LOCK_AUTO_CLEANUP", "1")
-    monkeypatch.setenv("CORTEXPILOT_LOCK_TTL_SEC", "30")
+    monkeypatch.setenv("OPENVIBECODING_LOCK_AUTO_CLEANUP", "1")
+    monkeypatch.setenv("OPENVIBECODING_LOCK_TTL_SEC", "30")
     monkeypatch.setattr(sched, "acquire_lock_with_cleanup", lambda *_args, **_kwargs: (True, ["README.md"], []))
     monkeypatch.setattr(sched, "validate_integrated_tools", lambda *_args, **_kwargs: {"ok": False, "missing": ["codex"]})
 
@@ -462,7 +462,7 @@ def test_scheduler_search_pipeline_failed_branch(monkeypatch, tmp_path: Path) ->
     monkeypatch.setattr(
         sched.artifact_pipeline,
         "load_search_requests",
-        lambda *_args, **_kwargs: ({"queries": ["cortexpilot"], "verify": False}, None),
+        lambda *_args, **_kwargs: ({"queries": ["openvibecoding"], "verify": False}, None),
     )
     monkeypatch.setattr(sched, "_run_search_pipeline", lambda *_args, **_kwargs: {"ok": False, "error": "forced"})
 

@@ -19,9 +19,9 @@ def _resolve_break_glass_state(*, click_only: bool, allow_gemini_skipped: bool, 
     # `click_only` is now a first-class strict mode (default in CI policy).
     # Break-glass remains mandatory only for high-risk downgrade paths.
     requested = bool(allow_gemini_skipped)
-    enabled = str(os.environ.get("CORTEXPILOT_UI_STRICT_BREAK_GLASS", "0")).strip().lower() in {"1", "true", "yes", "y"}
-    reason = str(os.environ.get("CORTEXPILOT_UI_STRICT_BREAK_GLASS_REASON", "")).strip()
-    ticket = str(os.environ.get("CORTEXPILOT_UI_STRICT_BREAK_GLASS_TICKET", "")).strip()
+    enabled = str(os.environ.get("OPENVIBECODING_UI_STRICT_BREAK_GLASS", "0")).strip().lower() in {"1", "true", "yes", "y"}
+    reason = str(os.environ.get("OPENVIBECODING_UI_STRICT_BREAK_GLASS_REASON", "")).strip()
+    ticket = str(os.environ.get("OPENVIBECODING_UI_STRICT_BREAK_GLASS_TICKET", "")).strip()
     state = {
         "requested": requested,
         "enabled": enabled,
@@ -31,14 +31,14 @@ def _resolve_break_glass_state(*, click_only: bool, allow_gemini_skipped: bool, 
     if not requested:
         return state
     if not enabled:
-        raise ValueError("allow-gemini-skipped requires CORTEXPILOT_UI_STRICT_BREAK_GLASS=1")
+        raise ValueError("allow-gemini-skipped requires OPENVIBECODING_UI_STRICT_BREAK_GLASS=1")
     if not reason:
-        raise ValueError("break-glass requires CORTEXPILOT_UI_STRICT_BREAK_GLASS_REASON")
+        raise ValueError("break-glass requires OPENVIBECODING_UI_STRICT_BREAK_GLASS_REASON")
     if not ticket:
-        raise ValueError("break-glass requires CORTEXPILOT_UI_STRICT_BREAK_GLASS_TICKET")
+        raise ValueError("break-glass requires OPENVIBECODING_UI_STRICT_BREAK_GLASS_TICKET")
     audit_path = Path(
         os.environ.get(
-            "CORTEXPILOT_UI_STRICT_BREAK_GLASS_AUDIT_PATH",
+            "OPENVIBECODING_UI_STRICT_BREAK_GLASS_AUDIT_PATH",
             str(report_path.parent / "break_glass_audit.jsonl"),
         )
     ).expanduser()

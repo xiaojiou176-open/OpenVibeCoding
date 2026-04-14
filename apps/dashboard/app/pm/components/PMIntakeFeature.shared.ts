@@ -1,7 +1,7 @@
 import type { EventRecord, ExecutionPlanReport, NewsDigestTimeRange, PmSessionSummary, TaskPackManifest } from "../../../lib/types";
 
 export type BrowserPreset = "safe" | "balanced" | "aggressive" | "custom";
-export type ChatRole = "PM" | "CortexPilot Command Tower";
+export type ChatRole = "PM" | "OpenVibeCoding Command Tower";
 export type PMLayoutMode = "dialog" | "split" | "chain" | "focus";
 export type ChatItemKind = "message" | "decision" | "delegation" | "progress" | "report" | "alert";
 export type PMTaskTemplate = string;
@@ -139,7 +139,7 @@ function eventToChatItem(event: EventRecord, index: number): ChatItem | null {
     return null;
   }
   const fromRole = String(context.from_role || context.role || "").trim().toUpperCase();
-  const role: ChatRole = fromRole === "PM" ? "PM" : "CortexPilot Command Tower";
+  const role: ChatRole = fromRole === "PM" ? "PM" : "OpenVibeCoding Command Tower";
   const ts = typeof event.ts === "string" ? event.ts : new Date().toISOString();
   return { id: `${ts}-${index}-${fromRole || "SYS"}`, role, text: message, createdAt: ts, kind: "message", origin: "remote" };
 }

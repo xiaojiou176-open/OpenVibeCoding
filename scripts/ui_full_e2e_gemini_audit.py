@@ -69,7 +69,7 @@ def _load_env_var_from_dotenv_if_missing(key: str) -> None:
 
 
 def _load_env_var_from_zsh_if_missing(key: str) -> None:
-    if str(os.environ.get("CORTEXPILOT_UI_DISABLE_ZSH_ENV", "")).strip().lower() in {"1", "true", "yes", "on"}:
+    if str(os.environ.get("OPENVIBECODING_UI_DISABLE_ZSH_ENV", "")).strip().lower() in {"1", "true", "yes", "on"}:
         return
     if os.environ.get(key, "").strip():
         return
@@ -130,98 +130,98 @@ def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Headed full-page/full-button E2E audit with Gemini multimodal analysis."
     )
-    parser.add_argument("--host", default=os.environ.get("CORTEXPILOT_E2E_HOST", "127.0.0.1"))
-    parser.add_argument("--api-port", type=int, default=int(os.environ.get("CORTEXPILOT_UI_FULL_E2E_API_PORT", "19600")))
+    parser.add_argument("--host", default=os.environ.get("OPENVIBECODING_E2E_HOST", "127.0.0.1"))
+    parser.add_argument("--api-port", type=int, default=int(os.environ.get("OPENVIBECODING_UI_FULL_E2E_API_PORT", "19600")))
     parser.add_argument(
-        "--dashboard-port", type=int, default=int(os.environ.get("CORTEXPILOT_UI_FULL_E2E_DASHBOARD_PORT", "19700"))
+        "--dashboard-port", type=int, default=int(os.environ.get("OPENVIBECODING_UI_FULL_E2E_DASHBOARD_PORT", "19700"))
     )
-    parser.add_argument("--external-api-base", default=os.environ.get("CORTEXPILOT_UI_FULL_E2E_EXTERNAL_API_BASE", ""))
+    parser.add_argument("--external-api-base", default=os.environ.get("OPENVIBECODING_UI_FULL_E2E_EXTERNAL_API_BASE", ""))
     parser.add_argument(
-        "--external-dashboard-base", default=os.environ.get("CORTEXPILOT_UI_FULL_E2E_EXTERNAL_DASHBOARD_BASE", "")
+        "--external-dashboard-base", default=os.environ.get("OPENVIBECODING_UI_FULL_E2E_EXTERNAL_DASHBOARD_BASE", "")
     )
     parser.add_argument(
         "--api-token",
         default=(
-            os.environ.get("CORTEXPILOT_E2E_API_TOKEN")
-            or os.environ.get("CORTEXPILOT_API_TOKEN")
-            or "cortexpilot-e2e-token"
+            os.environ.get("OPENVIBECODING_E2E_API_TOKEN")
+            or os.environ.get("OPENVIBECODING_API_TOKEN")
+            or "openvibecoding-e2e-token"
         ),
     )
-    parser.add_argument("--gemini-model", default=os.environ.get("CORTEXPILOT_UI_GEMINI_MODEL", "gemini-3.0-flash"))
-    parser.add_argument("--provider", default=os.environ.get("CORTEXPILOT_UI_AUDIT_PROVIDER", "gemini"))
-    parser.add_argument("--provider-base-url", default=os.environ.get("CORTEXPILOT_UI_PROVIDER_BASE_URL", ""))
-    parser.add_argument("--provider-model", default=os.environ.get("CORTEXPILOT_UI_PROVIDER_MODEL", ""))
-    parser.add_argument("--thinking-level", default=os.environ.get("CORTEXPILOT_UI_GEMINI_THINKING_LEVEL", "high"))
-    parser.add_argument("--gemini-key-env", default=os.environ.get("CORTEXPILOT_UI_GEMINI_KEY_ENV", "GEMINI_API_KEY"))
+    parser.add_argument("--gemini-model", default=os.environ.get("OPENVIBECODING_UI_GEMINI_MODEL", "gemini-3.0-flash"))
+    parser.add_argument("--provider", default=os.environ.get("OPENVIBECODING_UI_AUDIT_PROVIDER", "gemini"))
+    parser.add_argument("--provider-base-url", default=os.environ.get("OPENVIBECODING_UI_PROVIDER_BASE_URL", ""))
+    parser.add_argument("--provider-model", default=os.environ.get("OPENVIBECODING_UI_PROVIDER_MODEL", ""))
+    parser.add_argument("--thinking-level", default=os.environ.get("OPENVIBECODING_UI_GEMINI_THINKING_LEVEL", "high"))
+    parser.add_argument("--gemini-key-env", default=os.environ.get("OPENVIBECODING_UI_GEMINI_KEY_ENV", "GEMINI_API_KEY"))
     parser.add_argument(
         "--gemini-request-timeout-sec",
         type=int,
-        default=int(os.environ.get("CORTEXPILOT_UI_GEMINI_REQUEST_TIMEOUT_SEC", "75")),
+        default=int(os.environ.get("OPENVIBECODING_UI_GEMINI_REQUEST_TIMEOUT_SEC", "75")),
     )
     parser.add_argument(
         "--gemini-max-attempts",
         type=int,
-        default=int(os.environ.get("CORTEXPILOT_UI_GEMINI_MAX_ATTEMPTS", "5")),
+        default=int(os.environ.get("OPENVIBECODING_UI_GEMINI_MAX_ATTEMPTS", "5")),
     )
-    parser.add_argument("--max-pages", type=int, default=int(os.environ.get("CORTEXPILOT_UI_FULL_E2E_MAX_PAGES", "0")))
+    parser.add_argument("--max-pages", type=int, default=int(os.environ.get("OPENVIBECODING_UI_FULL_E2E_MAX_PAGES", "0")))
     parser.add_argument(
         "--max-buttons-per-page",
         type=int,
-        default=int(os.environ.get("CORTEXPILOT_UI_FULL_E2E_MAX_BUTTONS_PER_PAGE", "120")),
+        default=int(os.environ.get("OPENVIBECODING_UI_FULL_E2E_MAX_BUTTONS_PER_PAGE", "120")),
     )
     parser.add_argument(
         "--max-interactions",
         type=int,
-        default=int(os.environ.get("CORTEXPILOT_UI_FULL_E2E_MAX_INTERACTIONS", "504")),
+        default=int(os.environ.get("OPENVIBECODING_UI_FULL_E2E_MAX_INTERACTIONS", "504")),
         help="Global interaction budget across all routes; 0 disables cap.",
     )
     parser.add_argument(
         "--max-duplicate-targets",
         type=int,
-        default=int(os.environ.get("CORTEXPILOT_UI_FULL_E2E_MAX_DUPLICATE_TARGETS", "3")),
+        default=int(os.environ.get("OPENVIBECODING_UI_FULL_E2E_MAX_DUPLICATE_TARGETS", "3")),
         help="Maximum number of targets retained per semantic signature on each route.",
     )
     parser.add_argument(
-        "--navigation-timeout-ms", type=int, default=int(os.environ.get("CORTEXPILOT_UI_FULL_E2E_NAV_TIMEOUT_MS", "30000"))
+        "--navigation-timeout-ms", type=int, default=int(os.environ.get("OPENVIBECODING_UI_FULL_E2E_NAV_TIMEOUT_MS", "30000"))
     )
     parser.add_argument(
-        "--action-timeout-ms", type=int, default=int(os.environ.get("CORTEXPILOT_UI_FULL_E2E_ACTION_TIMEOUT_MS", "10000"))
+        "--action-timeout-ms", type=int, default=int(os.environ.get("OPENVIBECODING_UI_FULL_E2E_ACTION_TIMEOUT_MS", "10000"))
     )
-    parser.add_argument("--page-settle-ms", type=int, default=int(os.environ.get("CORTEXPILOT_UI_FULL_E2E_PAGE_SETTLE_MS", "1500")))
+    parser.add_argument("--page-settle-ms", type=int, default=int(os.environ.get("OPENVIBECODING_UI_FULL_E2E_PAGE_SETTLE_MS", "1500")))
     parser.add_argument(
         "--interaction-settle-ms",
         type=int,
-        default=int(os.environ.get("CORTEXPILOT_UI_FULL_E2E_INTERACTION_SETTLE_MS", "1200")),
+        default=int(os.environ.get("OPENVIBECODING_UI_FULL_E2E_INTERACTION_SETTLE_MS", "1200")),
     )
     parser.add_argument(
         "--max-runtime-sec",
         type=int,
-        default=int(os.environ.get("CORTEXPILOT_UI_FULL_E2E_MAX_RUNTIME_SEC", "0")),
+        default=int(os.environ.get("OPENVIBECODING_UI_FULL_E2E_MAX_RUNTIME_SEC", "0")),
         help="Hard runtime budget for one shard; 0 means no explicit runtime cap.",
     )
     parser.add_argument(
         "--heartbeat-interval-sec",
         type=int,
-        default=int(os.environ.get("CORTEXPILOT_UI_FULL_E2E_HEARTBEAT_INTERVAL_SEC", "20")),
+        default=int(os.environ.get("OPENVIBECODING_UI_FULL_E2E_HEARTBEAT_INTERVAL_SEC", "20")),
         help="Emit and persist heartbeat every N seconds while this shard is running.",
     )
-    parser.add_argument("--run-id", default=os.environ.get("CORTEXPILOT_UI_FULL_E2E_RUN_ID", "").strip())
+    parser.add_argument("--run-id", default=os.environ.get("OPENVIBECODING_UI_FULL_E2E_RUN_ID", "").strip())
     parser.add_argument(
         "--route-shard-total",
         type=int,
-        default=int(os.environ.get("CORTEXPILOT_UI_FULL_E2E_ROUTE_SHARD_TOTAL", "1")),
+        default=int(os.environ.get("OPENVIBECODING_UI_FULL_E2E_ROUTE_SHARD_TOTAL", "1")),
         help="Total shard count for route-level parallel execution.",
     )
     parser.add_argument(
         "--route-shard-index",
         type=int,
-        default=int(os.environ.get("CORTEXPILOT_UI_FULL_E2E_ROUTE_SHARD_INDEX", "0")),
+        default=int(os.environ.get("OPENVIBECODING_UI_FULL_E2E_ROUTE_SHARD_INDEX", "0")),
         help="Current shard index (0-based).",
     )
     parser.add_argument(
         "--headed",
         action="store_true",
-        default=_env_flag("CORTEXPILOT_UI_FULL_E2E_HEADED", False),
+        default=_env_flag("OPENVIBECODING_UI_FULL_E2E_HEADED", False),
         help="Run visible browser (headed). Default is headless to avoid focus stealing.",
     )
     return parser.parse_args()
@@ -556,17 +556,17 @@ def main() -> int:
             print("🚀 [ui-full-e2e] starting orchestrator api")
             api_env = os.environ.copy()
             api_env["PYTHONPATH"] = "apps/orchestrator/src"
-            api_env["CORTEXPILOT_API_AUTH_REQUIRED"] = str(
-                os.environ.get("CORTEXPILOT_UI_FULL_E2E_API_AUTH_REQUIRED", "false")
+            api_env["OPENVIBECODING_API_AUTH_REQUIRED"] = str(
+                os.environ.get("OPENVIBECODING_UI_FULL_E2E_API_AUTH_REQUIRED", "false")
             ).strip().lower()
-            api_env["CORTEXPILOT_API_TOKEN"] = args.api_token
-            api_env["CORTEXPILOT_DASHBOARD_PORT"] = str(resolved_dashboard_port)
+            api_env["OPENVIBECODING_API_TOKEN"] = args.api_token
+            api_env["OPENVIBECODING_DASHBOARD_PORT"] = str(resolved_dashboard_port)
             api_python = sys.executable or str(ROOT / ".venv" / "bin" / "python")
             api_proc = spawn_process(
                 [
                     api_python,
                     "-m",
-                    "cortexpilot_orch.cli",
+                    "openvibecoding_orch.cli",
                     "serve",
                     "--host",
                     args.host,
@@ -579,8 +579,8 @@ def main() -> int:
 
             print("🚀 [ui-full-e2e] starting dashboard dev server")
             dashboard_env = os.environ.copy()
-            dashboard_env["NEXT_PUBLIC_CORTEXPILOT_API_BASE"] = base_api
-            dashboard_env["NEXT_PUBLIC_CORTEXPILOT_API_TOKEN"] = args.api_token
+            dashboard_env["NEXT_PUBLIC_OPENVIBECODING_API_BASE"] = base_api
+            dashboard_env["NEXT_PUBLIC_OPENVIBECODING_API_TOKEN"] = args.api_token
             dashboard_env["PORT"] = str(resolved_dashboard_port)
             dashboard_env["NEXT_DIST_DIR"] = f".next-e2e-{resolved_dashboard_port}"
             ui_proc = spawn_process(

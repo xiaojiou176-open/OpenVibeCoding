@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
-  "name": "cortexpilot-readonly",
-  "display_name": "CortexPilot Read-only MCP",
+  "name": "openvibecoding-readonly",
+  "display_name": "OpenVibeCoding Read-only MCP",
   "status": "shipped",
   "version": "0.1.0-alpha.4",
   "version_truth": "This is the latest published public read-only MCP package version for registry and package-manager installs. The latest GitHub release tag can differ; re-check PyPI, Official MCP Registry, and the repo release page before broadening claims.",
   "release_represents_current_main": false,
-  "description": "Repo-owned read-only MCP server for CortexPilot runs, workflows, approvals, compare, proof, and incident summaries.",
+  "description": "Repo-owned read-only MCP server for OpenVibeCoding runs, workflows, approvals, compare, proof, and incident summaries.",
   "homepage": "https://xiaojiou176-open.github.io/OpenVibeCoding/mcp/",
   "distribution_page": "https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/DISTRIBUTION.md",
   "repository": "https://github.com/xiaojiou176-open/OpenVibeCoding",
@@ -21,11 +21,11 @@
   "startup": {
     "command": "bash",
     "args": [
-      "/absolute/path/to/CortexPilot/scripts/run_readonly_mcp.sh"
+      "/absolute/path/to/OpenVibeCoding/scripts/run_openvibecoding_readonly_mcp.sh"
     ],
     "working_directory": "optional",
     "environment": {},
-    "notes": "For an interactive proof from the repo root, you can also run `bash scripts/run_readonly_mcp.sh`."
+    "notes": "For an interactive proof from the repo root, you can also run `bash scripts/run_openvibecoding_readonly_mcp.sh`."
   },
   "portable_examples": [
     {
@@ -34,7 +34,7 @@
     },
     {
       "surface": "codex",
-      "path": "docs/examples/agent-starters/codex/cortexpilot.config.toml"
+      "path": "docs/examples/agent-starters/codex/openvibecoding.config.toml"
     },
     {
       "surface": "claude-code",
@@ -42,7 +42,7 @@
     },
     {
       "surface": "openclaw",
-      "path": "docs/examples/agent-starters/openclaw/cortexpilot-server.json"
+      "path": "docs/examples/agent-starters/openclaw/openvibecoding-server.json"
     },
     {
       "surface": "openclaw-toml",
@@ -67,8 +67,8 @@
     ]
   },
   "source_of_truth": {
-    "cli_entrypoint": "apps/orchestrator/src/cortexpilot_orch/cli.py",
-    "wrapper": "scripts/run_readonly_mcp.sh",
+    "cli_entrypoint": "apps/orchestrator/src/openvibecoding_orch/cli.py",
+    "wrapper": "scripts/run_openvibecoding_readonly_mcp.sh",
     "human_quickstart": "docs/mcp/index.html",
     "distribution_status": "DISTRIBUTION.md"
   },

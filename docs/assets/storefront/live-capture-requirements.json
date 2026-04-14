@@ -1,5 +1,5 @@
 {
-  "artifact_type": "cortexpilot_storefront_live_capture_requirements",
+  "artifact_type": "openvibecoding_storefront_live_capture_requirements",
   "applies_to_bundle": "news_digest",
   "summary": "This contract records the healthy public capture deliverables for the official first public baseline and the tracked assets that currently satisfy them.",
   "required_assets": [

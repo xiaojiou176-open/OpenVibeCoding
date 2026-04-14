@@ -4,7 +4,7 @@ import json
 import sys
 import types
 
-from cortexpilot_orch.services.operator_copilot import (
+from openvibecoding_orch.services.operator_copilot import (
     generate_execution_plan_copilot_brief,
     generate_run_operator_copilot_brief,
     generate_workflow_operator_copilot_brief,
@@ -55,7 +55,7 @@ def test_generate_operator_copilot_brief_returns_structured_report(monkeypatch) 
     )
 
     monkeypatch.setattr(
-        "cortexpilot_orch.services.operator_copilot.get_runner_config",
+        "openvibecoding_orch.services.operator_copilot.get_runner_config",
         lambda: types.SimpleNamespace(
             agents_base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
             agents_api="responses",
@@ -66,12 +66,12 @@ def test_generate_operator_copilot_brief_returns_structured_report(monkeypatch) 
             equilibrium_api_key="",
         ),
     )
-    monkeypatch.setattr("cortexpilot_orch.services.operator_copilot.resolve_runtime_provider_from_env", lambda: "gemini")
+    monkeypatch.setattr("openvibecoding_orch.services.operator_copilot.resolve_runtime_provider_from_env", lambda: "gemini")
     monkeypatch.setattr(
-        "cortexpilot_orch.services.operator_copilot.resolve_provider_credentials",
+        "openvibecoding_orch.services.operator_copilot.resolve_provider_credentials",
         lambda: types.SimpleNamespace(gemini_api_key="gemini-key", openai_api_key="", anthropic_api_key="", equilibrium_api_key=""),
     )
-    monkeypatch.setattr("cortexpilot_orch.services.operator_copilot.build_llm_compat_client", lambda **_kwargs: object())
+    monkeypatch.setattr("openvibecoding_orch.services.operator_copilot.build_llm_compat_client", lambda **_kwargs: object())
 
     report = generate_run_operator_copilot_brief(
         "run-1",
@@ -102,7 +102,7 @@ def test_generate_operator_copilot_brief_returns_structured_report(monkeypatch) 
 
 
 def test_generate_operator_copilot_brief_fails_closed_without_agents(monkeypatch) -> None:
-    monkeypatch.setattr("cortexpilot_orch.services.operator_copilot._agents_available", lambda: False)
+    monkeypatch.setattr("openvibecoding_orch.services.operator_copilot._agents_available", lambda: False)
 
     report = generate_run_operator_copilot_brief(
         "run-2",
@@ -139,7 +139,7 @@ def test_generate_workflow_operator_copilot_brief_returns_structured_report(monk
         ),
     )
     monkeypatch.setattr(
-        "cortexpilot_orch.services.operator_copilot.get_runner_config",
+        "openvibecoding_orch.services.operator_copilot.get_runner_config",
         lambda: types.SimpleNamespace(
             agents_base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
             agents_api="responses",
@@ -150,12 +150,12 @@ def test_generate_workflow_operator_copilot_brief_returns_structured_report(monk
             equilibrium_api_key="",
         ),
     )
-    monkeypatch.setattr("cortexpilot_orch.services.operator_copilot.resolve_runtime_provider_from_env", lambda: "gemini")
+    monkeypatch.setattr("openvibecoding_orch.services.operator_copilot.resolve_runtime_provider_from_env", lambda: "gemini")
     monkeypatch.setattr(
-        "cortexpilot_orch.services.operator_copilot.resolve_provider_credentials",
+        "openvibecoding_orch.services.operator_copilot.resolve_provider_credentials",
         lambda: types.SimpleNamespace(gemini_api_key="gemini-key", openai_api_key="", anthropic_api_key="", equilibrium_api_key=""),
     )
-    monkeypatch.setattr("cortexpilot_orch.services.operator_copilot.build_llm_compat_client", lambda **_kwargs: object())
+    monkeypatch.setattr("openvibecoding_orch.services.operator_copilot.build_llm_compat_client", lambda **_kwargs: object())
 
     report = generate_workflow_operator_copilot_brief(
         "wf-1",
@@ -198,7 +198,7 @@ def test_generate_execution_plan_copilot_brief_returns_structured_report(monkeyp
         ),
     )
     monkeypatch.setattr(
-        "cortexpilot_orch.services.operator_copilot.get_runner_config",
+        "openvibecoding_orch.services.operator_copilot.get_runner_config",
         lambda: types.SimpleNamespace(
             agents_base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
             agents_api="responses",
@@ -209,12 +209,12 @@ def test_generate_execution_plan_copilot_brief_returns_structured_report(monkeyp
             equilibrium_api_key="",
         ),
     )
-    monkeypatch.setattr("cortexpilot_orch.services.operator_copilot.resolve_runtime_provider_from_env", lambda: "gemini")
+    monkeypatch.setattr("openvibecoding_orch.services.operator_copilot.resolve_runtime_provider_from_env", lambda: "gemini")
     monkeypatch.setattr(
-        "cortexpilot_orch.services.operator_copilot.resolve_provider_credentials",
+        "openvibecoding_orch.services.operator_copilot.resolve_provider_credentials",
         lambda: types.SimpleNamespace(gemini_api_key="gemini-key", openai_api_key="", anthropic_api_key="", equilibrium_api_key=""),
     )
-    monkeypatch.setattr("cortexpilot_orch.services.operator_copilot.build_llm_compat_client", lambda **_kwargs: object())
+    monkeypatch.setattr("openvibecoding_orch.services.operator_copilot.build_llm_compat_client", lambda **_kwargs: object())
 
     report = generate_execution_plan_copilot_brief(
         {
@@ -269,7 +269,7 @@ def test_operator_copilot_switchyard_runtime_forces_chat_mode_and_placeholder_ke
     agents_mod.set_default_openai_client = lambda client: records.setdefault("client", client)
 
     monkeypatch.setattr(
-        "cortexpilot_orch.services.operator_copilot.get_runner_config",
+        "openvibecoding_orch.services.operator_copilot.get_runner_config",
         lambda: types.SimpleNamespace(
             agents_base_url="http://127.0.0.1:4010/v1/runtime/invoke",
             agents_api="responses",
@@ -280,12 +280,12 @@ def test_operator_copilot_switchyard_runtime_forces_chat_mode_and_placeholder_ke
             equilibrium_api_key="",
         ),
     )
-    monkeypatch.setattr("cortexpilot_orch.services.operator_copilot.resolve_runtime_provider_from_env", lambda: "openai")
+    monkeypatch.setattr("openvibecoding_orch.services.operator_copilot.resolve_runtime_provider_from_env", lambda: "openai")
     monkeypatch.setattr(
-        "cortexpilot_orch.services.operator_copilot.resolve_provider_credentials",
+        "openvibecoding_orch.services.operator_copilot.resolve_provider_credentials",
         lambda: types.SimpleNamespace(gemini_api_key="", openai_api_key="", anthropic_api_key="", equilibrium_api_key=""),
     )
-    monkeypatch.setattr("cortexpilot_orch.services.operator_copilot.build_llm_compat_client", _build_client)
+    monkeypatch.setattr("openvibecoding_orch.services.operator_copilot.build_llm_compat_client", _build_client)
 
     report = generate_run_operator_copilot_brief(
         "run-1",

@@ -4,11 +4,11 @@ from pathlib import Path
 
 import pytest
 
-from cortexpilot_orch.queue import test_store as queue_test_store
-from cortexpilot_orch.scheduler import test_test_pipeline_security as pipeline_security
-from cortexpilot_orch.scheduler import test_wave_b1_security as wave_b1_security
-from cortexpilot_orch.scheduler import test_wave_b2_regressions as wave_b2_regressions
-from cortexpilot_orch.store import test_run_store_security as run_store_security
+from openvibecoding_orch.queue import test_store as queue_test_store
+from openvibecoding_orch.scheduler import test_test_pipeline_security as pipeline_security
+from openvibecoding_orch.scheduler import test_wave_b1_security as wave_b1_security
+from openvibecoding_orch.scheduler import test_wave_b2_regressions as wave_b2_regressions
+from openvibecoding_orch.store import test_run_store_security as run_store_security
 
 
 def test_proxy_wave_b1_mcp_payload_is_redacted() -> None:

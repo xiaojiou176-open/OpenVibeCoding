@@ -59,7 +59,7 @@ describe("pm intake shared helpers", () => {
       },
       {
         id: "remote-2",
-        role: "CortexPilot Command Tower",
+        role: "OpenVibeCoding Command Tower",
         text: "reply",
         createdAt: "2026-03-01T10:01:00.000Z",
         kind: "message",

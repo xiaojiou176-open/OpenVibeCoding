@@ -2,13 +2,13 @@ import json
 import subprocess
 from pathlib import Path
 
-from cortexpilot_orch.runners.agents_runner import AgentsRunner
-from cortexpilot_orch.runners.app_server_runner import AppServerRunner
-from cortexpilot_orch.runners import execution_adapter as execution_adapter_module
-from cortexpilot_orch.scheduler import scheduler as sched
-from cortexpilot_orch.scheduler import scheduler_bridge_runtime as bridge_runtime
-from cortexpilot_orch.scheduler.scheduler import Orchestrator
-from cortexpilot_orch.store.run_store import RunStore
+from openvibecoding_orch.runners.agents_runner import AgentsRunner
+from openvibecoding_orch.runners.app_server_runner import AppServerRunner
+from openvibecoding_orch.runners import execution_adapter as execution_adapter_module
+from openvibecoding_orch.scheduler import scheduler as sched
+from openvibecoding_orch.scheduler import scheduler_bridge_runtime as bridge_runtime
+from openvibecoding_orch.scheduler.scheduler import Orchestrator
+from openvibecoding_orch.store.run_store import RunStore
 
 
 def _git(cmd: list[str], cwd: Path) -> None:
@@ -57,17 +57,17 @@ def _contract(task_id: str) -> dict:
 def test_scheduler_runner_selection_and_search_signature(tmp_path: Path, monkeypatch) -> None:
     store = RunStore(runs_root=tmp_path / "runs")
 
-    monkeypatch.setenv("CORTEXPILOT_RUNNER", "agents")
+    monkeypatch.setenv("OPENVIBECODING_RUNNER", "agents")
     assert isinstance(sched._select_runner({}, store), AgentsRunner)
     assert isinstance(
         sched._select_runner({"runtime_options": {"runner": "claude"}}, store),
         execution_adapter_module.ClaudeExecutionAdapter,
     )
 
-    monkeypatch.setenv("CORTEXPILOT_RUNNER", "app-server")
+    monkeypatch.setenv("OPENVIBECODING_RUNNER", "app-server")
     assert isinstance(sched._select_runner({}, store), AppServerRunner)
 
-    monkeypatch.setenv("CORTEXPILOT_RUNNER", "codex")
+    monkeypatch.setenv("OPENVIBECODING_RUNNER", "codex")
     assert isinstance(sched._select_runner({}, store), execution_adapter_module.CodexExecutionAdapter)
 
     class DummyToolRunner:
@@ -93,12 +93,12 @@ def test_scheduler_adapter_factory_resolves_build_execution_adapter_name(tmp_pat
             return DummyRunner()
 
     def _fake_import_module(name: str):
-        if name == "cortexpilot_orch.runners.execution_adapter":
+        if name == "openvibecoding_orch.runners.execution_adapter":
             return FakeAdapterModule
         raise ModuleNotFoundError(name)
 
     monkeypatch.setattr(bridge_runtime, "import_module", _fake_import_module)
-    monkeypatch.setenv("CORTEXPILOT_RUNNER", "codex")
+    monkeypatch.setenv("OPENVIBECODING_RUNNER", "codex")
 
     runner = sched._select_runner({}, store)
     assert isinstance(runner, DummyRunner)
@@ -107,7 +107,7 @@ def test_scheduler_adapter_factory_resolves_build_execution_adapter_name(tmp_pat
 
 def test_scheduler_runner_selection_ignores_provider_override(tmp_path: Path, monkeypatch) -> None:
     store = RunStore(runs_root=tmp_path / "runs")
-    monkeypatch.setenv("CORTEXPILOT_RUNNER", "app-server")
+    monkeypatch.setenv("OPENVIBECODING_RUNNER", "app-server")
 
     selected = sched._select_runner({"runtime_options": {"provider": "gemini"}}, store)
     assert isinstance(selected, AppServerRunner)
@@ -118,8 +118,8 @@ def test_scheduler_replay_error_paths(tmp_path: Path, monkeypatch) -> None:
     _init_repo(repo)
     runtime_root = tmp_path / "runtime"
     runs_root = runtime_root / "runs"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
 
     run_dir = runs_root / "run-replay"
     run_dir.mkdir(parents=True, exist_ok=True)
@@ -158,15 +158,15 @@ def test_scheduler_temporal_workflow_fast_paths(tmp_path: Path, monkeypatch) -> 
     runtime_root = tmp_path / "runtime"
     runs_root = runtime_root / "runs"
     worktree_root = runtime_root / "worktrees"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(worktree_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(worktree_root))
 
     contract_path = repo / "contract.json"
     _write_json(contract_path, _contract("task-temporal"))
 
-    monkeypatch.setenv("CORTEXPILOT_TEMPORAL_WORKFLOW", "1")
-    monkeypatch.delenv("CORTEXPILOT_TEMPORAL_ACTIVITY", raising=False)
+    monkeypatch.setenv("OPENVIBECODING_TEMPORAL_WORKFLOW", "1")
+    monkeypatch.delenv("OPENVIBECODING_TEMPORAL_ACTIVITY", raising=False)
 
     monkeypatch.setattr(sched, "run_workflow", lambda *_args, **_kwargs: {"run_id": "wf-123"})
     orch = Orchestrator(repo)
@@ -190,10 +190,10 @@ def test_scheduler_observability_branches(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime_obs"
     runs_root = runtime_root / "runs"
     worktree_root = runtime_root / "worktrees"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(worktree_root))
-    monkeypatch.delenv("CORTEXPILOT_TEMPORAL_WORKFLOW", raising=False)
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(worktree_root))
+    monkeypatch.delenv("OPENVIBECODING_TEMPORAL_WORKFLOW", raising=False)
 
     contract_path = repo / "contract_obs.json"
     _write_json(contract_path, _contract("task-observability"))

@@ -4,31 +4,31 @@ from pathlib import Path
 
 from typer.testing import CliRunner
 
-from cortexpilot_orch import cli
-from cortexpilot_orch.cli import app
-from cortexpilot_orch.contract.validator import ContractValidator
-from cortexpilot_orch.planning.coverage_chain import CoverageTarget, _assigned_role, build_coverage_self_heal_chain, load_coverage_targets
+from openvibecoding_orch import cli
+from openvibecoding_orch.cli import app
+from openvibecoding_orch.contract.validator import ContractValidator
+from openvibecoding_orch.planning.coverage_chain import CoverageTarget, _assigned_role, build_coverage_self_heal_chain, load_coverage_targets
 
 
 def _write_coverage_json(path: Path) -> None:
     payload = {
         "meta": {"version": "1"},
         "files": {
-            "apps/orchestrator/src/cortexpilot_orch/runners/agents_runner.py": {
+            "apps/orchestrator/src/openvibecoding_orch/runners/agents_runner.py": {
                 "summary": {
                     "percent_covered": 81.2,
                     "percent_statements_covered": 82.1,
                     "percent_branches_covered": 72.0,
                 }
             },
-            "apps/orchestrator/src/cortexpilot_orch/scheduler/scheduler.py": {
+            "apps/orchestrator/src/openvibecoding_orch/scheduler/scheduler.py": {
                 "summary": {
                     "percent_covered": 86.7,
                     "percent_statements_covered": 88.0,
                     "percent_branches_covered": 91.0,
                 }
             },
-            "apps/orchestrator/src/cortexpilot_orch/runners/codex_runner.py": {
+            "apps/orchestrator/src/openvibecoding_orch/runners/codex_runner.py": {
                 "summary": {
                     "percent_covered": 97.0,
                     "percent_statements_covered": 97.0,
@@ -44,28 +44,28 @@ def _write_coverage_json_many(path: Path) -> None:
     payload = {
         "meta": {"version": "1"},
         "files": {
-            "apps/orchestrator/src/cortexpilot_orch/runners/agents_runner.py": {
+            "apps/orchestrator/src/openvibecoding_orch/runners/agents_runner.py": {
                 "summary": {
                     "percent_covered": 71.0,
                     "percent_statements_covered": 72.1,
                     "percent_branches_covered": 68.0,
                 }
             },
-            "apps/orchestrator/src/cortexpilot_orch/scheduler/scheduler.py": {
+            "apps/orchestrator/src/openvibecoding_orch/scheduler/scheduler.py": {
                 "summary": {
                     "percent_covered": 73.0,
                     "percent_statements_covered": 74.0,
                     "percent_branches_covered": 69.0,
                 }
             },
-            "apps/orchestrator/src/cortexpilot_orch/chain/runner.py": {
+            "apps/orchestrator/src/openvibecoding_orch/chain/runner.py": {
                 "summary": {
                     "percent_covered": 74.0,
                     "percent_statements_covered": 75.0,
                     "percent_branches_covered": 70.0,
                 }
             },
-            "apps/orchestrator/src/cortexpilot_orch/planning/intake.py": {
+            "apps/orchestrator/src/openvibecoding_orch/planning/intake.py": {
                 "summary": {
                     "percent_covered": 75.0,
                     "percent_statements_covered": 76.0,
@@ -78,25 +78,25 @@ def _write_coverage_json_many(path: Path) -> None:
 
 
 def test_assigned_role_prefers_worker_for_coverage_self_heal_targets() -> None:
-    assert _assigned_role("apps/orchestrator/src/cortexpilot_orch/api/routes_admin.py") == "WORKER"
-    assert _assigned_role("apps/orchestrator/src/cortexpilot_orch/scheduler/scheduler.py") == "WORKER"
+    assert _assigned_role("apps/orchestrator/src/openvibecoding_orch/api/routes_admin.py") == "WORKER"
+    assert _assigned_role("apps/orchestrator/src/openvibecoding_orch/scheduler/scheduler.py") == "WORKER"
 
 
 def test_worker_timeout_uses_env_override(monkeypatch) -> None:
     targets = [
         CoverageTarget(
-            module_path="apps/orchestrator/src/cortexpilot_orch/api/routes_admin.py",
-            module_name="cortexpilot_orch.api.routes_admin",
+            module_path="apps/orchestrator/src/openvibecoding_orch/api/routes_admin.py",
+            module_name="openvibecoding_orch.api.routes_admin",
             coverage=50.0,
         )
     ]
 
-    monkeypatch.setenv("CORTEXPILOT_COVERAGE_WORKER_TIMEOUT_SEC", "123")
+    monkeypatch.setenv("OPENVIBECODING_COVERAGE_WORKER_TIMEOUT_SEC", "123")
     chain = build_coverage_self_heal_chain(targets, chain_id="task_chain_timeout_override")
     worker_step = next(step for step in chain["steps"] if step["name"] == "worker_cov_01")
     assert worker_step["payload"]["timeout_retry"]["timeout_sec"] == 123
 
-    monkeypatch.setenv("CORTEXPILOT_COVERAGE_WORKER_TIMEOUT_SEC", "5")
+    monkeypatch.setenv("OPENVIBECODING_COVERAGE_WORKER_TIMEOUT_SEC", "5")
     chain_min = build_coverage_self_heal_chain(targets, chain_id="task_chain_timeout_floor")
     worker_step_min = next(step for step in chain_min["steps"] if step["name"] == "worker_cov_01")
     assert worker_step_min["payload"]["timeout_retry"]["timeout_sec"] == 60
@@ -113,8 +113,8 @@ def test_coverage_targets_and_chain_schema_validation(tmp_path: Path) -> None:
         coverage_metric="overall",
     )
     assert [item.module_name for item in targets] == [
-        "cortexpilot_orch.runners.agents_runner",
-        "cortexpilot_orch.scheduler.scheduler",
+        "openvibecoding_orch.runners.agents_runner",
+        "openvibecoding_orch.scheduler.scheduler",
     ]
 
     branch_targets = load_coverage_targets(
@@ -123,7 +123,7 @@ def test_coverage_targets_and_chain_schema_validation(tmp_path: Path) -> None:
         max_workers=3,
         coverage_metric="branches",
     )
-    assert [item.module_name for item in branch_targets] == ["cortexpilot_orch.runners.agents_runner"]
+    assert [item.module_name for item in branch_targets] == ["openvibecoding_orch.runners.agents_runner"]
 
     chain = build_coverage_self_heal_chain(
         targets,
@@ -150,8 +150,8 @@ def test_coverage_targets_and_chain_schema_validation(tmp_path: Path) -> None:
     test_gate = next(step for step in chain["steps"] if step["name"] == "test_gate")
     gate_cmd = test_gate["payload"]["acceptance_tests"][0]["cmd"]
     assert gate_cmd.startswith("bash scripts/coverage_self_heal_gate.sh ")
-    assert "test_cov_apps_orchestrator_src_cortexpilot_orch_runners_agents_runner.py" in gate_cmd
-    assert "test_cov_apps_orchestrator_src_cortexpilot_orch_scheduler_scheduler.py" in gate_cmd
+    assert "test_cov_apps_orchestrator_src_openvibecoding_orch_runners_agents_runner.py" in gate_cmd
+    assert "test_cov_apps_orchestrator_src_openvibecoding_orch_scheduler_scheduler.py" in gate_cmd
     assert "worker_cov_01" in test_gate["depends_on"]
     assert "review_a" in test_gate["depends_on"]
     assert test_gate["payload"]["tool_permissions"]["shell"] == "never"
@@ -171,13 +171,13 @@ def test_coverage_targets_and_chain_schema_validation(tmp_path: Path) -> None:
 def test_shell_permissions_switch_to_on_request_for_codex_runner(monkeypatch) -> None:
     targets = [
         CoverageTarget(
-            module_path="apps/orchestrator/src/cortexpilot_orch/api/routes_admin.py",
-            module_name="cortexpilot_orch.api.routes_admin",
+            module_path="apps/orchestrator/src/openvibecoding_orch/api/routes_admin.py",
+            module_name="openvibecoding_orch.api.routes_admin",
             coverage=50.0,
         )
     ]
 
-    monkeypatch.setenv("CORTEXPILOT_RUNNER", "codex")
+    monkeypatch.setenv("OPENVIBECODING_RUNNER", "codex")
     chain = build_coverage_self_heal_chain(
         targets,
         chain_id="task_chain_codex_shell_permissions",
@@ -266,23 +266,23 @@ def test_cli_coverage_self_heal_chain_execute_fallback_to_equilibrium(tmp_path: 
 
         def execute_chain(self, chain_path: Path, mock_mode: bool = False) -> dict:
             calls["execute_chain"] = {"path": str(chain_path), "mock": mock_mode}
-            calls["runner"] = os.getenv("CORTEXPILOT_RUNNER", "")
-            calls["base_url"] = os.getenv("CORTEXPILOT_PROVIDER_BASE_URL", "")
-            calls["lock_auto_cleanup"] = os.getenv("CORTEXPILOT_LOCK_AUTO_CLEANUP", "")
-            calls["chain_exec_mode"] = os.getenv("CORTEXPILOT_CHAIN_EXEC_MODE", "")
-            calls["chain_subprocess_timeout"] = os.getenv("CORTEXPILOT_CHAIN_SUBPROCESS_TIMEOUT_SEC", "")
+            calls["runner"] = os.getenv("OPENVIBECODING_RUNNER", "")
+            calls["base_url"] = os.getenv("OPENVIBECODING_PROVIDER_BASE_URL", "")
+            calls["lock_auto_cleanup"] = os.getenv("OPENVIBECODING_LOCK_AUTO_CLEANUP", "")
+            calls["chain_exec_mode"] = os.getenv("OPENVIBECODING_CHAIN_EXEC_MODE", "")
+            calls["chain_subprocess_timeout"] = os.getenv("OPENVIBECODING_CHAIN_SUBPROCESS_TIMEOUT_SEC", "")
             return {"run_id": "run_cov_chain_eq", "status": "SUCCESS"}
 
     monkeypatch.setattr(cli, "Orchestrator", _FakeOrchestrator)
     monkeypatch.setattr(cli, "_repo_root", lambda: tmp_path)
     monkeypatch.setattr(cli, "_equilibrium_healthcheck", lambda *_args, **_kwargs: True)
     monkeypatch.delenv("GEMINI_API_KEY", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_PROVIDER_BASE_URL", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_RUNNER", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_LOCK_AUTO_CLEANUP", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_CHAIN_EXEC_MODE", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_CHAIN_SUBPROCESS_TIMEOUT_SEC", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_ALLOW_CODEX_EXEC", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_PROVIDER_BASE_URL", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_RUNNER", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_LOCK_AUTO_CLEANUP", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_CHAIN_EXEC_MODE", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_CHAIN_SUBPROCESS_TIMEOUT_SEC", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_ALLOW_CODEX_EXEC", raising=False)
 
     runner = CliRunner()
     result = runner.invoke(
@@ -324,8 +324,8 @@ def test_cli_coverage_self_heal_chain_execute_fallback_to_equilibrium(tmp_path: 
 def test_build_coverage_self_heal_chain_worker_batching_groups() -> None:
     targets = [
         CoverageTarget(
-            module_path=f"apps/orchestrator/src/cortexpilot_orch/module_{idx}.py",
-            module_name=f"cortexpilot_orch.module_{idx}",
+            module_path=f"apps/orchestrator/src/openvibecoding_orch/module_{idx}.py",
+            module_name=f"openvibecoding_orch.module_{idx}",
             coverage=70.0 + idx,
         )
         for idx in range(1, 5)
@@ -363,11 +363,11 @@ def test_cli_coverage_self_heal_chain_execute_auto_batching_default(tmp_path: Pa
     monkeypatch.setattr(cli, "_repo_root", lambda: tmp_path)
     monkeypatch.setattr(cli, "_equilibrium_healthcheck", lambda *_args, **_kwargs: False)
     monkeypatch.delenv("GEMINI_API_KEY", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_PROVIDER_BASE_URL", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_RUNNER", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_CHAIN_EXEC_MODE", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_CHAIN_SUBPROCESS_TIMEOUT_SEC", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_ALLOW_CODEX_EXEC", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_PROVIDER_BASE_URL", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_RUNNER", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_CHAIN_EXEC_MODE", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_CHAIN_SUBPROCESS_TIMEOUT_SEC", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_ALLOW_CODEX_EXEC", raising=False)
 
     output_path = tmp_path / "contracts" / "tasks" / "task_chain_cov_cli_auto_batch.json"
     runner = CliRunner()
@@ -418,24 +418,24 @@ def test_cli_coverage_self_heal_chain_execute_with_codex_fallback(tmp_path: Path
 
         def execute_chain(self, chain_path: Path, mock_mode: bool = False) -> dict:
             calls["execute_chain"] = {"path": str(chain_path), "mock": mock_mode}
-            calls["runner"] = os.getenv("CORTEXPILOT_RUNNER", "")
-            calls["base_url"] = os.getenv("CORTEXPILOT_PROVIDER_BASE_URL", "")
-            calls["lock_auto_cleanup"] = os.getenv("CORTEXPILOT_LOCK_AUTO_CLEANUP", "")
-            calls["chain_exec_mode"] = os.getenv("CORTEXPILOT_CHAIN_EXEC_MODE", "")
-            calls["chain_subprocess_timeout"] = os.getenv("CORTEXPILOT_CHAIN_SUBPROCESS_TIMEOUT_SEC", "")
-            calls["allow_codex_exec"] = os.getenv("CORTEXPILOT_ALLOW_CODEX_EXEC", "")
+            calls["runner"] = os.getenv("OPENVIBECODING_RUNNER", "")
+            calls["base_url"] = os.getenv("OPENVIBECODING_PROVIDER_BASE_URL", "")
+            calls["lock_auto_cleanup"] = os.getenv("OPENVIBECODING_LOCK_AUTO_CLEANUP", "")
+            calls["chain_exec_mode"] = os.getenv("OPENVIBECODING_CHAIN_EXEC_MODE", "")
+            calls["chain_subprocess_timeout"] = os.getenv("OPENVIBECODING_CHAIN_SUBPROCESS_TIMEOUT_SEC", "")
+            calls["allow_codex_exec"] = os.getenv("OPENVIBECODING_ALLOW_CODEX_EXEC", "")
             return {"run_id": "run_cov_chain_codex", "status": "SUCCESS"}
 
     monkeypatch.setattr(cli, "Orchestrator", _FakeOrchestrator)
     monkeypatch.setattr(cli, "_repo_root", lambda: tmp_path)
     monkeypatch.setattr(cli, "_equilibrium_healthcheck", lambda *_args, **_kwargs: False)
     monkeypatch.delenv("GEMINI_API_KEY", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_PROVIDER_BASE_URL", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_RUNNER", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_LOCK_AUTO_CLEANUP", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_CHAIN_EXEC_MODE", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_CHAIN_SUBPROCESS_TIMEOUT_SEC", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_ALLOW_CODEX_EXEC", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_PROVIDER_BASE_URL", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_RUNNER", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_LOCK_AUTO_CLEANUP", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_CHAIN_EXEC_MODE", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_CHAIN_SUBPROCESS_TIMEOUT_SEC", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_ALLOW_CODEX_EXEC", raising=False)
 
     runner = CliRunner()
     result = runner.invoke(
@@ -487,16 +487,16 @@ def test_cli_coverage_self_heal_chain_execute_prefers_gemini_key(tmp_path: Path,
 
         def execute_chain(self, chain_path: Path, mock_mode: bool = False) -> dict:
             calls["execute_chain"] = {"path": str(chain_path), "mock": mock_mode}
-            calls["runner"] = os.getenv("CORTEXPILOT_RUNNER", "")
-            calls["base_url"] = os.getenv("CORTEXPILOT_PROVIDER_BASE_URL", "")
+            calls["runner"] = os.getenv("OPENVIBECODING_RUNNER", "")
+            calls["base_url"] = os.getenv("OPENVIBECODING_PROVIDER_BASE_URL", "")
             return {"run_id": "run_cov_chain_gemini", "status": "SUCCESS"}
 
     monkeypatch.setattr(cli, "Orchestrator", _FakeOrchestrator)
     monkeypatch.setattr(cli, "_repo_root", lambda: tmp_path)
     monkeypatch.setattr(cli, "_equilibrium_healthcheck", lambda *_args, **_kwargs: False)
     monkeypatch.setenv("GEMINI_API_KEY", "test-gemini-key")
-    monkeypatch.delenv("CORTEXPILOT_PROVIDER_BASE_URL", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_RUNNER", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_PROVIDER_BASE_URL", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_RUNNER", raising=False)
 
     runner = CliRunner()
     result = runner.invoke(
@@ -539,22 +539,22 @@ def test_cli_coverage_self_heal_chain_execute_restores_temporary_env(monkeypatch
 
         def execute_chain(self, chain_path: Path, mock_mode: bool = False) -> dict:
             del chain_path, mock_mode
-            observed["runner_during_execute"] = os.getenv("CORTEXPILOT_RUNNER", "")
+            observed["runner_during_execute"] = os.getenv("OPENVIBECODING_RUNNER", "")
             return {"run_id": "run_cov_chain_env_restore", "status": "SUCCESS"}
 
     def _fake_prepare(mock_mode: bool) -> dict[str, object]:
         del mock_mode
-        os.environ["CORTEXPILOT_RUNNER"] = "codex"
+        os.environ["OPENVIBECODING_RUNNER"] = "codex"
         return {"mode": "test_env_override"}
 
     def _fake_print(*_args, **_kwargs) -> None:
-        observed["runner_at_print"] = os.getenv("CORTEXPILOT_RUNNER", "")
+        observed["runner_at_print"] = os.getenv("OPENVIBECODING_RUNNER", "")
 
     monkeypatch.setattr(cli, "Orchestrator", _FakeOrchestrator)
     monkeypatch.setattr(cli, "_repo_root", lambda: tmp_path)
     monkeypatch.setattr(cli, "_prepare_coverage_execute_env", _fake_prepare)
     monkeypatch.setattr(cli.console, "print", _fake_print)
-    monkeypatch.delenv("CORTEXPILOT_RUNNER", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_RUNNER", raising=False)
 
     runner = CliRunner()
     result = runner.invoke(
@@ -578,4 +578,4 @@ def test_cli_coverage_self_heal_chain_execute_restores_temporary_env(monkeypatch
     assert result.exit_code == 0
     assert observed["runner_during_execute"] == "codex"
     assert observed["runner_at_print"] == ""
-    assert os.getenv("CORTEXPILOT_RUNNER", "") == ""
+    assert os.getenv("OPENVIBECODING_RUNNER", "") == ""

@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from cortexpilot_orch.gates.schema_gate import run_schema_gate
+from openvibecoding_orch.gates.schema_gate import run_schema_gate
 import hashlib
 
 
@@ -44,7 +44,7 @@ def _contract(task_id: str) -> dict:
 
 def test_schema_gate_validates_contract(tmp_path: Path, monkeypatch) -> None:
     repo_root = Path(__file__).resolve().parents[3]
-    monkeypatch.setenv("CORTEXPILOT_SCHEMA_ROOT", str(repo_root / "schemas"))
+    monkeypatch.setenv("OPENVIBECODING_SCHEMA_ROOT", str(repo_root / "schemas"))
 
     contract_path = tmp_path / "contract.json"
     contract_path.write_text(json.dumps(_contract("task-0001")), encoding="utf-8")

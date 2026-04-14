@@ -5,7 +5,7 @@ from typing import Any
 from fastapi import FastAPI, Request
 from fastapi.testclient import TestClient
 
-from cortexpilot_orch.api import routes_pm
+from openvibecoding_orch.api import routes_pm
 
 
 def _build_app(
@@ -81,7 +81,7 @@ def test_routes_pm_list_sessions_forwards_status_array_filters() -> None:
             ("status[]", "failed"),
             ("status[]", "archived"),
             ("owner_pm", "pm-a"),
-            ("project_key", "cortexpilot"),
+            ("project_key", "openvibecoding"),
             ("sort", "failed_desc"),
             ("limit", "25"),
             ("offset", "3"),
@@ -91,7 +91,7 @@ def test_routes_pm_list_sessions_forwards_status_array_filters() -> None:
     assert capture["list"]["status"] == "active"
     assert capture["list"]["status_filters"] == ["failed", "archived"]
     assert capture["list"]["owner_pm"] == "pm-a"
-    assert capture["list"]["project_key"] == "cortexpilot"
+    assert capture["list"]["project_key"] == "openvibecoding"
     assert capture["list"]["sort"] == "failed_desc"
     assert capture["list"]["limit"] == 25
     assert capture["list"]["offset"] == 3

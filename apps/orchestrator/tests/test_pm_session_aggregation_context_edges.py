@@ -6,7 +6,7 @@ from types import SimpleNamespace
 import pytest
 from fastapi import HTTPException
 
-import cortexpilot_orch.api.pm_session_aggregation_context as context_mod
+import openvibecoding_orch.api.pm_session_aggregation_context as context_mod
 
 
 def _parse_iso(value: str) -> datetime:

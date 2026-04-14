@@ -5,7 +5,7 @@ from pathlib import Path
 
 from fastapi.testclient import TestClient
 
-from cortexpilot_orch.api import main as api_main
+from openvibecoding_orch.api import main as api_main
 
 from .helpers.api_main_test_io import _write_contract, _write_events, _write_manifest, _write_report
 
@@ -13,8 +13,8 @@ from .helpers.api_main_test_io import _write_contract, _write_events, _write_man
 def test_api_operator_copilot_brief_route_returns_grounded_brief(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime"
     runs_root = runtime_root / "runs"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
 
     run_dir = runs_root / "run_operator"
     _write_manifest(
@@ -27,7 +27,7 @@ def test_api_operator_copilot_brief_route_returns_grounded_brief(tmp_path: Path,
             "failure_reason": "diff gate rejected",
             "workflow": {
                 "workflow_id": "wf-operator",
-                "task_queue": "cortexpilot-orch",
+                "task_queue": "openvibecoding-orch",
                 "namespace": "default",
                 "status": "FAILED",
             },
@@ -46,7 +46,7 @@ def test_api_operator_copilot_brief_route_returns_grounded_brief(tmp_path: Path,
     _write_report(run_dir, "incident_pack.json", {"summary": "Gate blocked", "next_action": "Review gate"})
 
     monkeypatch.setattr(
-        "cortexpilot_orch.services.operator_copilot._build_ai_brief",
+        "openvibecoding_orch.services.operator_copilot._build_ai_brief",
         lambda _prompt: {
             "summary": "The run is blocked by a diff gate and needs operator review.",
             "likely_cause": "Diff gate rejection is the current blocker.",
@@ -79,8 +79,8 @@ def test_api_operator_copilot_brief_route_returns_grounded_brief(tmp_path: Path,
 def test_api_workflow_operator_copilot_brief_route_returns_grounded_brief(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime"
     runs_root = runtime_root / "runs"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
 
     run_dir = runs_root / "run_workflow_operator"
     _write_manifest(
@@ -93,7 +93,7 @@ def test_api_workflow_operator_copilot_brief_route_returns_grounded_brief(tmp_pa
             "failure_reason": "diff gate rejected",
             "workflow": {
                 "workflow_id": "wf-operator",
-                "task_queue": "cortexpilot-orch",
+                "task_queue": "openvibecoding-orch",
                 "namespace": "default",
                 "status": "FAILED",
             },
@@ -106,7 +106,7 @@ def test_api_workflow_operator_copilot_brief_route_returns_grounded_brief(tmp_pa
     _write_report(run_dir, "incident_pack.json", {"summary": "Gate blocked", "next_action": "Review gate"})
 
     monkeypatch.setattr(
-        "cortexpilot_orch.services.operator_copilot._build_ai_brief",
+        "openvibecoding_orch.services.operator_copilot._build_ai_brief",
         lambda _prompt: {
             "summary": "The workflow case is blocked by its latest linked run.",
             "likely_cause": "The latest run is still blocked by the diff gate.",
@@ -136,7 +136,7 @@ def test_api_workflow_operator_copilot_brief_route_returns_grounded_brief(tmp_pa
 
 def test_api_preview_intake_copilot_brief_route_returns_advisory_brief(monkeypatch) -> None:
     monkeypatch.setattr(
-        "cortexpilot_orch.services.operator_copilot._build_ai_flight_plan_brief",
+        "openvibecoding_orch.services.operator_copilot._build_ai_flight_plan_brief",
         lambda _prompt: {
             "summary": "The current Flight Plan is safe to review but still has one approval gate to confirm.",
             "risk_takeaway": "Manual approval is the main pre-run risk gate.",
@@ -183,7 +183,7 @@ def test_api_preview_intake_copilot_brief_route_returns_advisory_brief(monkeypat
 
 def test_api_preview_operator_copilot_brief_route_returns_advisory_brief(monkeypatch) -> None:
     monkeypatch.setattr(
-        "cortexpilot_orch.services.operator_copilot._build_ai_flight_plan_brief",
+        "openvibecoding_orch.services.operator_copilot._build_ai_flight_plan_brief",
         lambda _prompt: {
             "summary": "The Flight Plan is ready for review but still has one approval gate before execution.",
             "risk_takeaway": "Manual approval is the main pre-run risk gate.",

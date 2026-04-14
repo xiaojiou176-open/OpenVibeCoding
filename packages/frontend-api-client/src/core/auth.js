@@ -1,4 +1,4 @@
-import { FRONTEND_API_CONTRACT } from "@cortexpilot/frontend-api-contract";
+import { FRONTEND_API_CONTRACT } from "@openvibecoding/frontend-api-contract";
 
 function randomToken(prefix) {
   if (typeof globalThis.crypto?.randomUUID === "function") {

@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-TMP_ROOT="$(mktemp -d "${TMPDIR:-/tmp}/cortexpilot-relocation-smoke.XXXXXX")"
+TMP_ROOT="$(mktemp -d "${TMPDIR:-/tmp}/openvibecoding-relocation-smoke.XXXXXX")"
 SYMLINK_PATH="${TMP_ROOT}/relocated-checkout"
 
 cleanup() {

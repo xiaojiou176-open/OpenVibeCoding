@@ -2,12 +2,12 @@
   "task_id": "task_ui_example",
   "owner_agent": {
     "role": "WORKER",
-    "agent_id": "cortexpilot-worker-1",
+    "agent_id": "openvibecoding-worker-1",
     "codex_thread_id": ""
   },
   "assigned_agent": {
     "role": "WORKER",
-    "agent_id": "cortexpilot-worker-1",
+    "agent_id": "openvibecoding-worker-1",
     "codex_thread_id": ""
   },
   "inputs": {

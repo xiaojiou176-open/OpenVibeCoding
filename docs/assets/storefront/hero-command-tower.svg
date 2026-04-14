@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
-  <title id="title">CortexPilot command tower flow</title>
+  <title id="title">OpenVibeCoding command tower flow</title>
   <desc id="desc">A three-step flow from PM request to Command Tower to evidence and replay, with governed execution and audit surfaces.</desc>
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -20,7 +20,7 @@
   <circle cx="1030" cy="120" r="110" fill="#d86f45" opacity="0.18"/>
   <circle cx="180" cy="600" r="150" fill="#2d6c8a" opacity="0.12"/>
 
-  <text x="88" y="110" fill="#15202a" font-family="Georgia, 'Times New Roman', serif" font-size="52" font-weight="700">CortexPilot</text>
+  <text x="88" y="110" fill="#15202a" font-family="Georgia, 'Times New Roman', serif" font-size="52" font-weight="700">OpenVibeCoding</text>
   <text x="88" y="152" fill="#394d5b" font-family="'Trebuchet MS', Verdana, sans-serif" font-size="24">
     Governed AI task orchestration with evidence, replay, and operator visibility
   </text>

@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from cortexpilot_orch.contract import compiler as compiler_mod
+from openvibecoding_orch.contract import compiler as compiler_mod
 
 
 def test_compiler_helper_edges(tmp_path: Path, monkeypatch) -> None:

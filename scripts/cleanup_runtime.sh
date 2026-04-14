@@ -5,7 +5,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 source "$ROOT_DIR/scripts/lib/toolchain_env.sh"
 
-PYTHON="$(cortexpilot_python_bin "$ROOT_DIR" || true)"
+PYTHON="$(openvibecoding_python_bin "$ROOT_DIR" || true)"
 
 ensure_python() {
   if [ -x "$PYTHON" ] && "$PYTHON" -V >/dev/null 2>&1; then
@@ -18,7 +18,7 @@ ensure_python() {
 
 ensure_python
 
-PROFILE="${CORTEXPILOT_CLEANUP_PROFILE:-default}"
+PROFILE="${OPENVIBECODING_CLEANUP_PROFILE:-default}"
 MODE_INPUT="${1:-}"
 
 if [[ -z "$MODE_INPUT" ]]; then
@@ -39,9 +39,9 @@ case "$MODE" in
     ;;
 esac
 
-CLEAN_ROOT_NOISE="${CORTEXPILOT_CLEANUP_ROOT_NOISE:-1}"
-CLEAN_CONTRACT_ARTIFACTS="${CORTEXPILOT_CLEANUP_CONTRACT_ARTIFACTS:-0}"
-CONFIRM_APPLY="${CORTEXPILOT_CLEANUP_CONFIRM:-}"
+CLEAN_ROOT_NOISE="${OPENVIBECODING_CLEANUP_ROOT_NOISE:-1}"
+CLEAN_CONTRACT_ARTIFACTS="${OPENVIBECODING_CLEANUP_CONTRACT_ARTIFACTS:-0}"
+CONFIRM_APPLY="${OPENVIBECODING_CLEANUP_CONFIRM:-}"
 
 validate_toggle_01() {
   local name="$1"
@@ -55,8 +55,8 @@ validate_toggle_01() {
   esac
 }
 
-validate_toggle_01 "CORTEXPILOT_CLEANUP_ROOT_NOISE" "$CLEAN_ROOT_NOISE"
-validate_toggle_01 "CORTEXPILOT_CLEANUP_CONTRACT_ARTIFACTS" "$CLEAN_CONTRACT_ARTIFACTS"
+validate_toggle_01 "OPENVIBECODING_CLEANUP_ROOT_NOISE" "$CLEAN_ROOT_NOISE"
+validate_toggle_01 "OPENVIBECODING_CLEANUP_CONTRACT_ARTIFACTS" "$CLEAN_CONTRACT_ARTIFACTS"
 
 if [[ "$MODE" == "apply" ]]; then
   if [[ "$PROFILE" == "nightly" ]]; then
@@ -64,7 +64,7 @@ if [[ "$MODE" == "apply" ]]; then
       echo "ℹ️ [cleanup] nightly profile auto-confirms apply mode"
     fi
   elif [[ "$CONFIRM_APPLY" != "YES" ]]; then
-    echo "❌ [cleanup] apply mode requires CORTEXPILOT_CLEANUP_CONFIRM=YES" >&2
+    echo "❌ [cleanup] apply mode requires OPENVIBECODING_CLEANUP_CONFIRM=YES" >&2
     exit 2
   fi
 fi
@@ -106,7 +106,7 @@ cleanup_legacy_ci_reports() {
 import json
 from pathlib import Path
 
-root = Path(".runtime-cache/cortexpilot/reports/ci")
+root = Path(".runtime-cache/openvibecoding/reports/ci")
 if not root.exists():
     raise SystemExit(0)
 
@@ -147,9 +147,9 @@ for path in sorted(root.rglob("*.json")):
     if not isinstance(payload, dict):
         continue
     report_type = str(payload.get("report_type") or "")
-    if not report_type.startswith("cortexpilot_ci_"):
+    if not report_type.startswith("openvibecoding_ci_"):
         continue
-    if report_type in {"cortexpilot_ci_current_run_source_manifest", "cortexpilot_ci_route_report"}:
+    if report_type in {"openvibecoding_ci_current_run_source_manifest", "openvibecoding_ci_route_report"}:
         continue
     if all(str(payload.get(key) or "").strip() for key in ("source_run_id", "source_route", "source_event")):
         continue
@@ -164,9 +164,9 @@ PY
 
 echo "🚀 [cleanup] start ${MODE} cleanup"
 if [[ "$MODE" == "apply" ]]; then
-  PYTHONPATH=apps/orchestrator/src "$PYTHON" -m cortexpilot_orch.cli cleanup runtime --apply
+  PYTHONPATH=apps/orchestrator/src "$PYTHON" -m openvibecoding_orch.cli cleanup runtime --apply
 else
-  PYTHONPATH=apps/orchestrator/src "$PYTHON" -m cortexpilot_orch.cli cleanup runtime --dry-run
+  PYTHONPATH=apps/orchestrator/src "$PYTHON" -m openvibecoding_orch.cli cleanup runtime --dry-run
 fi
 
 if [[ "$CLEAN_ROOT_NOISE" == "1" ]]; then
@@ -181,7 +181,7 @@ if [[ "$CLEAN_ROOT_NOISE" == "1" ]]; then
   cleanup_path "root-noise" "htmlcov"
   cleanup_path "root-noise" "coverage.xml"
 else
-  echo "ℹ️ [cleanup] skip root noise cleanup (CORTEXPILOT_CLEANUP_ROOT_NOISE=0)"
+  echo "ℹ️ [cleanup] skip root noise cleanup (OPENVIBECODING_CLEANUP_ROOT_NOISE=0)"
 fi
 
 if [[ "$CLEAN_CONTRACT_ARTIFACTS" == "1" ]]; then
@@ -190,20 +190,20 @@ if [[ "$CLEAN_CONTRACT_ARTIFACTS" == "1" ]]; then
   done < <(
     CONTRACT_ROOT="$(
       PYTHONPATH=apps/orchestrator/src "$PYTHON" - <<'PY'
-from cortexpilot_orch.config import load_config
+from openvibecoding_orch.config import load_config
 print(load_config().runtime_contract_root)
 PY
 	    )"
 	    for base in \
 	      "$CONTRACT_ROOT/results" "$CONTRACT_ROOT/reviews" "$CONTRACT_ROOT/tasks" \
 	      "contracts/results" "contracts/reviews" "contracts/tasks" \
-	      ".runtime-cache/cortexpilot/contracts/results" ".runtime-cache/cortexpilot/contracts/reviews" ".runtime-cache/cortexpilot/contracts/tasks"; do
+	      ".runtime-cache/openvibecoding/contracts/results" ".runtime-cache/openvibecoding/contracts/reviews" ".runtime-cache/openvibecoding/contracts/tasks"; do
       [[ -d "$base" ]] || continue
       find "$base" -maxdepth 1 \( -type d -name 'run_*' -o -type f -name 'task-*.json' \) -print
     done | LC_ALL=C sort -u
   )
 else
-  echo "ℹ️ [cleanup] skip contract artifacts cleanup (set CORTEXPILOT_CLEANUP_CONTRACT_ARTIFACTS=1 to enable)"
+  echo "ℹ️ [cleanup] skip contract artifacts cleanup (set OPENVIBECODING_CLEANUP_CONTRACT_ARTIFACTS=1 to enable)"
 fi
 
 cleanup_legacy_ci_reports

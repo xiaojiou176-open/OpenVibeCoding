@@ -1,4 +1,4 @@
-FROM cortexpilot-ci-core:local
+FROM openvibecoding-ci-core:local
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \

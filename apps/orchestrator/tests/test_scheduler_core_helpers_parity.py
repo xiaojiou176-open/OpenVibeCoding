@@ -1,11 +1,11 @@
 from pathlib import Path
 
-from cortexpilot_orch.scheduler import artifact_pipeline, core_helpers, evidence_pipeline, report_builders, runtime_utils, test_pipeline
-from cortexpilot_orch.scheduler import scheduler as sched
+from openvibecoding_orch.scheduler import artifact_pipeline, core_helpers, evidence_pipeline, report_builders, runtime_utils, test_pipeline
+from openvibecoding_orch.scheduler import scheduler as sched
 
 
 def test_scheduler_core_aliases_trace_and_policy(monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_TRACE_URL_TEMPLATE", "https://trace.local/{run_id}/{trace_id}")
+    monkeypatch.setenv("OPENVIBECODING_TRACE_URL_TEMPLATE", "https://trace.local/{run_id}/{trace_id}")
     assert sched._trace_url("trace-1", "run-1") == core_helpers.trace_url("trace-1", "run-1")
 
     policy_gate_sched = sched._build_policy_gate(

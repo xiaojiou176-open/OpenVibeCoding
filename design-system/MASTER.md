@@ -1,8 +1,8 @@
-# CortexPilot Design System
+# OpenVibeCoding Design System
 
 ## Purpose
 
-This file is the canonical design system for CortexPilot's public front door,
+This file is the canonical design system for OpenVibeCoding's public front door,
 dashboard, and desktop control-plane surfaces.
 
 Read this as the design constitution for one specific product:
@@ -18,7 +18,7 @@ product identity.
 
 ## Atmosphere
 
-CortexPilot should feel like an architecture studio crossed with a mission
+OpenVibeCoding should feel like an architecture studio crossed with a mission
 control room.
 
 - **Density**: medium-high on control surfaces, medium on the public front door
@@ -41,7 +41,7 @@ Interpretation:
 
 Rules:
 
-- Never use `Inter` for CortexPilot hero or cockpit surfaces.
+- Never use `Inter` for OpenVibeCoding hero or cockpit surfaces.
 - Headings should signal confidence through weight and spacing, not giant scale.
 - Monospace belongs to machine facts only: run IDs, queue IDs, lane names,
   file refs, timestamps, contract artifacts.
@@ -68,7 +68,7 @@ Rules:
 
 - Keep one accent color only.
 - No purple glow, no neon blue gradients, no generic AI chroma.
-- Avoid pure black and pure white. CortexPilot should feel calibrated, not harsh.
+- Avoid pure black and pure white. OpenVibeCoding should feel calibrated, not harsh.
 - Healthy status can use green, but do not let the whole UI become “green dashboard”.
 
 ## Layout Principles
@@ -164,7 +164,7 @@ That means:
 
 ## Anti-Patterns
 
-Never ship these into CortexPilot:
+Never ship these into OpenVibeCoding:
 
 - emoji icons
 - neon purple/blue AI gradients

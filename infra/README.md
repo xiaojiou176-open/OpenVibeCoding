@@ -1,6 +1,6 @@
 # Infrastructure
 
-Infrastructure and local runtime support for the CortexPilot repository.
+Infrastructure and local runtime support for the OpenVibeCoding repository.
 
 ## Layout
 

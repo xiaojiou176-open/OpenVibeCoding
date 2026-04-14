@@ -14,15 +14,15 @@ from tests.helpers.mcp_stdio import (
 
 
 def _mcp_e2e_enabled() -> bool:
-    return os.getenv("CORTEXPILOT_ENABLE_MCP_E2E", "").strip().lower() in {"1", "true", "yes"}
+    return os.getenv("OPENVIBECODING_ENABLE_MCP_E2E", "").strip().lower() in {"1", "true", "yes"}
 
 
 def _require_mcp_e2e_or_skip() -> None:
     enabled = _mcp_e2e_enabled()
-    require = os.getenv("CORTEXPILOT_REQUIRE_MCP_E2E", "").strip().lower() in {"1", "true", "yes"}
+    require = os.getenv("OPENVIBECODING_REQUIRE_MCP_E2E", "").strip().lower() in {"1", "true", "yes"}
     if not enabled:
         if require:
-            pytest.fail("mcp protocol drift e2e is required but disabled (set CORTEXPILOT_ENABLE_MCP_E2E=1)")
+            pytest.fail("mcp protocol drift e2e is required but disabled (set OPENVIBECODING_ENABLE_MCP_E2E=1)")
         pytest.skip("mcp concurrency e2e disabled")
     if shutil.which("codex") is None:
         if require:
@@ -36,7 +36,7 @@ def test_mcp_protocol_drift_detection() -> None:
 
     handle = start_mcp_server_with_configs(initialize=False)
     try:
-        resp = initialize_with_protocol(handle, "1900-01-01", request_id=1, client_name="cortexpilot_drift")
+        resp = initialize_with_protocol(handle, "1900-01-01", request_id=1, client_name="openvibecoding_drift")
         if isinstance(resp, dict) and "error" in resp:
             return
 

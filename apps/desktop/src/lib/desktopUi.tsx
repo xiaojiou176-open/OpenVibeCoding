@@ -90,15 +90,15 @@ export type ChainNodeData = {
 
 export const WORKSPACES: Workspace[] = [
   {
-    id: "cortexpilot-main",
-    repo: "CortexPilot",
+    id: "openvibecoding-main",
+    repo: "OpenVibeCoding",
     branch: "main",
     path: "current checkout",
     activeAgents: 3
   },
   {
-    id: "cortexpilot-feature",
-    repo: "CortexPilot",
+    id: "openvibecoding-feature",
+    repo: "OpenVibeCoding",
     branch: "feature/pm-chat",
     path: "current checkout",
     activeAgents: 2
@@ -119,7 +119,7 @@ export function createSeedTimeline(sessionId: string): ChatMessage[] {
     {
       id: `${sessionId}-intro`,
       role: "pm",
-      content: "CortexPilot Command Tower PM is ready. Tell me the goal and I will coordinate the TL and engineering agents.",
+      content: "OpenVibeCoding Command Tower PM is ready. Tell me the goal and I will coordinate the TL and engineering agents.",
       embeds: [
         {
           id: `${sessionId}-decision-bootstrap`,

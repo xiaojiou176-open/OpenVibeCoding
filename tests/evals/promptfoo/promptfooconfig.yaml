@@ -1,6 +1,6 @@
-description: "CortexPilot regression baseline"
+description: "OpenVibeCoding regression baseline"
 # Example:
-# GEMINI_API_KEY=xxx CORTEXPILOT_EVAL_MODEL=gemini-2.0-flash bash scripts/run_evals.sh
+# GEMINI_API_KEY=xxx OPENVIBECODING_EVAL_MODEL=gemini-2.0-flash bash scripts/run_evals.sh
 
 prompts:
   - |
@@ -21,7 +21,7 @@ prompts:
     Do not include markdown fences or explanatory text outside the JSON object.
 
 providers:
-  - id: "google:__CORTEXPILOT_EVAL_MODEL__"
+  - id: "google:__OPENVIBECODING_EVAL_MODEL__"
     config:
       apiKey: "${GEMINI_API_KEY}"
 
@@ -185,7 +185,7 @@ tests:
       primary_risk: "governed_path_violation"
       required_path_term_groups: "runtime;root;route|reroute|governed"
       forbidden_path_terms: "scripts"
-      request: "A change proposal writes evaluation receipts into scripts/.runtime-cache because it is 'close to the script'. CortexPilot runtime artifacts must stay under the governed runtime root."
+      request: "A change proposal writes evaluation receipts into scripts/.runtime-cache because it is 'close to the script'. OpenVibeCoding runtime artifacts must stay under the governed runtime root."
   - description: "pm intake run responses must stay structured for downstream observers"
     vars:
       regression_target: "pm intake /run contract must expose structured fields immediately"

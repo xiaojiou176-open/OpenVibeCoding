@@ -7,9 +7,9 @@ from pathlib import Path
 
 import pytest
 
-from cortexpilot_orch.store import run_store
-from cortexpilot_orch.store.run_store import RunStore
-from cortexpilot_orch.store.run_store_primitives import write_atomic
+from openvibecoding_orch.store import run_store
+from openvibecoding_orch.store.run_store import RunStore
+from openvibecoding_orch.store.run_store_primitives import write_atomic
 
 
 def _read_lines(path: Path) -> list[str]:
@@ -25,7 +25,7 @@ def _sha256_bytes(payload: bytes) -> str:
 
 
 def test_run_store_creation(tmp_path: Path):
-    os.environ["CORTEXPILOT_RUNS_ROOT"] = str(tmp_path)
+    os.environ["OPENVIBECODING_RUNS_ROOT"] = str(tmp_path)
     store = RunStore()
     run_id = store.create_run("task_1")
     run_dir = tmp_path / run_id
@@ -38,7 +38,7 @@ def test_run_store_creation(tmp_path: Path):
 
 
 def test_run_store_append_events(tmp_path: Path):
-    os.environ["CORTEXPILOT_RUNS_ROOT"] = str(tmp_path)
+    os.environ["OPENVIBECODING_RUNS_ROOT"] = str(tmp_path)
     store = RunStore()
     run_id = store.create_run("task_2")
     store.append_event(
@@ -76,7 +76,7 @@ def test_run_store_append_events(tmp_path: Path):
 
 
 def test_run_store_append_only(tmp_path: Path):
-    os.environ["CORTEXPILOT_RUNS_ROOT"] = str(tmp_path)
+    os.environ["OPENVIBECODING_RUNS_ROOT"] = str(tmp_path)
     store = RunStore()
     run_id = store.create_run("task_3")
     store.append_event(
@@ -97,15 +97,15 @@ def test_run_store_append_only(tmp_path: Path):
 
 
 def test_run_store_contract_signature(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(tmp_path))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(tmp_path))
     store = RunStore()
     run_id = store.create_run("task_sig")
     contract_path = store.write_contract(run_id, {"task_id": "task_sig"})
 
-    monkeypatch.delenv("CORTEXPILOT_CONTRACT_HMAC_KEY", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_CONTRACT_HMAC_KEY", raising=False)
     assert store.write_contract_signature(run_id, contract_path) is None
 
-    monkeypatch.setenv("CORTEXPILOT_CONTRACT_HMAC_KEY", "secret")
+    monkeypatch.setenv("OPENVIBECODING_CONTRACT_HMAC_KEY", "secret")
     sig_path = store.write_contract_signature(run_id, contract_path)
     assert sig_path is not None
     assert sig_path.exists()
@@ -114,7 +114,7 @@ def test_run_store_contract_signature(tmp_path: Path, monkeypatch) -> None:
 
 
 def test_append_event_rolls_back_when_hashchain_append_fails(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(tmp_path))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(tmp_path))
     store = RunStore()
     run_id = store.create_run("task_hashchain_fail")
     events_path = tmp_path / run_id / "events.jsonl"
@@ -134,7 +134,7 @@ def test_append_event_rolls_back_when_hashchain_append_fails(tmp_path: Path, mon
 
 
 def test_append_event_keeps_primary_evidence_when_summary_update_fails(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(tmp_path))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(tmp_path))
     store = RunStore()
     run_id = store.create_run("task_summary_fail")
     events_path = tmp_path / run_id / "events.jsonl"
@@ -160,7 +160,7 @@ def test_append_event_keeps_primary_evidence_when_summary_update_fails(tmp_path:
 
 
 def test_rebuild_events_summary_clears_rebuild_marker(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(tmp_path))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(tmp_path))
     store = RunStore()
     run_id = store.create_run("task_summary_rebuild")
     marker_path = tmp_path / run_id / "reports" / "events_summary.rebuild_required.json"
@@ -187,7 +187,7 @@ def test_rebuild_events_summary_clears_rebuild_marker(tmp_path: Path, monkeypatc
 
 
 def test_module_helper_rebuild_events_summary_for_run(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(tmp_path))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(tmp_path))
     run_id = run_store.create_run_dir("task_summary_helper").name
     run_store.append_event(run_id, {"level": "INFO", "event": "STEP_STARTED", "run_id": run_id, "context": {}})
     rebuilt_path = run_store.rebuild_events_summary_for_run(run_id)
@@ -197,7 +197,7 @@ def test_module_helper_rebuild_events_summary_for_run(tmp_path: Path, monkeypatc
 def test_append_event_hashchain_failure_does_not_truncate_concurrent_append_from_other_store(
     tmp_path: Path, monkeypatch
 ) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(tmp_path))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(tmp_path))
     failing_store = RunStore(runs_root=tmp_path)
     peer_store = RunStore(runs_root=tmp_path)
     run_id = failing_store.create_run("task_hashchain_concurrency")
@@ -255,7 +255,7 @@ def test_append_event_hashchain_failure_does_not_truncate_concurrent_append_from
 def test_write_codex_session_map_preserves_task_entries_across_concurrent_writers(
     tmp_path: Path, monkeypatch
 ) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(tmp_path))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(tmp_path))
     first_store = RunStore(runs_root=tmp_path)
     second_store = RunStore(runs_root=tmp_path)
     run_id = first_store.create_run("task_session_map_race")
@@ -294,7 +294,7 @@ def test_write_atomic_fsyncs_parent_directory(tmp_path: Path, monkeypatch) -> No
         fsync_calls.append(fd)
         real_fsync(fd)
 
-    monkeypatch.setattr("cortexpilot_orch.store.run_store_primitives.os.fsync", _tracked_fsync)
+    monkeypatch.setattr("openvibecoding_orch.store.run_store_primitives.os.fsync", _tracked_fsync)
     write_atomic(target, b'{"ok":true}')
     assert target.read_text(encoding="utf-8") == '{"ok":true}'
     assert len(fsync_calls) >= 2

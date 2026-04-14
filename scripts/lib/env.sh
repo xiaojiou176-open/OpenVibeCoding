@@ -1,29 +1,29 @@
 #!/usr/bin/env bash
 
-if [[ -z "${__cortexpilot_env_bootstrapped:-}" ]]; then
-  __cortexpilot_env_bootstrapped=1
-  __cortexpilot_repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+if [[ -z "${__openvibecoding_env_bootstrapped:-}" ]]; then
+  __openvibecoding_env_bootstrapped=1
+  __openvibecoding_repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
   # Shared env bootstrap owns toolchain root resolution for shell entrypoints.
-  source "$__cortexpilot_repo_root/scripts/lib/toolchain_env.sh"
-  __cortexpilot_default_env_root="${CORTEXPILOT_DEFAULT_ENV_ROOT:-$HOME/.config/cortexpilot}"
-  for __cortexpilot_env_file in \
-    "${CORTEXPILOT_ENV_FILE:-}" \
-    "$__cortexpilot_default_env_root/.env.local" \
-    "$__cortexpilot_default_env_root/.env"; do
-    [[ -n "$__cortexpilot_env_file" ]] || continue
-    if [[ -f "$__cortexpilot_env_file" ]]; then
+  source "$__openvibecoding_repo_root/scripts/lib/toolchain_env.sh"
+  __openvibecoding_default_env_root="${OPENVIBECODING_DEFAULT_ENV_ROOT:-$HOME/.config/openvibecoding}"
+  for __openvibecoding_env_file in \
+    "${OPENVIBECODING_ENV_FILE:-}" \
+    "$__openvibecoding_default_env_root/.env.local" \
+    "$__openvibecoding_default_env_root/.env"; do
+    [[ -n "$__openvibecoding_env_file" ]] || continue
+    if [[ -f "$__openvibecoding_env_file" ]]; then
       set -a
       # shellcheck disable=SC1090
-      source "$__cortexpilot_env_file"
+      source "$__openvibecoding_env_file"
       set +a
     fi
   done
-  __cortexpilot_load_from_zsh_if_missing() {
+  __openvibecoding_load_from_zsh_if_missing() {
     local key="$1"
-    if [[ "${CORTEXPILOT_DISABLE_ZSH_ENV_FALLBACK:-0}" == "1" ]]; then
+    if [[ "${OPENVIBECODING_DISABLE_ZSH_ENV_FALLBACK:-0}" == "1" ]]; then
       return 0
     fi
-    if [[ "${CI:-}" == "1" || "${CI:-}" == "true" || "${GITHUB_ACTIONS:-}" == "1" ]] && [[ "${CORTEXPILOT_ALLOW_ZSH_ENV_FALLBACK_ON_CI:-0}" != "1" ]]; then
+    if [[ "${CI:-}" == "1" || "${CI:-}" == "true" || "${GITHUB_ACTIONS:-}" == "1" ]] && [[ "${OPENVIBECODING_ALLOW_ZSH_ENV_FALLBACK_ON_CI:-0}" != "1" ]]; then
       return 0
     fi
     if [[ -n "${!key:-}" ]]; then
@@ -70,26 +70,26 @@ if [[ -z "${__cortexpilot_env_bootstrapped:-}" ]]; then
     export "$key=$raw"
   }
   # Global-shell fallback for live tests: when current process env/.env is empty, try zsh login env.
-  __cortexpilot_load_from_zsh_if_missing "GEMINI_API_KEY"
-  __cortexpilot_load_from_zsh_if_missing "OPENAI_API_KEY"
-  __cortexpilot_load_from_zsh_if_missing "ANTHROPIC_API_KEY"
-  export CORTEXPILOT_MACHINE_CACHE_ROOT="${CORTEXPILOT_MACHINE_CACHE_ROOT:-$(cortexpilot_machine_cache_root "$__cortexpilot_repo_root")}"
-  export CORTEXPILOT_TOOLCHAIN_CACHE_ROOT="${CORTEXPILOT_TOOLCHAIN_CACHE_ROOT:-$(cortexpilot_toolchain_cache_root "$__cortexpilot_repo_root")}"
-  export CORTEXPILOT_PNPM_STORE_DIR="${CORTEXPILOT_PNPM_STORE_DIR:-$(cortexpilot_pnpm_store_dir "$__cortexpilot_repo_root")}"
-  export PLAYWRIGHT_BROWSERS_PATH="${PLAYWRIGHT_BROWSERS_PATH:-$(cortexpilot_playwright_browsers_path "$__cortexpilot_repo_root")}"
-  export CARGO_HOME="${CARGO_HOME:-$(cortexpilot_cargo_home "$__cortexpilot_repo_root")}"
-  if __cortexpilot_python_bin="$(cortexpilot_python_bin "$__cortexpilot_repo_root" 2>/dev/null)"; then
-    export CORTEXPILOT_PYTHON="${CORTEXPILOT_PYTHON:-$__cortexpilot_python_bin}"
-    export VIRTUAL_ENV="${VIRTUAL_ENV:-$(cortexpilot_python_venv_root "$__cortexpilot_repo_root")}"
+  __openvibecoding_load_from_zsh_if_missing "GEMINI_API_KEY"
+  __openvibecoding_load_from_zsh_if_missing "OPENAI_API_KEY"
+  __openvibecoding_load_from_zsh_if_missing "ANTHROPIC_API_KEY"
+  export OPENVIBECODING_MACHINE_CACHE_ROOT="${OPENVIBECODING_MACHINE_CACHE_ROOT:-$(openvibecoding_machine_cache_root "$__openvibecoding_repo_root")}"
+  export OPENVIBECODING_TOOLCHAIN_CACHE_ROOT="${OPENVIBECODING_TOOLCHAIN_CACHE_ROOT:-$(openvibecoding_toolchain_cache_root "$__openvibecoding_repo_root")}"
+  export OPENVIBECODING_PNPM_STORE_DIR="${OPENVIBECODING_PNPM_STORE_DIR:-$(openvibecoding_pnpm_store_dir "$__openvibecoding_repo_root")}"
+  export PLAYWRIGHT_BROWSERS_PATH="${PLAYWRIGHT_BROWSERS_PATH:-$(openvibecoding_playwright_browsers_path "$__openvibecoding_repo_root")}"
+  export CARGO_HOME="${CARGO_HOME:-$(openvibecoding_cargo_home "$__openvibecoding_repo_root")}"
+  if __openvibecoding_python_bin="$(openvibecoding_python_bin "$__openvibecoding_repo_root" 2>/dev/null)"; then
+    export OPENVIBECODING_PYTHON="${OPENVIBECODING_PYTHON:-$__openvibecoding_python_bin}"
+    export VIRTUAL_ENV="${VIRTUAL_ENV:-$(openvibecoding_python_venv_root "$__openvibecoding_repo_root")}"
   fi
-  unset -f __cortexpilot_load_from_zsh_if_missing
-  unset __cortexpilot_python_bin
-  unset __cortexpilot_repo_root
-  unset __cortexpilot_env_file
-  unset __cortexpilot_default_env_root
+  unset -f __openvibecoding_load_from_zsh_if_missing
+  unset __openvibecoding_python_bin
+  unset __openvibecoding_repo_root
+  unset __openvibecoding_env_file
+  unset __openvibecoding_default_env_root
 fi
 
-cortexpilot_env_get() {
+openvibecoding_env_get() {
   local name="$1"
   local default_value="${2:-}"
   local value="${!name-}"
@@ -100,14 +100,14 @@ cortexpilot_env_get() {
   printf "%s" "$default_value"
 }
 
-cortexpilot_env_is_true() {
+openvibecoding_env_is_true() {
   local raw="${1:-}"
   raw="$(printf "%s" "$raw" | tr '[:upper:]' '[:lower:]')"
   [[ "$raw" == "1" || "$raw" == "true" || "$raw" == "yes" || "$raw" == "on" ]]
 }
 
-cortexpilot_env_normalize_bool() {
-  if cortexpilot_env_is_true "$1"; then
+openvibecoding_env_normalize_bool() {
+  if openvibecoding_env_is_true "$1"; then
     printf "true"
     return
   fi

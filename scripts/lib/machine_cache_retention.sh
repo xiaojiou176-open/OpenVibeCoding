@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-cortexpilot_machine_cache_auto_prune_interval_sec() {
-  local raw="${CORTEXPILOT_MACHINE_CACHE_AUTO_PRUNE_INTERVAL_SEC:-1800}"
+openvibecoding_machine_cache_auto_prune_interval_sec() {
+  local raw="${OPENVIBECODING_MACHINE_CACHE_AUTO_PRUNE_INTERVAL_SEC:-1800}"
   if [[ "$raw" =~ ^[0-9]+$ ]]; then
     printf '%s\n' "$raw"
     return 0
@@ -9,8 +9,8 @@ cortexpilot_machine_cache_auto_prune_interval_sec() {
   printf '1800\n'
 }
 
-cortexpilot_machine_cache_auto_prune_enabled() {
-  local raw="${CORTEXPILOT_MACHINE_CACHE_AUTO_PRUNE:-1}"
+openvibecoding_machine_cache_auto_prune_enabled() {
+  local raw="${OPENVIBECODING_MACHINE_CACHE_AUTO_PRUNE:-1}"
   local normalized
   normalized="$(printf '%s' "$raw" | tr '[:upper:]' '[:lower:]')"
   case "$normalized" in
@@ -23,32 +23,32 @@ cortexpilot_machine_cache_auto_prune_enabled() {
   esac
 }
 
-cortexpilot_machine_cache_auto_prune_state_dir() {
+openvibecoding_machine_cache_auto_prune_state_dir() {
   local root_dir="${1:?root_dir required}"
   local machine_root
-  machine_root="$(cortexpilot_machine_cache_root "$root_dir")"
+  machine_root="$(openvibecoding_machine_cache_root "$root_dir")"
   printf '%s\n' "${machine_root}/retention-auto-prune"
 }
 
-cortexpilot_maybe_auto_prune_machine_cache() {
+openvibecoding_maybe_auto_prune_machine_cache() {
   local root_dir="${1:?root_dir required}"
   local reason="${2:-auto}"
 
-  if ! cortexpilot_machine_cache_auto_prune_enabled; then
+  if ! openvibecoding_machine_cache_auto_prune_enabled; then
     return 0
   fi
-  if [[ "${CORTEXPILOT_MACHINE_CACHE_AUTO_PRUNE_RUNNING:-0}" == "1" ]]; then
+  if [[ "${OPENVIBECODING_MACHINE_CACHE_AUTO_PRUNE_RUNNING:-0}" == "1" ]]; then
     return 0
   fi
 
   local interval_sec
-  interval_sec="$(cortexpilot_machine_cache_auto_prune_interval_sec)"
+  interval_sec="$(openvibecoding_machine_cache_auto_prune_interval_sec)"
   if [[ ! "$interval_sec" =~ ^[0-9]+$ ]] || (( interval_sec <= 0 )); then
     return 0
   fi
 
   local state_dir
-  state_dir="$(cortexpilot_machine_cache_auto_prune_state_dir "$root_dir")"
+  state_dir="$(openvibecoding_machine_cache_auto_prune_state_dir "$root_dir")"
   local lock_dir="${state_dir}/lock"
   local lock_owner_file="${lock_dir}/owner"
   local state_json="${state_dir}/state.json"
@@ -90,16 +90,16 @@ EOF
   local note="cleanup_runtime apply completed"
   printf '%s\n' "$now_epoch" >"$stamp_file"
   local python_bin=""
-  python_bin="$(cortexpilot_python_bin "$root_dir" 2>/dev/null || true)"
+  python_bin="$(openvibecoding_python_bin "$root_dir" 2>/dev/null || true)"
   if [[ ! -x "$python_bin" ]]; then
     prune_status="skip"
     note="managed python toolchain missing; defer auto-prune until bootstrap finishes"
   elif ! (
     cd "$root_dir"
-    export CORTEXPILOT_MACHINE_CACHE_AUTO_PRUNE_RUNNING=1
-    export CORTEXPILOT_CLEANUP_CONFIRM=YES
-    export CORTEXPILOT_CLEANUP_ROOT_NOISE=0
-    export CORTEXPILOT_CLEANUP_CONTRACT_ARTIFACTS=0
+    export OPENVIBECODING_MACHINE_CACHE_AUTO_PRUNE_RUNNING=1
+    export OPENVIBECODING_CLEANUP_CONFIRM=YES
+    export OPENVIBECODING_CLEANUP_ROOT_NOISE=0
+    export OPENVIBECODING_CLEANUP_CONTRACT_ARTIFACTS=0
     bash scripts/cleanup_runtime.sh apply
   ) >>"$log_path" 2>&1; then
     prune_status="warn"

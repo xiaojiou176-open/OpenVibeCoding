@@ -1,5 +1,5 @@
 // GENERATED FILE. DO NOT EDIT.
-// Source: docs/api/openapi.cortexpilot.json
+// Source: docs/api/openapi.openvibecoding.json
 
 export const PM_JOURNEY_STAGES = [
   "discover",

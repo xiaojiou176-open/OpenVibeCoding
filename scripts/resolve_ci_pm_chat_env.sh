@@ -4,30 +4,30 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
-if [[ "${CORTEXPILOT_CI_PM_CHAT_DISABLE_ZSH_ENV:-0}" == "1" ]]; then
-  export CORTEXPILOT_DISABLE_ZSH_ENV_FALLBACK=1
+if [[ "${OPENVIBECODING_CI_PM_CHAT_DISABLE_ZSH_ENV:-0}" == "1" ]]; then
+  export OPENVIBECODING_DISABLE_ZSH_ENV_FALLBACK=1
 fi
-if [[ "${CORTEXPILOT_CI_PM_CHAT_DISABLE_DOTENV:-0}" == "1" && -z "${CORTEXPILOT_DEFAULT_ENV_ROOT:-}" ]]; then
-  export CORTEXPILOT_DEFAULT_ENV_ROOT="${TMPDIR:-/tmp}/cortexpilot-empty-env-root"
-  mkdir -p "${CORTEXPILOT_DEFAULT_ENV_ROOT}"
+if [[ "${OPENVIBECODING_CI_PM_CHAT_DISABLE_DOTENV:-0}" == "1" && -z "${OPENVIBECODING_DEFAULT_ENV_ROOT:-}" ]]; then
+  export OPENVIBECODING_DEFAULT_ENV_ROOT="${TMPDIR:-/tmp}/openvibecoding-empty-env-root"
+  mkdir -p "${OPENVIBECODING_DEFAULT_ENV_ROOT}"
 fi
 
 source "$ROOT_DIR/scripts/lib/env.sh"
 
-codex_config_path="${CORTEXPILOT_CODEX_CONFIG_PATH:-$HOME/.codex/config.toml}"
+codex_config_path="${OPENVIBECODING_CODEX_CONFIG_PATH:-$HOME/.codex/config.toml}"
 codex_cfg_base_url=""
 codex_cfg_provider=""
 codex_cfg_model=""
 codex_cfg_has_key="0"
 codex_cfg_key_source="none"
-PYTHON_BIN="${CORTEXPILOT_CI_PM_CHAT_PYTHON_BIN:-}"
+PYTHON_BIN="${OPENVIBECODING_CI_PM_CHAT_PYTHON_BIN:-}"
 
 load_env_var_from_dotenv_if_missing() {
   local key="$1"
   if is_mainline_context; then
     return 0
   fi
-  if [[ "${CORTEXPILOT_CI_PM_CHAT_DISABLE_DOTENV:-0}" == "1" ]]; then
+  if [[ "${OPENVIBECODING_CI_PM_CHAT_DISABLE_DOTENV:-0}" == "1" ]]; then
     return 0
   fi
   if [[ -n "${!key:-}" ]]; then
@@ -100,7 +100,7 @@ is_mainline_context() {
   if is_truthy "${CI:-0}"; then
     return 0
   fi
-  if [[ "${CORTEXPILOT_CI_PROFILE:-}" == "strict" ]]; then
+  if [[ "${OPENVIBECODING_CI_PROFILE:-}" == "strict" ]]; then
     return 0
   fi
   if [[ "${GITHUB_REF_NAME:-}" == "main" || "${GITHUB_BASE_REF:-}" == "main" ]]; then
@@ -161,8 +161,8 @@ is_known_provider() {
 }
 
 if [[ -z "$PYTHON_BIN" ]]; then
-  if [[ -n "${CORTEXPILOT_PYTHON:-}" ]] && [[ -x "${CORTEXPILOT_PYTHON}" ]] && "${CORTEXPILOT_PYTHON}" -c "pass" >/dev/null 2>&1; then
-    PYTHON_BIN="${CORTEXPILOT_PYTHON}"
+  if [[ -n "${OPENVIBECODING_PYTHON:-}" ]] && [[ -x "${OPENVIBECODING_PYTHON}" ]] && "${OPENVIBECODING_PYTHON}" -c "pass" >/dev/null 2>&1; then
+    PYTHON_BIN="${OPENVIBECODING_PYTHON}"
   elif command -v python3 >/dev/null 2>&1; then
     PYTHON_BIN="python3"
   else
@@ -175,7 +175,7 @@ for key in GEMINI_API_KEY OPENAI_API_KEY ANTHROPIC_API_KEY; do
   load_env_var_from_dotenv_if_missing "$key"
 done
 
-if [[ -n "$PYTHON_BIN" ]] && [[ "${CORTEXPILOT_CI_PM_CHAT_DISABLE_CODEX_CONFIG:-0}" != "1" ]] && ! is_mainline_context && [[ -f "$codex_config_path" ]]; then
+if [[ -n "$PYTHON_BIN" ]] && [[ "${OPENVIBECODING_CI_PM_CHAT_DISABLE_CODEX_CONFIG:-0}" != "1" ]] && ! is_mainline_context && [[ -f "$codex_config_path" ]]; then
   codex_cfg_rows="$(
     "$PYTHON_BIN" - "$codex_config_path" <<'PY'
 import pathlib
@@ -283,23 +283,23 @@ PY
 fi
 
 PROVIDER_ENV_CHAIN=(
-  CORTEXPILOT_CI_PM_CHAT_PROVIDER
-  CORTEXPILOT_E2E_CODEX_PROVIDER
-  CORTEXPILOT_PROVIDER
+  OPENVIBECODING_CI_PM_CHAT_PROVIDER
+  OPENVIBECODING_E2E_CODEX_PROVIDER
+  OPENVIBECODING_PROVIDER
 )
 RUNTIME_PROVIDER_ENV_CHAIN=(
-  CORTEXPILOT_CI_PM_CHAT_RUNTIME_OPTIONS_PROVIDER
-  CORTEXPILOT_RUNTIME_OPTIONS_PROVIDER
-  CORTEXPILOT_E2E_RUNTIME_OPTIONS_PROVIDER
+  OPENVIBECODING_CI_PM_CHAT_RUNTIME_OPTIONS_PROVIDER
+  OPENVIBECODING_RUNTIME_OPTIONS_PROVIDER
+  OPENVIBECODING_E2E_RUNTIME_OPTIONS_PROVIDER
 )
 BASE_URL_ENV_CHAIN=(
-  CORTEXPILOT_CI_PM_CHAT_BASE_URL
-  CORTEXPILOT_E2E_CODEX_BASE_URL
+  OPENVIBECODING_CI_PM_CHAT_BASE_URL
+  OPENVIBECODING_E2E_CODEX_BASE_URL
 )
 MODEL_ENV_CHAIN=(
-  CORTEXPILOT_CI_PM_CHAT_MODEL
-  CORTEXPILOT_E2E_CODEX_MODEL
-  CORTEXPILOT_MODEL
+  OPENVIBECODING_CI_PM_CHAT_MODEL
+  OPENVIBECODING_E2E_CODEX_MODEL
+  OPENVIBECODING_MODEL
 )
 
 IFS=$'\t' read -r ENV_PROVIDER_SOURCE ENV_PROVIDER_RAW ENV_PROVIDER_NORM <<<"$(resolve_with_precedence normalize_provider "${PROVIDER_ENV_CHAIN[@]}")"
@@ -362,21 +362,21 @@ if [[ -n "${GEMINI_API_KEY:-}" ]] || [[ -n "${GOOGLE_API_KEY:-}" ]] || [[ "$code
 fi
 
 pm_chat_mode_default="real"
-if ! is_mainline_context && [[ "$has_llm_key" != "1" ]] && [[ -z "${CORTEXPILOT_CI_PM_CHAT_MODE:-}" ]]; then
+if ! is_mainline_context && [[ "$has_llm_key" != "1" ]] && [[ -z "${OPENVIBECODING_CI_PM_CHAT_MODE:-}" ]]; then
   pm_chat_mode_default="mock"
 fi
 
-pm_chat_mode="${CORTEXPILOT_CI_PM_CHAT_MODE:-$pm_chat_mode_default}"
-pm_chat_runner="${CORTEXPILOT_CI_PM_CHAT_RUNNER:-agents}"
-pm_chat_web_mode="${CORTEXPILOT_CI_PM_CHAT_WEB_MODE:-prod}"
+pm_chat_mode="${OPENVIBECODING_CI_PM_CHAT_MODE:-$pm_chat_mode_default}"
+pm_chat_runner="${OPENVIBECODING_CI_PM_CHAT_RUNNER:-agents}"
+pm_chat_web_mode="${OPENVIBECODING_CI_PM_CHAT_WEB_MODE:-prod}"
 pm_chat_runtime_provider="${ENV_RUNTIME_PROVIDER_NORM:-$RESOLVED_PROVIDER}"
 
 pm_chat_requires_key="0"
 pm_chat_requires_gemini_key="0"
-if [[ "$pm_chat_mode" == "real" ]] && [[ "$has_llm_key" != "1" ]] && [[ "${CORTEXPILOT_CI_PM_CHAT_ALLOW_MISSING_KEY:-0}" != "1" ]]; then
+if [[ "$pm_chat_mode" == "real" ]] && [[ "$has_llm_key" != "1" ]] && [[ "${OPENVIBECODING_CI_PM_CHAT_ALLOW_MISSING_KEY:-0}" != "1" ]]; then
   pm_chat_requires_key="1"
 fi
-if [[ "$pm_chat_mode" == "real" ]] && [[ "$pm_chat_runtime_provider" == "gemini" ]] && [[ "$has_gemini_key" != "1" ]] && [[ "${CORTEXPILOT_CI_PM_CHAT_ALLOW_MISSING_KEY:-0}" != "1" ]]; then
+if [[ "$pm_chat_mode" == "real" ]] && [[ "$pm_chat_runtime_provider" == "gemini" ]] && [[ "$has_gemini_key" != "1" ]] && [[ "${OPENVIBECODING_CI_PM_CHAT_ALLOW_MISSING_KEY:-0}" != "1" ]]; then
   pm_chat_requires_key="1"
   pm_chat_requires_gemini_key="1"
 fi

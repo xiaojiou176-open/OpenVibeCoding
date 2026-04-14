@@ -6,17 +6,17 @@
     <title>OpenVibeCoding | The open command tower for AI engineering</title>
     <meta
       name="description"
-      content="Stop babysitting AI coding work. OpenVibeCoding is the open command tower for AI engineering: the public shell for the CortexPilot runtime that helps teams plan / delegate / track / resume / prove long-running Codex and Claude Code work with Workflow Cases, read-only MCP truth, and replayable proof."
+      content="Stop babysitting AI coding work. OpenVibeCoding is the open command tower for AI engineering that helps teams plan / delegate / track / resume / prove long-running Codex and Claude Code work with Workflow Cases, read-only MCP truth, and replayable proof."
     />
     <meta
       name="keywords"
-      content="OpenVibeCoding, CortexPilot runtime, open command tower for AI engineering, Codex, Claude Code, MCP, Model Context Protocol, Workflow Cases, proof and replay, prompt engineering, context engineering, harness engineering"
+      content="OpenVibeCoding, open command tower for AI engineering, Codex, Claude Code, MCP, Model Context Protocol, Workflow Cases, proof and replay, prompt engineering, context engineering, harness engineering"
     />
     <link rel="canonical" href="https://xiaojiou176-open.github.io/OpenVibeCoding/" />
     <meta property="og:title" content="OpenVibeCoding | The open command tower for AI engineering" />
     <meta
       property="og:description"
-      content="The open command tower for AI engineering. OpenVibeCoding keeps long-running Codex and Claude Code work moving with Workflow Cases, read-only MCP truth, and proof-first replay on top of the CortexPilot runtime."
+      content="The open command tower for AI engineering. OpenVibeCoding keeps long-running Codex and Claude Code work moving with Workflow Cases, read-only MCP truth, and proof-first replay."
     />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://xiaojiou176-open.github.io/OpenVibeCoding/" />
@@ -34,7 +34,7 @@
         "@type": "WebSite",
         "name": "OpenVibeCoding",
         "url": "https://xiaojiou176-open.github.io/OpenVibeCoding/",
-        "description": "The open command tower for AI engineering. OpenVibeCoding is the public shell for the CortexPilot runtime and helps teams plan / delegate / track / resume / prove long-running Codex and Claude Code work with Workflow Cases, read-only MCP truth, and replayable proof.",
+        "description": "The open command tower for AI engineering. OpenVibeCoding helps teams plan / delegate / track / resume / prove long-running Codex and Claude Code work with Workflow Cases, read-only MCP truth, and replayable proof.",
         "keywords": [
           "Codex",
           "Claude Code",
@@ -59,7 +59,7 @@
             "name": "Is OpenVibeCoding an official Codex or Claude Code plugin?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "No. OpenVibeCoding is the public shell for the CortexPilot repo/runtime. Codex now has official plugin surfaces and OpenClaw has official plugin and skills surfaces, but the current public story still ships workflow-aligned integrations, repo-owned skills, read-only MCP, and local bundle examples rather than a published listing."
+              "text": "No. OpenVibeCoding is the current repo and product surface. Codex now has official plugin surfaces and OpenClaw has official plugin and skills surfaces, but the current public story still ships workflow-aligned integrations, repo-owned skills, read-only MCP, and local bundle examples rather than a published listing."
             }
           },
           {
@@ -67,7 +67,7 @@
             "name": "Is the public MCP surface write-capable?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "No. OpenVibeCoding's current public MCP contract is read-only, and write-capable mutation on the underlying CortexPilot runtime remains outside the public promise."
+              "text": "No. OpenVibeCoding's current public MCP contract is read-only, and write-capable mutation remains outside the public promise."
             }
           },
           {
@@ -275,15 +275,15 @@
         </nav>
         <h1>The open command tower for AI engineering.</h1>
         <p class="lede">
-          Stop babysitting AI coding work. OpenVibeCoding is the public shell for the CortexPilot runtime.
+          Stop babysitting AI coding work. OpenVibeCoding is the command tower for AI engineering.
           AI coding does not lack models. It lacks a command tower. It helps teams
           <strong>plan / delegate / track / resume / prove</strong> long-running work across
           Codex and Claude Code by turning PM request -&gt; Workflow Case -&gt; Proof &amp; Replay
           into one governed command-tower loop.
         </p>
         <p class="caption">
-          Current boundary: OpenVibeCoding is a repo-backed public shell over the CortexPilot runtime and a
-          repo-backed operator control plane, not a hosted product, and the shipped MCP surface remains read-only.
+          Current boundary: OpenVibeCoding is a repo-backed operator control plane, not a hosted product,
+          and the shipped MCP surface remains read-only.
         </p>
         <p class="caption">
           Official distribution today is the public repo, the Pages front door, one proven workflow
@@ -383,11 +383,11 @@
         <div class="grid">
           <article class="grid-card">
             <h3>Is OpenVibeCoding an official Codex or Claude Code plugin?</h3>
-            <p>Not today. OpenVibeCoding is the public shell for the CortexPilot repo/runtime. Codex now has official plugin surfaces and OpenClaw has official plugin and skills surfaces, but the current public story still ships workflow-aligned integrations, repo-owned skills, read-only MCP, and local bundle examples rather than a published listing.</p>
+            <p>Not today. OpenVibeCoding is the current repo and product surface. Codex now has official plugin surfaces and OpenClaw has official plugin and skills surfaces, but the current public story still ships workflow-aligned integrations, repo-owned skills, read-only MCP, and local bundle examples rather than a published listing.</p>
           </article>
           <article class="grid-card">
             <h3>Is the public MCP surface write-capable?</h3>
-            <p>OpenVibeCoding's current public MCP contract is read-only, and write-capable mutation on the underlying CortexPilot runtime remains outside the public promise.</p>
+            <p>OpenVibeCoding's current public MCP contract is read-only, and write-capable mutation remains outside the public promise.</p>
           </article>
           <article class="grid-card">
             <h3>Where does OpenClaw fit today?</h3>
@@ -458,7 +458,7 @@
         </p>
         <ol>
           <li><code>npm run bootstrap:host</code></li>
-          <li><code>CORTEXPILOT_HOST_COMPAT=1 bash scripts/test_quick.sh --no-related</code></li>
+          <li><code>OPENVIBECODING_HOST_COMPAT=1 bash scripts/test_quick.sh --no-related</code></li>
           <li><code>npm run dev</code></li>
         </ol>
         <p class="caption">

@@ -2,12 +2,12 @@
 
 run_ci_ui_full_gemini_audit() {
   local run_id_prefix="${1:-ci_ui_full_gemini}"
-  local ui_full_audit_parallel="${CORTEXPILOT_CI_UI_FULL_AUDIT_PARALLEL:-1}"
-  local ui_full_budget_profile="${CORTEXPILOT_CI_UI_FULL_AUDIT_BUDGET_PROFILE:-auto}"
+  local ui_full_audit_parallel="${OPENVIBECODING_CI_UI_FULL_AUDIT_PARALLEL:-1}"
+  local ui_full_budget_profile="${OPENVIBECODING_CI_UI_FULL_AUDIT_BUDGET_PROFILE:-auto}"
   local ci_mode="${CI:-}"
   local ci_default_budget="0"
   if [ "$ui_full_budget_profile" = "auto" ]; then
-    if [ "${CORTEXPILOT_CI_NIGHTLY_FULL:-0}" = "1" ]; then
+    if [ "${OPENVIBECODING_CI_NIGHTLY_FULL:-0}" = "1" ]; then
       ui_full_budget_profile="nightly_full"
     else
       ui_full_budget_profile="pr"
@@ -22,75 +22,75 @@ run_ci_ui_full_gemini_audit() {
   if [ -n "$ci_mode" ]; then
     ci_default_budget="1"
     if [ "$ui_full_budget_profile" = "nightly_full" ]; then
-      ui_full_audit_default_shards="${CORTEXPILOT_CI_UI_FULL_AUDIT_NIGHTLY_SHARDS:-$ui_full_audit_shard_baseline}"
-      ui_full_audit_default_max_routes="${CORTEXPILOT_CI_UI_FULL_AUDIT_NIGHTLY_MAX_ROUTES:-32}"
-      ui_full_audit_default_max_buttons_per_page="${CORTEXPILOT_CI_UI_FULL_AUDIT_NIGHTLY_MAX_BUTTONS_PER_PAGE:-120}"
-      ui_full_audit_default_max_interactions="${CORTEXPILOT_CI_UI_FULL_AUDIT_NIGHTLY_MAX_INTERACTIONS:-300}"
-      ui_full_audit_default_max_runtime_sec="${CORTEXPILOT_CI_UI_FULL_AUDIT_NIGHTLY_MAX_RUNTIME_SEC:-2400}"
+      ui_full_audit_default_shards="${OPENVIBECODING_CI_UI_FULL_AUDIT_NIGHTLY_SHARDS:-$ui_full_audit_shard_baseline}"
+      ui_full_audit_default_max_routes="${OPENVIBECODING_CI_UI_FULL_AUDIT_NIGHTLY_MAX_ROUTES:-32}"
+      ui_full_audit_default_max_buttons_per_page="${OPENVIBECODING_CI_UI_FULL_AUDIT_NIGHTLY_MAX_BUTTONS_PER_PAGE:-120}"
+      ui_full_audit_default_max_interactions="${OPENVIBECODING_CI_UI_FULL_AUDIT_NIGHTLY_MAX_INTERACTIONS:-300}"
+      ui_full_audit_default_max_runtime_sec="${OPENVIBECODING_CI_UI_FULL_AUDIT_NIGHTLY_MAX_RUNTIME_SEC:-2400}"
     elif [ "$ui_full_budget_profile" = "pr" ]; then
-      ui_full_audit_default_shards="${CORTEXPILOT_CI_UI_FULL_AUDIT_PR_SHARDS:-$ui_full_audit_shard_baseline}"
-      ui_full_audit_default_max_routes="${CORTEXPILOT_CI_UI_FULL_AUDIT_PR_MAX_ROUTES:-16}"
-      ui_full_audit_default_max_buttons_per_page="${CORTEXPILOT_CI_UI_FULL_AUDIT_PR_MAX_BUTTONS_PER_PAGE:-120}"
-      ui_full_audit_default_max_interactions="${CORTEXPILOT_CI_UI_FULL_AUDIT_PR_MAX_INTERACTIONS:-120}"
-      ui_full_audit_default_max_runtime_sec="${CORTEXPILOT_CI_UI_FULL_AUDIT_PR_MAX_RUNTIME_SEC:-1200}"
+      ui_full_audit_default_shards="${OPENVIBECODING_CI_UI_FULL_AUDIT_PR_SHARDS:-$ui_full_audit_shard_baseline}"
+      ui_full_audit_default_max_routes="${OPENVIBECODING_CI_UI_FULL_AUDIT_PR_MAX_ROUTES:-16}"
+      ui_full_audit_default_max_buttons_per_page="${OPENVIBECODING_CI_UI_FULL_AUDIT_PR_MAX_BUTTONS_PER_PAGE:-120}"
+      ui_full_audit_default_max_interactions="${OPENVIBECODING_CI_UI_FULL_AUDIT_PR_MAX_INTERACTIONS:-120}"
+      ui_full_audit_default_max_runtime_sec="${OPENVIBECODING_CI_UI_FULL_AUDIT_PR_MAX_RUNTIME_SEC:-1200}"
     else
-      echo "❌ [ci] unsupported CORTEXPILOT_CI_UI_FULL_AUDIT_BUDGET_PROFILE=${ui_full_budget_profile}. expected: auto|pr|nightly_full"
+      echo "❌ [ci] unsupported OPENVIBECODING_CI_UI_FULL_AUDIT_BUDGET_PROFILE=${ui_full_budget_profile}. expected: auto|pr|nightly_full"
       return 1
     fi
   elif [ "$ui_full_budget_profile" != "pr" ] && [ "$ui_full_budget_profile" != "nightly_full" ]; then
-    echo "❌ [ci] unsupported CORTEXPILOT_CI_UI_FULL_AUDIT_BUDGET_PROFILE=${ui_full_budget_profile}. expected: auto|pr|nightly_full"
+    echo "❌ [ci] unsupported OPENVIBECODING_CI_UI_FULL_AUDIT_BUDGET_PROFILE=${ui_full_budget_profile}. expected: auto|pr|nightly_full"
     return 1
   fi
   if ! is_ci_environment && [ "$CI_PROFILE" = "prepush" ]; then
-    ui_full_audit_default_shards="${CORTEXPILOT_CI_UI_FULL_AUDIT_PREPUSH_SHARDS:-$ui_full_audit_shard_baseline}"
-    ui_full_audit_default_max_routes="${CORTEXPILOT_CI_UI_FULL_AUDIT_PREPUSH_MAX_ROUTES:-8}"
-    ui_full_audit_default_max_buttons_per_page="${CORTEXPILOT_CI_UI_FULL_AUDIT_PREPUSH_MAX_BUTTONS_PER_PAGE:-120}"
-    ui_full_audit_default_max_interactions="${CORTEXPILOT_CI_UI_FULL_AUDIT_PREPUSH_MAX_INTERACTIONS:-80}"
-    ui_full_audit_default_max_runtime_sec="${CORTEXPILOT_CI_UI_FULL_AUDIT_PREPUSH_MAX_RUNTIME_SEC:-900}"
+    ui_full_audit_default_shards="${OPENVIBECODING_CI_UI_FULL_AUDIT_PREPUSH_SHARDS:-$ui_full_audit_shard_baseline}"
+    ui_full_audit_default_max_routes="${OPENVIBECODING_CI_UI_FULL_AUDIT_PREPUSH_MAX_ROUTES:-8}"
+    ui_full_audit_default_max_buttons_per_page="${OPENVIBECODING_CI_UI_FULL_AUDIT_PREPUSH_MAX_BUTTONS_PER_PAGE:-120}"
+    ui_full_audit_default_max_interactions="${OPENVIBECODING_CI_UI_FULL_AUDIT_PREPUSH_MAX_INTERACTIONS:-80}"
+    ui_full_audit_default_max_runtime_sec="${OPENVIBECODING_CI_UI_FULL_AUDIT_PREPUSH_MAX_RUNTIME_SEC:-900}"
   fi
-  local ui_full_audit_shards="${CORTEXPILOT_CI_UI_FULL_AUDIT_SHARDS:-$ui_full_audit_default_shards}"
-  local ui_full_audit_reuse_running_services="${CORTEXPILOT_CI_UI_FULL_AUDIT_REUSE_RUNNING_SERVICES:-1}"
-  local ui_full_audit_max_routes="${CORTEXPILOT_CI_UI_FULL_AUDIT_MAX_ROUTES:-$ui_full_audit_default_max_routes}"
-  local ui_full_audit_max_buttons_per_page="${CORTEXPILOT_CI_UI_FULL_AUDIT_MAX_BUTTONS_PER_PAGE:-$ui_full_audit_default_max_buttons_per_page}"
-  local ui_full_audit_max_interactions="${CORTEXPILOT_CI_UI_FULL_AUDIT_MAX_INTERACTIONS:-$ui_full_audit_default_max_interactions}"
-  local ui_full_audit_max_runtime_sec="${CORTEXPILOT_CI_UI_FULL_AUDIT_MAX_RUNTIME_SEC:-$ui_full_audit_default_max_runtime_sec}"
-  local ui_full_audit_max_duplicate_targets="${CORTEXPILOT_CI_UI_FULL_AUDIT_MAX_DUPLICATE_TARGETS:-3}"
-  local ui_full_route_sampling_mode_raw="${CORTEXPILOT_CI_UI_FULL_AUDIT_ROUTE_SAMPLING_MODE:-auto}"
+  local ui_full_audit_shards="${OPENVIBECODING_CI_UI_FULL_AUDIT_SHARDS:-$ui_full_audit_default_shards}"
+  local ui_full_audit_reuse_running_services="${OPENVIBECODING_CI_UI_FULL_AUDIT_REUSE_RUNNING_SERVICES:-1}"
+  local ui_full_audit_max_routes="${OPENVIBECODING_CI_UI_FULL_AUDIT_MAX_ROUTES:-$ui_full_audit_default_max_routes}"
+  local ui_full_audit_max_buttons_per_page="${OPENVIBECODING_CI_UI_FULL_AUDIT_MAX_BUTTONS_PER_PAGE:-$ui_full_audit_default_max_buttons_per_page}"
+  local ui_full_audit_max_interactions="${OPENVIBECODING_CI_UI_FULL_AUDIT_MAX_INTERACTIONS:-$ui_full_audit_default_max_interactions}"
+  local ui_full_audit_max_runtime_sec="${OPENVIBECODING_CI_UI_FULL_AUDIT_MAX_RUNTIME_SEC:-$ui_full_audit_default_max_runtime_sec}"
+  local ui_full_audit_max_duplicate_targets="${OPENVIBECODING_CI_UI_FULL_AUDIT_MAX_DUPLICATE_TARGETS:-3}"
+  local ui_full_route_sampling_mode_raw="${OPENVIBECODING_CI_UI_FULL_AUDIT_ROUTE_SAMPLING_MODE:-auto}"
   local ui_full_route_sampling_mode="stratified"
   if [ "$ui_full_route_sampling_mode_raw" = "auto" ]; then
     ui_full_route_sampling_mode="stratified"
   elif [ "$ui_full_route_sampling_mode_raw" = "off" ] || [ "$ui_full_route_sampling_mode_raw" = "stratified" ]; then
     ui_full_route_sampling_mode="$ui_full_route_sampling_mode_raw"
   else
-    echo "❌ [ci] unsupported CORTEXPILOT_CI_UI_FULL_AUDIT_ROUTE_SAMPLING_MODE=${ui_full_route_sampling_mode_raw}. expected: auto|off|stratified"
+    echo "❌ [ci] unsupported OPENVIBECODING_CI_UI_FULL_AUDIT_ROUTE_SAMPLING_MODE=${ui_full_route_sampling_mode_raw}. expected: auto|off|stratified"
     return 1
   fi
-  local ui_full_route_priority_file="${CORTEXPILOT_CI_UI_FULL_AUDIT_ROUTE_PRIORITY_FILE:-}"
-  local ui_full_route_priority_profile="${CORTEXPILOT_CI_UI_FULL_AUDIT_ROUTE_PRIORITY_PROFILE:-$ui_full_budget_profile}"
+  local ui_full_route_priority_file="${OPENVIBECODING_CI_UI_FULL_AUDIT_ROUTE_PRIORITY_FILE:-}"
+  local ui_full_route_priority_profile="${OPENVIBECODING_CI_UI_FULL_AUDIT_ROUTE_PRIORITY_PROFILE:-$ui_full_budget_profile}"
   local ui_full_route_sample_size_default="0"
   if ! is_ci_environment && [ "$CI_PROFILE" = "prepush" ]; then
-    ui_full_route_sample_size_default="${CORTEXPILOT_CI_UI_FULL_AUDIT_PREPUSH_ROUTE_SAMPLE_SIZE:-4}"
+    ui_full_route_sample_size_default="${OPENVIBECODING_CI_UI_FULL_AUDIT_PREPUSH_ROUTE_SAMPLE_SIZE:-4}"
   elif [ "$ui_full_budget_profile" = "pr" ]; then
-    ui_full_route_sample_size_default="${CORTEXPILOT_CI_UI_FULL_AUDIT_PR_ROUTE_SAMPLE_SIZE:-8}"
+    ui_full_route_sample_size_default="${OPENVIBECODING_CI_UI_FULL_AUDIT_PR_ROUTE_SAMPLE_SIZE:-8}"
   else
-    ui_full_route_sample_size_default="${CORTEXPILOT_CI_UI_FULL_AUDIT_NIGHTLY_ROUTE_SAMPLE_SIZE:-0}"
+    ui_full_route_sample_size_default="${OPENVIBECODING_CI_UI_FULL_AUDIT_NIGHTLY_ROUTE_SAMPLE_SIZE:-0}"
   fi
-  local ui_full_route_sample_size="${CORTEXPILOT_CI_UI_FULL_AUDIT_ROUTE_SAMPLE_SIZE:-$ui_full_route_sample_size_default}"
-  local ui_full_audit_ab_matrix="${CORTEXPILOT_CI_UI_FULL_AUDIT_EXPERIMENT_MATRIX:-0}"
-  local ui_full_audit_ab_profiles="${CORTEXPILOT_CI_UI_FULL_AUDIT_EXPERIMENT_PROFILES:-}"
-  local ui_full_audit_ab_iterations="${CORTEXPILOT_CI_UI_FULL_AUDIT_EXPERIMENT_ITERATIONS:-3}"
-  local ui_full_audit_auto_bootstrap_shared_services="${CORTEXPILOT_CI_UI_FULL_AUDIT_AUTO_BOOTSTRAP_SHARED_SERVICES:-1}"
-  local ui_full_audit_model="${CORTEXPILOT_CI_UI_FULL_AUDIT_MODEL:-gemini-3.0-flash}"
+  local ui_full_route_sample_size="${OPENVIBECODING_CI_UI_FULL_AUDIT_ROUTE_SAMPLE_SIZE:-$ui_full_route_sample_size_default}"
+  local ui_full_audit_ab_matrix="${OPENVIBECODING_CI_UI_FULL_AUDIT_EXPERIMENT_MATRIX:-0}"
+  local ui_full_audit_ab_profiles="${OPENVIBECODING_CI_UI_FULL_AUDIT_EXPERIMENT_PROFILES:-}"
+  local ui_full_audit_ab_iterations="${OPENVIBECODING_CI_UI_FULL_AUDIT_EXPERIMENT_ITERATIONS:-3}"
+  local ui_full_audit_auto_bootstrap_shared_services="${OPENVIBECODING_CI_UI_FULL_AUDIT_AUTO_BOOTSTRAP_SHARED_SERVICES:-1}"
+  local ui_full_audit_model="${OPENVIBECODING_CI_UI_FULL_AUDIT_MODEL:-gemini-3.0-flash}"
   local run_id="${run_id_prefix}_$(date +%Y%m%d_%H%M%S)"
-  local external_api_base="${CORTEXPILOT_E2E_EXTERNAL_API_BASE:-}"
-  local external_dashboard_base="${CORTEXPILOT_E2E_EXTERNAL_DASHBOARD_BASE:-}"
+  local external_api_base="${OPENVIBECODING_E2E_EXTERNAL_API_BASE:-}"
+  local external_dashboard_base="${OPENVIBECODING_E2E_EXTERNAL_DASHBOARD_BASE:-}"
   local ui_full_audit_local_service_reuse_mode="0"
   if [ -z "$external_api_base" ] || [ -z "$external_dashboard_base" ]; then
     ui_full_audit_local_service_reuse_mode="1"
   fi
-  local serial_break_glass_var="CORTEXPILOT_CI_UI_FULL_AUDIT_SERIAL_BREAK_GLASS"
-  local serial_break_glass_reason_var="CORTEXPILOT_CI_UI_FULL_AUDIT_SERIAL_BREAK_GLASS_REASON"
-  local serial_break_glass_ticket_var="CORTEXPILOT_CI_UI_FULL_AUDIT_SERIAL_BREAK_GLASS_TICKET"
+  local serial_break_glass_var="OPENVIBECODING_CI_UI_FULL_AUDIT_SERIAL_BREAK_GLASS"
+  local serial_break_glass_reason_var="OPENVIBECODING_CI_UI_FULL_AUDIT_SERIAL_BREAK_GLASS_REASON"
+  local serial_break_glass_ticket_var="OPENVIBECODING_CI_UI_FULL_AUDIT_SERIAL_BREAK_GLASS_TICKET"
 
   echo "ℹ️ [ci] ui full audit budget profile=${ui_full_budget_profile}, ci_default_budget=${ci_default_budget}, shards=${ui_full_audit_shards}, max_routes=${ui_full_audit_max_routes}, max_interactions=${ui_full_audit_max_interactions}, max_runtime_sec=${ui_full_audit_max_runtime_sec}, max_buttons_per_page=${ui_full_audit_max_buttons_per_page}, max_duplicate_targets=${ui_full_audit_max_duplicate_targets}, route_sampling_mode=${ui_full_route_sampling_mode}, route_sample_size=${ui_full_route_sample_size}, route_priority_profile=${ui_full_route_priority_profile}"
   if [ "$ui_full_audit_ab_matrix" = "1" ]; then
@@ -109,9 +109,9 @@ import urllib.request
 
 host, api_port, dashboard_port = sys.argv[1], int(sys.argv[2]), int(sys.argv[3])
 api_token = (
-    os.environ.get("CORTEXPILOT_API_TOKEN", "").strip()
-    or os.environ.get("CORTEXPILOT_E2E_API_TOKEN", "").strip()
-    or "cortexpilot-e2e-token"
+    os.environ.get("OPENVIBECODING_API_TOKEN", "").strip()
+    or os.environ.get("OPENVIBECODING_E2E_API_TOKEN", "").strip()
+    or "openvibecoding-e2e-token"
 )
 
 
@@ -178,21 +178,21 @@ PY
     local dashboard_port="$3"
     local api_log=".runtime-cache/test_output/ci_ui_full_shared_api_${api_port}.log"
     local dashboard_log=".runtime-cache/test_output/ci_ui_full_shared_dashboard_${dashboard_port}.log"
-    local shared_api_token="${CORTEXPILOT_API_TOKEN:-${CORTEXPILOT_E2E_API_TOKEN:-cortexpilot-e2e-token}}"
+    local shared_api_token="${OPENVIBECODING_API_TOKEN:-${OPENVIBECODING_E2E_API_TOKEN:-openvibecoding-e2e-token}}"
     mkdir -p .runtime-cache/test_output
     echo "ℹ️ [ci] bootstrap shared api/dashboard for ui full audit: host=${host}, api_port=${api_port}, dashboard_port=${dashboard_port}"
     (
       export PYTHONPATH="apps/orchestrator/src${PYTHONPATH:+:$PYTHONPATH}"
-      export CORTEXPILOT_API_TOKEN="$shared_api_token"
-      exec "$PYTHON" -m cortexpilot_orch.cli serve --host "$host" --port "$api_port"
+      export OPENVIBECODING_API_TOKEN="$shared_api_token"
+      exec "$PYTHON" -m openvibecoding_orch.cli serve --host "$host" --port "$api_port"
     ) >"$api_log" 2>&1 &
     ui_full_audit_bootstrap_api_pid=$!
     (
       cd apps/dashboard
-      export NEXT_PUBLIC_CORTEXPILOT_API_BASE="http://${host}:${api_port}"
-      export NEXT_PUBLIC_CORTEXPILOT_API_TOKEN="$shared_api_token"
-      export CORTEXPILOT_API_TOKEN="$shared_api_token"
-      export CORTEXPILOT_E2E_API_TOKEN="$shared_api_token"
+      export NEXT_PUBLIC_OPENVIBECODING_API_BASE="http://${host}:${api_port}"
+      export NEXT_PUBLIC_OPENVIBECODING_API_TOKEN="$shared_api_token"
+      export OPENVIBECODING_API_TOKEN="$shared_api_token"
+      export OPENVIBECODING_E2E_API_TOKEN="$shared_api_token"
       exec pnpm dev --hostname "$host" --port "$dashboard_port"
     ) >"$dashboard_log" 2>&1 &
     ui_full_audit_bootstrap_dashboard_pid=$!
@@ -222,9 +222,9 @@ PY
   trap ui_full_audit_cleanup_bootstrap_services RETURN
   if [ "$ui_full_audit_parallel" = "1" ] && { [ -z "$external_api_base" ] || [ -z "$external_dashboard_base" ]; }; then
     if [ "$ui_full_audit_reuse_running_services" = "1" ]; then
-      local shared_host="${CORTEXPILOT_E2E_HOST:-127.0.0.1}"
-      local shared_api_port="${CORTEXPILOT_UI_FULL_E2E_API_PORT:-19600}"
-      local shared_dashboard_port="${CORTEXPILOT_UI_FULL_E2E_DASHBOARD_PORT:-19700}"
+      local shared_host="${OPENVIBECODING_E2E_HOST:-127.0.0.1}"
+      local shared_api_port="${OPENVIBECODING_UI_FULL_E2E_API_PORT:-19600}"
+      local shared_dashboard_port="${OPENVIBECODING_UI_FULL_E2E_DASHBOARD_PORT:-19700}"
       if ui_full_audit_check_shared_services "$shared_host" "$shared_api_port" "$shared_dashboard_port"; then
         ui_full_audit_use_shared_services="1"
         echo "ℹ️ [ci] ui full audit parallel enabled in local shared-service reuse mode (reuse-running-services=1)"
@@ -272,14 +272,14 @@ PY
     if [ -n "$ui_full_route_priority_file" ]; then
       parallel_cmd+=(--route-priority-file "$ui_full_route_priority_file")
     fi
-    if [ -n "${CORTEXPILOT_E2E_HOST:-}" ]; then
-      parallel_cmd+=(--host "${CORTEXPILOT_E2E_HOST}")
+    if [ -n "${OPENVIBECODING_E2E_HOST:-}" ]; then
+      parallel_cmd+=(--host "${OPENVIBECODING_E2E_HOST}")
     fi
-    if [ -n "${CORTEXPILOT_UI_FULL_E2E_API_PORT:-}" ]; then
-      parallel_cmd+=(--api-port "${CORTEXPILOT_UI_FULL_E2E_API_PORT}")
+    if [ -n "${OPENVIBECODING_UI_FULL_E2E_API_PORT:-}" ]; then
+      parallel_cmd+=(--api-port "${OPENVIBECODING_UI_FULL_E2E_API_PORT}")
     fi
-    if [ -n "${CORTEXPILOT_UI_FULL_E2E_DASHBOARD_PORT:-}" ]; then
-      parallel_cmd+=(--dashboard-port "${CORTEXPILOT_UI_FULL_E2E_DASHBOARD_PORT}")
+    if [ -n "${OPENVIBECODING_UI_FULL_E2E_DASHBOARD_PORT:-}" ]; then
+      parallel_cmd+=(--dashboard-port "${OPENVIBECODING_UI_FULL_E2E_DASHBOARD_PORT}")
     fi
     if [ -n "$external_api_base" ] && [ -n "$external_dashboard_base" ]; then
       parallel_cmd+=(--external-api-base "$external_api_base" --external-dashboard-base "$external_dashboard_base")
@@ -450,7 +450,7 @@ PY
         return 1
       }
     if [[ "$serial_mode_break_glass_active" != "1" ]]; then
-      echo "❌ [ci] CORTEXPILOT_CI_UI_FULL_AUDIT_PARALLEL=${ui_full_audit_parallel} is blocked (fail-closed). use parallel mode, or set ${serial_break_glass_var}=1 with reason/ticket."
+      echo "❌ [ci] OPENVIBECODING_CI_UI_FULL_AUDIT_PARALLEL=${ui_full_audit_parallel} is blocked (fail-closed). use parallel mode, or set ${serial_break_glass_var}=1 with reason/ticket."
       return 1
     fi
     echo "⚠️ [ci] serial ui full audit mode enabled via audited break-glass"
@@ -466,23 +466,23 @@ PY
     --max-duplicate-targets "$ui_full_audit_max_duplicate_targets"
     --max-runtime-sec "$ui_full_audit_max_runtime_sec"
   )
-  if [ -n "${CORTEXPILOT_E2E_HOST:-}" ]; then
-    cmd+=(--host "${CORTEXPILOT_E2E_HOST}")
+  if [ -n "${OPENVIBECODING_E2E_HOST:-}" ]; then
+    cmd+=(--host "${OPENVIBECODING_E2E_HOST}")
   fi
-  if [ -n "${CORTEXPILOT_UI_FULL_E2E_API_PORT:-}" ]; then
-    cmd+=(--api-port "${CORTEXPILOT_UI_FULL_E2E_API_PORT}")
+  if [ -n "${OPENVIBECODING_UI_FULL_E2E_API_PORT:-}" ]; then
+    cmd+=(--api-port "${OPENVIBECODING_UI_FULL_E2E_API_PORT}")
   fi
-  if [ -n "${CORTEXPILOT_UI_FULL_E2E_DASHBOARD_PORT:-}" ]; then
-    cmd+=(--dashboard-port "${CORTEXPILOT_UI_FULL_E2E_DASHBOARD_PORT}")
+  if [ -n "${OPENVIBECODING_UI_FULL_E2E_DASHBOARD_PORT:-}" ]; then
+    cmd+=(--dashboard-port "${OPENVIBECODING_UI_FULL_E2E_DASHBOARD_PORT}")
   fi
-  if [ -n "${CORTEXPILOT_UI_FULL_E2E_EXTERNAL_API_BASE:-}" ]; then
-    cmd+=(--external-api-base "${CORTEXPILOT_UI_FULL_E2E_EXTERNAL_API_BASE}")
+  if [ -n "${OPENVIBECODING_UI_FULL_E2E_EXTERNAL_API_BASE:-}" ]; then
+    cmd+=(--external-api-base "${OPENVIBECODING_UI_FULL_E2E_EXTERNAL_API_BASE}")
   fi
-  if [ -n "${CORTEXPILOT_UI_FULL_E2E_EXTERNAL_DASHBOARD_BASE:-}" ]; then
-    cmd+=(--external-dashboard-base "${CORTEXPILOT_UI_FULL_E2E_EXTERNAL_DASHBOARD_BASE}")
+  if [ -n "${OPENVIBECODING_UI_FULL_E2E_EXTERNAL_DASHBOARD_BASE:-}" ]; then
+    cmd+=(--external-dashboard-base "${OPENVIBECODING_UI_FULL_E2E_EXTERNAL_DASHBOARD_BASE}")
   fi
-  if [ -n "${CORTEXPILOT_E2E_API_TOKEN:-}" ]; then
-    cmd+=(--api-token "${CORTEXPILOT_E2E_API_TOKEN}")
+  if [ -n "${OPENVIBECODING_E2E_API_TOKEN:-}" ]; then
+    cmd+=(--api-token "${OPENVIBECODING_E2E_API_TOKEN}")
   fi
   echo "ℹ️ [ci] ui strict click report absent, producing current-batch full audit report: run_id=${run_id}"
   local ui_full_serial_status=0

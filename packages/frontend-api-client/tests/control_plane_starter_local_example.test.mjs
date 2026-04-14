@@ -66,7 +66,7 @@ test("local starter example bootstraps the control-plane starter and optional pr
       "http://127.0.0.1:10000/api/agents/roles/WORKER/config/preview",
     ],
   );
-  assert.equal(calls.at(-1)?.init.headers["x-cortexpilot-role"], "TECH_LEAD");
+  assert.equal(calls.at(-1)?.init.headers["x-openvibecoding-role"], "TECH_LEAD");
 });
 
 test("local starter example only applies when explicitly enabled", async () => {
@@ -108,5 +108,5 @@ test("local starter example only applies when explicitly enabled", async () => {
 
   assert.deepEqual(result.applied, { saved: true });
   assert.equal(calls.at(-1)?.url, "http://127.0.0.1:10000/api/agents/roles/WORKER/config/apply");
-  assert.equal(calls.at(-1)?.init.headers["x-cortexpilot-role"], "TECH_LEAD");
+  assert.equal(calls.at(-1)?.init.headers["x-openvibecoding-role"], "TECH_LEAD");
 });

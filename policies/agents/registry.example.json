@@ -2,24 +2,24 @@
   "version": "v1",
   "agents": [
     {
-      "agent_id": "cortexpilot-pm",
+      "agent_id": "openvibecoding-pm",
       "role": "PM",
       "description": "唯一对外入口：只产出合同，不跑命令/不改代码/不自搜",
-      "codex_home": "~/.codex-homes/cortexpilot-pm",
+      "codex_home": "~/.codex-homes/openvibecoding-pm",
       "defaults": {"sandbox": "read-only", "approval_policy": "never", "network": "deny"}
     },
     {
-      "agent_id": "cortexpilot-worker-core",
+      "agent_id": "openvibecoding-worker-core",
       "role": "WORKER",
       "description": "受控执行：只在 allowed_paths 内改动",
-      "codex_home": "~/.codex-homes/cortexpilot-worker-core",
+      "codex_home": "~/.codex-homes/openvibecoding-worker-core",
       "defaults": {"sandbox": "workspace-write", "approval_policy": "on-request", "network": "deny"}
     },
     {
-      "agent_id": "cortexpilot-reviewer",
+      "agent_id": "openvibecoding-reviewer",
       "role": "REVIEWER",
       "description": "只审不改：物理只读",
-      "codex_home": "~/.codex-homes/cortexpilot-reviewer",
+      "codex_home": "~/.codex-homes/openvibecoding-reviewer",
       "defaults": {"sandbox": "read-only", "approval_policy": "never", "network": "deny"}
     }
   ]

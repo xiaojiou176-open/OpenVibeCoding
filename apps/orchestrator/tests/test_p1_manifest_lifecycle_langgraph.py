@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from cortexpilot_orch.scheduler import manifest_lifecycle
+from openvibecoding_orch.scheduler import manifest_lifecycle
 
 
 class _DummyStore:

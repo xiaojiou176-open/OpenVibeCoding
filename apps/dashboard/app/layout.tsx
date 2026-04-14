@@ -6,7 +6,7 @@ import "./globals.css";
 export const metadata = {
   title: "OpenVibeCoding | The open command tower for AI engineering",
   description:
-    "Stop babysitting AI coding work. AI coding does not lack models. It lacks a command tower. OpenVibeCoding is the public shell for the CortexPilot runtime across Codex, Claude Code, Workflow Cases, and replayable proof.",
+    "Stop babysitting AI coding work. AI coding does not lack models. It lacks a command tower. OpenVibeCoding is the public shell for the OpenVibeCoding runtime across Codex, Claude Code, Workflow Cases, and replayable proof.",
 };
 
 export const dynamic = "force-dynamic";

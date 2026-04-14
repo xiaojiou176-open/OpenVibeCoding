@@ -5,10 +5,10 @@ from pathlib import Path
 
 import pytest
 
-import cortexpilot_orch.config as config_module
-import cortexpilot_orch.runtime.space_governance as space_governance_module
-from cortexpilot_orch.config import load_config
-from cortexpilot_orch.runtime.retention import (
+import openvibecoding_orch.config as config_module
+import openvibecoding_orch.runtime.space_governance as space_governance_module
+from openvibecoding_orch.config import load_config
+from openvibecoding_orch.runtime.retention import (
     RetentionPlan,
     _overflow_log_candidates,
     _safe_remove_path,
@@ -52,7 +52,7 @@ def _write_space_policy(repo_root: Path) -> None:
             "repo_external_related": [
                 {
                     "id": "external_tmp_docker_ci_runner_temp",
-                    "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/tmp/docker-ci/runner-temp-*",
+                    "path": "${OPENVIBECODING_MACHINE_CACHE_ROOT}/tmp/docker-ci/runner-temp-*",
                     "type": "docker ci temp",
                     "ownership": "repo-owned docker ci temp",
                     "ownership_confidence": "High",
@@ -71,7 +71,7 @@ def _write_space_policy(repo_root: Path) -> None:
                 },
                 {
                     "id": "external_pnpm_store_v10",
-                    "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/pnpm-store/v10",
+                    "path": "${OPENVIBECODING_MACHINE_CACHE_ROOT}/pnpm-store/v10",
                     "type": "pnpm v10",
                     "ownership": "repo-controlled pnpm store",
                     "ownership_confidence": "High",
@@ -89,7 +89,7 @@ def _write_space_policy(repo_root: Path) -> None:
                 },
                 {
                     "id": "external_pnpm_store_dashboard",
-                    "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/pnpm-store/dashboard",
+                    "path": "${OPENVIBECODING_MACHINE_CACHE_ROOT}/pnpm-store/dashboard",
                     "type": "pnpm dashboard",
                     "ownership": "repo-controlled dashboard pnpm store",
                     "ownership_confidence": "High",
@@ -107,7 +107,7 @@ def _write_space_policy(repo_root: Path) -> None:
                 },
                 {
                     "id": "external_playwright",
-                    "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/playwright",
+                    "path": "${OPENVIBECODING_MACHINE_CACHE_ROOT}/playwright",
                     "type": "playwright cache",
                     "ownership": "repo-controlled playwright cache",
                     "ownership_confidence": "High",
@@ -125,7 +125,7 @@ def _write_space_policy(repo_root: Path) -> None:
                 },
                 {
                     "id": "external_python_toolchain_current",
-                    "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/toolchains/python/current",
+                    "path": "${OPENVIBECODING_MACHINE_CACHE_ROOT}/toolchains/python/current",
                     "type": "python toolchain current",
                     "ownership": "repo-related python current",
                     "ownership_confidence": "High",
@@ -202,14 +202,14 @@ def test_retention_helpers_overflow_and_safe_remove(tmp_path: Path) -> None:
 
 def test_build_retention_plan_and_write_report_for_empty_roots(tmp_path: Path, monkeypatch) -> None:
     repo_root = tmp_path / "repo"
-    runtime_root = repo_root / ".runtime-cache" / "cortexpilot"
-    monkeypatch.setenv("CORTEXPILOT_REPO_ROOT", str(repo_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runtime_root / "runs"))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(runtime_root / "worktrees"))
-    monkeypatch.setenv("CORTEXPILOT_LOGS_ROOT", str(runtime_root / "logs"))
-    monkeypatch.setenv("CORTEXPILOT_CACHE_ROOT", str(runtime_root / "cache"))
-    monkeypatch.setenv("CORTEXPILOT_MACHINE_CACHE_ROOT", str(tmp_path / "machine-cache"))
+    runtime_root = repo_root / ".runtime-cache" / "openvibecoding"
+    monkeypatch.setenv("OPENVIBECODING_REPO_ROOT", str(repo_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runtime_root / "runs"))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(runtime_root / "worktrees"))
+    monkeypatch.setenv("OPENVIBECODING_LOGS_ROOT", str(runtime_root / "logs"))
+    monkeypatch.setenv("OPENVIBECODING_CACHE_ROOT", str(runtime_root / "cache"))
+    monkeypatch.setenv("OPENVIBECODING_MACHINE_CACHE_ROOT", str(tmp_path / "machine-cache"))
 
     cfg = load_config()
     plan = build_retention_plan(cfg)
@@ -225,14 +225,14 @@ def test_build_retention_plan_and_write_report_for_empty_roots(tmp_path: Path, m
 
 def test_retention_report_space_bridge_reads_latest_space_audit(tmp_path: Path, monkeypatch) -> None:
     repo_root = tmp_path / "repo"
-    runtime_root = repo_root / ".runtime-cache" / "cortexpilot"
-    monkeypatch.setenv("CORTEXPILOT_REPO_ROOT", str(repo_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runtime_root / "runs"))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(runtime_root / "worktrees"))
-    monkeypatch.setenv("CORTEXPILOT_LOGS_ROOT", str(runtime_root / "logs"))
-    monkeypatch.setenv("CORTEXPILOT_CACHE_ROOT", str(runtime_root / "cache"))
-    monkeypatch.setenv("CORTEXPILOT_MACHINE_CACHE_ROOT", str(tmp_path / "machine-cache"))
+    runtime_root = repo_root / ".runtime-cache" / "openvibecoding"
+    monkeypatch.setenv("OPENVIBECODING_REPO_ROOT", str(repo_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runtime_root / "runs"))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(runtime_root / "worktrees"))
+    monkeypatch.setenv("OPENVIBECODING_LOGS_ROOT", str(runtime_root / "logs"))
+    monkeypatch.setenv("OPENVIBECODING_CACHE_ROOT", str(runtime_root / "cache"))
+    monkeypatch.setenv("OPENVIBECODING_MACHINE_CACHE_ROOT", str(tmp_path / "machine-cache"))
 
     space_report = runtime_root / "reports" / "space_governance" / "report.json"
     space_report.parent.mkdir(parents=True, exist_ok=True)
@@ -265,17 +265,17 @@ def test_retention_report_space_bridge_reads_latest_space_audit(tmp_path: Path, 
 def test_machine_cache_retention_honors_policy_ttl_and_cap(tmp_path: Path, monkeypatch) -> None:
     _reset_config_state()
     repo_root = tmp_path / "repo"
-    runtime_root = repo_root / ".runtime-cache" / "cortexpilot"
+    runtime_root = repo_root / ".runtime-cache" / "openvibecoding"
     machine_cache_root = tmp_path / "machine-cache"
 
-    monkeypatch.setenv("CORTEXPILOT_REPO_ROOT", str(repo_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runtime_root / "runs"))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(runtime_root / "worktrees"))
-    monkeypatch.setenv("CORTEXPILOT_LOGS_ROOT", str(repo_root / ".runtime-cache" / "logs"))
-    monkeypatch.setenv("CORTEXPILOT_CACHE_ROOT", str(repo_root / ".runtime-cache" / "cache"))
-    monkeypatch.setenv("CORTEXPILOT_MACHINE_CACHE_ROOT", str(machine_cache_root))
-    monkeypatch.setenv("CORTEXPILOT_RETENTION_MACHINE_CACHE_CAP_BYTES", "200")
+    monkeypatch.setenv("OPENVIBECODING_REPO_ROOT", str(repo_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runtime_root / "runs"))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(runtime_root / "worktrees"))
+    monkeypatch.setenv("OPENVIBECODING_LOGS_ROOT", str(repo_root / ".runtime-cache" / "logs"))
+    monkeypatch.setenv("OPENVIBECODING_CACHE_ROOT", str(repo_root / ".runtime-cache" / "cache"))
+    monkeypatch.setenv("OPENVIBECODING_MACHINE_CACHE_ROOT", str(machine_cache_root))
+    monkeypatch.setenv("OPENVIBECODING_RETENTION_MACHINE_CACHE_CAP_BYTES", "200")
 
     _write_space_policy(repo_root)
 
@@ -342,17 +342,17 @@ def test_machine_cache_retention_skips_entries_with_active_repo_scoped_processes
 ) -> None:
     _reset_config_state()
     repo_root = tmp_path / "repo"
-    runtime_root = repo_root / ".runtime-cache" / "cortexpilot"
+    runtime_root = repo_root / ".runtime-cache" / "openvibecoding"
     machine_cache_root = tmp_path / "machine-cache"
 
-    monkeypatch.setenv("CORTEXPILOT_REPO_ROOT", str(repo_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runtime_root / "runs"))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(runtime_root / "worktrees"))
-    monkeypatch.setenv("CORTEXPILOT_LOGS_ROOT", str(repo_root / ".runtime-cache" / "logs"))
-    monkeypatch.setenv("CORTEXPILOT_CACHE_ROOT", str(repo_root / ".runtime-cache" / "cache"))
-    monkeypatch.setenv("CORTEXPILOT_MACHINE_CACHE_ROOT", str(machine_cache_root))
-    monkeypatch.setenv("CORTEXPILOT_RETENTION_MACHINE_CACHE_CAP_BYTES", "1024")
+    monkeypatch.setenv("OPENVIBECODING_REPO_ROOT", str(repo_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runtime_root / "runs"))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(runtime_root / "worktrees"))
+    monkeypatch.setenv("OPENVIBECODING_LOGS_ROOT", str(repo_root / ".runtime-cache" / "logs"))
+    monkeypatch.setenv("OPENVIBECODING_CACHE_ROOT", str(repo_root / ".runtime-cache" / "cache"))
+    monkeypatch.setenv("OPENVIBECODING_MACHINE_CACHE_ROOT", str(machine_cache_root))
+    monkeypatch.setenv("OPENVIBECODING_RETENTION_MACHINE_CACHE_CAP_BYTES", "1024")
 
     _write_space_policy(repo_root)
     docker_temp = machine_cache_root / "tmp" / "docker-ci" / "runner-temp-1000"
@@ -392,16 +392,16 @@ def test_machine_cache_retention_skips_entries_with_active_repo_scoped_processes
 def test_machine_cache_auto_prune_summary_is_embedded_in_retention_report(tmp_path: Path, monkeypatch) -> None:
     _reset_config_state()
     repo_root = tmp_path / "repo"
-    runtime_root = repo_root / ".runtime-cache" / "cortexpilot"
+    runtime_root = repo_root / ".runtime-cache" / "openvibecoding"
     machine_cache_root = tmp_path / "machine-cache"
 
-    monkeypatch.setenv("CORTEXPILOT_REPO_ROOT", str(repo_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runtime_root / "runs"))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(runtime_root / "worktrees"))
-    monkeypatch.setenv("CORTEXPILOT_LOGS_ROOT", str(repo_root / ".runtime-cache" / "logs"))
-    monkeypatch.setenv("CORTEXPILOT_CACHE_ROOT", str(repo_root / ".runtime-cache" / "cache"))
-    monkeypatch.setenv("CORTEXPILOT_MACHINE_CACHE_ROOT", str(machine_cache_root))
+    monkeypatch.setenv("OPENVIBECODING_REPO_ROOT", str(repo_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runtime_root / "runs"))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(runtime_root / "worktrees"))
+    monkeypatch.setenv("OPENVIBECODING_LOGS_ROOT", str(repo_root / ".runtime-cache" / "logs"))
+    monkeypatch.setenv("OPENVIBECODING_CACHE_ROOT", str(repo_root / ".runtime-cache" / "cache"))
+    monkeypatch.setenv("OPENVIBECODING_MACHINE_CACHE_ROOT", str(machine_cache_root))
 
     _write_space_policy(repo_root)
     state_path = machine_cache_root / "retention-auto-prune" / "state.json"
@@ -430,15 +430,15 @@ def test_machine_cache_auto_prune_summary_is_embedded_in_retention_report(tmp_pa
 
 def test_config_fails_when_explicit_env_file_missing(monkeypatch) -> None:
     config_module._ENV_LOADED = False
-    monkeypatch.setenv("CORTEXPILOT_ENV_FILE", "/tmp/cortexpilot-env-file-should-not-exist.env")
-    with pytest.raises(RuntimeError, match="CORTEXPILOT_ENV_FILE not found"):
+    monkeypatch.setenv("OPENVIBECODING_ENV_FILE", "/tmp/openvibecoding-env-file-should-not-exist.env")
+    with pytest.raises(RuntimeError, match="OPENVIBECODING_ENV_FILE not found"):
         load_config()
 
 
 def test_config_ignores_legacy_base_url_alias_and_keeps_canonical(monkeypatch) -> None:
     config_module._ENV_LOADED = False
-    monkeypatch.delenv("CORTEXPILOT_ENV_FILE", raising=False)
-    monkeypatch.setenv("CORTEXPILOT_PROVIDER_BASE_URL", "https://api.primary.local/v1")
+    monkeypatch.delenv("OPENVIBECODING_ENV_FILE", raising=False)
+    monkeypatch.setenv("OPENVIBECODING_PROVIDER_BASE_URL", "https://api.primary.local/v1")
     monkeypatch.setenv("OPENAI_BASE_URL", "https://api.shadow.local/v1")
     cfg = load_config()
     assert cfg.runner.agents_base_url == "https://api.primary.local/v1"

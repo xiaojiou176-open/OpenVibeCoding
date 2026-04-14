@@ -11,8 +11,8 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from cortexpilot_orch.contract.validator import ContractValidator, evaluate_superpowers_gate
-from cortexpilot_orch.scheduler import task_execution_pipeline
+from openvibecoding_orch.contract.validator import ContractValidator, evaluate_superpowers_gate
+from openvibecoding_orch.scheduler import task_execution_pipeline
 
 
 class _DummyStore:
@@ -46,7 +46,7 @@ def _contract_base() -> dict[str, Any]:
         "assigned_agent": {"role": "WORKER", "agent_id": "agent-1"},
         "inputs": {"spec": "实现 superpowers methodology gate", "artifacts": [_output_schema_artifact("worker")]},
         "required_outputs": [{"name": "patch.diff", "type": "patch", "acceptance": "produce audited patch"}],
-        "allowed_paths": ["apps/orchestrator/src/cortexpilot_orch/contract/validator.py"],
+        "allowed_paths": ["apps/orchestrator/src/openvibecoding_orch/contract/validator.py"],
         "forbidden_actions": [],
         "acceptance_tests": [{"name": "smoke", "cmd": "echo ok", "must_pass": True}],
         "tool_permissions": {"filesystem": "workspace-write", "shell": "on-request", "network": "deny", "mcp_tools": ["codex"]},
@@ -120,7 +120,7 @@ def test_task_execution_pipeline_rejects_superpowers_gate_before_runner(monkeypa
         store=store,
         contract=_contract_base(),
         worktree_path=Path.cwd(),
-        allowed_paths=["apps/orchestrator/src/cortexpilot_orch/contract/validator.py"],
+        allowed_paths=["apps/orchestrator/src/openvibecoding_orch/contract/validator.py"],
         baseline_ref="HEAD",
         mock_mode=True,
         policy_pack="low",
@@ -177,7 +177,7 @@ def test_task_execution_pipeline_passes_superpowers_gate_and_runs_runtime(monkey
         store=store,
         contract=_enable_superpowers_stages(_contract_base()),
         worktree_path=Path.cwd(),
-        allowed_paths=["apps/orchestrator/src/cortexpilot_orch/contract/validator.py"],
+        allowed_paths=["apps/orchestrator/src/openvibecoding_orch/contract/validator.py"],
         baseline_ref="HEAD",
         mock_mode=True,
         policy_pack="low",

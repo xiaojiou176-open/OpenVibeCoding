@@ -3,8 +3,8 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 BUNDLE_DIR="$ROOT_DIR/apps/desktop/src-tauri/target/release/bundle"
-APP_PATH="${DESKTOP_NOTARY_APP_PATH:-$BUNDLE_DIR/macos/CortexPilot Desktop.app}"
-DMG_PATH="${DESKTOP_NOTARY_DMG_PATH:-$BUNDLE_DIR/dmg/CortexPilot Desktop_0.1.0_aarch64.dmg}"
+APP_PATH="${DESKTOP_NOTARY_APP_PATH:-$BUNDLE_DIR/macos/OpenVibeCoding Desktop.app}"
+DMG_PATH="${DESKTOP_NOTARY_DMG_PATH:-$BUNDLE_DIR/dmg/OpenVibeCoding Desktop_0.1.0_aarch64.dmg}"
 
 REPORT_DIR="${DESKTOP_NOTARY_REPORT_DIR:-$ROOT_DIR/.runtime-cache/test_output/desktop_release}"
 REPORT_PATH=""

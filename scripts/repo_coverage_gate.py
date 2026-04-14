@@ -27,7 +27,7 @@ DEFAULT_DESKTOP_REPORT = (
 )
 DEFAULT_COVERAGE_DATA_DIR = ROOT_DIR / ".runtime-cache" / "cache" / "test" / "coverage" / "repo_coverage_gate"
 DEFAULT_HYPOTHESIS_DATA_DIR = ROOT_DIR / ".runtime-cache" / "cache" / "hypothesis" / "repo_coverage_gate"
-DEFAULT_THRESHOLD = float(os.environ.get("CORTEXPILOT_REPO_COVERAGE_GATE_THRESHOLD", "95"))
+DEFAULT_THRESHOLD = float(os.environ.get("OPENVIBECODING_REPO_COVERAGE_GATE_THRESHOLD", "95"))
 
 
 def _round2(value: float) -> float:
@@ -191,7 +191,7 @@ def run_orchestrator_coverage(report_path: Path, pytest_target: str, pytest_mark
     report_path.parent.mkdir(parents=True, exist_ok=True)
     coverage_file = DEFAULT_COVERAGE_DATA_DIR / ".coverage"
     _prepare_coverage_file(coverage_file)
-    override = os.getenv("CORTEXPILOT_PYTHON", "").strip()
+    override = os.getenv("OPENVIBECODING_PYTHON", "").strip()
     toolchain_python = ROOT_DIR / ".runtime-cache" / "cache" / "toolchains" / "python" / "current" / "bin" / "python"
     python_bin = Path(override) if override else toolchain_python
     if not python_bin.exists():
@@ -207,7 +207,7 @@ def run_orchestrator_coverage(report_path: Path, pytest_target: str, pytest_mark
         pytest_mark,
         "-n",
         "0",
-        "--cov=cortexpilot_orch",
+        "--cov=openvibecoding_orch",
         "--cov-branch",
         f"--cov-report=json:{report_path}",
         "--cov-fail-under=0",
@@ -251,8 +251,8 @@ def run_dashboard_coverage(report_path: Path, test_targets: list[str]) -> None:
         command,
         env_overrides={
             "CI": "1",
-            "CORTEXPILOT_COVERAGE_HTML": "0",
-            "CORTEXPILOT_DASHBOARD_COVERAGE_DIR": str(report_path.parent),
+            "OPENVIBECODING_COVERAGE_HTML": "0",
+            "OPENVIBECODING_DASHBOARD_COVERAGE_DIR": str(report_path.parent),
         },
     )
 
@@ -281,9 +281,9 @@ def run_desktop_coverage(report_path: Path, test_targets: list[str]) -> None:
         command,
         env_overrides={
             "CI": "1",
-            "CORTEXPILOT_COVERAGE_HTML": "0",
-            "CORTEXPILOT_DESKTOP_COVERAGE_DIR": str(report_path.parent),
-            "CORTEXPILOT_DESKTOP_COVERAGE_RUN_ID": "repo-coverage-gate",
+            "OPENVIBECODING_COVERAGE_HTML": "0",
+            "OPENVIBECODING_DESKTOP_COVERAGE_DIR": str(report_path.parent),
+            "OPENVIBECODING_DESKTOP_COVERAGE_RUN_ID": "repo-coverage-gate",
         },
     )
 

@@ -27,8 +27,8 @@ vendored internal reuse rather than a separate public package story.
 
 - This package is part of the frontend presentation substrate, not a standalone
   public SDK.
-- Public API contract types stay in `@cortexpilot/frontend-api-contract`.
-- Client entry points stay in `@cortexpilot/frontend-api-client`.
+- Public API contract types stay in `@openvibecoding/frontend-api-contract`.
+- Client entry points stay in `@openvibecoding/frontend-api-client`.
 - This package is not treated as a standalone public package surface today.
 
 ## Human-readable entrypoints
@@ -63,6 +63,6 @@ native surfaces first:
 
 This package then stays in its narrower role:
 
-- shared UI copy, locale, and status presentation for CortexPilot command-tower surfaces
+- shared UI copy, locale, and status presentation for OpenVibeCoding command-tower surfaces
 - repo-owned presentation reuse across dashboard, desktop, and future web
 - not a native plugin for Codex, Claude Code, or OpenClaw

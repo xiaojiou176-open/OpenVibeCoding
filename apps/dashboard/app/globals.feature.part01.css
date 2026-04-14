@@ -743,7 +743,7 @@
   border-color: var(--color-border-primary-soft);
 }
 
-.pm-chat-item.is-cortexpilot {
+.pm-chat-item.is-openvibecoding {
   justify-self: start;
   align-self: flex-start;
   background: var(--color-bg-elevated);

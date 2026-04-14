@@ -4,7 +4,7 @@ from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
 
-from cortexpilot_orch.runners import agents_contract_flow
+from openvibecoding_orch.runners import agents_contract_flow
 
 
 class _Store:
@@ -49,13 +49,13 @@ def test_contract_helper_primitives(monkeypatch) -> None:
         "contract.langgraph.enabled",
     )
 
-    monkeypatch.setenv("CORTEXPILOT_LANGGRAPH_CONTRACT_SUBFLOW", "yes")
+    monkeypatch.setenv("OPENVIBECODING_LANGGRAPH_CONTRACT_SUBFLOW", "yes")
     assert agents_contract_flow._langgraph_requested({}) == (
         True,
-        "env.CORTEXPILOT_LANGGRAPH_CONTRACT_SUBFLOW",
+        "env.OPENVIBECODING_LANGGRAPH_CONTRACT_SUBFLOW",
     )
 
-    monkeypatch.setenv("CORTEXPILOT_LANGGRAPH_CONTRACT_SUBFLOW", "")
+    monkeypatch.setenv("OPENVIBECODING_LANGGRAPH_CONTRACT_SUBFLOW", "")
     assert agents_contract_flow._langgraph_requested({}) == (False, "default")
 
 

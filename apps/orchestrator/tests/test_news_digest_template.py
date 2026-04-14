@@ -1,19 +1,19 @@
 import json
 from pathlib import Path
 
-from cortexpilot_orch.scheduler.tool_execution_pipeline import run_browser_tasks, run_search_pipeline
-from cortexpilot_orch.runners.tool_runner import ToolRunner
-from cortexpilot_orch.store.run_store import RunStore
-from cortexpilot_orch.api import search_payload_helpers
-from cortexpilot_orch.planning import intake
+from openvibecoding_orch.scheduler.tool_execution_pipeline import run_browser_tasks, run_search_pipeline
+from openvibecoding_orch.runners.tool_runner import ToolRunner
+from openvibecoding_orch.store.run_store import RunStore
+from openvibecoding_orch.api import search_payload_helpers
+from openvibecoding_orch.planning import intake
 from tooling.page_brief_pipeline import DEFAULT_PAGE_BRIEF_FOCUS, build_page_brief_result
 from tooling import search_pipeline
 
 
 def test_news_digest_intake_builds_contract_artifact(monkeypatch, tmp_path: Path) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runtime_root / "runs"))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runtime_root / "runs"))
 
     service = intake.IntakeService()
     payload = {
@@ -155,8 +155,8 @@ def test_topic_brief_intake_and_result_builder() -> None:
 
 def test_page_brief_intake_builds_browser_contract_artifact(monkeypatch, tmp_path: Path) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runtime_root / "runs"))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runtime_root / "runs"))
 
     service = intake.IntakeService()
     payload = {
@@ -249,8 +249,8 @@ def test_page_brief_result_builder_and_browser_payload() -> None:
 
 def test_page_brief_browser_task_writes_failed_report(monkeypatch, tmp_path: Path) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runtime_root / "runs"))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runtime_root / "runs"))
 
     store = RunStore()
     run_id = store.create_run("page-brief-failure")
@@ -291,8 +291,8 @@ def test_page_brief_browser_task_writes_failed_report(monkeypatch, tmp_path: Pat
 
 def test_news_digest_result_writes_failed_report_when_search_pipeline_fails(monkeypatch, tmp_path: Path) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runtime_root / "runs"))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runtime_root / "runs"))
 
     store = RunStore()
     run_id = store.create_run("news-digest-failure")

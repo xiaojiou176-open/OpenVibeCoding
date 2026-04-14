@@ -1,703 +1,703 @@
 {
   "version": 1,
-  "description": "Backend direct os.getenv/os.environ reads must be explicitly allowlisted by file and key. Provider runtime supports gemini/openai/anthropic and unified CORTEXPILOT_PROVIDER* compatibility keys.",
+  "description": "Backend direct os.getenv/os.environ reads must be explicitly allowlisted by file and key. Provider runtime supports gemini/openai/anthropic and unified OPENVIBECODING_PROVIDER* compatibility keys.",
   "entries": [
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/api/routes_admin.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/api/routes_admin.py",
       "keys": [
-        "CORTEXPILOT_APPROVAL_ALLOWED_ROLES",
-        "CORTEXPILOT_RUM_MAX_PAYLOAD_BYTES"
+        "OPENVIBECODING_APPROVAL_ALLOWED_ROLES",
+        "OPENVIBECODING_RUM_MAX_PAYLOAD_BYTES"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/api/routes_runs.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/api/routes_runs.py",
       "keys": [
-        "CORTEXPILOT_APPROVAL_ALLOWED_ROLES"
+        "OPENVIBECODING_APPROVAL_ALLOWED_ROLES"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/api/pm_session_aggregation.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/api/pm_session_aggregation.py",
       "keys": [
-        "CORTEXPILOT_COMMAND_TOWER_OVERVIEW_TTL_SEC"
+        "OPENVIBECODING_COMMAND_TOWER_OVERVIEW_TTL_SEC"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/chain/runner.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/chain/runner.py",
       "keys": [
-        "CORTEXPILOT_CHAIN_EXEC_MODE",
-        "CORTEXPILOT_CHAIN_SUBPROCESS_TIMEOUT_SEC"
+        "OPENVIBECODING_CHAIN_EXEC_MODE",
+        "OPENVIBECODING_CHAIN_SUBPROCESS_TIMEOUT_SEC"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/cli.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/cli.py",
       "keys": [
-        "CORTEXPILOT_FORCE_UNLOCK",
-        "CORTEXPILOT_RUNNER"
+        "OPENVIBECODING_FORCE_UNLOCK",
+        "OPENVIBECODING_RUNNER"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/cli_coverage_helpers.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/cli_coverage_helpers.py",
       "keys": [
         "EQUILIBRIUM_BASE_URL",
-        "CORTEXPILOT_AGENTS_BASE_URL",
-        "CORTEXPILOT_ALLOW_CODEX_EXEC",
-        "CORTEXPILOT_CHAIN_EXEC_MODE",
-        "CORTEXPILOT_CHAIN_SUBPROCESS_TIMEOUT_SEC",
-        "CORTEXPILOT_LOCK_AUTO_CLEANUP",
-        "CORTEXPILOT_LOCK_TTL_SEC",
-        "CORTEXPILOT_PROVIDER_BASE_URL",
-        "CORTEXPILOT_PYTHON",
-        "CORTEXPILOT_RUNNER"
+        "OPENVIBECODING_AGENTS_BASE_URL",
+        "OPENVIBECODING_ALLOW_CODEX_EXEC",
+        "OPENVIBECODING_CHAIN_EXEC_MODE",
+        "OPENVIBECODING_CHAIN_SUBPROCESS_TIMEOUT_SEC",
+        "OPENVIBECODING_LOCK_AUTO_CLEANUP",
+        "OPENVIBECODING_LOCK_TTL_SEC",
+        "OPENVIBECODING_PROVIDER_BASE_URL",
+        "OPENVIBECODING_PYTHON",
+        "OPENVIBECODING_RUNNER"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/cli_runtime_helpers.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/cli_runtime_helpers.py",
       "keys": [
-        "CORTEXPILOT_HOOKS_AUTO_INSTALL"
+        "OPENVIBECODING_HOOKS_AUTO_INSTALL"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/mcp_queue_pilot_server.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/mcp_queue_pilot_server.py",
       "keys": [
-        "CORTEXPILOT_APPROVAL_ALLOWED_ROLES",
-        "CORTEXPILOT_MCP_QUEUE_PILOT_ENABLE_APPLY"
+        "OPENVIBECODING_APPROVAL_ALLOWED_ROLES",
+        "OPENVIBECODING_MCP_QUEUE_PILOT_ENABLE_APPLY"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/config.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/config.py",
       "keys": [
         "ANTHROPIC_BASE_URL",
         "CI",
-        "CORTEXPILOT_API_AUTH_REQUIRED",
-        "CORTEXPILOT_API_ALLOWED_ORIGINS",
-        "CORTEXPILOT_API_TOKEN",
-        "CORTEXPILOT_CACHE_ROOT",
-        "CORTEXPILOT_DASHBOARD_PORT",
-        "CORTEXPILOT_LOGS_ROOT",
-        "CORTEXPILOT_REPO_ROOT",
-        "CORTEXPILOT_RUNTIME_ROOT",
+        "OPENVIBECODING_API_AUTH_REQUIRED",
+        "OPENVIBECODING_API_ALLOWED_ORIGINS",
+        "OPENVIBECODING_API_TOKEN",
+        "OPENVIBECODING_CACHE_ROOT",
+        "OPENVIBECODING_DASHBOARD_PORT",
+        "OPENVIBECODING_LOGS_ROOT",
+        "OPENVIBECODING_REPO_ROOT",
+        "OPENVIBECODING_RUNTIME_ROOT",
         "EQUILIBRIUM_BASE_URL",
         "GEMINI_BASE_URL",
         "GITHUB_ACTIONS",
-        "CORTEXPILOT_AGENTS_API",
-        "CORTEXPILOT_AGENTS_BASE_URL",
-        "CORTEXPILOT_AGENTS_MODEL",
-        "CORTEXPILOT_AGENTS_STORE",
-        "CORTEXPILOT_CANARY_PERCENT",
-        "CORTEXPILOT_CODEX_MODEL",
-        "CORTEXPILOT_CONTRACT_ROOT",
-        "CORTEXPILOT_DEFAULT_ENV_ROOT",
-        "CORTEXPILOT_ENABLE_CONSOLE_TRACE",
-        "CORTEXPILOT_ENV_FILE",
-        "CORTEXPILOT_LANGFUSE_HEADERS",
-        "CORTEXPILOT_LANGFUSE_OTLP_ENDPOINT",
-        "CORTEXPILOT_LOG_BACKUP_COUNT",
-        "CORTEXPILOT_LOG_MAX_BYTES",
-        "CORTEXPILOT_LOG_SCHEMA_VERSION",
-        "CORTEXPILOT_MACHINE_CACHE_ROOT",
-        "CORTEXPILOT_MCP_SERVER_CONNECT_TIMEOUT_SEC",
-        "CORTEXPILOT_MCP_SERVER_TIMEOUT_SEC",
-        "CORTEXPILOT_OTEL_REQUIRED",
-        "CORTEXPILOT_OTLP_ENDPOINT",
-        "CORTEXPILOT_OTLP_HEADERS",
-        "CORTEXPILOT_OTLP_PROTOCOL",
-        "CORTEXPILOT_PNPM_STORE_DIR",
-        "CORTEXPILOT_PROVIDER",
-        "CORTEXPILOT_PROVIDER_BASE_URL",
-        "CORTEXPILOT_PROVIDER_MODEL",
-        "CORTEXPILOT_RETENTION_CACHE_HOURS",
-        "CORTEXPILOT_RETENTION_CODEX_HOME_DAYS",
-        "CORTEXPILOT_RETENTION_INTAKE_DAYS",
-        "CORTEXPILOT_RETENTION_LOG_DAYS",
-        "CORTEXPILOT_RETENTION_LOG_MAX_FILES",
-        "CORTEXPILOT_RETENTION_MACHINE_CACHE_CAP_BYTES",
-        "CORTEXPILOT_RETENTION_MAX_CODEX_HOMES",
-        "CORTEXPILOT_RETENTION_MAX_INTAKES",
-        "CORTEXPILOT_RETENTION_MAX_RUNS",
-        "CORTEXPILOT_RETENTION_RUN_DAYS",
-        "CORTEXPILOT_RETENTION_WORKTREE_DAYS",
-        "CORTEXPILOT_RUNS_ROOT",
-        "CORTEXPILOT_RUNTIME_CONTRACT_ROOT",
-        "CORTEXPILOT_SCHEMA_ROOT",
-        "CORTEXPILOT_TOOLCHAIN_CACHE_ROOT",
-        "CORTEXPILOT_TRACE_ID",
-        "CORTEXPILOT_TRACING_ENABLED",
-        "CORTEXPILOT_TRACING_ENDPOINT",
-        "CORTEXPILOT_TRACING_HEADERS",
-        "CORTEXPILOT_WORKTREE_ROOT",
+        "OPENVIBECODING_AGENTS_API",
+        "OPENVIBECODING_AGENTS_BASE_URL",
+        "OPENVIBECODING_AGENTS_MODEL",
+        "OPENVIBECODING_AGENTS_STORE",
+        "OPENVIBECODING_CANARY_PERCENT",
+        "OPENVIBECODING_CODEX_MODEL",
+        "OPENVIBECODING_CONTRACT_ROOT",
+        "OPENVIBECODING_DEFAULT_ENV_ROOT",
+        "OPENVIBECODING_ENABLE_CONSOLE_TRACE",
+        "OPENVIBECODING_ENV_FILE",
+        "OPENVIBECODING_LANGFUSE_HEADERS",
+        "OPENVIBECODING_LANGFUSE_OTLP_ENDPOINT",
+        "OPENVIBECODING_LOG_BACKUP_COUNT",
+        "OPENVIBECODING_LOG_MAX_BYTES",
+        "OPENVIBECODING_LOG_SCHEMA_VERSION",
+        "OPENVIBECODING_MACHINE_CACHE_ROOT",
+        "OPENVIBECODING_MCP_SERVER_CONNECT_TIMEOUT_SEC",
+        "OPENVIBECODING_MCP_SERVER_TIMEOUT_SEC",
+        "OPENVIBECODING_OTEL_REQUIRED",
+        "OPENVIBECODING_OTLP_ENDPOINT",
+        "OPENVIBECODING_OTLP_HEADERS",
+        "OPENVIBECODING_OTLP_PROTOCOL",
+        "OPENVIBECODING_PNPM_STORE_DIR",
+        "OPENVIBECODING_PROVIDER",
+        "OPENVIBECODING_PROVIDER_BASE_URL",
+        "OPENVIBECODING_PROVIDER_MODEL",
+        "OPENVIBECODING_RETENTION_CACHE_HOURS",
+        "OPENVIBECODING_RETENTION_CODEX_HOME_DAYS",
+        "OPENVIBECODING_RETENTION_INTAKE_DAYS",
+        "OPENVIBECODING_RETENTION_LOG_DAYS",
+        "OPENVIBECODING_RETENTION_LOG_MAX_FILES",
+        "OPENVIBECODING_RETENTION_MACHINE_CACHE_CAP_BYTES",
+        "OPENVIBECODING_RETENTION_MAX_CODEX_HOMES",
+        "OPENVIBECODING_RETENTION_MAX_INTAKES",
+        "OPENVIBECODING_RETENTION_MAX_RUNS",
+        "OPENVIBECODING_RETENTION_RUN_DAYS",
+        "OPENVIBECODING_RETENTION_WORKTREE_DAYS",
+        "OPENVIBECODING_RUNS_ROOT",
+        "OPENVIBECODING_RUNTIME_CONTRACT_ROOT",
+        "OPENVIBECODING_SCHEMA_ROOT",
+        "OPENVIBECODING_TOOLCHAIN_CACHE_ROOT",
+        "OPENVIBECODING_TRACE_ID",
+        "OPENVIBECODING_TRACING_ENABLED",
+        "OPENVIBECODING_TRACING_ENDPOINT",
+        "OPENVIBECODING_TRACING_HEADERS",
+        "OPENVIBECODING_WORKTREE_ROOT",
         "OPENAI_BASE_URL",
         "RUNNER_TEMP",
         "XDG_CACHE_HOME"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/contract/compiler.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/contract/compiler.py",
       "keys": [
-        "CORTEXPILOT_CODEX_MODEL",
-        "CORTEXPILOT_PROVIDER_MODEL"
+        "OPENVIBECODING_CODEX_MODEL",
+        "OPENVIBECODING_PROVIDER_MODEL"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/contract/role_config_registry.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/contract/role_config_registry.py",
       "keys": [
-        "CORTEXPILOT_ROLE_CONFIG_REGISTRY"
+        "OPENVIBECODING_ROLE_CONFIG_REGISTRY"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/contract/validator.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/contract/validator.py",
       "keys": [
-        "CORTEXPILOT_AGENT_REGISTRY",
-        "CORTEXPILOT_SUPERPOWERS_GATE_ENFORCE"
+        "OPENVIBECODING_AGENT_REGISTRY",
+        "OPENVIBECODING_SUPERPOWERS_GATE_ENFORCE"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/gates/diff_gate.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/gates/diff_gate.py",
       "keys": [
-        "CORTEXPILOT_PROTECTED_PATHS"
+        "OPENVIBECODING_PROTECTED_PATHS"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/gates/integrated_gate.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/gates/integrated_gate.py",
       "keys": [
-        "CORTEXPILOT_TOOL_REGISTRY"
+        "OPENVIBECODING_TOOL_REGISTRY"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/gates/mcp_concurrency_gate.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/gates/mcp_concurrency_gate.py",
       "keys": [
-        "CORTEXPILOT_MCP_ALLOW_MULTI",
-        "CORTEXPILOT_MCP_PROXY_ENABLED"
+        "OPENVIBECODING_MCP_ALLOW_MULTI",
+        "OPENVIBECODING_MCP_PROXY_ENABLED"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/gates/network_gate.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/gates/network_gate.py",
       "keys": [
-        "CORTEXPILOT_NETWORK_APPROVED"
+        "OPENVIBECODING_NETWORK_APPROVED"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/gates/reviewer_gate.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/gates/reviewer_gate.py",
       "keys": [
-        "CORTEXPILOT_REVIEWER_SNAPSHOT_VERBOSE"
+        "OPENVIBECODING_REVIEWER_SNAPSHOT_VERBOSE"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/gates/sampling_gate.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/gates/sampling_gate.py",
       "keys": [
-        "CORTEXPILOT_SAMPLING_APPROVED"
+        "OPENVIBECODING_SAMPLING_APPROVED"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/gates/tests_gate.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/gates/tests_gate.py",
       "keys": [
-        "CORTEXPILOT_ACCEPTANCE_STRICT_NONTRIVIAL"
+        "OPENVIBECODING_ACCEPTANCE_STRICT_NONTRIVIAL"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/gates/tool_gate.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/gates/tool_gate.py",
       "keys": [
-        "CORTEXPILOT_NETWORK_APPROVED"
+        "OPENVIBECODING_NETWORK_APPROVED"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/locks/locker.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/locks/locker.py",
       "keys": [
-        "CORTEXPILOT_FORCE_UNLOCK",
-        "CORTEXPILOT_LOCK_OWNER_TOKEN",
-        "CORTEXPILOT_LOCK_TTL_SEC",
-        "CORTEXPILOT_LOCK_TTL_SEC_DEFAULT",
-        "CORTEXPILOT_RUNNING_LOCK_STALE_SEC",
-        "CORTEXPILOT_RUN_ID"
+        "OPENVIBECODING_FORCE_UNLOCK",
+        "OPENVIBECODING_LOCK_OWNER_TOKEN",
+        "OPENVIBECODING_LOCK_TTL_SEC",
+        "OPENVIBECODING_LOCK_TTL_SEC_DEFAULT",
+        "OPENVIBECODING_RUNNING_LOCK_STALE_SEC",
+        "OPENVIBECODING_RUN_ID"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/planning/coverage_chain.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/planning/coverage_chain.py",
       "keys": [
-        "CORTEXPILOT_COVERAGE_WORKER_TIMEOUT_SEC",
-        "CORTEXPILOT_PYTHON",
-        "CORTEXPILOT_RUNNER"
+        "OPENVIBECODING_COVERAGE_WORKER_TIMEOUT_SEC",
+        "OPENVIBECODING_PYTHON",
+        "OPENVIBECODING_RUNNER"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/planning/intake.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/planning/intake.py",
       "keys": [
         "GEMINI_API_KEY",
-        "CORTEXPILOT_AGENTS_STORE",
-        "CORTEXPILOT_RUNNER",
-        "CORTEXPILOT_ORCHESTRATION_SMOKE_MODE",
-        "CORTEXPILOT_E2E_ORCHESTRATION_SMOKE_MODE"
+        "OPENVIBECODING_AGENTS_STORE",
+        "OPENVIBECODING_RUNNER",
+        "OPENVIBECODING_ORCHESTRATION_SMOKE_MODE",
+        "OPENVIBECODING_E2E_ORCHESTRATION_SMOKE_MODE"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/policy/browser_policy_resolver.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/policy/browser_policy_resolver.py",
       "keys": [
         "CI",
-        "CORTEXPILOT_BROWSER_BREAK_GLASS",
-        "CORTEXPILOT_BROWSER_COOKIE_PATH",
-        "CORTEXPILOT_BROWSER_HUMAN_BEHAVIOR",
-        "CORTEXPILOT_BROWSER_HUMAN_BEHAVIOR_LEVEL",
-        "CORTEXPILOT_BROWSER_PLUGIN_OPTIONAL",
-        "CORTEXPILOT_BROWSER_PROFILE_ALLOWLIST",
-        "CORTEXPILOT_BROWSER_CDP_HOST",
-        "CORTEXPILOT_BROWSER_CDP_PORT",
-        "CORTEXPILOT_BROWSER_PROFILE_DIR",
-        "CORTEXPILOT_BROWSER_PROFILE_MODE",
-        "CORTEXPILOT_BROWSER_PROFILE_NAME",
-        "CORTEXPILOT_CI_CONTAINER",
-        "CORTEXPILOT_CLEAN_ROOM_MACHINE_TMP_ROOT",
-        "CORTEXPILOT_CLEAN_ROOM_PRESERVE_ROOT",
-        "CORTEXPILOT_BROWSER_STEALTH_MODE",
+        "OPENVIBECODING_BROWSER_BREAK_GLASS",
+        "OPENVIBECODING_BROWSER_COOKIE_PATH",
+        "OPENVIBECODING_BROWSER_HUMAN_BEHAVIOR",
+        "OPENVIBECODING_BROWSER_HUMAN_BEHAVIOR_LEVEL",
+        "OPENVIBECODING_BROWSER_PLUGIN_OPTIONAL",
+        "OPENVIBECODING_BROWSER_PROFILE_ALLOWLIST",
+        "OPENVIBECODING_BROWSER_CDP_HOST",
+        "OPENVIBECODING_BROWSER_CDP_PORT",
+        "OPENVIBECODING_BROWSER_PROFILE_DIR",
+        "OPENVIBECODING_BROWSER_PROFILE_MODE",
+        "OPENVIBECODING_BROWSER_PROFILE_NAME",
+        "OPENVIBECODING_CI_CONTAINER",
+        "OPENVIBECODING_CLEAN_ROOM_MACHINE_TMP_ROOT",
+        "OPENVIBECODING_CLEAN_ROOM_PRESERVE_ROOT",
+        "OPENVIBECODING_BROWSER_STEALTH_MODE",
         "GITHUB_ACTIONS",
-        "CORTEXPILOT_WEB_COOKIE_PATH",
-        "CORTEXPILOT_WEB_PROFILE_DIR",
-        "CORTEXPILOT_WEB_PROFILE_MODE",
-        "CORTEXPILOT_WEB_PROFILE_NAME",
-        "CORTEXPILOT_WEB_STEALTH_MODE"
+        "OPENVIBECODING_WEB_COOKIE_PATH",
+        "OPENVIBECODING_WEB_PROFILE_DIR",
+        "OPENVIBECODING_WEB_PROFILE_MODE",
+        "OPENVIBECODING_WEB_PROFILE_NAME",
+        "OPENVIBECODING_WEB_STEALTH_MODE"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/runners/provider_capability.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/runners/provider_capability.py",
       "keys": [
-        "CORTEXPILOT_PROVIDER_BASE_URL"
+        "OPENVIBECODING_PROVIDER_BASE_URL"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/queue/store.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/queue/store.py",
       "keys": [
-        "CORTEXPILOT_RUNTIME_ROOT"
+        "OPENVIBECODING_RUNTIME_ROOT"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/runtime/space_governance.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/runtime/space_governance.py",
       "keys": [
-        "CORTEXPILOT_MACHINE_CACHE_ROOT"
+        "OPENVIBECODING_MACHINE_CACHE_ROOT"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/replay/replay_helpers.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/replay/replay_helpers.py",
       "keys": [
-        "CORTEXPILOT_CONTRACT_HMAC_KEY"
+        "OPENVIBECODING_CONTRACT_HMAC_KEY"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/replay/replayer_verify_helpers.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/replay/replayer_verify_helpers.py",
       "keys": [
-        "CORTEXPILOT_CONTRACT_HMAC_KEY"
+        "OPENVIBECODING_CONTRACT_HMAC_KEY"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/reviewer/reviewer.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/reviewer/reviewer.py",
       "keys": [
-        "CORTEXPILOT_CODEX_MODEL",
-        "CORTEXPILOT_CODEX_USE_OUTPUT_SCHEMA"
+        "OPENVIBECODING_CODEX_MODEL",
+        "OPENVIBECODING_CODEX_USE_OUTPUT_SCHEMA"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/runners/agents_contract_flow.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/runners/agents_contract_flow.py",
       "keys": [
-        "CORTEXPILOT_LANGGRAPH_CONTRACT_SUBFLOW"
+        "OPENVIBECODING_LANGGRAPH_CONTRACT_SUBFLOW"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/runners/agents_handoff.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/runners/agents_handoff.py",
       "keys": [
-        "CORTEXPILOT_AGENTS_FORCE_HANDOFF"
+        "OPENVIBECODING_AGENTS_FORCE_HANDOFF"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/runners/agents_handoff_runtime.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/runners/agents_handoff_runtime.py",
       "keys": [
-        "CORTEXPILOT_AGENTS_HANDOFF_TIMEOUT_FAIL_OPEN"
+        "OPENVIBECODING_AGENTS_HANDOFF_TIMEOUT_FAIL_OPEN"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/runners/agents_mcp_runtime.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/runners/agents_mcp_runtime.py",
       "keys": [
         "CODEX_HOME",
         "GEMINI_API_KEY",
-        "CORTEXPILOT_AGENTS_MODEL",
-        "CORTEXPILOT_CODEX_BASE_HOME",
-        "CORTEXPILOT_CODEX_MODEL",
-        "CORTEXPILOT_PROVIDER_MODEL",
-        "CORTEXPILOT_RUNTIME_ROOT"
+        "OPENVIBECODING_AGENTS_MODEL",
+        "OPENVIBECODING_CODEX_BASE_HOME",
+        "OPENVIBECODING_CODEX_MODEL",
+        "OPENVIBECODING_PROVIDER_MODEL",
+        "OPENVIBECODING_RUNTIME_ROOT"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/runners/agents_mcp_runtime_helpers.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/runners/agents_mcp_runtime_helpers.py",
       "keys": [
-        "CORTEXPILOT_MCP_EVENT_ROUTED_SAMPLE_EVERY"
+        "OPENVIBECODING_MCP_EVENT_ROUTED_SAMPLE_EVERY"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/runners/agents_prompting.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/runners/agents_prompting.py",
       "keys": [
-        "CORTEXPILOT_CODEX_MODEL",
-        "CORTEXPILOT_CODEX_TIMEBOX_SEC",
-        "CORTEXPILOT_INLINE_OUTPUT_SCHEMA",
-        "CORTEXPILOT_SKIP_ROLE_PROMPT"
+        "OPENVIBECODING_CODEX_MODEL",
+        "OPENVIBECODING_CODEX_TIMEBOX_SEC",
+        "OPENVIBECODING_INLINE_OUTPUT_SCHEMA",
+        "OPENVIBECODING_SKIP_ROLE_PROMPT"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/runners/agents_runner.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/runners/agents_runner.py",
       "keys": [
-        "CORTEXPILOT_CODEX_BASE_URL"
+        "OPENVIBECODING_CODEX_BASE_URL"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/runners/agents_runner_execution_helpers.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/runners/agents_runner_execution_helpers.py",
       "keys": [
         "GEMINI_API_KEY",
-        "CORTEXPILOT_AGENTS_LLM_CLIENT_RETRIES",
-        "CORTEXPILOT_AGENTS_LLM_TIMEOUT_SEC",
-        "CORTEXPILOT_AGENTS_STREAM_RETRY_BACKOFF_SEC",
-        "CORTEXPILOT_AGENTS_STREAM_TIMEOUT_FALLBACK",
-        "CORTEXPILOT_AGENTS_STREAM_TIMEOUT_RETRIES"
+        "OPENVIBECODING_AGENTS_LLM_CLIENT_RETRIES",
+        "OPENVIBECODING_AGENTS_LLM_TIMEOUT_SEC",
+        "OPENVIBECODING_AGENTS_STREAM_RETRY_BACKOFF_SEC",
+        "OPENVIBECODING_AGENTS_STREAM_TIMEOUT_FALLBACK",
+        "OPENVIBECODING_AGENTS_STREAM_TIMEOUT_RETRIES"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/runners/agents_runtime_helpers.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/runners/agents_runtime_helpers.py",
       "keys": [
         "EQUILIBRIUM_BASE_URL",
-        "CORTEXPILOT_CODEX_PROFILE"
+        "OPENVIBECODING_CODEX_PROFILE"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/runners/agents_stream_runtime.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/runners/agents_stream_runtime.py",
       "keys": [
-        "CORTEXPILOT_CODEX_TIMEBOX_SEC",
-        "CORTEXPILOT_MCP_BROKEN_PIPE_FAIL",
-        "CORTEXPILOT_STREAM_IDLE_TIMEOUT_SEC"
+        "OPENVIBECODING_CODEX_TIMEBOX_SEC",
+        "OPENVIBECODING_MCP_BROKEN_PIPE_FAIL",
+        "OPENVIBECODING_STREAM_IDLE_TIMEOUT_SEC"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/runners/app_server_runner.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/runners/app_server_runner.py",
       "keys": [
-        "CORTEXPILOT_CODEX_MODEL"
+        "OPENVIBECODING_CODEX_MODEL"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/runners/codex_runner.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/runners/codex_runner.py",
       "keys": [
-        "CORTEXPILOT_ALLOW_CODEX_EXEC",
-        "CORTEXPILOT_CODEX_EXEC_TIMEOUT_SEC",
-        "CORTEXPILOT_CODEX_MODEL",
-        "CORTEXPILOT_CODEX_PROFILE",
-        "CORTEXPILOT_CODEX_USE_OUTPUT_SCHEMA",
-        "CORTEXPILOT_CODEX_VERSION",
-        "CORTEXPILOT_MCP_ONLY"
+        "OPENVIBECODING_ALLOW_CODEX_EXEC",
+        "OPENVIBECODING_CODEX_EXEC_TIMEOUT_SEC",
+        "OPENVIBECODING_CODEX_MODEL",
+        "OPENVIBECODING_CODEX_PROFILE",
+        "OPENVIBECODING_CODEX_USE_OUTPUT_SCHEMA",
+        "OPENVIBECODING_CODEX_VERSION",
+        "OPENVIBECODING_MCP_ONLY"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/runners/common.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/runners/common.py",
       "keys": [
-        "CORTEXPILOT_RUN_ID"
+        "OPENVIBECODING_RUN_ID"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/runners/execution_adapter.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/runners/execution_adapter.py",
       "keys": [
-        "CORTEXPILOT_PROVIDER"
+        "OPENVIBECODING_PROVIDER"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/runners/mcp_server_lifecycle.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/runners/mcp_server_lifecycle.py",
       "keys": [
-        "CORTEXPILOT_MCP_CLEANUP_TIMEOUT_SEC",
-        "CORTEXPILOT_MCP_CONNECT_TIMEOUT_SEC",
-        "CORTEXPILOT_MCP_SERVER_CLEANUP_TIMEOUT_SEC",
-        "CORTEXPILOT_MCP_SERVER_CONNECT_TIMEOUT_SEC",
-        "CORTEXPILOT_MCP_SERVER_TIMEOUT_SEC",
-        "CORTEXPILOT_MCP_TIMEOUT_SEC",
-        "CORTEXPILOT_MCP_TOOL_TIMEOUT_SEC"
+        "OPENVIBECODING_MCP_CLEANUP_TIMEOUT_SEC",
+        "OPENVIBECODING_MCP_CONNECT_TIMEOUT_SEC",
+        "OPENVIBECODING_MCP_SERVER_CLEANUP_TIMEOUT_SEC",
+        "OPENVIBECODING_MCP_SERVER_CONNECT_TIMEOUT_SEC",
+        "OPENVIBECODING_MCP_SERVER_TIMEOUT_SEC",
+        "OPENVIBECODING_MCP_TIMEOUT_SEC",
+        "OPENVIBECODING_MCP_TOOL_TIMEOUT_SEC"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/runners/mcp_streaming.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/runners/mcp_streaming.py",
       "keys": [
-        "CORTEXPILOT_STREAM_LOG_EVERY"
+        "OPENVIBECODING_STREAM_LOG_EVERY"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/runners/provider_resolution.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/runners/provider_resolution.py",
       "keys": [
         "ANTHROPIC_API_KEY",
         "GEMINI_API_KEY",
         "GOOGLE_API_KEY",
-        "CORTEXPILOT_AGENTS_BASE_URL",
-        "CORTEXPILOT_AGENTS_MODEL",
-        "CORTEXPILOT_PROVIDER",
-        "CORTEXPILOT_PROVIDER_BASE_URL",
-        "CORTEXPILOT_PROVIDER_MODEL",
+        "OPENVIBECODING_AGENTS_BASE_URL",
+        "OPENVIBECODING_AGENTS_MODEL",
+        "OPENVIBECODING_PROVIDER",
+        "OPENVIBECODING_PROVIDER_BASE_URL",
+        "OPENVIBECODING_PROVIDER_MODEL",
         "OPENAI_API_KEY"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/scheduler/approval_flow.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/scheduler/approval_flow.py",
       "keys": [
-        "CORTEXPILOT_FORCE_UNLOCK",
-        "CORTEXPILOT_GOD_MODE_ON_REQUEST",
-        "CORTEXPILOT_GOD_MODE_REQUIRED",
-        "CORTEXPILOT_GOD_MODE_TIMEOUT_SEC",
-        "CORTEXPILOT_LOCK_AUTO_CLEANUP",
-        "CORTEXPILOT_LOCK_TTL_SEC",
-        "CORTEXPILOT_LOCK_TTL_SEC_DEFAULT"
+        "OPENVIBECODING_FORCE_UNLOCK",
+        "OPENVIBECODING_GOD_MODE_ON_REQUEST",
+        "OPENVIBECODING_GOD_MODE_REQUIRED",
+        "OPENVIBECODING_GOD_MODE_TIMEOUT_SEC",
+        "OPENVIBECODING_LOCK_AUTO_CLEANUP",
+        "OPENVIBECODING_LOCK_TTL_SEC",
+        "OPENVIBECODING_LOCK_TTL_SEC_DEFAULT"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/scheduler/artifact_pipeline.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/scheduler/artifact_pipeline.py",
       "keys": [
-        "CORTEXPILOT_RUNTIME_ROOT"
+        "OPENVIBECODING_RUNTIME_ROOT"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/scheduler/core_helpers.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/scheduler/core_helpers.py",
       "keys": [
         "CODEX_HOME",
-        "CORTEXPILOT_CODEX_HOME_PER_RUN",
-        "CORTEXPILOT_TRACE_BASE_URL",
-        "CORTEXPILOT_TRACE_URL_TEMPLATE"
+        "OPENVIBECODING_CODEX_HOME_PER_RUN",
+        "OPENVIBECODING_TRACE_BASE_URL",
+        "OPENVIBECODING_TRACE_URL_TEMPLATE"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/scheduler/execute_task_pipeline.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/scheduler/execute_task_pipeline.py",
       "keys": [
         "CODEX_HOME",
-        "CORTEXPILOT_CODEX_PROFILE",
-        "CORTEXPILOT_CODEX_VERSION",
-        "CORTEXPILOT_DIAGNOSTIC_RUNS_ROOT",
-        "CORTEXPILOT_NETWORK_APPROVED",
-        "CORTEXPILOT_NODE_VERSION",
-        "CORTEXPILOT_ORCHESTRATOR_VERSION",
-        "CORTEXPILOT_RUNNER",
-        "CORTEXPILOT_RUNS_ROOT",
-        "CORTEXPILOT_RUN_ID",
-        "CORTEXPILOT_RUNTIME_ROOT",
-        "CORTEXPILOT_TEMPORAL_NAMESPACE",
-        "CORTEXPILOT_TEMPORAL_TASK_QUEUE",
-        "CORTEXPILOT_TEMPORAL_WORKFLOW_ID",
-        "CORTEXPILOT_TRACE_ID"
+        "OPENVIBECODING_CODEX_PROFILE",
+        "OPENVIBECODING_CODEX_VERSION",
+        "OPENVIBECODING_DIAGNOSTIC_RUNS_ROOT",
+        "OPENVIBECODING_NETWORK_APPROVED",
+        "OPENVIBECODING_NODE_VERSION",
+        "OPENVIBECODING_ORCHESTRATOR_VERSION",
+        "OPENVIBECODING_RUNNER",
+        "OPENVIBECODING_RUNS_ROOT",
+        "OPENVIBECODING_RUN_ID",
+        "OPENVIBECODING_RUNTIME_ROOT",
+        "OPENVIBECODING_TEMPORAL_NAMESPACE",
+        "OPENVIBECODING_TEMPORAL_TASK_QUEUE",
+        "OPENVIBECODING_TEMPORAL_WORKFLOW_ID",
+        "OPENVIBECODING_TRACE_ID"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/scheduler/execute_task_preflight.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/scheduler/execute_task_preflight.py",
       "keys": [
-        "CORTEXPILOT_TEMPORAL_ACTIVITY",
-        "CORTEXPILOT_TEMPORAL_WORKFLOW"
+        "OPENVIBECODING_TEMPORAL_ACTIVITY",
+        "OPENVIBECODING_TEMPORAL_WORKFLOW"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/scheduler/policy_pipeline.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/scheduler/policy_pipeline.py",
       "keys": [
-        "CORTEXPILOT_ALLOW_CODEX_EXEC",
-        "CORTEXPILOT_MCP_ONLY"
+        "OPENVIBECODING_ALLOW_CODEX_EXEC",
+        "OPENVIBECODING_MCP_ONLY"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/scheduler/preflight_gate_runtime_helpers.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/scheduler/preflight_gate_runtime_helpers.py",
       "keys": [
-        "CORTEXPILOT_MCP_CONCURRENCY_MODE",
-        "CORTEXPILOT_MCP_CONCURRENCY_REQUIRED",
-        "CORTEXPILOT_NETWORK_APPROVED"
+        "OPENVIBECODING_MCP_CONCURRENCY_MODE",
+        "OPENVIBECODING_MCP_CONCURRENCY_REQUIRED",
+        "OPENVIBECODING_NETWORK_APPROVED"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/scheduler/runtime_utils.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/scheduler/runtime_utils.py",
       "keys": [
-        "CORTEXPILOT_CODEX_MODEL",
-        "CORTEXPILOT_CODEX_PROFILE"
+        "OPENVIBECODING_CODEX_MODEL",
+        "OPENVIBECODING_CODEX_PROFILE"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/scheduler/scheduler.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/scheduler/scheduler.py",
       "keys": [
-        "CORTEXPILOT_CODEX_PROFILE",
-        "CORTEXPILOT_CODEX_VERSION",
-        "CORTEXPILOT_RUN_ID",
-        "CORTEXPILOT_TRACE_ID"
+        "OPENVIBECODING_CODEX_PROFILE",
+        "OPENVIBECODING_CODEX_VERSION",
+        "OPENVIBECODING_RUN_ID",
+        "OPENVIBECODING_TRACE_ID"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/scheduler/scheduler_bridge_runtime.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/scheduler/scheduler_bridge_runtime.py",
       "keys": [
-        "CORTEXPILOT_RUNNER"
+        "OPENVIBECODING_RUNNER"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/scheduler/task_execution_review_helpers.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/scheduler/task_execution_review_helpers.py",
       "keys": [
-        "CORTEXPILOT_REVIEWER_MODE"
+        "OPENVIBECODING_REVIEWER_MODE"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/scheduler/task_execution_runtime_helpers.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/scheduler/task_execution_runtime_helpers.py",
       "keys": [
-        "CORTEXPILOT_DIFF_GATE_SCOPED_REVERT",
-        "CORTEXPILOT_EVALS_ENABLED"
+        "OPENVIBECODING_DIFF_GATE_SCOPED_REVERT",
+        "OPENVIBECODING_EVALS_ENABLED"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/scheduler/test_wave_b2_regressions.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/scheduler/test_wave_b2_regressions.py",
       "keys": [
         "CODEX_HOME",
-        "CORTEXPILOT_RUN_ID"
+        "OPENVIBECODING_RUN_ID"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/scheduler/tool_execution_pipeline.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/scheduler/tool_execution_pipeline.py",
       "keys": [
-        "CORTEXPILOT_SEARCH_VERIFY_AI"
+        "OPENVIBECODING_SEARCH_VERIFY_AI"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/store/run_store_primitives.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/store/run_store_primitives.py",
       "keys": [
-        "CORTEXPILOT_CONTRACT_HMAC_KEY"
+        "OPENVIBECODING_CONTRACT_HMAC_KEY"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/store/session_map.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/store/session_map.py",
       "keys": [
-        "CORTEXPILOT_CODEX_SESSIONS_ROOT",
-        "CORTEXPILOT_SESSION_ALIAS_PATH"
+        "OPENVIBECODING_CODEX_SESSIONS_ROOT",
+        "OPENVIBECODING_SESSION_ALIAS_PATH"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/temporal/manager.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/temporal/manager.py",
       "keys": [
-        "CORTEXPILOT_TEMPORAL_ACTIVITY",
-        "CORTEXPILOT_TEMPORAL_ADDRESS",
-        "CORTEXPILOT_TEMPORAL_ENABLED",
-        "CORTEXPILOT_TEMPORAL_NAMESPACE",
-        "CORTEXPILOT_TEMPORAL_REQUIRED"
+        "OPENVIBECODING_TEMPORAL_ACTIVITY",
+        "OPENVIBECODING_TEMPORAL_ADDRESS",
+        "OPENVIBECODING_TEMPORAL_ENABLED",
+        "OPENVIBECODING_TEMPORAL_NAMESPACE",
+        "OPENVIBECODING_TEMPORAL_REQUIRED"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/temporal/runner.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/temporal/runner.py",
       "keys": [
-        "CORTEXPILOT_TEMPORAL_ADDRESS",
-        "CORTEXPILOT_TEMPORAL_NAMESPACE",
-        "CORTEXPILOT_TEMPORAL_TASK_QUEUE",
-        "CORTEXPILOT_TEMPORAL_WORKFLOW"
+        "OPENVIBECODING_TEMPORAL_ADDRESS",
+        "OPENVIBECODING_TEMPORAL_NAMESPACE",
+        "OPENVIBECODING_TEMPORAL_TASK_QUEUE",
+        "OPENVIBECODING_TEMPORAL_WORKFLOW"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/temporal/test_workflows.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/temporal/test_workflows.py",
       "keys": [
-        "CORTEXPILOT_TEMPORAL_ACTIVITY",
-        "CORTEXPILOT_TEMPORAL_WORKFLOW",
-        "CORTEXPILOT_TEMPORAL_WORKFLOW_ID"
+        "OPENVIBECODING_TEMPORAL_ACTIVITY",
+        "OPENVIBECODING_TEMPORAL_WORKFLOW",
+        "OPENVIBECODING_TEMPORAL_WORKFLOW_ID"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/temporal/worker.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/temporal/worker.py",
       "keys": [
-        "CORTEXPILOT_TEMPORAL_ADDRESS",
-        "CORTEXPILOT_TEMPORAL_NAMESPACE",
-        "CORTEXPILOT_TEMPORAL_TASK_QUEUE"
+        "OPENVIBECODING_TEMPORAL_ADDRESS",
+        "OPENVIBECODING_TEMPORAL_NAMESPACE",
+        "OPENVIBECODING_TEMPORAL_TASK_QUEUE"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/temporal/workflows.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/temporal/workflows.py",
       "keys": [
-        "CORTEXPILOT_TEMPORAL_ACTIVITY",
-        "CORTEXPILOT_TEMPORAL_ACTIVITY_TIMEOUT",
-        "CORTEXPILOT_TEMPORAL_WORKFLOW",
-        "CORTEXPILOT_TEMPORAL_WORKFLOW_ID"
+        "OPENVIBECODING_TEMPORAL_ACTIVITY",
+        "OPENVIBECODING_TEMPORAL_ACTIVITY_TIMEOUT",
+        "OPENVIBECODING_TEMPORAL_WORKFLOW",
+        "OPENVIBECODING_TEMPORAL_WORKFLOW_ID"
       ]
     },
     {
-      "path": "apps/orchestrator/src/cortexpilot_orch/transport/codex_profile_pool.py",
+      "path": "apps/orchestrator/src/openvibecoding_orch/transport/codex_profile_pool.py",
       "keys": [
-        "CORTEXPILOT_CODEX_PROFILE_POOL",
-        "CORTEXPILOT_CODEX_PROFILE_POOL_LOCK_TTL_SEC",
-        "CORTEXPILOT_RUNTIME_ROOT"
+        "OPENVIBECODING_CODEX_PROFILE_POOL",
+        "OPENVIBECODING_CODEX_PROFILE_POOL_LOCK_TTL_SEC",
+        "OPENVIBECODING_RUNTIME_ROOT"
       ]
     },
     {
       "path": "tooling/briefing_generator.py",
       "keys": [
-        "CORTEXPILOT_RUNS_ROOT"
+        "OPENVIBECODING_RUNS_ROOT"
       ]
     },
     {
       "path": "tooling/browser/playwright_runner.py",
       "keys": [
-        "CORTEXPILOT_BROWSER_ALLOWLIST",
-        "CORTEXPILOT_HEADLESS",
-        "CORTEXPILOT_PLAYWRIGHT_TIMEOUT_MS"
+        "OPENVIBECODING_BROWSER_ALLOWLIST",
+        "OPENVIBECODING_HEADLESS",
+        "OPENVIBECODING_PLAYWRIGHT_TIMEOUT_MS"
       ]
     },
     {
       "path": "tooling/browser/policy.py",
       "keys": [
-        "CORTEXPILOT_BROWSER_HUMAN_BEHAVIOR",
-        "CORTEXPILOT_BROWSER_HUMAN_BEHAVIOR_LEVEL",
-        "CORTEXPILOT_BROWSER_PLUGIN_OPTIONAL"
+        "OPENVIBECODING_BROWSER_HUMAN_BEHAVIOR",
+        "OPENVIBECODING_BROWSER_HUMAN_BEHAVIOR_LEVEL",
+        "OPENVIBECODING_BROWSER_PLUGIN_OPTIONAL"
       ]
     },
     {
       "path": "tooling/browser/session_manager.py",
       "keys": [
         "CHROME_PATH",
-        "CORTEXPILOT_BROWSER_CDP_HOST",
-        "CORTEXPILOT_BROWSER_CDP_PORT",
+        "OPENVIBECODING_BROWSER_CDP_HOST",
+        "OPENVIBECODING_BROWSER_CDP_PORT",
         "CI",
-        "CORTEXPILOT_BROWSER_COOKIE_PATH",
-        "CORTEXPILOT_BROWSER_PROFILE_DIR",
-        "CORTEXPILOT_BROWSER_PROFILE_MODE",
-        "CORTEXPILOT_BROWSER_PROFILE_NAME",
-        "CORTEXPILOT_CI_CONTAINER",
-        "CORTEXPILOT_CLEAN_ROOM_MACHINE_TMP_ROOT",
-        "CORTEXPILOT_CLEAN_ROOM_PRESERVE_ROOT",
-        "CORTEXPILOT_RUNTIME_ROOT",
+        "OPENVIBECODING_BROWSER_COOKIE_PATH",
+        "OPENVIBECODING_BROWSER_PROFILE_DIR",
+        "OPENVIBECODING_BROWSER_PROFILE_MODE",
+        "OPENVIBECODING_BROWSER_PROFILE_NAME",
+        "OPENVIBECODING_CI_CONTAINER",
+        "OPENVIBECODING_CLEAN_ROOM_MACHINE_TMP_ROOT",
+        "OPENVIBECODING_CLEAN_ROOM_PRESERVE_ROOT",
+        "OPENVIBECODING_RUNTIME_ROOT",
         "GITHUB_ACTIONS",
-        "CORTEXPILOT_WEB_COOKIE_PATH",
-        "CORTEXPILOT_WEB_PROFILE_DIR",
-        "CORTEXPILOT_WEB_PROFILE_MODE",
-        "CORTEXPILOT_WEB_PROFILE_NAME"
+        "OPENVIBECODING_WEB_COOKIE_PATH",
+        "OPENVIBECODING_WEB_PROFILE_DIR",
+        "OPENVIBECODING_WEB_PROFILE_MODE",
+        "OPENVIBECODING_WEB_PROFILE_NAME"
       ]
     },
     {
       "path": "tooling/browser/stealth_provider.py",
       "keys": [
-        "CORTEXPILOT_BROWSER_PLUGIN_OPTIONAL",
-        "CORTEXPILOT_BROWSER_STEALTH_MODE",
-        "CORTEXPILOT_WEB_STEALTH_MODE"
+        "OPENVIBECODING_BROWSER_PLUGIN_OPTIONAL",
+        "OPENVIBECODING_BROWSER_STEALTH_MODE",
+        "OPENVIBECODING_WEB_STEALTH_MODE"
       ]
     },
     {
       "path": "tooling/mcp/sampling_runner.py",
       "keys": [
         "GEMINI_API_KEY",
-        "CORTEXPILOT_AGENTS_BASE_URL",
-        "CORTEXPILOT_SAMPLING_MODE",
-        "CORTEXPILOT_SAMPLING_MODEL",
-        "CORTEXPILOT_SAMPLING_PROVIDER"
+        "OPENVIBECODING_AGENTS_BASE_URL",
+        "OPENVIBECODING_SAMPLING_MODE",
+        "OPENVIBECODING_SAMPLING_MODEL",
+        "OPENVIBECODING_SAMPLING_PROVIDER"
       ]
     },
     {
       "path": "tooling/search/ai_verifier.py",
       "keys": [
-        "CORTEXPILOT_AGENTS_API",
-        "CORTEXPILOT_AGENTS_BASE_URL",
-        "CORTEXPILOT_SEARCH_PROVIDER",
-        "CORTEXPILOT_SEARCH_VERIFY_MODEL"
+        "OPENVIBECODING_AGENTS_API",
+        "OPENVIBECODING_AGENTS_BASE_URL",
+        "OPENVIBECODING_SEARCH_PROVIDER",
+        "OPENVIBECODING_SEARCH_VERIFY_MODEL"
       ]
     },
     {
       "path": "tooling/search/search_engine.py",
       "keys": [
-        "CORTEXPILOT_BROWSER_PROFILE_MODE",
-        "CORTEXPILOT_BROWSER_STEALTH_MODE",
-        "CORTEXPILOT_RUNTIME_ROOT",
-        "CORTEXPILOT_SEARCH_MODE",
-        "CORTEXPILOT_SEARCH_PROVIDER",
-        "CORTEXPILOT_WEB_ALLOWLIST",
-        "CORTEXPILOT_WEB_HEADLESS",
-        "CORTEXPILOT_WEB_PROFILE_MODE",
-        "CORTEXPILOT_WEB_SEARCH_FALLBACK",
-        "CORTEXPILOT_WEB_SEARCH_FALLBACK_POLICY",
-        "CORTEXPILOT_WEB_STEALTH_MODE"
+        "OPENVIBECODING_BROWSER_PROFILE_MODE",
+        "OPENVIBECODING_BROWSER_STEALTH_MODE",
+        "OPENVIBECODING_RUNTIME_ROOT",
+        "OPENVIBECODING_SEARCH_MODE",
+        "OPENVIBECODING_SEARCH_PROVIDER",
+        "OPENVIBECODING_WEB_ALLOWLIST",
+        "OPENVIBECODING_WEB_HEADLESS",
+        "OPENVIBECODING_WEB_PROFILE_MODE",
+        "OPENVIBECODING_WEB_SEARCH_FALLBACK",
+        "OPENVIBECODING_WEB_SEARCH_FALLBACK_POLICY",
+        "OPENVIBECODING_WEB_STEALTH_MODE"
       ]
     }
   ]

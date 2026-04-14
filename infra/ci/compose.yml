@@ -3,7 +3,7 @@ services:
     build:
       context: ../..
       dockerfile: infra/ci/Dockerfile.core
-    image: cortexpilot-ci-core:local
+    image: openvibecoding-ci-core:local
     init: true
     command: ["bash", "-lc", "sleep infinity"]
     tty: true
@@ -16,9 +16,9 @@ services:
       GITHUB_RUN_ATTEMPT: ${GITHUB_RUN_ATTEMPT:-0}
       GITHUB_EVENT_NAME: ${GITHUB_EVENT_NAME:-local}
       GEMINI_API_KEY: ${GEMINI_API_KEY:-}
-      RUNNER_TEMP: /tmp/cortexpilot-runner-temp
-      CORTEXPILOT_CI_CONTAINER: "1"
+      RUNNER_TEMP: /tmp/openvibecoding-runner-temp
+      OPENVIBECODING_CI_CONTAINER: "1"
       PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
     volumes:
       - ../..:/workspace
-      - ${CORTEXPILOT_DOCKER_CI_RUNNER_TEMP_HOST:-/tmp/cortexpilot-docker-ci-runner-temp}:/tmp/cortexpilot-runner-temp
+      - ${OPENVIBECODING_DOCKER_CI_RUNNER_TEMP_HOST:-/tmp/openvibecoding-docker-ci-runner-temp}:/tmp/openvibecoding-runner-temp

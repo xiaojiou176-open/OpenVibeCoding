@@ -1,6 +1,6 @@
 # Apps Overview
 
-`apps/` contains the three main operator-facing surfaces of CortexPilot.
+`apps/` contains the three main operator-facing surfaces of OpenVibeCoding.
 
 - `orchestrator/`: backend execution, orchestration, evidence, replay
 - `dashboard/`: web command surface

@@ -61,8 +61,8 @@ def _ci_topology_summary() -> str:
 
 def _current_run_summary() -> str:
     return (
-        "- authoritative release-truth builders must consume `.runtime-cache/cortexpilot/reports/ci/current_run/source_manifest.json`.\n"
-        "- the live current-run authority verdict belongs to `python3 scripts/check_ci_current_run_sources.py` and `.runtime-cache/cortexpilot/reports/ci/current_run/consistency.json`.\n"
+        "- authoritative release-truth builders must consume `.runtime-cache/openvibecoding/reports/ci/current_run/source_manifest.json`.\n"
+        "- the live current-run authority verdict belongs to `python3 scripts/check_ci_current_run_sources.py` and `.runtime-cache/openvibecoding/reports/ci/current_run/consistency.json`.\n"
         "- current-run builders: `artifact_index/current_run_index`, `cost_profile`, `runner_health`, `slo`, `portal`, `provenance`.\n"
         "- docs and wrappers must not hand-maintain live current-run status; they must point readers back to the checker receipts.\n"
         "- if the current-run source manifest is missing, authoritative current-run reports must fail closed or run only in explicit advisory mode.\n"

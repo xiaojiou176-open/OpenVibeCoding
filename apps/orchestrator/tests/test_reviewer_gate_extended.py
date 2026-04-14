@@ -3,8 +3,8 @@ from pathlib import Path
 
 import pytest
 
-from cortexpilot_orch.gates import reviewer_gate
-from cortexpilot_orch.gates.reviewer_gate import snapshot_worktree, validate_reviewer_isolation
+from openvibecoding_orch.gates import reviewer_gate
+from openvibecoding_orch.gates.reviewer_gate import snapshot_worktree, validate_reviewer_isolation
 
 
 def _git(cmd: list[str], cwd: Path) -> None:
@@ -29,7 +29,7 @@ def test_reviewer_gate_detects_modifications_verbose(tmp_path: Path, monkeypatch
     snap = snapshot_worktree(repo)
     (repo / "README.md").write_text("changed", encoding="utf-8")
 
-    monkeypatch.setenv("CORTEXPILOT_REVIEWER_SNAPSHOT_VERBOSE", "1")
+    monkeypatch.setenv("OPENVIBECODING_REVIEWER_SNAPSHOT_VERBOSE", "1")
     result = validate_reviewer_isolation(repo, snap)
     assert result["ok"] is False
     assert result["reason"] == "reviewer modified working tree"

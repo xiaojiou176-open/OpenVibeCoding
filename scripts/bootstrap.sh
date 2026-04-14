@@ -17,10 +17,10 @@ MODE="${1:-${BOOTSTRAP_MODE:-full}}"
 PLAYWRIGHT_BROWSERS_PATH_DEFAULT="${PLAYWRIGHT_BROWSERS_PATH:-}"
 PYTHON_LOCKFILE="apps/orchestrator/uv.lock"
 
-cortexpilot_maybe_auto_prune_machine_cache "$ROOT_DIR" "bootstrap:${MODE}"
+openvibecoding_maybe_auto_prune_machine_cache "$ROOT_DIR" "bootstrap:${MODE}"
 
 resolve_pnpm_store_dir() {
-  cortexpilot_pnpm_store_dir "$ROOT_DIR"
+  openvibecoding_pnpm_store_dir "$ROOT_DIR"
 }
 
 sync_python_deps_from_lock_or_fail() {
@@ -33,7 +33,7 @@ sync_python_deps_from_lock_or_fail() {
     exit 1
   fi
   local python_bin
-  python_bin="$(cortexpilot_python_bin "$ROOT_DIR")"
+  python_bin="$(openvibecoding_python_bin "$ROOT_DIR")"
   uv pip sync --python "$python_bin" --link-mode copy "$PYTHON_LOCKFILE"
 }
 
@@ -77,7 +77,7 @@ normalize_python_entrypoints() {
 }
 
 PNPM_STORE_DIR_RESOLVED="$(resolve_pnpm_store_dir)"
-PLAYWRIGHT_BROWSERS_PATH_RESOLVED="$(cortexpilot_playwright_browsers_path "$ROOT_DIR")"
+PLAYWRIGHT_BROWSERS_PATH_RESOLVED="$(openvibecoding_playwright_browsers_path "$ROOT_DIR")"
 if [[ "${GITHUB_ACTIONS:-}" == "true" || "${CI:-}" == "true" ]]; then
   if [[ -z "${RUNNER_TEMP:-}" ]]; then
     echo "❌ bootstrap requires RUNNER_TEMP on CI" >&2
@@ -148,13 +148,13 @@ case "$MODE" in
 esac
 
 if [[ "$need_python_venv" -eq 1 ]]; then
-  local_venv_root="$(cortexpilot_python_venv_root "$ROOT_DIR")"
+  local_venv_root="$(openvibecoding_python_venv_root "$ROOT_DIR")"
   mkdir -p "$(dirname "$local_venv_root")"
   if python_venv_needs_rebuild "$local_venv_root"; then
     rm -rf "$local_venv_root"
   fi
-  bootstrap_python_bin="$(cortexpilot_bootstrap_python_bin)" || {
-    echo "❌ bootstrap requires python3 (or CORTEXPILOT_BOOTSTRAP_PYTHON) to create the managed toolchain" >&2
+  bootstrap_python_bin="$(openvibecoding_bootstrap_python_bin)" || {
+    echo "❌ bootstrap requires python3 (or OPENVIBECODING_BOOTSTRAP_PYTHON) to create the managed toolchain" >&2
     exit 1
   }
   "$bootstrap_python_bin" -m venv "$local_venv_root"
@@ -162,12 +162,12 @@ if [[ "$need_python_venv" -eq 1 ]]; then
 fi
 
 if [[ "$need_python_deps" -eq 1 || "$need_playwright" -eq 1 || "$need_precommit_hooks" -eq 1 ]]; then
-  local_venv_root="$(cortexpilot_python_venv_root "$ROOT_DIR")"
+  local_venv_root="$(openvibecoding_python_venv_root "$ROOT_DIR")"
   if python_venv_needs_rebuild "$local_venv_root"; then
     rm -rf "$local_venv_root"
     mkdir -p "$(dirname "$local_venv_root")"
-    bootstrap_python_bin="$(cortexpilot_bootstrap_python_bin)" || {
-      echo "❌ bootstrap requires python3 (or CORTEXPILOT_BOOTSTRAP_PYTHON) to create the managed toolchain" >&2
+    bootstrap_python_bin="$(openvibecoding_bootstrap_python_bin)" || {
+      echo "❌ bootstrap requires python3 (or OPENVIBECODING_BOOTSTRAP_PYTHON) to create the managed toolchain" >&2
       exit 1
     }
     "$bootstrap_python_bin" -m venv "$local_venv_root"

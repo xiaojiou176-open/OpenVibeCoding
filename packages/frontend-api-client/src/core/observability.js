@@ -1,5 +1,5 @@
-const LOG_EVENT_NAME = "cortexpilot:log-event";
-const LOG_PREFIX = "CORTEXPILOT_LOG_EVENT ";
+const LOG_EVENT_NAME = "openvibecoding:log-event";
+const LOG_PREFIX = "OPENVIBECODING_LOG_EVENT ";
 const REDACTION_VERSION = "redaction.v1";
 const SCHEMA_VERSION = "log_event.v2";
 const SENSITIVE_KEY_PATTERN = /(token|secret|password|credential|api[_-]?key|bearer)/i;
@@ -56,10 +56,10 @@ function normalizeEnum(name, value, allowedValues, fallback) {
 }
 
 function inferService(surface) {
-  if (surface === "dashboard") return "cortexpilot-dashboard";
-  if (surface === "desktop") return "cortexpilot-desktop";
-  if (surface === "ci") return "cortexpilot-ci";
-  return "cortexpilot-tooling";
+  if (surface === "dashboard") return "openvibecoding-dashboard";
+  if (surface === "desktop") return "openvibecoding-desktop";
+  if (surface === "ci") return "openvibecoding-ci";
+  return "openvibecoding-tooling";
 }
 
 function inferLane(domain, inputLane) {

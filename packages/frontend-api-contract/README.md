@@ -1,7 +1,7 @@
 # Frontend API Contract
 
-`@cortexpilot/frontend-api-contract` is the generated route, query, and type
-boundary for CortexPilot frontend consumers.
+`@openvibecoding/frontend-api-contract` is the generated route, query, and type
+boundary for OpenVibeCoding frontend consumers.
 
 Current package boundary: the manifest is ready for a future public package
 release, but no registry publication is live yet. The truthful adoption path

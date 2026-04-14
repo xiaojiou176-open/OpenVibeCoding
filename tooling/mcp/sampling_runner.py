@@ -6,7 +6,7 @@ from typing import Any
 
 
 def _mode() -> str:
-    raw = os.getenv("CORTEXPILOT_SAMPLING_MODE", "mock").strip().lower()
+    raw = os.getenv("OPENVIBECODING_SAMPLING_MODE", "mock").strip().lower()
     return raw if raw in {"mock", "echo", "llm", "gemini"} else "mock"
 
 
@@ -14,7 +14,7 @@ def _resolve_provider(payload: dict[str, Any], mode: str) -> str:
     if mode == "gemini":
         return mode
     provider = (
-        os.getenv("CORTEXPILOT_SAMPLING_PROVIDER", "").strip().lower()
+        os.getenv("OPENVIBECODING_SAMPLING_PROVIDER", "").strip().lower()
         or str(payload.get("provider", "")).strip().lower()
         or "gemini"
     )
@@ -27,7 +27,7 @@ def _resolve_model(payload: dict[str, Any], provider: str) -> str:
     payload_model = payload.get("model")
     if isinstance(payload_model, str) and payload_model.strip():
         return payload_model.strip()
-    env_model = os.getenv("CORTEXPILOT_SAMPLING_MODEL", "").strip()
+    env_model = os.getenv("OPENVIBECODING_SAMPLING_MODEL", "").strip()
     if env_model:
         return env_model
     return "gemini-2.0-flash"

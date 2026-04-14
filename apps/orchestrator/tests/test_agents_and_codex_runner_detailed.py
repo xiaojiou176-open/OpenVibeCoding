@@ -4,21 +4,21 @@ import sys
 import types
 from pathlib import Path
 
-from cortexpilot_orch.runners.agents_runner import (
+from openvibecoding_orch.runners.agents_runner import (
     AgentsRunner,
     _build_codex_payload,
     _extract_binding_from_result,
     _resolve_session_binding,
 )
-from cortexpilot_orch.runners.codex_runner import (
+from openvibecoding_orch.runners.codex_runner import (
     CodexRunner,
     _codex_allowed,
     _codex_flags,
     _extract_session_id,
     _extract_thread_id,
 )
-from cortexpilot_orch.store.run_store import RunStore
-from cortexpilot_orch.store.session_map import SessionAliasStore
+from openvibecoding_orch.store.run_store import RunStore
+from openvibecoding_orch.store.session_map import SessionAliasStore
 
 
 class DummyRunConfig:
@@ -87,7 +87,7 @@ def _base_contract(task_id: str, output_name: str = "mock_output.txt") -> dict:
 def test_codex_runner_parses_stdout_and_writes_transcript(tmp_path: Path, monkeypatch) -> None:
     store = RunStore(runs_root=tmp_path)
     run_id = store.create_run("task_codex")
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", run_id)
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", run_id)
 
     repo_root = Path(__file__).resolve().parents[3]
     schema_path = repo_root / "schemas" / "task_result.v1.json"
@@ -129,7 +129,7 @@ def test_codex_runner_parses_stdout_and_writes_transcript(tmp_path: Path, monkey
 def test_codex_runner_handles_subprocess_failures(tmp_path: Path, monkeypatch) -> None:
     store = RunStore(runs_root=tmp_path)
     run_id = store.create_run("task_codex_fail")
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", run_id)
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", run_id)
 
     repo_root = Path(__file__).resolve().parents[3]
     schema_path = repo_root / "schemas" / "task_result.v1.json"
@@ -158,7 +158,7 @@ def test_codex_runner_handles_subprocess_failures(tmp_path: Path, monkeypatch) -
 def test_codex_runner_missing_task_result_and_schema_invalid(tmp_path: Path, monkeypatch) -> None:
     store = RunStore(runs_root=tmp_path)
     run_id = store.create_run("task_codex_missing")
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", run_id)
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", run_id)
 
     repo_root = Path(__file__).resolve().parents[3]
     schema_path = repo_root / "schemas" / "task_result.v1.json"
@@ -206,9 +206,9 @@ def test_codex_runner_missing_task_result_and_schema_invalid(tmp_path: Path, mon
 def test_agents_runner_with_fake_sdk(monkeypatch, tmp_path: Path) -> None:
     store = RunStore(runs_root=tmp_path)
     run_id = store.create_run("task_agents")
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", run_id)
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", run_id)
     monkeypatch.setenv("GEMINI_API_KEY", "test-key")
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(tmp_path / "runtime"))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(tmp_path / "runtime"))
 
     alias_store = SessionAliasStore()
     alias_store.set_alias("agent-1", "session-legacy", thread_id="thread-legacy", note="seed")
@@ -275,10 +275,10 @@ def test_agents_runner_with_fake_sdk(monkeypatch, tmp_path: Path) -> None:
 def test_agents_runner_missing_api_key(monkeypatch, tmp_path: Path) -> None:
     store = RunStore(runs_root=tmp_path)
     run_id = store.create_run("task_agents_missing_key")
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", run_id)
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", run_id)
     monkeypatch.delenv("GEMINI_API_KEY", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_AGENTS_BASE_URL", raising=False)
-    monkeypatch.setattr("cortexpilot_orch.runners.agents_runner._equilibrium_healthcheck", lambda *_args, **_kwargs: False)
+    monkeypatch.delenv("OPENVIBECODING_AGENTS_BASE_URL", raising=False)
+    monkeypatch.setattr("openvibecoding_orch.runners.agents_runner._equilibrium_healthcheck", lambda *_args, **_kwargs: False)
 
     agents_mod = types.ModuleType("agents")
     agents_mod.Agent = object
@@ -307,7 +307,7 @@ def test_agents_runner_missing_api_key(monkeypatch, tmp_path: Path) -> None:
 def test_agents_runner_shell_deny_detects_tool(monkeypatch, tmp_path: Path) -> None:
     store = RunStore(runs_root=tmp_path)
     run_id = store.create_run("task_shell_deny")
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", run_id)
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", run_id)
     monkeypatch.setenv("GEMINI_API_KEY", "test-key")
 
     class DummyAgent:
@@ -372,9 +372,9 @@ def test_agents_runner_shell_deny_detects_tool(monkeypatch, tmp_path: Path) -> N
 def test_agents_runner_handoff_chain(monkeypatch, tmp_path: Path) -> None:
     store = RunStore(runs_root=tmp_path)
     run_id = store.create_run("task_agents_handoff")
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", run_id)
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", run_id)
     monkeypatch.setenv("GEMINI_API_KEY", "test-key")
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(tmp_path / "runtime"))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(tmp_path / "runtime"))
 
     class DummyAgent:
         def __init__(self, name: str, instructions: str, mcp_servers: list):
@@ -385,7 +385,7 @@ def test_agents_runner_handoff_chain(monkeypatch, tmp_path: Path) -> None:
     class DummyRunner:
         @staticmethod
         def run_streamed(agent, prompt, **kwargs):
-            if agent.name.startswith("CortexPilotHandoff_") or agent.name == "CortexPilotOwner":
+            if agent.name.startswith("OpenVibeCodingHandoff_") or agent.name == "OpenVibeCodingOwner":
                 payload = {
                     "summary": "handoff summary",
                     "risks": ["risk-1"],
@@ -443,7 +443,7 @@ def test_agents_runner_handoff_chain(monkeypatch, tmp_path: Path) -> None:
 def test_agents_runner_invalid_output(monkeypatch, tmp_path: Path) -> None:
     store = RunStore(runs_root=tmp_path)
     run_id = store.create_run("task_agents_invalid")
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", run_id)
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", run_id)
     monkeypatch.setenv("GEMINI_API_KEY", "test-key")
 
     class DummyAgent:

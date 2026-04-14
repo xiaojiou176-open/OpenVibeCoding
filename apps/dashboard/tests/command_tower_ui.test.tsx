@@ -21,7 +21,7 @@ import BlockerPanel from "../components/command-tower/BlockerPanel";
 import ConversationGraph from "../components/command-tower/ConversationGraph";
 import SessionBoard from "../components/command-tower/SessionBoard";
 import { metadata as commandTowerMetadata } from "../app/command-tower/page";
-import { getUiCopy } from "@cortexpilot/frontend-shared/uiCopy";
+import { getUiCopy } from "@openvibecoding/frontend-shared/uiCopy";
 
 function getRequiredSessionRow(sessionId: string): HTMLTableRowElement {
   const sessionLink = document.querySelector(`a[href="/command-tower/sessions/${sessionId}"]`);

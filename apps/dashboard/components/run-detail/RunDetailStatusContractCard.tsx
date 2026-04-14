@@ -1,6 +1,6 @@
 "use client";
 
-import { DEFAULT_UI_LOCALE, getUiCopy } from "@cortexpilot/frontend-shared/uiCopy";
+import { DEFAULT_UI_LOCALE, getUiCopy } from "@openvibecoding/frontend-shared/uiCopy";
 import Link from "next/link";
 import ContractViewer from "../ContractViewer";
 import { Badge } from "../ui/badge";

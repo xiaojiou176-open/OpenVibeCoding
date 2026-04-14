@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from cortexpilot_orch.planning import intake
+from openvibecoding_orch.planning import intake
 
 
 def test_extract_parallelism_positive_after_regex_fix() -> None:
@@ -115,8 +115,8 @@ def test_build_task_chain_invalid_plan_entries() -> None:
 
 def test_intake_service_answer_chain_failure_and_bundle_note(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runtime_root / "runs"))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runtime_root / "runs"))
 
     service = intake.IntakeService()
     monkeypatch.setattr(service._validator, "validate_report", lambda *_args, **_kwargs: None)
@@ -171,8 +171,8 @@ def test_intake_service_answer_chain_failure_and_bundle_note(tmp_path: Path, mon
 
 def test_intake_service_build_contract_artifacts_non_list(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runtime_root / "runs"))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runtime_root / "runs"))
 
     service = intake.IntakeService()
 
@@ -217,8 +217,8 @@ def test_intake_service_build_contract_artifacts_non_list(tmp_path: Path, monkey
 
 def test_intake_service_build_contract_compacts_empty_browser_policy_fields(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runtime_root / "runs"))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runtime_root / "runs"))
 
     service = intake.IntakeService()
 
@@ -364,8 +364,8 @@ def test_intake_run_agent_local_key_fallback_and_output_errors(monkeypatch) -> N
 
 def test_intake_service_answer_failure_and_chain_run_failed(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runtime_root / "runs"))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runtime_root / "runs"))
 
     service = intake.IntakeService()
     monkeypatch.setattr(service._validator, "validate_report", lambda *_args, **_kwargs: None)
@@ -452,8 +452,8 @@ def test_intake_lastmile_helper_branches(tmp_path: Path, monkeypatch) -> None:
     assert isinstance(bundle.get("plans"), list)
 
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runtime_root / "runs"))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runtime_root / "runs"))
     service = intake.IntakeService()
     intake_id = service._store.create(payload)
     service._store.write_response(intake_id, {"intake_id": intake_id, "status": "READY", "questions": []})

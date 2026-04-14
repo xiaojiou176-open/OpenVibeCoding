@@ -113,8 +113,8 @@ describe("dashboard api wrappers", () => {
       },
       {
         name: "fetchPmSessions(status[] + project + sort)",
-        path: "/api/pm/sessions?status%5B%5D=active&status=active&status%5B%5D=failed&status=failed&project_key=cortexpilot&sort=blocked_desc",
-        invoke: () => fetchPmSessions({ status: ["active", "failed"], projectKey: "cortexpilot", sort: "blocked_desc" }),
+        path: "/api/pm/sessions?status%5B%5D=active&status=active&status%5B%5D=failed&status=failed&project_key=openvibecoding&sort=blocked_desc",
+        invoke: () => fetchPmSessions({ status: ["active", "failed"], projectKey: "openvibecoding", sort: "blocked_desc" }),
       },
       { name: "fetchPmSession", path: "/api/pm/sessions/session%2F1", invoke: () => fetchPmSession("session/1") },
       {

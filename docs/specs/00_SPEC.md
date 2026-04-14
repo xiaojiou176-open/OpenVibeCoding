@@ -1,10 +1,10 @@
-# 00_SPEC - CortexPilot Engineering Specification (Single Source of Truth)
+# 00_SPEC - OpenVibeCoding Engineering Specification (Single Source of Truth)
 
 > **Active entrypoint note**: this is the current active spec entrypoint and the main product/specification reference for public contributors.
 
 > **Status**: Normative / hard enforcement gates must follow this document  
 > **Last Updated**: 2026-04-12
-> **Scope**: this repository (monorepo), including CortexPilot Orchestrator and the multi-agent collaboration runtime  
+> **Scope**: this repository (monorepo), including OpenVibeCoding Orchestrator and the multi-agent collaboration runtime  
 > **Non-goal**: this document does not carry vision, story, or dialectical history; for those materials, see `10_VISION.md` / `90_HISTORY.md`
 
 ---
@@ -45,13 +45,13 @@
 
 - **Contract**: a structured task contract; the **only** valid instruction carrier. Natural-language handoff is forbidden.
 - **Result / Report**: structured outputs produced by execution, review, or testing, primarily in JSON.
-- **Run**: a complete execution instance and its evidence chain; the directory root is `.runtime-cache/cortexpilot/runs/<run_id>`.
-- **Run Bundle**: the `.runtime-cache/cortexpilot/runs/<run_id>` directory and everything inside it.
-- **Run Store**: the root directory `.runtime-cache/cortexpilot/runs/`.
+- **Run**: a complete execution instance and its evidence chain; the directory root is `.runtime-cache/openvibecoding/runs/<run_id>`.
+- **Run Bundle**: the `.runtime-cache/openvibecoding/runs/<run_id>` directory and everything inside it.
+- **Run Store**: the root directory `.runtime-cache/openvibecoding/runs/`.
 - **Gate**: a hard gate such as diff / tool / reviewer / tests / network / MCP / integrated / sampling.
 - **Worktree**:
-  - **P1 default (parallel L2 / multi-worker)**: `.runtime-cache/cortexpilot/worktrees/<run_id>/<task_id>`, one worktree per task with physical isolation.
-  - **P0 compatibility**: `.runtime-cache/cortexpilot/worktrees/<run_id>` is allowed only for a single task running serially.
+  - **P1 default (parallel L2 / multi-worker)**: `.runtime-cache/openvibecoding/worktrees/<run_id>/<task_id>`, one worktree per task with physical isolation.
+  - **P0 compatibility**: `.runtime-cache/openvibecoding/worktrees/<run_id>` is allowed only for a single task running serially.
   - **Concurrency hard rule**: if L2 parallelism or multiple workers must write concurrently, P1 is mandatory. Concurrent writes inside a single P0 worktree are forbidden.
 - **Event Stream**: `events.jsonl` (append-only).
 - **Minimum `events.jsonl` fields**: `ts` / `level` / `event_type` / `run_id` / `task_id` / `attempt` / `payload`.
@@ -73,8 +73,8 @@
 - `apps/orchestrator/`: the single trusted control plane
 - `contracts/`: contract examples and notes (examples, plans, and similar materials)
 - `docs/`: human-readable documents only; they must not conflict with the specification
-- `.runtime-cache/cortexpilot/`: runtime artifact root (must be gitignored; may be overridden with `CORTEXPILOT_RUNTIME_ROOT`)
-- `CORTEXPILOT_CODEX_BASE_HOME`: the Codex MCP home root (must include full `mcp_servers.*` and the Equilibrium provider). Role-specific homes must not carry `mcp_servers.*`
+- `.runtime-cache/openvibecoding/`: runtime artifact root (must be gitignored; may be overridden with `OPENVIBECODING_RUNTIME_ROOT`)
+- `OPENVIBECODING_CODEX_BASE_HOME`: the Codex MCP home root (must include full `mcp_servers.*` and the Equilibrium provider). Role-specific homes must not carry `mcp_servers.*`
 
 ### 2.2 Required Development And Test Entrypoints
 
@@ -94,9 +94,9 @@
   * The canonical terminology lives in the "Glossary And Naming" section of this file.
 * **Execution order (dependency-sorted)**
   1. Freeze the schemas: `task_contract.v1.json` / `run_manifest.v1.json` / `task_result.v1.json` / `work_report.v1.json` / `review_report.v1.json` / `test_report.v1.json` / `evidence_report.v1.json` / `evidence_bundle.v1.json` / `reexec_report.v1.json` / `agent_registry.v1.json` / `orchestrator_event.v1.json`
-  2. Run Store: create `.runtime-cache/cortexpilot/runs/<run_id>` and initialize `contract.json` / `manifest.json` / `events.jsonl`
-  3. Worktree: create `.runtime-cache/cortexpilot/worktrees/<run_id>/<task_id>` (P1 default), run `git worktree prune` first, and `git worktree remove --force` at the end
-  4. Locks: `.runtime-cache/cortexpilot/locks/<sha256>.lock`, with all-or-nothing acquisition and release
+  2. Run Store: create `.runtime-cache/openvibecoding/runs/<run_id>` and initialize `contract.json` / `manifest.json` / `events.jsonl`
+  3. Worktree: create `.runtime-cache/openvibecoding/worktrees/<run_id>/<task_id>` (P1 default), run `git worktree prune` first, and `git worktree remove --force` at the end
+  4. Locks: `.runtime-cache/openvibecoding/locks/<sha256>.lock`, with all-or-nothing acquisition and release
   5. Gates: schema / diff / tool / reviewer / tests + network / MCP / integrated / sampling (scope violations fail immediately)
   6. Runner: Codex / Agents Runner must inject `sandbox` / `approval-policy` / `cwd` / `codex_thread_id`
      * Production execution must be MCP-only; `codex exec --json` is reserved for diagnostics and regression sampling
@@ -106,7 +106,7 @@
   8. Replay: support both Rehydration (no LLM call) and Re-execution (rerun)
   9. CLI and acceptance: `init` / `doctor` / `run` / `serve` + Day-1 E2E
 * **Archival rule**
-  * Runtime artifacts may land only inside `.runtime-cache/cortexpilot/runs/<run_id>`. Scattered output paths are forbidden.
+  * Runtime artifacts may land only inside `.runtime-cache/openvibecoding/runs/<run_id>`. Scattered output paths are forbidden.
 
 ---
 
@@ -138,7 +138,7 @@
 
 ### 5.1 Run Bundle Root Directory
 
-- The actual on-disk root is `.runtime-cache/cortexpilot/runs/<run_id>`.
+- The actual on-disk root is `.runtime-cache/openvibecoding/runs/<run_id>`.
 - `events.jsonl` must remain **append-only**, and writes must use both `flush` and `fsync`.
 
 ### 5.2 Minimum Required Directory Structure
@@ -153,10 +153,10 @@
     * Replay by Rehydration
     * Audit
 * On-disk rule
-  * The real on-disk location must be `.runtime-cache/cortexpilot/runs/<run_id>`.
+  * The real on-disk location must be `.runtime-cache/openvibecoding/runs/<run_id>`.
 * Directory structure (aligned to the current implementation)
   ```text
-  .runtime-cache/cortexpilot/runs/
+  .runtime-cache/openvibecoding/runs/
   ├── <run_id>/                        # unique directory for each run
   │   ├── contract.json                # initial Task Contract
   │   ├── manifest.json                # Run Manifest
@@ -572,7 +572,7 @@
     * Searcher / Researcher: filesystem=`workspace-write`, shell=`never`, network=`allow` (controlled retrieval tasks only)
   * Default `forbidden_actions` denylist
     * `rm -rf`, `sudo`, `ssh`, `curl`, `wget`, and editing `.env`
-    * runtime directories such as `.runtime-cache/cortexpilot/` are protected
+    * runtime directories such as `.runtime-cache/openvibecoding/` are protected
   * `allowed_paths` breadth review
     * forbid `**`, empty arrays, `.`, and `/`
     * overly broad directories require God Mode approval

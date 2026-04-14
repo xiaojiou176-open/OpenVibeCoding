@@ -49,8 +49,8 @@ if [[ "$MODE" == "apply" && "$CONFIRM_APPLY" != "1" ]]; then
   exit 2
 fi
 
-REPORT_JSON=".runtime-cache/cortexpilot/reports/space_governance/report.json"
-REPORT_MD=".runtime-cache/cortexpilot/reports/space_governance/report.md"
+REPORT_JSON=".runtime-cache/openvibecoding/reports/space_governance/report.json"
+REPORT_MD=".runtime-cache/openvibecoding/reports/space_governance/report.md"
 GATE_JSON=".runtime-cache/test_output/space_governance/cleanup_gate_${WAVE}.json"
 RESULT_JSON=".runtime-cache/test_output/space_governance/cleanup_${WAVE}_${MODE}.json"
 

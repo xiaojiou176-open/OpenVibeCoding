@@ -1,6 +1,6 @@
 # Ecosystem And Builder Surfaces v1
 
-This document explains how CortexPilot fits into today's coding-agent
+This document explains how OpenVibeCoding fits into today's coding-agent
 ecosystem, how the public first-run loop turns into a shareable asset, and
 where builders should connect without overclaiming a full SDK/platform story.
 
@@ -9,7 +9,7 @@ where builders should connect without overclaiming a full SDK/platform story.
 These names are safe to use in the current front door because they match the
 repo's real product boundary.
 
-- **Codex**: CortexPilot is a command tower for Codex workflows that need
+- **Codex**: OpenVibeCoding is a command tower for Codex workflows that need
   governed runs, case records, approvals, and replayable proof.
 - **Claude Code**: the same operator/control-plane story applies to Claude Code
   workflows.
@@ -42,7 +42,7 @@ The strongest public distribution loop today is:
 3. Reuse the Workflow Case as a **share-ready asset** instead of trapping the
    result inside a one-off operator page.
 
-That makes CortexPilot easier to explain, review, and circulate without
+That makes OpenVibeCoding easier to explain, review, and circulate without
 pretending it is already a hosted product.
 
 ## AI surfaces already in the main flow
@@ -63,9 +63,9 @@ Use these three layers together:
 
 | Surface | What it is for | Where to start |
 | --- | --- | --- |
-| `@cortexpilot/frontend-api-client` | thin JS/TS client helpers for dashboard/desktop/web consumers plus the repo-owned `createControlPlaneStarter(...)` bootstrap path | `packages/frontend-api-client/README.md` |
-| `@cortexpilot/frontend-api-contract` | generated contract-facing types and route/query names | `packages/frontend-api-contract/index.d.ts` |
-| `@cortexpilot/frontend-shared` | shared UI copy, locale, status, and frontend-only presentation helpers | `packages/frontend-shared/README.md` |
+| `@openvibecoding/frontend-api-client` | thin JS/TS client helpers for dashboard/desktop/web consumers plus the repo-owned `createControlPlaneStarter(...)` bootstrap path | `packages/frontend-api-client/README.md` |
+| `@openvibecoding/frontend-api-contract` | generated contract-facing types and route/query names | `packages/frontend-api-contract/index.d.ts` |
+| `@openvibecoding/frontend-shared` | shared UI copy, locale, status, and frontend-only presentation helpers | `packages/frontend-shared/README.md` |
 
 ## Builder quickstart
 
@@ -75,9 +75,9 @@ Use these three layers together:
    bootstrap for overview + agents + contracts + role-config reads
 4. Read runs, Workflow Cases, approvals, and command-tower overviews from the
    same client boundary
-5. Use `@cortexpilot/frontend-api-contract` for generated contract-facing
+5. Use `@openvibecoding/frontend-api-contract` for generated contract-facing
    imports
-6. Use `@cortexpilot/frontend-shared` for copy, locale, and presentation
+6. Use `@openvibecoding/frontend-shared` for copy, locale, and presentation
    helpers instead of rebuilding those layers per app
 7. Use the repo-owned example
    `packages/frontend-api-client/examples/control_plane_starter.local.mjs`
@@ -87,7 +87,7 @@ Use these three layers together:
 ## Minimal builder example
 
 ```ts
-import { createFrontendApiClient } from "@cortexpilot/frontend-api-client";
+import { createFrontendApiClient } from "@openvibecoding/frontend-api-client";
 
 const client = createFrontendApiClient({
   baseUrl: "http://localhost:8000",
@@ -119,7 +119,7 @@ SDK or an automatic execution-authority switch.
 
 ## Guardrails
 
-- do not describe CortexPilot as a hosted operator product
+- do not describe OpenVibeCoding as a hosted operator product
 - do not describe the current MCP surface as write-capable
 - do not describe the current package surface as a full SDK platform
 - do keep the public story anchored on:

@@ -119,7 +119,7 @@ jobs:
       - name: Seed route report
         run: |
           set -euo pipefail
-          mkdir -p .runtime-cache/cortexpilot/reports/ci/routes
+          mkdir -p .runtime-cache/openvibecoding/reports/ci/routes
           python3 - <<'PY'
           import json
           import os
@@ -127,10 +127,10 @@ jobs:
           from pathlib import Path
 
           route_id = os.environ["ROUTE_ID"]
-          out_dir = Path(".runtime-cache/cortexpilot/reports/ci/routes")
+          out_dir = Path(".runtime-cache/openvibecoding/reports/ci/routes")
           out_dir.mkdir(parents=True, exist_ok=True)
           payload = {
-              "report_type": "cortexpilot_ci_route_report",
+              "report_type": "openvibecoding_ci_route_report",
               "generated_at": datetime.now(timezone.utc).isoformat(),
               "route_id": route_id,
               "trust_class": os.environ["TRUST_CLASS"],
@@ -178,7 +178,7 @@ jobs:
           retention-days: 14
           if-no-files-found: error
           path: |
-            .runtime-cache/cortexpilot/reports/ci/routes
+            .runtime-cache/openvibecoding/reports/ci/routes
 
   quick-feedback:
     name: Quick Feedback
@@ -191,7 +191,7 @@ jobs:
       security-events: read
     env:
       PYTHONDONTWRITEBYTECODE: "1"
-      CORTEXPILOT_HYGIENE_QUICK_PATH: "1"
+      OPENVIBECODING_HYGIENE_QUICK_PATH: "1"
     steps:
       - name: Capture quick-feedback start
         id: quick_feedback_start
@@ -234,8 +234,8 @@ jobs:
       - name: Control-plane doctor (GitHub-hosted quick path)
         run: |
           set -euo pipefail
-          CORTEXPILOT_DOCTOR_REQUIRE_DOCKER=0 \
-          CORTEXPILOT_DOCTOR_REQUIRE_SUDO=0 \
+          OPENVIBECODING_DOCTOR_REQUIRE_DOCKER=0 \
+          OPENVIBECODING_DOCTOR_REQUIRE_SUDO=0 \
           bash scripts/ci_control_plane_doctor.sh
 
       - name: Governance self-tests
@@ -274,19 +274,19 @@ jobs:
 
       - name: Quick policy / doc / hygiene gates
         env:
-          CORTEXPILOT_DOC_GATE_MODE: ci-diff
-          CORTEXPILOT_DOC_GATE_BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
-          CORTEXPILOT_DOC_GATE_HEAD_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
-          CORTEXPILOT_CI_ROUTE_ID: ${{ needs.ci-trust-boundary.outputs.route_id }}
-          CORTEXPILOT_CI_RUNNER_CLASS: github_hosted
-          CORTEXPILOT_HYGIENE_QUICK_PATH: "1"
+          OPENVIBECODING_DOC_GATE_MODE: ci-diff
+          OPENVIBECODING_DOC_GATE_BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+          OPENVIBECODING_DOC_GATE_HEAD_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+          OPENVIBECODING_CI_ROUTE_ID: ${{ needs.ci-trust-boundary.outputs.route_id }}
+          OPENVIBECODING_CI_RUNNER_CLASS: github_hosted
+          OPENVIBECODING_HYGIENE_QUICK_PATH: "1"
           GH_TOKEN: ${{ github.token }}
           TRUSTED_ROUTE_ALLOWED: ${{ needs.ci-trust-boundary.outputs.trusted_route_allowed }}
         run: |
           set -euo pipefail
           github_alert_mode="require"
-          if [[ "${CORTEXPILOT_CI_RUNNER_CLASS:-}" == "github_hosted" ]]; then
-            case "${CORTEXPILOT_CI_ROUTE_ID:-}" in
+          if [[ "${OPENVIBECODING_CI_RUNNER_CLASS:-}" == "github_hosted" ]]; then
+            case "${OPENVIBECODING_CI_ROUTE_ID:-}" in
               trusted_pr|untrusted_pr|push_main)
                 github_alert_mode="auto"
                 ;;
@@ -294,7 +294,7 @@ jobs:
           elif [[ "${GITHUB_EVENT_NAME}" == "pull_request" ]]; then
             github_alert_mode="auto"
           fi
-          export CORTEXPILOT_GITHUB_ALERTS_MODE="${github_alert_mode}"
+          export OPENVIBECODING_GITHUB_ALERTS_MODE="${github_alert_mode}"
           bash scripts/check_governance_python_entrypoints.sh
           bash scripts/run_governance_py.sh scripts/check_repo_positioning.py
           bash scripts/run_governance_py.sh scripts/check_github_security_alerts.py --mode "${github_alert_mode}" --repo xiaojiou176-open/OpenVibeCoding
@@ -332,7 +332,7 @@ jobs:
             --started-epoch "${STARTED_EPOCH}" \
             --artifact-root .runtime-cache/test_output \
             --artifact-root .runtime-cache/logs \
-            --artifact-root .runtime-cache/cortexpilot/reports \
+            --artifact-root .runtime-cache/openvibecoding/reports \
             --source-run-id "${SOURCE_RUN_ID}" \
             --source-run-attempt "${SOURCE_RUN_ATTEMPT}" \
             --source-sha "${SOURCE_SHA}" \
@@ -361,7 +361,7 @@ jobs:
           path: |
             .runtime-cache/test_output
             .runtime-cache/logs
-            .runtime-cache/cortexpilot/reports
+            .runtime-cache/openvibecoding/reports
 
   dependency-review:
     name: Dependency Review
@@ -422,15 +422,15 @@ jobs:
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16
         with:
           name: ci-route-seed-${{ github.run_id }}-${{ github.run_attempt }}
-          path: .runtime-cache/cortexpilot/reports/ci/routes
+          path: .runtime-cache/openvibecoding/reports/ci/routes
           merge-multiple: true
 
       - name: Run low-privilege PR lane
         id: run_low_priv_lane
         env:
-          CORTEXPILOT_DOC_GATE_MODE: ci-diff
-          CORTEXPILOT_DOC_GATE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          CORTEXPILOT_DOC_GATE_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          OPENVIBECODING_DOC_GATE_MODE: ci-diff
+          OPENVIBECODING_DOC_GATE_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          OPENVIBECODING_DOC_GATE_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           source scripts/lib/test_heartbeat.sh
           run_with_heartbeat_and_timeout "ci:pr-low-priv:basic-gates" "1800" "30" -- \
@@ -454,8 +454,8 @@ jobs:
             status="fail"
           fi
           python3 scripts/build_ci_route_report.py finalize \
-            --input ".runtime-cache/cortexpilot/reports/ci/routes/${ROUTE_ID_VALUE}.json" \
-            --output ".runtime-cache/cortexpilot/reports/ci/routes/${ROUTE_ID_VALUE}.json" \
+            --input ".runtime-cache/openvibecoding/reports/ci/routes/${ROUTE_ID_VALUE}.json" \
+            --output ".runtime-cache/openvibecoding/reports/ci/routes/${ROUTE_ID_VALUE}.json" \
             --overall-status "${status}" \
             --cloud-bootstrap-used false \
             --job-observed ci-trust-boundary \
@@ -463,7 +463,7 @@ jobs:
             --job-observed untrusted-pr-basic-gates \
             --artifact-name "${LOW_PRIV_ARTIFACT_NAME}"
           python3 scripts/build_ci_route_report.py validate \
-            --input ".runtime-cache/cortexpilot/reports/ci/routes/${ROUTE_ID_VALUE}.json" \
+            --input ".runtime-cache/openvibecoding/reports/ci/routes/${ROUTE_ID_VALUE}.json" \
             --expected-route-id untrusted_pr \
             --expected-trust-class untrusted \
             --expected-runner-class github_hosted \
@@ -494,7 +494,7 @@ jobs:
           path: |
             .runtime-cache/test_output
             .runtime-cache/logs
-            .runtime-cache/cortexpilot/reports
+            .runtime-cache/openvibecoding/reports
 
       - name: Upload untrusted route report artifact
         if: always()
@@ -504,8 +504,8 @@ jobs:
           retention-days: 14
           if-no-files-found: error
           path: |
-            .runtime-cache/cortexpilot/reports/ci/routes/${{ needs.ci-trust-boundary.outputs.route_id }}.json
-            .runtime-cache/cortexpilot/reports/ci/routes/${{ needs.ci-trust-boundary.outputs.route_id }}.md
+            .runtime-cache/openvibecoding/reports/ci/routes/${{ needs.ci-trust-boundary.outputs.route_id }}.json
+            .runtime-cache/openvibecoding/reports/ci/routes/${{ needs.ci-trust-boundary.outputs.route_id }}.md
 
   policy-and-security:
     name: Policy and Security
@@ -520,10 +520,10 @@ jobs:
       actions: write
       security-events: read
     env:
-      CORTEXPILOT_CI_ROUTE_ID: ${{ needs.ci-trust-boundary.outputs.route_id }}
-      CORTEXPILOT_CI_TRUST_CLASS: ${{ needs.ci-trust-boundary.outputs.trust_class }}
-      CORTEXPILOT_CI_RUNNER_CLASS: github_hosted
-      CORTEXPILOT_CI_CLOUD_BOOTSTRAP_ALLOWED: ${{ needs.ci-trust-boundary.outputs.sensitive_dispatch_allowed }}
+      OPENVIBECODING_CI_ROUTE_ID: ${{ needs.ci-trust-boundary.outputs.route_id }}
+      OPENVIBECODING_CI_TRUST_CLASS: ${{ needs.ci-trust-boundary.outputs.trust_class }}
+      OPENVIBECODING_CI_RUNNER_CLASS: github_hosted
+      OPENVIBECODING_CI_CLOUD_BOOTSTRAP_ALLOWED: ${{ needs.ci-trust-boundary.outputs.sensitive_dispatch_allowed }}
       GH_TOKEN: ${{ github.token }}
     steps:
       - name: Initialize Runner Tool Cache Env
@@ -586,8 +586,8 @@ jobs:
           path: |
             .runtime-cache/test_output
             .runtime-cache/logs
-            .runtime-cache/cortexpilot/reports
-            .runtime-cache/cortexpilot/release
+            .runtime-cache/openvibecoding/reports
+            .runtime-cache/openvibecoding/release
 
   core-tests:
     name: Core Tests
@@ -601,10 +601,10 @@ jobs:
       contents: read
       actions: write
     env:
-      CORTEXPILOT_CI_ROUTE_ID: ${{ needs.ci-trust-boundary.outputs.route_id }}
-      CORTEXPILOT_CI_TRUST_CLASS: ${{ needs.ci-trust-boundary.outputs.trust_class }}
-      CORTEXPILOT_CI_RUNNER_CLASS: github_hosted
-      CORTEXPILOT_CI_CLOUD_BOOTSTRAP_ALLOWED: ${{ needs.ci-trust-boundary.outputs.sensitive_dispatch_allowed }}
+      OPENVIBECODING_CI_ROUTE_ID: ${{ needs.ci-trust-boundary.outputs.route_id }}
+      OPENVIBECODING_CI_TRUST_CLASS: ${{ needs.ci-trust-boundary.outputs.trust_class }}
+      OPENVIBECODING_CI_RUNNER_CLASS: github_hosted
+      OPENVIBECODING_CI_CLOUD_BOOTSTRAP_ALLOWED: ${{ needs.ci-trust-boundary.outputs.sensitive_dispatch_allowed }}
     steps:
       - name: Initialize Runner Tool Cache Env
         run: |
@@ -626,7 +626,7 @@ jobs:
 
       - name: Run core-tests slice
         env:
-          CORTEXPILOT_CI_TEST_PHASE_PARALLEL: "1"
+          OPENVIBECODING_CI_TEST_PHASE_PARALLEL: "1"
         run: |
           source scripts/lib/test_heartbeat.sh
           if sudo -n true >/dev/null 2>&1; then
@@ -661,7 +661,7 @@ jobs:
           path: |
             .runtime-cache/test_output
             .runtime-cache/logs
-            .runtime-cache/cortexpilot/reports
+            .runtime-cache/openvibecoding/reports
 
   ui-truth:
     name: UI Truth
@@ -680,11 +680,11 @@ jobs:
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-      CORTEXPILOT_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE: require
-      CORTEXPILOT_CI_ROUTE_ID: ${{ needs.ci-trust-boundary.outputs.route_id }}
-      CORTEXPILOT_CI_TRUST_CLASS: ${{ needs.ci-trust-boundary.outputs.trust_class }}
-      CORTEXPILOT_CI_RUNNER_CLASS: github_hosted
-      CORTEXPILOT_CI_CLOUD_BOOTSTRAP_ALLOWED: ${{ needs.ci-trust-boundary.outputs.sensitive_dispatch_allowed }}
+      OPENVIBECODING_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE: require
+      OPENVIBECODING_CI_ROUTE_ID: ${{ needs.ci-trust-boundary.outputs.route_id }}
+      OPENVIBECODING_CI_TRUST_CLASS: ${{ needs.ci-trust-boundary.outputs.trust_class }}
+      OPENVIBECODING_CI_RUNNER_CLASS: github_hosted
+      OPENVIBECODING_CI_CLOUD_BOOTSTRAP_ALLOWED: ${{ needs.ci-trust-boundary.outputs.sensitive_dispatch_allowed }}
     steps:
       - name: Initialize Runner Tool Cache Env
         run: |
@@ -739,7 +739,7 @@ jobs:
           path: |
             .runtime-cache/test_output
             .runtime-cache/logs
-            .runtime-cache/cortexpilot/reports
+            .runtime-cache/openvibecoding/reports
 
   resilience-and-e2e:
     name: Resilience and E2E
@@ -758,12 +758,12 @@ jobs:
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-      CORTEXPILOT_CI_LIVE_PREFLIGHT_PROVIDER_API_MODE: require
-      CORTEXPILOT_CI_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE: require
-      CORTEXPILOT_CI_ROUTE_ID: ${{ needs.ci-trust-boundary.outputs.route_id }}
-      CORTEXPILOT_CI_TRUST_CLASS: ${{ needs.ci-trust-boundary.outputs.trust_class }}
-      CORTEXPILOT_CI_RUNNER_CLASS: github_hosted
-      CORTEXPILOT_CI_CLOUD_BOOTSTRAP_ALLOWED: ${{ needs.ci-trust-boundary.outputs.sensitive_dispatch_allowed }}
+      OPENVIBECODING_CI_LIVE_PREFLIGHT_PROVIDER_API_MODE: require
+      OPENVIBECODING_CI_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE: require
+      OPENVIBECODING_CI_ROUTE_ID: ${{ needs.ci-trust-boundary.outputs.route_id }}
+      OPENVIBECODING_CI_TRUST_CLASS: ${{ needs.ci-trust-boundary.outputs.trust_class }}
+      OPENVIBECODING_CI_RUNNER_CLASS: github_hosted
+      OPENVIBECODING_CI_CLOUD_BOOTSTRAP_ALLOWED: ${{ needs.ci-trust-boundary.outputs.sensitive_dispatch_allowed }}
     steps:
       - name: Initialize Runner Tool Cache Env
         run: |
@@ -818,7 +818,7 @@ jobs:
           path: |
             .runtime-cache/test_output
             .runtime-cache/logs
-            .runtime-cache/cortexpilot/reports
+            .runtime-cache/openvibecoding/reports
 
   release-evidence:
     name: Release Evidence
@@ -838,10 +838,10 @@ jobs:
     outputs:
       route_report_artifact_name: ${{ steps.finalize_release_route.outputs.route_report_artifact_name }}
     env:
-      CORTEXPILOT_CI_ROUTE_ID: ${{ needs.ci-trust-boundary.outputs.route_id }}
-      CORTEXPILOT_CI_TRUST_CLASS: ${{ needs.ci-trust-boundary.outputs.trust_class }}
-      CORTEXPILOT_CI_RUNNER_CLASS: github_hosted
-      CORTEXPILOT_CI_CLOUD_BOOTSTRAP_ALLOWED: ${{ needs.ci-trust-boundary.outputs.sensitive_dispatch_allowed }}
+      OPENVIBECODING_CI_ROUTE_ID: ${{ needs.ci-trust-boundary.outputs.route_id }}
+      OPENVIBECODING_CI_TRUST_CLASS: ${{ needs.ci-trust-boundary.outputs.trust_class }}
+      OPENVIBECODING_CI_RUNNER_CLASS: github_hosted
+      OPENVIBECODING_CI_CLOUD_BOOTSTRAP_ALLOWED: ${{ needs.ci-trust-boundary.outputs.sensitive_dispatch_allowed }}
     steps:
       - name: Initialize Runner Tool Cache Env
         run: |
@@ -893,7 +893,7 @@ jobs:
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16
         with:
           name: ci-route-seed-${{ github.run_id }}-${{ github.run_attempt }}
-          path: .runtime-cache/cortexpilot/reports/ci/routes
+          path: .runtime-cache/openvibecoding/reports/ci/routes
           merge-multiple: true
 
       - name: Run release-evidence slice
@@ -928,8 +928,8 @@ jobs:
             status="fail"
           fi
           python3 scripts/build_ci_route_report.py finalize \
-            --input ".runtime-cache/cortexpilot/reports/ci/routes/${ROUTE_ID_VALUE}.json" \
-            --output ".runtime-cache/cortexpilot/reports/ci/routes/${ROUTE_ID_VALUE}.json" \
+            --input ".runtime-cache/openvibecoding/reports/ci/routes/${ROUTE_ID_VALUE}.json" \
+            --output ".runtime-cache/openvibecoding/reports/ci/routes/${ROUTE_ID_VALUE}.json" \
             --overall-status "${status}" \
             --cloud-bootstrap-used "${SENSITIVE_DISPATCH_ALLOWED}" \
             --job-observed ci-trust-boundary \
@@ -969,8 +969,8 @@ jobs:
           path: |
             .runtime-cache/test_output
             .runtime-cache/logs
-            .runtime-cache/cortexpilot/release
-            .runtime-cache/cortexpilot/reports
+            .runtime-cache/openvibecoding/release
+            .runtime-cache/openvibecoding/reports
 
       - name: Upload trusted route report artifact
         if: always()
@@ -980,8 +980,8 @@ jobs:
           retention-days: 14
           if-no-files-found: error
           path: |
-            .runtime-cache/cortexpilot/reports/ci/routes/${{ needs.ci-trust-boundary.outputs.route_id }}.json
-            .runtime-cache/cortexpilot/reports/ci/routes/${{ needs.ci-trust-boundary.outputs.route_id }}.md
+            .runtime-cache/openvibecoding/reports/ci/routes/${{ needs.ci-trust-boundary.outputs.route_id }}.json
+            .runtime-cache/openvibecoding/reports/ci/routes/${{ needs.ci-trust-boundary.outputs.route_id }}.md
 
   pr-release-critical-gates:
     name: PR Release-Critical Gates
@@ -1020,7 +1020,7 @@ jobs:
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16
         with:
           name: ci-route-seed-${{ github.run_id }}-${{ github.run_attempt }}
-          path: .runtime-cache/cortexpilot/reports/ci/routes
+          path: .runtime-cache/openvibecoding/reports/ci/routes
           merge-multiple: true
 
       - name: Aggregate PR release-critical gates
@@ -1049,8 +1049,8 @@ jobs:
             fi
           done
           python3 scripts/build_ci_route_report.py finalize \
-            --input ".runtime-cache/cortexpilot/reports/ci/routes/${ROUTE_ID_VALUE}.json" \
-            --output ".runtime-cache/cortexpilot/reports/ci/routes/${ROUTE_ID_VALUE}.json" \
+            --input ".runtime-cache/openvibecoding/reports/ci/routes/${ROUTE_ID_VALUE}.json" \
+            --output ".runtime-cache/openvibecoding/reports/ci/routes/${ROUTE_ID_VALUE}.json" \
             --overall-status "${status}" \
             --cloud-bootstrap-used false \
             --job-observed ci-trust-boundary \
@@ -1070,8 +1070,8 @@ jobs:
           retention-days: 14
           if-no-files-found: error
           path: |
-            .runtime-cache/cortexpilot/reports/ci/routes/${{ needs.ci-trust-boundary.outputs.route_id }}.json
-            .runtime-cache/cortexpilot/reports/ci/routes/${{ needs.ci-trust-boundary.outputs.route_id }}.md
+            .runtime-cache/openvibecoding/reports/ci/routes/${{ needs.ci-trust-boundary.outputs.route_id }}.json
+            .runtime-cache/openvibecoding/reports/ci/routes/${{ needs.ci-trust-boundary.outputs.route_id }}.md
 
   pr-ci-gate:
     name: PR CI Gate
@@ -1152,14 +1152,14 @@ jobs:
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16
         with:
           name: ${{ env.ROUTE_ARTIFACT_NAME }}
-          path: .runtime-cache/cortexpilot/reports/ci/routes
+          path: .runtime-cache/openvibecoding/reports/ci/routes
           merge-multiple: true
 
       - name: Validate route report
         run: |
           set -euo pipefail
           declare -a route_args=(
-            --input ".runtime-cache/cortexpilot/reports/ci/routes/${ROUTE_ID}.json"
+            --input ".runtime-cache/openvibecoding/reports/ci/routes/${ROUTE_ID}.json"
             --expected-route-id "${ROUTE_ID}"
             --expected-trust-class "${EXPECTED_TRUST}"
             --expected-runner-class "${EXPECTED_RUNNER}"

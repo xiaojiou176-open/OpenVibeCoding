@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
-from cortexpilot_orch.api.pm_session_aggregation_context import resolve_pm_session_context
+from openvibecoding_orch.api.pm_session_aggregation_context import resolve_pm_session_context
 
 
 def _parse_iso(value: str) -> datetime:

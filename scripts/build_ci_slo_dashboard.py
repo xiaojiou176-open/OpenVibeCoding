@@ -24,7 +24,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Build CI SLO dashboard from current-run source manifest.")
     parser.add_argument("--policy", default=str(DEFAULT_POLICY))
     parser.add_argument("--source-manifest", default="")
-    parser.add_argument("--out-dir", default=".runtime-cache/cortexpilot/reports/ci/slo")
+    parser.add_argument("--out-dir", default=".runtime-cache/openvibecoding/reports/ci/slo")
     parser.add_argument("--mode", choices=("strict", "report"), default="report")
     return parser.parse_args()
 
@@ -53,7 +53,7 @@ def main() -> int:
             missing_required.append(name)
         rows.append({"slice": name, "status": status, "duration_sec": duration, "slo_sec": int(threshold)})
     payload = {
-        "report_type": "cortexpilot_ci_slo_dashboard",
+        "report_type": "openvibecoding_ci_slo_dashboard",
         "generated_at": now_utc(),
         "authoritative": bool(authority["authoritative_current_truth"]),
         **authority,

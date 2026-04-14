@@ -3,9 +3,9 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 ROLE_DIR="$ROOT_DIR/policies/agents/codex/roles"
-MODEL_NAME="${CORTEXPILOT_CODEX_MODEL:-gpt-5.2-codex}"
-BASE_CONFIG="${CORTEXPILOT_CODEX_BASE_CONFIG:-$HOME/.codex/config.toml}"
-BASE_REQUIREMENTS="${CORTEXPILOT_CODEX_BASE_REQUIREMENTS:-$HOME/.codex/requirements.toml}"
+MODEL_NAME="${OPENVIBECODING_CODEX_MODEL:-gpt-5.2-codex}"
+BASE_CONFIG="${OPENVIBECODING_CODEX_BASE_CONFIG:-$HOME/.codex/config.toml}"
+BASE_REQUIREMENTS="${OPENVIBECODING_CODEX_BASE_REQUIREMENTS:-$HOME/.codex/requirements.toml}"
 
 if [[ ! -f "$BASE_CONFIG" ]]; then
   echo "Base Codex config not found: $BASE_CONFIG" >&2
@@ -15,7 +15,7 @@ fi
 create_home() {
   local role="$1"
   local role_file="$2"
-  local home_dir="$HOME/.codex-homes/cortexpilot-$role"
+  local home_dir="$HOME/.codex-homes/openvibecoding-$role"
   mkdir -p "$home_dir"
   local tmp_file
   tmp_file="$(mktemp)"

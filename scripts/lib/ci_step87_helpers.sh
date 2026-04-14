@@ -36,8 +36,8 @@ print(candidates[0][2])
 PY
   }
   echo "🚀 [STEP 8.7/12] Start: UI regression stability gate (flake)"
-  if [ "${CORTEXPILOT_CI_UI_REGRESSION_FLAKE_GATE:-1}" = "1" ]; then
-    if [ "${CORTEXPILOT_CI_NIGHTLY_FULL:-0}" = "1" ]; then
+  if [ "${OPENVIBECODING_CI_UI_REGRESSION_FLAKE_GATE:-1}" = "1" ]; then
+    if [ "${OPENVIBECODING_CI_NIGHTLY_FULL:-0}" = "1" ]; then
       UI_REGRESSION_PROFILE="nightly"
       default_p0_iter="20"
       default_p1_iter="20"
@@ -51,26 +51,26 @@ PY
       default_p1_threshold="1.0"
     fi
     echo "ℹ️ [ci] ui regression profile=${UI_REGRESSION_PROFILE}"
-    UI_FLAKE_PARALLEL="${CORTEXPILOT_CI_UI_FLAKE_PARALLEL:-0}"
-    P0_FLAKE_ITERATIONS="${CORTEXPILOT_CI_UI_FLAKE_P0_ITER:-$default_p0_iter}"
-    P0_FLAKE_THRESHOLD="${CORTEXPILOT_CI_UI_FLAKE_P0_THRESHOLD:-$default_p0_threshold}"
-    P0_FLAKE_MAX_THRESHOLD_POLICY="${CORTEXPILOT_CI_UI_FLAKE_P0_MAX_THRESHOLD_POLICY:-$default_p0_threshold}"
-    P0_FLAKE_MIN_ITER_POLICY="${CORTEXPILOT_CI_UI_FLAKE_P0_MIN_ITER_POLICY:-$default_p0_iter}"
-    P0_COMMANDS_FILE="${CORTEXPILOT_CI_UI_REGRESSION_P0_COMMANDS_FILE:-scripts/ui_regression_p0.commands}"
+    UI_FLAKE_PARALLEL="${OPENVIBECODING_CI_UI_FLAKE_PARALLEL:-0}"
+    P0_FLAKE_ITERATIONS="${OPENVIBECODING_CI_UI_FLAKE_P0_ITER:-$default_p0_iter}"
+    P0_FLAKE_THRESHOLD="${OPENVIBECODING_CI_UI_FLAKE_P0_THRESHOLD:-$default_p0_threshold}"
+    P0_FLAKE_MAX_THRESHOLD_POLICY="${OPENVIBECODING_CI_UI_FLAKE_P0_MAX_THRESHOLD_POLICY:-$default_p0_threshold}"
+    P0_FLAKE_MIN_ITER_POLICY="${OPENVIBECODING_CI_UI_FLAKE_P0_MIN_ITER_POLICY:-$default_p0_iter}"
+    P0_COMMANDS_FILE="${OPENVIBECODING_CI_UI_REGRESSION_P0_COMMANDS_FILE:-scripts/ui_regression_p0.commands}"
     P0_RUN_ID="ci_ui_regression_p0_$(date +%Y%m%d_%H%M%S)"
     P0_REPORT_PATH=".runtime-cache/test_output/ui_regression/${P0_RUN_ID}/flake_report.json"
     P1_ENABLED=0
-    if [ "${CORTEXPILOT_CI_NIGHTLY_FULL:-0}" = "1" ] || [ "${CORTEXPILOT_CI_UI_FLAKE_RUN_P1:-1}" = "1" ]; then
+    if [ "${OPENVIBECODING_CI_NIGHTLY_FULL:-0}" = "1" ] || [ "${OPENVIBECODING_CI_UI_FLAKE_RUN_P1:-1}" = "1" ]; then
       P1_ENABLED=1
-      P1_FLAKE_ITERATIONS="${CORTEXPILOT_CI_UI_FLAKE_P1_ITER:-$default_p1_iter}"
-      P1_FLAKE_THRESHOLD="${CORTEXPILOT_CI_UI_FLAKE_P1_THRESHOLD:-$default_p1_threshold}"
-      P1_FLAKE_MAX_THRESHOLD_POLICY="${CORTEXPILOT_CI_UI_FLAKE_P1_MAX_THRESHOLD_POLICY:-$default_p1_threshold}"
-      P1_FLAKE_MIN_ITER_POLICY="${CORTEXPILOT_CI_UI_FLAKE_P1_MIN_ITER_POLICY:-$default_p1_iter}"
-      P1_COMMANDS_FILE="${CORTEXPILOT_CI_UI_REGRESSION_P1_COMMANDS_FILE:-scripts/ui_regression_p1.commands}"
+      P1_FLAKE_ITERATIONS="${OPENVIBECODING_CI_UI_FLAKE_P1_ITER:-$default_p1_iter}"
+      P1_FLAKE_THRESHOLD="${OPENVIBECODING_CI_UI_FLAKE_P1_THRESHOLD:-$default_p1_threshold}"
+      P1_FLAKE_MAX_THRESHOLD_POLICY="${OPENVIBECODING_CI_UI_FLAKE_P1_MAX_THRESHOLD_POLICY:-$default_p1_threshold}"
+      P1_FLAKE_MIN_ITER_POLICY="${OPENVIBECODING_CI_UI_FLAKE_P1_MIN_ITER_POLICY:-$default_p1_iter}"
+      P1_COMMANDS_FILE="${OPENVIBECODING_CI_UI_REGRESSION_P1_COMMANDS_FILE:-scripts/ui_regression_p1.commands}"
       P1_RUN_ID="ci_ui_regression_p1_$(date +%Y%m%d_%H%M%S)"
       P1_REPORT_PATH=".runtime-cache/test_output/ui_regression/${P1_RUN_ID}/flake_report.json"
     else
-      echo "ℹ️ [ci] skip P1 flake gate (enable by CORTEXPILOT_CI_NIGHTLY_FULL=1 or CORTEXPILOT_CI_UI_FLAKE_RUN_P1=1)"
+      echo "ℹ️ [ci] skip P1 flake gate (enable by OPENVIBECODING_CI_NIGHTLY_FULL=1 or OPENVIBECODING_CI_UI_FLAKE_RUN_P1=1)"
       P1_REPORT_PATH=".runtime-cache/test_output/ui_regression/nonexistent_p1_report.json"
     fi
     run_flake_gate_with_taxonomy() {
@@ -89,7 +89,7 @@ PY
       run_with_timeout_heartbeat_and_cleanup \
         "ci.sh:step8.7:ui_flake_${tier}" \
         "${flake_timeout_sec}" \
-        bash -lc "set -euo pipefail; CORTEXPILOT_E2E_LIVE_PREFLIGHT_PROVIDER_API_MODE='${CI_LIVE_PREFLIGHT_PROVIDER_API_MODE}' UI_REGRESSION_MAX_ALLOWED_THRESHOLD_PERCENT='${max_threshold_policy}' UI_REGRESSION_MIN_ITERATIONS='${min_iterations_policy}' bash scripts/ui_regression_flake_gate.sh --iterations '${iterations}' --threshold-percent '${threshold}' --run-id '${run_id}' --commands-file '${commands_file}'"
+        bash -lc "set -euo pipefail; OPENVIBECODING_E2E_LIVE_PREFLIGHT_PROVIDER_API_MODE='${CI_LIVE_PREFLIGHT_PROVIDER_API_MODE}' UI_REGRESSION_MAX_ALLOWED_THRESHOLD_PERCENT='${max_threshold_policy}' UI_REGRESSION_MIN_ITERATIONS='${min_iterations_policy}' bash scripts/ui_regression_flake_gate.sh --iterations '${iterations}' --threshold-percent '${threshold}' --run-id '${run_id}' --commands-file '${commands_file}'"
       gate_status=$?
       run_with_timeout_heartbeat_and_cleanup \
         "ci.sh:step8.7:ui_flake_taxonomy_${tier}" \
@@ -151,20 +151,20 @@ PY
   else
     UI_FLAKE_BREAK_GLASS_ACTIVE="$(resolve_ci_break_glass \
       "ui_flake_gate_skip" \
-      "CORTEXPILOT_CI_UI_FLAKE_BREAK_GLASS" \
-      "CORTEXPILOT_CI_UI_FLAKE_BREAK_GLASS_REASON" \
-      "CORTEXPILOT_CI_UI_FLAKE_BREAK_GLASS_TICKET")"
+      "OPENVIBECODING_CI_UI_FLAKE_BREAK_GLASS" \
+      "OPENVIBECODING_CI_UI_FLAKE_BREAK_GLASS_REASON" \
+      "OPENVIBECODING_CI_UI_FLAKE_BREAK_GLASS_TICKET")"
     if [[ "$UI_FLAKE_BREAK_GLASS_ACTIVE" != "1" ]]; then
-      echo "❌ [ci] CORTEXPILOT_CI_UI_REGRESSION_FLAKE_GATE=0 is blocked (fail-closed). Use explicit break-glass vars."
+      echo "❌ [ci] OPENVIBECODING_CI_UI_REGRESSION_FLAKE_GATE=0 is blocked (fail-closed). Use explicit break-glass vars."
       exit 1
     fi
-    echo "⚠️ [WARN] CORTEXPILOT_CI_UI_REGRESSION_FLAKE_GATE=0 with break-glass, require explicit flake reports (no auto-latest reuse)"
-    if [[ -z "${CORTEXPILOT_UI_P0_REPORT:-}" || -z "${CORTEXPILOT_UI_P1_REPORT:-}" ]]; then
-      echo "❌ [ci] flake gate skipped but explicit reports missing: require CORTEXPILOT_UI_P0_REPORT and CORTEXPILOT_UI_P1_REPORT"
+    echo "⚠️ [WARN] OPENVIBECODING_CI_UI_REGRESSION_FLAKE_GATE=0 with break-glass, require explicit flake reports (no auto-latest reuse)"
+    if [[ -z "${OPENVIBECODING_UI_P0_REPORT:-}" || -z "${OPENVIBECODING_UI_P1_REPORT:-}" ]]; then
+      echo "❌ [ci] flake gate skipped but explicit reports missing: require OPENVIBECODING_UI_P0_REPORT and OPENVIBECODING_UI_P1_REPORT"
       exit 1
     fi
-    P0_REPORT_PATH="${CORTEXPILOT_UI_P0_REPORT}"
-    P1_REPORT_PATH="${CORTEXPILOT_UI_P1_REPORT}"
+    P0_REPORT_PATH="${OPENVIBECODING_UI_P0_REPORT}"
+    P1_REPORT_PATH="${OPENVIBECODING_UI_P1_REPORT}"
     if [[ ! -f "$P0_REPORT_PATH" || ! -f "$P1_REPORT_PATH" ]]; then
       echo "❌ [ci] flake gate skipped but explicit report path not found: p0=${P0_REPORT_PATH}, p1=${P1_REPORT_PATH}"
       exit 1

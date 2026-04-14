@@ -53,7 +53,7 @@ def _is_truthy(value: str | None) -> bool:
 def _is_mainline_context() -> bool:
     if _is_truthy(os.environ.get("CI")):
         return True
-    if str(os.environ.get("CORTEXPILOT_CI_PROFILE", "")).strip().lower() == "strict":
+    if str(os.environ.get("OPENVIBECODING_CI_PROFILE", "")).strip().lower() == "strict":
         return True
     if str(os.environ.get("GITHUB_REF_NAME", "")).strip() == "main":
         return True
@@ -115,7 +115,7 @@ def _resolve_key_candidates(
 def _codex_config_path() -> Path:
     return Path(
         os.environ.get(
-            "CORTEXPILOT_CODEX_CONFIG_PATH",
+            "OPENVIBECODING_CODEX_CONFIG_PATH",
             str(Path.home() / ".codex" / "config.toml"),
         )
     )
@@ -181,8 +181,8 @@ def _resolve_provider_probe_key() -> dict[str, str]:
 
 
 def _resolve_provider_probe_target() -> dict[str, str]:
-    provider = str(os.environ.get("CORTEXPILOT_PROVIDER", "")).strip().lower()
-    base_url = str(os.environ.get("CORTEXPILOT_PROVIDER_BASE_URL", "")).strip()
+    provider = str(os.environ.get("OPENVIBECODING_PROVIDER", "")).strip().lower()
+    base_url = str(os.environ.get("OPENVIBECODING_PROVIDER_BASE_URL", "")).strip()
     source = "env" if provider or base_url else "none"
     provider_name, provider_block = _load_codex_provider_block()
     if not base_url and provider_block:
@@ -318,47 +318,47 @@ def _parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--url",
-        default=os.environ.get("CORTEXPILOT_EXTERNAL_WEB_PROBE_URL", "https://example.com"),
+        default=os.environ.get("OPENVIBECODING_EXTERNAL_WEB_PROBE_URL", "https://example.com"),
         help="External URL to probe.",
     )
     parser.add_argument(
         "--title-regex",
-        default=os.environ.get("CORTEXPILOT_EXTERNAL_WEB_PROBE_TITLE_REGEX", r"Example\s+Domain"),
+        default=os.environ.get("OPENVIBECODING_EXTERNAL_WEB_PROBE_TITLE_REGEX", r"Example\s+Domain"),
         help="Expected page title regex.",
     )
     parser.add_argument(
         "--run-id",
-        default=os.environ.get("CORTEXPILOT_EXTERNAL_WEB_PROBE_RUN_ID", "").strip(),
+        default=os.environ.get("OPENVIBECODING_EXTERNAL_WEB_PROBE_RUN_ID", "").strip(),
         help="Optional run id.",
     )
     parser.add_argument(
         "--timeout-ms",
         type=int,
-        default=int(os.environ.get("CORTEXPILOT_EXTERNAL_WEB_PROBE_TIMEOUT_MS", "45000")),
+        default=int(os.environ.get("OPENVIBECODING_EXTERNAL_WEB_PROBE_TIMEOUT_MS", "45000")),
         help="Page navigation timeout in milliseconds.",
     )
     parser.add_argument(
         "--provider-api-mode",
         choices=("off", "auto", "require"),
-        default=os.environ.get("CORTEXPILOT_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE", "auto"),
+        default=os.environ.get("OPENVIBECODING_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE", "auto"),
         help="Whether to probe real provider API with resolved key.",
     )
     parser.add_argument(
         "--provider-api-timeout-sec",
         type=int,
-        default=int(os.environ.get("CORTEXPILOT_EXTERNAL_WEB_PROBE_PROVIDER_TIMEOUT_SEC", "15")),
+        default=int(os.environ.get("OPENVIBECODING_EXTERNAL_WEB_PROBE_PROVIDER_TIMEOUT_SEC", "15")),
         help="Timeout for provider API probe.",
     )
     parser.add_argument(
         "--heartbeat-interval-sec",
         type=int,
-        default=int(os.environ.get("CORTEXPILOT_EXTERNAL_WEB_PROBE_HEARTBEAT_SEC", "10")),
+        default=int(os.environ.get("OPENVIBECODING_EXTERNAL_WEB_PROBE_HEARTBEAT_SEC", "10")),
         help="Heartbeat emission interval in seconds.",
     )
     parser.add_argument(
         "--hard-timeout-sec",
         type=int,
-        default=int(os.environ.get("CORTEXPILOT_EXTERNAL_WEB_PROBE_HARD_TIMEOUT_SEC", "180")),
+        default=int(os.environ.get("OPENVIBECODING_EXTERNAL_WEB_PROBE_HARD_TIMEOUT_SEC", "180")),
         help="Hard timeout for whole probe process (seconds).",
     )
     parser.add_argument(

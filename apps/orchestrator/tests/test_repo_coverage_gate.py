@@ -30,8 +30,8 @@ def test_orchestrator_coverage_uses_managed_coverage_file() -> None:
 
 def test_dashboard_and_desktop_coverage_use_managed_report_dirs() -> None:
     text = _read_script()
-    assert '"CORTEXPILOT_DASHBOARD_COVERAGE_DIR": str(report_path.parent)' in text
-    assert '"CORTEXPILOT_DESKTOP_COVERAGE_DIR": str(report_path.parent)' in text
+    assert '"OPENVIBECODING_DASHBOARD_COVERAGE_DIR": str(report_path.parent)' in text
+    assert '"OPENVIBECODING_DESKTOP_COVERAGE_DIR": str(report_path.parent)' in text
 
 
 def test_orchestrator_coverage_uses_managed_hypothesis_storage() -> None:

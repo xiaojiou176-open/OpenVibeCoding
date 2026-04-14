@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from cortexpilot_orch.scheduler import approval_flow, evidence_pipeline, task_build_pipeline, test_pipeline
+from openvibecoding_orch.scheduler import approval_flow, evidence_pipeline, task_build_pipeline, test_pipeline
 
 
 class _ApprovalStore:
@@ -52,7 +52,7 @@ class _LegacyEvidenceStore:
 
 
 def test_approval_requires_human_approval_modes(monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_GOD_MODE_REQUIRED", "1")
+    monkeypatch.setenv("OPENVIBECODING_GOD_MODE_REQUIRED", "1")
     assert approval_flow.requires_human_approval(
         requires_network=False,
         filesystem_policy="read-only",
@@ -60,8 +60,8 @@ def test_approval_requires_human_approval_modes(monkeypatch) -> None:
         shell_policy="untrusted",
     )
 
-    monkeypatch.setenv("CORTEXPILOT_GOD_MODE_REQUIRED", "0")
-    monkeypatch.setenv("CORTEXPILOT_GOD_MODE_ON_REQUEST", "0")
+    monkeypatch.setenv("OPENVIBECODING_GOD_MODE_REQUIRED", "0")
+    monkeypatch.setenv("OPENVIBECODING_GOD_MODE_ON_REQUEST", "0")
     assert approval_flow.requires_human_approval(
         requires_network=False,
         filesystem_policy="danger-full-access",
@@ -69,7 +69,7 @@ def test_approval_requires_human_approval_modes(monkeypatch) -> None:
         shell_policy="deny",
     )
 
-    monkeypatch.setenv("CORTEXPILOT_GOD_MODE_ON_REQUEST", "1")
+    monkeypatch.setenv("OPENVIBECODING_GOD_MODE_ON_REQUEST", "1")
     assert approval_flow.requires_human_approval(
         requires_network=True,
         filesystem_policy="workspace-write",
@@ -85,16 +85,16 @@ def test_approval_requires_human_approval_modes(monkeypatch) -> None:
 
 
 def test_approval_helpers_flags(monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_FORCE_UNLOCK", "true")
+    monkeypatch.setenv("OPENVIBECODING_FORCE_UNLOCK", "true")
     assert approval_flow.force_unlock_requested()
 
-    monkeypatch.setenv("CORTEXPILOT_LOCK_AUTO_CLEANUP", "")
-    monkeypatch.setenv("CORTEXPILOT_LOCK_TTL_SEC", "120")
+    monkeypatch.setenv("OPENVIBECODING_LOCK_AUTO_CLEANUP", "")
+    monkeypatch.setenv("OPENVIBECODING_LOCK_TTL_SEC", "120")
     assert approval_flow.auto_lock_cleanup_requested()
 
-    monkeypatch.setenv("CORTEXPILOT_GOD_MODE_TIMEOUT_SEC", "15")
+    monkeypatch.setenv("OPENVIBECODING_GOD_MODE_TIMEOUT_SEC", "15")
     assert approval_flow.god_mode_timeout_sec() == 15
-    monkeypatch.setenv("CORTEXPILOT_GOD_MODE_TIMEOUT_SEC", "bad")
+    monkeypatch.setenv("OPENVIBECODING_GOD_MODE_TIMEOUT_SEC", "bad")
     assert approval_flow.god_mode_timeout_sec() == 0
 
 
@@ -105,7 +105,7 @@ def test_await_human_approval_success(tmp_path: Path, monkeypatch) -> None:
         encoding="utf-8",
     )
     store = _ApprovalStore(events)
-    monkeypatch.setenv("CORTEXPILOT_GOD_MODE_TIMEOUT_SEC", "3")
+    monkeypatch.setenv("OPENVIBECODING_GOD_MODE_TIMEOUT_SEC", "3")
     assert approval_flow.await_human_approval("run-1", store, reason=["r"]) is True
     assert store.events and store.events[0]["event"] == "HUMAN_APPROVAL_REQUIRED"
 
@@ -114,7 +114,7 @@ def test_await_human_approval_timeout(tmp_path: Path, monkeypatch) -> None:
     events = tmp_path / "events-empty.jsonl"
     events.write_text("", encoding="utf-8")
     store = _ApprovalStore(events)
-    monkeypatch.setenv("CORTEXPILOT_GOD_MODE_TIMEOUT_SEC", "1")
+    monkeypatch.setenv("OPENVIBECODING_GOD_MODE_TIMEOUT_SEC", "1")
 
     tick = {"value": 0}
 
@@ -243,8 +243,8 @@ def test_evidence_placeholder_and_ensure(tmp_path: Path, monkeypatch) -> None:
 
 
 def test_approval_extra_branches_and_invalid_json(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_GOD_MODE_REQUIRED", "0")
-    monkeypatch.setenv("CORTEXPILOT_GOD_MODE_ON_REQUEST", "1")
+    monkeypatch.setenv("OPENVIBECODING_GOD_MODE_REQUIRED", "0")
+    monkeypatch.setenv("OPENVIBECODING_GOD_MODE_ON_REQUEST", "1")
     assert approval_flow.requires_human_approval(
         requires_network=False,
         filesystem_policy="danger-full-access",
@@ -252,12 +252,12 @@ def test_approval_extra_branches_and_invalid_json(tmp_path: Path, monkeypatch) -
         shell_policy="deny",
     )
 
-    monkeypatch.setenv("CORTEXPILOT_LOCK_AUTO_CLEANUP", "true")
+    monkeypatch.setenv("OPENVIBECODING_LOCK_AUTO_CLEANUP", "true")
     assert approval_flow.auto_lock_cleanup_requested()
 
     events = tmp_path / "missing-events.jsonl"
     store = _ApprovalStore(events)
-    monkeypatch.setenv("CORTEXPILOT_GOD_MODE_TIMEOUT_SEC", "1")
+    monkeypatch.setenv("OPENVIBECODING_GOD_MODE_TIMEOUT_SEC", "1")
 
     tick = {"value": 0}
 
@@ -272,7 +272,7 @@ def test_approval_extra_branches_and_invalid_json(tmp_path: Path, monkeypatch) -
     bad = tmp_path / "bad-events.jsonl"
     bad.write_text("not-json\n" + json.dumps({"event": "HUMAN_APPROVAL_COMPLETED"}) + "\n", encoding="utf-8")
     store_bad = _ApprovalStore(bad)
-    monkeypatch.setenv("CORTEXPILOT_GOD_MODE_TIMEOUT_SEC", "2")
+    monkeypatch.setenv("OPENVIBECODING_GOD_MODE_TIMEOUT_SEC", "2")
     assert approval_flow.await_human_approval("run-bad", store_bad) is True
 
 

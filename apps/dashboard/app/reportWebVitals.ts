@@ -2,7 +2,7 @@ import type { NextWebVitalsMetric } from "next/app";
 import { resolveDashboardApiBase } from "../lib/env";
 
 const DEFAULT_API_BASE = "http://127.0.0.1:18180";
-const PAGE_VIEW_ID_KEY = "cortexpilot_rum_page_view_id";
+const PAGE_VIEW_ID_KEY = "openvibecoding_rum_page_view_id";
 
 function resolveApiBase(): string {
   return resolveDashboardApiBase() || DEFAULT_API_BASE;

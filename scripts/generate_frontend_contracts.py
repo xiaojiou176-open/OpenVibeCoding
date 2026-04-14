@@ -6,16 +6,16 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-OPENAPI_PATH = ROOT / "docs" / "api" / "openapi.cortexpilot.json"
+OPENAPI_PATH = ROOT / "docs" / "api" / "openapi.openvibecoding.json"
 CONTRACT_DIR = ROOT / "packages" / "frontend-api-contract"
 GENERATED_DIR = CONTRACT_DIR / "generated"
 
 
 def _load_contract_extension() -> dict:
     payload = json.loads(OPENAPI_PATH.read_text(encoding="utf-8"))
-    ext = payload.get("x-cortexpilot-frontend-contract")
+    ext = payload.get("x-openvibecoding-frontend-contract")
     if not isinstance(ext, dict):
-        raise SystemExit(f"missing x-cortexpilot-frontend-contract in {OPENAPI_PATH}")
+        raise SystemExit(f"missing x-openvibecoding-frontend-contract in {OPENAPI_PATH}")
     return ext
 
 
@@ -31,7 +31,7 @@ def _tuple_union(values: list[str]) -> tuple[str, str]:
 
 def build_index_js(ext: dict) -> str:
     return f"""// GENERATED FILE. DO NOT EDIT.
-// Source: docs/api/openapi.cortexpilot.json
+// Source: docs/api/openapi.openvibecoding.json
 
 export const FRONTEND_API_CONTRACT = { _json_js({
     "defaultApiBase": ext["defaultApiBase"],
@@ -65,7 +65,7 @@ export * from "./ui-flow.js";
 
 def build_index_cjs(ext: dict) -> str:
     return f"""// GENERATED FILE. DO NOT EDIT.
-// Source: docs/api/openapi.cortexpilot.json
+// Source: docs/api/openapi.openvibecoding.json
 
 "use strict";
 
@@ -130,7 +130,7 @@ def build_index_dts(ext: dict) -> str:
     workflow_authority_tuple, workflow_authority_union = _tuple_union(read_models["workflowCaseAuthorities"])
     workflow_source_tuple, workflow_source_union = _tuple_union(read_models["workflowCaseSources"])
     return f"""// GENERATED FILE. DO NOT EDIT.
-// Source: docs/api/openapi.cortexpilot.json
+// Source: docs/api/openapi.openvibecoding.json
 
 export declare const FRONTEND_API_CONTRACT: {{
   readonly defaultApiBase: "{ext["defaultApiBase"]}";
@@ -427,7 +427,7 @@ export type {{
 def build_ui_flow_js(ext: dict) -> str:
     ui_flow = ext["uiFlow"]
     return f"""// GENERATED FILE. DO NOT EDIT.
-// Source: docs/api/openapi.cortexpilot.json
+// Source: docs/api/openapi.openvibecoding.json
 
 export const PM_JOURNEY_STAGES = { _json_js(ui_flow["pmJourneyStages"]) };
 export const COMMAND_TOWER_PRIORITY_LANES = { _json_js(ui_flow["commandTowerPriorityLanes"]) };
@@ -438,7 +438,7 @@ export const DESKTOP_WORK_MODES = { _json_js(ui_flow["desktopWorkModes"]) };
 def build_ui_flow_cjs(ext: dict) -> str:
     ui_flow = ext["uiFlow"]
     return f"""// GENERATED FILE. DO NOT EDIT.
-// Source: docs/api/openapi.cortexpilot.json
+// Source: docs/api/openapi.openvibecoding.json
 
 "use strict";
 
@@ -460,7 +460,7 @@ def build_ui_flow_dts(ext: dict) -> str:
     lanes_tuple, lanes_union = _tuple_union(ui_flow["commandTowerPriorityLanes"])
     modes_tuple, modes_union = _tuple_union(ui_flow["desktopWorkModes"])
     return f"""// GENERATED FILE. DO NOT EDIT.
-// Source: docs/api/openapi.cortexpilot.json
+// Source: docs/api/openapi.openvibecoding.json
 
 export declare const PM_JOURNEY_STAGES: readonly [{stages_tuple}];
 export type PmJourneyStage = {stages_union};
@@ -493,7 +493,7 @@ def main() -> int:
     for path, content in outputs.items():
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(content, encoding="utf-8")
-    print("generated frontend api contract artifacts from docs/api/openapi.cortexpilot.json")
+    print("generated frontend api contract artifacts from docs/api/openapi.openvibecoding.json")
     return 0
 
 

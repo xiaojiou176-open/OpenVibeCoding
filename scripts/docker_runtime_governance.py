@@ -12,10 +12,10 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_REPORT = ROOT / ".runtime-cache" / "cortexpilot" / "reports" / "space_governance" / "docker_runtime.json"
-DEFAULT_IMAGE = os.environ.get("CORTEXPILOT_DOCKER_RUNTIME_IMAGE", "cortexpilot-ci-core:local")
-DEFAULT_DESKTOP_IMAGE = os.environ.get("CORTEXPILOT_DOCKER_DESKTOP_NATIVE_IMAGE", "cortexpilot-ci-desktop-native:local")
-DEFAULT_VOLUME_PREFIX = os.environ.get("CORTEXPILOT_DOCKER_VOLUME_PREFIX", "cortexpilot")
+DEFAULT_REPORT = ROOT / ".runtime-cache" / "openvibecoding" / "reports" / "space_governance" / "docker_runtime.json"
+DEFAULT_IMAGE = os.environ.get("OPENVIBECODING_DOCKER_RUNTIME_IMAGE", "openvibecoding-ci-core:local")
+DEFAULT_DESKTOP_IMAGE = os.environ.get("OPENVIBECODING_DOCKER_DESKTOP_NATIVE_IMAGE", "openvibecoding-ci-desktop-native:local")
+DEFAULT_VOLUME_PREFIX = os.environ.get("OPENVIBECODING_DOCKER_VOLUME_PREFIX", "openvibecoding")
 
 
 def _human_size(num_bytes: int) -> str:
@@ -30,7 +30,7 @@ def _human_size(num_bytes: int) -> str:
 
 
 def _machine_cache_root() -> Path:
-    explicit = os.environ.get("CORTEXPILOT_MACHINE_CACHE_ROOT", "").strip()
+    explicit = os.environ.get("OPENVIBECODING_MACHINE_CACHE_ROOT", "").strip()
     if explicit:
         return Path(explicit).expanduser()
     runner_temp = os.environ.get("RUNNER_TEMP", "").strip()
@@ -38,11 +38,11 @@ def _machine_cache_root() -> Path:
         "GITHUB_ACTIONS", ""
     ).strip().lower() == "true"
     if ci and runner_temp:
-        return Path(runner_temp) / "cortexpilot-machine-cache"
+        return Path(runner_temp) / "openvibecoding-machine-cache"
     xdg_cache_home = os.environ.get("XDG_CACHE_HOME", "").strip()
     if xdg_cache_home:
-        return Path(xdg_cache_home).expanduser() / "cortexpilot"
-    return Path.home() / ".cache" / "cortexpilot"
+        return Path(xdg_cache_home).expanduser() / "openvibecoding"
+    return Path.home() / ".cache" / "openvibecoding"
 
 
 def _docker_buildx_cache_root() -> Path:

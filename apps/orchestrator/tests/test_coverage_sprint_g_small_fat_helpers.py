@@ -6,12 +6,12 @@ from pathlib import Path
 import pytest
 from fastapi import HTTPException
 
-from cortexpilot_orch.api import artifact_helpers
-from cortexpilot_orch.api import event_cursor
-from cortexpilot_orch.api import main_run_views_helpers
-from cortexpilot_orch.api import pm_session_aggregation_graph
-from cortexpilot_orch.api import run_state_helpers
-from cortexpilot_orch.api import security_validators
+from openvibecoding_orch.api import artifact_helpers
+from openvibecoding_orch.api import event_cursor
+from openvibecoding_orch.api import main_run_views_helpers
+from openvibecoding_orch.api import pm_session_aggregation_graph
+from openvibecoding_orch.api import run_state_helpers
+from openvibecoding_orch.api import security_validators
 
 
 def _err(code: str) -> dict[str, str]:

@@ -1,12 +1,12 @@
 {
   "orchestrator": {
     "critical_modules": [
-      "apps/orchestrator/src/cortexpilot_orch/gates/diff_gate.py",
-      "apps/orchestrator/src/cortexpilot_orch/scheduler/core_helpers.py",
-      "apps/orchestrator/src/cortexpilot_orch/queue/store.py",
-      "apps/orchestrator/src/cortexpilot_orch/runners/agents_payload.py",
-      "apps/orchestrator/src/cortexpilot_orch/runners/tool_runner.py",
-      "apps/orchestrator/src/cortexpilot_orch/store/session_map.py"
+      "apps/orchestrator/src/openvibecoding_orch/gates/diff_gate.py",
+      "apps/orchestrator/src/openvibecoding_orch/scheduler/core_helpers.py",
+      "apps/orchestrator/src/openvibecoding_orch/queue/store.py",
+      "apps/orchestrator/src/openvibecoding_orch/runners/agents_payload.py",
+      "apps/orchestrator/src/openvibecoding_orch/runners/tool_runner.py",
+      "apps/orchestrator/src/openvibecoding_orch/store/session_map.py"
     ]
   }
 }

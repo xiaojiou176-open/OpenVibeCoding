@@ -5,8 +5,8 @@ from fastapi.testclient import TestClient
 import pytest
 from starlette.requests import Request
 
-from cortexpilot_orch.api import main as api_main
-from cortexpilot_orch.api import pm_session_aggregation
+from openvibecoding_orch.api import main as api_main
+from openvibecoding_orch.api import pm_session_aggregation
 
 
 def _build_request() -> Request:
@@ -49,7 +49,7 @@ def test_main_pm_session_wrappers_delegate_to_aggregation(monkeypatch: pytest.Mo
         _build_request(),
         status="active",
         owner_pm="pm-alpha",
-        project_key="cortexpilot",
+        project_key="openvibecoding",
         sort="blocked_desc",
         limit=7,
         offset=2,
@@ -60,7 +60,7 @@ def test_main_pm_session_wrappers_delegate_to_aggregation(monkeypatch: pytest.Mo
         "request_path": "/api/pm/sessions",
         "status": "active",
         "owner_pm": "pm-alpha",
-        "project_key": "cortexpilot",
+        "project_key": "openvibecoding",
         "sort": "blocked_desc",
         "limit": 7,
         "offset": 2,
@@ -143,7 +143,7 @@ def test_main_pm_session_wrappers_forward_status_filters_when_supported(
         status="active",
         status_filters=["failed", "archived"],
         owner_pm="pm-alpha",
-        project_key="cortexpilot",
+        project_key="openvibecoding",
         sort="blocked_desc",
         limit=7,
         offset=2,

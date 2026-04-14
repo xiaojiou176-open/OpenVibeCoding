@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "plugins": {
+    "openvibecoding-coding-agent-bundle": {
+      "source": {
+        "path": "../plugin-bundles/openvibecoding-coding-agent-bundle"
+      }
+    }
+  }
+}

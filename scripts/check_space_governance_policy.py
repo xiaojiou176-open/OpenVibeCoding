@@ -8,12 +8,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "apps" / "orchestrator" / "src"))
 
-from cortexpilot_orch.runtime.space_governance import load_space_governance_policy
+from openvibecoding_orch.runtime.space_governance import load_space_governance_policy
 DEFAULT_POLICY = ROOT / "configs" / "space_governance_policy.json"
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Validate the CortexPilot space governance policy.")
+    parser = argparse.ArgumentParser(description="Validate the OpenVibeCoding space governance policy.")
     parser.add_argument("--policy", default=str(DEFAULT_POLICY))
     return parser.parse_args()
 

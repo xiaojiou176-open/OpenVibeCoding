@@ -6,8 +6,8 @@ from pathlib import Path
 
 import pytest
 
-from cortexpilot_orch.contract.compiler import compile_plan, compile_plan_text
-from cortexpilot_orch.contract.validator import (
+from openvibecoding_orch.contract.compiler import compile_plan, compile_plan_text
+from openvibecoding_orch.contract.validator import (
     ContractValidator,
     validate_contract,
     validate_report,
@@ -84,18 +84,18 @@ def test_contract_validator_import_does_not_eagerly_import_compiler() -> None:
     saved_modules = {
         name: module
         for name, module in sys.modules.items()
-        if name == "cortexpilot_orch.contract" or name.startswith("cortexpilot_orch.contract.")
+        if name == "openvibecoding_orch.contract" or name.startswith("openvibecoding_orch.contract.")
     }
     for name in list(saved_modules):
         sys.modules.pop(name, None)
 
     try:
-        validator_module = importlib.import_module("cortexpilot_orch.contract.validator")
+        validator_module = importlib.import_module("openvibecoding_orch.contract.validator")
         assert validator_module.ContractValidator is not None
-        assert "cortexpilot_orch.contract.compiler" not in sys.modules
+        assert "openvibecoding_orch.contract.compiler" not in sys.modules
     finally:
         for name in list(sys.modules):
-            if name == "cortexpilot_orch.contract" or name.startswith("cortexpilot_orch.contract."):
+            if name == "openvibecoding_orch.contract" or name.startswith("openvibecoding_orch.contract."):
                 sys.modules.pop(name, None)
         sys.modules.update(saved_modules)
 
@@ -104,7 +104,7 @@ def test_compile_plan_missing_task_id(monkeypatch) -> None:
     plan = _plan_base()
     plan["plan_id"] = ""
     plan.pop("task_id", None)
-    monkeypatch.setattr("cortexpilot_orch.contract.compiler.ContractValidator.validate_report", lambda *args, **kwargs: None)
+    monkeypatch.setattr("openvibecoding_orch.contract.compiler.ContractValidator.validate_report", lambda *args, **kwargs: None)
     with pytest.raises(ValueError, match="missing task_id"):
         compile_plan(plan)
 
@@ -133,7 +133,7 @@ def test_compile_plan_assigned_agent_from_owner() -> None:
 def test_compile_plan_inherits_forbidden_actions(monkeypatch) -> None:
     plan = _plan_base()
     plan.pop("forbidden_actions", None)
-    monkeypatch.setattr("cortexpilot_orch.contract.compiler._load_forbidden_actions", lambda: ["rm -rf"])
+    monkeypatch.setattr("openvibecoding_orch.contract.compiler._load_forbidden_actions", lambda: ["rm -rf"])
     contract = compile_plan(plan)
     assert "rm -rf" in contract.get("forbidden_actions", [])
 
@@ -293,7 +293,7 @@ def test_compile_plan_rejects_missing_mcp_bundle_fragment(monkeypatch, tmp_path:
     )
     registry_path = tmp_path / "agent_registry.json"
     registry_path.write_text(json.dumps(registry), encoding="utf-8")
-    monkeypatch.setenv("CORTEXPILOT_AGENT_REGISTRY", str(registry_path))
+    monkeypatch.setenv("OPENVIBECODING_AGENT_REGISTRY", str(registry_path))
 
     with pytest.raises(ValueError, match="role_contract.mcp_bundle_ref"):
         compile_plan(_plan_base())

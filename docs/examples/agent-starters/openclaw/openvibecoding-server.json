@@ -1,0 +1,7 @@
+{
+  "command": "bash",
+  "args": [
+    "__OPENVIBECODING_REPO_ROOT__/scripts/run_openvibecoding_readonly_mcp.sh"
+  ],
+  "cwd": "/absolute/path/to/OpenVibeCoding"
+}

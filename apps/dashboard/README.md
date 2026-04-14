@@ -8,7 +8,7 @@ Read it as:
 
 - the browser-based command tower for plan, delegate, track, resume, and prove
   loops
-- a way to inspect and operate CortexPilot Command Tower orchestration truth from the web
+- a way to inspect and operate OpenVibeCoding Command Tower orchestration truth from the web
 - a repo-owned UI for L0-style oversight and case-driven operator review
 
 Do **not** read it as:
@@ -19,7 +19,7 @@ Do **not** read it as:
 
 ## Module Responsibility
 
-- Provide run, workflow, session, and review visualization for CortexPilot Command Tower
+- Provide run, workflow, session, and review visualization for OpenVibeCoding Command Tower
   orchestration output.
 - Surface operator-facing status, artifacts, and control points for the web.
 - Surface intake preview, approval summaries, and run diagnostics as

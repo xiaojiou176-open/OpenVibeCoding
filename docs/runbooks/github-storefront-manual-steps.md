@@ -1,6 +1,6 @@
 # GitHub Storefront Manual Steps
 
-Use this checklist when applying the remaining GitHub UI changes for CortexPilot.
+Use this checklist when applying the remaining GitHub UI changes for OpenVibeCoding.
 
 ## 1. About
 
@@ -59,7 +59,7 @@ If Discussions are disabled again in the future:
 
 Recommended release title:
 
-> CortexPilot v0.1.0-alpha.3 - storefront sync baseline
+> OpenVibeCoding v0.1.0-alpha.3 - storefront sync baseline
 
 Draft notes source:
 

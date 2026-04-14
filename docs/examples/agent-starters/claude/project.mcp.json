@@ -1,11 +1,11 @@
 {
   "mcpServers": {
-    "cortexpilot-readonly": {
+    "openvibecoding-readonly": {
       "command": "bash",
       "args": [
-        "__CORTEXPILOT_REPO_ROOT__/scripts/run_readonly_mcp.sh"
+        "__OPENVIBECODING_REPO_ROOT__/scripts/run_openvibecoding_readonly_mcp.sh"
       ],
-      "cwd": "__CORTEXPILOT_REPO_ROOT__"
+      "cwd": "__OPENVIBECODING_REPO_ROOT__"
     }
   }
 }

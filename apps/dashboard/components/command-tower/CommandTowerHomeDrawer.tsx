@@ -1,5 +1,5 @@
 import type { KeyboardEvent as ReactKeyboardEvent, RefObject } from "react";
-import type { UiCopy } from "@cortexpilot/frontend-shared/uiCopy";
+import type { UiCopy } from "@openvibecoding/frontend-shared/uiCopy";
 import { Badge, type BadgeVariant } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Input, Select } from "../ui/input";

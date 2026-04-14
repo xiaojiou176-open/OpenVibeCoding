@@ -12,8 +12,8 @@ from .helpers.api_main_test_io import (
     _write_manifest,
     _write_report,
 )
-from cortexpilot_orch.api import main as api_main
-from cortexpilot_orch.store.intake_store import IntakeStore
+from openvibecoding_orch.api import main as api_main
+from openvibecoding_orch.store.intake_store import IntakeStore
 
 
 def test_api_misc_collections_and_pm_wrappers(tmp_path: Path, monkeypatch) -> None:
@@ -26,10 +26,10 @@ def test_api_misc_collections_and_pm_wrappers(tmp_path: Path, monkeypatch) -> No
     policies_dir.mkdir(parents=True, exist_ok=True)
     tools_dir.mkdir(parents=True, exist_ok=True)
 
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_CONTRACT_ROOT", str(contracts_root))
-    monkeypatch.setenv("CORTEXPILOT_REPO_ROOT", str(repo_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_CONTRACT_ROOT", str(contracts_root))
+    monkeypatch.setenv("OPENVIBECODING_REPO_ROOT", str(repo_root))
 
     (policies_dir / "agent_registry.json").write_text(json.dumps({"version": "v1", "agents": []}), encoding="utf-8")
     (policies_dir / "command_allowlist.json").write_text(
@@ -106,10 +106,10 @@ def test_api_intake_and_request_guard_error_paths(tmp_path: Path, monkeypatch) -
     runs_root = runtime_root / "runs"
     repo_root = tmp_path / "repo"
     contracts_root = tmp_path / "contracts"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_REPO_ROOT", str(repo_root))
-    monkeypatch.setenv("CORTEXPILOT_CONTRACT_ROOT", str(contracts_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_REPO_ROOT", str(repo_root))
+    monkeypatch.setenv("OPENVIBECODING_CONTRACT_ROOT", str(contracts_root))
 
     run_dir = runs_root / "run_guard"
     _write_manifest(run_dir, {"run_id": "run_guard", "task_id": "task", "status": "SUCCESS"})
@@ -183,13 +183,13 @@ def test_api_intake_and_request_guard_error_paths(tmp_path: Path, monkeypatch) -
     assert contract_json.get("audit_only") is True
 
     # request guard: missing configured token when auth required -> 503
-    monkeypatch.setenv("CORTEXPILOT_API_AUTH_REQUIRED", "1")
-    monkeypatch.setenv("CORTEXPILOT_API_TOKEN", "")
+    monkeypatch.setenv("OPENVIBECODING_API_AUTH_REQUIRED", "1")
+    monkeypatch.setenv("OPENVIBECODING_API_TOKEN", "")
     unavailable = client.get("/api/runs")
     assert unavailable.status_code == 503
 
     # request guard: unhandled endpoint exception -> 500 with request id payload.
-    monkeypatch.setenv("CORTEXPILOT_API_AUTH_REQUIRED", "0")
+    monkeypatch.setenv("OPENVIBECODING_API_AUTH_REQUIRED", "0")
     monkeypatch.setattr(api_main, "_runs_root", lambda: (_ for _ in ()).throw(RuntimeError("boom")))
     crashed = client.get("/api/runs")
     assert crashed.status_code == 500
@@ -200,9 +200,9 @@ def test_api_run_intake_strict_acceptance_and_reexec_routes(tmp_path: Path, monk
     runtime_root = tmp_path / "runtime"
     runs_root = runtime_root / "runs"
     contracts_root = tmp_path / "contracts"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_CONTRACT_ROOT", str(contracts_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_CONTRACT_ROOT", str(contracts_root))
 
     class SuccessService:
         def build_contract(self, intake_id):
@@ -272,9 +272,9 @@ def test_api_run_intake_strict_acceptance_and_reexec_routes(tmp_path: Path, monk
     assert captured["strict_runtime"] == "True"
     assert captured["runner_runtime"] == "agents"
     assert captured["provider_runtime"] == "cliproxyapi"
-    assert os.getenv("CORTEXPILOT_ACCEPTANCE_STRICT_NONTRIVIAL", "") == ""
+    assert os.getenv("OPENVIBECODING_ACCEPTANCE_STRICT_NONTRIVIAL", "") == ""
 
-    replay_headers = {"x-cortexpilot-role": "TECH_LEAD"}
+    replay_headers = {"x-openvibecoding-role": "TECH_LEAD"}
     verify = client.post("/api/runs/run-strict/verify", params={"strict": "true"}, headers=replay_headers)
     assert verify.status_code == 200
     assert verify.json() == {"mode": "verify", "run_id": "run-strict", "strict": True}
@@ -297,9 +297,9 @@ def test_api_run_intake_generates_unique_contract_path_per_run(tmp_path: Path, m
     runtime_root = tmp_path / "runtime"
     runs_root = runtime_root / "runs"
     contracts_root = tmp_path / "contracts"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_CONTRACT_ROOT", str(contracts_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_CONTRACT_ROOT", str(contracts_root))
 
     class SuccessService:
         def build_contract(self, intake_id):
@@ -351,8 +351,8 @@ def test_api_run_intake_generates_unique_contract_path_per_run(tmp_path: Path, m
 def test_api_intake_listing_and_fetch(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime"
     runs_root = runtime_root / "runs"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
 
     store = IntakeStore()
     intake_id = store.create({"objective": "deep review"})
@@ -377,10 +377,10 @@ def test_api_internal_helpers_branches(tmp_path: Path, monkeypatch) -> None:
     runs_root = runtime_root / "runs"
     contract_root = tmp_path / "contracts"
     repo_root = tmp_path / "repo"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_CONTRACT_ROOT", str(contract_root))
-    monkeypatch.setenv("CORTEXPILOT_REPO_ROOT", str(repo_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_CONTRACT_ROOT", str(contract_root))
+    monkeypatch.setenv("OPENVIBECODING_REPO_ROOT", str(repo_root))
 
     run_dir = runs_root / "run_helpers"
     _write_manifest(run_dir, {"run_id": "run_helpers", "task_id": "task", "status": "RUNNING"})
@@ -431,7 +431,7 @@ def test_api_internal_helpers_branches(tmp_path: Path, monkeypatch) -> None:
 
 def test_api_write_side_delegates_to_service(tmp_path: Path, monkeypatch) -> None:
     runs_root = tmp_path / "runs"
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
 
     run_id = "run_delegate"
     run_dir = runs_root / run_id
@@ -470,7 +470,7 @@ def test_api_write_side_delegates_to_service(tmp_path: Path, monkeypatch) -> Non
     _write_events(run_dir, [json.dumps({"event": "HUMAN_APPROVAL_REQUIRED"})])
     client = TestClient(api_main.app)
 
-    headers = {"x-cortexpilot-role": "TECH_LEAD"}
+    headers = {"x-openvibecoding-role": "TECH_LEAD"}
     promote_resp = client.post(f"/api/runs/{run_id}/evidence/promote", headers=headers)
     assert promote_resp.status_code == 200
     assert promote_resp.json()["ok"] is True
@@ -485,7 +485,7 @@ def test_api_write_side_delegates_to_service(tmp_path: Path, monkeypatch) -> Non
     approve_resp = client.post(
         "/api/god-mode/approve",
         json=approve_payload,
-        headers={"x-cortexpilot-role": "TECH_LEAD"},
+        headers={"x-openvibecoding-role": "TECH_LEAD"},
     )
     assert approve_resp.status_code == 200
     assert approve_resp.json() == {"ok": True, "run_id": run_id}
@@ -500,14 +500,14 @@ def test_api_reject_service_run_not_found_maps_404(monkeypatch) -> None:
     monkeypatch.setattr(api_main, "_orchestration_service", DummyService())
     client = TestClient(api_main.app)
 
-    resp = client.post("/api/runs/missing/reject", headers={"x-cortexpilot-role": "TECH_LEAD"})
+    resp = client.post("/api/runs/missing/reject", headers={"x-openvibecoding-role": "TECH_LEAD"})
     assert resp.status_code == 404
     assert resp.json()["detail"]["code"] == "RUN_NOT_FOUND"
 
 
 def test_api_write_helpers_service_and_fallback_paths(tmp_path: Path, monkeypatch) -> None:
     runs_root = tmp_path / "runs"
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
 
     run_id = "run_helper_paths"
     run_dir = runs_root / run_id

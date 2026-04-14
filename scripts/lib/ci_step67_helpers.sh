@@ -2,27 +2,27 @@
 
 run_ci_step6_ui_audit() {
   echo "🚀 [STEP 6/12] Start: UI audit gate (Lighthouse + axe)"
-  if [ "${CORTEXPILOT_CI_UI_AUDIT_GATE:-1}" = "1" ]; then
+  if [ "${OPENVIBECODING_CI_UI_AUDIT_GATE:-1}" = "1" ]; then
     npm run ui:audit
   else
-    require_skip_gate_break_glass_or_fail "CORTEXPILOT_CI_UI_AUDIT_GATE" "ui_audit_gate_skip"
-    echo "⚠️ [WARN] CORTEXPILOT_CI_UI_AUDIT_GATE=0, skip ui audit gate (break-glass)"
+    require_skip_gate_break_glass_or_fail "OPENVIBECODING_CI_UI_AUDIT_GATE" "ui_audit_gate_skip"
+    echo "⚠️ [WARN] OPENVIBECODING_CI_UI_AUDIT_GATE=0, skip ui audit gate (break-glass)"
   fi
   echo "✅ [STEP 6/12] Completed"
 }
 
 run_ci_step7_dependency_audit() {
   echo "🚀 [STEP 7/12] Start: Dependency security audit"
-  if [ "${CORTEXPILOT_SOFT_AUDIT:-0}" = "1" ]; then
+  if [ "${OPENVIBECODING_SOFT_AUDIT:-0}" = "1" ]; then
     local soft_audit_break_glass_active=""
     if ! soft_audit_break_glass_active="$(
       resolve_ci_break_glass \
         "dependency_audit_soft_mode" \
-        "CORTEXPILOT_SOFT_AUDIT" \
-        "CORTEXPILOT_SOFT_AUDIT_REASON" \
-        "CORTEXPILOT_SOFT_AUDIT_TICKET"
+        "OPENVIBECODING_SOFT_AUDIT" \
+        "OPENVIBECODING_SOFT_AUDIT_REASON" \
+        "OPENVIBECODING_SOFT_AUDIT_TICKET"
     )"; then
-      echo "❌ [ci] CORTEXPILOT_SOFT_AUDIT=1 requires break-glass audit fields: CORTEXPILOT_SOFT_AUDIT_REASON + CORTEXPILOT_SOFT_AUDIT_TICKET"
+      echo "❌ [ci] OPENVIBECODING_SOFT_AUDIT=1 requires break-glass audit fields: OPENVIBECODING_SOFT_AUDIT_REASON + OPENVIBECODING_SOFT_AUDIT_TICKET"
       exit 1
     fi
     if [[ "$soft_audit_break_glass_active" != "1" ]]; then

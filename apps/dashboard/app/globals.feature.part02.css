@@ -637,7 +637,7 @@
   border-color: var(--color-border-primary-soft);
 }
 
-.pm-chat-bubble.is-cortexpilot {
+.pm-chat-bubble.is-openvibecoding {
   justify-self: start;
   align-self: flex-start;
   background: var(--color-bg-surface);

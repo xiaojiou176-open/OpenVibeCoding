@@ -63,7 +63,7 @@ trim or expand it for the live GitHub Release page.
 Run the smallest repo-side checks before a release-facing doc change:
 
 ```bash
-CORTEXPILOT_HOST_COMPAT=1 bash scripts/test_quick.sh --no-related
+OPENVIBECODING_HOST_COMPAT=1 bash scripts/test_quick.sh --no-related
 bash scripts/check_repo_hygiene.sh
 ```
 

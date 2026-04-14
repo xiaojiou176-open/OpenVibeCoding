@@ -18,7 +18,7 @@ def test_ui_audit_logs_use_dedicated_runtime_subdir() -> None:
 
 def test_ui_audit_container_staging_prefers_runner_temp() -> None:
     text = _read("scripts/ui_audit_gate.sh")
-    assert 'if [[ "${CORTEXPILOT_CI_CONTAINER:-0}" == "1" && -n "${RUNNER_TEMP:-}" ]]; then' in text
+    assert 'if [[ "${OPENVIBECODING_CI_CONTAINER:-0}" == "1" && -n "${RUNNER_TEMP:-}" ]]; then' in text
     assert 'workspace_parent="${RUNNER_TEMP}/ui-audit-dashboard-workspace"' in text
     assert 'frontend-api-client \\' in text
     assert 'frontend-api-contract \\' in text
@@ -40,8 +40,8 @@ def test_install_logs_use_dedicated_runtime_subdir() -> None:
 def test_install_scripts_fail_closed_on_low_headroom_workspace_recovery() -> None:
     dash = _read("scripts/install_dashboard_deps.sh")
     desktop = _read("scripts/install_desktop_deps.sh")
-    assert 'MIN_ENOSPC_RECOVERY_HEADROOM_GIB="${CORTEXPILOT_DASHBOARD_ENOSPC_MIN_HEADROOM_GIB:-3}"' in dash
-    assert 'MIN_ENOSPC_RECOVERY_HEADROOM_GIB="${CORTEXPILOT_DESKTOP_ENOSPC_MIN_HEADROOM_GIB:-3}"' in desktop
+    assert 'MIN_ENOSPC_RECOVERY_HEADROOM_GIB="${OPENVIBECODING_DASHBOARD_ENOSPC_MIN_HEADROOM_GIB:-3}"' in dash
+    assert 'MIN_ENOSPC_RECOVERY_HEADROOM_GIB="${OPENVIBECODING_DESKTOP_ENOSPC_MIN_HEADROOM_GIB:-3}"' in desktop
     assert "workspace-local ENOSPC recovery requires at least" in dash
     assert "workspace-local ENOSPC recovery requires at least" in desktop
 

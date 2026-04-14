@@ -13,13 +13,13 @@ importers:
 
   .:
     dependencies:
-      '@cortexpilot/frontend-api-client':
+      '@openvibecoding/frontend-api-client':
         specifier: file:../../packages/frontend-api-client
         version: file:../../packages/frontend-api-client
-      '@cortexpilot/frontend-api-contract':
+      '@openvibecoding/frontend-api-contract':
         specifier: file:../../packages/frontend-api-contract
         version: file:../../packages/frontend-api-contract
-      '@cortexpilot/frontend-shared':
+      '@openvibecoding/frontend-shared':
         specifier: file:../../packages/frontend-shared
         version: file:../../packages/frontend-shared
       '@tauri-apps/api':
@@ -201,13 +201,13 @@ packages:
     resolution: {integrity: sha512-6zABk/ECA/QYSCQ1NGiVwwbQerUCZ+TQbp64Q3AgmfNvurHH0j8TtXa1qbShXA6qqkpAj4V5W8pP6mLe1mcMqA==}
     engines: {node: '>=18'}
 
-  '@cortexpilot/frontend-api-client@file:../../packages/frontend-api-client':
+  '@openvibecoding/frontend-api-client@file:../../packages/frontend-api-client':
     resolution: {directory: ../../packages/frontend-api-client, type: directory}
 
-  '@cortexpilot/frontend-api-contract@file:../../packages/frontend-api-contract':
+  '@openvibecoding/frontend-api-contract@file:../../packages/frontend-api-contract':
     resolution: {directory: ../../packages/frontend-api-contract, type: directory}
 
-  '@cortexpilot/frontend-shared@file:../../packages/frontend-shared':
+  '@openvibecoding/frontend-shared@file:../../packages/frontend-shared':
     resolution: {directory: ../../packages/frontend-shared, type: directory}
 
   '@csstools/color-helpers@5.1.0':
@@ -1830,13 +1830,13 @@ snapshots:
 
   '@bcoe/v8-coverage@1.0.2': {}
 
-  '@cortexpilot/frontend-api-client@file:../../packages/frontend-api-client':
+  '@openvibecoding/frontend-api-client@file:../../packages/frontend-api-client':
     dependencies:
-      '@cortexpilot/frontend-api-contract': file:../../packages/frontend-api-contract
+      '@openvibecoding/frontend-api-contract': file:../../packages/frontend-api-contract
 
-  '@cortexpilot/frontend-api-contract@file:../../packages/frontend-api-contract': {}
+  '@openvibecoding/frontend-api-contract@file:../../packages/frontend-api-contract': {}
 
-  '@cortexpilot/frontend-shared@file:../../packages/frontend-shared': {}
+  '@openvibecoding/frontend-shared@file:../../packages/frontend-shared': {}
 
   '@csstools/color-helpers@5.1.0': {}
 

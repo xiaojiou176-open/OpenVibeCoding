@@ -14,9 +14,9 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 BENCH_ROOT = ROOT / ".runtime-cache" / "test_output" / "benchmarks"
-DEFAULT_MAX_FAIL_RATE = float(os.environ.get("CORTEXPILOT_BENCH_MAX_FAIL_RATE", "0.05"))
-DEFAULT_UI_MAX_P95_SEC = float(os.environ.get("CORTEXPILOT_BENCH_UI_FULL_GEMINI_STRICT_MAX_P95_SEC", "180"))
-DEFAULT_DASH_MAX_P95_SEC = float(os.environ.get("CORTEXPILOT_BENCH_DASHBOARD_HIGH_RISK_E2E_MAX_P95_SEC", "90"))
+DEFAULT_MAX_FAIL_RATE = float(os.environ.get("OPENVIBECODING_BENCH_MAX_FAIL_RATE", "0.05"))
+DEFAULT_UI_MAX_P95_SEC = float(os.environ.get("OPENVIBECODING_BENCH_UI_FULL_GEMINI_STRICT_MAX_P95_SEC", "180"))
+DEFAULT_DASH_MAX_P95_SEC = float(os.environ.get("OPENVIBECODING_BENCH_DASHBOARD_HIGH_RISK_E2E_MAX_P95_SEC", "90"))
 
 
 def _find_latest_summary() -> Path | None:
@@ -52,7 +52,7 @@ def parse_args() -> argparse.Namespace:
         "--max-overall-fail-rate",
         type=float,
         default=DEFAULT_MAX_FAIL_RATE,
-        help="Maximum allowed overall fail_rate (default from CORTEXPILOT_BENCH_MAX_FAIL_RATE or 0.05).",
+        help="Maximum allowed overall fail_rate (default from OPENVIBECODING_BENCH_MAX_FAIL_RATE or 0.05).",
     )
     parser.add_argument(
         "--ui-max-p95-sec",

@@ -10,7 +10,7 @@ Runbook:
 4. Generate strong secrets where needed (for example: `openssl rand -hex 32` for `ENCRYPTION_KEY`).
 5. `docker compose up -d`
 6. Open Langfuse Web at `http://localhost:18130` (host port; container internal web port remains `3000`).
-7. Local exposed infra ports are pinned to CortexPilot `18xxx` namespace:
+7. Local exposed infra ports are pinned to OpenVibeCoding `18xxx` namespace:
    - Postgres: `127.0.0.1:18132 -> 5432`
    - Redis: `127.0.0.1:18179 -> 6379`
    - MinIO API: `127.0.0.1:18190 -> 9000`
@@ -24,7 +24,7 @@ OTel bridge:
   - `LANGFUSE_S3_MEDIA_UPLOAD_ENDPOINT=http://localhost:18190`
   - `LANGFUSE_S3_BATCH_EXPORT_EXTERNAL_ENDPOINT=http://localhost:18190`
 - Then set orchestrator env:
-  - `CORTEXPILOT_OTLP_ENDPOINT=http://127.0.0.1:4318`
-  - `CORTEXPILOT_OTLP_PROTOCOL=http`
-  - `CORTEXPILOT_OTLP_HEADERS=Authorization=Basic <base64>`
+  - `OPENVIBECODING_OTLP_ENDPOINT=http://127.0.0.1:4318`
+  - `OPENVIBECODING_OTLP_PROTOCOL=http`
+  - `OPENVIBECODING_OTLP_HEADERS=Authorization=Basic <base64>`
 Note: Langfuse OTel ingestion expects HTTP/protobuf, not gRPC.

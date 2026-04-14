@@ -5,7 +5,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from cortexpilot_orch.gates import tests_gate
+from openvibecoding_orch.gates import tests_gate
 
 
 def _patch_tests_gate_subprocess(monkeypatch: pytest.MonkeyPatch, run_impl) -> None:
@@ -98,7 +98,7 @@ def test_run_tests_gate_wrapper(tmp_path: Path, monkeypatch) -> None:
 
 
 def test_tests_gate_strict_nontrivial_blocks_echo(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_ACCEPTANCE_STRICT_NONTRIVIAL", "1")
+    monkeypatch.setenv("OPENVIBECODING_ACCEPTANCE_STRICT_NONTRIVIAL", "1")
     monkeypatch.setattr(tests_gate, "validate_command", lambda *args, **kwargs: {"ok": True})
 
     result = tests_gate.run_acceptance_tests(tmp_path, ["echo ok"])
@@ -108,7 +108,7 @@ def test_tests_gate_strict_nontrivial_blocks_echo(tmp_path: Path, monkeypatch) -
 
 
 def test_tests_gate_strict_nontrivial_allows_real_command(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_ACCEPTANCE_STRICT_NONTRIVIAL", "1")
+    monkeypatch.setenv("OPENVIBECODING_ACCEPTANCE_STRICT_NONTRIVIAL", "1")
     monkeypatch.setattr(tests_gate, "validate_command", lambda *args, **kwargs: {"ok": True})
 
     def _fake_run(*args, **kwargs):
@@ -125,7 +125,7 @@ def test_tests_gate_strict_nontrivial_allows_real_command(tmp_path: Path, monkey
 
 
 def test_tests_gate_strict_nontrivial_blocks_quoted_empty_command(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_ACCEPTANCE_STRICT_NONTRIVIAL", "1")
+    monkeypatch.setenv("OPENVIBECODING_ACCEPTANCE_STRICT_NONTRIVIAL", "1")
     monkeypatch.setattr(tests_gate, "validate_command", lambda *args, **kwargs: {"ok": True})
 
     result = tests_gate.run_acceptance_tests(tmp_path, ['""'])
@@ -135,7 +135,7 @@ def test_tests_gate_strict_nontrivial_blocks_quoted_empty_command(tmp_path: Path
 
 
 def test_tests_gate_strict_nontrivial_blocks_echo_numeric_payload(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_ACCEPTANCE_STRICT_NONTRIVIAL", "1")
+    monkeypatch.setenv("OPENVIBECODING_ACCEPTANCE_STRICT_NONTRIVIAL", "1")
     monkeypatch.setattr(tests_gate, "validate_command", lambda *args, **kwargs: {"ok": True})
 
     result = tests_gate.run_acceptance_tests(tmp_path, ['echo "1"'])
@@ -145,7 +145,7 @@ def test_tests_gate_strict_nontrivial_blocks_echo_numeric_payload(tmp_path: Path
 
 
 def test_tests_gate_strict_nontrivial_blocks_echo_whitespace_payload(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_ACCEPTANCE_STRICT_NONTRIVIAL", "1")
+    monkeypatch.setenv("OPENVIBECODING_ACCEPTANCE_STRICT_NONTRIVIAL", "1")
     monkeypatch.setattr(tests_gate, "validate_command", lambda *args, **kwargs: {"ok": True})
 
     result = tests_gate.run_acceptance_tests(tmp_path, ['echo "   "'])
@@ -206,9 +206,9 @@ def test_tests_gate_prefers_repo_venv_and_sets_pythonpath(tmp_path: Path, monkey
     monkeypatch.setattr(tests_gate, "validate_command", lambda *args, **kwargs: {"ok": True})
     repo_root = Path(tests_gate.__file__).resolve().parents[5]
     machine_cache_root = tmp_path / "machine-cache"
-    monkeypatch.setenv("CORTEXPILOT_MACHINE_CACHE_ROOT", str(machine_cache_root))
-    monkeypatch.delenv("CORTEXPILOT_PYTHON", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_TOOLCHAIN_CACHE_ROOT", raising=False)
+    monkeypatch.setenv("OPENVIBECODING_MACHINE_CACHE_ROOT", str(machine_cache_root))
+    monkeypatch.delenv("OPENVIBECODING_PYTHON", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_TOOLCHAIN_CACHE_ROOT", raising=False)
     monkeypatch.setattr(tests_gate, "load_config", lambda: __import__("types").SimpleNamespace(toolchain_cache_root=machine_cache_root / "toolchains"))
     venv_root = machine_cache_root / "toolchains" / "python" / "current"
     venv_bin = venv_root / "bin"

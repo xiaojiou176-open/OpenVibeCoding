@@ -30,4 +30,4 @@ SH
 install_hook pre-commit
 install_hook pre-push
 
-echo "installed cortexpilot hooks: pre-commit, pre-push"
+echo "installed openvibecoding hooks: pre-commit, pre-push"

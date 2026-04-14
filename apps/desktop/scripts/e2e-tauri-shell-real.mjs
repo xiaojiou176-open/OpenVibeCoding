@@ -16,7 +16,7 @@ const tauriLogPath = resolve(outputDir, "tauri_shell_real_tauri.log");
 
 function resolvePythonBin() {
   const candidates = [
-    String(process.env.CORTEXPILOT_PYTHON || "").trim(),
+    String(process.env.OPENVIBECODING_PYTHON || "").trim(),
     resolve(repoRoot, ".runtime-cache", "cache", "toolchains", "python", "current", "bin", "python"),
     resolve(repoRoot, ".venv", "bin", "python"),
   ].filter(Boolean);
@@ -136,8 +136,8 @@ async function detectLingeringRepoDesktopProcesses() {
       command.includes("/apps/desktop/node_modules/.bin/vite")
       && command.includes("--host 127.0.0.1")
       && command.includes("--port ");
-    const isRepoDesktopNative = command.includes("/apps/desktop/src-tauri/target/debug/cortexpilot-desktop")
-      || command.includes("target/debug/cortexpilot-desktop");
+    const isRepoDesktopNative = command.includes("/apps/desktop/src-tauri/target/debug/openvibecoding-desktop")
+      || command.includes("target/debug/openvibecoding-desktop");
     if (!isRepoDesktopVite && !isRepoDesktopNative) continue;
     hits.push({
       pid,
@@ -148,7 +148,7 @@ async function detectLingeringRepoDesktopProcesses() {
   return { clean: hits.length === 0, hits, detail: "ok" };
 }
 
-async function detectCortexPilotDesktopRuntimeProcess() {
+async function detectOpenVibeCodingDesktopRuntimeProcess() {
   const ps = await runCommand("ps", ["-Ao", "pid=,command="]);
   if (ps.code !== 0) {
     return { found: false, pids: [], commands: [], detail: ps.stderr || "ps failed" };
@@ -162,10 +162,10 @@ async function detectCortexPilotDesktopRuntimeProcess() {
     if (!match) continue;
     const pid = Number.parseInt(match[1], 10);
     const command = match[2];
-    const isCortexPilotDesktopRuntime =
-      command.includes("/apps/desktop/src-tauri/target/debug/cortexpilot-desktop")
-      || /(^|\s)target\/debug\/cortexpilot-desktop(\s|$)/.test(command);
-    if (!isCortexPilotDesktopRuntime) continue;
+    const isOpenVibeCodingDesktopRuntime =
+      command.includes("/apps/desktop/src-tauri/target/debug/openvibecoding-desktop")
+      || /(^|\s)target\/debug\/openvibecoding-desktop(\s|$)/.test(command);
+    if (!isOpenVibeCodingDesktopRuntime) continue;
     hits.push({ pid, command });
   }
   return {
@@ -186,8 +186,8 @@ async function describePortRelease(port) {
 }
 
 async function run() {
-  const requestedApiPort = Number.parseInt(String(process.env.CORTEXPILOT_E2E_API_PORT || ""), 10);
-  const requestedTauriPort = Number.parseInt(String(process.env.CORTEXPILOT_E2E_TAURI_PORT || ""), 10);
+  const requestedApiPort = Number.parseInt(String(process.env.OPENVIBECODING_E2E_API_PORT || ""), 10);
+  const requestedTauriPort = Number.parseInt(String(process.env.OPENVIBECODING_E2E_TAURI_PORT || ""), 10);
   const apiPort = Number.isFinite(requestedApiPort) && requestedApiPort > 0
     ? requestedApiPort
     : await findAvailablePort(18700, 120);
@@ -196,7 +196,7 @@ async function run() {
     : await findAvailablePort(1430, 120);
   const apiBase = `http://127.0.0.1:${apiPort}`;
   const tauriWebBase = `http://127.0.0.1:${tauriPort}`;
-  const apiToken = String(process.env.CORTEXPILOT_API_TOKEN || "cortexpilot-dev-token").trim();
+  const apiToken = String(process.env.OPENVIBECODING_API_TOKEN || "openvibecoding-dev-token").trim();
 
   const report = {
     scenario: "tauri real shell e2e",
@@ -234,14 +234,14 @@ async function run() {
 
   const apiServer = spawn(
     pythonBin,
-    ["-m", "cortexpilot_orch.cli", "serve", "--host", "127.0.0.1", "--port", String(apiPort)],
+    ["-m", "openvibecoding_orch.cli", "serve", "--host", "127.0.0.1", "--port", String(apiPort)],
     {
       cwd: repoRoot,
       env: {
         ...process.env,
         PYTHONPATH: "apps/orchestrator/src",
-        CORTEXPILOT_API_AUTH_REQUIRED: "true",
-        CORTEXPILOT_API_TOKEN: apiToken,
+        OPENVIBECODING_API_AUTH_REQUIRED: "true",
+        OPENVIBECODING_API_TOKEN: apiToken,
       },
       stdio: ["ignore", "pipe", "pipe"],
     },
@@ -262,8 +262,8 @@ async function run() {
       cwd: desktopDir,
       env: {
         ...process.env,
-        VITE_CORTEXPILOT_API_BASE: apiBase,
-        VITE_CORTEXPILOT_API_TOKEN: apiToken,
+        VITE_OPENVIBECODING_API_BASE: apiBase,
+        VITE_OPENVIBECODING_API_TOKEN: apiToken,
       },
       stdio: ["ignore", "pipe", "pipe"],
     },
@@ -299,10 +299,10 @@ async function run() {
       pass: true,
     });
 
-    const tauriRuntimeStarted = /target\/debug\/cortexpilot-desktop/.test(tauriLog);
+    const tauriRuntimeStarted = /target\/debug\/openvibecoding-desktop/.test(tauriLog);
     const tauriRuntimeReady = tauriRuntimeStarted
-      || await waitFor(async () => /target\/debug\/cortexpilot-desktop/.test(tauriLog), 30000, 500);
-    const runtimeProcessProbe = await detectCortexPilotDesktopRuntimeProcess();
+      || await waitFor(async () => /target\/debug\/openvibecoding-desktop/.test(tauriLog), 30000, 500);
+    const runtimeProcessProbe = await detectOpenVibeCodingDesktopRuntimeProcess();
     const runtimeEvidencePass = Boolean(tauriRuntimeReady && runtimeProcessProbe.found === true);
     report.checks.push({
       name: "native tauri shell should be active (runtime+process strong evidence)",

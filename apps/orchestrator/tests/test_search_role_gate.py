@@ -4,7 +4,7 @@ import os
 import subprocess
 from pathlib import Path
 
-from cortexpilot_orch.scheduler.scheduler import Orchestrator
+from openvibecoding_orch.scheduler.scheduler import Orchestrator
 
 
 def _output_schema_artifacts(role: str = "worker") -> list[dict]:
@@ -115,15 +115,15 @@ def test_search_gate_blocks_pm_owner(tmp_path: Path, monkeypatch) -> None:
     _git(["git", "commit", "-m", "init"], repo)
 
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runtime_root / "runs"))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(runtime_root / "worktrees"))
-    monkeypatch.setenv("CORTEXPILOT_SEARCH_MODE", "mock")
-    monkeypatch.setenv("CORTEXPILOT_RUNNER", "agents")
-    monkeypatch.delenv("CORTEXPILOT_ALLOW_CODEX_EXEC", raising=False)
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runtime_root / "runs"))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(runtime_root / "worktrees"))
+    monkeypatch.setenv("OPENVIBECODING_SEARCH_MODE", "mock")
+    monkeypatch.setenv("OPENVIBECODING_RUNNER", "agents")
+    monkeypatch.delenv("OPENVIBECODING_ALLOW_CODEX_EXEC", raising=False)
 
     search_path = repo / "search_requests.json"
-    body = json.dumps({"queries": ["cortexpilot"]}, ensure_ascii=False, indent=2)
+    body = json.dumps({"queries": ["openvibecoding"]}, ensure_ascii=False, indent=2)
     search_path.write_text(body, encoding="utf-8")
     artifact = {
         "name": "search_requests.json",
@@ -157,15 +157,15 @@ def test_search_gate_blocks_non_searcher(tmp_path: Path, monkeypatch) -> None:
     _git(["git", "commit", "-m", "init"], repo)
 
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runtime_root / "runs"))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(runtime_root / "worktrees"))
-    monkeypatch.setenv("CORTEXPILOT_SEARCH_MODE", "mock")
-    monkeypatch.setenv("CORTEXPILOT_RUNNER", "agents")
-    monkeypatch.delenv("CORTEXPILOT_ALLOW_CODEX_EXEC", raising=False)
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runtime_root / "runs"))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(runtime_root / "worktrees"))
+    monkeypatch.setenv("OPENVIBECODING_SEARCH_MODE", "mock")
+    monkeypatch.setenv("OPENVIBECODING_RUNNER", "agents")
+    monkeypatch.delenv("OPENVIBECODING_ALLOW_CODEX_EXEC", raising=False)
 
     search_path = repo / "search_requests.json"
-    body = json.dumps({"queries": ["cortexpilot"]}, ensure_ascii=False, indent=2)
+    body = json.dumps({"queries": ["openvibecoding"]}, ensure_ascii=False, indent=2)
     search_path.write_text(body, encoding="utf-8")
     artifact = {
         "name": "search_requests.json",

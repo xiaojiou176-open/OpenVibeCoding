@@ -4,7 +4,7 @@ from typing import Any
 
 import pytest
 
-from cortexpilot_orch.runners import agents_stream_flow
+from openvibecoding_orch.runners import agents_stream_flow
 
 
 class _FakeRunner:

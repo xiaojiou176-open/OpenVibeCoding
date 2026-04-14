@@ -11,7 +11,7 @@
         "packages/**/*.tsx"
       ],
       "deny_patterns": [
-        "(?:from|import|require)\\s*(?:\\(|[^\\n])*['\\\"][^'\\\"]*(?:@cortexpilot/.*/app/|/apps/|\\.\\./apps/|\\.\\./\\.\\./apps/)"
+        "(?:from|import|require)\\s*(?:\\(|[^\\n])*['\\\"][^'\\\"]*(?:@openvibecoding/.*/app/|/apps/|\\.\\./apps/|\\.\\./\\.\\./apps/)"
       ]
     },
     {

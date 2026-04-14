@@ -23,8 +23,8 @@ done
 
 mkdir -p "$(dirname "$OUTPUT_PATH")"
 
-git config user.email "cortexpilot-bot@local"
-git config user.name "cortexpilot-bot"
+git config user.email "openvibecoding-bot@local"
+git config user.name "openvibecoding-bot"
 
 if [[ -z "$(git status --porcelain)" ]]; then
   printf '%s\n' "no_changes" > "$OUTPUT_PATH"

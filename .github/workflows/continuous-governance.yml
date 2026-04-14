@@ -130,5 +130,5 @@ jobs:
           retention-days: 14
           path: |
             .runtime-cache/test_output/continuous_governance
-            .runtime-cache/cortexpilot/reports/ci
+            .runtime-cache/openvibecoding/reports/ci
           if-no-files-found: warn

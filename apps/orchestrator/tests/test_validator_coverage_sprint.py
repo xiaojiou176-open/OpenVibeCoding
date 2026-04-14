@@ -4,13 +4,13 @@ from pathlib import Path
 
 import pytest
 
-from cortexpilot_orch.contract import validator as validator_mod
+from openvibecoding_orch.contract import validator as validator_mod
 
 
 def test_registry_path_and_load_fail_closed_edges(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     repo = tmp_path / "repo"
     repo.mkdir(parents=True, exist_ok=True)
-    monkeypatch.delenv("CORTEXPILOT_AGENT_REGISTRY", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_AGENT_REGISTRY", raising=False)
     monkeypatch.setattr(validator_mod, "_REPO_ROOT", repo)
 
     assert validator_mod.resolve_agent_registry_path(repo) == (repo / "policies" / "agent_registry.json")
@@ -107,9 +107,9 @@ def test_path_and_helper_edges() -> None:
 
 
 def test_superpowers_gate_markers_and_violations(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_SUPERPOWERS_GATE_ENFORCE", "true")
+    monkeypatch.setenv("OPENVIBECODING_SUPERPOWERS_GATE_ENFORCE", "true")
     assert validator_mod.is_superpowers_gate_required({"evidence_links": []}) is True
-    monkeypatch.delenv("CORTEXPILOT_SUPERPOWERS_GATE_ENFORCE", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_SUPERPOWERS_GATE_ENFORCE", raising=False)
 
     assert (
         validator_mod.is_superpowers_gate_required({"evidence_links": [1, "gate:superpowers"]})

@@ -17,7 +17,7 @@ def _write_checker(path: Path, trigger_texts: list[str]) -> None:
         (
             "from pathlib import Path\n"
             "import os\n\n"
-            "target = Path(os.environ['CORTEXPILOT_MUTATION_TARGET_FILE'])\n"
+            "target = Path(os.environ['OPENVIBECODING_MUTATION_TARGET_FILE'])\n"
             "text = target.read_text(encoding='utf-8')\n"
             f"{checks}\n"
             "raise SystemExit(0)\n"
@@ -70,12 +70,12 @@ def test_mutation_gate_writes_report_and_enforces_kill_rate(tmp_path: Path) -> N
     env.update(
         {
                 "PYTHON_BIN": sys.executable,
-                "CORTEXPILOT_MUTATION_TARGET_FILE": str(target_file),
-                "CORTEXPILOT_MUTATION_CONFIG_FILE": str(config_file),
-                "CORTEXPILOT_MUTATION_TEST_CMD": f"\"{sys.executable}\" \"{checker}\"",
-                "CORTEXPILOT_MUTATION_REPORT_PATH": str(report_path),
-                "CORTEXPILOT_MUTATION_MIN_MUTANTS": "3",
-                "CORTEXPILOT_MUTATION_MIN_KILL_RATE": "1.0",
+                "OPENVIBECODING_MUTATION_TARGET_FILE": str(target_file),
+                "OPENVIBECODING_MUTATION_CONFIG_FILE": str(config_file),
+                "OPENVIBECODING_MUTATION_TEST_CMD": f"\"{sys.executable}\" \"{checker}\"",
+                "OPENVIBECODING_MUTATION_REPORT_PATH": str(report_path),
+                "OPENVIBECODING_MUTATION_MIN_MUTANTS": "3",
+                "OPENVIBECODING_MUTATION_MIN_KILL_RATE": "1.0",
             }
     )
 
@@ -131,12 +131,12 @@ def test_mutation_gate_fail_closed_when_kill_rate_below_threshold(tmp_path: Path
     env.update(
         {
                 "PYTHON_BIN": sys.executable,
-                "CORTEXPILOT_MUTATION_TARGET_FILE": str(target_file),
-                "CORTEXPILOT_MUTATION_CONFIG_FILE": str(config_file),
-                "CORTEXPILOT_MUTATION_TEST_CMD": f"\"{sys.executable}\" \"{checker}\"",
-                "CORTEXPILOT_MUTATION_REPORT_PATH": str(report_path),
-                "CORTEXPILOT_MUTATION_MIN_MUTANTS": "2",
-                "CORTEXPILOT_MUTATION_MIN_KILL_RATE": "1.0",
+                "OPENVIBECODING_MUTATION_TARGET_FILE": str(target_file),
+                "OPENVIBECODING_MUTATION_CONFIG_FILE": str(config_file),
+                "OPENVIBECODING_MUTATION_TEST_CMD": f"\"{sys.executable}\" \"{checker}\"",
+                "OPENVIBECODING_MUTATION_REPORT_PATH": str(report_path),
+                "OPENVIBECODING_MUTATION_MIN_MUTANTS": "2",
+                "OPENVIBECODING_MUTATION_MIN_KILL_RATE": "1.0",
             }
     )
 

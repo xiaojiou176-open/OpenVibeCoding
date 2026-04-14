@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from cortexpilot_orch.scheduler import policy_pipeline
+from openvibecoding_orch.scheduler import policy_pipeline
 
 
 def test_policy_basic_extractors_and_normalizers() -> None:
@@ -37,14 +37,14 @@ def test_codex_shell_policy_and_env_flags(monkeypatch) -> None:
     assert passthrough["effective_shell"] == "untrusted"
     assert passthrough["overridden"] is False
 
-    monkeypatch.setenv("CORTEXPILOT_MCP_ONLY", "yes")
+    monkeypatch.setenv("OPENVIBECODING_MCP_ONLY", "yes")
     assert policy_pipeline.mcp_only_enabled() is True
-    monkeypatch.setenv("CORTEXPILOT_MCP_ONLY", "0")
+    monkeypatch.setenv("OPENVIBECODING_MCP_ONLY", "0")
     assert policy_pipeline.mcp_only_enabled() is False
 
-    monkeypatch.setenv("CORTEXPILOT_ALLOW_CODEX_EXEC", "TRUE")
+    monkeypatch.setenv("OPENVIBECODING_ALLOW_CODEX_EXEC", "TRUE")
     assert policy_pipeline.allow_codex_exec() is True
-    monkeypatch.setenv("CORTEXPILOT_ALLOW_CODEX_EXEC", "")
+    monkeypatch.setenv("OPENVIBECODING_ALLOW_CODEX_EXEC", "")
     assert policy_pipeline.allow_codex_exec() is False
 
 

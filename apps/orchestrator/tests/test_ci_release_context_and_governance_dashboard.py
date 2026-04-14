@@ -25,7 +25,7 @@ def _write_json(path: Path, payload: dict) -> None:
 def test_evidence_manifest_release_context_requires_provenance_metadata(tmp_path: Path) -> None:
     module = _load_module(REPO_ROOT / "scripts" / "check_evidence_manifest.py", "check_evidence_manifest")
     manifest = {
-        "manifest_type": "cortexpilot_evidence_manifest",
+        "manifest_type": "openvibecoding_evidence_manifest",
         "schema_version": 2,
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "overall_status": "pass",

@@ -2,17 +2,17 @@ import json
 import os
 from pathlib import Path
 
-from cortexpilot_orch.locks import locker
+from openvibecoding_orch.locks import locker
 
 
 def test_locker_helper_edge_branches(tmp_path: Path, monkeypatch) -> None:
     assert locker._normalize_lock_path("././src/main.py/") == "src/main.py"
 
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", "run-edge")
-    monkeypatch.delenv("CORTEXPILOT_LOCK_OWNER_TOKEN", raising=False)
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", "run-edge")
+    monkeypatch.delenv("OPENVIBECODING_LOCK_OWNER_TOKEN", raising=False)
     assert locker._owner_token().startswith("run:run-edge:pid:")
 
-    monkeypatch.setenv("CORTEXPILOT_RUNNING_LOCK_STALE_SEC", "invalid")
+    monkeypatch.setenv("OPENVIBECODING_RUNNING_LOCK_STALE_SEC", "invalid")
     assert locker._resolve_running_stale_sec() == locker._DEFAULT_RUNNING_STALE_SEC
 
     assert locker._sanitize_allowed_paths("src/a.py") == ["src/a.py"]
@@ -83,8 +83,8 @@ def test_locker_unlink_and_stale_pid_branches(tmp_path: Path, monkeypatch) -> No
 
 def test_locker_cleanup_ttl_release_and_acquire_retries(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", "run-main")
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", "run-main")
 
     removed, remaining = locker.cleanup_stale_locks(["src/missing.py"], ttl_sec=0)
     assert removed == []
@@ -114,8 +114,8 @@ def test_locker_cleanup_ttl_release_and_acquire_retries(tmp_path: Path, monkeypa
     assert len(removed_after) == 1
     assert remaining_after == []
 
-    monkeypatch.delenv("CORTEXPILOT_LOCK_TTL_SEC", raising=False)
-    monkeypatch.setenv("CORTEXPILOT_LOCK_TTL_SEC_DEFAULT", "invalid")
+    monkeypatch.delenv("OPENVIBECODING_LOCK_TTL_SEC", raising=False)
+    monkeypatch.setenv("OPENVIBECODING_LOCK_TTL_SEC_DEFAULT", "invalid")
     assert locker.resolve_lock_ttl(auto_cleanup=True) == (0, "default_env_invalid")
 
     # acquire_lock_with_cleanup final retry fails -> returns False with cleanup records.
@@ -141,9 +141,9 @@ def test_locker_cleanup_ttl_release_and_acquire_retries(tmp_path: Path, monkeypa
 
 def test_locker_release_missing_and_unlink_file_not_found(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", "run-release")
-    monkeypatch.setenv("CORTEXPILOT_LOCK_OWNER_TOKEN", "owner-release")
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", "run-release")
+    monkeypatch.setenv("OPENVIBECODING_LOCK_OWNER_TOKEN", "owner-release")
 
     # Missing lock path branch.
     locker.release_lock(["src/not-found.py"])

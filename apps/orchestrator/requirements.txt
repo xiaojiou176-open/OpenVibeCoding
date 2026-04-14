@@ -21,11 +21,11 @@ opentelemetry-exporter-otlp-proto-http==1.40.0
 playwright==1.58.0
 # Primary LLM provider (Gemini-first).
 google-genai==1.68.0
-# Optional provider accelerator (enabled via CORTEXPILOT_PROVIDER_USE_LITELLM=1).
+# Optional provider accelerator (enabled via OPENVIBECODING_PROVIDER_USE_LITELLM=1).
 # Keep this path optional at runtime; do not block baseline bootstrap/clean-room
 # recovery on a provider accelerator that is activated only behind an env flag.
 # TEMP BLOCKER: current runtime imports `agents.*` modules in
-# `apps/orchestrator/src/cortexpilot_orch/**`; removing this now breaks runtime.
+# `apps/orchestrator/src/openvibecoding_orch/**`; removing this now breaks runtime.
 # Minimal fallback for now is to keep this dependency until agents runtime is migrated.
 openai-agents==0.7.0
 temporalio==1.22.0

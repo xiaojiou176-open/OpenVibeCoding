@@ -6,7 +6,7 @@ from tooling.search_pipeline import write_search_results, write_verification, wr
 
 def test_search_pipeline_appends_history(tmp_path: Path, monkeypatch) -> None:
     runs_root = tmp_path / "runs"
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
     run_id = "run_search_history"
 
     write_search_results(run_id, [{"href": "https://example.com/one"}])
@@ -24,7 +24,7 @@ def test_search_pipeline_appends_history(tmp_path: Path, monkeypatch) -> None:
 
 def test_verification_appends_history(tmp_path: Path, monkeypatch) -> None:
     runs_root = tmp_path / "runs"
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
     run_id = "run_verify_history"
 
     write_verification(run_id, {"ok": True})
@@ -41,7 +41,7 @@ def test_verification_appends_history(tmp_path: Path, monkeypatch) -> None:
 
 def test_purified_summary_appends_history(tmp_path: Path, monkeypatch) -> None:
     runs_root = tmp_path / "runs"
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
     run_id = "run_purify_history"
 
     write_purified_summary(run_id, [{"provider": "duckduckgo", "results": [{"href": "https://example.com"}]}], {"ok": True})

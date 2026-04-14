@@ -1,0 +1,11 @@
+{
+  "name": "openvibecoding-coding-agent-bundle",
+  "description": "Repo-owned OpenVibeCoding starter bundle for Claude Code, Codex, and compatible coding-agent installs.",
+  "version": "0.1.0",
+  "author": {
+    "name": "OpenVibeCoding"
+  },
+  "homepage": "https://github.com/xiaojiou176-open/OpenVibeCoding",
+  "repository": "https://github.com/xiaojiou176-open/OpenVibeCoding",
+  "license": "MIT"
+}

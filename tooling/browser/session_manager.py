@@ -47,11 +47,11 @@ def _normalize_profile_mode(raw: str, default_mode: str) -> str:
 
 
 def _local_profile_defaults_enabled() -> bool:
-    if _truthy_env("CI", "GITHUB_ACTIONS", "CORTEXPILOT_CI_CONTAINER"):
+    if _truthy_env("CI", "GITHUB_ACTIONS", "OPENVIBECODING_CI_CONTAINER"):
         return False
     if _first_non_empty(
-        os.getenv("CORTEXPILOT_CLEAN_ROOM_MACHINE_TMP_ROOT"),
-        os.getenv("CORTEXPILOT_CLEAN_ROOM_PRESERVE_ROOT"),
+        os.getenv("OPENVIBECODING_CLEAN_ROOM_MACHINE_TMP_ROOT"),
+        os.getenv("OPENVIBECODING_CLEAN_ROOM_PRESERVE_ROOT"),
     ):
         return False
     return True
@@ -73,18 +73,18 @@ def _default_profile_name(profile_mode: str) -> str:
 
 
 def _forced_ephemeral_reason() -> str:
-    if _truthy_env("CI", "GITHUB_ACTIONS", "CORTEXPILOT_CI_CONTAINER"):
+    if _truthy_env("CI", "GITHUB_ACTIONS", "OPENVIBECODING_CI_CONTAINER"):
         return "ci_or_container"
     if _first_non_empty(
-        os.getenv("CORTEXPILOT_CLEAN_ROOM_MACHINE_TMP_ROOT"),
-        os.getenv("CORTEXPILOT_CLEAN_ROOM_PRESERVE_ROOT"),
+        os.getenv("OPENVIBECODING_CLEAN_ROOM_MACHINE_TMP_ROOT"),
+        os.getenv("OPENVIBECODING_CLEAN_ROOM_PRESERVE_ROOT"),
     ):
         return "clean_room"
     return ""
 
 
 def _runtime_root() -> Path:
-    return Path(os.getenv("CORTEXPILOT_RUNTIME_ROOT", ".runtime-cache/cortexpilot")).resolve()
+    return Path(os.getenv("OPENVIBECODING_RUNTIME_ROOT", ".runtime-cache/openvibecoding")).resolve()
 
 
 def _load_cookie_file(path: Path) -> list[dict[str, Any]]:
@@ -185,30 +185,30 @@ class BrowserSessionManager:
     ) -> "BrowserSessionManager":
         resolved_default_mode = _default_profile_mode(default_profile_mode)
         raw_mode = _first_non_empty(
-            os.getenv("CORTEXPILOT_BROWSER_PROFILE_MODE"),
-            os.getenv("CORTEXPILOT_WEB_PROFILE_MODE"),
+            os.getenv("OPENVIBECODING_BROWSER_PROFILE_MODE"),
+            os.getenv("OPENVIBECODING_WEB_PROFILE_MODE"),
         )
         profile_mode = _normalize_profile_mode(raw_mode, resolved_default_mode)
         if _forced_ephemeral_reason():
             profile_mode = "ephemeral"
 
         raw_profile_dir = _first_non_empty(
-            os.getenv("CORTEXPILOT_BROWSER_PROFILE_DIR"),
-            os.getenv("CORTEXPILOT_WEB_PROFILE_DIR"),
+            os.getenv("OPENVIBECODING_BROWSER_PROFILE_DIR"),
+            os.getenv("OPENVIBECODING_WEB_PROFILE_DIR"),
         )
         profile_dir = Path(raw_profile_dir).expanduser().resolve() if raw_profile_dir else None
         if profile_dir is None and profile_mode == "allow_profile":
             profile_dir = default_repo_chrome_user_data_dir().resolve()
 
         raw_profile_name = _first_non_empty(
-            os.getenv("CORTEXPILOT_BROWSER_PROFILE_NAME"),
-            os.getenv("CORTEXPILOT_WEB_PROFILE_NAME"),
+            os.getenv("OPENVIBECODING_BROWSER_PROFILE_NAME"),
+            os.getenv("OPENVIBECODING_WEB_PROFILE_NAME"),
         )
         profile_name = raw_profile_name or _default_profile_name(profile_mode)
 
         raw_cookie_file = _first_non_empty(
-            os.getenv("CORTEXPILOT_BROWSER_COOKIE_PATH"),
-            os.getenv("CORTEXPILOT_WEB_COOKIE_PATH"),
+            os.getenv("OPENVIBECODING_BROWSER_COOKIE_PATH"),
+            os.getenv("OPENVIBECODING_WEB_COOKIE_PATH"),
         )
         cookie_file = Path(raw_cookie_file).expanduser().resolve() if raw_cookie_file else None
         if profile_mode == "ephemeral":

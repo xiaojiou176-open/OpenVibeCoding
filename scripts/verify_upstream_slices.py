@@ -19,7 +19,7 @@ except ModuleNotFoundError:
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MATRIX = ROOT / "configs" / "upstream_compat_matrix.json"
 DEFAULT_OUTPUT_DIR = ROOT / ".runtime-cache" / "test_output" / "governance" / "upstream"
-DEFAULT_HEARTBEAT_SEC = int(os.environ.get("CORTEXPILOT_UPSTREAM_VERIFICATION_HEARTBEAT_SEC", "15"))
+DEFAULT_HEARTBEAT_SEC = int(os.environ.get("OPENVIBECODING_UPSTREAM_VERIFICATION_HEARTBEAT_SEC", "15"))
 
 
 def _utc_now() -> str:
@@ -298,7 +298,7 @@ def main() -> int:
             timeout_sec = int(
                 row.get("smoke_timeout_sec")
                 if args.mode == "smoke"
-                else row.get("validation_timeout_sec") or os.environ.get("CORTEXPILOT_UPSTREAM_VERIFICATION_TIMEOUT_SEC", "180")
+                else row.get("validation_timeout_sec") or os.environ.get("OPENVIBECODING_UPSTREAM_VERIFICATION_TIMEOUT_SEC", "180")
             )
 
         record_path = ROOT / str(row.get("verification_record_path") or "")
@@ -308,10 +308,10 @@ def main() -> int:
         log_path = record_path.with_suffix(".log")
         artifact_path = str(log_path.relative_to(ROOT))
         extra_env = {
-            "CORTEXPILOT_UPSTREAM_VERIFICATION_RUN_ID": run_id,
-            "CORTEXPILOT_UPSTREAM_VERIFICATION_BATCH_ID": verification_batch_id,
-            "CORTEXPILOT_LOG_RUN_ID": run_id,
-            "CORTEXPILOT_LOG_ARTIFACT_KIND": "upstream_verification",
+            "OPENVIBECODING_UPSTREAM_VERIFICATION_RUN_ID": run_id,
+            "OPENVIBECODING_UPSTREAM_VERIFICATION_BATCH_ID": verification_batch_id,
+            "OPENVIBECODING_LOG_RUN_ID": run_id,
+            "OPENVIBECODING_LOG_ARTIFACT_KIND": "upstream_verification",
         }
         _recover_interrupted_record(
             record_path=record_path,

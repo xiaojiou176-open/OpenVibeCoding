@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
-  <title id="title">CortexPilot showcase card</title>
+  <title id="title">OpenVibeCoding showcase card</title>
   <desc id="desc">A storefront card showing PM request, Command Tower, Workflow Case, and Proof and Replay in one public-facing visual.</desc>
   <defs>
     <linearGradient id="bg" x1="120" y1="60" x2="1160" y2="660" gradientUnits="userSpaceOnUse">
@@ -30,7 +30,7 @@
   <text x="88" y="316" fill="#16232d" font-family="Georgia, 'Times New Roman', serif" font-size="66" font-weight="700">One proof pack you can inspect.</text>
 
   <text x="88" y="382" fill="#4f616e" font-family="'Trebuchet MS', Verdana, sans-serif" font-size="25">
-    CortexPilot turns PM request -> Workflow Case -> Proof and Replay into one governed operator loop.
+    OpenVibeCoding turns PM request -> Workflow Case -> Proof and Replay into one governed operator loop.
   </text>
   <text x="88" y="418" fill="#4f616e" font-family="'Trebuchet MS', Verdana, sans-serif" font-size="25">
     Public boundary today: repo, Pages, one release-proven workflow, read-only MCP, starter packs.

@@ -2,12 +2,12 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-SKIP_UPSTREAM_CHECKS="${CORTEXPILOT_HYGIENE_SKIP_UPSTREAM:-0}"
-INCLUDE_EXTERNAL_TRUTH="${CORTEXPILOT_HYGIENE_INCLUDE_EXTERNAL:-0}"
-QUICK_PATH="${CORTEXPILOT_HYGIENE_QUICK_PATH:-0}"
-if [[ -n "${CORTEXPILOT_GITHUB_ALERTS_MODE:-}" ]]; then
-  GITHUB_ALERTS_MODE="${CORTEXPILOT_GITHUB_ALERTS_MODE}"
-elif [[ "${CORTEXPILOT_CI_RUNNER_CLASS:-}" == "github_hosted" && ( "${CORTEXPILOT_CI_ROUTE_ID:-}" == "trusted_pr" || "${CORTEXPILOT_CI_ROUTE_ID:-}" == "untrusted_pr" || "${CORTEXPILOT_CI_ROUTE_ID:-}" == "push_main" ) ]]; then
+SKIP_UPSTREAM_CHECKS="${OPENVIBECODING_HYGIENE_SKIP_UPSTREAM:-0}"
+INCLUDE_EXTERNAL_TRUTH="${OPENVIBECODING_HYGIENE_INCLUDE_EXTERNAL:-0}"
+QUICK_PATH="${OPENVIBECODING_HYGIENE_QUICK_PATH:-0}"
+if [[ -n "${OPENVIBECODING_GITHUB_ALERTS_MODE:-}" ]]; then
+  GITHUB_ALERTS_MODE="${OPENVIBECODING_GITHUB_ALERTS_MODE}"
+elif [[ "${OPENVIBECODING_CI_RUNNER_CLASS:-}" == "github_hosted" && ( "${OPENVIBECODING_CI_ROUTE_ID:-}" == "trusted_pr" || "${OPENVIBECODING_CI_ROUTE_ID:-}" == "untrusted_pr" || "${OPENVIBECODING_CI_ROUTE_ID:-}" == "push_main" ) ]]; then
   # GitHub-hosted integration tokens cannot reliably read the alerts APIs, and
   # fresh hosted-first push_main routes may not have CodeQL/secret-scanning
   # analysis materialized yet. Keep local / repo-owned gates fail-closed, but
@@ -165,7 +165,7 @@ require_file "configs/cargo_audit_ignored_advisories.json"
 require_file "configs/upstream_inventory.json"
 require_file "configs/upstream_compat_matrix.json"
 require_file "schemas/log_event.v2.json"
-require_file "docs/api/openapi.cortexpilot.json"
+require_file "docs/api/openapi.openvibecoding.json"
 require_file "docs/runbooks/space-governance.md"
 require_file ".github/dependency-review-config.yml"
 require_file "pnpm-workspace.yaml"
@@ -205,8 +205,8 @@ check_no_matches "root directory must not contain tmp_* temporary files" \
 check_no_matches "root directory must not contain *.tmp temporary files" \
   find "$ROOT_DIR" -maxdepth 1 -type f -name '*.tmp'
 
-check_no_matches "do not use .runtime-cache/cortexpilot/logs as the primary log root" \
-  find "$ROOT_DIR/.runtime-cache/cortexpilot/logs" -type f 2>/dev/null
+check_no_matches "do not use .runtime-cache/openvibecoding/logs as the primary log root" \
+  find "$ROOT_DIR/.runtime-cache/openvibecoding/logs" -type f 2>/dev/null
 
 check_no_matches "tracked *.pyc files are forbidden" \
   git -C "$ROOT_DIR" ls-files '*.pyc'
@@ -434,9 +434,9 @@ else
 fi
 
 if [[ "$SKIP_UPSTREAM_CHECKS" == "1" ]]; then
-  info "Skipping external truth gates (CORTEXPILOT_HYGIENE_SKIP_UPSTREAM=1, current verdict=repo-side truth only)"
+  info "Skipping external truth gates (OPENVIBECODING_HYGIENE_SKIP_UPSTREAM=1, current verdict=repo-side truth only)"
 elif [[ "$INCLUDE_EXTERNAL_TRUTH" != "1" ]]; then
-  info "Skipping external truth gates by default (repo-side truth only; run scripts/truth_triage.sh or set CORTEXPILOT_HYGIENE_INCLUDE_EXTERNAL=1 for external truth)"
+  info "Skipping external truth gates by default (repo-side truth only; run scripts/truth_triage.sh or set OPENVIBECODING_HYGIENE_INCLUDE_EXTERNAL=1 for external truth)"
 else
   info "Running upstream slice verification gate"
   if ! upstream_verify_output="$(run_governance_py scripts/verify_upstream_slices.py --mode smoke 2>&1)"; then
@@ -470,7 +470,7 @@ if is_truthy "$QUICK_PATH"; then
   info "Skipping retention report gate in hygiene quick-path"
 else
   info "Running retention report gate"
-  if [[ ! -f "$ROOT_DIR/.runtime-cache/cortexpilot/reports/retention_report.json" ]]; then
+  if [[ ! -f "$ROOT_DIR/.runtime-cache/openvibecoding/reports/retention_report.json" ]]; then
     if ! cleanup_output="$(bash "$ROOT_DIR/scripts/cleanup_runtime.sh" dry-run 2>&1)"; then
       echo "$cleanup_output"
       fail "retention report pre-generation failed"

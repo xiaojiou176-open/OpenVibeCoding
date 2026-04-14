@@ -42,7 +42,7 @@ if python3 scripts/check_ci_supply_chain_policy.py >/dev/null 2>&1; then
 fi
 cp "$backup_dockerfile" "$orig_dockerfile"
 
-mkdir -p .runtime-cache/cortexpilot/reports/ci/cost_profile
+mkdir -p .runtime-cache/openvibecoding/reports/ci/cost_profile
 cat > "$tmpdir/cost_profile.json" <<'EOF'
 {"retry_green_count": 1}
 EOF

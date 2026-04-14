@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from cortexpilot_orch.scheduler import runtime_utils
+from openvibecoding_orch.scheduler import runtime_utils
 
 
 def test_runtime_utils_branch_matrix(monkeypatch, tmp_path: Path) -> None:

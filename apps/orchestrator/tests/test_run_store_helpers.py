@@ -4,11 +4,11 @@ from pathlib import Path
 
 import pytest
 
-from cortexpilot_orch.store import run_store
+from openvibecoding_orch.store import run_store
 
 
 def test_run_store_helper_functions(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(tmp_path))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(tmp_path))
     run_id = "run_helper"
 
     run_dir = run_store.create_run_dir(run_id)
@@ -99,7 +99,7 @@ def test_run_store_helper_functions(tmp_path: Path, monkeypatch) -> None:
 
 
 def test_write_artifact_blocks_path_traversal(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(tmp_path))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(tmp_path))
     run_id = "run_safe"
     run_store.create_run_dir(run_id)
 
@@ -111,7 +111,7 @@ def test_write_artifact_blocks_path_traversal(tmp_path: Path, monkeypatch) -> No
 
 
 def test_write_task_paths_block_traversal(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(tmp_path))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(tmp_path))
     run_id = "run_task_paths"
     run_store.create_run_dir(run_id)
 
@@ -149,7 +149,7 @@ def test_write_task_paths_block_traversal(tmp_path: Path, monkeypatch) -> None:
 
 
 def test_append_event_thread_safe(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(tmp_path))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(tmp_path))
     store = run_store.RunStore(runs_root=tmp_path)
     run_id = store.create_run("task_threads")
     per_thread = 25

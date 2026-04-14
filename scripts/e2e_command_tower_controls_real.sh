@@ -4,7 +4,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
-TMP_RUNTIME_DIR="${RUNNER_TEMP:-$ROOT_DIR/.runtime-cache/cortexpilot/temp}/playwright-artifacts"
+TMP_RUNTIME_DIR="${RUNNER_TEMP:-$ROOT_DIR/.runtime-cache/openvibecoding/temp}/playwright-artifacts"
 mkdir -p "$TMP_RUNTIME_DIR"
 export TMPDIR="${TMPDIR:-$TMP_RUNTIME_DIR}"
 export TMP="${TMP:-$TMP_RUNTIME_DIR}"
@@ -13,28 +13,28 @@ export TEMP="${TEMP:-$TMP_RUNTIME_DIR}"
 source "$ROOT_DIR/scripts/lib/env.sh"
 source "$ROOT_DIR/scripts/lib/e2e_common.sh"
 source "$ROOT_DIR/scripts/lib/test_heartbeat.sh"
-PYTHON_BIN="${CORTEXPILOT_PYTHON:-}"
+PYTHON_BIN="${OPENVIBECODING_PYTHON:-}"
 
-HOST="$(cortexpilot_env_get CORTEXPILOT_E2E_HOST "127.0.0.1")"
+HOST="$(openvibecoding_env_get OPENVIBECODING_E2E_HOST "127.0.0.1")"
 if [[ "$HOST" == "127.0.0.1" ]]; then
   echo "ℹ️ [ct-controls] runtime host normalized: 127.0.0.1 -> localhost (ipv4 loopback unavailable in current env)"
   HOST="localhost"
 fi
-API_PORT="$(cortexpilot_env_get CORTEXPILOT_E2E_API_PORT "19200")"
-DASHBOARD_PORT="$(cortexpilot_env_get CORTEXPILOT_E2E_DASHBOARD_PORT "19300")"
-BROWSER_HOST="$(cortexpilot_env_get CORTEXPILOT_E2E_BROWSER_HOST "$HOST")"
+API_PORT="$(openvibecoding_env_get OPENVIBECODING_E2E_API_PORT "19200")"
+DASHBOARD_PORT="$(openvibecoding_env_get OPENVIBECODING_E2E_DASHBOARD_PORT "19300")"
+BROWSER_HOST="$(openvibecoding_env_get OPENVIBECODING_E2E_BROWSER_HOST "$HOST")"
 case "$BROWSER_HOST" in
   127.0.0.1|0.0.0.0|::|::1|\[::\]|\[::1\])
     BROWSER_HOST="localhost"
     ;;
 esac
-API_TOKEN="$(cortexpilot_env_get CORTEXPILOT_E2E_API_TOKEN "cortexpilot-e2e-token")"
-HEARTBEAT_SEC="$(cortexpilot_env_get CORTEXPILOT_E2E_HEARTBEAT_INTERVAL_SEC "20")"
-FAST_GATE_TIMEOUT_SEC="$(cortexpilot_env_get CORTEXPILOT_E2E_FAST_GATE_TIMEOUT_SEC "900")"
-LIVE_PREFLIGHT_TIMEOUT_SEC="$(cortexpilot_env_get CORTEXPILOT_E2E_LIVE_PREFLIGHT_TIMEOUT_SEC "180")"
-PLAYWRIGHT_TIMEOUT_SEC="$(cortexpilot_env_get CORTEXPILOT_E2E_PLAYWRIGHT_TIMEOUT_SEC "2400")"
-PLAYWRIGHT_ATTEMPTS="$(cortexpilot_env_get CORTEXPILOT_E2E_PLAYWRIGHT_ATTEMPTS "2")"
-PLAYWRIGHT_RETRY_BACKOFF_SEC="$(cortexpilot_env_get CORTEXPILOT_E2E_PLAYWRIGHT_RETRY_BACKOFF_SEC "2")"
+API_TOKEN="$(openvibecoding_env_get OPENVIBECODING_E2E_API_TOKEN "openvibecoding-e2e-token")"
+HEARTBEAT_SEC="$(openvibecoding_env_get OPENVIBECODING_E2E_HEARTBEAT_INTERVAL_SEC "20")"
+FAST_GATE_TIMEOUT_SEC="$(openvibecoding_env_get OPENVIBECODING_E2E_FAST_GATE_TIMEOUT_SEC "900")"
+LIVE_PREFLIGHT_TIMEOUT_SEC="$(openvibecoding_env_get OPENVIBECODING_E2E_LIVE_PREFLIGHT_TIMEOUT_SEC "180")"
+PLAYWRIGHT_TIMEOUT_SEC="$(openvibecoding_env_get OPENVIBECODING_E2E_PLAYWRIGHT_TIMEOUT_SEC "2400")"
+PLAYWRIGHT_ATTEMPTS="$(openvibecoding_env_get OPENVIBECODING_E2E_PLAYWRIGHT_ATTEMPTS "2")"
+PLAYWRIGHT_RETRY_BACKOFF_SEC="$(openvibecoding_env_get OPENVIBECODING_E2E_PLAYWRIGHT_RETRY_BACKOFF_SEC "2")"
 
 OUT_DIR="$ROOT_DIR/.runtime-cache/test_output/ui_regression"
 LOG_DIR="$ROOT_DIR/.runtime-cache/logs/runtime"
@@ -44,7 +44,7 @@ TS="$(date +%Y%m%d_%H%M%S)"
 API_LOG="$LOG_DIR/e2e_ct_controls_api_${TS}.log"
 UI_LOG="$LOG_DIR/e2e_ct_controls_dashboard_${TS}.log"
 DASHBOARD_DIST_DIR=".next"
-ARTIFACT_SUFFIX="${CORTEXPILOT_E2E_ARTIFACT_SUFFIX:-}"
+ARTIFACT_SUFFIX="${OPENVIBECODING_E2E_ARTIFACT_SUFFIX:-}"
 if [[ -n "$ARTIFACT_SUFFIX" && "$ARTIFACT_SUFFIX" =~ iter_([0-9]+)$ ]]; then
   ITERATION_OFFSET_RAW="${BASH_REMATCH[1]}"
   ITERATION_OFFSET="$((10#$ITERATION_OFFSET_RAW))"
@@ -184,14 +184,14 @@ trap cleanup EXIT INT TERM
 
 e2e_require_python_venv "$ROOT_DIR"
 e2e_prepare_dashboard_generated_file_restore "$ROOT_DIR" "$DASHBOARD_DIST_DIR"
-API_PORT="$(resolve_port "$API_PORT" "API_PORT" "CORTEXPILOT_E2E_API_PORT")"
-DASHBOARD_PORT="$(resolve_port "$DASHBOARD_PORT" "DASHBOARD_PORT" "CORTEXPILOT_E2E_DASHBOARD_PORT" "$API_PORT")"
+API_PORT="$(resolve_port "$API_PORT" "API_PORT" "OPENVIBECODING_E2E_API_PORT")"
+DASHBOARD_PORT="$(resolve_port "$DASHBOARD_PORT" "DASHBOARD_PORT" "OPENVIBECODING_E2E_DASHBOARD_PORT" "$API_PORT")"
 e2e_wait_for_port_free "$API_PORT" "API_PORT" 25
 e2e_wait_for_port_free "$DASHBOARD_PORT" "DASHBOARD_PORT" 25
 e2e_ensure_dashboard_node_modules "$ROOT_DIR"
 
-if [[ -n "${CORTEXPILOT_E2E_ARTIFACT_SUFFIX:-}" ]]; then
-  echo "ℹ️ [ct-controls] skip fast gate under flake iteration context (artifact_suffix=${CORTEXPILOT_E2E_ARTIFACT_SUFFIX})"
+if [[ -n "${OPENVIBECODING_E2E_ARTIFACT_SUFFIX:-}" ]]; then
+  echo "ℹ️ [ct-controls] skip fast gate under flake iteration context (artifact_suffix=${OPENVIBECODING_E2E_ARTIFACT_SUFFIX})"
 else
   echo "🚀 [ct-controls] preflight: fast gate (test:quick)"
   run_with_heartbeat_and_timeout "ct-controls-fast-gate-test-quick" "$FAST_GATE_TIMEOUT_SEC" "$HEARTBEAT_SEC" -- \
@@ -203,11 +203,11 @@ echo "🚀 [ct-controls] preflight: live external probe (real browser + real pro
 run_live_preflight_probe() {
   run_with_heartbeat_and_timeout "ct-controls-live-preflight" "$LIVE_PREFLIGHT_TIMEOUT_SEC" "$HEARTBEAT_SEC" -- \
     "$PYTHON_BIN" scripts/e2e_external_web_probe.py \
-      --url "${CORTEXPILOT_E2E_LIVE_PREFLIGHT_URL:-https://example.com}" \
-      --timeout-ms "${CORTEXPILOT_E2E_LIVE_PREFLIGHT_NAV_TIMEOUT_MS:-15000}" \
-      --provider-api-mode "${CORTEXPILOT_E2E_LIVE_PREFLIGHT_PROVIDER_API_MODE:-require}" \
-      --provider-api-timeout-sec "${CORTEXPILOT_E2E_LIVE_PREFLIGHT_PROVIDER_TIMEOUT_SEC:-12}" \
-      --hard-timeout-sec "${CORTEXPILOT_E2E_LIVE_PREFLIGHT_HARD_TIMEOUT_SEC:-120}"
+      --url "${OPENVIBECODING_E2E_LIVE_PREFLIGHT_URL:-https://example.com}" \
+      --timeout-ms "${OPENVIBECODING_E2E_LIVE_PREFLIGHT_NAV_TIMEOUT_MS:-15000}" \
+      --provider-api-mode "${OPENVIBECODING_E2E_LIVE_PREFLIGHT_PROVIDER_API_MODE:-require}" \
+      --provider-api-timeout-sec "${OPENVIBECODING_E2E_LIVE_PREFLIGHT_PROVIDER_TIMEOUT_SEC:-12}" \
+      --hard-timeout-sec "${OPENVIBECODING_E2E_LIVE_PREFLIGHT_HARD_TIMEOUT_SEC:-120}"
 }
 
 if ! run_live_preflight_probe; then
@@ -225,20 +225,20 @@ fi
 
 echo "🚀 [ct-controls] starting api: http://$HOST:$API_PORT"
 PYTHONPATH=apps/orchestrator/src \
-CORTEXPILOT_API_AUTH_REQUIRED=true \
-CORTEXPILOT_API_TOKEN="$API_TOKEN" \
-CORTEXPILOT_DASHBOARD_PORT="$DASHBOARD_PORT" \
-"$PYTHON_BIN" -m cortexpilot_orch.cli serve --host "$HOST" --port "$API_PORT" \
+OPENVIBECODING_API_AUTH_REQUIRED=true \
+OPENVIBECODING_API_TOKEN="$API_TOKEN" \
+OPENVIBECODING_DASHBOARD_PORT="$DASHBOARD_PORT" \
+"$PYTHON_BIN" -m openvibecoding_orch.cli serve --host "$HOST" --port "$API_PORT" \
   >"$API_LOG" 2>&1 &
 API_PID=$!
 
 echo "🚀 [ct-controls] starting dashboard: http://$BROWSER_HOST:$DASHBOARD_PORT/command-tower (bind=$HOST)"
 start_dashboard_dev() {
   NEXT_DIST_DIR="$DASHBOARD_DIST_DIR" \
-  NEXT_PUBLIC_CORTEXPILOT_API_BASE="http://$BROWSER_HOST:$API_PORT" \
-  NEXT_PUBLIC_CORTEXPILOT_API_TOKEN="$API_TOKEN" \
-  CORTEXPILOT_API_TOKEN="$API_TOKEN" \
-  CORTEXPILOT_E2E_API_TOKEN="$API_TOKEN" \
+  NEXT_PUBLIC_OPENVIBECODING_API_BASE="http://$BROWSER_HOST:$API_PORT" \
+  NEXT_PUBLIC_OPENVIBECODING_API_TOKEN="$API_TOKEN" \
+  OPENVIBECODING_API_TOKEN="$API_TOKEN" \
+  OPENVIBECODING_E2E_API_TOKEN="$API_TOKEN" \
   PORT="$DASHBOARD_PORT" \
   bash scripts/run_workspace_app.sh dashboard dev -- --hostname "$HOST" --port "$DASHBOARD_PORT" \
     >"$UI_LOG" 2>&1 &
@@ -262,7 +262,7 @@ deadline = time.time() + timeout_sec
 headers = {}
 if token:
     headers["Authorization"] = f"Bearer {token}"
-    headers["x-cortexpilot-role"] = "OWNER"
+    headers["x-openvibecoding-role"] = "OWNER"
 while time.time() < deadline:
     try:
         req = urllib.request.Request(url, headers=headers, method="GET")
@@ -304,10 +304,10 @@ restart_runtime_stack_for_retry() {
 
   echo "🚀 [ct-controls] restarting api: http://$HOST:$API_PORT"
   PYTHONPATH=apps/orchestrator/src \
-  CORTEXPILOT_API_AUTH_REQUIRED=true \
-  CORTEXPILOT_API_TOKEN="$API_TOKEN" \
-  CORTEXPILOT_DASHBOARD_PORT="$DASHBOARD_PORT" \
-  "$PYTHON_BIN" -m cortexpilot_orch.cli serve --host "$HOST" --port "$API_PORT" \
+  OPENVIBECODING_API_AUTH_REQUIRED=true \
+  OPENVIBECODING_API_TOKEN="$API_TOKEN" \
+  OPENVIBECODING_DASHBOARD_PORT="$DASHBOARD_PORT" \
+  "$PYTHON_BIN" -m openvibecoding_orch.cli serve --host "$HOST" --port "$API_PORT" \
     >"$API_LOG" 2>&1 &
   API_PID=$!
 
@@ -469,11 +469,11 @@ try:
         browser = p.chromium.launch()
         context = browser.new_context(
             viewport={"width": 1440, "height": 900},
-            extra_http_headers={"x-cortexpilot-role": "OWNER"},
+            extra_http_headers={"x-openvibecoding-role": "OWNER"},
         )
         context.add_cookies(
             [
-                {"name": "cortexpilot_api_token", "value": api_token, "url": dash_base},
+                {"name": "openvibecoding_api_token", "value": api_token, "url": dash_base},
                 {"name": "api_token", "value": api_token, "url": dash_base},
             ]
         )
@@ -584,14 +584,14 @@ try:
             refresh_network_seen = True
 
         filter_card = page.locator(".ct-filter-card").first
-        project_input_candidates = filter_card.get_by_placeholder("cortexpilot")
+        project_input_candidates = filter_card.get_by_placeholder("openvibecoding")
         if project_input_candidates.count() == 0:
             ensure_home_drawer_open()
             try:
-                filter_card.get_by_placeholder("cortexpilot").first.wait_for(state="visible", timeout=3000)
+                filter_card.get_by_placeholder("openvibecoding").first.wait_for(state="visible", timeout=3000)
             except Exception:
                 pass
-        project_input = filter_card.get_by_placeholder("cortexpilot").first
+        project_input = filter_card.get_by_placeholder("openvibecoding").first
         if project_input.count() == 0:
             project_input = page.locator(".ct-home-filter-label-project input").first
         project_input.wait_for(timeout=20000)
@@ -599,7 +599,7 @@ try:
         reset_btn = page.get_by_role("button", name="重置").first
         if apply_btn.count() == 0 or reset_btn.count() == 0:
             raise RuntimeError("filter apply/reset buttons not found")
-        project_input.fill("cortexpilot")
+        project_input.fill("openvibecoding")
         apply_btn.wait_for(state="visible", timeout=10000)
         if apply_btn.is_disabled():
             raise RuntimeError("apply button did not become enabled after editing filter")
@@ -612,7 +612,7 @@ try:
         except Exception:
             apply_seen = False
 
-        project_input.fill("cortexpilot-temp")
+        project_input.fill("openvibecoding-temp")
         if apply_btn.is_disabled():
             raise RuntimeError("apply button did not become enabled for reset precondition")
         reset_btn.click()

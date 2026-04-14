@@ -6,7 +6,7 @@ cd "$ROOT_DIR"
 source "$ROOT_DIR/scripts/lib/env.sh"
 source "$ROOT_DIR/scripts/lib/machine_cache_retention.sh"
 
-export CORTEXPILOT_HOST_COMPAT=1
+export OPENVIBECODING_HOST_COMPAT=1
 export PYTHONDONTWRITEBYTECODE=1
 existing_pytest_addopts="${PYTEST_ADDOPTS:-}"
 case " ${existing_pytest_addopts} " in
@@ -16,16 +16,16 @@ case " ${existing_pytest_addopts} " in
     ;;
 esac
 
-MACHINE_TMP_ROOT="$(cortexpilot_machine_tmp_root "$ROOT_DIR")"
-cortexpilot_maybe_auto_prune_machine_cache "$ROOT_DIR" "clean_room_recovery"
+MACHINE_TMP_ROOT="$(openvibecoding_machine_tmp_root "$ROOT_DIR")"
+openvibecoding_maybe_auto_prune_machine_cache "$ROOT_DIR" "clean_room_recovery"
 mkdir -p "$MACHINE_TMP_ROOT"
 MACHINE_CACHE_ROOT="$(mktemp -d "$MACHINE_TMP_ROOT/clean-room-machine-cache.XXXXXX")"
-export CORTEXPILOT_MACHINE_CACHE_ROOT="$MACHINE_CACHE_ROOT"
-export CORTEXPILOT_TOOLCHAIN_CACHE_ROOT="$MACHINE_CACHE_ROOT/toolchains"
-export CORTEXPILOT_PNPM_STORE_DIR="$MACHINE_CACHE_ROOT/pnpm-store"
+export OPENVIBECODING_MACHINE_CACHE_ROOT="$MACHINE_CACHE_ROOT"
+export OPENVIBECODING_TOOLCHAIN_CACHE_ROOT="$MACHINE_CACHE_ROOT/toolchains"
+export OPENVIBECODING_PNPM_STORE_DIR="$MACHINE_CACHE_ROOT/pnpm-store"
 export PLAYWRIGHT_BROWSERS_PATH="$MACHINE_CACHE_ROOT/playwright"
-export CORTEXPILOT_CLEAN_ROOM_MACHINE_TMP_ROOT="$MACHINE_TMP_ROOT"
-unset CORTEXPILOT_PYTHON
+export OPENVIBECODING_CLEAN_ROOM_MACHINE_TMP_ROOT="$MACHINE_TMP_ROOT"
+unset OPENVIBECODING_PYTHON
 unset VIRTUAL_ENV
 
 CLEAN_ROOM_REPORT_PATH="$ROOT_DIR/.runtime-cache/test_output/governance/clean_room_recovery.json"
@@ -33,7 +33,7 @@ CLEAN_ROOM_STATUS="fail"
 
 write_clean_room_report() {
   local exit_code="$1"
-  python3 - <<'PY' "$CLEAN_ROOM_REPORT_PATH" "$exit_code" "$CLEAN_ROOM_STATUS" "${CORTEXPILOT_CLEAN_ROOM_MACHINE_TMP_ROOT:-}" "${CORTEXPILOT_MACHINE_CACHE_ROOT:-}" "${CORTEXPILOT_CLEAN_ROOM_PRESERVE_ROOT:-}"
+  python3 - <<'PY' "$CLEAN_ROOM_REPORT_PATH" "$exit_code" "$CLEAN_ROOM_STATUS" "${OPENVIBECODING_CLEAN_ROOM_MACHINE_TMP_ROOT:-}" "${OPENVIBECODING_MACHINE_CACHE_ROOT:-}" "${OPENVIBECODING_CLEAN_ROOM_PRESERVE_ROOT:-}"
 import json
 import sys
 from datetime import datetime, timezone
@@ -80,7 +80,7 @@ if [[ "$skip_governance_scorecard" == "1" ]]; then
   PRESERVE_RUNTIME_STATE=1
   CLEAN_ROOM_PRESERVE_ROOT="$(mktemp -d "$MACHINE_TMP_ROOT/clean-room-preserve.XXXXXX")"
 fi
-export CORTEXPILOT_CLEAN_ROOM_PRESERVE_ROOT="$CLEAN_ROOM_PRESERVE_ROOT"
+export OPENVIBECODING_CLEAN_ROOM_PRESERVE_ROOT="$CLEAN_ROOM_PRESERVE_ROOT"
 
 preserve_runtime_path() {
   local rel_path="$1"
@@ -106,8 +106,8 @@ restore_runtime_path() {
 }
 
 preserve_runtime_path ".runtime-cache/test_output/governance"
-preserve_runtime_path ".runtime-cache/cortexpilot/reports/ci"
-preserve_runtime_path ".runtime-cache/cortexpilot/release"
+preserve_runtime_path ".runtime-cache/openvibecoding/reports/ci"
+preserve_runtime_path ".runtime-cache/openvibecoding/release"
 
 bash "$ROOT_DIR/scripts/cleanup_workspace_modules.sh" >/dev/null 2>&1 || true
 
@@ -118,7 +118,7 @@ rm -rf \
   "$ROOT_DIR/coverage" \
   "$ROOT_DIR/.hypothesis" \
   "$ROOT_DIR/node_modules" \
-  "$ROOT_DIR/cortexpilot" \
+  "$ROOT_DIR/openvibecoding" \
   "$ROOT_DIR/htmlcov" \
   "$ROOT_DIR/apps/dashboard/node_modules" \
   "$ROOT_DIR/apps/dashboard/.next" \
@@ -130,7 +130,7 @@ bash "$ROOT_DIR/scripts/cleanup_workspace_modules.sh" >/dev/null 2>&1 || true
 
 bash "$ROOT_DIR/scripts/bootstrap.sh" python
 bash "$ROOT_DIR/scripts/bootstrap.sh" node
-PYTHON_BIN="$(bash -lc "source \"$ROOT_DIR/scripts/lib/toolchain_env.sh\" && cortexpilot_python_bin \"$ROOT_DIR\"")"
+PYTHON_BIN="$(bash -lc "source \"$ROOT_DIR/scripts/lib/toolchain_env.sh\" && openvibecoding_python_bin \"$ROOT_DIR\"")"
 bash "$ROOT_DIR/scripts/run_governance_py.sh" scripts/check_toolchain_hardcut.py
 bash "$ROOT_DIR/scripts/run_governance_py.sh" scripts/check_root_semantic_cleanliness.py
 bash "$ROOT_DIR/scripts/run_governance_py.sh" scripts/check_legacy_active_paths.py
@@ -153,13 +153,13 @@ node --test \
   "$ROOT_DIR/packages/frontend-api-client/tests/observability.test.mjs"
 bash "$ROOT_DIR/scripts/cleanup_workspace_modules.sh" >/dev/null 2>&1 || true
 bash "$ROOT_DIR/scripts/cleanup_runtime.sh" dry-run
-CORTEXPILOT_HYGIENE_SKIP_UPSTREAM=1 bash "$ROOT_DIR/scripts/check_repo_hygiene.sh"
+OPENVIBECODING_HYGIENE_SKIP_UPSTREAM=1 bash "$ROOT_DIR/scripts/check_repo_hygiene.sh"
 
 bash "$ROOT_DIR/scripts/cleanup_workspace_modules.sh" >/dev/null 2>&1 || true
 
 restore_runtime_path ".runtime-cache/test_output/governance"
-restore_runtime_path ".runtime-cache/cortexpilot/reports/ci"
-restore_runtime_path ".runtime-cache/cortexpilot/release"
+restore_runtime_path ".runtime-cache/openvibecoding/reports/ci"
+restore_runtime_path ".runtime-cache/openvibecoding/release"
 
 if [[ "$skip_governance_scorecard" != "1" ]]; then
   bash "$ROOT_DIR/scripts/run_governance_py.sh" scripts/refresh_governance_evidence_manifest.py

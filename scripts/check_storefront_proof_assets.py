@@ -49,7 +49,7 @@ def _require_text(path: Path, snippets: list[str], errors: list[str]) -> None:
 
 def _load_generator_module() -> object:
     script_path = Path(__file__).resolve().with_name("generate_storefront_proof_pack_index.py")
-    spec = importlib.util.spec_from_file_location("cortexpilot_generate_storefront_proof_pack_index", script_path)
+    spec = importlib.util.spec_from_file_location("openvibecoding_generate_storefront_proof_pack_index", script_path)
     module = importlib.util.module_from_spec(spec)
     assert spec and spec.loader
     spec.loader.exec_module(module)
@@ -81,12 +81,12 @@ def main() -> int:
     payload = current_payload
     live_capture_requirements = _load_json(LIVE_CAPTURE_REQUIREMENTS_PATH)
     _require(
-        payload.get("artifact_type") == "cortexpilot_public_proof_pack_index",
+        payload.get("artifact_type") == "openvibecoding_public_proof_pack_index",
         "proof-pack index has unexpected artifact_type",
         errors,
     )
     _require(
-        live_capture_requirements.get("artifact_type") == "cortexpilot_storefront_live_capture_requirements",
+        live_capture_requirements.get("artifact_type") == "openvibecoding_storefront_live_capture_requirements",
         "live capture requirements has unexpected artifact_type",
         errors,
     )

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 
-from cortexpilot_orch.planning import intake as intake_mod
+from openvibecoding_orch.planning import intake as intake_mod
 
 
 def test_intake_preview_builds_execution_plan_report(monkeypatch) -> None:
@@ -165,7 +165,7 @@ def test_intake_preview_marks_manual_approval_when_env_requires_it(monkeypatch) 
             },
     )
 
-    monkeypatch.setenv("CORTEXPILOT_GOD_MODE_REQUIRED", "1")
+    monkeypatch.setenv("OPENVIBECODING_GOD_MODE_REQUIRED", "1")
     try:
         service = intake_mod.IntakeService()
         report = service.preview(
@@ -175,7 +175,7 @@ def test_intake_preview_marks_manual_approval_when_env_requires_it(monkeypatch) 
             }
         )
     finally:
-        os.environ.pop("CORTEXPILOT_GOD_MODE_REQUIRED", None)
+        os.environ.pop("OPENVIBECODING_GOD_MODE_REQUIRED", None)
 
     assert report["requires_human_approval"] is True
     assert report["warnings"]

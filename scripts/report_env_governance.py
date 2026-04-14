@@ -116,12 +116,12 @@ def collect_report(
     def timeout_family_key(name: str) -> str | None:
         if not name.endswith("_TIMEOUT_SEC"):
             return None
-        if not name.startswith("CORTEXPILOT_CI_STEP"):
+        if not name.startswith("OPENVIBECODING_CI_STEP"):
             return None
         base = name[: -len("_TIMEOUT_SEC")]
         parts = base.split("_")
-        # CORTEXPILOT_CI_STEP8_4_INVENTORY -> CORTEXPILOT_CI_STEP8_4_TIMEOUT_SEC
-        # CORTEXPILOT_CI_STEP8_2 -> CORTEXPILOT_CI_STEP8_TIMEOUT_SEC
+        # OPENVIBECODING_CI_STEP8_4_INVENTORY -> OPENVIBECODING_CI_STEP8_4_TIMEOUT_SEC
+        # OPENVIBECODING_CI_STEP8_2 -> OPENVIBECODING_CI_STEP8_TIMEOUT_SEC
         if len(parts) >= 5 and parts[4].isdigit():
             return "_".join(parts[:5]) + "_TIMEOUT_SEC"
         if len(parts) >= 4:

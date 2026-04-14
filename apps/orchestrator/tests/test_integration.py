@@ -3,7 +3,7 @@ import os
 import subprocess
 from pathlib import Path
 
-from cortexpilot_orch.scheduler.scheduler import Orchestrator
+from openvibecoding_orch.scheduler.scheduler import Orchestrator
 import hashlib
 
 
@@ -89,10 +89,10 @@ def test_integration(tmp_path: Path, monkeypatch):
     runs_root = runtime_root / "runs"
     worktree_root = runtime_root / "worktrees"
 
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(worktree_root))
-    monkeypatch.setenv("CORTEXPILOT_SCHEMA_ROOT", str(Path("schemas")))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(worktree_root))
+    monkeypatch.setenv("OPENVIBECODING_SCHEMA_ROOT", str(Path("schemas")))
 
     repo = tmp_path / "fixtures" / "tiny_repo"
     repo.mkdir(parents=True)

@@ -15,7 +15,7 @@ def test_build_repo_local_state_rewrites_to_single_profile() -> None:
             "last_active_profiles": ["Profile 22", "Profile 3"],
             "profiles_order": ["Profile 22", "Profile 3"],
             "info_cache": {
-                "Profile 22": {"name": "cortexpilot", "gaia_name": "Example"},
+                "Profile 22": {"name": "openvibecoding", "gaia_name": "Example"},
                 "Profile 3": {"name": "other"},
             },
         },
@@ -26,7 +26,7 @@ def test_build_repo_local_state_rewrites_to_single_profile() -> None:
         source_payload,
         source_profile_directory="Profile 22",
         target_profile_directory="Profile 1",
-        display_name="cortexpilot",
+        display_name="openvibecoding",
     )
 
     profile_payload = rewritten["profile"]
@@ -34,7 +34,7 @@ def test_build_repo_local_state_rewrites_to_single_profile() -> None:
     assert profile_payload["last_active_profiles"] == ["Profile 1"]
     assert profile_payload["profiles_order"] == ["Profile 1"]
     assert profile_payload["info_cache"] == {
-        "Profile 1": {"name": "cortexpilot", "gaia_name": "Example"}
+        "Profile 1": {"name": "openvibecoding", "gaia_name": "Example"}
     }
     assert rewritten["browser"] == {"theme": "keep-me"}
 
@@ -48,7 +48,7 @@ def test_migrate_default_chrome_profile_copies_only_local_state_and_target_profi
     source_profile.mkdir(parents=True, exist_ok=True)
     (source_profile / "Preferences").write_text("{}", encoding="utf-8")
     (source_root / "Local State").write_text(
-        json.dumps({"profile": {"info_cache": {"Profile 22": {"name": "cortexpilot"}}, "last_used": "Profile 22"}}),
+        json.dumps({"profile": {"info_cache": {"Profile 22": {"name": "openvibecoding"}}, "last_used": "Profile 22"}}),
         encoding="utf-8",
     )
     (source_root / "SingletonLock").write_text("lock", encoding="utf-8")
@@ -58,7 +58,7 @@ def test_migrate_default_chrome_profile_copies_only_local_state_and_target_profi
 
     result = singleton_module.migrate_default_chrome_profile(
         source_root=source_root,
-        source_profile_name="cortexpilot",
+        source_profile_name="openvibecoding",
         target_root=target_root,
     )
 
@@ -80,11 +80,11 @@ def test_migrate_default_chrome_profile_returns_already_bootstrapped(
     source_root.mkdir(parents=True, exist_ok=True)
     target_root.mkdir(parents=True, exist_ok=True)
     (source_root / "Local State").write_text(
-        json.dumps({"profile": {"info_cache": {"Profile 22": {"name": "cortexpilot"}}}}),
+        json.dumps({"profile": {"info_cache": {"Profile 22": {"name": "openvibecoding"}}}}),
         encoding="utf-8",
     )
     (target_root / "Local State").write_text(
-        json.dumps({"profile": {"info_cache": {"Profile 1": {"name": "cortexpilot"}}, "last_used": "Profile 1"}}),
+        json.dumps({"profile": {"info_cache": {"Profile 1": {"name": "openvibecoding"}}, "last_used": "Profile 1"}}),
         encoding="utf-8",
     )
     (target_root / "Profile 1").mkdir()
@@ -93,7 +93,7 @@ def test_migrate_default_chrome_profile_returns_already_bootstrapped(
 
     result = singleton_module.migrate_default_chrome_profile(
         source_root=source_root,
-        source_profile_name="cortexpilot",
+        source_profile_name="openvibecoding",
         target_root=target_root,
     )
 
@@ -106,7 +106,7 @@ def test_migrate_default_chrome_profile_fails_when_default_root_is_active(
     source_root = tmp_path / "source-chrome"
     source_root.mkdir(parents=True, exist_ok=True)
     (source_root / "Local State").write_text(
-        json.dumps({"profile": {"info_cache": {"Profile 22": {"name": "cortexpilot"}}}}),
+        json.dumps({"profile": {"info_cache": {"Profile 22": {"name": "openvibecoding"}}}}),
         encoding="utf-8",
     )
     monkeypatch.setattr(
@@ -126,7 +126,7 @@ def test_migrate_default_chrome_profile_fails_when_default_root_is_active(
     with pytest.raises(RuntimeError, match="default Chrome root is still active"):
         singleton_module.migrate_default_chrome_profile(
             source_root=source_root,
-            source_profile_name="cortexpilot",
+            source_profile_name="openvibecoding",
             target_root=tmp_path / "target",
         )
 
@@ -136,7 +136,7 @@ def test_parse_chrome_process_line_preserves_user_data_dir_with_spaces() -> None
         "67422 "
         "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome "
         "--disable-blink-features=AutomationControlled "
-        "--user-data-dir=/workspace/CortexPilot Repo/"
+        "--user-data-dir=/workspace/OpenVibeCoding Repo/"
         ".runtime-cache/temp/batch-auth-chrome-user-data/Profile-1-abc "
         "--profile-directory=Profile 1 "
         "--remote-debugging-port=9221 "
@@ -150,7 +150,7 @@ def test_parse_chrome_process_line_preserves_user_data_dir_with_spaces() -> None
     assert parsed.remote_debugging_port == 9221
     assert (
         parsed.user_data_dir
-        == "/workspace/CortexPilot Repo/.runtime-cache/temp/batch-auth-chrome-user-data/Profile-1-abc"
+        == "/workspace/OpenVibeCoding Repo/.runtime-cache/temp/batch-auth-chrome-user-data/Profile-1-abc"
     )
 
 
@@ -160,7 +160,7 @@ def test_ensure_repo_chrome_singleton_attaches_existing_matching_port(
     user_data_dir = tmp_path / "browser" / "chrome-user-data"
     (user_data_dir / "Profile 1").mkdir(parents=True, exist_ok=True)
     (user_data_dir / "Local State").write_text(
-        json.dumps({"profile": {"info_cache": {"Profile 1": {"name": "cortexpilot"}}, "last_used": "Profile 1"}}),
+        json.dumps({"profile": {"info_cache": {"Profile 1": {"name": "openvibecoding"}}, "last_used": "Profile 1"}}),
         encoding="utf-8",
     )
     monkeypatch.setattr(
@@ -184,7 +184,7 @@ def test_ensure_repo_chrome_singleton_attaches_existing_matching_port(
     instance = singleton_module.ensure_repo_chrome_singleton(
         chrome_executable_path="/preferred/chrome",
         user_data_dir=user_data_dir,
-        profile_name="cortexpilot",
+        profile_name="openvibecoding",
         cdp_host="127.0.0.1",
         cdp_port=9341,
         requested_headless=True,
@@ -202,7 +202,7 @@ def test_ensure_repo_chrome_singleton_launches_when_no_instance_exists(
     user_data_dir = tmp_path / "browser" / "chrome-user-data"
     (user_data_dir / "Profile 1").mkdir(parents=True, exist_ok=True)
     (user_data_dir / "Local State").write_text(
-        json.dumps({"profile": {"info_cache": {"Profile 1": {"name": "cortexpilot"}}, "last_used": "Profile 1"}}),
+        json.dumps({"profile": {"info_cache": {"Profile 1": {"name": "openvibecoding"}}, "last_used": "Profile 1"}}),
         encoding="utf-8",
     )
     launches: list[list[str]] = []
@@ -235,7 +235,7 @@ def test_ensure_repo_chrome_singleton_launches_when_no_instance_exists(
     instance = singleton_module.ensure_repo_chrome_singleton(
         chrome_executable_path="/preferred/chrome",
         user_data_dir=user_data_dir,
-        profile_name="cortexpilot",
+        profile_name="openvibecoding",
         cdp_host="127.0.0.1",
         cdp_port=9341,
         extra_launch_args=["--disable-blink-features=AutomationControlled"],
@@ -253,7 +253,7 @@ def test_ensure_repo_chrome_singleton_launches_on_non_macos_without_unbound_flag
     user_data_dir = tmp_path / "browser" / "chrome-user-data"
     (user_data_dir / "Profile 1").mkdir(parents=True, exist_ok=True)
     (user_data_dir / "Local State").write_text(
-        json.dumps({"profile": {"info_cache": {"Profile 1": {"name": "cortexpilot"}}, "last_used": "Profile 1"}}),
+        json.dumps({"profile": {"info_cache": {"Profile 1": {"name": "openvibecoding"}}, "last_used": "Profile 1"}}),
         encoding="utf-8",
     )
     launches: list[list[str]] = []
@@ -287,7 +287,7 @@ def test_ensure_repo_chrome_singleton_launches_on_non_macos_without_unbound_flag
     instance = singleton_module.ensure_repo_chrome_singleton(
         chrome_executable_path="/preferred/chrome",
         user_data_dir=user_data_dir,
-        profile_name="cortexpilot",
+        profile_name="openvibecoding",
         cdp_host="127.0.0.1",
         cdp_port=9341,
     )
@@ -303,7 +303,7 @@ def test_ensure_repo_chrome_singleton_fails_closed_when_launch_does_not_stay_att
     user_data_dir = tmp_path / "browser" / "chrome-user-data"
     (user_data_dir / "Profile 1").mkdir(parents=True, exist_ok=True)
     (user_data_dir / "Local State").write_text(
-        json.dumps({"profile": {"info_cache": {"Profile 1": {"name": "cortexpilot"}}, "last_used": "Profile 1"}}),
+        json.dumps({"profile": {"info_cache": {"Profile 1": {"name": "openvibecoding"}}, "last_used": "Profile 1"}}),
         encoding="utf-8",
     )
     (user_data_dir / "SingletonLock").write_text("stale", encoding="utf-8")
@@ -313,7 +313,7 @@ def test_ensure_repo_chrome_singleton_fails_closed_when_launch_does_not_stay_att
             pid=777,
             user_data_dir=str(user_data_dir),
             profile_directory="Profile 1",
-            profile_name="cortexpilot",
+            profile_name="openvibecoding",
             cdp_host="127.0.0.1",
             cdp_port=9341,
             cdp_endpoint="http://127.0.0.1:9341",
@@ -359,7 +359,7 @@ def test_ensure_repo_chrome_singleton_fails_closed_when_launch_does_not_stay_att
         singleton_module.ensure_repo_chrome_singleton(
             chrome_executable_path="/preferred/chrome",
             user_data_dir=user_data_dir,
-            profile_name="cortexpilot",
+            profile_name="openvibecoding",
             cdp_host="127.0.0.1",
             cdp_port=9341,
         )
@@ -375,7 +375,7 @@ def test_ensure_repo_chrome_singleton_retries_via_mac_open_when_stability_check_
     user_data_dir = tmp_path / "browser" / "chrome-user-data"
     (user_data_dir / "Profile 1").mkdir(parents=True, exist_ok=True)
     (user_data_dir / "Local State").write_text(
-        json.dumps({"profile": {"info_cache": {"Profile 1": {"name": "cortexpilot"}}, "last_used": "Profile 1"}}),
+        json.dumps({"profile": {"info_cache": {"Profile 1": {"name": "openvibecoding"}}, "last_used": "Profile 1"}}),
         encoding="utf-8",
     )
     launches: list[list[str]] = []
@@ -433,7 +433,7 @@ def test_ensure_repo_chrome_singleton_retries_via_mac_open_when_stability_check_
     instance = singleton_module.ensure_repo_chrome_singleton(
         chrome_executable_path="/preferred/chrome",
         user_data_dir=user_data_dir,
-        profile_name="cortexpilot",
+        profile_name="openvibecoding",
         cdp_host="127.0.0.1",
         cdp_port=9341,
     )
@@ -449,7 +449,7 @@ def test_ensure_repo_chrome_singleton_retries_via_open_on_macos_when_initial_ope
     user_data_dir = tmp_path / "browser" / "chrome-user-data"
     (user_data_dir / "Profile 1").mkdir(parents=True, exist_ok=True)
     (user_data_dir / "Local State").write_text(
-        json.dumps({"profile": {"info_cache": {"Profile 1": {"name": "cortexpilot"}}, "last_used": "Profile 1"}}),
+        json.dumps({"profile": {"info_cache": {"Profile 1": {"name": "openvibecoding"}}, "last_used": "Profile 1"}}),
         encoding="utf-8",
     )
     launches: list[list[str]] = []
@@ -506,7 +506,7 @@ def test_ensure_repo_chrome_singleton_retries_via_open_on_macos_when_initial_ope
     instance = singleton_module.ensure_repo_chrome_singleton(
         chrome_executable_path="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
         user_data_dir=user_data_dir,
-        profile_name="cortexpilot",
+        profile_name="openvibecoding",
         cdp_host="127.0.0.1",
         cdp_port=9341,
     )
@@ -524,7 +524,7 @@ def test_ensure_repo_chrome_singleton_fails_when_other_root_owns_port(
     user_data_dir = tmp_path / "browser" / "chrome-user-data"
     (user_data_dir / "Profile 1").mkdir(parents=True, exist_ok=True)
     (user_data_dir / "Local State").write_text(
-        json.dumps({"profile": {"info_cache": {"Profile 1": {"name": "cortexpilot"}}, "last_used": "Profile 1"}}),
+        json.dumps({"profile": {"info_cache": {"Profile 1": {"name": "openvibecoding"}}, "last_used": "Profile 1"}}),
         encoding="utf-8",
     )
     monkeypatch.setattr(
@@ -549,7 +549,7 @@ def test_ensure_repo_chrome_singleton_fails_when_other_root_owns_port(
         singleton_module.ensure_repo_chrome_singleton(
             chrome_executable_path="/preferred/chrome",
             user_data_dir=user_data_dir,
-            profile_name="cortexpilot",
+            profile_name="openvibecoding",
             cdp_host="127.0.0.1",
             cdp_port=9341,
         )
@@ -561,7 +561,7 @@ def test_ensure_repo_chrome_singleton_relaunches_same_root_from_legacy_port(
     user_data_dir = tmp_path / "browser" / "chrome-user-data"
     (user_data_dir / "Profile 1").mkdir(parents=True, exist_ok=True)
     (user_data_dir / "Local State").write_text(
-        json.dumps({"profile": {"info_cache": {"Profile 1": {"name": "cortexpilot"}}, "last_used": "Profile 1"}}),
+        json.dumps({"profile": {"info_cache": {"Profile 1": {"name": "openvibecoding"}}, "last_used": "Profile 1"}}),
         encoding="utf-8",
     )
     launches: list[list[str]] = []
@@ -610,7 +610,7 @@ def test_ensure_repo_chrome_singleton_relaunches_same_root_from_legacy_port(
     instance = singleton_module.ensure_repo_chrome_singleton(
         chrome_executable_path="/preferred/chrome",
         user_data_dir=user_data_dir,
-        profile_name="cortexpilot",
+        profile_name="openvibecoding",
         cdp_host="127.0.0.1",
         cdp_port=9341,
     )
@@ -627,7 +627,7 @@ def test_ensure_repo_chrome_singleton_keeps_legacy_process_when_new_port_is_fore
     user_data_dir = tmp_path / "browser" / "chrome-user-data"
     (user_data_dir / "Profile 1").mkdir(parents=True, exist_ok=True)
     (user_data_dir / "Local State").write_text(
-        json.dumps({"profile": {"info_cache": {"Profile 1": {"name": "cortexpilot"}}, "last_used": "Profile 1"}}),
+        json.dumps({"profile": {"info_cache": {"Profile 1": {"name": "openvibecoding"}}, "last_used": "Profile 1"}}),
         encoding="utf-8",
     )
     stopped: list[int] = []
@@ -666,7 +666,7 @@ def test_ensure_repo_chrome_singleton_keeps_legacy_process_when_new_port_is_fore
         singleton_module.ensure_repo_chrome_singleton(
             chrome_executable_path="/preferred/chrome",
             user_data_dir=user_data_dir,
-            profile_name="cortexpilot",
+            profile_name="openvibecoding",
             cdp_host="127.0.0.1",
             cdp_port=9341,
         )
@@ -680,7 +680,7 @@ def test_ensure_repo_chrome_singleton_fails_closed_for_same_root_non_legacy_port
     user_data_dir = tmp_path / "browser" / "chrome-user-data"
     (user_data_dir / "Profile 1").mkdir(parents=True, exist_ok=True)
     (user_data_dir / "Local State").write_text(
-        json.dumps({"profile": {"info_cache": {"Profile 1": {"name": "cortexpilot"}}, "last_used": "Profile 1"}}),
+        json.dumps({"profile": {"info_cache": {"Profile 1": {"name": "openvibecoding"}}, "last_used": "Profile 1"}}),
         encoding="utf-8",
     )
     monkeypatch.setattr(singleton_module, "_is_executable_file", lambda path: str(path) == "/preferred/chrome")
@@ -702,7 +702,7 @@ def test_ensure_repo_chrome_singleton_fails_closed_for_same_root_non_legacy_port
         singleton_module.ensure_repo_chrome_singleton(
             chrome_executable_path="/preferred/chrome",
             user_data_dir=user_data_dir,
-            profile_name="cortexpilot",
+            profile_name="openvibecoding",
             cdp_host="127.0.0.1",
             cdp_port=9341,
         )
@@ -722,7 +722,7 @@ def test_repo_chrome_singleton_cli_status_writes_json(monkeypatch: pytest.Monkey
 
     payload = singleton_module.repo_chrome_status(
         user_data_dir=user_data_dir,
-        profile_name="cortexpilot",
+        profile_name="openvibecoding",
         cdp_host="127.0.0.1",
         cdp_port=9341,
     )
@@ -743,7 +743,7 @@ def test_repo_chrome_singleton_status_reports_stale_state_when_state_file_surviv
     user_data_dir = tmp_path / "browser" / "chrome-user-data"
     (user_data_dir / "Profile 1").mkdir(parents=True, exist_ok=True)
     (user_data_dir / "Local State").write_text(
-        json.dumps({"profile": {"info_cache": {"Profile 1": {"name": "cortexpilot"}}, "last_used": "Profile 1"}}),
+        json.dumps({"profile": {"info_cache": {"Profile 1": {"name": "openvibecoding"}}, "last_used": "Profile 1"}}),
         encoding="utf-8",
     )
     singleton_module.write_singleton_state(
@@ -752,7 +752,7 @@ def test_repo_chrome_singleton_status_reports_stale_state_when_state_file_surviv
             pid=20105,
             user_data_dir=str(user_data_dir),
             profile_directory="Profile 1",
-            profile_name="cortexpilot",
+            profile_name="openvibecoding",
             cdp_host="127.0.0.1",
             cdp_port=9341,
             cdp_endpoint="http://127.0.0.1:9341",
@@ -786,7 +786,7 @@ def test_repo_chrome_singleton_status_reports_stale_state_when_state_file_surviv
 
     payload = singleton_module.repo_chrome_status(
         user_data_dir=user_data_dir,
-        profile_name="cortexpilot",
+        profile_name="openvibecoding",
         cdp_host="127.0.0.1",
         cdp_port=9341,
     )

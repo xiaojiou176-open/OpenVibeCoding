@@ -91,7 +91,7 @@ export function resolveChatPlaceholder(params: {
     return copyVariant === "b" ? "Working on it. You can still add more detail..." : "Working on it. You can keep adding more detail...";
   }
   if (currentSessionStatus.toLowerCase() === "failed") {
-    return copyVariant === "b" ? "Ask for a retry, or tell CortexPilot exactly what to change..." : "Ask for a retry, or tell CortexPilot what to change...";
+    return copyVariant === "b" ? "Ask for a retry, or tell OpenVibeCoding exactly what to change..." : "Ask for a retry, or tell OpenVibeCoding what to change...";
   }
   if (runId) {
     return "Execution is in progress. Ask for status or add a new requirement...";

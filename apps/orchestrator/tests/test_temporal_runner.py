@@ -2,52 +2,52 @@ import os
 import pytest
 from pathlib import Path
 
-from cortexpilot_orch.temporal.runner import run_workflow
+from openvibecoding_orch.temporal.runner import run_workflow
 
 
 def test_temporal_runner_disabled(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.delenv("CORTEXPILOT_TEMPORAL_WORKFLOW", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_TEMPORAL_WORKFLOW", raising=False)
     with pytest.raises(RuntimeError, match="temporal workflow disabled"):
         run_workflow(tmp_path, tmp_path / "contract.json", False)
 
 
 def test_temporal_runner_missing_dependency(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_TEMPORAL_WORKFLOW", "1")
-    monkeypatch.setenv("CORTEXPILOT_TEMPORAL_ADDRESS", "127.0.0.1:1")
+    monkeypatch.setenv("OPENVIBECODING_TEMPORAL_WORKFLOW", "1")
+    monkeypatch.setenv("OPENVIBECODING_TEMPORAL_ADDRESS", "127.0.0.1:1")
     with pytest.raises(RuntimeError, match="temporalio not installed|Connection refused|Server connection error"):
         run_workflow(tmp_path, tmp_path / "contract.json", False)
 
 
 def test_temporal_runner_helpers_and_required(monkeypatch) -> None:
-    from cortexpilot_orch.temporal import runner as temporal_runner
+    from openvibecoding_orch.temporal import runner as temporal_runner
 
-    monkeypatch.delenv("CORTEXPILOT_TEMPORAL_WORKFLOW", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_TEMPORAL_WORKFLOW", raising=False)
     assert temporal_runner._enabled() is False
 
-    monkeypatch.setenv("CORTEXPILOT_TEMPORAL_WORKFLOW", "1")
+    monkeypatch.setenv("OPENVIBECODING_TEMPORAL_WORKFLOW", "1")
     assert temporal_runner._enabled() is True
 
-    monkeypatch.setenv("CORTEXPILOT_TEMPORAL_ADDRESS", "host:7233")
-    monkeypatch.setenv("CORTEXPILOT_TEMPORAL_NAMESPACE", "ns")
-    monkeypatch.setenv("CORTEXPILOT_TEMPORAL_TASK_QUEUE", "q")
+    monkeypatch.setenv("OPENVIBECODING_TEMPORAL_ADDRESS", "host:7233")
+    monkeypatch.setenv("OPENVIBECODING_TEMPORAL_NAMESPACE", "ns")
+    monkeypatch.setenv("OPENVIBECODING_TEMPORAL_TASK_QUEUE", "q")
     assert temporal_runner._config() == ("host:7233", "ns", "q")
 
     workflow_id = temporal_runner._workflow_id("task")
-    assert workflow_id.startswith("cortexpilot-task-")
+    assert workflow_id.startswith("openvibecoding-task-")
 
-    monkeypatch.setenv("CORTEXPILOT_TEMPORAL_REQUIRED", "1")
+    monkeypatch.setenv("OPENVIBECODING_TEMPORAL_REQUIRED", "1")
     with pytest.raises(RuntimeError, match="boom"):
         temporal_runner.temporal_required_or_raise("boom")
 
-    monkeypatch.setenv("CORTEXPILOT_TEMPORAL_REQUIRED", "0")
+    monkeypatch.setenv("OPENVIBECODING_TEMPORAL_REQUIRED", "0")
     assert temporal_runner.temporal_required_or_raise("nope") == {"ok": False, "error": "nope"}
 
 
 def test_temporal_runner_success_and_missing_run_id(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_TEMPORAL_WORKFLOW", "1")
-    monkeypatch.setenv("CORTEXPILOT_TEMPORAL_ADDRESS", "127.0.0.1:7233")
-    monkeypatch.setenv("CORTEXPILOT_TEMPORAL_NAMESPACE", "default")
-    monkeypatch.setenv("CORTEXPILOT_TEMPORAL_TASK_QUEUE", "cortexpilot-orch")
+    monkeypatch.setenv("OPENVIBECODING_TEMPORAL_WORKFLOW", "1")
+    monkeypatch.setenv("OPENVIBECODING_TEMPORAL_ADDRESS", "127.0.0.1:7233")
+    monkeypatch.setenv("OPENVIBECODING_TEMPORAL_NAMESPACE", "default")
+    monkeypatch.setenv("OPENVIBECODING_TEMPORAL_TASK_QUEUE", "openvibecoding-orch")
 
     import sys
     import types
@@ -82,10 +82,10 @@ def test_temporal_runner_success_and_missing_run_id(tmp_path: Path, monkeypatch)
         async def run(self, request):  # noqa: ANN001
             return {"run_id": "run-123"}
 
-    workflow_mod = types.ModuleType("cortexpilot_orch.temporal.workflows")
+    workflow_mod = types.ModuleType("openvibecoding_orch.temporal.workflows")
     workflow_mod.RunRequest = _FakeRunRequest
-    workflow_mod.CortexPilotRunWorkflow = _FakeWorkflow
-    monkeypatch.setitem(sys.modules, "cortexpilot_orch.temporal.workflows", workflow_mod)
+    workflow_mod.OpenVibeCodingRunWorkflow = _FakeWorkflow
+    monkeypatch.setitem(sys.modules, "openvibecoding_orch.temporal.workflows", workflow_mod)
 
     repo_root = tmp_path / "repo"
     contract_path = tmp_path / "contract.json"
@@ -119,7 +119,7 @@ def test_temporal_runner_success_and_missing_run_id(tmp_path: Path, monkeypatch)
 def test_temporal_runner_forced_import_error(tmp_path: Path, monkeypatch) -> None:
     import builtins
 
-    monkeypatch.setenv("CORTEXPILOT_TEMPORAL_WORKFLOW", "1")
+    monkeypatch.setenv("OPENVIBECODING_TEMPORAL_WORKFLOW", "1")
 
     real_import = builtins.__import__
 

@@ -165,29 +165,29 @@ def _resolve_core_env(core_cfg: dict[str, Any]) -> LayerMap:
     env: LayerMap = {}
 
     if "mode_on_ci" in pm_chat:
-        env["CORTEXPILOT_CI_PM_CHAT_MODE"] = str(pm_chat["mode_on_ci"])
+        env["OPENVIBECODING_CI_PM_CHAT_MODE"] = str(pm_chat["mode_on_ci"])
     if "runner" in pm_chat:
-        env["CORTEXPILOT_CI_PM_CHAT_RUNNER"] = str(pm_chat["runner"])
+        env["OPENVIBECODING_CI_PM_CHAT_RUNNER"] = str(pm_chat["runner"])
     if "web_mode" in pm_chat:
-        env["CORTEXPILOT_CI_PM_CHAT_WEB_MODE"] = str(pm_chat["web_mode"])
+        env["OPENVIBECODING_CI_PM_CHAT_WEB_MODE"] = str(pm_chat["web_mode"])
     if "allow_mock_on_ci" in pm_chat:
-        env["CORTEXPILOT_CI_PM_CHAT_ALLOW_MOCK_ON_CI"] = _bool_env(pm_chat["allow_mock_on_ci"])
+        env["OPENVIBECODING_CI_PM_CHAT_ALLOW_MOCK_ON_CI"] = _bool_env(pm_chat["allow_mock_on_ci"])
     if "allow_missing_key" in pm_chat:
-        env["CORTEXPILOT_CI_PM_CHAT_ALLOW_MISSING_KEY"] = _bool_env(pm_chat["allow_missing_key"])
+        env["OPENVIBECODING_CI_PM_CHAT_ALLOW_MISSING_KEY"] = _bool_env(pm_chat["allow_missing_key"])
 
     if "ui_truth_disable_auto_latest" in defaults:
-        env["CORTEXPILOT_CI_UI_TRUTH_DISABLE_AUTO_LATEST"] = _bool_env(defaults["ui_truth_disable_auto_latest"])
+        env["OPENVIBECODING_CI_UI_TRUTH_DISABLE_AUTO_LATEST"] = _bool_env(defaults["ui_truth_disable_auto_latest"])
     if "ui_truth_require_run_id_match" in defaults:
-        env["CORTEXPILOT_CI_UI_TRUTH_REQUIRE_RUN_ID_MATCH"] = _bool_env(defaults["ui_truth_require_run_id_match"])
+        env["OPENVIBECODING_CI_UI_TRUTH_REQUIRE_RUN_ID_MATCH"] = _bool_env(defaults["ui_truth_require_run_id_match"])
     if "ui_truth_enforce_flake_policy" in defaults:
-        env["CORTEXPILOT_CI_UI_TRUTH_ENFORCE_FLAKE_POLICY"] = _bool_env(defaults["ui_truth_enforce_flake_policy"])
+        env["OPENVIBECODING_CI_UI_TRUTH_ENFORCE_FLAKE_POLICY"] = _bool_env(defaults["ui_truth_enforce_flake_policy"])
     if "ui_strict_require_gemini_verdict" in defaults:
-        env["CORTEXPILOT_CI_UI_STRICT_REQUIRE_GEMINI_VERDICT"] = _bool_env(
+        env["OPENVIBECODING_CI_UI_STRICT_REQUIRE_GEMINI_VERDICT"] = _bool_env(
             defaults["ui_strict_require_gemini_verdict"]
         )
 
     if "ui_regression_flake" in gates:
-        env["CORTEXPILOT_CI_UI_REGRESSION_FLAKE_GATE"] = _bool_env(gates["ui_regression_flake"])
+        env["OPENVIBECODING_CI_UI_REGRESSION_FLAKE_GATE"] = _bool_env(gates["ui_regression_flake"])
 
     return env
 
@@ -208,20 +208,20 @@ def _resolve_profile_env(profile_cfg: dict[str, Any], profile: str) -> LayerMap:
 
     env: LayerMap = {}
     mapping = {
-        "p0_iterations": "CORTEXPILOT_CI_UI_FLAKE_P0_ITER",
-        "p1_iterations": "CORTEXPILOT_CI_UI_FLAKE_P1_ITER",
-        "p0_threshold_percent": "CORTEXPILOT_CI_UI_FLAKE_P0_THRESHOLD",
-        "p1_threshold_percent": "CORTEXPILOT_CI_UI_FLAKE_P1_THRESHOLD",
+        "p0_iterations": "OPENVIBECODING_CI_UI_FLAKE_P0_ITER",
+        "p1_iterations": "OPENVIBECODING_CI_UI_FLAKE_P1_ITER",
+        "p0_threshold_percent": "OPENVIBECODING_CI_UI_FLAKE_P0_THRESHOLD",
+        "p1_threshold_percent": "OPENVIBECODING_CI_UI_FLAKE_P1_THRESHOLD",
     }
     for source_key, env_key in mapping.items():
         if source_key in ui_flake:
             env[env_key] = str(ui_flake[source_key])
 
     truth_mapping = {
-        "p0_min_iterations": "CORTEXPILOT_CI_UI_TRUTH_P0_MIN_ITERATIONS",
-        "p1_min_iterations": "CORTEXPILOT_CI_UI_TRUTH_P1_MIN_ITERATIONS",
-        "p0_max_threshold_percent": "CORTEXPILOT_CI_UI_TRUTH_P0_MAX_THRESHOLD_PERCENT",
-        "p1_max_threshold_percent": "CORTEXPILOT_CI_UI_TRUTH_P1_MAX_THRESHOLD_PERCENT",
+        "p0_min_iterations": "OPENVIBECODING_CI_UI_TRUTH_P0_MIN_ITERATIONS",
+        "p1_min_iterations": "OPENVIBECODING_CI_UI_TRUTH_P1_MIN_ITERATIONS",
+        "p0_max_threshold_percent": "OPENVIBECODING_CI_UI_TRUTH_P0_MAX_THRESHOLD_PERCENT",
+        "p1_max_threshold_percent": "OPENVIBECODING_CI_UI_TRUTH_P1_MAX_THRESHOLD_PERCENT",
     }
     for source_key, env_key in truth_mapping.items():
         if source_key in ui_truth:
@@ -259,9 +259,9 @@ def main() -> int:
 
     args = parser.parse_args()
 
-    core_path = Path(os.environ.get("CORTEXPILOT_CI_POLICY_CORE_CONFIG", str(DEFAULT_CORE_PATH)))
-    profile_path = Path(os.environ.get("CORTEXPILOT_CI_POLICY_PROFILE_CONFIG", str(DEFAULT_PROFILE_PATH)))
-    advanced_path = Path(os.environ.get("CORTEXPILOT_CI_POLICY_ADVANCED_CONFIG", str(DEFAULT_ADVANCED_PATH)))
+    core_path = Path(os.environ.get("OPENVIBECODING_CI_POLICY_CORE_CONFIG", str(DEFAULT_CORE_PATH)))
+    profile_path = Path(os.environ.get("OPENVIBECODING_CI_POLICY_PROFILE_CONFIG", str(DEFAULT_PROFILE_PATH)))
+    advanced_path = Path(os.environ.get("OPENVIBECODING_CI_POLICY_ADVANCED_CONFIG", str(DEFAULT_ADVANCED_PATH)))
 
     core_cfg = _load_json(core_path, "core")
     profile_cfg = _load_json(profile_path, "profile")

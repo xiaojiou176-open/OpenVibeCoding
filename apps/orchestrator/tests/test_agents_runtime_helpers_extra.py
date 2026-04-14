@@ -1,6 +1,6 @@
 from types import SimpleNamespace
 
-from cortexpilot_orch.runners import agents_runtime_helpers
+from openvibecoding_orch.runners import agents_runtime_helpers
 
 
 def test_path_allowed_and_mock_output_path_matrix(monkeypatch) -> None:
@@ -48,10 +48,10 @@ def test_path_allowed_trailing_slash_branch_with_path_adapter(monkeypatch) -> No
 
 
 def test_resolve_helpers_and_base_url_resolution(monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_CODEX_PROFILE", "manual-profile")
+    monkeypatch.setenv("OPENVIBECODING_CODEX_PROFILE", "manual-profile")
     assert agents_runtime_helpers.resolve_profile() == "manual-profile"
 
-    monkeypatch.setenv("CORTEXPILOT_CODEX_PROFILE", "")
+    monkeypatch.setenv("OPENVIBECODING_CODEX_PROFILE", "")
     monkeypatch.setattr(agents_runtime_helpers, "pick_profile", lambda: "pooled-profile")
     assert agents_runtime_helpers.resolve_profile() == "pooled-profile"
 

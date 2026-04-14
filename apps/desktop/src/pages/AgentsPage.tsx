@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { getUiCopy, type UiLocale } from "@cortexpilot/frontend-shared/uiCopy";
-import { detectPreferredUiLocale } from "@cortexpilot/frontend-shared/uiLocale";
+import { getUiCopy, type UiLocale } from "@openvibecoding/frontend-shared/uiCopy";
+import { detectPreferredUiLocale } from "@openvibecoding/frontend-shared/uiLocale";
 import type { AgentCatalogPayload, AgentCatalogRecord, AgentStatusPayload, AgentStatusRecord, RoleCatalogRecord } from "../lib/types";
 import { fetchAgents, fetchAgentStatus } from "../lib/api";
 import { stageVariant } from "../lib/statusPresentation";

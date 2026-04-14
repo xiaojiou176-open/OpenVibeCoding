@@ -159,7 +159,7 @@ describe("pm intake component branches", () => {
       newConversationBusy: false,
       onStartNewConversation: vi.fn(),
       workspacePath: "apps/dashboard",
-      repoName: "cortexpilot",
+      repoName: "openvibecoding",
       onWorkspacePathChange: vi.fn(),
       onRepoNameChange: vi.fn(),
       stage: "discover",
@@ -201,7 +201,7 @@ describe("pm intake component branches", () => {
       chatLog: [
         {
           id: "chat-1",
-          role: "CortexPilot Command Tower",
+          role: "OpenVibeCoding Command Tower",
           text: "delegation message",
           createdAt: "2026-03-01T10:00:00.000Z",
           kind: "delegation",
@@ -327,9 +327,9 @@ describe("pm intake component branches", () => {
     expect(repoInput).toHaveClass("input");
 
     fireEvent.change(screen.getByLabelText("Workspace path"), { target: { value: "apps/new" } });
-    fireEvent.change(screen.getByLabelText("Repository slug"), { target: { value: "cortexpilot-next" } });
+    fireEvent.change(screen.getByLabelText("Repository slug"), { target: { value: "openvibecoding-next" } });
     expect(onWorkspacePathChange).toHaveBeenCalledWith("apps/new");
-    expect(onRepoNameChange).toHaveBeenCalledWith("cortexpilot-next");
+    expect(onRepoNameChange).toHaveBeenCalledWith("openvibecoding-next");
 
     fireEvent.click(screen.getByRole("button", { name: "+ New chat" }));
     expect(onStartNewConversation).toHaveBeenCalledTimes(1);

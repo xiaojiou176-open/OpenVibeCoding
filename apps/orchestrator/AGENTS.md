@@ -9,10 +9,10 @@ Read root `AGENTS.md` first.
 
 ## Key Paths
 
-- `src/cortexpilot_orch/config.py`
-- `src/cortexpilot_orch/planning/`
-- `src/cortexpilot_orch/gates/`
-- `src/cortexpilot_orch/store/`
+- `src/openvibecoding_orch/config.py`
+- `src/openvibecoding_orch/planning/`
+- `src/openvibecoding_orch/gates/`
+- `src/openvibecoding_orch/store/`
 
 ## Commands
 

@@ -23,7 +23,7 @@ REQUIRED_REGISTRY_FIELDS = (
 )
 
 SCAN_ROOTS = (
-    "apps/orchestrator/src/cortexpilot_orch",
+    "apps/orchestrator/src/openvibecoding_orch",
     "apps/dashboard",
     "apps/desktop",
     "scripts",
@@ -57,7 +57,7 @@ EXCLUDED_PARTS = {
 }
 
 ENV_KEY_ALLOW_PATTERN = re.compile(
-    r"^(CORTEXPILOT_|OPENAI_|NEXT_PUBLIC_|VITE_|GEMINI_|DASHBOARD_VITEST_|DESKTOP_VITEST_|VITEST_|CI$|NODE_ENV$)"
+    r"^(OPENVIBECODING_|OPENAI_|NEXT_PUBLIC_|VITE_|GEMINI_|DASHBOARD_VITEST_|DESKTOP_VITEST_|VITEST_|CI$|NODE_ENV$)"
 )
 
 ENV_CAPTURE_PATTERNS = (
@@ -72,7 +72,7 @@ ENV_CAPTURE_PATTERNS = (
 )
 
 BACKEND_DIRECT_READ_SCAN_ROOTS = (
-    "apps/orchestrator/src/cortexpilot_orch",
+    "apps/orchestrator/src/openvibecoding_orch",
     "tools",
 )
 
@@ -104,7 +104,7 @@ GITIGNORE_REQUIRED_LINES = (
 
 LEGACY_LLM_KEYS = (
     "OPENAI_API_KEY",
-    "CORTEXPILOT_EQUILIBRIUM_API_KEY",
+    "OPENVIBECODING_EQUILIBRIUM_API_KEY",
 )
 
 ALLOWED_TIERS = {"core", "profile", "advanced", "deprecated"}
@@ -768,7 +768,7 @@ def _check_tiers_contract(
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="CortexPilot env governance checker")
+    parser = argparse.ArgumentParser(description="OpenVibeCoding env governance checker")
     parser.add_argument("--mode", choices=("warn", "gate"), default="gate")
     parser.add_argument(
         "--max-deprecated-count",

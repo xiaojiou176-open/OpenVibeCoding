@@ -96,7 +96,7 @@ describe("runtimeBridge", () => {
     registerMock.mockResolvedValue(undefined);
     onOpenUrlMock.mockImplementation(async (cb: (urls: string[]) => void) => {
       await Promise.resolve();
-      cb(["cortexpilot://open/path?token=abc", "invalid-url"]);
+      cb(["openvibecoding://open/path?token=abc", "invalid-url"]);
     });
 
     const events: DesktopRuntimeEvent[] = [];
@@ -105,7 +105,7 @@ describe("runtimeBridge", () => {
     expect(onOpenUrlMock).toHaveBeenCalledTimes(1);
     const opened = events.find((event) => event.code === "DEEP_LINK_OPENED");
     expect(opened).toMatchObject({ code: "DEEP_LINK_OPENED" });
-    expect(opened?.detail).toContain("cortexpilot://open/path");
+    expect(opened?.detail).toContain("openvibecoding://open/path");
     expect(opened?.detail).not.toContain("token=abc");
     expect(opened?.detail).toContain("[REDACTED_DEEP_LINK]");
     expect(getCodes(events)).toContain("DEEP_LINK_READY");
@@ -135,7 +135,7 @@ describe("runtimeBridge", () => {
     listenMock.mockResolvedValue(undefined);
     registerMock.mockResolvedValue(undefined);
     onOpenUrlMock.mockImplementation(async (cb: (urls: string[]) => void) => {
-      const corrupted = ["cortexpilot://open/path"] as unknown as string[] & {
+      const corrupted = ["openvibecoding://open/path"] as unknown as string[] & {
         map: () => never;
       };
       corrupted.map = () => {

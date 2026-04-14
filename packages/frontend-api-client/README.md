@@ -1,7 +1,7 @@
 # Frontend API Client
 
-`@cortexpilot/frontend-api-client` is the thin JavaScript/TypeScript client
-layer for CortexPilot command-tower consumers.
+`@openvibecoding/frontend-api-client` is the thin JavaScript/TypeScript client
+layer for OpenVibeCoding command-tower consumers.
 
 Current package boundary: this package now carries publish-ready metadata and a
 registry-safe manifest, but no public registry release is live yet. The
@@ -36,11 +36,11 @@ This package is useful when you want one import boundary for:
 import {
   createControlPlaneStarter,
   createDashboardApiClient,
-} from "@cortexpilot/frontend-api-client";
+} from "@openvibecoding/frontend-api-client";
 
 const client = createDashboardApiClient({
   baseUrl: "http://localhost:8000",
-  resolveToken: () => window.localStorage.getItem("cortexpilot.token") || undefined,
+  resolveToken: () => window.localStorage.getItem("openvibecoding.token") || undefined,
   resolveMutationRole: () => "TECH_LEAD",
 });
 
@@ -95,7 +95,7 @@ This example assumes you already have a truthful local control-plane context:
 
 ```bash
 npm run bootstrap:host
-CORTEXPILOT_HOST_COMPAT=1 bash scripts/test_quick.sh --no-related
+OPENVIBECODING_HOST_COMPAT=1 bash scripts/test_quick.sh --no-related
 ```
 
 Then either start the dashboard loop or make sure the API base URL you plan to
@@ -178,13 +178,13 @@ workflow instead of just reading the package in isolation:
    - OpenClaw: [repo](https://github.com/openclaw/openclaw),
      [skills docs](https://docs.openclaw.ai/tools/skills),
      [ClawHub](https://github.com/openclaw/clawhub)
-2. Use CortexPilot's
+2. Use OpenVibeCoding's
    [compatibility matrix](https://xiaojiou176-open.github.io/OpenVibeCoding/compatibility/)
    and
    [integration guide](https://xiaojiou176-open.github.io/OpenVibeCoding/integrations/)
-   to pick the first truthful CortexPilot lane.
-3. Keep this package together with `@cortexpilot/frontend-api-contract` and
-   `@cortexpilot/frontend-shared` inside one clone or vendored workspace copy.
+   to pick the first truthful OpenVibeCoding lane.
+3. Keep this package together with `@openvibecoding/frontend-api-contract` and
+   `@openvibecoding/frontend-shared` inside one clone or vendored workspace copy.
 4. Prove the integration with `createControlPlaneStarter(...)` before you
    enable any guarded operator mutation path.
 
@@ -212,7 +212,7 @@ If another Codex / Claude Code / OpenClaw workspace wants the shortest truthful
 builder reuse path today, keep the copied surface explicit:
 
 ```text
-vendor/CortexPilot/
+vendor/OpenVibeCoding/
   packages/frontend-api-client/
   packages/frontend-api-contract/
   packages/frontend-shared/
@@ -232,7 +232,7 @@ Then keep the workflow small:
 
 - This is a thin client surface, not a full SDK platform.
 - It wraps the current HTTP routes that power the dashboard and desktop shells.
-- Where `@cortexpilot/frontend-api-contract` already publishes frontend-safe
+- Where `@openvibecoding/frontend-api-contract` already publishes frontend-safe
   route or query truth, this client reuses that contract instead of keeping a
   second handwritten path map.
 - It does not replace the backend orchestration runtime or the read-only MCP

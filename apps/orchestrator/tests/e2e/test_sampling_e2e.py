@@ -35,7 +35,7 @@ def test_sampling_requests_flow(tmp_path: Path) -> None:
     worktree_root = runtime_root / "worktrees"
 
     base_env = build_env(repo_root, runtime_root, runs_root, worktree_root)
-    base_env["CORTEXPILOT_SAMPLING_APPROVED"] = "true"
+    base_env["OPENVIBECODING_SAMPLING_APPROVED"] = "true"
 
     repo = create_tiny_repo(tmp_path / "tiny_repo_sampling")
     sampling_path = repo / "sampling_requests.json"

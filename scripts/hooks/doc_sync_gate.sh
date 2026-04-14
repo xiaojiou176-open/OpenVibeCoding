@@ -5,10 +5,10 @@ REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 cd "$REPO_ROOT"
 
 collect_target_files() {
-  local mode="${CORTEXPILOT_DOC_GATE_MODE:-staged}"
+  local mode="${OPENVIBECODING_DOC_GATE_MODE:-staged}"
   if [[ "$mode" == "staged" ]]; then
-    if [[ -n "${CORTEXPILOT_STAGED_FILES:-}" ]]; then
-      printf '%s\n' "$CORTEXPILOT_STAGED_FILES" | tr ' ' '\n' | sed '/^$/d'
+    if [[ -n "${OPENVIBECODING_STAGED_FILES:-}" ]]; then
+      printf '%s\n' "$OPENVIBECODING_STAGED_FILES" | tr ' ' '\n' | sed '/^$/d'
     else
       git diff --cached --name-only --diff-filter=ACMR
     fi
@@ -16,10 +16,10 @@ collect_target_files() {
   fi
 
   if [[ "$mode" == "ci-diff" ]]; then
-    local base_sha="${CORTEXPILOT_DOC_GATE_BASE_SHA:-}"
-    local head_sha="${CORTEXPILOT_DOC_GATE_HEAD_SHA:-}"
+    local base_sha="${OPENVIBECODING_DOC_GATE_BASE_SHA:-}"
+    local head_sha="${OPENVIBECODING_DOC_GATE_HEAD_SHA:-}"
     if [[ -z "$base_sha" || -z "$head_sha" ]]; then
-      echo "❌ [doc-sync-gate] ci-diff mode requires CORTEXPILOT_DOC_GATE_BASE_SHA and CORTEXPILOT_DOC_GATE_HEAD_SHA." >&2
+      echo "❌ [doc-sync-gate] ci-diff mode requires OPENVIBECODING_DOC_GATE_BASE_SHA and OPENVIBECODING_DOC_GATE_HEAD_SHA." >&2
       return 1
     fi
     if [[ "$base_sha" == "0000000000000000000000000000000000000000" ]]; then
@@ -38,7 +38,7 @@ collect_target_files() {
     return 0
   fi
 
-  echo "❌ [doc-sync-gate] unsupported CORTEXPILOT_DOC_GATE_MODE=$mode (expected: staged|ci-diff)." >&2
+  echo "❌ [doc-sync-gate] unsupported OPENVIBECODING_DOC_GATE_MODE=$mode (expected: staged|ci-diff)." >&2
   return 1
 }
 
@@ -48,7 +48,7 @@ is_major_logic_file() {
     .pre-commit-config.yaml|package.json)
       return 0
       ;;
-    apps/orchestrator/src/cortexpilot_orch/*.py|apps/orchestrator/src/cortexpilot_orch/**/*.py)
+    apps/orchestrator/src/openvibecoding_orch/*.py|apps/orchestrator/src/openvibecoding_orch/**/*.py)
       return 0
       ;;
     apps/dashboard/app/*.ts|apps/dashboard/app/*.tsx|apps/dashboard/app/**/*.ts|apps/dashboard/app/**/*.tsx)

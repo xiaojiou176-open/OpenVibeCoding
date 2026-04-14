@@ -6,11 +6,11 @@
     <title>OpenVibeCoding | Coding-agent integrations for Codex, Claude Code, and OpenClaw</title>
     <meta
       name="description"
-      content="Truthful OpenVibeCoding integration guide for Codex, Claude Code, and OpenClaw: read-only MCP, API/client entrypoints, repo-owned skills, and the current no-fake-plugin boundary on top of the CortexPilot runtime."
+      content="Truthful OpenVibeCoding integration guide for Codex, Claude Code, and OpenClaw: read-only MCP, API/client entrypoints, repo-owned skills, and the current no-fake-plugin boundary on top of the OpenVibeCoding runtime."
     />
     <meta
       name="keywords"
-      content="OpenVibeCoding, CortexPilot runtime, Codex, Claude Code, OpenClaw, coding agent integrations, MCP, plugin, skills, workflow cases, proof and replay"
+      content="OpenVibeCoding, OpenVibeCoding runtime, Codex, Claude Code, OpenClaw, coding agent integrations, MCP, plugin, skills, workflow cases, proof and replay"
     />
     <link rel="canonical" href="https://xiaojiou176-open.github.io/OpenVibeCoding/integrations/" />
     <meta property="og:title" content="OpenVibeCoding | Coding-agent integrations for Codex, Claude Code, and OpenClaw" />
@@ -47,7 +47,7 @@
             "name": "Is OpenVibeCoding an official Codex or Claude Code plugin?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "No. OpenVibeCoding is the public shell for the CortexPilot repo/runtime. Codex now has official plugin surfaces and OpenClaw has official plugin and skills surfaces, but the current public story still ships workflow compatibility, read-only MCP, repo-owned skills, builder entrypoints, and local bundle examples rather than a published listing."
+              "text": "No. OpenVibeCoding is the public shell for the OpenVibeCoding repo/runtime. Codex now has official plugin surfaces and OpenClaw has official plugin and skills surfaces, but the current public story still ships workflow compatibility, read-only MCP, repo-owned skills, builder entrypoints, and local bundle examples rather than a published listing."
             }
           },
           {
@@ -197,7 +197,7 @@
         </nav>
         <h1>Codex, Claude Code, and OpenClaw integrations.</h1>
         <p class="lede">
-          OpenVibeCoding is the public shell for the CortexPilot runtime, and it already fits into modern coding-agent workflows, but the truthful entrypoint is
+          OpenVibeCoding is the public shell for the OpenVibeCoding runtime, and it already fits into modern coding-agent workflows, but the truthful entrypoint is
           <strong>not</strong> “install our official plugin.” The truthful story today is:
           <strong>read-only MCP</strong>, <strong>repo-owned skills</strong>, <strong>API/client entrypoints</strong>,
           and <strong>Workflow Cases + Proof &amp; Replay</strong> as the common operating record.
@@ -409,7 +409,7 @@
           If your team wants something more concrete than “read the docs,” start with one of these repo-owned paths.
         </p>
         <pre><code># 1) protocol-first: prove the read-only MCP surface is real
-bash scripts/run_readonly_mcp.sh
+bash scripts/run_openvibecoding_readonly_mcp.sh
 
 # 2) builder-first: prove the thin client + contract bootstrap path is real
 node packages/frontend-api-client/examples/control_plane_starter.local.mjs \
@@ -420,7 +420,7 @@ node packages/frontend-api-client/examples/control_plane_starter.local.mjs \
   --preview-model gpt-5.4
 
 # 3) proof-first: prove the public first-run loop is real
-CORTEXPILOT_HOST_COMPAT=1 bash scripts/test_quick.sh --no-related</code></pre>
+OPENVIBECODING_HOST_COMPAT=1 bash scripts/test_quick.sh --no-related</code></pre>
         <p>
           Need the client-specific setup files after that? Open the
           <a href="../agent-starters/">agent starter kits</a> for tracked Codex
@@ -437,7 +437,7 @@ CORTEXPILOT_HOST_COMPAT=1 bash scripts/test_quick.sh --no-related</code></pre>
         </p>
         <ol>
           <li>Vendor the repo truth you want the agent to follow: <code>README.md</code>, <code>docs/README.md</code>, <code>AGENTS.md</code>, and the specific skill folders you actually plan to reuse.</li>
-          <li>Wire the repo-owned MCP server as a <strong>stdio command</strong>, not as a hosted claim: <code>bash /absolute/path/to/CortexPilot/scripts/run_readonly_mcp.sh</code>.</li>
+          <li>Wire the repo-owned MCP server as a <strong>stdio command</strong>, not as a hosted claim: <code>bash /absolute/path/to/OpenVibeCoding/scripts/run_openvibecoding_readonly_mcp.sh</code>.</li>
           <li>Choose only one adoption lane first: protocol-first, skills-first, or builder-first. Do not promise plugin/store support unless a real platform surface exists and is verified.</li>
         </ol>
         <pre><code># 1) keep the repo truth close to the agent
@@ -446,7 +446,7 @@ sed -n '1,220p' docs/README.md
 sed -n '1,220p' AGENTS.md
 
 # 2) keep MCP on the truthful stdio path
-bash /absolute/path/to/CortexPilot/scripts/run_readonly_mcp.sh
+bash /absolute/path/to/OpenVibeCoding/scripts/run_openvibecoding_readonly_mcp.sh
 
 # 3) keep builder adoption copy-pasteable
 node packages/frontend-api-client/examples/control_plane_starter.local.mjs \
@@ -487,7 +487,7 @@ node packages/frontend-api-client/examples/control_plane_starter.local.mjs \
         <div class="grid">
           <article class="card">
             <h3>Is this an official Codex or Claude Code plugin page?</h3>
-            <p>No. OpenVibeCoding is the public shell for the CortexPilot repo/runtime. Codex now has official plugin surfaces and OpenClaw has official plugin and skills surfaces, but the current public story still ships workflow compatibility, read-only MCP, repo-owned skills, builder entrypoints, and local bundle examples rather than a published listing.</p>
+            <p>No. OpenVibeCoding is the public shell for the OpenVibeCoding repo/runtime. Codex now has official plugin surfaces and OpenClaw has official plugin and skills surfaces, but the current public story still ships workflow compatibility, read-only MCP, repo-owned skills, builder entrypoints, and local bundle examples rather than a published listing.</p>
           </article>
           <article class="card">
             <h3>Where does OpenClaw fit today?</h3>

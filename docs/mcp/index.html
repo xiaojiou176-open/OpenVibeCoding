@@ -6,11 +6,11 @@
     <title>OpenVibeCoding | Read-only MCP quickstart</title>
     <meta
       name="description"
-      content="Read-only MCP quickstart for OpenVibeCoding: what the current Model Context Protocol surface exposes, who should use it first, and where the frozen write boundary remains on the CortexPilot runtime."
+      content="Read-only MCP quickstart for OpenVibeCoding: what the current Model Context Protocol surface exposes, who should use it first, and where the frozen write boundary remains on the OpenVibeCoding runtime."
     />
     <meta
       name="keywords"
-      content="OpenVibeCoding, CortexPilot runtime, MCP, Model Context Protocol, read-only MCP, Codex MCP, Claude Code MCP, OpenClaw MCP, workflow inspection"
+      content="OpenVibeCoding, OpenVibeCoding runtime, MCP, Model Context Protocol, read-only MCP, Codex MCP, Claude Code MCP, OpenClaw MCP, workflow inspection"
     />
     <link rel="canonical" href="https://xiaojiou176-open.github.io/OpenVibeCoding/mcp/" />
     <meta property="og:title" content="OpenVibeCoding | Read-only MCP quickstart" />
@@ -239,7 +239,7 @@
         </nav>
         <h1>Read-only MCP quickstart.</h1>
         <p class="lede">
-          OpenVibeCoding is the public shell for the CortexPilot runtime, and it already exposes a real <strong>Model Context Protocol (MCP)</strong> surface, but the public contract is intentionally
+          OpenVibeCoding is the public shell for the OpenVibeCoding runtime, and it already exposes a real <strong>Model Context Protocol (MCP)</strong> surface, but the public contract is intentionally
           <strong>read-only</strong>. This page exists so teams searching for MCP, Codex, Claude Code, or OpenClaw adoption paths can find the truthful protocol story quickly instead of guessing from source files.
         </p>
         <p class="lede">
@@ -325,9 +325,9 @@
           The current server is a repo-owned <strong>stdio JSON-RPC</strong> node. Run it from the repo root when you want the shortest proof that the public MCP story is real:
         </p>
         <p>
-          Prerequisite: start from a bootstrapped CortexPilot checkout. The wrapper expects the orchestrator Python dependencies to exist already, so run <code>npm run bootstrap:host</code> first when you are setting up a fresh clone.
+          Prerequisite: start from a bootstrapped OpenVibeCoding checkout. The wrapper expects the orchestrator Python dependencies to exist already, so run <code>npm run bootstrap:host</code> first when you are setting up a fresh clone.
         </p>
-        <pre><code>bash /absolute/path/to/CortexPilot/scripts/run_readonly_mcp.sh</code></pre>
+        <pre><code>bash /absolute/path/to/OpenVibeCoding/scripts/run_openvibecoding_readonly_mcp.sh</code></pre>
         <p>
           Current tool set:
           <code>list_runs</code>,
@@ -377,7 +377,7 @@
               </tr>
               <tr>
                 <td><strong>Working directory</strong></td>
-                <td>the CortexPilot repo root</td>
+                <td>the OpenVibeCoding repo root</td>
                 <td>The server reads repo-local runtime state, run bundles, and workflow truth.</td>
               </tr>
               <tr>
@@ -387,7 +387,7 @@
               </tr>
               <tr>
                 <td><strong>Command</strong></td>
-                <td><code>bash __CORTEXPILOT_REPO_ROOT__/scripts/run_readonly_mcp.sh</code></td>
+                <td><code>bash __OPENVIBECODING_REPO_ROOT__/scripts/run_openvibecoding_readonly_mcp.sh</code></td>
                 <td>This is the shortest truthful startup command for stdio-capable clients today.</td>
               </tr>
               <tr>
@@ -405,7 +405,7 @@
         </div>
         <p>
           The wrapper keeps the public install story short, but the underlying runtime command stays
-          <code>python3 -m cortexpilot_orch.cli mcp-readonly-server</code> with
+          <code>python3 -m openvibecoding_orch.cli mcp-readonly-server</code> with
           <code>PYTHONPATH=&lt;repo-root&gt;/apps/orchestrator/src</code>.
         </p>
       </section>
@@ -443,9 +443,9 @@
       <section class="section">
         <h2>Where to read the current contract</h2>
         <ul>
-          <li><a href="https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/apps/orchestrator/src/cortexpilot_orch/mcp_readonly_server.py">read-only MCP server implementation</a></li>
+          <li><a href="https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/apps/orchestrator/src/openvibecoding_orch/mcp_readonly_server.py">read-only MCP server implementation</a></li>
           <li><a href="https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/configs/mcp_public_manifest.json">MCP public manifest</a></li>
-          <li><a href="https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/scripts/run_readonly_mcp.sh">repo-owned startup wrapper</a></li>
+          <li><a href="https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/scripts/run_openvibecoding_readonly_mcp.sh">repo-owned startup wrapper</a></li>
           <li><a href="https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/apps/orchestrator/README.md">orchestrator README</a></li>
           <li><a href="https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/docs/architecture/mcp-and-operator-copilot-v1.md">MCP architecture baseline</a></li>
           <li><a href="../distribution/">distribution status</a> for release, package, and public-boundary truth</li>

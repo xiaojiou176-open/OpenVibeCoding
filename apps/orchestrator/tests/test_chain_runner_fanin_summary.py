@@ -3,9 +3,9 @@ import subprocess
 from pathlib import Path
 
 import pytest
-from cortexpilot_orch.chain.runner import ChainRunner
-from cortexpilot_orch.scheduler.scheduler import Orchestrator
-from cortexpilot_orch.store.run_store import RunStore
+from openvibecoding_orch.chain.runner import ChainRunner
+from openvibecoding_orch.scheduler.scheduler import Orchestrator
+from openvibecoding_orch.store.run_store import RunStore
 
 
 SCHEMA_ROOT = Path(__file__).resolve().parents[3] / "schemas"
@@ -13,7 +13,7 @@ SCHEMA_ROOT = Path(__file__).resolve().parents[3] / "schemas"
 
 @pytest.fixture(autouse=True)
 def _disable_strict_nontrivial(monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_ACCEPTANCE_STRICT_NONTRIVIAL", "0")
+    monkeypatch.setenv("OPENVIBECODING_ACCEPTANCE_STRICT_NONTRIVIAL", "0")
 
 
 def _git(cmd: list[str], cwd: Path) -> None:
@@ -99,10 +99,10 @@ def test_chain_runner_normalizes_fanin_summary(tmp_path: Path, monkeypatch) -> N
     runtime_root = tmp_path / "runtime"
     runs_root = runtime_root / "runs"
     worktree_root = runtime_root / "worktrees"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(worktree_root))
-    monkeypatch.setenv("CORTEXPILOT_SCHEMA_ROOT", str(SCHEMA_ROOT))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(worktree_root))
+    monkeypatch.setenv("OPENVIBECODING_SCHEMA_ROOT", str(SCHEMA_ROOT))
 
     chain = {
         "chain_id": "chain_fanin",
@@ -141,5 +141,5 @@ def test_chain_runner_normalizes_fanin_summary(tmp_path: Path, monkeypatch) -> N
     payload = json.loads(report_path.read_text(encoding="utf-8"))
     summary = payload.get("summary", "")
     parsed = json.loads(summary)
-    assert parsed.get("format") == "cortexpilot.fanin.summary.v1"
+    assert parsed.get("format") == "openvibecoding.fanin.summary.v1"
     assert parsed.get("dependency_run_ids")

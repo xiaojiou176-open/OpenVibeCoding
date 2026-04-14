@@ -7,7 +7,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_REPORT = ROOT / ".runtime-cache" / "cortexpilot" / "reports" / "retention_report.json"
+DEFAULT_REPORT = ROOT / ".runtime-cache" / "openvibecoding" / "reports" / "retention_report.json"
 
 
 def main() -> int:

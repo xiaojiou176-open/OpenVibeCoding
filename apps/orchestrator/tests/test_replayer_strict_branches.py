@@ -3,8 +3,8 @@ import json
 import subprocess
 from pathlib import Path
 
-from cortexpilot_orch.replay.replayer import ReplayRunner
-from cortexpilot_orch.store.run_store import RunStore
+from openvibecoding_orch.replay.replayer import ReplayRunner
+from openvibecoding_orch.store.run_store import RunStore
 
 
 def _output_schema_artifacts(role: str = "worker") -> list[dict]:
@@ -178,9 +178,9 @@ def test_reexecute_soft_and_hard_diffs(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime"
     runs_root = runtime_root / "runs"
     worktree_root = runtime_root / "worktrees"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(worktree_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(worktree_root))
     monkeypatch.chdir(repo)
 
     store = RunStore(runs_root=runs_root)
@@ -202,9 +202,9 @@ def test_reexecute_soft_and_hard_diffs(tmp_path: Path, monkeypatch) -> None:
     def _fake_tests(*args, **kwargs):
         return {"ok": False, "reports": [], "reason": "fail"}
 
-    monkeypatch.setattr("cortexpilot_orch.replay.replayer.run_acceptance_tests", _fake_tests)
-    monkeypatch.setattr("cortexpilot_orch.replay.replayer.worktree_manager.create_worktree", lambda *args, **kwargs: repo)
-    monkeypatch.setattr("cortexpilot_orch.replay.replayer.worktree_manager.remove_worktree", lambda *args, **kwargs: None)
+    monkeypatch.setattr("openvibecoding_orch.replay.replayer.run_acceptance_tests", _fake_tests)
+    monkeypatch.setattr("openvibecoding_orch.replay.replayer.worktree_manager.create_worktree", lambda *args, **kwargs: repo)
+    monkeypatch.setattr("openvibecoding_orch.replay.replayer.worktree_manager.remove_worktree", lambda *args, **kwargs: None)
 
     runner = ReplayRunner(store)
     report = runner.reexecute(run_id, strict=True)

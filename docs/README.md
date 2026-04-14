@@ -2,8 +2,8 @@
 
 This repository keeps its public documentation intentionally small.
 
-The public route pages now speak as **OpenVibeCoding**, the public shell for
-the CortexPilot runtime and repo surfaces.
+The public route pages now speak as **OpenVibeCoding**, the command tower for
+AI engineering across the repo's public surfaces.
 
 The product spine stays stable across the docs entrypoints:
 
@@ -12,9 +12,9 @@ The product spine stays stable across the docs entrypoints:
 - **Proof & Replay** for evidence, compare, and replay review
 
 `docs/index.html` is the current tracked GitHub Pages landing source for the
-OpenVibeCoding public shell. `docs/README.md` remains the repo-side
+OpenVibeCoding front door. `docs/README.md` remains the repo-side
 documentation summary for contributors and maintainers who still need the
-CortexPilot runtime inventory.
+runtime and repository inventory.
 
 `configs/docs_nav_registry.json` is the machine source of truth for the active
 docs inventory. This file is the human-readable summary of that registry.
@@ -25,7 +25,7 @@ file as the docs inventory map, not as a second CI manual.
 ## Public Lane Order
 
 - `pure_mcp` is the primary public machine-readable lane.
-- `public-skills/cortexpilot-adoption-router/` is the secondary public adoption lane.
+- `public-skills/openvibecoding-adoption-router/` is the secondary public adoption lane.
 - `examples/coding-agents/` and `examples/coding-agents/plugin-bundles/` are
   starter/example lanes only; do not treat them as the canonical public root.
 
@@ -133,7 +133,7 @@ navigation set.
 - `configs/mcp_public_manifest.json`: machine-readable MCP distribution artifact for the shipped read-only stdio surface
 - `docs/api/index.html`: public API / contract quickstart page for OpenAPI, frontend client, and contract-facing types
 - `docs/integrations/index.html`: truthful coding-agent integration map for Codex / Claude Code / OpenClaw, including the no-fake-plugin boundary plus a lighter proof-first pointer back to `use-cases/`
-- `docs/skills/index.html`: repo-owned skills quickstart for teams adopting CortexPilot playbooks with coding agents, including a minimal vendored skill-pack layout and the same lighter proof-first pointer instead of a second chooser grid
+- `docs/skills/index.html`: repo-owned skills quickstart for teams adopting OpenVibeCoding playbooks with coding agents, including a minimal vendored skill-pack layout and the same lighter proof-first pointer instead of a second chooser grid
 - `design-system/MASTER.md`: repo-owned design constitution for the command-tower identity; use it when web/desktop surfaces change so visual hierarchy does not drift back to generic dashboard tropes
 - `design-system/pages/*.md`: page-specific design overrides for `dashboard-home`, `command-tower`, `workflow-detail`, `run-detail`, and `desktop-overview`
 - `.stitch/DESIGN.md`: repo-owned Stitch fallback design source when authenticated screen generation is unavailable
@@ -144,9 +144,9 @@ navigation set.
 - `policies/skills_bundle_registry.json`: repo-owned authority surface for named skills bundles used by qualifying role contracts
 - `policies/role_config_registry.json`: repo-owned mutable defaults surface for role configuration preview/apply flows; changes here affect future compiled role defaults, not the execution authority of already-issued task contracts
 - `configs/env_direct_read_allowlist.json`: machine allowlist for governed backend direct env reads; update this alongside docs when a role/runtime helper legitimately reads env-backed model metadata
-- `docs/api/openapi.cortexpilot.json`: canonical frontend contract extension that now carries Prompt 8 run/workflow route bindings plus Prompt 9 agents/contracts catalog bindings and generated read-model metadata for `RoleBindingReadModel` / `WorkflowCaseReadModel`
+- `docs/api/openapi.openvibecoding.json`: canonical frontend contract extension that now carries Prompt 8 run/workflow route bindings plus Prompt 9 agents/contracts catalog bindings and generated read-model metadata for `RoleBindingReadModel` / `WorkflowCaseReadModel`
 - `schemas/completion_governance_report.v1.json`: runtime-evaluated completion-governance report emitted during run finalize; use it when operator surfaces need the live DoD / reply-audit / continuation verdict instead of only the planning artifact summary
-- `scripts/generate_frontend_contracts.py`: repo-owned generator that now emits Prompt 8 read-model types plus Prompt 9 agents/contracts catalog routes into `@cortexpilot/frontend-api-contract`
+- `scripts/generate_frontend_contracts.py`: repo-owned generator that now emits Prompt 8 read-model types plus Prompt 9 agents/contracts catalog routes into `@openvibecoding/frontend-api-contract`
 - `schemas/role_config_registry.v1.json`: schema-first contract for the repo-owned role configuration overlay used by Prompt 10 role-default preview/apply surfaces
 - `packages/frontend-api-contract/generated/index.d.ts`: generated TypeScript contract surface for frontend-safe run/workflow routes and read-model types; avoid hand-maintaining parallel overlays when this file changes
 - `packages/frontend-api-contract/docs/README.md`: human-readable contract package guide that now sits between the public API/builder quickstarts and the raw generated contract files
@@ -162,11 +162,11 @@ navigation set.
   `scripts/*.py` hooks should run through `bash scripts/run_governance_py.sh`
   (or an equivalent `python3 -B` path) so clean hook passes do not leave
   repo-local `__pycache__` residue behind
-- `apps/orchestrator/src/cortexpilot_orch/api/main_pm_intake_helpers.py`: PM-facing helper surface that now returns a contract-derived `role_binding_summary`, and the same read model now persists into run manifests for stable post-run inspection without becoming execution authority
+- `apps/orchestrator/src/openvibecoding_orch/api/main_pm_intake_helpers.py`: PM-facing helper surface that now returns a contract-derived `role_binding_summary`, and the same read model now persists into run manifests for stable post-run inspection without becoming execution authority
 - `schemas/execution_plan_report.v1.json` / `schemas/run_manifest.v1.json`: schema-owned runtime capability summaries (`lane`, `compat_api_mode`, `provider_status`, `tool_execution`) that keep preview/manifests honest about chat-compatible vs fail-closed tool posture
-- `apps/orchestrator/src/cortexpilot_orch/api/main_runs_handlers.py`: run-detail helper surface that now returns a stable `role_binding_read_model` derived from persisted contract truth for read-only inspection
-- `apps/orchestrator/src/cortexpilot_orch/api/main_state_store_helpers.py`: workflow aggregation helper that now projects `workflow_case_read_model` from the latest linked run's persisted binding summary for control-plane/workflow reads
-- `apps/orchestrator/src/cortexpilot_orch/api/main_run_views_helpers.py`: registry-backed agent inventory now also publishes a read-only role catalog, while contract artifact listing emits normalized bundle/runtime inspector rows for Prompt 9 operator pages
+- `apps/orchestrator/src/openvibecoding_orch/api/main_runs_handlers.py`: run-detail helper surface that now returns a stable `role_binding_read_model` derived from persisted contract truth for read-only inspection
+- `apps/orchestrator/src/openvibecoding_orch/api/main_state_store_helpers.py`: workflow aggregation helper that now projects `workflow_case_read_model` from the latest linked run's persisted binding summary for control-plane/workflow reads
+- `apps/orchestrator/src/openvibecoding_orch/api/main_run_views_helpers.py`: registry-backed agent inventory now also publishes a read-only role catalog, while contract artifact listing emits normalized bundle/runtime inspector rows for Prompt 9 operator pages
 
 ## Public CI Contract
 

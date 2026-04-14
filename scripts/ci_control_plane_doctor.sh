@@ -4,13 +4,13 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
-OUT_DIR="${CORTEXPILOT_CI_CONTROL_PLANE_DOCTOR_OUT_DIR:-.runtime-cache/test_output/ci_control_plane_doctor}"
+OUT_DIR="${OPENVIBECODING_CI_CONTROL_PLANE_DOCTOR_OUT_DIR:-.runtime-cache/test_output/ci_control_plane_doctor}"
 mkdir -p "$OUT_DIR"
 REPORT_JSON="${OUT_DIR}/report.json"
 REPORT_MD="${OUT_DIR}/summary.md"
 
-REQUIRE_DOCKER="${CORTEXPILOT_DOCTOR_REQUIRE_DOCKER:-1}"
-REQUIRE_SUDO="${CORTEXPILOT_DOCTOR_REQUIRE_SUDO:-1}"
+REQUIRE_DOCKER="${OPENVIBECODING_DOCTOR_REQUIRE_DOCKER:-1}"
+REQUIRE_SUDO="${OPENVIBECODING_DOCTOR_REQUIRE_SUDO:-1}"
 
 check_cmd() {
   local name="$1"
@@ -45,7 +45,7 @@ if check_cmd jq; then jq_ok=1; fi
 if check_cmd curl; then curl_ok=1; fi
 if [[ -n "${RUNNER_TEMP:-}" ]]; then runner_temp_ok=1; fi
 
-allowlist_json='["CORTEXPILOT_DOC_GATE_MODE","CORTEXPILOT_DOC_GATE_BASE_SHA","CORTEXPILOT_DOC_GATE_HEAD_SHA","CORTEXPILOT_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE","CORTEXPILOT_CI_LIVE_PREFLIGHT_PROVIDER_API_MODE","CORTEXPILOT_CI_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE"]'
+allowlist_json='["OPENVIBECODING_DOC_GATE_MODE","OPENVIBECODING_DOC_GATE_BASE_SHA","OPENVIBECODING_DOC_GATE_HEAD_SHA","OPENVIBECODING_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE","OPENVIBECODING_CI_LIVE_PREFLIGHT_PROVIDER_API_MODE","OPENVIBECODING_CI_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE"]'
 
 python3 - "$REPORT_JSON" "$REPORT_MD" "$docker_ok" "$sudo_ok" "$jq_ok" "$curl_ok" "$runner_temp_ok" "$tool_cache_ok" "$allowlist_json" <<'PY'
 import json
@@ -66,7 +66,7 @@ from pathlib import Path
 ) = sys.argv[1:]
 
 payload = {
-    "report_type": "cortexpilot_ci_control_plane_doctor",
+    "report_type": "openvibecoding_ci_control_plane_doctor",
     "generated_at": datetime.now(timezone.utc).isoformat(),
     "checks": {
         "docker": docker_ok == "1",
@@ -76,7 +76,7 @@ payload = {
         "runner_temp": runner_temp_ok == "1",
         "tool_cache_contract": tool_cache_ok == "1",
     },
-    "strict_ci_cortexpilot_allowlist": json.loads(allowlist_json),
+    "strict_ci_openvibecoding_allowlist": json.loads(allowlist_json),
 }
 Path(report_json).write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 Path(report_md).write_text(
@@ -90,7 +90,7 @@ Path(report_md).write_text(
             f"- curl: **{payload['checks']['curl']}**",
             f"- runner_temp: **{payload['checks']['runner_temp']}**",
             f"- tool_cache_contract: **{payload['checks']['tool_cache_contract']}**",
-            f"- strict_ci_cortexpilot_allowlist: `{', '.join(payload['strict_ci_cortexpilot_allowlist'])}`",
+            f"- strict_ci_openvibecoding_allowlist: `{', '.join(payload['strict_ci_openvibecoding_allowlist'])}`",
             "",
         ]
     )

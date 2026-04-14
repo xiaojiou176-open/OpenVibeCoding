@@ -508,9 +508,9 @@ def _http_ok(url: str, timeout_sec: int = 3, *, auth: bool = False) -> bool:
         req = urllib.request.Request(url, method="GET")
         if auth:
             api_token = (
-                os.environ.get("CORTEXPILOT_API_TOKEN", "").strip()
-                or os.environ.get("CORTEXPILOT_E2E_API_TOKEN", "").strip()
-                or "cortexpilot-e2e-token"
+                os.environ.get("OPENVIBECODING_API_TOKEN", "").strip()
+                or os.environ.get("OPENVIBECODING_E2E_API_TOKEN", "").strip()
+                or "openvibecoding-e2e-token"
             )
             if api_token:
                 req.add_header("Authorization", f"Bearer {api_token}")
@@ -1121,24 +1121,24 @@ def main() -> int:
     parser.add_argument(
         "--shards",
         type=int,
-        default=int(os.environ.get("CORTEXPILOT_CI_UI_FULL_AUDIT_SHARDS", "6")),
+        default=int(os.environ.get("OPENVIBECODING_CI_UI_FULL_AUDIT_SHARDS", "6")),
         help="Total shard count. Default: 6.",
     )
     parser.add_argument(
         "--model",
         default=(
-            os.environ.get("CORTEXPILOT_CI_UI_FULL_AUDIT_MODEL")
-            or os.environ.get("CORTEXPILOT_UI_GEMINI_MODEL")
+            os.environ.get("OPENVIBECODING_CI_UI_FULL_AUDIT_MODEL")
+            or os.environ.get("OPENVIBECODING_UI_GEMINI_MODEL")
             or "gemini-3.0-flash"
         ),
     )
-    parser.add_argument("--gemini-key-env", default=os.environ.get("CORTEXPILOT_UI_GEMINI_KEY_ENV", "GEMINI_API_KEY"))
-    parser.add_argument("--host", default=os.environ.get("CORTEXPILOT_E2E_HOST", "127.0.0.1"))
-    parser.add_argument("--api-port", type=int, default=int(os.environ.get("CORTEXPILOT_UI_FULL_E2E_API_PORT", "19600")))
+    parser.add_argument("--gemini-key-env", default=os.environ.get("OPENVIBECODING_UI_GEMINI_KEY_ENV", "GEMINI_API_KEY"))
+    parser.add_argument("--host", default=os.environ.get("OPENVIBECODING_E2E_HOST", "127.0.0.1"))
+    parser.add_argument("--api-port", type=int, default=int(os.environ.get("OPENVIBECODING_UI_FULL_E2E_API_PORT", "19600")))
     parser.add_argument(
         "--dashboard-port",
         type=int,
-        default=int(os.environ.get("CORTEXPILOT_UI_FULL_E2E_DASHBOARD_PORT", "19700")),
+        default=int(os.environ.get("OPENVIBECODING_UI_FULL_E2E_DASHBOARD_PORT", "19700")),
     )
     parser.add_argument(
         "--reuse-running-services",
@@ -1148,92 +1148,92 @@ def main() -> int:
     parser.add_argument(
         "--shard-timeout-sec",
         type=int,
-        default=int(os.environ.get("CORTEXPILOT_UI_FULL_E2E_PARALLEL_SHARD_TIMEOUT_SEC", "2400")),
+        default=int(os.environ.get("OPENVIBECODING_UI_FULL_E2E_PARALLEL_SHARD_TIMEOUT_SEC", "2400")),
         help="Hard timeout per shard process in seconds. 0 disables timeout.",
     )
     parser.add_argument(
         "--heartbeat-interval-sec",
         type=int,
-        default=int(os.environ.get("CORTEXPILOT_UI_FULL_E2E_PARALLEL_HEARTBEAT_INTERVAL_SEC", "20")),
+        default=int(os.environ.get("OPENVIBECODING_UI_FULL_E2E_PARALLEL_HEARTBEAT_INTERVAL_SEC", "20")),
         help="Heartbeat interval for shard liveness logs.",
     )
     parser.add_argument(
         "--snapshot-tail-lines",
         type=int,
-        default=int(os.environ.get("CORTEXPILOT_UI_FULL_E2E_PARALLEL_SNAPSHOT_TAIL_LINES", "80")),
+        default=int(os.environ.get("OPENVIBECODING_UI_FULL_E2E_PARALLEL_SNAPSHOT_TAIL_LINES", "80")),
         help="How many log tail lines are captured in timeout/interrupt snapshots.",
     )
     parser.add_argument(
         "--audit-max-runtime-sec",
         type=int,
-        default=int(os.environ.get("CORTEXPILOT_UI_FULL_E2E_MAX_RUNTIME_SEC", "0")),
+        default=int(os.environ.get("OPENVIBECODING_UI_FULL_E2E_MAX_RUNTIME_SEC", "0")),
         help="Optional per-shard runtime budget forwarded to ui_full_e2e_gemini_audit.py.",
     )
     parser.add_argument(
         "--headed",
         action="store_true",
-        default=_env_flag("CORTEXPILOT_UI_FULL_E2E_HEADED", False),
+        default=_env_flag("OPENVIBECODING_UI_FULL_E2E_HEADED", False),
         help="Run visible browser (headed). Default is headless.",
     )
     parser.add_argument(
         "--budget-profile",
-        default=os.environ.get("CORTEXPILOT_CI_UI_FULL_AUDIT_BUDGET_PROFILE", "unknown"),
+        default=os.environ.get("OPENVIBECODING_CI_UI_FULL_AUDIT_BUDGET_PROFILE", "unknown"),
         help="Budget profile label used by CI (for example: pr/nightly_full).",
     )
     parser.add_argument(
         "--run-profile",
-        default=os.environ.get("CORTEXPILOT_UI_FULL_E2E_RUN_PROFILE", "default"),
+        default=os.environ.get("OPENVIBECODING_UI_FULL_E2E_RUN_PROFILE", "default"),
         help="Experiment profile label for A/B attribution.",
     )
     parser.add_argument(
         "--run-label",
-        default=os.environ.get("CORTEXPILOT_UI_FULL_E2E_RUN_LABEL", "single"),
+        default=os.environ.get("OPENVIBECODING_UI_FULL_E2E_RUN_LABEL", "single"),
         help="Experiment label for this execution.",
     )
     parser.add_argument(
         "--max-pages",
         type=int,
-        default=int(os.environ.get("CORTEXPILOT_UI_FULL_E2E_MAX_PAGES", "0")),
+        default=int(os.environ.get("OPENVIBECODING_UI_FULL_E2E_MAX_PAGES", "0")),
         help="Forward global route budget; 0 disables cap.",
     )
     parser.add_argument(
         "--max-interactions",
         type=int,
-        default=int(os.environ.get("CORTEXPILOT_UI_FULL_E2E_MAX_INTERACTIONS", "0")),
+        default=int(os.environ.get("OPENVIBECODING_UI_FULL_E2E_MAX_INTERACTIONS", "0")),
         help="Forward global interaction budget to each shard; 0 disables cap.",
     )
     parser.add_argument(
         "--max-buttons-per-page",
         type=int,
-        default=int(os.environ.get("CORTEXPILOT_UI_FULL_E2E_MAX_BUTTONS_PER_PAGE", "120")),
+        default=int(os.environ.get("OPENVIBECODING_UI_FULL_E2E_MAX_BUTTONS_PER_PAGE", "120")),
         help="Forward per-route target cap to each shard.",
     )
     parser.add_argument(
         "--max-duplicate-targets",
         type=int,
-        default=int(os.environ.get("CORTEXPILOT_UI_FULL_E2E_MAX_DUPLICATE_TARGETS", "3")),
+        default=int(os.environ.get("OPENVIBECODING_UI_FULL_E2E_MAX_DUPLICATE_TARGETS", "3")),
         help="Forward per-signature duplicate cap to each shard.",
     )
     parser.add_argument(
         "--route-sampling-mode",
-        default=os.environ.get("CORTEXPILOT_UI_FULL_E2E_ROUTE_SAMPLING_MODE", "off"),
+        default=os.environ.get("OPENVIBECODING_UI_FULL_E2E_ROUTE_SAMPLING_MODE", "off"),
         choices=["off", "stratified"],
         help="Route selection mode: off keeps classic shard slicing, stratified picks prioritized routes first.",
     )
     parser.add_argument(
         "--route-priority-file",
-        default=os.environ.get("CORTEXPILOT_UI_FULL_E2E_ROUTE_PRIORITY_FILE", ""),
+        default=os.environ.get("OPENVIBECODING_UI_FULL_E2E_ROUTE_PRIORITY_FILE", ""),
         help="Optional JSON file providing per-route priority/risk overrides.",
     )
     parser.add_argument(
         "--route-priority-profile",
-        default=os.environ.get("CORTEXPILOT_UI_FULL_E2E_ROUTE_PRIORITY_PROFILE", ""),
+        default=os.environ.get("OPENVIBECODING_UI_FULL_E2E_ROUTE_PRIORITY_PROFILE", ""),
         help="Priority profile label for filtering route-priority-file entries.",
     )
     parser.add_argument(
         "--route-sample-size",
         type=int,
-        default=int(os.environ.get("CORTEXPILOT_UI_FULL_E2E_ROUTE_SAMPLE_SIZE", "0")),
+        default=int(os.environ.get("OPENVIBECODING_UI_FULL_E2E_ROUTE_SAMPLE_SIZE", "0")),
         help="Target selected route count before strict execution; 0 means full catalog.",
     )
     parser.add_argument(
@@ -1244,12 +1244,12 @@ def main() -> int:
     parser.add_argument(
         "--ab-matrix",
         action="store_true",
-        default=_env_flag("CORTEXPILOT_UI_FULL_E2E_AB_MATRIX", False),
+        default=_env_flag("OPENVIBECODING_UI_FULL_E2E_AB_MATRIX", False),
         help="Run A/B experiment matrix and auto-summary (p50/p95/fail_rate ranking).",
     )
     parser.add_argument(
         "--ab-profiles",
-        default=os.environ.get("CORTEXPILOT_UI_FULL_E2E_AB_PROFILES", ""),
+        default=os.environ.get("OPENVIBECODING_UI_FULL_E2E_AB_PROFILES", ""),
         help=(
             "Semicolon-separated profiles: "
             "label=A,profile=baseline,shards=6,max_pages=24,max_interactions=180,max_runtime_sec=1800;"
@@ -1259,7 +1259,7 @@ def main() -> int:
     parser.add_argument(
         "--ab-iterations",
         type=int,
-        default=int(os.environ.get("CORTEXPILOT_UI_FULL_E2E_AB_ITERATIONS", "3")),
+        default=int(os.environ.get("OPENVIBECODING_UI_FULL_E2E_AB_ITERATIONS", "3")),
         help="Run count per A/B profile.",
     )
     parser.add_argument(

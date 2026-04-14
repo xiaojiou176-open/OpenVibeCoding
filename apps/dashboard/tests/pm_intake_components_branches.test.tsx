@@ -168,7 +168,7 @@ describe("pm intake center panel component branches", () => {
       },
       {
         id: "m2",
-        role: "CortexPilot Command Tower",
+        role: "OpenVibeCoding Command Tower",
         text: "second",
         createdAt: "2026-03-01T10:10:00.000Z",
         kind: "progress",

@@ -7,7 +7,7 @@ source "$ROOT_DIR/scripts/lib/env.sh"
 
 PYTHON_BIN="${PYTHON_BIN:-}"
 if [[ -z "$PYTHON_BIN" ]]; then
-  PYTHON_BIN="${CORTEXPILOT_PYTHON:-}"
+  PYTHON_BIN="${OPENVIBECODING_PYTHON:-}"
 fi
 if [[ -z "$PYTHON_BIN" ]]; then
   echo "❌ [mutation-gate] missing managed Python toolchain (run ./scripts/bootstrap.sh)" >&2
@@ -15,9 +15,9 @@ if [[ -z "$PYTHON_BIN" ]]; then
 fi
 PYTHON_BIN_ESCAPED="$(printf '%q' "$PYTHON_BIN")"
 
-PROFILE_MODE="${CORTEXPILOT_MUTATION_PROFILE_MODE:-}"
+PROFILE_MODE="${OPENVIBECODING_MUTATION_PROFILE_MODE:-}"
 if [[ -z "$PROFILE_MODE" ]]; then
-  if [[ -n "${CORTEXPILOT_MUTATION_TARGET_FILE+x}" || -n "${CORTEXPILOT_MUTATION_CONFIG_FILE+x}" || -n "${CORTEXPILOT_MUTATION_TEST_CMD+x}" ]]; then
+  if [[ -n "${OPENVIBECODING_MUTATION_TARGET_FILE+x}" || -n "${OPENVIBECODING_MUTATION_CONFIG_FILE+x}" || -n "${OPENVIBECODING_MUTATION_TEST_CMD+x}" ]]; then
     PROFILE_MODE="single"
   else
     PROFILE_MODE="all"
@@ -36,13 +36,13 @@ if [[ "$PROFILE_MODE" == "all" ]]; then
     local min_kill_rate="$6"
     local test_cmd="$7"
     echo "🧪 [mutation-gate] profile=${name} target=${target}"
-    if ! CORTEXPILOT_MUTATION_PROFILE_MODE="single" \
-      CORTEXPILOT_MUTATION_TARGET_FILE="$target" \
-      CORTEXPILOT_MUTATION_CONFIG_FILE="$config" \
-      CORTEXPILOT_MUTATION_REPORT_PATH="$report" \
-      CORTEXPILOT_MUTATION_MIN_MUTANTS="$min_mutants" \
-      CORTEXPILOT_MUTATION_MIN_KILL_RATE="$min_kill_rate" \
-      CORTEXPILOT_MUTATION_TEST_CMD="$test_cmd" \
+    if ! OPENVIBECODING_MUTATION_PROFILE_MODE="single" \
+      OPENVIBECODING_MUTATION_TARGET_FILE="$target" \
+      OPENVIBECODING_MUTATION_CONFIG_FILE="$config" \
+      OPENVIBECODING_MUTATION_REPORT_PATH="$report" \
+      OPENVIBECODING_MUTATION_MIN_MUTANTS="$min_mutants" \
+      OPENVIBECODING_MUTATION_MIN_KILL_RATE="$min_kill_rate" \
+      OPENVIBECODING_MUTATION_TEST_CMD="$test_cmd" \
       bash "$SCRIPT_SELF"; then
       echo "❌ [mutation-gate] profile failed: ${name}" >&2
       EXIT_CODE=1
@@ -51,38 +51,38 @@ if [[ "$PROFILE_MODE" == "all" ]]; then
 
   run_profile \
     "tests_gate" \
-    "$ROOT_DIR/apps/orchestrator/src/cortexpilot_orch/gates/tests_gate.py" \
+    "$ROOT_DIR/apps/orchestrator/src/openvibecoding_orch/gates/tests_gate.py" \
     "$ROOT_DIR/configs/mutation/tests_gate_mutants.json" \
     "$ROOT_DIR/.runtime-cache/test_output/mutation/mutation_gate_report.json" \
-    "${CORTEXPILOT_MUTATION_MIN_MUTANTS:-20}" \
-    "${CORTEXPILOT_MUTATION_MIN_KILL_RATE:-0.75}" \
+    "${OPENVIBECODING_MUTATION_MIN_MUTANTS:-20}" \
+    "${OPENVIBECODING_MUTATION_MIN_KILL_RATE:-0.75}" \
     "$PYTHON_BIN_ESCAPED -m pytest apps/orchestrator/tests/test_tests_gate_extended.py apps/orchestrator/tests/test_high_order_testing_pilot.py -q"
 
   run_profile \
     "routes_runs_write_paths" \
-    "$ROOT_DIR/apps/orchestrator/src/cortexpilot_orch/api/routes_runs.py" \
+    "$ROOT_DIR/apps/orchestrator/src/openvibecoding_orch/api/routes_runs.py" \
     "$ROOT_DIR/configs/mutation/routes_runs_write_path_mutants.json" \
     "$ROOT_DIR/.runtime-cache/test_output/mutation/mutation_gate_routes_runs_report.json" \
-    "${CORTEXPILOT_MUTATION_ROUTES_RUNS_MIN_MUTANTS:-4}" \
-    "${CORTEXPILOT_MUTATION_ROUTES_RUNS_MIN_KILL_RATE:-0.75}" \
-    "$PYTHON_BIN_ESCAPED -m pytest apps/orchestrator/tests/self_heal/test_cov_apps_orchestrator_src_cortexpilot_orch_api_routes_runs.py apps/orchestrator/tests/counterfactual/test_api_routes_runs_counterfactual.py apps/orchestrator/tests/test_api_main.py::test_api_runs_role_header_requires_trusted_auth_context apps/orchestrator/tests/test_api_main.py::test_api_runs_mutation_routes_require_role -q"
+    "${OPENVIBECODING_MUTATION_ROUTES_RUNS_MIN_MUTANTS:-4}" \
+    "${OPENVIBECODING_MUTATION_ROUTES_RUNS_MIN_KILL_RATE:-0.75}" \
+    "$PYTHON_BIN_ESCAPED -m pytest apps/orchestrator/tests/self_heal/test_cov_apps_orchestrator_src_openvibecoding_orch_api_routes_runs.py apps/orchestrator/tests/counterfactual/test_api_routes_runs_counterfactual.py apps/orchestrator/tests/test_api_main.py::test_api_runs_role_header_requires_trusted_auth_context apps/orchestrator/tests/test_api_main.py::test_api_runs_mutation_routes_require_role -q"
 
   run_profile \
     "routes_admin_write_paths" \
-    "$ROOT_DIR/apps/orchestrator/src/cortexpilot_orch/api/routes_admin.py" \
+    "$ROOT_DIR/apps/orchestrator/src/openvibecoding_orch/api/routes_admin.py" \
     "$ROOT_DIR/configs/mutation/routes_admin_write_path_mutants.json" \
     "$ROOT_DIR/.runtime-cache/test_output/mutation/mutation_gate_routes_admin_report.json" \
-    "${CORTEXPILOT_MUTATION_ROUTES_ADMIN_MIN_MUTANTS:-3}" \
-    "${CORTEXPILOT_MUTATION_ROUTES_ADMIN_MIN_KILL_RATE:-0.75}" \
-    "$PYTHON_BIN_ESCAPED -m pytest apps/orchestrator/tests/self_heal/test_cov_apps_orchestrator_src_cortexpilot_orch_api_routes_admin.py apps/orchestrator/tests/test_api_main.py::test_api_god_mode_approve_requires_role_and_pending -q"
+    "${OPENVIBECODING_MUTATION_ROUTES_ADMIN_MIN_MUTANTS:-3}" \
+    "${OPENVIBECODING_MUTATION_ROUTES_ADMIN_MIN_KILL_RATE:-0.75}" \
+    "$PYTHON_BIN_ESCAPED -m pytest apps/orchestrator/tests/self_heal/test_cov_apps_orchestrator_src_openvibecoding_orch_api_routes_admin.py apps/orchestrator/tests/test_api_main.py::test_api_god_mode_approve_requires_role_and_pending -q"
 
   run_profile \
     "routes_intake_write_paths" \
-    "$ROOT_DIR/apps/orchestrator/src/cortexpilot_orch/api/routes_intake.py" \
+    "$ROOT_DIR/apps/orchestrator/src/openvibecoding_orch/api/routes_intake.py" \
     "$ROOT_DIR/configs/mutation/routes_intake_write_path_mutants.json" \
     "$ROOT_DIR/.runtime-cache/test_output/mutation/mutation_gate_routes_intake_report.json" \
-    "${CORTEXPILOT_MUTATION_ROUTES_INTAKE_MIN_MUTANTS:-3}" \
-    "${CORTEXPILOT_MUTATION_ROUTES_INTAKE_MIN_KILL_RATE:-0.66}" \
+    "${OPENVIBECODING_MUTATION_ROUTES_INTAKE_MIN_MUTANTS:-3}" \
+    "${OPENVIBECODING_MUTATION_ROUTES_INTAKE_MIN_KILL_RATE:-0.66}" \
     "$PYTHON_BIN_ESCAPED -m pytest apps/orchestrator/tests/test_new_flow_modules.py -q"
 
   if [[ "$EXIT_CODE" -ne 0 ]]; then
@@ -92,13 +92,13 @@ if [[ "$PROFILE_MODE" == "all" ]]; then
   exit 0
 fi
 
-TARGET_FILE="${CORTEXPILOT_MUTATION_TARGET_FILE:-$ROOT_DIR/apps/orchestrator/src/cortexpilot_orch/gates/tests_gate.py}"
-CONFIG_FILE="${CORTEXPILOT_MUTATION_CONFIG_FILE:-$ROOT_DIR/configs/mutation/tests_gate_mutants.json}"
-REPORT_PATH="${CORTEXPILOT_MUTATION_REPORT_PATH:-$ROOT_DIR/.runtime-cache/test_output/mutation/mutation_gate_report.json}"
-MIN_MUTANTS="${CORTEXPILOT_MUTATION_MIN_MUTANTS:-20}"
-MIN_KILL_RATE="${CORTEXPILOT_MUTATION_MIN_KILL_RATE:-0.75}"
+TARGET_FILE="${OPENVIBECODING_MUTATION_TARGET_FILE:-$ROOT_DIR/apps/orchestrator/src/openvibecoding_orch/gates/tests_gate.py}"
+CONFIG_FILE="${OPENVIBECODING_MUTATION_CONFIG_FILE:-$ROOT_DIR/configs/mutation/tests_gate_mutants.json}"
+REPORT_PATH="${OPENVIBECODING_MUTATION_REPORT_PATH:-$ROOT_DIR/.runtime-cache/test_output/mutation/mutation_gate_report.json}"
+MIN_MUTANTS="${OPENVIBECODING_MUTATION_MIN_MUTANTS:-20}"
+MIN_KILL_RATE="${OPENVIBECODING_MUTATION_MIN_KILL_RATE:-0.75}"
 DEFAULT_TEST_CMD="$PYTHON_BIN_ESCAPED -m pytest apps/orchestrator/tests/test_tests_gate_extended.py apps/orchestrator/tests/test_high_order_testing_pilot.py -q"
-TEST_CMD="${CORTEXPILOT_MUTATION_TEST_CMD:-$DEFAULT_TEST_CMD}"
+TEST_CMD="${OPENVIBECODING_MUTATION_TEST_CMD:-$DEFAULT_TEST_CMD}"
 
 if [[ ! -f "$TARGET_FILE" ]]; then
   echo "❌ [mutation-gate] target file missing: $TARGET_FILE" >&2
@@ -116,7 +116,7 @@ restore_original() {
   fi
 }
 
-BACKUP_FILE="$(mktemp "${TMPDIR:-/tmp}/cortexpilot-mutation-gate.XXXXXX")"
+BACKUP_FILE="$(mktemp "${TMPDIR:-/tmp}/openvibecoding-mutation-gate.XXXXXX")"
 cp "$TARGET_FILE" "$BACKUP_FILE"
 trap 'restore_original; rm -f "$BACKUP_FILE"' EXIT
 
@@ -149,9 +149,9 @@ min_kill_rate = float(sys.argv[6])
 test_cmd = str(os.environ.get("MUTATION_TEST_CMD", "")).strip()
 
 if min_mutants < 1:
-    raise SystemExit("❌ [mutation-gate] invalid CORTEXPILOT_MUTATION_MIN_MUTANTS (must be >= 1)")
+    raise SystemExit("❌ [mutation-gate] invalid OPENVIBECODING_MUTATION_MIN_MUTANTS (must be >= 1)")
 if min_kill_rate <= 0 or min_kill_rate > 1:
-    raise SystemExit("❌ [mutation-gate] invalid CORTEXPILOT_MUTATION_MIN_KILL_RATE (must be in (0, 1])")
+    raise SystemExit("❌ [mutation-gate] invalid OPENVIBECODING_MUTATION_MIN_KILL_RATE (must be in (0, 1])")
 if not test_cmd:
     raise SystemExit("❌ [mutation-gate] MUTATION_TEST_CMD is empty")
 

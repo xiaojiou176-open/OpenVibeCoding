@@ -3,13 +3,13 @@ import logging
 from pathlib import Path
 from types import SimpleNamespace
 
-from cortexpilot_orch.observability import logger as logger_module
+from openvibecoding_orch.observability import logger as logger_module
 
 
 def test_json_line_formatter_includes_request_id_from_meta() -> None:
     formatter = logger_module.JsonLineFormatter()
     record = logging.LogRecord(
-        name="cortexpilot",
+        name="openvibecoding",
         level=logging.INFO,
         pathname=__file__,
         lineno=1,
@@ -30,7 +30,7 @@ def test_json_line_formatter_includes_request_id_from_meta() -> None:
     assert payload["meta"]["x"] == 1
     assert payload["surface"] == "backend"
     assert payload["domain"] == "api"
-    assert payload["service"] == "cortexpilot-orchestrator"
+    assert payload["service"] == "openvibecoding-orchestrator"
     assert payload["lane"] == "access"
     assert payload["correlation_kind"] == "run"
     assert payload["redaction_version"] == "redaction.v1"
@@ -39,7 +39,7 @@ def test_json_line_formatter_includes_request_id_from_meta() -> None:
 def test_json_line_formatter_prefers_explicit_request_id() -> None:
     formatter = logger_module.JsonLineFormatter()
     record = logging.LogRecord(
-        name="cortexpilot",
+        name="openvibecoding",
         level=logging.INFO,
         pathname=__file__,
         lineno=1,
@@ -58,7 +58,7 @@ def test_json_line_formatter_prefers_explicit_request_id() -> None:
 
 
 def test_resolve_log_level_defaults_to_debug(monkeypatch) -> None:
-    monkeypatch.delenv("CORTEXPILOT_LOG_LEVEL", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_LOG_LEVEL", raising=False)
     level = logger_module._resolve_log_level()
     assert level == logging.DEBUG
 
@@ -66,7 +66,7 @@ def test_resolve_log_level_defaults_to_debug(monkeypatch) -> None:
 def test_json_line_formatter_handles_non_dict_meta() -> None:
     formatter = logger_module.JsonLineFormatter()
     record = logging.LogRecord(
-        name="cortexpilot",
+        name="openvibecoding",
         level=logging.INFO,
         pathname=__file__,
         lineno=1,
@@ -108,21 +108,21 @@ def test_sanitize_payload_redacts_sensitive_keys_and_values() -> None:
 
 def test_level_and_access_filters_cover_accept_and_reject_paths() -> None:
     level_filter = logger_module._LevelAtLeastFilter(logging.WARNING)
-    low_record = logging.LogRecord("cortexpilot", logging.INFO, __file__, 1, "msg", (), None)
-    high_record = logging.LogRecord("cortexpilot", logging.ERROR, __file__, 1, "msg", (), None)
+    low_record = logging.LogRecord("openvibecoding", logging.INFO, __file__, 1, "msg", (), None)
+    high_record = logging.LogRecord("openvibecoding", logging.ERROR, __file__, 1, "msg", (), None)
     assert level_filter.filter(low_record) is False
     assert level_filter.filter(high_record) is True
 
     access_filter = logger_module._AccessEventFilter()
-    api_record = logging.LogRecord("cortexpilot", logging.INFO, __file__, 1, "msg", (), None)
+    api_record = logging.LogRecord("openvibecoding", logging.INFO, __file__, 1, "msg", (), None)
     api_record.component = "api"
     assert access_filter.filter(api_record) is True
 
-    http_event = logging.LogRecord("cortexpilot", logging.INFO, __file__, 1, "msg", (), None)
+    http_event = logging.LogRecord("openvibecoding", logging.INFO, __file__, 1, "msg", (), None)
     http_event.event = "HTTP_REQUEST"
     assert access_filter.filter(http_event) is True
 
-    other = logging.LogRecord("cortexpilot", logging.INFO, __file__, 1, "msg", (), None)
+    other = logging.LogRecord("openvibecoding", logging.INFO, __file__, 1, "msg", (), None)
     other.component = "worker"
     other.event = "RUN"
     assert access_filter.filter(other) is False
@@ -130,19 +130,19 @@ def test_level_and_access_filters_cover_accept_and_reject_paths() -> None:
 
 def test_gzip_rotating_file_handler_compresses_rotated_files(monkeypatch, tmp_path: Path) -> None:
     monkeypatch.setattr(logger_module.RotatingFileHandler, "doRollover", lambda self: None)
-    log_path = tmp_path / "cortexpilot.log"
-    rotated = tmp_path / "cortexpilot.log.1"
+    log_path = tmp_path / "openvibecoding.log"
+    rotated = tmp_path / "openvibecoding.log.1"
     rotated.write_text("old-log", encoding="utf-8")
 
     handler = logger_module._GzipRotatingFileHandler(log_path, maxBytes=1, backupCount=1, encoding="utf-8")
     handler.doRollover()
 
     assert rotated.exists() is False
-    assert (tmp_path / "cortexpilot.log.1.gz").exists() is True
+    assert (tmp_path / "openvibecoding.log.1.gz").exists() is True
 
 
 def test_get_logger_initializes_handlers_once(monkeypatch, tmp_path: Path) -> None:
-    logger = logging.getLogger("cortexpilot")
+    logger = logging.getLogger("openvibecoding")
     for handler in list(logger.handlers):
         logger.removeHandler(handler)
 
@@ -207,7 +207,7 @@ def test_log_event_sanitizes_metadata_and_uses_level_fallback(monkeypatch) -> No
 
 def test_json_line_formatter_rejects_invalid_surface() -> None:
     formatter = logger_module.JsonLineFormatter()
-    record = logging.LogRecord("cortexpilot", logging.INFO, __file__, 1, "evt", (), None)
+    record = logging.LogRecord("openvibecoding", logging.INFO, __file__, 1, "evt", (), None)
     record.component = "api"
     record.event = "TEST_EVENT"
     record.surface = "frontend"
@@ -235,16 +235,16 @@ def test_resolve_logs_root_and_targets(monkeypatch, tmp_path: Path) -> None:
     targets = logger_module._build_log_targets()
 
     assert resolved == (tmp_path / "logs").resolve()
-    assert targets["runtime"].name == "cortexpilot-runtime.jsonl"
-    assert targets["error"].name == "cortexpilot-error.jsonl"
-    assert targets["access"].name == "cortexpilot-access.jsonl"
-    assert targets["e2e"].name == "cortexpilot-e2e.jsonl"
+    assert targets["runtime"].name == "openvibecoding-runtime.jsonl"
+    assert targets["error"].name == "openvibecoding-error.jsonl"
+    assert targets["access"].name == "openvibecoding-access.jsonl"
+    assert targets["e2e"].name == "openvibecoding-e2e.jsonl"
 
 
 def test_gzip_rotating_file_handler_skips_already_compressed(monkeypatch, tmp_path: Path) -> None:
     monkeypatch.setattr(logger_module.RotatingFileHandler, "doRollover", lambda self: None)
-    log_path = tmp_path / "cortexpilot.log"
-    compressed = tmp_path / "cortexpilot.log.1.gz"
+    log_path = tmp_path / "openvibecoding.log"
+    compressed = tmp_path / "openvibecoding.log.1.gz"
     compressed.write_bytes(b"compressed")
 
     handler = logger_module._GzipRotatingFileHandler(log_path, maxBytes=1, backupCount=1, encoding="utf-8")

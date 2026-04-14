@@ -10,7 +10,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_SOURCE_MANIFEST = (
-    ROOT / ".runtime-cache" / "cortexpilot" / "reports" / "ci" / "current_run" / "source_manifest.json"
+    ROOT / ".runtime-cache" / "openvibecoding" / "reports" / "ci" / "current_run" / "source_manifest.json"
 )
 
 
@@ -134,7 +134,7 @@ def current_truth_authority(manifest: dict[str, Any]) -> dict[str, Any]:
 def load_source_manifest(path: str | Path | None = None) -> dict[str, Any]:
     target = resolve_path(path or DEFAULT_SOURCE_MANIFEST)
     payload = load_json(target, label="ci current-run source manifest")
-    if payload.get("report_type") != "cortexpilot_ci_current_run_source_manifest":
+    if payload.get("report_type") != "openvibecoding_ci_current_run_source_manifest":
         raise ValueError(f"ci current-run source manifest has unexpected report_type: {target}")
     return payload
 

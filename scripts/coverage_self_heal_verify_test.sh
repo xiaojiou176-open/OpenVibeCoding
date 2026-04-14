@@ -34,23 +34,23 @@ resolve_python() {
   local common_dir
   local main_root
 
-  if [ -n "${CORTEXPILOT_PYTHON:-}" ]; then
-    candidate="$CORTEXPILOT_PYTHON"
+  if [ -n "${OPENVIBECODING_PYTHON:-}" ]; then
+    candidate="$OPENVIBECODING_PYTHON"
     if [ -x "$candidate" ]; then
       printf '%s\n' "$candidate"
       return 0
     fi
   fi
 
-  if [ -n "${CORTEXPILOT_REPO_ROOT:-}" ]; then
-    candidate="$(cortexpilot_toolchain_cache_root "$CORTEXPILOT_REPO_ROOT")/python/current/bin/python"
+  if [ -n "${OPENVIBECODING_REPO_ROOT:-}" ]; then
+    candidate="$(openvibecoding_toolchain_cache_root "$OPENVIBECODING_REPO_ROOT")/python/current/bin/python"
     if [ -x "$candidate" ]; then
       printf '%s\n' "$candidate"
       return 0
     fi
   fi
 
-  candidate="$(cortexpilot_toolchain_cache_root "$ROOT_DIR")/python/current/bin/python"
+  candidate="$(openvibecoding_toolchain_cache_root "$ROOT_DIR")/python/current/bin/python"
   if [ -x "$candidate" ]; then
     printf '%s\n' "$candidate"
     return 0
@@ -59,7 +59,7 @@ resolve_python() {
   common_dir="$(git -C "$ROOT_DIR" rev-parse --path-format=absolute --git-common-dir 2>/dev/null || true)"
   if [ -n "$common_dir" ]; then
     main_root="$(cd "$common_dir/.." && pwd)"
-    candidate="$(cortexpilot_toolchain_cache_root "$main_root")/python/current/bin/python"
+    candidate="$(openvibecoding_toolchain_cache_root "$main_root")/python/current/bin/python"
     if [ -x "$candidate" ]; then
       printf '%s\n' "$candidate"
       return 0
@@ -80,7 +80,7 @@ resolve_python() {
 }
 
 PYTHON_BIN="$(resolve_python)" || {
-  echo "missing managed python interpreter (set CORTEXPILOT_PYTHON or run ./scripts/bootstrap.sh)" >&2
+  echo "missing managed python interpreter (set OPENVIBECODING_PYTHON or run ./scripts/bootstrap.sh)" >&2
   exit 1
 }
 

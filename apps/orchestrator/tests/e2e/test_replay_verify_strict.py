@@ -2,9 +2,9 @@ import json
 from pathlib import Path
 
 import pytest
-from cortexpilot_orch.contract.validator import ContractValidator
-from cortexpilot_orch.replay.replayer import ReplayRunner, _collect_evidence_hashes
-from cortexpilot_orch.store.run_store import RunStore
+from openvibecoding_orch.contract.validator import ContractValidator
+from openvibecoding_orch.replay.replayer import ReplayRunner, _collect_evidence_hashes
+from openvibecoding_orch.store.run_store import RunStore
 import hashlib
 
 pytestmark = pytest.mark.e2e

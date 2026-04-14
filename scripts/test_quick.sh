@@ -5,7 +5,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 source "$ROOT_DIR/scripts/lib/env.sh"
 source "$ROOT_DIR/scripts/lib/toolchain_env.sh"
-PYTHON_BIN="${CORTEXPILOT_PYTHON:-$(cortexpilot_python_bin "$ROOT_DIR" || true)}"
+PYTHON_BIN="${OPENVIBECODING_PYTHON:-$(openvibecoding_python_bin "$ROOT_DIR" || true)}"
 export PYTHONDONTWRITEBYTECODE=1
 
 is_truthy() {
@@ -15,11 +15,11 @@ is_truthy() {
   [[ "${normalized}" == "1" || "${normalized}" == "true" || "${normalized}" == "yes" || "${normalized}" == "on" ]]
 }
 
-if ! is_truthy "${CORTEXPILOT_CI_CONTAINER:-0}" && ! is_truthy "${CORTEXPILOT_HOST_COMPAT:-0}"; then
+if ! is_truthy "${OPENVIBECODING_CI_CONTAINER:-0}" && ! is_truthy "${OPENVIBECODING_HOST_COMPAT:-0}"; then
   exec bash "$ROOT_DIR/scripts/docker_ci.sh" test-quick "$@"
 fi
 
-TMP_RUNTIME_DIR="$ROOT_DIR/.runtime-cache/cortexpilot/temp"
+TMP_RUNTIME_DIR="$ROOT_DIR/.runtime-cache/openvibecoding/temp"
 mkdir -p "$TMP_RUNTIME_DIR"
 export TMPDIR="$TMP_RUNTIME_DIR"
 
@@ -43,7 +43,7 @@ DESK_CHANGED="$WORK_DIR/desktop_changed.txt"
 SUMMARY_FILE="$WORK_DIR/summary.txt"
 ORCH_MATCH_TRACE="$WORK_DIR/orchestrator_match_trace.txt"
 
-BASE_REF="${CORTEXPILOT_TEST_QUICK_BASE:-}"
+BASE_REF="${OPENVIBECODING_TEST_QUICK_BASE:-}"
 DISABLE_RELATED_MODE="0"
 
 while [[ $# -gt 0 ]]; do
@@ -149,7 +149,7 @@ map_orchestrator_source_to_tests() {
     done < <(rg -l -F "$module_import" apps/orchestrator/tests -g "*.py")
   fi
 
-  if [[ -n "$module_dir" && "$module_dir" != "." && "$module_dir" != "cortexpilot_orch" ]]; then
+  if [[ -n "$module_dir" && "$module_dir" != "." && "$module_dir" != "openvibecoding_orch" ]]; then
     while IFS= read -r test_path; do
       append_line_if_exists "$ORCH_TARGETS" "$test_path"
     done < <(rg --files apps/orchestrator/tests -g "test*${module_dir}*${module_name}*.py")
@@ -208,7 +208,7 @@ run_pytest_with_parallel_fallback() {
   local target_file="$1"
   local log_file="$2"
   local parallel_args
-  parallel_args="${CORTEXPILOT_PYTEST_PARALLEL_ARGS:--n auto --dist loadscope}"
+  parallel_args="${OPENVIBECODING_PYTEST_PARALLEL_ARGS:--n auto --dist loadscope}"
   local targets=()
   while IFS= read -r line; do
     [[ -n "$line" ]] && targets+=("$line")
@@ -368,7 +368,7 @@ log "starting local quick checks (coverage disabled by default)"
 if [[ -z "$PYTHON_BIN" ]] || [[ ! -x "$PYTHON_BIN" ]]; then
   log "managed Python toolchain missing; bootstrapping before continuing"
   bash "$ROOT_DIR/scripts/bootstrap.sh" python
-  PYTHON_BIN="${CORTEXPILOT_PYTHON:-$(cortexpilot_python_bin "$ROOT_DIR" || true)}"
+  PYTHON_BIN="${OPENVIBECODING_PYTHON:-$(openvibecoding_python_bin "$ROOT_DIR" || true)}"
   if [[ -z "$PYTHON_BIN" ]] || [[ ! -x "$PYTHON_BIN" ]]; then
     log "managed Python toolchain is still missing after bootstrap"
     exit 1

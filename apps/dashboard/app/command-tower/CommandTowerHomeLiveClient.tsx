@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useMemo } from "react";
-import { getUiCopy, type UiLocale } from "@cortexpilot/frontend-shared/uiCopy";
+import { getUiCopy, type UiLocale } from "@openvibecoding/frontend-shared/uiCopy";
 
 import type { CommandTowerOverviewPayload, PmSessionSummary } from "../../lib/types";
 

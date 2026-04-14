@@ -14,13 +14,13 @@
     "moduleResolution": "bundler",
     "baseUrl": ".",
     "paths": {
-      "@cortexpilot/frontend-shared/uiCopy": [
+      "@openvibecoding/frontend-shared/uiCopy": [
         "../../packages/frontend-shared/uiCopy.ts"
       ],
-      "@cortexpilot/frontend-shared/uiLocale": [
+      "@openvibecoding/frontend-shared/uiLocale": [
         "../../packages/frontend-shared/uiLocale.ts"
       ],
-      "@cortexpilot/frontend-shared/types": [
+      "@openvibecoding/frontend-shared/types": [
         "../../packages/frontend-shared/types.ts"
       ]
     },

@@ -8,7 +8,7 @@ from types import SimpleNamespace
 import pytest
 from fastapi import HTTPException
 
-from cortexpilot_orch.api.main_runs_handlers import build_runs_handlers
+from openvibecoding_orch.api.main_runs_handlers import build_runs_handlers
 
 
 def _write_run(run_dir: Path, manifest: dict, events: list[dict]) -> None:

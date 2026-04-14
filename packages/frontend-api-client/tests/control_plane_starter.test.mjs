@@ -112,8 +112,8 @@ test("control plane starter forwards preview/apply role config mutations", async
     calls[1].url,
     "http://127.0.0.1:10000/api/agents/roles/WORKER/config/apply",
   );
-  assert.equal(calls[0].init.headers["x-cortexpilot-role"], "TECH_LEAD");
-  assert.equal(calls[1].init.headers["x-cortexpilot-role"], "TECH_LEAD");
+  assert.equal(calls[0].init.headers["x-openvibecoding-role"], "TECH_LEAD");
+  assert.equal(calls[1].init.headers["x-openvibecoding-role"], "TECH_LEAD");
   assert.deepEqual(preview, {
     ok: true,
     url: "http://127.0.0.1:10000/api/agents/roles/WORKER/config/preview",
@@ -147,8 +147,8 @@ test("control plane starter forwards guarded queue helpers", async () => {
     calls[1].url,
     "http://127.0.0.1:10000/api/queue/queue%2F1/cancel",
   );
-  assert.equal(calls[0].init.headers["x-cortexpilot-role"], "TECH_LEAD");
-  assert.equal(calls[1].init.headers["x-cortexpilot-role"], "TECH_LEAD");
+  assert.equal(calls[0].init.headers["x-openvibecoding-role"], "TECH_LEAD");
+  assert.equal(calls[1].init.headers["x-openvibecoding-role"], "TECH_LEAD");
   assert.deepEqual(preview, {
     ok: true,
     url: "http://127.0.0.1:10000/api/queue/from-run/run%2F1/preview",

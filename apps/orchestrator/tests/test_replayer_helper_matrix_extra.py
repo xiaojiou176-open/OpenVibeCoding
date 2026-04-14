@@ -3,7 +3,7 @@ import json
 import subprocess
 from pathlib import Path
 
-from cortexpilot_orch.replay import replayer
+from openvibecoding_orch.replay import replayer
 
 
 def _build_valid_hashchain(events: list[str]) -> list[str]:
@@ -32,12 +32,12 @@ def test_verify_contract_signature_matrix(tmp_path: Path, monkeypatch) -> None:
     contract_path.write_text("{}", encoding="utf-8")
     sig_path = tmp_path / "contract.sig"
 
-    monkeypatch.delenv("CORTEXPILOT_CONTRACT_HMAC_KEY", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_CONTRACT_HMAC_KEY", raising=False)
     ok, reason = replayer._verify_contract_signature(contract_path, sig_path)
     assert ok is False
     assert reason == "hmac key missing"
 
-    monkeypatch.setenv("CORTEXPILOT_CONTRACT_HMAC_KEY", "secret")
+    monkeypatch.setenv("OPENVIBECODING_CONTRACT_HMAC_KEY", "secret")
     ok, reason = replayer._verify_contract_signature(contract_path, sig_path)
     assert ok is False
     assert reason.startswith("signature read failed:")

@@ -1,8 +1,8 @@
 {
   "version": "v1",
   "product_identity": {
-    "title": "CortexPilot L0 Command Tower",
-    "one_sentence": "CortexPilot is the command tower for AI engineering: it operates as an L0 control plane that plans, delegates, tracks, resumes, and proves long-running engineering work across Codex and Claude Code.",
+    "title": "OpenVibeCoding L0 Command Tower",
+    "one_sentence": "OpenVibeCoding is the command tower for AI engineering: it operates as an L0 control plane that plans, delegates, tracks, resumes, and proves long-running engineering work across Codex and Claude Code.",
     "primary_execution_bases": [
       "Codex",
       "Claude Code"

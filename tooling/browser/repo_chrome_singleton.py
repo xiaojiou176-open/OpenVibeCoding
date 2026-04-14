@@ -17,7 +17,7 @@ from pathlib import Path
 from typing import Any
 
 
-DEFAULT_PROFILE_DISPLAY_NAME = "cortexpilot"
+DEFAULT_PROFILE_DISPLAY_NAME = "openvibecoding"
 DEFAULT_PROFILE_DIRECTORY = "Profile 1"
 DEFAULT_CDP_HOST = "127.0.0.1"
 DEFAULT_CDP_PORT = 9341
@@ -73,16 +73,16 @@ def _truthy_env(*names: str) -> bool:
 
 
 def _machine_cache_root() -> Path:
-    explicit = _first_non_empty(os.getenv("CORTEXPILOT_MACHINE_CACHE_ROOT"))
+    explicit = _first_non_empty(os.getenv("OPENVIBECODING_MACHINE_CACHE_ROOT"))
     if explicit:
         return Path(explicit).expanduser()
     runner_temp = _first_non_empty(os.getenv("RUNNER_TEMP"))
     if runner_temp and _truthy_env("CI", "GITHUB_ACTIONS"):
-        return Path(runner_temp) / "cortexpilot-machine-cache"
+        return Path(runner_temp) / "openvibecoding-machine-cache"
     xdg_cache_home = _first_non_empty(os.getenv("XDG_CACHE_HOME"))
     if xdg_cache_home:
-        return Path(xdg_cache_home) / "cortexpilot"
-    return Path.home() / ".cache" / "cortexpilot"
+        return Path(xdg_cache_home) / "openvibecoding"
+    return Path.home() / ".cache" / "openvibecoding"
 
 
 def default_repo_browser_root() -> Path:
@@ -98,11 +98,11 @@ def default_source_chrome_root() -> Path:
 
 
 def default_cdp_host() -> str:
-    return _first_non_empty(os.getenv("CORTEXPILOT_BROWSER_CDP_HOST"), DEFAULT_CDP_HOST)
+    return _first_non_empty(os.getenv("OPENVIBECODING_BROWSER_CDP_HOST"), DEFAULT_CDP_HOST)
 
 
 def default_cdp_port() -> int:
-    raw = _first_non_empty(os.getenv("CORTEXPILOT_BROWSER_CDP_PORT"), str(DEFAULT_CDP_PORT))
+    raw = _first_non_empty(os.getenv("OPENVIBECODING_BROWSER_CDP_PORT"), str(DEFAULT_CDP_PORT))
     try:
         value = int(raw)
     except ValueError:

@@ -3,7 +3,7 @@ import threading
 import time
 from pathlib import Path
 
-from cortexpilot_orch import cli_runtime_helpers
+from openvibecoding_orch import cli_runtime_helpers
 
 
 class _Console:

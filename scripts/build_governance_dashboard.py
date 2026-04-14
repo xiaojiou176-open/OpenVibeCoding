@@ -399,7 +399,7 @@ def main() -> int:
     pass_ratio = ((required_total - required_failed) / required_total) if required_total > 0 else None
 
     payload = {
-        "report_type": "cortexpilot_governance_dashboard",
+        "report_type": "openvibecoding_governance_dashboard",
         "schema_version": 1,
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "run_id": summary.get("run_id"),

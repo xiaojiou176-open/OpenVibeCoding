@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useMemo, type Dispatch, type ReactNode, type SetStateAction } from "react";
-import { DEFAULT_UI_LOCALE, getUiCopy, type UiCopy, type UiLocale } from "@cortexpilot/frontend-shared/uiCopy";
+import { DEFAULT_UI_LOCALE, getUiCopy, type UiCopy, type UiLocale } from "@openvibecoding/frontend-shared/uiCopy";
 
 type DashboardLocaleContextValue = {
   locale: UiLocale;

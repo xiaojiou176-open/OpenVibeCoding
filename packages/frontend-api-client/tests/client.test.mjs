@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { FRONTEND_API_CONTRACT } from "@cortexpilot/frontend-api-contract";
+import { FRONTEND_API_CONTRACT } from "@openvibecoding/frontend-api-contract";
 import { createDashboardApiClient, createDesktopApiClient } from "../index.js";
 
 function createJsonResponse(body) {
@@ -226,8 +226,8 @@ test("dashboard client uses contract-backed role-config paths", async () => {
     calls[2].url,
     `http://127.0.0.1:10000${FRONTEND_API_CONTRACT.paths.roleConfigApply.replace("{role}", "worker")}`,
   );
-  assert.equal(calls[1].init.headers["x-cortexpilot-role"], "TECH_LEAD");
-  assert.equal(calls[2].init.headers["x-cortexpilot-role"], "TECH_LEAD");
+  assert.equal(calls[1].init.headers["x-openvibecoding-role"], "TECH_LEAD");
+  assert.equal(calls[2].init.headers["x-openvibecoding-role"], "TECH_LEAD");
 });
 
 test("dashboard client attaches operator role only for mutation requests", async () => {
@@ -246,10 +246,10 @@ test("dashboard client attaches operator role only for mutation requests", async
 
   assert.equal(calls.length, 2);
   assert.equal(calls[0].init.method, "GET");
-  assert.equal(calls[0].init.headers["x-cortexpilot-role"], undefined);
+  assert.equal(calls[0].init.headers["x-openvibecoding-role"], undefined);
   assert.equal(calls[1].init.method, "POST");
-  assert.equal(calls[1].init.headers["x-cortexpilot-role"], "TECH_LEAD");
-  assert.equal(calls[1].init.headers["x-cortexpilot-run-id"], "run-1");
+  assert.equal(calls[1].init.headers["x-openvibecoding-role"], "TECH_LEAD");
+  assert.equal(calls[1].init.headers["x-openvibecoding-run-id"], "run-1");
   assert.equal(client.canExecuteMutations(), true);
   assert.equal(client.getMutationRole(), "TECH_LEAD");
 });

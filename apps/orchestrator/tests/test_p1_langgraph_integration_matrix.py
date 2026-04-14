@@ -5,8 +5,8 @@ from typing import Any
 
 import pytest
 
-from cortexpilot_orch.runners import agents_contract_flow, agents_stream_flow
-from cortexpilot_orch.scheduler import manifest_lifecycle
+from openvibecoding_orch.runners import agents_contract_flow, agents_stream_flow
+from openvibecoding_orch.scheduler import manifest_lifecycle
 
 
 class _ContractStore:
@@ -100,14 +100,14 @@ def _contract_langgraph_success(
             {"run_id": "run_env_enabled", "task_id": "task_env_enabled"},
             "1",
             True,
-            "env.CORTEXPILOT_LANGGRAPH_CONTRACT_SUBFLOW",
+            "env.OPENVIBECODING_LANGGRAPH_CONTRACT_SUBFLOW",
         ),
         (
             "env_disabled",
             {"run_id": "run_env_disabled", "task_id": "task_env_disabled"},
             "0",
             False,
-            "env.CORTEXPILOT_LANGGRAPH_CONTRACT_SUBFLOW",
+            "env.OPENVIBECODING_LANGGRAPH_CONTRACT_SUBFLOW",
         ),
     ],
 )
@@ -124,9 +124,9 @@ def test_contract_subflow_enable_disable_matrix(
     monkeypatch.setattr(agents_contract_flow, "AgentsRunner", _ContractRunner)
 
     if env_flag is None:
-        monkeypatch.delenv("CORTEXPILOT_LANGGRAPH_CONTRACT_SUBFLOW", raising=False)
+        monkeypatch.delenv("OPENVIBECODING_LANGGRAPH_CONTRACT_SUBFLOW", raising=False)
     else:
-        monkeypatch.setenv("CORTEXPILOT_LANGGRAPH_CONTRACT_SUBFLOW", env_flag)
+        monkeypatch.setenv("OPENVIBECODING_LANGGRAPH_CONTRACT_SUBFLOW", env_flag)
 
     if expect_langgraph:
         monkeypatch.setattr(

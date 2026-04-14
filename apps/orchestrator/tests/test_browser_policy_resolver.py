@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from cortexpilot_orch.policy import browser_policy_resolver
-from cortexpilot_orch.policy.browser_policy_resolver import resolve_browser_policy
+from openvibecoding_orch.policy import browser_policy_resolver
+from openvibecoding_orch.policy.browser_policy_resolver import resolve_browser_policy
 
 
 def test_resolver_local_dev_defaults_to_allow_profile(monkeypatch, tmp_path: Path) -> None:
@@ -12,10 +12,10 @@ def test_resolver_local_dev_defaults_to_allow_profile(monkeypatch, tmp_path: Pat
     chrome_root.mkdir(parents=True, exist_ok=True)
     monkeypatch.delenv("CI", raising=False)
     monkeypatch.delenv("GITHUB_ACTIONS", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_CI_CONTAINER", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_CLEAN_ROOM_MACHINE_TMP_ROOT", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_CLEAN_ROOM_PRESERVE_ROOT", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_BROWSER_PROFILE_ALLOWLIST", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_CI_CONTAINER", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_CLEAN_ROOM_MACHINE_TMP_ROOT", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_CLEAN_ROOM_PRESERVE_ROOT", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_BROWSER_PROFILE_ALLOWLIST", raising=False)
     monkeypatch.setattr(browser_policy_resolver, "_default_chrome_profile_dir", lambda: chrome_root)
     monkeypatch.setattr(browser_policy_resolver, "default_repo_browser_root", lambda: browser_root)
 
@@ -29,10 +29,10 @@ def test_resolver_local_dev_defaults_to_allow_profile(monkeypatch, tmp_path: Pat
 
     assert audit["requested_policy"]["profile_mode"] == "allow_profile"
     assert audit["requested_policy"]["profile_ref"]["profile_dir"] == str(chrome_root)
-    assert audit["requested_policy"]["profile_ref"]["profile_name"] == "cortexpilot"
+    assert audit["requested_policy"]["profile_ref"]["profile_name"] == "openvibecoding"
     assert audit["effective_policy"]["profile_mode"] == "allow_profile"
     assert audit["effective_policy"]["profile_ref"]["profile_dir"] == str(chrome_root)
-    assert audit["effective_policy"]["profile_ref"]["profile_name"] == "cortexpilot"
+    assert audit["effective_policy"]["profile_ref"]["profile_name"] == "openvibecoding"
     assert audit["policy_source"]["profile_mode"] == "env"
     assert audit["policy_source"]["profile_ref.profile_dir"] == "default"
     assert audit["policy_source"]["profile_ref.profile_name"] == "env"
@@ -42,9 +42,9 @@ def test_resolver_ci_defaults_to_ephemeral(monkeypatch, tmp_path: Path) -> None:
     chrome_root = tmp_path / "chrome-root"
     chrome_root.mkdir(parents=True, exist_ok=True)
     monkeypatch.setenv("GITHUB_ACTIONS", "true")
-    monkeypatch.delenv("CORTEXPILOT_BROWSER_PROFILE_MODE", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_BROWSER_PROFILE_DIR", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_BROWSER_PROFILE_NAME", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_BROWSER_PROFILE_MODE", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_BROWSER_PROFILE_DIR", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_BROWSER_PROFILE_NAME", raising=False)
     monkeypatch.setattr(browser_policy_resolver, "_default_chrome_profile_dir", lambda: chrome_root)
 
     audit = resolve_browser_policy(
@@ -64,13 +64,13 @@ def test_resolver_ci_defaults_to_ephemeral(monkeypatch, tmp_path: Path) -> None:
 def test_resolver_force_ephemeral_environment_blocks_explicit_allow_profile(monkeypatch, tmp_path: Path) -> None:
     chrome_root = tmp_path / "chrome-root"
     chrome_root.mkdir(parents=True, exist_ok=True)
-    monkeypatch.setenv("CORTEXPILOT_CLEAN_ROOM_MACHINE_TMP_ROOT", str(tmp_path / "machine-tmp"))
-    monkeypatch.setenv("CORTEXPILOT_BROWSER_PROFILE_ALLOWLIST", str(chrome_root))
+    monkeypatch.setenv("OPENVIBECODING_CLEAN_ROOM_MACHINE_TMP_ROOT", str(tmp_path / "machine-tmp"))
+    monkeypatch.setenv("OPENVIBECODING_BROWSER_PROFILE_ALLOWLIST", str(chrome_root))
 
     audit = resolve_browser_policy(
         contract_policy={
             "profile_mode": "allow_profile",
-            "profile_ref": {"profile_dir": str(chrome_root), "profile_name": "cortexpilot"},
+            "profile_ref": {"profile_dir": str(chrome_root), "profile_name": "openvibecoding"},
             "stealth_mode": "none",
             "human_behavior": {"enabled": False, "level": "low"},
         },
@@ -93,7 +93,7 @@ def test_resolver_force_ephemeral_environment_blocks_explicit_allow_profile(monk
 def test_resolver_default_allowlist_includes_repo_browser_root(monkeypatch, tmp_path: Path) -> None:
     browser_root = tmp_path / "repo-browser"
     browser_root.mkdir(parents=True, exist_ok=True)
-    monkeypatch.delenv("CORTEXPILOT_BROWSER_PROFILE_ALLOWLIST", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_BROWSER_PROFILE_ALLOWLIST", raising=False)
     monkeypatch.setattr(browser_policy_resolver, "default_repo_browser_root", lambda: browser_root)
 
     assert browser_root in browser_policy_resolver._profile_allowlist_roots()
@@ -102,9 +102,9 @@ def test_resolver_default_allowlist_includes_repo_browser_root(monkeypatch, tmp_
 def test_resolver_priority_and_task_override(monkeypatch, tmp_path: Path) -> None:
     allow_root = tmp_path / "profiles"
     allow_root.mkdir(parents=True, exist_ok=True)
-    monkeypatch.setenv("CORTEXPILOT_BROWSER_PROFILE_ALLOWLIST", str(allow_root))
-    monkeypatch.setenv("CORTEXPILOT_BROWSER_STEALTH_MODE", "none")
-    monkeypatch.setenv("CORTEXPILOT_BROWSER_HUMAN_BEHAVIOR", "0")
+    monkeypatch.setenv("OPENVIBECODING_BROWSER_PROFILE_ALLOWLIST", str(allow_root))
+    monkeypatch.setenv("OPENVIBECODING_BROWSER_STEALTH_MODE", "none")
+    monkeypatch.setenv("OPENVIBECODING_BROWSER_HUMAN_BEHAVIOR", "0")
 
     contract_policy = {
         "profile_mode": "ephemeral",
@@ -132,7 +132,7 @@ def test_resolver_priority_and_task_override(monkeypatch, tmp_path: Path) -> Non
 
 
 def test_resolver_rejects_task_profile_override(monkeypatch) -> None:
-    monkeypatch.delenv("CORTEXPILOT_BROWSER_BREAK_GLASS", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_BROWSER_BREAK_GLASS", raising=False)
     audit = resolve_browser_policy(
         contract_policy={"profile_mode": "ephemeral", "stealth_mode": "none", "human_behavior": {"enabled": False, "level": "low"}},
         task_policy={"profile_mode": "allow_profile", "stealth_mode": "lite"},
@@ -149,8 +149,8 @@ def test_resolver_rejects_task_profile_override(monkeypatch) -> None:
 def test_resolver_guard_blocks_non_allowlisted_profile(monkeypatch, tmp_path: Path) -> None:
     allow_root = tmp_path / "automation-profiles"
     allow_root.mkdir(parents=True, exist_ok=True)
-    monkeypatch.setenv("CORTEXPILOT_BROWSER_PROFILE_ALLOWLIST", str(allow_root))
-    monkeypatch.delenv("CORTEXPILOT_BROWSER_BREAK_GLASS", raising=False)
+    monkeypatch.setenv("OPENVIBECODING_BROWSER_PROFILE_ALLOWLIST", str(allow_root))
+    monkeypatch.delenv("OPENVIBECODING_BROWSER_BREAK_GLASS", raising=False)
 
     contract_policy = {
         "profile_mode": "allow_profile",
@@ -177,11 +177,11 @@ def test_resolver_break_glass_allows_privileged_override(monkeypatch, tmp_path: 
     allow_root.mkdir(parents=True, exist_ok=True)
     monkeypatch.delenv("CI", raising=False)
     monkeypatch.delenv("GITHUB_ACTIONS", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_CI_CONTAINER", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_CLEAN_ROOM_MACHINE_TMP_ROOT", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_CLEAN_ROOM_PRESERVE_ROOT", raising=False)
-    monkeypatch.setenv("CORTEXPILOT_BROWSER_PROFILE_ALLOWLIST", str(allow_root))
-    monkeypatch.setenv("CORTEXPILOT_BROWSER_BREAK_GLASS", "1")
+    monkeypatch.delenv("OPENVIBECODING_CI_CONTAINER", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_CLEAN_ROOM_MACHINE_TMP_ROOT", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_CLEAN_ROOM_PRESERVE_ROOT", raising=False)
+    monkeypatch.setenv("OPENVIBECODING_BROWSER_PROFILE_ALLOWLIST", str(allow_root))
+    monkeypatch.setenv("OPENVIBECODING_BROWSER_BREAK_GLASS", "1")
 
     contract_policy = {
         "profile_mode": "allow_profile",
@@ -209,13 +209,13 @@ def test_resolver_explicit_env_profile_override_beats_contract(monkeypatch, tmp_
     allow_root.mkdir(parents=True, exist_ok=True)
     monkeypatch.delenv("CI", raising=False)
     monkeypatch.delenv("GITHUB_ACTIONS", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_CI_CONTAINER", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_CLEAN_ROOM_MACHINE_TMP_ROOT", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_CLEAN_ROOM_PRESERVE_ROOT", raising=False)
-    monkeypatch.setenv("CORTEXPILOT_BROWSER_PROFILE_ALLOWLIST", str(allow_root))
-    monkeypatch.setenv("CORTEXPILOT_BROWSER_PROFILE_MODE", "allow_profile")
-    monkeypatch.setenv("CORTEXPILOT_BROWSER_PROFILE_DIR", str(allow_root))
-    monkeypatch.setenv("CORTEXPILOT_BROWSER_PROFILE_NAME", "Default")
+    monkeypatch.delenv("OPENVIBECODING_CI_CONTAINER", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_CLEAN_ROOM_MACHINE_TMP_ROOT", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_CLEAN_ROOM_PRESERVE_ROOT", raising=False)
+    monkeypatch.setenv("OPENVIBECODING_BROWSER_PROFILE_ALLOWLIST", str(allow_root))
+    monkeypatch.setenv("OPENVIBECODING_BROWSER_PROFILE_MODE", "allow_profile")
+    monkeypatch.setenv("OPENVIBECODING_BROWSER_PROFILE_DIR", str(allow_root))
+    monkeypatch.setenv("OPENVIBECODING_BROWSER_PROFILE_NAME", "Default")
 
     audit = resolve_browser_policy(
         contract_policy={
@@ -241,13 +241,13 @@ def test_resolver_env_profile_survives_missing_contract(monkeypatch, tmp_path: P
     allow_root.mkdir(parents=True, exist_ok=True)
     monkeypatch.delenv("CI", raising=False)
     monkeypatch.delenv("GITHUB_ACTIONS", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_CI_CONTAINER", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_CLEAN_ROOM_MACHINE_TMP_ROOT", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_CLEAN_ROOM_PRESERVE_ROOT", raising=False)
-    monkeypatch.setenv("CORTEXPILOT_BROWSER_PROFILE_ALLOWLIST", str(allow_root))
-    monkeypatch.setenv("CORTEXPILOT_BROWSER_PROFILE_MODE", "allow_profile")
-    monkeypatch.setenv("CORTEXPILOT_BROWSER_PROFILE_DIR", str(allow_root))
-    monkeypatch.setenv("CORTEXPILOT_BROWSER_PROFILE_NAME", "Default")
+    monkeypatch.delenv("OPENVIBECODING_CI_CONTAINER", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_CLEAN_ROOM_MACHINE_TMP_ROOT", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_CLEAN_ROOM_PRESERVE_ROOT", raising=False)
+    monkeypatch.setenv("OPENVIBECODING_BROWSER_PROFILE_ALLOWLIST", str(allow_root))
+    monkeypatch.setenv("OPENVIBECODING_BROWSER_PROFILE_MODE", "allow_profile")
+    monkeypatch.setenv("OPENVIBECODING_BROWSER_PROFILE_DIR", str(allow_root))
+    monkeypatch.setenv("OPENVIBECODING_BROWSER_PROFILE_NAME", "Default")
 
     audit = resolve_browser_policy(
         contract_policy=None,
@@ -267,10 +267,10 @@ def test_resolver_defaults_profile_dir_before_allowlist_guard(monkeypatch, tmp_p
     allow_root.mkdir(parents=True, exist_ok=True)
     monkeypatch.delenv("CI", raising=False)
     monkeypatch.delenv("GITHUB_ACTIONS", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_CI_CONTAINER", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_CLEAN_ROOM_MACHINE_TMP_ROOT", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_CLEAN_ROOM_PRESERVE_ROOT", raising=False)
-    monkeypatch.setenv("CORTEXPILOT_BROWSER_PROFILE_ALLOWLIST", str(allow_root))
+    monkeypatch.delenv("OPENVIBECODING_CI_CONTAINER", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_CLEAN_ROOM_MACHINE_TMP_ROOT", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_CLEAN_ROOM_PRESERVE_ROOT", raising=False)
+    monkeypatch.setenv("OPENVIBECODING_BROWSER_PROFILE_ALLOWLIST", str(allow_root))
     monkeypatch.setattr(browser_policy_resolver, "_default_chrome_profile_dir", lambda: allow_root)
 
     audit = resolve_browser_policy(

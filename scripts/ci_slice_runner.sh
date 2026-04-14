@@ -39,8 +39,8 @@ PY
 artifact_roots=(
   ".runtime-cache/test_output"
   ".runtime-cache/logs"
-  ".runtime-cache/cortexpilot/release"
-  ".runtime-cache/cortexpilot/reports"
+  ".runtime-cache/openvibecoding/release"
+  ".runtime-cache/openvibecoding/reports"
 )
 
 write_summary() {
@@ -57,9 +57,9 @@ write_summary() {
     --source-sha "${GITHUB_SHA:-}"
     --source-ref "${GITHUB_REF:-}"
     --source-event "${GITHUB_EVENT_NAME:-}"
-    --source-route "${CORTEXPILOT_CI_ROUTE_ID:-}"
-    --source-trust-class "${CORTEXPILOT_CI_TRUST_CLASS:-}"
-    --source-runner-class "${CORTEXPILOT_CI_RUNNER_CLASS:-}"
+    --source-route "${OPENVIBECODING_CI_ROUTE_ID:-}"
+    --source-trust-class "${OPENVIBECODING_CI_TRUST_CLASS:-}"
+    --source-runner-class "${OPENVIBECODING_CI_RUNNER_CLASS:-}"
   )
   local root
   for root in "${artifact_roots[@]}"; do
@@ -72,8 +72,8 @@ write_summary "running"
 trap 'write_summary "$final_status"' EXIT
 
 export CI=1
-export CORTEXPILOT_CI_PROFILE="${CORTEXPILOT_CI_PROFILE:-strict}"
-export CORTEXPILOT_CI_SLICE="$SLICE"
+export OPENVIBECODING_CI_PROFILE="${OPENVIBECODING_CI_PROFILE:-strict}"
+export OPENVIBECODING_CI_SLICE="$SLICE"
 export PYTHONDONTWRITEBYTECODE=1
 
 bash scripts/lib/ci_main_impl.sh "$@"

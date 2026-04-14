@@ -1,8 +1,8 @@
 export const COMPOSER_MAX_CHARS = 4000;
 export const SCROLL_FOLLOW_THRESHOLD_PX = 100;
 export const DRAFT_SAVE_INTERVAL_MS = 30_000;
-export const DRAFT_STORAGE_PREFIX = "cortexpilot.desktop.draft";
-export const ONBOARDING_STORAGE_KEY = "cortexpilot.desktop.onboarding.dismissed";
+export const DRAFT_STORAGE_PREFIX = "openvibecoding.desktop.draft";
+export const ONBOARDING_STORAGE_KEY = "openvibecoding.desktop.onboarding.dismissed";
 export const CHAIN_PANEL_IDLE_DELAY_MS = 200;
 export const FIRST_SESSION_ALLOWED_PATHS = ["apps/desktop/src"] as const;
 

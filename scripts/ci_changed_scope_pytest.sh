@@ -4,7 +4,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 source "$ROOT_DIR/scripts/lib/env.sh"
-PYTHON_BIN="${CORTEXPILOT_PYTHON:-}"
+PYTHON_BIN="${OPENVIBECODING_PYTHON:-}"
 export PYTHONDONTWRITEBYTECODE=1
 existing_pytest_addopts="${PYTEST_ADDOPTS:-}"
 case " ${existing_pytest_addopts} " in

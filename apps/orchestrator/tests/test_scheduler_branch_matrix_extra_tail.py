@@ -71,7 +71,7 @@ def test_scheduler_evals_gate_failure_marks_tests_failed(monkeypatch, tmp_path: 
                 "evidence_refs": {},
             }
 
-    monkeypatch.setenv("CORTEXPILOT_EVALS_ENABLED", "1")
+    monkeypatch.setenv("OPENVIBECODING_EVALS_ENABLED", "1")
     monkeypatch.setattr(sched, "_select_runner", lambda *_args, **_kwargs: _OkRunner())
     monkeypatch.setattr(sched, "validate_diff", lambda *_args, **_kwargs: {"ok": True, "changed_files": [], "violations": []})
     monkeypatch.setattr(sched, "run_acceptance_tests", lambda *_args, **_kwargs: {"ok": True, "reports": []})

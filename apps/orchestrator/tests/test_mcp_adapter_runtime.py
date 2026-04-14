@@ -5,8 +5,8 @@ from pathlib import Path
 
 import pytest
 
-from cortexpilot_orch.runners import mcp_adapter_runtime
-from cortexpilot_orch.runners.mcp_adapter_runtime import execute_mcp_adapter, normalize_adapter_tool
+from openvibecoding_orch.runners import mcp_adapter_runtime
+from openvibecoding_orch.runners.mcp_adapter_runtime import execute_mcp_adapter, normalize_adapter_tool
 
 
 def test_normalize_adapter_tool_open_interpreter_alias() -> None:

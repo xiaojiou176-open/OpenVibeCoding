@@ -49,9 +49,9 @@ TARGETS = [
 ]
 HAN_RE = re.compile(r"[\u4e00-\u9fff]")
 STRICT_ALL_LINES_TARGETS = [
-    ROOT / "apps" / "orchestrator" / "src" / "cortexpilot_orch" / "contract" / "compiler.py",
-    ROOT / "apps" / "orchestrator" / "src" / "cortexpilot_orch" / "planning" / "intake_policy_helpers.py",
-    ROOT / "apps" / "orchestrator" / "src" / "cortexpilot_orch" / "scheduler" / "preflight_gate_runtime_helpers.py",
+    ROOT / "apps" / "orchestrator" / "src" / "openvibecoding_orch" / "contract" / "compiler.py",
+    ROOT / "apps" / "orchestrator" / "src" / "openvibecoding_orch" / "planning" / "intake_policy_helpers.py",
+    ROOT / "apps" / "orchestrator" / "src" / "openvibecoding_orch" / "scheduler" / "preflight_gate_runtime_helpers.py",
     ROOT / "scripts" / "resolve_perf_smoke_env.sh",
     ROOT / "policies" / "agents" / "README.md",
     ROOT / "policies" / "agents" / "search" / "SYSTEM.md",
@@ -60,8 +60,8 @@ STRICT_ALL_LINES_TARGETS = [
     ROOT / "policies" / "agents" / "reviewer" / "SYSTEM.md",
     ROOT / "policies" / "agents" / "tech_lead" / "SYSTEM.md",
     ROOT / "scripts" / "ui_regression_failure_taxonomy.py",
-    ROOT / "apps" / "orchestrator" / "src" / "cortexpilot_orch" / "reviewer" / "reviewer.py",
-    ROOT / "apps" / "orchestrator" / "src" / "cortexpilot_orch" / "scheduler" / "task_execution_review_helpers.py",
+    ROOT / "apps" / "orchestrator" / "src" / "openvibecoding_orch" / "reviewer" / "reviewer.py",
+    ROOT / "apps" / "orchestrator" / "src" / "openvibecoding_orch" / "scheduler" / "task_execution_review_helpers.py",
 ]
 TARGETED_DIAGNOSTIC_PATTERNS = {
     ROOT / "apps" / "dashboard" / "components" / "RunDetail.tsx": (
@@ -83,17 +83,17 @@ TARGETED_DIAGNOSTIC_PATTERNS = {
         re.compile(r'throw new Error\(".*[\u4e00-\u9fff]'),
         re.compile(r'partialMessage\s*=\s*`.*[\u4e00-\u9fff]'),
     ),
-    ROOT / "apps" / "orchestrator" / "src" / "cortexpilot_orch" / "services" / "orchestration_service.py": (
+    ROOT / "apps" / "orchestrator" / "src" / "openvibecoding_orch" / "services" / "orchestration_service.py": (
         re.compile(r'failure_summary_zh"\]\s*=\s*".*[\u4e00-\u9fff]'),
         re.compile(r'action_hint_zh"\]\s*=\s*".*[\u4e00-\u9fff]'),
         re.compile(r'outcome_label_zh"\]\s*=\s*".*[\u4e00-\u9fff]'),
     ),
-    ROOT / "apps" / "orchestrator" / "src" / "cortexpilot_orch" / "services" / "rollback_service.py": (
+    ROOT / "apps" / "orchestrator" / "src" / "openvibecoding_orch" / "services" / "rollback_service.py": (
         re.compile(r'failure_summary_zh"\]\s*=\s*f?".*[\u4e00-\u9fff]'),
         re.compile(r'action_hint_zh"\]\s*=\s*".*[\u4e00-\u9fff]'),
         re.compile(r'outcome_label_zh"\]\s*=\s*".*[\u4e00-\u9fff]'),
     ),
-    ROOT / "apps" / "orchestrator" / "src" / "cortexpilot_orch" / "api" / "main_runs_handlers.py": (
+    ROOT / "apps" / "orchestrator" / "src" / "openvibecoding_orch" / "api" / "main_runs_handlers.py": (
         re.compile(r'failure_summary_zh"\]\s*=\s*f?".*[\u4e00-\u9fff]'),
         re.compile(r'action_hint_zh"\]\s*=\s*".*[\u4e00-\u9fff]'),
         re.compile(r'outcome_label_zh"\s*:\s*".*[\u4e00-\u9fff]'),

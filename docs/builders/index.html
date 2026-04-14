@@ -6,17 +6,17 @@
     <title>OpenVibeCoding | Builder quickstart</title>
     <meta
       name="description"
-      content="Builder quickstart for OpenVibeCoding: current client entrypoints, contract-facing types, shared presentation substrate, and the shortest package-adoption path for Codex, Claude Code, and OpenClaw teams on top of the CortexPilot runtime."
+      content="Builder quickstart for OpenVibeCoding: current client entrypoints, contract-facing types, shared presentation substrate, and the shortest package-adoption path for Codex, Claude Code, and OpenClaw teams on top of the OpenVibeCoding runtime."
     />
     <meta
       name="keywords"
-      content="OpenVibeCoding builder quickstart, CortexPilot runtime, frontend API client, frontend API contract, shared UI substrate, Codex builders, Claude Code builders, OpenClaw builders"
+      content="OpenVibeCoding builder quickstart, OpenVibeCoding runtime, frontend API client, frontend API contract, shared UI substrate, Codex builders, Claude Code builders, OpenClaw builders"
     />
     <link rel="canonical" href="https://xiaojiou176-open.github.io/OpenVibeCoding/builders/" />
     <meta property="og:title" content="OpenVibeCoding | Builder quickstart" />
     <meta
       property="og:description"
-      content="Current builder entrypoints for the CortexPilot API client, contract package, shared UI substrate, and read-only MCP-aware control-plane reads."
+      content="Current builder entrypoints for the OpenVibeCoding API client, contract package, shared UI substrate, and read-only MCP-aware control-plane reads."
     />
     <meta property="og:image" content="../assets/storefront/social-preview-1280x640.png" />
     <meta property="og:url" content="https://xiaojiou176-open.github.io/OpenVibeCoding/builders/" />
@@ -25,7 +25,7 @@
     <meta name="twitter:title" content="OpenVibeCoding | Builder quickstart" />
     <meta
       name="twitter:description"
-      content="Current builder entrypoints for the CortexPilot API client, contract package, shared UI substrate, and read-only MCP-aware control-plane reads."
+      content="Current builder entrypoints for the OpenVibeCoding API client, contract package, shared UI substrate, and read-only MCP-aware control-plane reads."
     />
     <meta name="twitter:image" content="../assets/storefront/social-preview-1280x640.png" />
     <script type="application/ld+json">
@@ -34,7 +34,7 @@
         "@type": "TechArticle",
         "headline": "OpenVibeCoding builder quickstart",
         "url": "https://xiaojiou176-open.github.io/OpenVibeCoding/builders/",
-        "description": "Current builder entrypoints for the CortexPilot API client, contract package, shared UI substrate, and read-only MCP-aware control-plane reads."
+        "description": "Current builder entrypoints for the OpenVibeCoding API client, contract package, shared UI substrate, and read-only MCP-aware control-plane reads."
       }
     </script>
     <script type="application/ld+json">
@@ -47,7 +47,7 @@
             "name": "Is the builder layer the same thing as a full SDK platform?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "No. OpenVibeCoding already exposes useful builder entrypoints, but the public builder story remains a thin client, contract package, and shared frontend substrate on top of the CortexPilot runtime rather than a full SDK platform."
+              "text": "No. OpenVibeCoding already exposes useful builder entrypoints, but the public builder story remains a thin client, contract package, and shared frontend substrate on top of the OpenVibeCoding runtime rather than a full SDK platform."
             }
           },
           {
@@ -238,18 +238,18 @@
         </nav>
         <h1>Builder quickstart.</h1>
         <p class="lede">
-          OpenVibeCoding is the public shell for the CortexPilot runtime, and it does already expose a useful builder surface across three layers:
+          OpenVibeCoding is the public shell for the OpenVibeCoding runtime, and it does already expose a useful builder surface across three layers:
           a thin frontend API client, contract-facing route/type bindings, and a shared presentation substrate.
         </p>
         <p class="lede">
           If your team already understands the workflow and protocol boundary and now wants the shortest repo-owned package path, this page is the right next click.
         </p>
         <p class="lede">
-          Current package boundary: <code>@cortexpilot/frontend-api-client</code> and
-          <code>@cortexpilot/frontend-api-contract</code> now carry publish-ready metadata,
+          Current package boundary: <code>@openvibecoding/frontend-api-client</code> and
+          <code>@openvibecoding/frontend-api-contract</code> now carry publish-ready metadata,
           but no public package release is live yet. The current official install path
           is still clone/workspace reuse or vendor copy, while
-          <code>@cortexpilot/frontend-shared</code> remains a repo-owned presentation
+          <code>@openvibecoding/frontend-shared</code> remains a repo-owned presentation
           substrate instead of a standalone package story.
         </p>
         <div class="actions">
@@ -275,17 +275,17 @@
             <tbody>
               <tr>
                 <td><strong>Convenience client</strong></td>
-                <td><code>@cortexpilot/frontend-api-client</code></td>
+                <td><code>@openvibecoding/frontend-api-client</code></td>
                 <td>Use it when you are working inside a clone or shared workspace copy and want overview, runs, Workflow Cases, approvals, and bootstrap reads through one thin helper layer.</td>
               </tr>
               <tr>
                 <td><strong>Route/type boundary</strong></td>
-                <td><code>@cortexpilot/frontend-api-contract</code></td>
+                <td><code>@openvibecoding/frontend-api-contract</code></td>
                 <td>Use it when your real need is generated contract-facing types without backend imports inside the same repo or a vendored package copy.</td>
               </tr>
               <tr>
                 <td><strong>Shared presentation</strong></td>
-                <td><code>@cortexpilot/frontend-shared</code></td>
+                <td><code>@openvibecoding/frontend-shared</code></td>
                 <td>Use it when you need repo-owned copy, locale, and status-presentation substrate for dashboard, desktop, and future web consumers inside the same workspace story.</td>
               </tr>
               <tr>
@@ -304,7 +304,7 @@
           <article class="card">
             <span class="badge primary">Client</span>
             <h3>Frontend API client</h3>
-            <p>Use the repo-owned client when you are consuming CortexPilot from a clone or vendored workspace and want convenience helpers for command-tower overview, runs, Workflow Cases, approvals, and role-config preview reads.</p>
+            <p>Use the repo-owned client when you are consuming OpenVibeCoding from a clone or vendored workspace and want convenience helpers for command-tower overview, runs, Workflow Cases, approvals, and role-config preview reads.</p>
             <p><a href="https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/packages/frontend-api-client/README.md">Open package README</a></p>
           </article>
           <article class="card">
@@ -316,13 +316,13 @@
           <article class="card">
             <span class="badge primary">Shared UI</span>
             <h3>Presentation substrate</h3>
-            <p>Use the shared package when you are reusing CortexPilot from a clone or vendored workspace and want brand copy, locale, and status presentation to stay aligned across dashboard, desktop, and future web consumers.</p>
+            <p>Use the shared package when you are reusing OpenVibeCoding from a clone or vendored workspace and want brand copy, locale, and status presentation to stay aligned across dashboard, desktop, and future web consumers.</p>
             <p><a href="https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/packages/frontend-shared/README.md">Open shared README</a></p>
           </article>
           <article class="card">
             <span class="badge warn">Boundary</span>
             <h3>Still repo-owned</h3>
-            <p>These are real builder entrypoints, but they do not turn CortexPilot into a hosted SDK platform, marketplace artifact, or write-capable MCP product.</p>
+            <p>These are real builder entrypoints, but they do not turn OpenVibeCoding into a hosted SDK platform, marketplace artifact, or write-capable MCP product.</p>
           </article>
           <article class="card">
             <span class="badge warn">Boundary</span>
@@ -332,7 +332,7 @@
           <article class="card">
             <span class="badge warn">Boundary</span>
             <h3>Shared stays repo-owned</h3>
-            <p><code>@cortexpilot/frontend-shared</code> is useful, but it is still the repo-owned presentation substrate rather than a standalone distribution unit.</p>
+            <p><code>@openvibecoding/frontend-shared</code> is useful, but it is still the repo-owned presentation substrate rather than a standalone distribution unit.</p>
           </article>
         </div>
       </section>
@@ -361,8 +361,8 @@
       <section class="section">
         <h2>Vendor or shared-workspace adoption recipe</h2>
         <ol>
-          <li>Confirm the host ecosystem first: Codex, Claude Code, or OpenClaw should be understood from their own official docs before you import any CortexPilot package.</li>
-          <li>Keep the three CortexPilot packages together in one clone or vendored workspace copy: <code>frontend-api-client</code>, <code>frontend-api-contract</code>, and <code>frontend-shared</code>.</li>
+          <li>Confirm the host ecosystem first: Codex, Claude Code, or OpenClaw should be understood from their own official docs before you import any OpenVibeCoding package.</li>
+          <li>Keep the three OpenVibeCoding packages together in one clone or vendored workspace copy: <code>frontend-api-client</code>, <code>frontend-api-contract</code>, and <code>frontend-shared</code>.</li>
           <li>Use the repo-owned starter example as the first proof that your workspace wiring is correct.</li>
           <li>Only promote to guarded operator actions such as <code>--apply</code> after preview works and your team accepts the trusted-operator boundary.</li>
         </ol>

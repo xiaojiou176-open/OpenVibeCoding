@@ -4,23 +4,23 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
-export NEXT_PUBLIC_CORTEXPILOT_OPERATOR_ROLE="${NEXT_PUBLIC_CORTEXPILOT_OPERATOR_ROLE:-TECH_LEAD}"
+export NEXT_PUBLIC_OPENVIBECODING_OPERATOR_ROLE="${NEXT_PUBLIC_OPENVIBECODING_OPERATOR_ROLE:-TECH_LEAD}"
 
 source "$ROOT_DIR/scripts/lib/env.sh"
 source "$ROOT_DIR/scripts/lib/test_heartbeat.sh"
 source "$ROOT_DIR/scripts/lib/e2e_common.sh"
-PYTHON_BIN="${CORTEXPILOT_PYTHON:-}"
+PYTHON_BIN="${OPENVIBECODING_PYTHON:-}"
 
-HOST="${CORTEXPILOT_E2E_HOST:-127.0.0.1}"
-API_PORT="${CORTEXPILOT_E2E_API_PORT:-19600}"
-DESKTOP_PORT="${CORTEXPILOT_E2E_DESKTOP_PORT:-19700}"
-API_TOKEN="${CORTEXPILOT_E2E_API_TOKEN:-cortexpilot-e2e-token}"
-HEARTBEAT_SEC="${CORTEXPILOT_E2E_HEARTBEAT_INTERVAL_SEC:-20}"
-FAST_GATE_TIMEOUT_SEC="${CORTEXPILOT_E2E_FAST_GATE_TIMEOUT_SEC:-900}"
-LIVE_PREFLIGHT_TIMEOUT_SEC="${CORTEXPILOT_E2E_LIVE_PREFLIGHT_TIMEOUT_SEC:-180}"
-LIVE_PREFLIGHT_MAX_ATTEMPTS="${CORTEXPILOT_E2E_LIVE_PREFLIGHT_ATTEMPTS:-3}"
-LIVE_PREFLIGHT_RETRY_BACKOFF_SEC="${CORTEXPILOT_E2E_LIVE_PREFLIGHT_RETRY_BACKOFF_SEC:-2}"
-PLAYWRIGHT_TIMEOUT_SEC="${CORTEXPILOT_E2E_PLAYWRIGHT_TIMEOUT_SEC:-3000}"
+HOST="${OPENVIBECODING_E2E_HOST:-127.0.0.1}"
+API_PORT="${OPENVIBECODING_E2E_API_PORT:-19600}"
+DESKTOP_PORT="${OPENVIBECODING_E2E_DESKTOP_PORT:-19700}"
+API_TOKEN="${OPENVIBECODING_E2E_API_TOKEN:-openvibecoding-e2e-token}"
+HEARTBEAT_SEC="${OPENVIBECODING_E2E_HEARTBEAT_INTERVAL_SEC:-20}"
+FAST_GATE_TIMEOUT_SEC="${OPENVIBECODING_E2E_FAST_GATE_TIMEOUT_SEC:-900}"
+LIVE_PREFLIGHT_TIMEOUT_SEC="${OPENVIBECODING_E2E_LIVE_PREFLIGHT_TIMEOUT_SEC:-180}"
+LIVE_PREFLIGHT_MAX_ATTEMPTS="${OPENVIBECODING_E2E_LIVE_PREFLIGHT_ATTEMPTS:-3}"
+LIVE_PREFLIGHT_RETRY_BACKOFF_SEC="${OPENVIBECODING_E2E_LIVE_PREFLIGHT_RETRY_BACKOFF_SEC:-2}"
+PLAYWRIGHT_TIMEOUT_SEC="${OPENVIBECODING_E2E_PLAYWRIGHT_TIMEOUT_SEC:-3000}"
 
 OUT_DIR="$ROOT_DIR/.runtime-cache/test_output/ui_regression"
 UI_LOG_EVENT_DIR="$ROOT_DIR/.runtime-cache/test_output/ui_log_events"
@@ -109,11 +109,11 @@ resolve_port() {
   echo "$resolved_port"
 }
 
-API_PORT="$(resolve_port "$API_PORT" "API_PORT" "CORTEXPILOT_E2E_API_PORT")"
-DESKTOP_PORT="$(resolve_port "$DESKTOP_PORT" "DESKTOP_PORT" "CORTEXPILOT_E2E_DESKTOP_PORT" "$API_PORT")"
+API_PORT="$(resolve_port "$API_PORT" "API_PORT" "OPENVIBECODING_E2E_API_PORT")"
+DESKTOP_PORT="$(resolve_port "$DESKTOP_PORT" "DESKTOP_PORT" "OPENVIBECODING_E2E_DESKTOP_PORT" "$API_PORT")"
 
-if [[ -n "${CORTEXPILOT_E2E_ARTIFACT_SUFFIX:-}" ]]; then
-  echo "ℹ️ [desktop-high-risk] skip fast gate under flake iteration context (artifact_suffix=${CORTEXPILOT_E2E_ARTIFACT_SUFFIX})"
+if [[ -n "${OPENVIBECODING_E2E_ARTIFACT_SUFFIX:-}" ]]; then
+  echo "ℹ️ [desktop-high-risk] skip fast gate under flake iteration context (artifact_suffix=${OPENVIBECODING_E2E_ARTIFACT_SUFFIX})"
 else
   echo "🚀 [desktop-high-risk] preflight: fast gate (test:quick)"
   run_with_heartbeat_and_timeout "desktop-high-risk-fast-gate-test-quick" "$FAST_GATE_TIMEOUT_SEC" "$HEARTBEAT_SEC" -- \
@@ -133,11 +133,11 @@ LIVE_PREFLIGHT_ATTEMPT=1
 while true; do
   if run_with_heartbeat_and_timeout "desktop-high-risk-live-preflight" "$LIVE_PREFLIGHT_TIMEOUT_SEC" "$HEARTBEAT_SEC" -- \
     "$PYTHON_BIN" scripts/e2e_external_web_probe.py \
-      --url "${CORTEXPILOT_E2E_LIVE_PREFLIGHT_URL:-https://example.com}" \
-      --timeout-ms "${CORTEXPILOT_E2E_LIVE_PREFLIGHT_NAV_TIMEOUT_MS:-15000}" \
-      --provider-api-mode "${CORTEXPILOT_E2E_LIVE_PREFLIGHT_PROVIDER_API_MODE:-require}" \
-      --provider-api-timeout-sec "${CORTEXPILOT_E2E_LIVE_PREFLIGHT_PROVIDER_TIMEOUT_SEC:-12}" \
-      --hard-timeout-sec "${CORTEXPILOT_E2E_LIVE_PREFLIGHT_HARD_TIMEOUT_SEC:-120}"; then
+      --url "${OPENVIBECODING_E2E_LIVE_PREFLIGHT_URL:-https://example.com}" \
+      --timeout-ms "${OPENVIBECODING_E2E_LIVE_PREFLIGHT_NAV_TIMEOUT_MS:-15000}" \
+      --provider-api-mode "${OPENVIBECODING_E2E_LIVE_PREFLIGHT_PROVIDER_API_MODE:-require}" \
+      --provider-api-timeout-sec "${OPENVIBECODING_E2E_LIVE_PREFLIGHT_PROVIDER_TIMEOUT_SEC:-12}" \
+      --hard-timeout-sec "${OPENVIBECODING_E2E_LIVE_PREFLIGHT_HARD_TIMEOUT_SEC:-120}"; then
     break
   fi
   if [[ "$LIVE_PREFLIGHT_ATTEMPT" -ge "$LIVE_PREFLIGHT_MAX_ATTEMPTS" ]]; then
@@ -151,16 +151,16 @@ done
 
 echo "🚀 [desktop-high-risk] starting api: http://$HOST:$API_PORT"
 PYTHONPATH=apps/orchestrator/src \
-CORTEXPILOT_API_AUTH_REQUIRED=true \
-CORTEXPILOT_API_TOKEN="$API_TOKEN" \
-CORTEXPILOT_DASHBOARD_PORT="$DESKTOP_PORT" \
-"$PYTHON_BIN" -m cortexpilot_orch.cli serve --host "$HOST" --port "$API_PORT" \
+OPENVIBECODING_API_AUTH_REQUIRED=true \
+OPENVIBECODING_API_TOKEN="$API_TOKEN" \
+OPENVIBECODING_DASHBOARD_PORT="$DESKTOP_PORT" \
+"$PYTHON_BIN" -m openvibecoding_orch.cli serve --host "$HOST" --port "$API_PORT" \
   >"$API_LOG" 2>&1 &
 API_PID=$!
 
 echo "🚀 [desktop-high-risk] starting desktop dev: http://$HOST:$DESKTOP_PORT"
-VITE_CORTEXPILOT_API_BASE="http://$HOST:$API_PORT" \
-VITE_CORTEXPILOT_API_TOKEN="$API_TOKEN" \
+VITE_OPENVIBECODING_API_BASE="http://$HOST:$API_PORT" \
+VITE_OPENVIBECODING_API_TOKEN="$API_TOKEN" \
 bash scripts/run_workspace_app.sh desktop dev -- --host "$HOST" --port "$DESKTOP_PORT" --strictPort \
   >"$UI_LOG" 2>&1 &
 UI_PID=$!
@@ -184,7 +184,7 @@ print_failure_diagnostics() {
   tail -n 120 "$UI_LOG" >&2 || true
 }
 
-PLAYWRIGHT_MAX_ATTEMPTS="${CORTEXPILOT_E2E_PLAYWRIGHT_ATTEMPTS:-2}"
+PLAYWRIGHT_MAX_ATTEMPTS="${OPENVIBECODING_E2E_PLAYWRIGHT_ATTEMPTS:-2}"
 if ! [[ "$PLAYWRIGHT_MAX_ATTEMPTS" =~ ^[0-9]+$ ]] || [[ "$PLAYWRIGHT_MAX_ATTEMPTS" -lt 1 ]]; then
   PLAYWRIGHT_MAX_ATTEMPTS=1
 fi
@@ -206,7 +206,7 @@ from pathlib import Path
 
 from playwright.sync_api import sync_playwright
 
-from cortexpilot_orch.store import run_store
+from openvibecoding_orch.store import run_store
 
 (
     host,
@@ -539,7 +539,7 @@ except Exception as exc:
     report["status"] = "failed"
 finally:
     Path(network_path).write_text(json.dumps(network_events, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    ui_log_lines = [line[len("CORTEXPILOT_LOG_EVENT "):] for line in console_events if line.startswith("CORTEXPILOT_LOG_EVENT ")]
+    ui_log_lines = [line[len("OPENVIBECODING_LOG_EVENT "):] for line in console_events if line.startswith("OPENVIBECODING_LOG_EVENT ")]
     Path(ui_log_events_path).write_text("".join(f"{line}\n" for line in ui_log_lines), encoding="utf-8")
     Path(report_path).write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 

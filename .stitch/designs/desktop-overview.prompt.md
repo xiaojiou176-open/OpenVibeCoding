@@ -1,4 +1,4 @@
-Design a **desktop overview** surface for CortexPilot's macOS shell.
+Design a **desktop overview** surface for OpenVibeCoding's macOS shell.
 
 It should mirror the web command-tower story, but feel denser and more
 operator-focused.

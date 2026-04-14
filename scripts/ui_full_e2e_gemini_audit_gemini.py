@@ -100,8 +100,8 @@ def _gemini_request_lock() -> Any:
         return
     lock_path = Path(
         os.environ.get(
-            "CORTEXPILOT_UI_GEMINI_REQUEST_LOCK",
-            ".runtime-cache/cortexpilot/locks/ui_gemini_request.lock",
+            "OPENVIBECODING_UI_GEMINI_REQUEST_LOCK",
+            ".runtime-cache/openvibecoding/locks/ui_gemini_request.lock",
         )
     )
     lock_path.parent.mkdir(parents=True, exist_ok=True)
@@ -114,7 +114,7 @@ def _gemini_request_lock() -> Any:
 
 
 def _respect_gemini_min_interval() -> None:
-    raw = str(os.environ.get("CORTEXPILOT_UI_GEMINI_MIN_INTERVAL_SEC", "2.5")).strip()
+    raw = str(os.environ.get("OPENVIBECODING_UI_GEMINI_MIN_INTERVAL_SEC", "2.5")).strip()
     try:
         min_interval = max(0.0, float(raw))
     except Exception:  # noqa: BLE001
@@ -123,8 +123,8 @@ def _respect_gemini_min_interval() -> None:
         return
     stamp_path = Path(
         os.environ.get(
-            "CORTEXPILOT_UI_GEMINI_REQUEST_STAMP",
-            ".runtime-cache/cortexpilot/locks/ui_gemini_request.timestamp",
+            "OPENVIBECODING_UI_GEMINI_REQUEST_STAMP",
+            ".runtime-cache/openvibecoding/locks/ui_gemini_request.timestamp",
         )
     )
     stamp_path.parent.mkdir(parents=True, exist_ok=True)
@@ -567,11 +567,11 @@ def _image_geometry(path: Path) -> dict[str, float] | None:
 def _diagnose_extreme_tall_images(image_paths: list[Path]) -> dict[str, Any] | None:
     ratio_threshold = max(
         1.0,
-        _parse_float_env("CORTEXPILOT_UI_GEMINI_EXTREME_TALL_RATIO", _EXTREME_TALL_ASPECT_RATIO),
+        _parse_float_env("OPENVIBECODING_UI_GEMINI_EXTREME_TALL_RATIO", _EXTREME_TALL_ASPECT_RATIO),
     )
     min_height_px = max(
         1,
-        _parse_int_env("CORTEXPILOT_UI_GEMINI_EXTREME_TALL_MIN_HEIGHT_PX", _EXTREME_TALL_MIN_HEIGHT_PX),
+        _parse_int_env("OPENVIBECODING_UI_GEMINI_EXTREME_TALL_MIN_HEIGHT_PX", _EXTREME_TALL_MIN_HEIGHT_PX),
     )
     findings: list[dict[str, Any]] = []
     for path in image_paths:
@@ -718,10 +718,10 @@ class GeminiAnalyzer:
         raise last_exc
 
     def _cache_enabled(self) -> bool:
-        return str(os.environ.get("CORTEXPILOT_GEMINI_CONTEXT_CACHE", "1")).strip().lower() not in {"0", "false", "no", "off"}
+        return str(os.environ.get("OPENVIBECODING_GEMINI_CONTEXT_CACHE", "1")).strip().lower() not in {"0", "false", "no", "off"}
 
     def _cache_root(self) -> Path:
-        raw = str(os.environ.get("CORTEXPILOT_GEMINI_CONTEXT_CACHE_DIR", "")).strip()
+        raw = str(os.environ.get("OPENVIBECODING_GEMINI_CONTEXT_CACHE_DIR", "")).strip()
         if raw:
             return Path(raw).expanduser()
         return Path(".runtime-cache/cache/gemini_ui_audit")

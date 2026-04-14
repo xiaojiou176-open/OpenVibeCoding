@@ -13,7 +13,7 @@ is_truthy() {
   [[ "${normalized}" == "1" || "${normalized}" == "true" || "${normalized}" == "yes" || "${normalized}" == "on" ]]
 }
 
-if ! is_truthy "${CORTEXPILOT_CI_CONTAINER:-0}" && ! is_truthy "${CORTEXPILOT_HOST_COMPAT:-0}"; then
+if ! is_truthy "${OPENVIBECODING_CI_CONTAINER:-0}" && ! is_truthy "${OPENVIBECODING_HOST_COMPAT:-0}"; then
   exec bash "$ROOT_DIR/scripts/docker_ci.sh" pre-push "$@"
 fi
 
@@ -24,12 +24,12 @@ PRE_PUSH_BREAK_GLASS_AUDIT_LOG=".runtime-cache/test_output/pre_push/break_glass_
 log_ci_event "$ROOT_DIR" "pre_push_quality_gate" "start" "info" '{"gate":"pre-push"}'
 
 resolve_pre_push_probe_provider_mode_or_fail() {
-  local mode="${CORTEXPILOT_PRE_PUSH_EXTERNAL_PROBE_PROVIDER_API_MODE:-require}"
+  local mode="${OPENVIBECODING_PRE_PUSH_EXTERNAL_PROBE_PROVIDER_API_MODE:-require}"
   case "$mode" in
     require|auto|off)
       ;;
     *)
-      echo "❌ [pre-push-quality-gate] unsupported CORTEXPILOT_PRE_PUSH_EXTERNAL_PROBE_PROVIDER_API_MODE=${mode}. expected: require|auto|off" >&2
+      echo "❌ [pre-push-quality-gate] unsupported OPENVIBECODING_PRE_PUSH_EXTERNAL_PROBE_PROVIDER_API_MODE=${mode}. expected: require|auto|off" >&2
       exit 1
       ;;
   esac
@@ -39,24 +39,24 @@ resolve_pre_push_probe_provider_mode_or_fail() {
     return 0
   fi
 
-  if [[ "${CORTEXPILOT_PRE_PUSH_EXTERNAL_PROBE_PROVIDER_MODE_BREAK_GLASS:-0}" != "1" ]]; then
+  if [[ "${OPENVIBECODING_PRE_PUSH_EXTERNAL_PROBE_PROVIDER_MODE_BREAK_GLASS:-0}" != "1" ]]; then
     echo "❌ [pre-push-quality-gate] probe provider mode downgrade requires break-glass" >&2
-    echo "Required env: CORTEXPILOT_PRE_PUSH_EXTERNAL_PROBE_PROVIDER_MODE_BREAK_GLASS=1 + CORTEXPILOT_PRE_PUSH_EXTERNAL_PROBE_PROVIDER_MODE_BREAK_GLASS_REASON + CORTEXPILOT_PRE_PUSH_EXTERNAL_PROBE_PROVIDER_MODE_BREAK_GLASS_TICKET" >&2
+    echo "Required env: OPENVIBECODING_PRE_PUSH_EXTERNAL_PROBE_PROVIDER_MODE_BREAK_GLASS=1 + OPENVIBECODING_PRE_PUSH_EXTERNAL_PROBE_PROVIDER_MODE_BREAK_GLASS_REASON + OPENVIBECODING_PRE_PUSH_EXTERNAL_PROBE_PROVIDER_MODE_BREAK_GLASS_TICKET" >&2
     exit 1
   fi
-  if [[ -z "${CORTEXPILOT_PRE_PUSH_EXTERNAL_PROBE_PROVIDER_MODE_BREAK_GLASS_REASON:-}" || -z "${CORTEXPILOT_PRE_PUSH_EXTERNAL_PROBE_PROVIDER_MODE_BREAK_GLASS_TICKET:-}" ]]; then
+  if [[ -z "${OPENVIBECODING_PRE_PUSH_EXTERNAL_PROBE_PROVIDER_MODE_BREAK_GLASS_REASON:-}" || -z "${OPENVIBECODING_PRE_PUSH_EXTERNAL_PROBE_PROVIDER_MODE_BREAK_GLASS_TICKET:-}" ]]; then
     echo "❌ [pre-push-quality-gate] probe provider mode break-glass requires reason and ticket" >&2
     exit 1
   fi
   local audit_log_path
   audit_log_path="$(append_pre_push_break_glass_audit \
     "pre_push_probe_provider_mode_downgrade" \
-    "${CORTEXPILOT_PRE_PUSH_EXTERNAL_PROBE_PROVIDER_MODE_BREAK_GLASS_REASON}" \
-    "${CORTEXPILOT_PRE_PUSH_EXTERNAL_PROBE_PROVIDER_MODE_BREAK_GLASS_TICKET}" \
+    "${OPENVIBECODING_PRE_PUSH_EXTERNAL_PROBE_PROVIDER_MODE_BREAK_GLASS_REASON}" \
+    "${OPENVIBECODING_PRE_PUSH_EXTERNAL_PROBE_PROVIDER_MODE_BREAK_GLASS_TICKET}" \
     "provider_mode=${mode}")"
   echo "⚠️ [pre-push-quality-gate] probe provider mode downgraded via break-glass: mode=${mode}" >&2
-  echo "   reason=${CORTEXPILOT_PRE_PUSH_EXTERNAL_PROBE_PROVIDER_MODE_BREAK_GLASS_REASON}" >&2
-  echo "   ticket=${CORTEXPILOT_PRE_PUSH_EXTERNAL_PROBE_PROVIDER_MODE_BREAK_GLASS_TICKET}" >&2
+  echo "   reason=${OPENVIBECODING_PRE_PUSH_EXTERNAL_PROBE_PROVIDER_MODE_BREAK_GLASS_REASON}" >&2
+  echo "   ticket=${OPENVIBECODING_PRE_PUSH_EXTERNAL_PROBE_PROVIDER_MODE_BREAK_GLASS_TICKET}" >&2
   echo "   audit_log=${audit_log_path}" >&2
   echo "$mode"
 }
@@ -111,24 +111,24 @@ check_pre_commit_passed() {
 }
 
 require_skip_precommit_break_glass_or_fail() {
-  if [[ "${CORTEXPILOT_PRE_PUSH_SKIP_PRECOMMIT_GATES_BREAK_GLASS:-0}" != "1" ]]; then
-    echo "❌ [pre-push-quality-gate] explicit CORTEXPILOT_PRE_PUSH_SKIP_PRECOMMIT_GATES=1 requires break-glass" >&2
-    echo "Required env: CORTEXPILOT_PRE_PUSH_SKIP_PRECOMMIT_GATES_BREAK_GLASS=1 + CORTEXPILOT_PRE_PUSH_SKIP_PRECOMMIT_GATES_BREAK_GLASS_REASON + CORTEXPILOT_PRE_PUSH_SKIP_PRECOMMIT_GATES_BREAK_GLASS_TICKET" >&2
+  if [[ "${OPENVIBECODING_PRE_PUSH_SKIP_PRECOMMIT_GATES_BREAK_GLASS:-0}" != "1" ]]; then
+    echo "❌ [pre-push-quality-gate] explicit OPENVIBECODING_PRE_PUSH_SKIP_PRECOMMIT_GATES=1 requires break-glass" >&2
+    echo "Required env: OPENVIBECODING_PRE_PUSH_SKIP_PRECOMMIT_GATES_BREAK_GLASS=1 + OPENVIBECODING_PRE_PUSH_SKIP_PRECOMMIT_GATES_BREAK_GLASS_REASON + OPENVIBECODING_PRE_PUSH_SKIP_PRECOMMIT_GATES_BREAK_GLASS_TICKET" >&2
     exit 1
   fi
-  if [[ -z "${CORTEXPILOT_PRE_PUSH_SKIP_PRECOMMIT_GATES_BREAK_GLASS_REASON:-}" || -z "${CORTEXPILOT_PRE_PUSH_SKIP_PRECOMMIT_GATES_BREAK_GLASS_TICKET:-}" ]]; then
+  if [[ -z "${OPENVIBECODING_PRE_PUSH_SKIP_PRECOMMIT_GATES_BREAK_GLASS_REASON:-}" || -z "${OPENVIBECODING_PRE_PUSH_SKIP_PRECOMMIT_GATES_BREAK_GLASS_TICKET:-}" ]]; then
     echo "❌ [pre-push-quality-gate] skip-precommit break-glass requires reason and ticket" >&2
     exit 1
   fi
   local audit_log_path
   audit_log_path="$(append_pre_push_break_glass_audit \
     "pre_push_skip_precommit_gates" \
-    "${CORTEXPILOT_PRE_PUSH_SKIP_PRECOMMIT_GATES_BREAK_GLASS_REASON}" \
-    "${CORTEXPILOT_PRE_PUSH_SKIP_PRECOMMIT_GATES_BREAK_GLASS_TICKET}" \
+    "${OPENVIBECODING_PRE_PUSH_SKIP_PRECOMMIT_GATES_BREAK_GLASS_REASON}" \
+    "${OPENVIBECODING_PRE_PUSH_SKIP_PRECOMMIT_GATES_BREAK_GLASS_TICKET}" \
     "skip_precommit_gates=1")"
   echo "⚠️ [pre-push-quality-gate] pre-commit lint/doc gates skip approved via break-glass" >&2
-  echo "   reason=${CORTEXPILOT_PRE_PUSH_SKIP_PRECOMMIT_GATES_BREAK_GLASS_REASON}" >&2
-  echo "   ticket=${CORTEXPILOT_PRE_PUSH_SKIP_PRECOMMIT_GATES_BREAK_GLASS_TICKET}" >&2
+  echo "   reason=${OPENVIBECODING_PRE_PUSH_SKIP_PRECOMMIT_GATES_BREAK_GLASS_REASON}" >&2
+  echo "   ticket=${OPENVIBECODING_PRE_PUSH_SKIP_PRECOMMIT_GATES_BREAK_GLASS_TICKET}" >&2
   echo "   audit_log=${audit_log_path}" >&2
 }
 
@@ -141,7 +141,7 @@ echo "🚦 [pre-push-quality-gate] local-first layered gate start"
 # - CI handles: full comprehensive checks (catch-all for --no-verify bypass)
 
 # Check if pre-commit already passed recently (within 5 minutes)
-skip_lint_doc_gates_request="${CORTEXPILOT_PRE_PUSH_SKIP_PRECOMMIT_GATES:-auto}"
+skip_lint_doc_gates_request="${OPENVIBECODING_PRE_PUSH_SKIP_PRECOMMIT_GATES:-auto}"
 skip_lint_doc_gates="$skip_lint_doc_gates_request"
 if [[ "$skip_lint_doc_gates_request" == "auto" ]]; then
   if check_pre_commit_passed; then
@@ -155,7 +155,7 @@ elif [[ "$skip_lint_doc_gates_request" == "1" ]]; then
 elif [[ "$skip_lint_doc_gates_request" == "0" ]]; then
   :
 else
-  echo "❌ [pre-push-quality-gate] unsupported CORTEXPILOT_PRE_PUSH_SKIP_PRECOMMIT_GATES=${skip_lint_doc_gates_request}. expected: auto|1|0" >&2
+  echo "❌ [pre-push-quality-gate] unsupported OPENVIBECODING_PRE_PUSH_SKIP_PRECOMMIT_GATES=${skip_lint_doc_gates_request}. expected: auto|1|0" >&2
   exit 1
 fi
 
@@ -181,7 +181,7 @@ echo "ℹ️  [pre-push-quality-gate] skip desktop Cargo.lock audit in the defau
 # pre-push runs a lightweight fast path by default and keeps the old strict
 # local mirror as an explicit opt-in. Remote CI remains the highest-strictness
 # second-pass verifier.
-run_local_ci="${CORTEXPILOT_PRE_PUSH_RUN_CI_DOUBLE_CHECK:-0}"
+run_local_ci="${OPENVIBECODING_PRE_PUSH_RUN_CI_DOUBLE_CHECK:-0}"
 if [[ "$run_local_ci" == "1" ]]; then
   echo "🚦 [pre-push-quality-gate] running strict local verification bundle (opt-in)"
   bash scripts/check_secret_scan_closeout.sh --mode current
@@ -200,7 +200,7 @@ if [[ "$run_local_ci" == "1" ]]; then
   
   # Incremental test mode: only run tests related to changed files
   # Full test mode: run all tests (fallback when incremental detection fails)
-  test_mode="${CORTEXPILOT_PRE_PUSH_TEST_MODE:-incremental}"
+  test_mode="${OPENVIBECODING_PRE_PUSH_TEST_MODE:-incremental}"
   
   if [[ "$test_mode" == "incremental" ]]; then
     echo "🔍 [pre-push-quality-gate] detecting changed tests for incremental run"
@@ -212,7 +212,7 @@ if [[ "$run_local_ci" == "1" ]]; then
     incremental_output=""
     if incremental_output="$(
       python3 scripts/detect_changed_tests.py \
-        --base-ref "${CORTEXPILOT_PRE_PUSH_BASE_REF:-origin/main}" \
+        --base-ref "${OPENVIBECODING_PRE_PUSH_BASE_REF:-origin/main}" \
         --test-dir apps/orchestrator/tests \
         --src-dir apps/orchestrator/src \
         --output files \
@@ -239,50 +239,50 @@ EOF
 
     if printf '%s\n' "${incremental_lines[@]}" | rg -q '^(__ALL__|apps/orchestrator/tests)$'; then
       echo "🔄 [pre-push-quality-gate] running full test suite (critical files changed or fallback)"
-      CORTEXPILOT_TEST_MODE=full bash ./scripts/test.sh
+      OPENVIBECODING_TEST_MODE=full bash ./scripts/test.sh
     elif printf '%s\n' "${incremental_lines[@]}" | rg -q '^(__SKIP__|__NONE__)$'; then
       echo "ℹ️  [pre-push-quality-gate] no Python tests affected by changes, skipping pytest"
     else
       echo "🎯 [pre-push-quality-gate] running incremental tests: ${#incremental_lines[@]} files"
       incremental_payload="$(printf '%s\n' "${incremental_lines[@]}")"
-      CORTEXPILOT_TEST_MODE=incremental CORTEXPILOT_TEST_INCREMENTAL_FILES="$incremental_payload" bash ./scripts/test.sh
+      OPENVIBECODING_TEST_MODE=incremental OPENVIBECODING_TEST_INCREMENTAL_FILES="$incremental_payload" bash ./scripts/test.sh
     fi
   else
     echo "🔄 [pre-push-quality-gate] running full test suite (test_mode=$test_mode)"
-    CORTEXPILOT_TEST_MODE=full bash ./scripts/test.sh
+    OPENVIBECODING_TEST_MODE=full bash ./scripts/test.sh
   fi
   
   # External probe always runs (real network validation)
-  python_bin="$(cortexpilot_python_bin "$ROOT_DIR")"
+  python_bin="$(openvibecoding_python_bin "$ROOT_DIR")"
   "$python_bin" scripts/e2e_external_web_probe.py \
-    --url "${CORTEXPILOT_PRE_PUSH_EXTERNAL_PROBE_URL:-https://example.com}" \
+    --url "${OPENVIBECODING_PRE_PUSH_EXTERNAL_PROBE_URL:-https://example.com}" \
     --provider-api-mode "${PRE_PUSH_EXTERNAL_PROBE_PROVIDER_MODE}" \
-    --hard-timeout-sec "${CORTEXPILOT_PRE_PUSH_EXTERNAL_PROBE_TIMEOUT_SEC:-120}"
+    --hard-timeout-sec "${OPENVIBECODING_PRE_PUSH_EXTERNAL_PROBE_TIMEOUT_SEC:-120}"
 elif [[ "$run_local_ci" == "0" ]]; then
   echo "🚦 [pre-push-quality-gate] running fast local verification bundle (default)"
   bash ./scripts/test_quick.sh --no-related
 elif [[ "$run_local_ci" == "off" ]]; then
-  if [[ "${CORTEXPILOT_PRE_PUSH_BREAK_GLASS:-0}" != "1" ]]; then
+  if [[ "${OPENVIBECODING_PRE_PUSH_BREAK_GLASS:-0}" != "1" ]]; then
     echo "❌ [pre-push-quality-gate] off mode requires break-glass" >&2
-    echo "Set CORTEXPILOT_PRE_PUSH_BREAK_GLASS=1 with reason/ticket to bypass." >&2
+    echo "Set OPENVIBECODING_PRE_PUSH_BREAK_GLASS=1 with reason/ticket to bypass." >&2
     exit 1
   fi
-  if [[ -z "${CORTEXPILOT_PRE_PUSH_BREAK_GLASS_REASON:-}" || -z "${CORTEXPILOT_PRE_PUSH_BREAK_GLASS_TICKET:-}" ]]; then
+  if [[ -z "${OPENVIBECODING_PRE_PUSH_BREAK_GLASS_REASON:-}" || -z "${OPENVIBECODING_PRE_PUSH_BREAK_GLASS_TICKET:-}" ]]; then
     echo "❌ [pre-push-quality-gate] break-glass requires reason and ticket" >&2
-    echo "Required env: CORTEXPILOT_PRE_PUSH_BREAK_GLASS_REASON, CORTEXPILOT_PRE_PUSH_BREAK_GLASS_TICKET" >&2
+    echo "Required env: OPENVIBECODING_PRE_PUSH_BREAK_GLASS_REASON, OPENVIBECODING_PRE_PUSH_BREAK_GLASS_TICKET" >&2
     exit 1
   fi
   audit_log_path="$(append_pre_push_break_glass_audit \
     "pre_push_skip_local_ci_double_check" \
-    "${CORTEXPILOT_PRE_PUSH_BREAK_GLASS_REASON}" \
-    "${CORTEXPILOT_PRE_PUSH_BREAK_GLASS_TICKET}" \
+    "${OPENVIBECODING_PRE_PUSH_BREAK_GLASS_REASON}" \
+    "${OPENVIBECODING_PRE_PUSH_BREAK_GLASS_TICKET}" \
     "run_local_ci=${run_local_ci}")"
   echo "⚠️ [pre-push-quality-gate] break-glass: skip all local verification bundles"
-  echo "   reason=${CORTEXPILOT_PRE_PUSH_BREAK_GLASS_REASON}"
-  echo "   ticket=${CORTEXPILOT_PRE_PUSH_BREAK_GLASS_TICKET}"
+  echo "   reason=${OPENVIBECODING_PRE_PUSH_BREAK_GLASS_REASON}"
+  echo "   ticket=${OPENVIBECODING_PRE_PUSH_BREAK_GLASS_TICKET}"
   echo "   audit_log=${audit_log_path}"
 else
-  echo "❌ [pre-push-quality-gate] invalid CORTEXPILOT_PRE_PUSH_RUN_CI_DOUBLE_CHECK=${run_local_ci} (expected: 0|1|off)" >&2
+  echo "❌ [pre-push-quality-gate] invalid OPENVIBECODING_PRE_PUSH_RUN_CI_DOUBLE_CHECK=${run_local_ci} (expected: 0|1|off)" >&2
   exit 1
 fi
 

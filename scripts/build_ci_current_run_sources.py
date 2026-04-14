@@ -78,7 +78,7 @@ def main() -> int:
     output.parent.mkdir(parents=True, exist_ok=True)
     authority_hint = "advisory" if args.route_id.strip() == "local-advisory" else "authoritative_candidate"
     payload = {
-        "report_type": "cortexpilot_ci_current_run_source_manifest",
+        "report_type": "openvibecoding_ci_current_run_source_manifest",
         "schema_version": 1,
         "generated_at": now_utc(),
         "authority_hint": authority_hint,

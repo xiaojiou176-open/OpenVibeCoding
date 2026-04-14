@@ -3,11 +3,11 @@
 Date: 2026-03-31 (America/Los_Angeles)
 
 This document captures the Prompt 4 baseline for the first **read-only MCP
-server** and the first **AI operator copilot** surface in CortexPilot.
+server** and the first **AI operator copilot** surface in OpenVibeCoding.
 
 ## Why this slice exists
 
-CortexPilot already had the control-plane truth and the operator UI. Prompt 4
+OpenVibeCoding already had the control-plane truth and the operator UI. Prompt 4
 turns that into two new product surfaces:
 
 - an **agent-facing read-only MCP node**
@@ -23,18 +23,18 @@ second truth source or hide write behavior behind soft wording.
 For stdio-capable clients, the shortest repo-owned entry is:
 
 ```bash
-bash /absolute/path/to/CortexPilot/scripts/run_readonly_mcp.sh
+bash /absolute/path/to/OpenVibeCoding/scripts/run_openvibecoding_readonly_mcp.sh
 ```
 
 The underlying runtime command remains:
 
 ```bash
-PYTHONPATH=apps/orchestrator/src python3 -m cortexpilot_orch.cli mcp-readonly-server
+PYTHONPATH=apps/orchestrator/src python3 -m openvibecoding_orch.cli mcp-readonly-server
 ```
 
 The repo-local entry lives at
-`apps/orchestrator/src/cortexpilot_orch/mcp_readonly_server.py` and the CLI
-hook lives at `apps/orchestrator/src/cortexpilot_orch/cli.py`.
+`apps/orchestrator/src/openvibecoding_orch/mcp_readonly_server.py` and the CLI
+hook lives at `apps/orchestrator/src/openvibecoding_orch/cli.py`.
 
 ### What v1 exposes
 
@@ -100,7 +100,7 @@ Prompt 7 extends the same bounded brief shell to these additional surfaces:
 
 Backend brief generation:
 
-- `apps/orchestrator/src/cortexpilot_orch/services/operator_copilot.py`
+- `apps/orchestrator/src/openvibecoding_orch/services/operator_copilot.py`
 - `schemas/operator_copilot_brief.v1.json`
 
 ### What v1 answers
@@ -217,9 +217,9 @@ Smallest safe next move if reopened later:
 
 Why not now:
 
-- README / SUPPORT / PRIVACY still define CortexPilot as source code plus
+- README / SUPPORT / PRIVACY still define OpenVibeCoding as source code plus
   operator/demo surfaces, not a hosted service
-- `cortexpilot.ai` is still a holding page, not a production front door
+- `openvibecoding.ai` is still a holding page, not a production front door
 - the live public repo, release body, and Pages wording still lag behind the
   repo-side product story
 - no tenant boundary, service onboarding, or hosted support promise is part of

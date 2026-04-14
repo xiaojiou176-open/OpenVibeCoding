@@ -5,7 +5,7 @@ from types import SimpleNamespace
 
 import pytest
 
-import cortexpilot_orch.config as config_module
+import openvibecoding_orch.config as config_module
 
 
 def _reset_config_state() -> None:
@@ -24,22 +24,22 @@ def test_round4_config_properties_and_public_getters(monkeypatch: pytest.MonkeyP
     schema_root.mkdir(parents=True, exist_ok=True)
     contract_root.mkdir(parents=True, exist_ok=True)
 
-    monkeypatch.delenv("CORTEXPILOT_ENV_FILE", raising=False)
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_SCHEMA_ROOT", str(schema_root))
-    monkeypatch.setenv("CORTEXPILOT_CONTRACT_ROOT", str(contract_root))
-    monkeypatch.setenv("CORTEXPILOT_REPO_ROOT", str(tmp_path))
-    monkeypatch.setenv("CORTEXPILOT_LOGS_ROOT", str(logs_root))
-    monkeypatch.setenv("CORTEXPILOT_CACHE_ROOT", str(cache_root))
-    monkeypatch.setenv("CORTEXPILOT_MACHINE_CACHE_ROOT", str(tmp_path / "machine-cache"))
-    monkeypatch.setenv("CORTEXPILOT_RETENTION_MACHINE_CACHE_CAP_BYTES", "4096")
+    monkeypatch.delenv("OPENVIBECODING_ENV_FILE", raising=False)
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_SCHEMA_ROOT", str(schema_root))
+    monkeypatch.setenv("OPENVIBECODING_CONTRACT_ROOT", str(contract_root))
+    monkeypatch.setenv("OPENVIBECODING_REPO_ROOT", str(tmp_path))
+    monkeypatch.setenv("OPENVIBECODING_LOGS_ROOT", str(logs_root))
+    monkeypatch.setenv("OPENVIBECODING_CACHE_ROOT", str(cache_root))
+    monkeypatch.setenv("OPENVIBECODING_MACHINE_CACHE_ROOT", str(tmp_path / "machine-cache"))
+    monkeypatch.setenv("OPENVIBECODING_RETENTION_MACHINE_CACHE_CAP_BYTES", "4096")
 
     cfg = config_module.load_config()
 
     assert cfg.schema_root == schema_root
     assert cfg.repo_root == tmp_path
     assert cfg.contract_root_explicit is True
-    assert cfg.runtime_contract_root == tmp_path / ".runtime-cache" / "cortexpilot" / "contracts"
+    assert cfg.runtime_contract_root == tmp_path / ".runtime-cache" / "openvibecoding" / "contracts"
     assert cfg.machine_cache_root == tmp_path / "machine-cache"
     assert cfg.retention_machine_cache_cap_bytes == 4096
 
@@ -51,7 +51,7 @@ def test_round4_config_properties_and_public_getters(monkeypatch: pytest.MonkeyP
 def test_round4_config_env_helpers_and_runtime_path_fallback(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     _reset_config_state()
 
-    monkeypatch.setenv("CORTEXPILOT_ENV_FILE", "custom.env")
+    monkeypatch.setenv("OPENVIBECODING_ENV_FILE", "custom.env")
     candidates = config_module._explicit_env_candidates(tmp_path)
     assert candidates == [Path("custom.env")]
 
@@ -123,15 +123,15 @@ def test_round4_config_machine_cache_cap_defaults_from_space_policy(
 }""",
         encoding="utf-8",
     )
-    monkeypatch.setenv("CORTEXPILOT_REPO_ROOT", str(tmp_path))
-    monkeypatch.delenv("CORTEXPILOT_RETENTION_MACHINE_CACHE_CAP_BYTES", raising=False)
+    monkeypatch.setenv("OPENVIBECODING_REPO_ROOT", str(tmp_path))
+    monkeypatch.delenv("OPENVIBECODING_RETENTION_MACHINE_CACHE_CAP_BYTES", raising=False)
 
     cfg = config_module.load_config()
 
     assert cfg.retention_machine_cache_cap_bytes == 7777
 
 
-def test_round4_config_prefers_cortexpilot_aliases_for_core_runtime_inputs(
+def test_round4_config_prefers_openvibecoding_aliases_for_core_runtime_inputs(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
     _reset_config_state()
@@ -140,13 +140,13 @@ def test_round4_config_prefers_cortexpilot_aliases_for_core_runtime_inputs(
     repo_root = tmp_path / "repo-new"
     logs_root = tmp_path / "logs-new"
     cache_root = tmp_path / "cache-new"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_REPO_ROOT", str(repo_root))
-    monkeypatch.setenv("CORTEXPILOT_LOGS_ROOT", str(logs_root))
-    monkeypatch.setenv("CORTEXPILOT_CACHE_ROOT", str(cache_root))
-    monkeypatch.setenv("CORTEXPILOT_API_AUTH_REQUIRED", "false")
-    monkeypatch.setenv("CORTEXPILOT_API_TOKEN", "cp-token")
-    monkeypatch.setenv("CORTEXPILOT_DASHBOARD_PORT", "4100")
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_REPO_ROOT", str(repo_root))
+    monkeypatch.setenv("OPENVIBECODING_LOGS_ROOT", str(logs_root))
+    monkeypatch.setenv("OPENVIBECODING_CACHE_ROOT", str(cache_root))
+    monkeypatch.setenv("OPENVIBECODING_API_AUTH_REQUIRED", "false")
+    monkeypatch.setenv("OPENVIBECODING_API_TOKEN", "cp-token")
+    monkeypatch.setenv("OPENVIBECODING_DASHBOARD_PORT", "4100")
 
     cfg = config_module.load_config()
 
@@ -169,27 +169,27 @@ def test_round4_config_default_relative_runtime_paths_anchor_to_repo_root(
     work_dir.mkdir(parents=True, exist_ok=True)
 
     monkeypatch.chdir(work_dir)
-    monkeypatch.delenv("CORTEXPILOT_ENV_FILE", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_RUNTIME_ROOT", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_SCHEMA_ROOT", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_CONTRACT_ROOT", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_RUNTIME_CONTRACT_ROOT", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_WORKTREE_ROOT", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_RUNS_ROOT", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_LOGS_ROOT", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_CACHE_ROOT", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_REPO_ROOT", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_ENV_FILE", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_RUNTIME_ROOT", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_SCHEMA_ROOT", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_CONTRACT_ROOT", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_RUNTIME_CONTRACT_ROOT", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_WORKTREE_ROOT", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_RUNS_ROOT", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_LOGS_ROOT", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_CACHE_ROOT", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_REPO_ROOT", raising=False)
     monkeypatch.setattr(config_module, "_repo_root", lambda: repo_root)
 
     cfg = config_module.load_config()
 
     assert cfg.repo_root == repo_root
-    assert cfg.runtime_root == repo_root / ".runtime-cache" / "cortexpilot"
+    assert cfg.runtime_root == repo_root / ".runtime-cache" / "openvibecoding"
     assert cfg.schema_root == repo_root / "schemas"
     assert cfg.contract_root == repo_root / "contracts"
-    assert cfg.runtime_contract_root == repo_root / ".runtime-cache" / "cortexpilot" / "contracts"
-    assert cfg.worktree_root == repo_root / ".runtime-cache" / "cortexpilot" / "worktrees"
-    assert cfg.runs_root == repo_root / ".runtime-cache" / "cortexpilot" / "runs"
+    assert cfg.runtime_contract_root == repo_root / ".runtime-cache" / "openvibecoding" / "contracts"
+    assert cfg.worktree_root == repo_root / ".runtime-cache" / "openvibecoding" / "worktrees"
+    assert cfg.runs_root == repo_root / ".runtime-cache" / "openvibecoding" / "runs"
     assert cfg.logs_root == repo_root / ".runtime-cache" / "logs"
     assert cfg.cache_root == repo_root / ".runtime-cache" / "cache"
 
@@ -201,17 +201,17 @@ def test_round4_config_shadowed_env_and_explicit_env_loading(monkeypatch: pytest
     monkeypatch.setattr(
         config_module,
         "_ENV_OVERRIDE_ORDER",
-        {"base_url": ("CORTEXPILOT_PROVIDER_BASE_URL", "CORTEXPILOT_PROVIDER_MODEL")},
+        {"base_url": ("OPENVIBECODING_PROVIDER_BASE_URL", "OPENVIBECODING_PROVIDER_MODEL")},
     )
-    monkeypatch.setenv("CORTEXPILOT_PROVIDER_BASE_URL", "https://api.primary.local/v1")
-    monkeypatch.setenv("CORTEXPILOT_PROVIDER_MODEL", "https://api.shadow.local/v1")
+    monkeypatch.setenv("OPENVIBECODING_PROVIDER_BASE_URL", "https://api.primary.local/v1")
+    monkeypatch.setenv("OPENVIBECODING_PROVIDER_MODEL", "https://api.shadow.local/v1")
     with pytest.raises(RuntimeError, match="env effective-chain breakpoint"):
         config_module._assert_no_shadowed_env_values()
 
     _reset_config_state()
     monkeypatch.setattr(config_module, "_ENV_OVERRIDE_ORDER", original_override_order)
-    monkeypatch.delenv("CORTEXPILOT_PROVIDER_BASE_URL", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_PROVIDER_MODEL", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_PROVIDER_BASE_URL", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_PROVIDER_MODEL", raising=False)
 
     class _FlipLoadedLock:
         def __enter__(self):
@@ -230,17 +230,17 @@ def test_round4_config_shadowed_env_and_explicit_env_loading(monkeypatch: pytest
     repo_root = tmp_path / "repo"
     env_file = repo_root / "envs" / "local.env"
     env_file.parent.mkdir(parents=True, exist_ok=True)
-    env_file.write_text("CORTEXPILOT_PROVIDER=gemini\n", encoding="utf-8")
+    env_file.write_text("OPENVIBECODING_PROVIDER=gemini\n", encoding="utf-8")
 
     monkeypatch.setattr(config_module, "_repo_root", lambda: repo_root)
-    monkeypatch.setenv("CORTEXPILOT_ENV_FILE", "envs/local.env")
+    monkeypatch.setenv("OPENVIBECODING_ENV_FILE", "envs/local.env")
     config_module._load_explicit_env_files()
     assert config_module._ENV_LOADED is True
 
     _reset_config_state()
     monkeypatch.setattr(config_module, "_repo_root", lambda: repo_root)
-    monkeypatch.setenv("CORTEXPILOT_ENV_FILE", "envs/missing.env")
-    with pytest.raises(RuntimeError, match="CORTEXPILOT_ENV_FILE not found"):
+    monkeypatch.setenv("OPENVIBECODING_ENV_FILE", "envs/missing.env")
+    with pytest.raises(RuntimeError, match="OPENVIBECODING_ENV_FILE not found"):
         config_module._load_explicit_env_files()
 
 

@@ -11,12 +11,12 @@ source "$ROOT_DIR/scripts/lib/env.sh"
 source "$ROOT_DIR/scripts/lib/test_heartbeat.sh"
 source "$ROOT_DIR/scripts/lib/e2e_common.sh"
 source "$ROOT_DIR/scripts/lib/toolchain_env.sh"
-PYTHON_BIN="${CORTEXPILOT_PYTHON:-$(cortexpilot_python_bin "$ROOT_DIR" || true)}"
+PYTHON_BIN="${OPENVIBECODING_PYTHON:-$(openvibecoding_python_bin "$ROOT_DIR" || true)}"
 
 if [[ -z "$PYTHON_BIN" ]] || [[ ! -x "$PYTHON_BIN" ]]; then
   echo "ℹ️ [pm-chat-e2e] missing managed Python toolchain, bootstrapping playwright-capable toolchain"
   bash "$ROOT_DIR/scripts/bootstrap.sh" playwright
-  PYTHON_BIN="${CORTEXPILOT_PYTHON:-$(cortexpilot_python_bin "$ROOT_DIR" || true)}"
+  PYTHON_BIN="${OPENVIBECODING_PYTHON:-$(openvibecoding_python_bin "$ROOT_DIR" || true)}"
 fi
 
 if [[ -z "$PYTHON_BIN" ]] || [[ ! -x "$PYTHON_BIN" ]]; then
@@ -30,31 +30,31 @@ PY
 then
   echo "ℹ️ [pm-chat-e2e] managed Python missing playwright, bootstrapping playwright-capable toolchain"
   bash "$ROOT_DIR/scripts/bootstrap.sh" playwright
-  PYTHON_BIN="${CORTEXPILOT_PYTHON:-$(cortexpilot_python_bin "$ROOT_DIR" || true)}"
+  PYTHON_BIN="${OPENVIBECODING_PYTHON:-$(openvibecoding_python_bin "$ROOT_DIR" || true)}"
 fi
 
-HOST="$(cortexpilot_env_get CORTEXPILOT_E2E_HOST "127.0.0.1")"
-API_PORT="$(cortexpilot_env_get CORTEXPILOT_E2E_API_PORT "18000")"
-DASHBOARD_PORT="$(cortexpilot_env_get CORTEXPILOT_E2E_DASHBOARD_PORT "18100")"
-API_TOKEN="$(cortexpilot_env_get CORTEXPILOT_E2E_API_TOKEN "cortexpilot-e2e-token")"
-RUN_MODE="$(cortexpilot_env_get CORTEXPILOT_E2E_RUN_MODE "real")"
-RUNNER_NAME="$(cortexpilot_env_get CORTEXPILOT_E2E_RUNNER "agents")"
-WEB_MODE="$(cortexpilot_env_get CORTEXPILOT_E2E_WEB_MODE "dev")"
-ALLOWED_PATHS_OVERRIDE="$(cortexpilot_env_get CORTEXPILOT_E2E_ALLOWED_PATHS "apps/dashboard")"
-REEXEC_STRICT="$(cortexpilot_env_get CORTEXPILOT_E2E_REEXEC_STRICT "true")"
-ACCEPTANCE_CMD="$(cortexpilot_env_get CORTEXPILOT_E2E_ACCEPTANCE_CMD "")"
-USE_CODEX_CONFIG="$(cortexpilot_env_get CORTEXPILOT_E2E_USE_CODEX_CONFIG "1")"
-codex_config_path="$(cortexpilot_env_get CORTEXPILOT_CODEX_CONFIG_PATH "$HOME/.codex/config.toml")"
-IMPORT_CONFIG_API_KEY="$(cortexpilot_env_get CORTEXPILOT_E2E_IMPORT_CONFIG_API_KEY "0")"
-CODEX_BASE_URL_OVERRIDE="$(cortexpilot_env_get CORTEXPILOT_E2E_CODEX_BASE_URL "")"
-CODEX_PROVIDER_OVERRIDE="$(cortexpilot_env_get CORTEXPILOT_E2E_CODEX_PROVIDER "")"
-CODEX_MODEL_OVERRIDE="$(cortexpilot_env_get CORTEXPILOT_E2E_CODEX_MODEL "")"
-CODEX_KEY_SOURCE_OVERRIDE="$(cortexpilot_env_get CORTEXPILOT_E2E_CODEX_KEY_SOURCE "")"
-HEARTBEAT_SEC="$(cortexpilot_env_get CORTEXPILOT_E2E_HEARTBEAT_INTERVAL_SEC "20")"
-FAST_GATE_TIMEOUT_SEC="$(cortexpilot_env_get CORTEXPILOT_E2E_FAST_GATE_TIMEOUT_SEC "900")"
-LIVE_PREFLIGHT_TIMEOUT_SEC="$(cortexpilot_env_get CORTEXPILOT_E2E_LIVE_PREFLIGHT_TIMEOUT_SEC "180")"
-RUNNER_TIMEOUT_SEC="$(cortexpilot_env_get CORTEXPILOT_E2E_RUNNER_TIMEOUT_SEC "3600")"
-SKIP_FAST_GATE="$(cortexpilot_env_get CORTEXPILOT_E2E_SKIP_FAST_GATE "0")"
+HOST="$(openvibecoding_env_get OPENVIBECODING_E2E_HOST "127.0.0.1")"
+API_PORT="$(openvibecoding_env_get OPENVIBECODING_E2E_API_PORT "18000")"
+DASHBOARD_PORT="$(openvibecoding_env_get OPENVIBECODING_E2E_DASHBOARD_PORT "18100")"
+API_TOKEN="$(openvibecoding_env_get OPENVIBECODING_E2E_API_TOKEN "openvibecoding-e2e-token")"
+RUN_MODE="$(openvibecoding_env_get OPENVIBECODING_E2E_RUN_MODE "real")"
+RUNNER_NAME="$(openvibecoding_env_get OPENVIBECODING_E2E_RUNNER "agents")"
+WEB_MODE="$(openvibecoding_env_get OPENVIBECODING_E2E_WEB_MODE "dev")"
+ALLOWED_PATHS_OVERRIDE="$(openvibecoding_env_get OPENVIBECODING_E2E_ALLOWED_PATHS "apps/dashboard")"
+REEXEC_STRICT="$(openvibecoding_env_get OPENVIBECODING_E2E_REEXEC_STRICT "true")"
+ACCEPTANCE_CMD="$(openvibecoding_env_get OPENVIBECODING_E2E_ACCEPTANCE_CMD "")"
+USE_CODEX_CONFIG="$(openvibecoding_env_get OPENVIBECODING_E2E_USE_CODEX_CONFIG "1")"
+codex_config_path="$(openvibecoding_env_get OPENVIBECODING_CODEX_CONFIG_PATH "$HOME/.codex/config.toml")"
+IMPORT_CONFIG_API_KEY="$(openvibecoding_env_get OPENVIBECODING_E2E_IMPORT_CONFIG_API_KEY "0")"
+CODEX_BASE_URL_OVERRIDE="$(openvibecoding_env_get OPENVIBECODING_E2E_CODEX_BASE_URL "")"
+CODEX_PROVIDER_OVERRIDE="$(openvibecoding_env_get OPENVIBECODING_E2E_CODEX_PROVIDER "")"
+CODEX_MODEL_OVERRIDE="$(openvibecoding_env_get OPENVIBECODING_E2E_CODEX_MODEL "")"
+CODEX_KEY_SOURCE_OVERRIDE="$(openvibecoding_env_get OPENVIBECODING_E2E_CODEX_KEY_SOURCE "")"
+HEARTBEAT_SEC="$(openvibecoding_env_get OPENVIBECODING_E2E_HEARTBEAT_INTERVAL_SEC "20")"
+FAST_GATE_TIMEOUT_SEC="$(openvibecoding_env_get OPENVIBECODING_E2E_FAST_GATE_TIMEOUT_SEC "900")"
+LIVE_PREFLIGHT_TIMEOUT_SEC="$(openvibecoding_env_get OPENVIBECODING_E2E_LIVE_PREFLIGHT_TIMEOUT_SEC "180")"
+RUNNER_TIMEOUT_SEC="$(openvibecoding_env_get OPENVIBECODING_E2E_RUNNER_TIMEOUT_SEC "3600")"
+SKIP_FAST_GATE="$(openvibecoding_env_get OPENVIBECODING_E2E_SKIP_FAST_GATE "0")"
 
 if [[ -z "$ACCEPTANCE_CMD" ]]; then
   ACCEPTANCE_CMD="python3 -m pytest apps/orchestrator/tests/test_schema_validation.py apps/orchestrator/tests/test_policy_registry_alignment.py -q"
@@ -68,7 +68,7 @@ case "$RUN_MODE" in
     RUN_MOCK="true"
     ;;
   *)
-    echo "❌ invalid CORTEXPILOT_E2E_RUN_MODE: $RUN_MODE (expected: real|mock)"
+    echo "❌ invalid OPENVIBECODING_E2E_RUN_MODE: $RUN_MODE (expected: real|mock)"
     exit 1
     ;;
 esac
@@ -77,7 +77,7 @@ case "$WEB_MODE" in
   dev|prod)
     ;;
   *)
-    echo "❌ invalid CORTEXPILOT_E2E_WEB_MODE: $WEB_MODE (expected: dev|prod)"
+    echo "❌ invalid OPENVIBECODING_E2E_WEB_MODE: $WEB_MODE (expected: dev|prod)"
     exit 1
     ;;
 esac
@@ -85,7 +85,7 @@ esac
 UI_REG_OUT_DIR="$ROOT_DIR/.runtime-cache/test_output/ui_regression"
 OUT_DIR="$UI_REG_OUT_DIR"
 LOG_DIR="$ROOT_DIR/.runtime-cache/logs/runtime/pm_chat_e2e"
-PID_DIR="$ROOT_DIR/.runtime-cache/cortexpilot/temp"
+PID_DIR="$ROOT_DIR/.runtime-cache/openvibecoding/temp"
 mkdir -p "$OUT_DIR" "$UI_REG_OUT_DIR" "$LOG_DIR" "$PID_DIR"
 
 TS="$(date +%Y%m%d_%H%M%S)"
@@ -97,8 +97,8 @@ SCREEN_SESSION="$OUT_DIR/e2e_pm_chat_session_page_${RUN_MODE}_${TS}.png"
 UI_REG_EVIDENCE_JSON="$EVIDENCE_JSON"
 UI_REG_SCREEN_PM="$SCREEN_PM"
 UI_REG_SCREEN_SESSION="$SCREEN_SESSION"
-SCRIPT_LOCK_DIR="$ROOT_DIR/.runtime-cache/cortexpilot/locks/pm_chat_real_e2e.lockdir"
-SERIAL_TIMEOUT_SEC="$(cortexpilot_env_get CORTEXPILOT_E2E_PM_CHAT_SERIAL_TIMEOUT_SEC "120")"
+SCRIPT_LOCK_DIR="$ROOT_DIR/.runtime-cache/openvibecoding/locks/pm_chat_real_e2e.lockdir"
+SERIAL_TIMEOUT_SEC="$(openvibecoding_env_get OPENVIBECODING_E2E_PM_CHAT_SERIAL_TIMEOUT_SEC "120")"
 
 API_PID=""
 UI_PID=""
@@ -244,10 +244,10 @@ load_codex_llm_env() {
   local resolved_key_source="$CODEX_KEY_SOURCE_OVERRIDE"
 
   if [[ "$USE_CODEX_CONFIG" == "0" ]]; then
-    export CORTEXPILOT_E2E_RESOLVED_CODEX_BASE_URL="$resolved_base_url"
-    export CORTEXPILOT_E2E_RESOLVED_CODEX_PROVIDER="$resolved_provider"
-    export CORTEXPILOT_E2E_RESOLVED_CODEX_MODEL="$resolved_model"
-    export CORTEXPILOT_E2E_RESOLVED_CODEX_KEY_SOURCE="$resolved_key_source"
+    export OPENVIBECODING_E2E_RESOLVED_CODEX_BASE_URL="$resolved_base_url"
+    export OPENVIBECODING_E2E_RESOLVED_CODEX_PROVIDER="$resolved_provider"
+    export OPENVIBECODING_E2E_RESOLVED_CODEX_MODEL="$resolved_model"
+    export OPENVIBECODING_E2E_RESOLVED_CODEX_KEY_SOURCE="$resolved_key_source"
     return
   fi
 
@@ -325,25 +325,25 @@ PY
     fi
   fi
 
-  if [[ -z "${CORTEXPILOT_AGENTS_BASE_URL:-}" ]] && [[ -n "$resolved_base_url" ]]; then
-    export CORTEXPILOT_AGENTS_BASE_URL="$resolved_base_url"
+  if [[ -z "${OPENVIBECODING_AGENTS_BASE_URL:-}" ]] && [[ -n "$resolved_base_url" ]]; then
+    export OPENVIBECODING_AGENTS_BASE_URL="$resolved_base_url"
   fi
-  if [[ -z "${CORTEXPILOT_PROVIDER_BASE_URL:-}" ]] && [[ -n "$resolved_base_url" ]]; then
-    export CORTEXPILOT_PROVIDER_BASE_URL="$resolved_base_url"
+  if [[ -z "${OPENVIBECODING_PROVIDER_BASE_URL:-}" ]] && [[ -n "$resolved_base_url" ]]; then
+    export OPENVIBECODING_PROVIDER_BASE_URL="$resolved_base_url"
   fi
   if [[ -z "${OPENAI_BASE_URL:-}" ]] && [[ -n "$resolved_base_url" ]]; then
     # Some OpenAI-compatible SDK paths still honor the conventional env key
-    # instead of the repo-specific CORTEXPILOT_* wrapper key.
+    # instead of the repo-specific OPENVIBECODING_* wrapper key.
     export OPENAI_BASE_URL="$resolved_base_url"
   fi
-  if [[ -z "${CORTEXPILOT_AGENTS_MODEL:-}" ]] && [[ -n "$resolved_model" ]]; then
-    export CORTEXPILOT_AGENTS_MODEL="$resolved_model"
+  if [[ -z "${OPENVIBECODING_AGENTS_MODEL:-}" ]] && [[ -n "$resolved_model" ]]; then
+    export OPENVIBECODING_AGENTS_MODEL="$resolved_model"
   fi
-  if [[ -z "${CORTEXPILOT_PROVIDER_MODEL:-}" ]] && [[ -n "$resolved_model" ]]; then
-    export CORTEXPILOT_PROVIDER_MODEL="$resolved_model"
+  if [[ -z "${OPENVIBECODING_PROVIDER_MODEL:-}" ]] && [[ -n "$resolved_model" ]]; then
+    export OPENVIBECODING_PROVIDER_MODEL="$resolved_model"
   fi
-  if [[ -z "${CORTEXPILOT_PROVIDER:-}" ]] && [[ -n "$resolved_provider" ]]; then
-    export CORTEXPILOT_PROVIDER="$resolved_provider"
+  if [[ -z "${OPENVIBECODING_PROVIDER:-}" ]] && [[ -n "$resolved_provider" ]]; then
+    export OPENVIBECODING_PROVIDER="$resolved_provider"
   fi
   if [[ "$IMPORT_CONFIG_API_KEY" == "1" ]] && [[ -n "$resolved_api_key" ]]; then
     if [[ -z "${GEMINI_API_KEY:-}" ]]; then
@@ -369,20 +369,20 @@ PY
         ;;
     esac
   fi
-  export CORTEXPILOT_E2E_RESOLVED_CODEX_BASE_URL="$resolved_base_url"
-  export CORTEXPILOT_E2E_RESOLVED_CODEX_PROVIDER="$resolved_provider"
-  export CORTEXPILOT_E2E_RESOLVED_CODEX_MODEL="$resolved_model"
-  export CORTEXPILOT_E2E_RESOLVED_CODEX_KEY_SOURCE="$resolved_key_source"
+  export OPENVIBECODING_E2E_RESOLVED_CODEX_BASE_URL="$resolved_base_url"
+  export OPENVIBECODING_E2E_RESOLVED_CODEX_PROVIDER="$resolved_provider"
+  export OPENVIBECODING_E2E_RESOLVED_CODEX_MODEL="$resolved_model"
+  export OPENVIBECODING_E2E_RESOLVED_CODEX_KEY_SOURCE="$resolved_key_source"
 }
 
 ensure_e2e_codex_base_home() {
-  if [[ -n "${CORTEXPILOT_CODEX_BASE_HOME:-}" && -f "${CORTEXPILOT_CODEX_BASE_HOME}/config.toml" ]]; then
-    if [[ -d "${HOME}/.codex-homes/cortexpilot-worker-core" ]]; then
+  if [[ -n "${OPENVIBECODING_CODEX_BASE_HOME:-}" && -f "${OPENVIBECODING_CODEX_BASE_HOME}/config.toml" ]]; then
+    if [[ -d "${HOME}/.codex-homes/openvibecoding-worker-core" ]]; then
       return 0
     fi
   fi
 
-  local target_home="$ROOT_DIR/.runtime-cache/cortexpilot/codex-homes/base"
+  local target_home="$ROOT_DIR/.runtime-cache/openvibecoding/codex-homes/base"
   mkdir -p "$target_home"
   local target_config="$target_home/config.toml"
 
@@ -415,14 +415,14 @@ content = base_text + ("\n\n" if base_text else "") + filesystem_section + "\n"
 target.write_text(content, encoding="utf-8")
 PY
 
-  export CORTEXPILOT_CODEX_BASE_HOME="$target_home"
-  CORTEXPILOT_CODEX_BASE_CONFIG="$target_config" \
+  export OPENVIBECODING_CODEX_BASE_HOME="$target_home"
+  OPENVIBECODING_CODEX_BASE_CONFIG="$target_config" \
   bash "$ROOT_DIR/scripts/codex/init_codex_homes.sh" >/dev/null
-  echo "ℹ️ [pm-chat-e2e] using generated CORTEXPILOT_CODEX_BASE_HOME=$CORTEXPILOT_CODEX_BASE_HOME"
+  echo "ℹ️ [pm-chat-e2e] using generated OPENVIBECODING_CODEX_BASE_HOME=$OPENVIBECODING_CODEX_BASE_HOME"
 }
 
 if [[ -z "$PYTHON_BIN" ]] || [[ ! -x "$PYTHON_BIN" ]]; then
-  echo "❌ managed python toolchain missing: ${CORTEXPILOT_PYTHON:-<unset>}"
+  echo "❌ managed python toolchain missing: ${OPENVIBECODING_PYTHON:-<unset>}"
   exit 1
 fi
 
@@ -453,14 +453,14 @@ refresh_dashboard_deps() {
 run_dashboard_prod_build() {
   (
     cd apps/dashboard
-    NEXT_PUBLIC_CORTEXPILOT_API_BASE="http://$HOST:$API_PORT" \
-    NEXT_PUBLIC_CORTEXPILOT_API_TOKEN="$API_TOKEN" \
+    NEXT_PUBLIC_OPENVIBECODING_API_BASE="http://$HOST:$API_PORT" \
+    NEXT_PUBLIC_OPENVIBECODING_API_TOKEN="$API_TOKEN" \
     pnpm run build
   ) >"$UI_LOG" 2>&1
 }
 
-API_PORT="$(resolve_port "$API_PORT" "API_PORT" "CORTEXPILOT_E2E_API_PORT")"
-DASHBOARD_PORT="$(resolve_port "$DASHBOARD_PORT" "DASHBOARD_PORT" "CORTEXPILOT_E2E_DASHBOARD_PORT" "$API_PORT")"
+API_PORT="$(resolve_port "$API_PORT" "API_PORT" "OPENVIBECODING_E2E_API_PORT")"
+DASHBOARD_PORT="$(resolve_port "$DASHBOARD_PORT" "DASHBOARD_PORT" "OPENVIBECODING_E2E_DASHBOARD_PORT" "$API_PORT")"
 
 if dashboard_deps_ready; then
   echo "📦 dashboard workspace deps already ready for pm-chat e2e"
@@ -475,40 +475,40 @@ if [[ "$SKIP_FAST_GATE" != "1" ]]; then
   run_with_heartbeat_and_timeout "pm-chat-e2e-fast-gate-test-quick" "$FAST_GATE_TIMEOUT_SEC" "$HEARTBEAT_SEC" -- \
     bash scripts/test_quick.sh
 else
-  echo "ℹ️ skip fast gate for pm-chat e2e (CORTEXPILOT_E2E_SKIP_FAST_GATE=1)"
+  echo "ℹ️ skip fast gate for pm-chat e2e (OPENVIBECODING_E2E_SKIP_FAST_GATE=1)"
 fi
 
 if [[ "$RUN_MODE" == "real" ]]; then
   echo "🚀 preflight: live external probe (real browser + real provider key/api)"
   run_with_heartbeat_and_timeout "pm-chat-e2e-live-preflight" "$LIVE_PREFLIGHT_TIMEOUT_SEC" "$HEARTBEAT_SEC" -- \
     "$PYTHON_BIN" scripts/e2e_external_web_probe.py \
-      --url "${CORTEXPILOT_E2E_LIVE_PREFLIGHT_URL:-https://example.com}" \
-      --timeout-ms "${CORTEXPILOT_E2E_LIVE_PREFLIGHT_NAV_TIMEOUT_MS:-15000}" \
-      --provider-api-mode "${CORTEXPILOT_E2E_LIVE_PREFLIGHT_PROVIDER_API_MODE:-require}" \
-      --provider-api-timeout-sec "${CORTEXPILOT_E2E_LIVE_PREFLIGHT_PROVIDER_TIMEOUT_SEC:-12}" \
-      --hard-timeout-sec "${CORTEXPILOT_E2E_LIVE_PREFLIGHT_HARD_TIMEOUT_SEC:-120}"
+      --url "${OPENVIBECODING_E2E_LIVE_PREFLIGHT_URL:-https://example.com}" \
+      --timeout-ms "${OPENVIBECODING_E2E_LIVE_PREFLIGHT_NAV_TIMEOUT_MS:-15000}" \
+      --provider-api-mode "${OPENVIBECODING_E2E_LIVE_PREFLIGHT_PROVIDER_API_MODE:-require}" \
+      --provider-api-timeout-sec "${OPENVIBECODING_E2E_LIVE_PREFLIGHT_PROVIDER_TIMEOUT_SEC:-12}" \
+      --hard-timeout-sec "${OPENVIBECODING_E2E_LIVE_PREFLIGHT_HARD_TIMEOUT_SEC:-120}"
 fi
 
 ensure_e2e_codex_base_home
 load_codex_llm_env
-echo "ℹ️ codex_provider=${CORTEXPILOT_E2E_RESOLVED_CODEX_PROVIDER:-<empty>} codex_model=${CORTEXPILOT_E2E_RESOLVED_CODEX_MODEL:-<empty>} codex_base_url=${CORTEXPILOT_E2E_RESOLVED_CODEX_BASE_URL:-<empty>} key_source=${CORTEXPILOT_E2E_RESOLVED_CODEX_KEY_SOURCE:-none}"
+echo "ℹ️ codex_provider=${OPENVIBECODING_E2E_RESOLVED_CODEX_PROVIDER:-<empty>} codex_model=${OPENVIBECODING_E2E_RESOLVED_CODEX_MODEL:-<empty>} codex_base_url=${OPENVIBECODING_E2E_RESOLVED_CODEX_BASE_URL:-<empty>} key_source=${OPENVIBECODING_E2E_RESOLVED_CODEX_KEY_SOURCE:-none}"
 
 echo "🚀 starting api http://$HOST:$API_PORT"
 emit_stage "api-start" "url=http://$HOST:$API_PORT"
 API_AUTH_REQUIRED="true"
-if [[ "${CORTEXPILOT_E2E_ORCHESTRATION_SMOKE_MODE:-0}" =~ ^(1|true|yes|y|on)$ ]]; then
+if [[ "${OPENVIBECODING_E2E_ORCHESTRATION_SMOKE_MODE:-0}" =~ ^(1|true|yes|y|on)$ ]]; then
   API_AUTH_REQUIRED="false"
 fi
 PYTHONPATH=apps/orchestrator/src \
-CORTEXPILOT_API_AUTH_REQUIRED="$API_AUTH_REQUIRED" \
-CORTEXPILOT_API_TOKEN="$API_TOKEN" \
-CORTEXPILOT_DASHBOARD_PORT="$DASHBOARD_PORT" \
-CORTEXPILOT_RUNNER="$RUNNER_NAME" \
-CORTEXPILOT_ORCHESTRATION_SMOKE_MODE="${CORTEXPILOT_E2E_ORCHESTRATION_SMOKE_MODE:-0}" \
-CORTEXPILOT_AGENTS_HANDOFF_TIMEOUT_FAIL_OPEN=true \
-CORTEXPILOT_AGENTS_STREAM_TIMEOUT_FALLBACK=true \
-CORTEXPILOT_INLINE_OUTPUT_SCHEMA=false \
-"$PYTHON_BIN" -m cortexpilot_orch.cli serve --host "$HOST" --port "$API_PORT" \
+OPENVIBECODING_API_AUTH_REQUIRED="$API_AUTH_REQUIRED" \
+OPENVIBECODING_API_TOKEN="$API_TOKEN" \
+OPENVIBECODING_DASHBOARD_PORT="$DASHBOARD_PORT" \
+OPENVIBECODING_RUNNER="$RUNNER_NAME" \
+OPENVIBECODING_ORCHESTRATION_SMOKE_MODE="${OPENVIBECODING_E2E_ORCHESTRATION_SMOKE_MODE:-0}" \
+OPENVIBECODING_AGENTS_HANDOFF_TIMEOUT_FAIL_OPEN=true \
+OPENVIBECODING_AGENTS_STREAM_TIMEOUT_FALLBACK=true \
+OPENVIBECODING_INLINE_OUTPUT_SCHEMA=false \
+"$PYTHON_BIN" -m openvibecoding_orch.cli serve --host "$HOST" --port "$API_PORT" \
   >"$API_LOG" 2>&1 &
 API_PID=$!
 
@@ -529,8 +529,8 @@ if [[ "$WEB_MODE" == "prod" ]]; then
   emit_stage "dashboard-start" "mode=prod port=$DASHBOARD_PORT"
   (
     cd apps/dashboard
-    NEXT_PUBLIC_CORTEXPILOT_API_BASE="http://$HOST:$API_PORT" \
-    NEXT_PUBLIC_CORTEXPILOT_API_TOKEN="$API_TOKEN" \
+    NEXT_PUBLIC_OPENVIBECODING_API_BASE="http://$HOST:$API_PORT" \
+    NEXT_PUBLIC_OPENVIBECODING_API_TOKEN="$API_TOKEN" \
     pnpm run start --hostname "$HOST" --port "$DASHBOARD_PORT"
   ) >>"$UI_LOG" 2>&1 &
   UI_PID=$!
@@ -538,8 +538,8 @@ else
   emit_stage "dashboard-start" "mode=dev port=$DASHBOARD_PORT"
   (
     cd apps/dashboard
-    NEXT_PUBLIC_CORTEXPILOT_API_BASE="http://$HOST:$API_PORT" \
-    NEXT_PUBLIC_CORTEXPILOT_API_TOKEN="$API_TOKEN" \
+    NEXT_PUBLIC_OPENVIBECODING_API_BASE="http://$HOST:$API_PORT" \
+    NEXT_PUBLIC_OPENVIBECODING_API_TOKEN="$API_TOKEN" \
     pnpm run dev --hostname "$HOST" --port "$DASHBOARD_PORT"
   ) >"$UI_LOG" 2>&1 &
   UI_PID=$!
@@ -551,7 +551,7 @@ emit_stage "wait-dashboard-ready" "url=http://$HOST:$DASHBOARD_PORT/pm"
 wait_http_ok "http://$HOST:$DASHBOARD_PORT/pm" 180 || fail_with_logs "dashboard readiness check failed" "The dashboard process started but /pm never became reachable."
 
 # Guardrail contract markers for tests:
-# CORTEXPILOT_E2E_REQUIRE_UI_INTAKE", "1" if run_mode == "real" else "0"
+# OPENVIBECODING_E2E_REQUIRE_UI_INTAKE", "1" if run_mode == "real" else "0"
 # failed to create intake through PM UI in strict mode
 # route.continue_(post_data=json.dumps(payload, ensure_ascii=False))
 # reset_btn = page.get_by_role("button", name=re.compile(r"^(新建 PM 对话|\\+\\s*新对话|新对话)$"))
@@ -569,7 +569,7 @@ wait_http_ok "http://$HOST:$DASHBOARD_PORT/pm" 180 || fail_with_logs "dashboard 
 echo "🧪 running playwright flow (mode=$RUN_MODE, mock=$RUN_MOCK, runner=$RUNNER_NAME)"
 emit_stage "playwright-main-flow" "runner=$RUNNER_NAME mode=$RUN_MODE mock=$RUN_MOCK"
 run_with_heartbeat_and_timeout "pm-chat-e2e-main-flow" "$RUNNER_TIMEOUT_SEC" "$HEARTBEAT_SEC" -- \
-  env PYTHONPATH=apps/orchestrator/src CORTEXPILOT_E2E_ORCHESTRATION_SMOKE_MODE="${CORTEXPILOT_E2E_ORCHESTRATION_SMOKE_MODE:-0}" \
+  env PYTHONPATH=apps/orchestrator/src OPENVIBECODING_E2E_ORCHESTRATION_SMOKE_MODE="${OPENVIBECODING_E2E_ORCHESTRATION_SMOKE_MODE:-0}" \
     "$PYTHON_BIN" "$ROOT_DIR/scripts/e2e_pm_chat_command_tower_success_runner.py" \
     "$HOST" "$API_PORT" "$DASHBOARD_PORT" "$API_TOKEN" \
     "$EVIDENCE_JSON" "$SCREEN_PM" "$SCREEN_SESSION" "$RUN_MOCK" "$RUN_MODE" "$RUNNER_NAME" "$ALLOWED_PATHS_OVERRIDE" "$REEXEC_STRICT" "$ACCEPTANCE_CMD"

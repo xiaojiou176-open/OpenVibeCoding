@@ -4,15 +4,15 @@ describe("dashboard api auth headers", () => {
   afterEach(() => {
     vi.restoreAllMocks();
     vi.unstubAllGlobals();
-    delete process.env.CORTEXPILOT_API_TOKEN;
-    delete process.env.CORTEXPILOT_E2E_API_TOKEN;
-    delete process.env.NEXT_PUBLIC_CORTEXPILOT_OPERATOR_ROLE;
-    delete process.env.NEXT_PUBLIC_CORTEXPILOT_API_TOKEN;
+    delete process.env.OPENVIBECODING_API_TOKEN;
+    delete process.env.OPENVIBECODING_E2E_API_TOKEN;
+    delete process.env.NEXT_PUBLIC_OPENVIBECODING_OPERATOR_ROLE;
+    delete process.env.NEXT_PUBLIC_OPENVIBECODING_API_TOKEN;
   });
 
   it("never forwards NEXT_PUBLIC token as Authorization header", async () => {
-    const previousToken = process.env.NEXT_PUBLIC_CORTEXPILOT_API_TOKEN;
-    process.env.NEXT_PUBLIC_CORTEXPILOT_API_TOKEN = "sensitive-client-token";
+    const previousToken = process.env.NEXT_PUBLIC_OPENVIBECODING_API_TOKEN;
+    process.env.NEXT_PUBLIC_OPENVIBECODING_API_TOKEN = "sensitive-client-token";
 
     vi.resetModules();
     const api = await import("./api");
@@ -32,14 +32,14 @@ describe("dashboard api auth headers", () => {
     });
 
     if (previousToken === undefined) {
-      delete process.env.NEXT_PUBLIC_CORTEXPILOT_API_TOKEN;
+      delete process.env.NEXT_PUBLIC_OPENVIBECODING_API_TOKEN;
     } else {
-      process.env.NEXT_PUBLIC_CORTEXPILOT_API_TOKEN = previousToken;
+      process.env.NEXT_PUBLIC_OPENVIBECODING_API_TOKEN = previousToken;
     }
   });
 
-  it("uses CORTEXPILOT_API_TOKEN as the primary server token", async () => {
-    process.env.CORTEXPILOT_API_TOKEN = "cortexpilot-token";
+  it("uses OPENVIBECODING_API_TOKEN as the primary server token", async () => {
+    process.env.OPENVIBECODING_API_TOKEN = "openvibecoding-token";
     vi.stubGlobal("window", undefined);
     vi.resetModules();
     const api = await import("./api");
@@ -55,13 +55,13 @@ describe("dashboard api auth headers", () => {
     await api.fetchRuns();
     const requestInit = (fetchMock.mock.calls[0]?.[1] ?? {}) as RequestInit;
     expect(requestInit.headers).toMatchObject({
-      Authorization: "Bearer cortexpilot-token",
+      Authorization: "Bearer openvibecoding-token",
     });
   });
 
-  it("injects server Authorization header from CORTEXPILOT_API_TOKEN", async () => {
-    process.env.CORTEXPILOT_API_TOKEN = "primary-server-token";
-    process.env.CORTEXPILOT_E2E_API_TOKEN = "fallback-token";
+  it("injects server Authorization header from OPENVIBECODING_API_TOKEN", async () => {
+    process.env.OPENVIBECODING_API_TOKEN = "primary-server-token";
+    process.env.OPENVIBECODING_E2E_API_TOKEN = "fallback-token";
     vi.stubGlobal("window", undefined);
     vi.resetModules();
     const api = await import("./api");
@@ -81,9 +81,9 @@ describe("dashboard api auth headers", () => {
     });
   });
 
-  it("falls back to CORTEXPILOT_E2E_API_TOKEN on server when primary token is absent", async () => {
-    delete process.env.CORTEXPILOT_API_TOKEN;
-    process.env.CORTEXPILOT_E2E_API_TOKEN = "fallback-token";
+  it("falls back to OPENVIBECODING_E2E_API_TOKEN on server when primary token is absent", async () => {
+    delete process.env.OPENVIBECODING_API_TOKEN;
+    process.env.OPENVIBECODING_E2E_API_TOKEN = "fallback-token";
     vi.stubGlobal("window", undefined);
     vi.resetModules();
     const api = await import("./api");
@@ -104,8 +104,8 @@ describe("dashboard api auth headers", () => {
   });
 
   it("does not inject server Authorization header on client", async () => {
-    process.env.CORTEXPILOT_API_TOKEN = "primary-server-token";
-    process.env.CORTEXPILOT_E2E_API_TOKEN = "fallback-token";
+    process.env.OPENVIBECODING_API_TOKEN = "primary-server-token";
+    process.env.OPENVIBECODING_E2E_API_TOKEN = "fallback-token";
     vi.stubGlobal("window", {} as Window & typeof globalThis);
     vi.resetModules();
     const api = await import("./api");
@@ -126,7 +126,7 @@ describe("dashboard api auth headers", () => {
   });
 
   it("attaches operator role header only for mutation requests", async () => {
-    process.env.NEXT_PUBLIC_CORTEXPILOT_OPERATOR_ROLE = "tech_lead";
+    process.env.NEXT_PUBLIC_OPENVIBECODING_OPERATOR_ROLE = "tech_lead";
     vi.stubGlobal("window", {} as Window & typeof globalThis);
     vi.resetModules();
     const api = await import("./api");
@@ -146,10 +146,10 @@ describe("dashboard api auth headers", () => {
     const mutationInit = (fetchMock.mock.calls[1]?.[1] ?? {}) as RequestInit;
 
     expect(readInit.headers).not.toMatchObject({
-      "x-cortexpilot-role": expect.any(String),
+      "x-openvibecoding-role": expect.any(String),
     });
     expect(mutationInit.headers).toMatchObject({
-      "x-cortexpilot-role": "TECH_LEAD",
+      "x-openvibecoding-role": "TECH_LEAD",
     });
     expect(api.mutationExecutionCapability()).toEqual({
       executable: true,
@@ -158,7 +158,7 @@ describe("dashboard api auth headers", () => {
   });
 
   it("reports mutation capability unavailable when operator role env is missing", async () => {
-    delete process.env.NEXT_PUBLIC_CORTEXPILOT_OPERATOR_ROLE;
+    delete process.env.NEXT_PUBLIC_OPENVIBECODING_OPERATOR_ROLE;
     vi.resetModules();
     const api = await import("./api");
     expect(api.mutationExecutionCapability()).toEqual({

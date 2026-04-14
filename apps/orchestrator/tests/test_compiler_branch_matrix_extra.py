@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from cortexpilot_orch.contract import compiler as compiler_mod
+from openvibecoding_orch.contract import compiler as compiler_mod
 
 
 def _plan_base() -> dict:

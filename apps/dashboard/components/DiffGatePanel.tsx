@@ -220,7 +220,7 @@ export default function DiffGatePanel() {
   const mutationCapability = mutationExecutionCapability();
   const normalizedRole = mutationCapability.operatorRole || "";
   const hasMutationRole = mutationCapability.executable;
-  const roleGateReason = hasMutationRole ? "" : "NEXT_PUBLIC_CORTEXPILOT_OPERATOR_ROLE is not configured. High-risk actions are disabled.";
+  const roleGateReason = hasMutationRole ? "" : "NEXT_PUBLIC_OPENVIBECODING_OPERATOR_ROLE is not configured. High-risk actions are disabled.";
 
   const statusOptions = useMemo(() => {
     const options = new Set<string>(["ALL"]);

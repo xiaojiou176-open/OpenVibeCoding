@@ -2,8 +2,8 @@
 
 import dynamic from "next/dynamic";
 import { type KeyboardEvent as ReactKeyboardEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { getUiCopy, type UiLocale } from "@cortexpilot/frontend-shared/uiCopy";
-import type { StatusVariant } from "@cortexpilot/frontend-shared/statusPresentation";
+import { getUiCopy, type UiLocale } from "@openvibecoding/frontend-shared/uiCopy";
+import type { StatusVariant } from "@openvibecoding/frontend-shared/statusPresentation";
 
 import { fetchCommandTowerAlerts, fetchCommandTowerOverview, fetchPmSessions } from "../../lib/api";
 import type {
@@ -35,8 +35,8 @@ const BASE_INTERVAL_MS = 3000;
 const MAX_INTERVAL_MS = 8000;
 const REQUEST_TIMEOUT_MS = 12000;
 const REQUEST_RETRY_ATTEMPTS = 2;
-const HOME_DRAWER_COLLAPSED_KEY = "cortexpilot.commandTower.home.drawerCollapsed";
-const HOME_DRAWER_PINNED_KEY = "cortexpilot.commandTower.home.drawerPinned";
+const HOME_DRAWER_COLLAPSED_KEY = "openvibecoding.commandTower.home.drawerCollapsed";
+const HOME_DRAWER_PINNED_KEY = "openvibecoding.commandTower.home.drawerPinned";
 
 type CommandTowerHomeLiveProps = {
   initialOverview: CommandTowerOverviewPayload;

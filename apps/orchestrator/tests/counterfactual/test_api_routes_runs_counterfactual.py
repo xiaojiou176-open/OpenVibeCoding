@@ -5,9 +5,9 @@ from fastapi.testclient import TestClient
 import pytest
 from starlette.requests import Request
 
-from cortexpilot_orch.api import deps as api_deps
-from cortexpilot_orch.api import main as api_main
-from cortexpilot_orch.api import routes_runs
+from openvibecoding_orch.api import deps as api_deps
+from openvibecoding_orch.api import main as api_main
+from openvibecoding_orch.api import routes_runs
 
 
 def test_main_binds_routes_runs_handlers() -> None:
@@ -75,7 +75,7 @@ def test_main_replay_route_keeps_baseline_window_resolution(monkeypatch) -> None
     response = client.post(
         "/api/runs/run_current/replay",
         json={"baseline_window": {"kind": "latest_success", "hours": 24}},
-        headers={"x-cortexpilot-role": "TECH_LEAD"},
+        headers={"x-openvibecoding-role": "TECH_LEAD"},
     )
 
     assert response.status_code == 200

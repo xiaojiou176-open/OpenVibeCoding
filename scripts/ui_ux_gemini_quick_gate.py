@@ -16,10 +16,10 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT_DIR = ROOT / ".runtime-cache" / "test_output" / "ui_ux_gemini_quick_gate"
 MODEL_DEFAULT = "gemini-3.0-flash"
-KEY_ENV_SELECTOR = "CORTEXPILOT_UI_GEMINI_KEY_ENV"
+KEY_ENV_SELECTOR = "OPENVIBECODING_UI_GEMINI_KEY_ENV"
 KEY_ENV_DEFAULT = "GEMINI_API_KEY"
-MODEL_ENV = "CORTEXPILOT_UI_GEMINI_MODEL"
-REQUEST_TIMEOUT_ENV = "CORTEXPILOT_UI_GEMINI_TIMEOUT_SEC"
+MODEL_ENV = "OPENVIBECODING_UI_GEMINI_MODEL"
+REQUEST_TIMEOUT_ENV = "OPENVIBECODING_UI_GEMINI_TIMEOUT_SEC"
 REQUEST_TIMEOUT_DEFAULT = 45
 MAX_FILE_CHARS = 8000
 MAX_TOTAL_CHARS = 32000
@@ -114,9 +114,9 @@ def _prepush_ui_files() -> list[str]:
     """
     pre-push commonly has no staged files.
     To avoid blocking on historical debt, default to latest-commit scope.
-    Optional override: CORTEXPILOT_UI_GEMINI_QUICK_SCOPE=upstream_range.
+    Optional override: OPENVIBECODING_UI_GEMINI_QUICK_SCOPE=upstream_range.
     """
-    scope = (os.environ.get("CORTEXPILOT_UI_GEMINI_QUICK_SCOPE", "head_commit") or "head_commit").strip().lower()
+    scope = (os.environ.get("OPENVIBECODING_UI_GEMINI_QUICK_SCOPE", "head_commit") or "head_commit").strip().lower()
     candidates: list[str] = []
     if scope == "upstream_range":
         try:
@@ -240,7 +240,7 @@ def _build_prompt(file_payload: list[dict[str, Any]]) -> str:
         ],
     }
     return (
-        "You are a strict UI/UX gate reviewer for CortexPilot frontend code. "
+        "You are a strict UI/UX gate reviewer for OpenVibeCoding frontend code. "
         "Audit only the provided staged snippets and return JSON only.\n\n"
         f"Rules:\n- " + "\n- ".join(rules) + "\n\n"
         f"Expected JSON schema:\n{json.dumps(schema, ensure_ascii=False, indent=2)}\n\n"

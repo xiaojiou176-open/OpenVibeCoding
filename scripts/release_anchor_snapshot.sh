@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-OUT_DIR="$ROOT_DIR/.runtime-cache/cortexpilot/release"
+OUT_DIR="$ROOT_DIR/.runtime-cache/openvibecoding/release"
 OUT_PATH="$OUT_DIR/release_anchor.json"
 mkdir -p "$OUT_DIR"
 

@@ -27,12 +27,12 @@ is_truthy() {
   [[ "${normalized}" == "1" || "${normalized}" == "true" || "${normalized}" == "yes" || "${normalized}" == "on" ]]
 }
 
-if ! is_truthy "${CORTEXPILOT_CI_CONTAINER:-0}" && ! is_truthy "${CORTEXPILOT_HOST_COMPAT:-0}"; then
+if ! is_truthy "${OPENVIBECODING_CI_CONTAINER:-0}" && ! is_truthy "${OPENVIBECODING_HOST_COMPAT:-0}"; then
   exec bash "$ROOT_DIR/scripts/docker_ci.sh" test "$@"
 fi
 
-HYGIENE_SKIP_UPSTREAM="${CORTEXPILOT_HYGIENE_SKIP_UPSTREAM:-}"
-if [[ -z "$HYGIENE_SKIP_UPSTREAM" ]] && { is_truthy "${CORTEXPILOT_CI_CONTAINER:-0}" || is_truthy "${CORTEXPILOT_HOST_COMPAT:-0}"; }; then
+HYGIENE_SKIP_UPSTREAM="${OPENVIBECODING_HYGIENE_SKIP_UPSTREAM:-}"
+if [[ -z "$HYGIENE_SKIP_UPSTREAM" ]] && { is_truthy "${OPENVIBECODING_CI_CONTAINER:-0}" || is_truthy "${OPENVIBECODING_HOST_COMPAT:-0}"; }; then
   # The main test entry verifies repo-side truth. Managed CI containers cannot
   # rerun host-bound upstream probes, and the host-compat alias must mirror the
   # same repo-side semantics instead of diverging into a heavier gate by default.
@@ -135,7 +135,7 @@ PY
 }
 
 load_orchestrator_critical_modules_config_or_fail() {
-  local config_path="${CORTEXPILOT_COVERAGE_CRITICAL_MODULES_CONFIG:-configs/coverage_critical_modules.json}"
+  local config_path="${OPENVIBECODING_COVERAGE_CRITICAL_MODULES_CONFIG:-configs/coverage_critical_modules.json}"
   if [[ ! -r "$config_path" ]]; then
     echo "❌ [ERROR] critical coverage modules config is not readable: ${config_path}" >&2
     exit 1
@@ -197,21 +197,21 @@ PY
 }
 
 echo "🚀 [STEP 1/6] Start: environment check"
-PYTHON_BIN="$(cortexpilot_python_bin "$ROOT_DIR")" || {
+PYTHON_BIN="$(openvibecoding_python_bin "$ROOT_DIR")" || {
   echo "❌ [ERROR] missing Python toolchain; run ./scripts/bootstrap.sh first" >&2
   exit 1
 }
-VENV_ROOT="$(cortexpilot_python_venv_root "$ROOT_DIR")"
+VENV_ROOT="$(openvibecoding_python_venv_root "$ROOT_DIR")"
 if [[ ! -x "$PYTHON_BIN" ]]; then
   echo "❌ [ERROR] missing Python toolchain; run ./scripts/bootstrap.sh first" >&2
   exit 1
 fi
-export CORTEXPILOT_PYTHON="${CORTEXPILOT_PYTHON:-$PYTHON_BIN}"
+export OPENVIBECODING_PYTHON="${OPENVIBECODING_PYTHON:-$PYTHON_BIN}"
 export VIRTUAL_ENV="${VIRTUAL_ENV:-$VENV_ROOT}"
 echo "✅ [STEP 1/6] Done: Python environment available"
 
 echo "🚀 [STEP 2/6] Start: repository hygiene"
-CORTEXPILOT_HYGIENE_SKIP_UPSTREAM="$HYGIENE_SKIP_UPSTREAM" bash scripts/check_repo_hygiene.sh
+OPENVIBECODING_HYGIENE_SKIP_UPSTREAM="$HYGIENE_SKIP_UPSTREAM" bash scripts/check_repo_hygiene.sh
 echo "✅ [STEP 2/6] Done: repository hygiene passed"
 if [[ "${HYGIENE_SKIP_UPSTREAM:-0}" == "1" ]]; then
   echo "ℹ️ [VERDICT] this entrypoint verifies repo-side truth only; external/upstream truth and current-run authoritative truth require separate gates"
@@ -228,8 +228,8 @@ echo "✅ [STEP 4/6] Done: test-smell gate passed"
 echo "🚀 [STEP 5/6] Start: Orchestrator tests (parallel)"
 
 # Incremental test mode support
-TEST_MODE="${CORTEXPILOT_TEST_MODE:-full}"
-INCREMENTAL_FILES="${CORTEXPILOT_TEST_INCREMENTAL_FILES:-}"
+TEST_MODE="${OPENVIBECODING_TEST_MODE:-full}"
+INCREMENTAL_FILES="${OPENVIBECODING_TEST_INCREMENTAL_FILES:-}"
 
 if [[ "$TEST_MODE" == "incremental" && -n "$INCREMENTAL_FILES" ]]; then
   echo "ℹ️ [INFO][TEST_MODE] incremental - running only changed-related tests"
@@ -246,36 +246,36 @@ EOF
   fi
   PYTEST_TEST_TARGET="${_incremental_targets[*]}"
   # For incremental mode, we skip coverage enforcement to speed up
-  SKIP_COVERAGE_GATE="${CORTEXPILOT_TEST_INCREMENTAL_SKIP_COVERAGE:-1}"
+  SKIP_COVERAGE_GATE="${OPENVIBECODING_TEST_INCREMENTAL_SKIP_COVERAGE:-1}"
 else
   echo "ℹ️ [INFO][TEST_MODE] full - running all orchestrator tests"
   PYTEST_TEST_TARGET="apps/orchestrator/tests"
   SKIP_COVERAGE_GATE="0"
 fi
 
-COV_FAIL_UNDER="${CORTEXPILOT_COV_FAIL_UNDER:-85}"
-MIN_DEFAULT_COVERAGE_FLOOR="${CORTEXPILOT_DEFAULT_COVERAGE_FLOOR:-80}"
+COV_FAIL_UNDER="${OPENVIBECODING_COV_FAIL_UNDER:-85}"
+MIN_DEFAULT_COVERAGE_FLOOR="${OPENVIBECODING_DEFAULT_COVERAGE_FLOOR:-80}"
 DEFAULT_COVERAGE_HARD_FLOOR=80
 ORCH_CORE_COVERAGE_HARD_FLOOR=95
 if ! [[ "$COV_FAIL_UNDER" =~ ^[0-9]+$ ]]; then
-  echo "❌ [ERROR] CORTEXPILOT_COV_FAIL_UNDER must be an integer; current value: $COV_FAIL_UNDER" >&2
+  echo "❌ [ERROR] OPENVIBECODING_COV_FAIL_UNDER must be an integer; current value: $COV_FAIL_UNDER" >&2
   exit 1
 fi
 if ! [[ "$MIN_DEFAULT_COVERAGE_FLOOR" =~ ^[0-9]+$ ]]; then
-  echo "❌ [ERROR] CORTEXPILOT_DEFAULT_COVERAGE_FLOOR must be an integer; current value: $MIN_DEFAULT_COVERAGE_FLOOR" >&2
+  echo "❌ [ERROR] OPENVIBECODING_DEFAULT_COVERAGE_FLOOR must be an integer; current value: $MIN_DEFAULT_COVERAGE_FLOOR" >&2
   exit 1
 fi
 if [[ "$MIN_DEFAULT_COVERAGE_FLOOR" -lt "$DEFAULT_COVERAGE_HARD_FLOOR" ]]; then
-  echo "❌ [ERROR] CORTEXPILOT_DEFAULT_COVERAGE_FLOOR cannot be lower than hard floor ${DEFAULT_COVERAGE_HARD_FLOOR}; current value: $MIN_DEFAULT_COVERAGE_FLOOR" >&2
+  echo "❌ [ERROR] OPENVIBECODING_DEFAULT_COVERAGE_FLOOR cannot be lower than hard floor ${DEFAULT_COVERAGE_HARD_FLOOR}; current value: $MIN_DEFAULT_COVERAGE_FLOOR" >&2
   exit 1
 fi
 if [[ "$COV_FAIL_UNDER" -lt "$MIN_DEFAULT_COVERAGE_FLOOR" ]]; then
   echo "❌ [ERROR] default coverage gate cannot be lower than ${MIN_DEFAULT_COVERAGE_FLOOR}; current value: $COV_FAIL_UNDER" >&2
   exit 1
 fi
-ORCH_CORE_COV_FAIL_UNDER="${CORTEXPILOT_ORCH_CORE_COV_FAIL_UNDER:-95}"
+ORCH_CORE_COV_FAIL_UNDER="${OPENVIBECODING_ORCH_CORE_COV_FAIL_UNDER:-95}"
 if ! [[ "$ORCH_CORE_COV_FAIL_UNDER" =~ ^[0-9]+([.][0-9]+)?$ ]]; then
-  echo "❌ [ERROR] CORTEXPILOT_ORCH_CORE_COV_FAIL_UNDER must be numeric; current value: $ORCH_CORE_COV_FAIL_UNDER" >&2
+  echo "❌ [ERROR] OPENVIBECODING_ORCH_CORE_COV_FAIL_UNDER must be numeric; current value: $ORCH_CORE_COV_FAIL_UNDER" >&2
   exit 1
 fi
 if ! python3 - "$ORCH_CORE_COV_FAIL_UNDER" "$ORCH_CORE_COVERAGE_HARD_FLOOR" <<'PY'
@@ -285,11 +285,11 @@ hard_floor = float(sys.argv[2])
 raise SystemExit(0 if value >= hard_floor else 1)
 PY
 then
-  echo "❌ [ERROR] CORTEXPILOT_ORCH_CORE_COV_FAIL_UNDER cannot be lower than hard floor ${ORCH_CORE_COVERAGE_HARD_FLOOR}; current value: $ORCH_CORE_COV_FAIL_UNDER" >&2
+  echo "❌ [ERROR] OPENVIBECODING_ORCH_CORE_COV_FAIL_UNDER cannot be lower than hard floor ${ORCH_CORE_COVERAGE_HARD_FLOOR}; current value: $ORCH_CORE_COV_FAIL_UNDER" >&2
   exit 1
 fi
 load_orchestrator_critical_modules_config_or_fail
-PYTEST_DIST_MODE="${CORTEXPILOT_PYTEST_DIST_MODE:-loadscope}"
+PYTEST_DIST_MODE="${OPENVIBECODING_PYTEST_DIST_MODE:-loadscope}"
 PYTEST_AUTO_CPU_COUNT="$(
   getconf _NPROCESSORS_ONLN 2>/dev/null \
     || sysctl -n hw.logicalcpu 2>/dev/null \
@@ -298,19 +298,19 @@ PYTEST_AUTO_CPU_COUNT="$(
 if [[ ! "$PYTEST_AUTO_CPU_COUNT" =~ ^[0-9]+$ ]] || [[ "$PYTEST_AUTO_CPU_COUNT" -lt 1 ]]; then
   PYTEST_AUTO_CPU_COUNT=1
 fi
-PYTEST_RESERVE_CPUS="${CORTEXPILOT_PYTEST_RESERVE_CPUS:-1}"
-PYTEST_MIN_WORKERS="${CORTEXPILOT_PYTEST_MIN_WORKERS:-1}"
-PYTEST_MAX_WORKERS="${CORTEXPILOT_PYTEST_MAX_WORKERS:-0}"
+PYTEST_RESERVE_CPUS="${OPENVIBECODING_PYTEST_RESERVE_CPUS:-1}"
+PYTEST_MIN_WORKERS="${OPENVIBECODING_PYTEST_MIN_WORKERS:-1}"
+PYTEST_MAX_WORKERS="${OPENVIBECODING_PYTEST_MAX_WORKERS:-0}"
 if [[ ! "$PYTEST_RESERVE_CPUS" =~ ^[0-9]+$ ]]; then
-  echo "❌ [ERROR] CORTEXPILOT_PYTEST_RESERVE_CPUS must be a non-negative integer; current value: $PYTEST_RESERVE_CPUS" >&2
+  echo "❌ [ERROR] OPENVIBECODING_PYTEST_RESERVE_CPUS must be a non-negative integer; current value: $PYTEST_RESERVE_CPUS" >&2
   exit 1
 fi
 if [[ ! "$PYTEST_MIN_WORKERS" =~ ^[1-9][0-9]*$ ]]; then
-  echo "❌ [ERROR] CORTEXPILOT_PYTEST_MIN_WORKERS must be a positive integer; current value: $PYTEST_MIN_WORKERS" >&2
+  echo "❌ [ERROR] OPENVIBECODING_PYTEST_MIN_WORKERS must be a positive integer; current value: $PYTEST_MIN_WORKERS" >&2
   exit 1
 fi
 if [[ "$PYTEST_MAX_WORKERS" =~ ^[1-9][0-9]*$ ]] && [[ "$PYTEST_MAX_WORKERS" -lt "$PYTEST_MIN_WORKERS" ]]; then
-  echo "❌ [ERROR] CORTEXPILOT_PYTEST_MAX_WORKERS cannot be smaller than CORTEXPILOT_PYTEST_MIN_WORKERS; current value: max=$PYTEST_MAX_WORKERS min=$PYTEST_MIN_WORKERS" >&2
+  echo "❌ [ERROR] OPENVIBECODING_PYTEST_MAX_WORKERS cannot be smaller than OPENVIBECODING_PYTEST_MIN_WORKERS; current value: max=$PYTEST_MAX_WORKERS min=$PYTEST_MIN_WORKERS" >&2
   exit 1
 fi
 PYTEST_AUTO_WORKERS=$((PYTEST_AUTO_CPU_COUNT - PYTEST_RESERVE_CPUS))
@@ -320,16 +320,16 @@ fi
 if [[ "$PYTEST_MAX_WORKERS" =~ ^[1-9][0-9]*$ ]] && [[ "$PYTEST_AUTO_WORKERS" -gt "$PYTEST_MAX_WORKERS" ]]; then
   PYTEST_AUTO_WORKERS="$PYTEST_MAX_WORKERS"
 fi
-PYTEST_WORKERS="${CORTEXPILOT_PYTEST_WORKERS:-$PYTEST_AUTO_WORKERS}"
+PYTEST_WORKERS="${OPENVIBECODING_PYTEST_WORKERS:-$PYTEST_AUTO_WORKERS}"
 if [[ ! "$PYTEST_WORKERS" =~ ^[1-9][0-9]*$ ]]; then
-  echo "❌ [ERROR] CORTEXPILOT_PYTEST_WORKERS must be a positive integer; current value: $PYTEST_WORKERS" >&2
+  echo "❌ [ERROR] OPENVIBECODING_PYTEST_WORKERS must be a positive integer; current value: $PYTEST_WORKERS" >&2
   exit 1
 fi
 if [[ "$PYTEST_MAX_WORKERS" =~ ^[1-9][0-9]*$ ]] && [[ "$PYTEST_WORKERS" -gt "$PYTEST_MAX_WORKERS" ]]; then
-  echo "❌ [ERROR] CORTEXPILOT_PYTEST_WORKERS exceeds CORTEXPILOT_PYTEST_MAX_WORKERS; current value: workers=$PYTEST_WORKERS max=$PYTEST_MAX_WORKERS" >&2
+  echo "❌ [ERROR] OPENVIBECODING_PYTEST_WORKERS exceeds OPENVIBECODING_PYTEST_MAX_WORKERS; current value: workers=$PYTEST_WORKERS max=$PYTEST_MAX_WORKERS" >&2
   exit 1
 fi
-PYTEST_PARALLEL_ARGS="${CORTEXPILOT_PYTEST_PARALLEL_ARGS:--n $PYTEST_WORKERS --dist $PYTEST_DIST_MODE}"
+PYTEST_PARALLEL_ARGS="${OPENVIBECODING_PYTEST_PARALLEL_ARGS:--n $PYTEST_WORKERS --dist $PYTEST_DIST_MODE}"
 COVERAGE_FILE="${COVERAGE_FILE:-.runtime-cache/cache/test/coverage/.coverage}"
 export COVERAGE_FILE
 mkdir -p "$(dirname "$COVERAGE_FILE")"
@@ -344,11 +344,11 @@ echo "ℹ️ [INFO][COVERAGE_POLICY] default_floor=${MIN_DEFAULT_COVERAGE_FLOOR}
 
 set +e
 heartbeat_pid=""
-start_heartbeat "test.sh:orchestrator-pytest-parallel" "${CORTEXPILOT_TEST_HEARTBEAT_INTERVAL_SEC:-45}" heartbeat_pid
+start_heartbeat "test.sh:orchestrator-pytest-parallel" "${OPENVIBECODING_TEST_HEARTBEAT_INTERVAL_SEC:-45}" heartbeat_pid
 
 # Build pytest command based on test mode
 if [[ "$SKIP_COVERAGE_GATE" == "1" ]]; then
-  echo "ℹ️ [INFO][COVERAGE] skipped in incremental mode (set CORTEXPILOT_TEST_INCREMENTAL_SKIP_COVERAGE=0 to enable)"
+  echo "ℹ️ [INFO][COVERAGE] skipped in incremental mode (set OPENVIBECODING_TEST_INCREMENTAL_SKIP_COVERAGE=0 to enable)"
   # shellcheck disable=SC2086
   VIRTUAL_ENV="$VENV_ROOT" PYTHONPATH=apps/orchestrator/src "$PYTHON_BIN" -m pytest $PYTEST_TEST_TARGET -m "not e2e and not serial" \
     $PYTEST_PARALLEL_ARGS \
@@ -356,7 +356,7 @@ if [[ "$SKIP_COVERAGE_GATE" == "1" ]]; then
 else
   # shellcheck disable=SC2086
   VIRTUAL_ENV="$VENV_ROOT" PYTHONPATH=apps/orchestrator/src "$PYTHON_BIN" -m pytest $PYTEST_TEST_TARGET -m "not e2e and not serial" \
-    $PYTEST_PARALLEL_ARGS --cov=cortexpilot_orch --cov-branch "${ORCH_CRITICAL_COV_ARGS[@]}" --cov-report=term-missing --cov-report="json:${ORCH_COVERAGE_JSON_REPORT}" --cov-fail-under="$COV_FAIL_UNDER" \
+    $PYTEST_PARALLEL_ARGS --cov=openvibecoding_orch --cov-branch "${ORCH_CRITICAL_COV_ARGS[@]}" --cov-report=term-missing --cov-report="json:${ORCH_COVERAGE_JSON_REPORT}" --cov-fail-under="$COV_FAIL_UNDER" \
     2>&1 | tee "$PYTEST_PARALLEL_LOG"
 fi
 parallel_status="${PIPESTATUS[0]:-1}"
@@ -366,7 +366,7 @@ set -e
 if [[ "$parallel_status" -ne 0 ]]; then
   parallel_failure_category="UNCLASSIFIED"
   parallel_failure_reason="parallel test run failed without matching a known signature"
-  force_serial_recheck="${CORTEXPILOT_FORCE_SERIAL_RECHECK:-0}"
+  force_serial_recheck="${OPENVIBECODING_FORCE_SERIAL_RECHECK:-0}"
   should_serial_recheck=0
   if rg -q "INTERNALERROR|no such table: meta|WorkerController|_pytest/capture.py|FileNotFoundError: \\[Errno 2\\] No such file or directory" "$PYTEST_PARALLEL_LOG"; then
     parallel_failure_category="PARALLEL_INFRA"
@@ -381,10 +381,10 @@ if [[ "$parallel_status" -ne 0 ]]; then
   fi
   if [[ "$force_serial_recheck" == "1" ]]; then
     should_serial_recheck=1
-    echo "⚠️ [WARN] CORTEXPILOT_FORCE_SERIAL_RECHECK=1; forcing serial recheck"
+    echo "⚠️ [WARN] OPENVIBECODING_FORCE_SERIAL_RECHECK=1; forcing serial recheck"
   fi
   if [[ "$should_serial_recheck" -ne 1 ]]; then
-    echo "❌ [ERROR][category:$parallel_failure_category] ${parallel_failure_reason}; skipping serial recheck (set CORTEXPILOT_FORCE_SERIAL_RECHECK=1 to force it)" >&2
+    echo "❌ [ERROR][category:$parallel_failure_category] ${parallel_failure_reason}; skipping serial recheck (set OPENVIBECODING_FORCE_SERIAL_RECHECK=1 to force it)" >&2
     echo "ℹ️ [INFO] parallel log: $PYTEST_PARALLEL_LOG"
     exit "$parallel_status"
   fi
@@ -393,7 +393,7 @@ if [[ "$parallel_status" -ne 0 ]]; then
   rm -f -- "$COVERAGE_FILE" "$COVERAGE_FILE".*
   set +e
   heartbeat_pid=""
-  start_heartbeat "test.sh:orchestrator-pytest-serial-recheck" "${CORTEXPILOT_TEST_HEARTBEAT_INTERVAL_SEC:-45}" heartbeat_pid
+  start_heartbeat "test.sh:orchestrator-pytest-serial-recheck" "${OPENVIBECODING_TEST_HEARTBEAT_INTERVAL_SEC:-45}" heartbeat_pid
   
   if [[ "$SKIP_COVERAGE_GATE" == "1" ]]; then
     # shellcheck disable=SC2086
@@ -403,7 +403,7 @@ if [[ "$parallel_status" -ne 0 ]]; then
   else
     # shellcheck disable=SC2086
     VIRTUAL_ENV="$VENV_ROOT" PYTHONPATH=apps/orchestrator/src "$PYTHON_BIN" -m pytest $PYTEST_TEST_TARGET -m "not e2e and not serial" \
-      -n 0 --cov=cortexpilot_orch --cov-branch "${ORCH_CRITICAL_COV_ARGS[@]}" --cov-report=term-missing --cov-report="json:${ORCH_COVERAGE_JSON_REPORT}" --cov-fail-under="$COV_FAIL_UNDER" \
+      -n 0 --cov=openvibecoding_orch --cov-branch "${ORCH_CRITICAL_COV_ARGS[@]}" --cov-report=term-missing --cov-report="json:${ORCH_COVERAGE_JSON_REPORT}" --cov-fail-under="$COV_FAIL_UNDER" \
       2>&1 | tee "$PYTEST_SERIAL_LOG"
   fi
   serial_status="${PIPESTATUS[0]:-1}"

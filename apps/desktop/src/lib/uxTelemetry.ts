@@ -1,4 +1,4 @@
-import { emitFrontendLogEvent } from "@cortexpilot/frontend-api-client";
+import { emitFrontendLogEvent } from "@openvibecoding/frontend-api-client";
 
 type UxTelemetryEventName = "pm_starter_prompt_used" | "pm_send_attempt" | "pm_send_blocked";
 

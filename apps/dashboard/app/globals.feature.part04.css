@@ -1101,7 +1101,7 @@ body {
   border-color: color-mix(in srgb, var(--color-brand-indigo) 30%, transparent);
 }
 
-.pm-chat-bubble.is-cortexpilot {
+.pm-chat-bubble.is-openvibecoding {
   background: color-mix(in srgb, var(--color-bg-elevated) 96%, white);
 }
 

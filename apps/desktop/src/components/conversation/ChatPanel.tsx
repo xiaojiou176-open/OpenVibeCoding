@@ -406,7 +406,7 @@ export function ChatPanel({
                   data-message-id={item.id}
                   className={`chat-bubble ${item.role === "user" ? "is-user" : "is-pm"}`.trim()}
                 >
-                  <strong>{item.role === "user" ? "You" : "CortexPilot Command Tower PM"}</strong>
+                  <strong>{item.role === "user" ? "You" : "OpenVibeCoding Command Tower PM"}</strong>
                   <div className="markdown-content">
                     {shouldRenderMarkdown(item.content) ? (
                       <Suspense fallback={<p className="chat-plain-text">{item.content}</p>}>
@@ -422,7 +422,7 @@ export function ChatPanel({
             )}
             {activeSessionGenerating ? (
               <article className="chat-bubble is-pm typing-bubble" aria-live="polite">
-                <strong>CortexPilot Command Tower PM</strong>
+                <strong>OpenVibeCoding Command Tower PM</strong>
                 <p>{streamingText || phaseText}</p>
               </article>
             ) : null}

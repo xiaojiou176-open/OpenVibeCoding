@@ -10,10 +10,10 @@ import pytest
 import typer
 from typer.testing import CliRunner
 
-from cortexpilot_orch import cli, cli_command_helpers
-from cortexpilot_orch.chain import runtime_helpers
-from cortexpilot_orch.cli import app
-from cortexpilot_orch.store.run_store import RunStore
+from openvibecoding_orch import cli, cli_command_helpers
+from openvibecoding_orch.chain import runtime_helpers
+from openvibecoding_orch.cli import app
+from openvibecoding_orch.store.run_store import RunStore
 
 
 def _strip_ansi(text: str) -> str:
@@ -236,13 +236,13 @@ def test_cli_force_unlock_fail_closed_and_env_restore(tmp_path: Path, monkeypatc
             return "run_env_restore"
 
     monkeypatch.setattr(cli, "Orchestrator", _FakeOrchestrator)
-    monkeypatch.setenv("CORTEXPILOT_RUNNER", "previous-runner")
-    monkeypatch.setenv("CORTEXPILOT_FORCE_UNLOCK", "previous-unlock")
+    monkeypatch.setenv("OPENVIBECODING_RUNNER", "previous-runner")
+    monkeypatch.setenv("OPENVIBECODING_FORCE_UNLOCK", "previous-unlock")
     run_result = runner.invoke(app, ["run", str(contract_path), "--mock", "--runner", "codex"])
     assert run_result.exit_code == 0
     assert "run_id=run_env_restore" in run_result.output
-    assert os.getenv("CORTEXPILOT_RUNNER") == "previous-runner"
-    assert os.getenv("CORTEXPILOT_FORCE_UNLOCK") == "previous-unlock"
+    assert os.getenv("OPENVIBECODING_RUNNER") == "previous-runner"
+    assert os.getenv("OPENVIBECODING_FORCE_UNLOCK") == "previous-unlock"
 
 
 def test_cli_run_chain_restores_existing_force_unlock_env(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -259,10 +259,10 @@ def test_cli_run_chain_restores_existing_force_unlock_env(tmp_path: Path, monkey
             return {"status": "SUCCESS"}
 
     monkeypatch.setattr(cli, "Orchestrator", _FakeOrchestrator)
-    monkeypatch.setenv("CORTEXPILOT_FORCE_UNLOCK", "keep-me")
+    monkeypatch.setenv("OPENVIBECODING_FORCE_UNLOCK", "keep-me")
     result = runner.invoke(app, ["run-chain", str(chain_path), "--mock"])
     assert result.exit_code == 0
-    assert os.getenv("CORTEXPILOT_FORCE_UNLOCK") == "keep-me"
+    assert os.getenv("OPENVIBECODING_FORCE_UNLOCK") == "keep-me"
 
 
 def test_cli_coverage_self_heal_chain_fail_closed_paths(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:

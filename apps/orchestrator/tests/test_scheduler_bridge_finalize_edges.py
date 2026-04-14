@@ -4,8 +4,8 @@ import json
 from pathlib import Path
 from typing import Any
 
-from cortexpilot_orch.scheduler import scheduler_bridge_finalize as bridge_finalize
-from cortexpilot_orch.store.run_store import RunStore
+from openvibecoding_orch.scheduler import scheduler_bridge_finalize as bridge_finalize
+from openvibecoding_orch.store.run_store import RunStore
 
 
 class _AlwaysValidValidator:

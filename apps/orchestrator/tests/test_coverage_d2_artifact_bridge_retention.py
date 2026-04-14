@@ -6,12 +6,12 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
-import cortexpilot_orch.config as config_module
-from cortexpilot_orch.config import load_config
-from cortexpilot_orch.runtime import retention as retention_module
-from cortexpilot_orch.runtime.retention import RetentionPlan, apply_retention_plan, build_retention_plan
-from cortexpilot_orch.scheduler import artifact_pipeline, scheduler_bridge_finalize as bridge_finalize
-from cortexpilot_orch.store.run_store import RunStore
+import openvibecoding_orch.config as config_module
+from openvibecoding_orch.config import load_config
+from openvibecoding_orch.runtime import retention as retention_module
+from openvibecoding_orch.runtime.retention import RetentionPlan, apply_retention_plan, build_retention_plan
+from openvibecoding_orch.scheduler import artifact_pipeline, scheduler_bridge_finalize as bridge_finalize
+from openvibecoding_orch.store.run_store import RunStore
 
 
 def _artifact_contract(name: str, uri: str) -> dict[str, Any]:
@@ -487,35 +487,35 @@ def test_scheduler_bridge_finalize_d2_execute_finalizer_without_lock_or_worktree
 
 def test_retention_d2_namespace_contract_overflow_and_apply_edges(tmp_path: Path, monkeypatch) -> None:
     repo_root = tmp_path / "repo"
-    runtime_root = repo_root / ".runtime-cache" / "cortexpilot"
+    runtime_root = repo_root / ".runtime-cache" / "openvibecoding"
     runs_root = runtime_root / "runs"
     worktree_root = runtime_root / "worktrees"
     logs_root = runtime_root / "logs"
     cache_root = runtime_root / "cache"
     contract_root = tmp_path / "contracts"
 
-    monkeypatch.setenv("CORTEXPILOT_REPO_ROOT", str(repo_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(worktree_root))
-    monkeypatch.setenv("CORTEXPILOT_LOGS_ROOT", str(logs_root))
-    monkeypatch.setenv("CORTEXPILOT_CACHE_ROOT", str(cache_root))
-    monkeypatch.setenv("CORTEXPILOT_CONTRACT_ROOT", str(contract_root))
-    monkeypatch.setenv("CORTEXPILOT_MACHINE_CACHE_ROOT", str(tmp_path / "machine-cache"))
-    monkeypatch.setenv("CORTEXPILOT_RETENTION_RUN_DAYS", "30")
-    monkeypatch.setenv("CORTEXPILOT_RETENTION_MAX_RUNS", "10")
-    monkeypatch.setenv("CORTEXPILOT_RETENTION_LOG_DAYS", "30")
-    monkeypatch.setenv("CORTEXPILOT_RETENTION_WORKTREE_DAYS", "30")
-    monkeypatch.setenv("CORTEXPILOT_RETENTION_LOG_MAX_FILES", "10")
-    monkeypatch.setenv("CORTEXPILOT_RETENTION_CACHE_HOURS", "48")
-    monkeypatch.setenv("CORTEXPILOT_RETENTION_CODEX_HOME_DAYS", "30")
-    monkeypatch.setenv("CORTEXPILOT_RETENTION_MAX_CODEX_HOMES", "1")
-    monkeypatch.setenv("CORTEXPILOT_RETENTION_INTAKE_DAYS", "30")
-    monkeypatch.setenv("CORTEXPILOT_RETENTION_MAX_INTAKES", "1")
-    monkeypatch.delenv("CORTEXPILOT_ENV_FILE", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_PROVIDER", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_PROVIDER_BASE_URL", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_PROVIDER_MODEL", raising=False)
+    monkeypatch.setenv("OPENVIBECODING_REPO_ROOT", str(repo_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(worktree_root))
+    monkeypatch.setenv("OPENVIBECODING_LOGS_ROOT", str(logs_root))
+    monkeypatch.setenv("OPENVIBECODING_CACHE_ROOT", str(cache_root))
+    monkeypatch.setenv("OPENVIBECODING_CONTRACT_ROOT", str(contract_root))
+    monkeypatch.setenv("OPENVIBECODING_MACHINE_CACHE_ROOT", str(tmp_path / "machine-cache"))
+    monkeypatch.setenv("OPENVIBECODING_RETENTION_RUN_DAYS", "30")
+    monkeypatch.setenv("OPENVIBECODING_RETENTION_MAX_RUNS", "10")
+    monkeypatch.setenv("OPENVIBECODING_RETENTION_LOG_DAYS", "30")
+    monkeypatch.setenv("OPENVIBECODING_RETENTION_WORKTREE_DAYS", "30")
+    monkeypatch.setenv("OPENVIBECODING_RETENTION_LOG_MAX_FILES", "10")
+    monkeypatch.setenv("OPENVIBECODING_RETENTION_CACHE_HOURS", "48")
+    monkeypatch.setenv("OPENVIBECODING_RETENTION_CODEX_HOME_DAYS", "30")
+    monkeypatch.setenv("OPENVIBECODING_RETENTION_MAX_CODEX_HOMES", "1")
+    monkeypatch.setenv("OPENVIBECODING_RETENTION_INTAKE_DAYS", "30")
+    monkeypatch.setenv("OPENVIBECODING_RETENTION_MAX_INTAKES", "1")
+    monkeypatch.delenv("OPENVIBECODING_ENV_FILE", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_PROVIDER", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_PROVIDER_BASE_URL", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_PROVIDER_MODEL", raising=False)
     config_module._ENV_LOADED = False
     config_module.reset_cached_config()
     cfg = load_config()

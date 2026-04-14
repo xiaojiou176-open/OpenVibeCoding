@@ -6,8 +6,8 @@ from pathlib import Path
 import pytest
 from typer.testing import CliRunner
 
-from cortexpilot_orch import cli
-from cortexpilot_orch.cli import app
+from openvibecoding_orch import cli
+from openvibecoding_orch.cli import app
 
 
 class _DummyConsole:
@@ -92,17 +92,17 @@ def test_cli_wait_run_and_manifest_and_hooks(tmp_path: Path, monkeypatch) -> Non
     assert found == "run_1"
 
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runtime_root / "runs"))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runtime_root / "runs"))
 
     run_manifest_dir = runtime_root / "runs" / "run_manifest"
     run_manifest_dir.mkdir(parents=True, exist_ok=True)
     (run_manifest_dir / "manifest.json").write_text("{", encoding="utf-8")
     assert cli._read_manifest_status("run_manifest") == "UNKNOWN"
 
-    monkeypatch.setenv("CORTEXPILOT_HOOKS_AUTO_INSTALL", "yes")
+    monkeypatch.setenv("OPENVIBECODING_HOOKS_AUTO_INSTALL", "yes")
     assert cli._hooks_auto_install_enabled() is True
-    monkeypatch.setenv("CORTEXPILOT_HOOKS_AUTO_INSTALL", "0")
+    monkeypatch.setenv("OPENVIBECODING_HOOKS_AUTO_INSTALL", "0")
     assert cli._hooks_auto_install_enabled() is False
 
     repo_root = tmp_path / "repo"
@@ -129,8 +129,8 @@ def test_cli_wait_run_and_manifest_and_hooks(tmp_path: Path, monkeypatch) -> Non
 
 def test_cli_cleanup_runtime_guard(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runtime_root / "runs"))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runtime_root / "runs"))
 
     runner = CliRunner()
     result = runner.invoke(app, ["cleanup", "runtime", "--dry-run", "--apply"])
@@ -149,7 +149,7 @@ def test_cli_temporal_worker_and_serve(monkeypatch) -> None:
         def run_worker() -> None:
             _fake_run_worker()
 
-    monkeypatch.setitem(__import__("sys").modules, "cortexpilot_orch.temporal.worker", _FakeTemporalWorkerModule)
+    monkeypatch.setitem(__import__("sys").modules, "openvibecoding_orch.temporal.worker", _FakeTemporalWorkerModule)
 
     def _fake_uvicorn_run(_app_obj, host: str, port: int, reload: bool) -> None:  # noqa: ANN001
         called["serve"] = {"host": host, "port": port, "reload": reload}

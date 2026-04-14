@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-labelledby="title desc">
-  <title id="title">CortexPilot social preview source</title>
-  <desc id="desc">Social preview source artwork for CortexPilot showing its governed AI task orchestration positioning.</desc>
+  <title id="title">OpenVibeCoding social preview source</title>
+  <desc id="desc">Social preview source artwork for OpenVibeCoding showing its governed AI task orchestration positioning.</desc>
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#16232d"/>
@@ -13,7 +13,7 @@
   <circle cx="1070" cy="110" r="120" fill="#d48452" opacity="0.18"/>
   <circle cx="150" cy="550" r="160" fill="#f2dcc7" opacity="0.08"/>
 
-  <text x="86" y="132" fill="#f6f1e8" font-family="Georgia, 'Times New Roman', serif" font-size="62" font-weight="700">CortexPilot</text>
+  <text x="86" y="132" fill="#f6f1e8" font-family="Georgia, 'Times New Roman', serif" font-size="62" font-weight="700">OpenVibeCoding</text>
   <text x="86" y="186" fill="#d9e7ee" font-family="'Trebuchet MS', Verdana, sans-serif" font-size="28">
     Governed AI task orchestration with evidence, replay, and operator visibility
   </text>

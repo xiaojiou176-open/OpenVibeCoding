@@ -6,8 +6,8 @@ from pathlib import Path
 from fastapi.testclient import TestClient
 import pytest
 
-from cortexpilot_orch.api import main as api_main
-from cortexpilot_orch.api import run_state_helpers
+from openvibecoding_orch.api import main as api_main
+from openvibecoding_orch.api import run_state_helpers
 
 
 def _write_manifest(run_dir: Path, payload: dict) -> None:
@@ -28,7 +28,7 @@ def test_runs_endpoint_fails_loud_when_last_event_ts_helper_breaks(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     runs_root = tmp_path / "runs"
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
     run_dir = runs_root / "run_last_event_fail"
     _write_manifest(run_dir, {"run_id": "run_last_event_fail", "task_id": "task", "status": "RUNNING"})
 
@@ -49,7 +49,7 @@ def test_agents_status_endpoint_fails_loud_when_derive_stage_helper_breaks(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     runs_root = tmp_path / "runs"
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
     run_dir = runs_root / "run_stage_fail"
     _write_manifest(run_dir, {"run_id": "run_stage_fail", "task_id": "task", "status": "RUNNING"})
 

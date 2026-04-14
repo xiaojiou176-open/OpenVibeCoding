@@ -1,5 +1,5 @@
-from cortexpilot_orch.chain import helpers as chain_helpers
-from cortexpilot_orch.chain import runner as chain_runner
+from openvibecoding_orch.chain import helpers as chain_helpers
+from openvibecoding_orch.chain import runner as chain_runner
 
 
 def test_exclusive_paths_and_overlap() -> None:

@@ -9,7 +9,7 @@ from types import ModuleType
 
 import pytest
 
-from cortexpilot_orch.services.control_plane_read_service import (
+from openvibecoding_orch.services.control_plane_read_service import (
     ControlPlaneReadService,
     _as_array,
     _as_record,
@@ -113,7 +113,7 @@ def test_control_plane_read_service_from_api_main_builds_workflows_and_queue_fil
                 {"queue_id": "queue-2", "workflow_id": "wf-2", "status": "DONE"},
             ]
 
-    api_main = ModuleType("cortexpilot_orch.api.main")
+    api_main = ModuleType("openvibecoding_orch.api.main")
     api_main.load_config = lambda: SimpleNamespace(runs_root=Path("/tmp/runs"), runtime_root=Path("/tmp/runtime"))
     api_main._read_events = lambda run_id: event_map.get(run_id, [])
     api_main._parse_iso_ts = lambda value: datetime.fromisoformat(value.replace("Z", "+00:00"))
@@ -124,15 +124,15 @@ def test_control_plane_read_service_from_api_main_builds_workflows_and_queue_fil
     api_main.list_pending_approvals = lambda: [{"run_id": "run-a"}]
     api_main.list_diff_gate = lambda: [{"run_id": "run-b", "status": "FAILED"}]
 
-    main_state_store_helpers = ModuleType("cortexpilot_orch.api.main_state_store_helpers")
+    main_state_store_helpers = ModuleType("openvibecoding_orch.api.main_state_store_helpers")
     main_state_store_helpers.collect_workflows = lambda **_: workflows
 
-    queue_module = ModuleType("cortexpilot_orch.queue")
+    queue_module = ModuleType("openvibecoding_orch.queue")
     queue_module.QueueStore = _FakeQueueStore
 
-    monkeypatch.setitem(sys.modules, "cortexpilot_orch.api.main", api_main)
-    monkeypatch.setitem(sys.modules, "cortexpilot_orch.api.main_state_store_helpers", main_state_store_helpers)
-    monkeypatch.setitem(sys.modules, "cortexpilot_orch.queue", queue_module)
+    monkeypatch.setitem(sys.modules, "openvibecoding_orch.api.main", api_main)
+    monkeypatch.setitem(sys.modules, "openvibecoding_orch.api.main_state_store_helpers", main_state_store_helpers)
+    monkeypatch.setitem(sys.modules, "openvibecoding_orch.queue", queue_module)
 
     service = ControlPlaneReadService.from_api_main()
 
@@ -250,33 +250,33 @@ def test_control_plane_read_service_from_runtime_builds_runtime_views_and_pendin
                 {"queue_id": "queue-2", "workflow_id": "wf-2", "status": "DONE"},
             ]
 
-    config_module = ModuleType("cortexpilot_orch.config")
+    config_module = ModuleType("openvibecoding_orch.config")
     config_module.load_config = lambda: SimpleNamespace(runs_root=runs_root, runtime_root=runtime_root)
 
-    main_state_store_helpers = ModuleType("cortexpilot_orch.api.main_state_store_helpers")
+    main_state_store_helpers = ModuleType("openvibecoding_orch.api.main_state_store_helpers")
     main_state_store_helpers.read_events = lambda *, run_id, runs_root: event_map.get(run_id, [])
     main_state_store_helpers.collect_workflows = lambda **_: workflows
 
-    main_run_views_helpers = ModuleType("cortexpilot_orch.api.main_run_views_helpers")
+    main_run_views_helpers = ModuleType("openvibecoding_orch.api.main_run_views_helpers")
     main_run_views_helpers.list_diff_gate = lambda **_: [
         {"run_id": "run-a", "status": "FAILED"},
         {"run_id": "run-b", "status": "PASS"},
     ]
 
-    compiler_module = ModuleType("cortexpilot_orch.contract.compiler")
+    compiler_module = ModuleType("openvibecoding_orch.contract.compiler")
     compiler_module.build_role_binding_summary = lambda contract: {
         "source": "generated",
         "task_id": contract.get("task_id"),
     }
 
-    queue_module = ModuleType("cortexpilot_orch.queue")
+    queue_module = ModuleType("openvibecoding_orch.queue")
     queue_module.QueueStore = _FakeQueueStore
 
-    monkeypatch.setitem(sys.modules, "cortexpilot_orch.config", config_module)
-    monkeypatch.setitem(sys.modules, "cortexpilot_orch.api.main_state_store_helpers", main_state_store_helpers)
-    monkeypatch.setitem(sys.modules, "cortexpilot_orch.api.main_run_views_helpers", main_run_views_helpers)
-    monkeypatch.setitem(sys.modules, "cortexpilot_orch.contract.compiler", compiler_module)
-    monkeypatch.setitem(sys.modules, "cortexpilot_orch.queue", queue_module)
+    monkeypatch.setitem(sys.modules, "openvibecoding_orch.config", config_module)
+    monkeypatch.setitem(sys.modules, "openvibecoding_orch.api.main_state_store_helpers", main_state_store_helpers)
+    monkeypatch.setitem(sys.modules, "openvibecoding_orch.api.main_run_views_helpers", main_run_views_helpers)
+    monkeypatch.setitem(sys.modules, "openvibecoding_orch.contract.compiler", compiler_module)
+    monkeypatch.setitem(sys.modules, "openvibecoding_orch.queue", queue_module)
 
     service = ControlPlaneReadService.from_runtime()
 

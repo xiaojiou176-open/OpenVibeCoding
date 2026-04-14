@@ -1,4 +1,4 @@
-Design a **Workflow Case detail** page for CortexPilot.
+Design a **Workflow Case detail** page for OpenVibeCoding.
 
 This is the durable operating record for one case. It should make it obvious:
 

@@ -18,7 +18,7 @@
       "smoke_entrypoint": "bash scripts/run_governance_py.sh scripts/check_provider_contract_smoke.py --upstream-id provider-gateway:cliproxyapi",
       "smoke_timeout_sec": 45,
       "break_glass_policy": "Provider downgrade requires explicit runtime env override and auditable reason/ticket",
-      "rollback_path": "Set CORTEXPILOT_PROVIDER to another allowed provider and rerun provider/runtime gates",
+      "rollback_path": "Set OPENVIBECODING_PROVIDER to another allowed provider and rerun provider/runtime gates",
       "failure_attribution_hint": "Differentiate provider API contract failures from repo orchestration/runtime failures using the dedicated provider contract probe instead of PM chat orchestration evidence",
       "verification_record_path": ".runtime-cache/test_output/governance/upstream/provider-runtime-path.json",
       "same_run_required": true
@@ -27,7 +27,7 @@
       "integration_slice": "ci-core-image",
       "owner": "platform",
       "upstream_ids": [
-        "ci-image:cortexpilot-ci-core",
+        "ci-image:openvibecoding-ci-core",
         "download-host:mcr.microsoft.com",
         "download-host:nodejs.org",
         "download-host:static.rust-lang.org",
@@ -68,8 +68,8 @@
         "bash scripts/e2e_pm_chat_command_tower_success.sh",
         "python3 scripts/check_upstream_inventory.py --mode gate"
       ],
-      "validation_gate": "CORTEXPILOT_E2E_RUNNER=agents CORTEXPILOT_E2E_WEB_MODE=prod bash scripts/e2e_pm_chat_command_tower_success.sh",
-      "smoke_entrypoint": "CORTEXPILOT_E2E_RUNNER=agents CORTEXPILOT_E2E_WEB_MODE=prod CORTEXPILOT_E2E_SKIP_FAST_GATE=1 CORTEXPILOT_E2E_CHECK_PM_STOP=0 CORTEXPILOT_E2E_ORCHESTRATION_SMOKE_MODE=1 CORTEXPILOT_E2E_API_PORT=18020 CORTEXPILOT_E2E_DASHBOARD_PORT=18120 bash scripts/e2e_pm_chat_command_tower_success.sh",
+      "validation_gate": "OPENVIBECODING_E2E_RUNNER=agents OPENVIBECODING_E2E_WEB_MODE=prod bash scripts/e2e_pm_chat_command_tower_success.sh",
+      "smoke_entrypoint": "OPENVIBECODING_E2E_RUNNER=agents OPENVIBECODING_E2E_WEB_MODE=prod OPENVIBECODING_E2E_SKIP_FAST_GATE=1 OPENVIBECODING_E2E_CHECK_PM_STOP=0 OPENVIBECODING_E2E_ORCHESTRATION_SMOKE_MODE=1 OPENVIBECODING_E2E_API_PORT=18020 OPENVIBECODING_E2E_DASHBOARD_PORT=18120 bash scripts/e2e_pm_chat_command_tower_success.sh",
       "smoke_timeout_sec": 600,
       "break_glass_policy": "Mock mode on CI requires explicit emergency override",
       "rollback_path": "Revert to the last passing PM chat real-E2E contract and rerun the real chain",
@@ -81,7 +81,7 @@
       "integration_slice": "ui-audit-playwright",
       "owner": "platform",
       "upstream_ids": [
-        "ci-image:cortexpilot-ci-core",
+        "ci-image:openvibecoding-ci-core",
         "download-host:mcr.microsoft.com"
       ],
       "supported_versions_or_pins": [

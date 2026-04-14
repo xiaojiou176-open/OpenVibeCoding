@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from cortexpilot_orch.scheduler import artifact_pipeline
+from openvibecoding_orch.scheduler import artifact_pipeline
 
 
 def _contract_with_artifact(name: str, uri: str) -> dict[str, object]:
@@ -15,7 +15,7 @@ def test_safe_artifact_path_relative_uri_and_non_dict_agents(tmp_path: Path, mon
     repo_root.mkdir()
     runtime_root = tmp_path / "runtime"
     runtime_root.mkdir()
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
 
     nested = repo_root / "artifacts" / "result.json"
     nested.parent.mkdir(parents=True, exist_ok=True)

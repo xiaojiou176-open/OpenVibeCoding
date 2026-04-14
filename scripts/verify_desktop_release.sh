@@ -10,8 +10,8 @@ REPORT_DIR="${DESKTOP_VERIFY_REPORT_DIR:-$ROOT_DIR/.runtime-cache/test_output/de
 REPORT_PATH="$REPORT_DIR/release_verification.txt"
 SHA_PATH="$REPORT_DIR/release_sha256.txt"
 
-APP_PATH="${DESKTOP_VERIFY_APP_PATH:-$BUNDLE_DIR/macos/CortexPilot Desktop.app}"
-DMG_PATH="${DESKTOP_VERIFY_DMG_PATH:-$BUNDLE_DIR/dmg/CortexPilot Desktop_0.1.0_aarch64.dmg}"
+APP_PATH="${DESKTOP_VERIFY_APP_PATH:-$BUNDLE_DIR/macos/OpenVibeCoding Desktop.app}"
+DMG_PATH="${DESKTOP_VERIFY_DMG_PATH:-$BUNDLE_DIR/dmg/OpenVibeCoding Desktop_0.1.0_aarch64.dmg}"
 ICON_REQUIRED=(
   "$ICON_DIR/icon-1024.png"
   "$ICON_DIR/icon.png"

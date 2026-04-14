@@ -201,7 +201,7 @@ def _run_once(
     t0 = time.perf_counter()
     env = os.environ.copy()
     artifact_suffix = f"bench_{run_id}_{suite}_r{round_idx:03d}"
-    env["CORTEXPILOT_E2E_ARTIFACT_SUFFIX"] = artifact_suffix
+    env["OPENVIBECODING_E2E_ARTIFACT_SUFFIX"] = artifact_suffix
 
     command = ""
     report_path = ""
@@ -211,7 +211,7 @@ def _run_once(
 
     if suite == SUITE_UI:
         ui_run_id = f"bench_{run_id}_ui_r{round_idx:03d}"
-        env["CORTEXPILOT_UI_FULL_E2E_RUN_ID"] = ui_run_id
+        env["OPENVIBECODING_UI_FULL_E2E_RUN_ID"] = ui_run_id
         command = ui_command
         report_path_obj = UI_REPORT_ROOT / ui_run_id / "report.json"
     elif suite == SUITE_DASH:

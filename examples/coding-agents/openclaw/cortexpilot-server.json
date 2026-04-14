@@ -1,7 +1,0 @@
-{
-  "command": "bash",
-  "args": [
-    "__CORTEXPILOT_REPO_ROOT__/scripts/run_readonly_mcp.sh"
-  ],
-  "cwd": "__CORTEXPILOT_REPO_ROOT__"
-}

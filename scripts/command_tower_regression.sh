@@ -3,7 +3,7 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 source "$ROOT_DIR/scripts/lib/env.sh"
-PYTHON_BIN="${CORTEXPILOT_PYTHON:-}"
+PYTHON_BIN="${OPENVIBECODING_PYTHON:-}"
 export PYTHONDONTWRITEBYTECODE=1
 existing_pytest_addopts="${PYTEST_ADDOPTS:-}"
 case " ${existing_pytest_addopts} " in
@@ -61,7 +61,7 @@ run_step "repo-hygiene" "$hygiene_log" bash scripts/check_repo_hygiene.sh || tru
   echo "- Hygiene: \\`$hygiene_log\\`"
   echo
   echo "## Commands"
-  echo "1. \\`PYTHONPATH=apps/orchestrator/src \${CORTEXPILOT_PYTHON:-.runtime-cache/cache/toolchains/python/current/bin/python} -m pytest apps/orchestrator/tests/test_api_main.py -q\\`"
+  echo "1. \\`PYTHONPATH=apps/orchestrator/src \${OPENVIBECODING_PYTHON:-.runtime-cache/cache/toolchains/python/current/bin/python} -m pytest apps/orchestrator/tests/test_api_main.py -q\\`"
   echo "2. \\`pnpm --dir apps/dashboard test\\`"
   echo "3. \\`pnpm --dir apps/dashboard exec tsc -p tsconfig.typecheck.json --noEmit\\`"
   echo "4. \\`bash scripts/check_repo_hygiene.sh\\`"

@@ -1,4 +1,4 @@
-name: cortexpilot-codeql
+name: openvibecoding-codeql
 
 paths-ignore:
   - .runtime-cache/**

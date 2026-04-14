@@ -6,12 +6,12 @@
     "default_cap_bytes": 21474836480,
     "auto_prune_interval_sec": 1800,
     "protected_prefixes": [
-      "${CORTEXPILOT_MACHINE_CACHE_ROOT}/browser",
-      "${CORTEXPILOT_MACHINE_CACHE_ROOT}/toolchains",
-      "${CORTEXPILOT_MACHINE_CACHE_ROOT}/toolchains/python/current"
+      "${OPENVIBECODING_MACHINE_CACHE_ROOT}/browser",
+      "${OPENVIBECODING_MACHINE_CACHE_ROOT}/toolchains",
+      "${OPENVIBECODING_MACHINE_CACHE_ROOT}/toolchains/python/current"
     ],
     "cap_excluded_prefixes": [
-      "${CORTEXPILOT_MACHINE_CACHE_ROOT}/browser"
+      "${OPENVIBECODING_MACHINE_CACHE_ROOT}/browser"
     ]
   },
   "shared_realpath_prefixes": [
@@ -477,7 +477,7 @@
       },
       {
         "id": "runtime_temp",
-        "path": ".runtime-cache/cortexpilot/temp",
+        "path": ".runtime-cache/openvibecoding/temp",
         "type": "runtime temp namespace",
         "ownership": "current repo runtime temp namespace",
         "ownership_confidence": "High",
@@ -552,7 +552,7 @@
         "apply_serial_only": false,
         "evidence": [
           "docs/architecture/runtime-topology.md",
-          "apps/orchestrator/src/cortexpilot_orch/observability/logger.py"
+          "apps/orchestrator/src/openvibecoding_orch/observability/logger.py"
         ],
         "notes": "Treat as evidence lane first, cleanup lane second."
       },
@@ -610,7 +610,7 @@
       },
       {
         "id": "runtime_browser_profiles",
-        "path": ".runtime-cache/cortexpilot/browser-profiles",
+        "path": ".runtime-cache/openvibecoding/browser-profiles",
         "type": "governed browser profile namespace",
         "ownership": "preferred runtime browser profile root",
         "ownership_confidence": "Medium",
@@ -631,13 +631,13 @@
         "apply_serial_only": false,
         "evidence": [
           "configs/runtime_artifact_policy.json",
-          "apps/orchestrator/src/cortexpilot_orch/policy/browser_policy_resolver.py"
+          "apps/orchestrator/src/openvibecoding_orch/policy/browser_policy_resolver.py"
         ],
         "notes": "Allowed by policy, but keep under verification because materialization depends on runtime browser flows."
       },
       {
         "id": "runtime_backups",
-        "path": ".runtime-cache/cortexpilot/backups",
+        "path": ".runtime-cache/openvibecoding/backups",
         "type": "runtime historical backup namespace",
         "ownership": "governed backup surface",
         "ownership_confidence": "Low",
@@ -658,7 +658,7 @@
     "repo_external_related": [
       {
         "id": "external_machine_cache_root",
-        "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}",
+        "path": "${OPENVIBECODING_MACHINE_CACHE_ROOT}",
         "type": "machine-scoped cache namespace",
         "ownership": "repo-owned external cache namespace",
         "ownership_confidence": "High",
@@ -676,11 +676,11 @@
           "scripts/lib/env.sh",
           "configs/runtime_artifact_policy.json"
         ],
-        "notes": "Top-level namespace is shared by multiple CortexPilot worktrees/branches on the same machine."
+        "notes": "Top-level namespace is shared by multiple OpenVibeCoding worktrees/branches on the same machine."
       },
       {
         "id": "external_repo_browser_root",
-        "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/browser",
+        "path": "${OPENVIBECODING_MACHINE_CACHE_ROOT}/browser",
         "type": "repo-owned persistent browser singleton root",
         "ownership": "repo-owned Chrome singleton browser root",
         "ownership_confidence": "High",
@@ -696,13 +696,13 @@
         "evidence": [
           "scripts/repo_chrome_singleton.py",
           "tooling/browser/repo_chrome_singleton.py",
-          "apps/orchestrator/src/cortexpilot_orch/policy/browser_policy_resolver.py"
+          "apps/orchestrator/src/openvibecoding_orch/policy/browser_policy_resolver.py"
         ],
-        "notes": "Persistent repo browser workspace rooted at ~/.cache/cortexpilot/browser. It stays auditable, but does not participate in TTL or cap-driven cleanup."
+        "notes": "Persistent repo browser workspace rooted at ~/.cache/openvibecoding/browser. It stays auditable, but does not participate in TTL or cap-driven cleanup."
       },
       {
         "id": "external_pnpm_store",
-        "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/pnpm-store",
+        "path": "${OPENVIBECODING_MACHINE_CACHE_ROOT}/pnpm-store",
         "type": "machine-scoped pnpm store",
         "ownership": "repo-controlled external pnpm cache",
         "ownership_confidence": "High",
@@ -725,7 +725,7 @@
       },
       {
         "id": "external_pnpm_store_dashboard",
-        "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/pnpm-store/dashboard",
+        "path": "${OPENVIBECODING_MACHINE_CACHE_ROOT}/pnpm-store/dashboard",
         "type": "dashboard-scoped pnpm store branch",
         "ownership": "repo-controlled external dashboard pnpm cache",
         "ownership_confidence": "High",
@@ -748,11 +748,11 @@
           "scripts/install_dashboard_deps.sh",
           "scripts/lib/toolchain_env.sh"
         ],
-        "notes": "Dashboard-specific pnpm store branch under the shared CortexPilot machine cache."
+        "notes": "Dashboard-specific pnpm store branch under the shared OpenVibeCoding machine cache."
       },
       {
         "id": "external_pnpm_store_desktop",
-        "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/pnpm-store/desktop",
+        "path": "${OPENVIBECODING_MACHINE_CACHE_ROOT}/pnpm-store/desktop",
         "type": "desktop-scoped pnpm store branch",
         "ownership": "repo-controlled external desktop pnpm cache",
         "ownership_confidence": "High",
@@ -775,11 +775,11 @@
           "scripts/install_desktop_deps.sh",
           "scripts/lib/toolchain_env.sh"
         ],
-        "notes": "Desktop-specific pnpm store branch under the shared CortexPilot machine cache."
+        "notes": "Desktop-specific pnpm store branch under the shared OpenVibeCoding machine cache."
       },
       {
         "id": "external_pnpm_store_v10",
-        "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/pnpm-store/v10",
+        "path": "${OPENVIBECODING_MACHINE_CACHE_ROOT}/pnpm-store/v10",
         "type": "pnpm content-addressed store root",
         "ownership": "repo-controlled external pnpm store content-addressed cache",
         "ownership_confidence": "High",
@@ -809,7 +809,7 @@
       },
       {
         "id": "external_pnpm_store_local",
-        "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/pnpm-store-local-*",
+        "path": "${OPENVIBECODING_MACHINE_CACHE_ROOT}/pnpm-store-local-*",
         "type": "derived pnpm retry/local store",
         "ownership": "repo-derived temporary pnpm store namespace",
         "ownership_confidence": "High",
@@ -838,7 +838,7 @@
       },
       {
         "id": "external_tmp_docker_ci_runner_temp",
-        "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/tmp/docker-ci/runner-temp-*",
+        "path": "${OPENVIBECODING_MACHINE_CACHE_ROOT}/tmp/docker-ci/runner-temp-*",
         "type": "machine-scoped docker_ci runner temp root",
         "ownership": "repo-owned docker_ci host runner temp",
         "ownership_confidence": "High",
@@ -861,18 +861,18 @@
         "lifecycle": "machine_tmp",
         "process_command_hints": [
           "scripts/docker_ci.sh",
-          "cortexpilot-docker-ci",
+          "openvibecoding-docker-ci",
           "runner-temp"
         ],
         "evidence": [
           "scripts/docker_ci.sh",
           "scripts/lib/toolchain_env.sh"
         ],
-        "notes": "Repo-owned heavy local CI runner temp surface. Keep it under the CortexPilot machine tmp root instead of Darwin TMPDIR."
+        "notes": "Repo-owned heavy local CI runner temp surface. Keep it under the OpenVibeCoding machine tmp root instead of Darwin TMPDIR."
       },
       {
         "id": "external_tmp_clean_room_machine_cache",
-        "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/tmp/clean-room-machine-cache.*",
+        "path": "${OPENVIBECODING_MACHINE_CACHE_ROOT}/tmp/clean-room-machine-cache.*",
         "type": "machine-scoped clean-room machine cache",
         "ownership": "repo-owned clean-room recovery machine cache",
         "ownership_confidence": "High",
@@ -905,7 +905,7 @@
       },
       {
         "id": "external_tmp_clean_room_preserve",
-        "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/tmp/clean-room-preserve.*",
+        "path": "${OPENVIBECODING_MACHINE_CACHE_ROOT}/tmp/clean-room-preserve.*",
         "type": "machine-scoped clean-room preserve root",
         "ownership": "repo-owned clean-room preserve temp root",
         "ownership_confidence": "High",
@@ -934,11 +934,11 @@
           "scripts/check_clean_room_recovery.sh",
           "scripts/lib/toolchain_env.sh"
         ],
-        "notes": "Repo-owned clean-room preserve temp root. This should stay under the CortexPilot machine tmp root rather than Darwin TMPDIR."
+        "notes": "Repo-owned clean-room preserve temp root. This should stay under the OpenVibeCoding machine tmp root rather than Darwin TMPDIR."
       },
       {
         "id": "external_playwright",
-        "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/playwright",
+        "path": "${OPENVIBECODING_MACHINE_CACHE_ROOT}/playwright",
         "type": "machine-scoped Playwright browser cache",
         "ownership": "repo-controlled external browser download root",
         "ownership_confidence": "High",
@@ -961,11 +961,11 @@
           "scripts/lib/toolchain_env.sh",
           "scripts/bootstrap.sh"
         ],
-        "notes": "Repo-owned browser cache, but still shared across CortexPilot worktrees on the same machine."
+        "notes": "Repo-owned browser cache, but still shared across OpenVibeCoding worktrees on the same machine."
       },
       {
         "id": "external_docker_buildx_cache_root",
-        "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/docker-buildx-cache",
+        "path": "${OPENVIBECODING_MACHINE_CACHE_ROOT}/docker-buildx-cache",
         "type": "repo-owned docker buildx local cache root",
         "ownership": "repo-owned docker buildx local cache root",
         "ownership_confidence": "High",
@@ -987,7 +987,7 @@
       },
       {
         "id": "external_docker_buildx_cache_core",
-        "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/docker-buildx-cache/cortexpilot-ci-core-local",
+        "path": "${OPENVIBECODING_MACHINE_CACHE_ROOT}/docker-buildx-cache/openvibecoding-ci-core-local",
         "type": "repo-owned docker buildx core image cache",
         "ownership": "repo-owned docker buildx cache for the core local CI image",
         "ownership_confidence": "High",
@@ -1011,7 +1011,7 @@
         "process_command_hints": [
           "buildx",
           "scripts/docker_ci.sh",
-          "cortexpilot-ci-core:local"
+          "openvibecoding-ci-core:local"
         ],
         "evidence": [
           "scripts/docker_ci.sh",
@@ -1021,7 +1021,7 @@
       },
       {
         "id": "external_docker_buildx_cache_desktop_native",
-        "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/docker-buildx-cache/cortexpilot-ci-desktop-native-local",
+        "path": "${OPENVIBECODING_MACHINE_CACHE_ROOT}/docker-buildx-cache/openvibecoding-ci-desktop-native-local",
         "type": "repo-owned docker buildx desktop-native image cache",
         "ownership": "repo-owned docker buildx cache for the desktop-native local CI image",
         "ownership_confidence": "High",
@@ -1045,7 +1045,7 @@
         "process_command_hints": [
           "buildx",
           "desktop-native-smoke",
-          "cortexpilot-ci-desktop-native:local"
+          "openvibecoding-ci-desktop-native:local"
         ],
         "evidence": [
           "scripts/docker_ci.sh",
@@ -1055,7 +1055,7 @@
       },
       {
         "id": "external_cargo",
-        "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/cargo",
+        "path": "${OPENVIBECODING_MACHINE_CACHE_ROOT}/cargo",
         "type": "machine-scoped Cargo cache",
         "ownership": "repo-controlled external Cargo home",
         "ownership_confidence": "High",
@@ -1080,7 +1080,7 @@
       },
       {
         "id": "external_python_toolchain_current",
-        "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/toolchains/python/current",
+        "path": "${OPENVIBECODING_MACHINE_CACHE_ROOT}/toolchains/python/current",
         "type": "shared python toolchain root",
         "ownership": "repo-related but potentially cross-repo shared Python toolchain",
         "ownership_confidence": "Medium",
@@ -1175,7 +1175,7 @@
           "scripts/bootstrap.sh",
           "scripts/lib/toolchain_env.sh"
         ],
-        "notes": "Outside short-term cleanup scope because CortexPilot already prefers its own browser cache root."
+        "notes": "Outside short-term cleanup scope because OpenVibeCoding already prefers its own browser cache root."
       },
       {
         "id": "shared_npm_cache",
@@ -1246,7 +1246,7 @@
         "apps/desktop"
       ],
       "process_command_hints": [
-        "CortexPilot",
+        "OpenVibeCoding",
         "apps/desktop",
         ".runtime-cache"
       ],
@@ -1278,7 +1278,7 @@
         "packages/frontend-api-client"
       ],
       "process_command_hints": [
-        "CortexPilot",
+        "OpenVibeCoding",
         "apps/dashboard",
         "apps/desktop",
         "apps/orchestrator",
@@ -1316,20 +1316,20 @@
         "docker"
       ],
       "process_path_hints": [
-        "${CORTEXPILOT_MACHINE_CACHE_ROOT}",
-        "${CORTEXPILOT_MACHINE_CACHE_ROOT}/pnpm-store",
-        "${CORTEXPILOT_MACHINE_CACHE_ROOT}/tmp",
-        "${CORTEXPILOT_MACHINE_CACHE_ROOT}/tmp/docker-ci",
-        "${CORTEXPILOT_MACHINE_CACHE_ROOT}/playwright",
-        "${CORTEXPILOT_MACHINE_CACHE_ROOT}/docker-buildx-cache",
-        "${CORTEXPILOT_MACHINE_CACHE_ROOT}/cargo"
+        "${OPENVIBECODING_MACHINE_CACHE_ROOT}",
+        "${OPENVIBECODING_MACHINE_CACHE_ROOT}/pnpm-store",
+        "${OPENVIBECODING_MACHINE_CACHE_ROOT}/tmp",
+        "${OPENVIBECODING_MACHINE_CACHE_ROOT}/tmp/docker-ci",
+        "${OPENVIBECODING_MACHINE_CACHE_ROOT}/playwright",
+        "${OPENVIBECODING_MACHINE_CACHE_ROOT}/docker-buildx-cache",
+        "${OPENVIBECODING_MACHINE_CACHE_ROOT}/cargo"
       ],
       "process_command_hints": [
-        "CortexPilot",
-        ".cache/cortexpilot",
+        "OpenVibeCoding",
+        ".cache/openvibecoding",
         "scripts/docker_ci.sh",
         "scripts/check_clean_room_recovery.sh",
-        "cortexpilot-docker-ci",
+        "openvibecoding-docker-ci",
         "buildx",
         "clean-room-machine-cache",
         "clean-room-preserve",

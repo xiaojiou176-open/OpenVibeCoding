@@ -4,11 +4,11 @@ from typing import cast
 import json
 from datetime import datetime, timezone
 
-from cortexpilot_orch.locks.locker import _lock_path, acquire_lock, acquire_lock_with_cleanup, release_lock
+from openvibecoding_orch.locks.locker import _lock_path, acquire_lock, acquire_lock_with_cleanup, release_lock
 
 
 def test_locker_acquire_collision(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(tmp_path))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(tmp_path))
     locks_root = tmp_path / "locks"
     locks_root.mkdir(parents=True, exist_ok=True)
 
@@ -19,7 +19,7 @@ def test_locker_acquire_collision(tmp_path: Path, monkeypatch) -> None:
 
 
 def test_locker_cleanup_on_partial_failure(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(tmp_path))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(tmp_path))
     locks_root = tmp_path / "locks"
     locks_root.mkdir(parents=True, exist_ok=True)
 
@@ -32,8 +32,8 @@ def test_locker_cleanup_on_partial_failure(tmp_path: Path, monkeypatch) -> None:
 
 
 def test_locker_release(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(tmp_path))
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", "run_release")
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(tmp_path))
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", "run_release")
     locks_root = tmp_path / "locks"
     locks_root.mkdir(parents=True, exist_ok=True)
 
@@ -44,7 +44,7 @@ def test_locker_release(tmp_path: Path, monkeypatch) -> None:
 
 
 def test_locker_release_all_when_empty(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(tmp_path))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(tmp_path))
     locks_root = tmp_path / "locks"
     locks_root.mkdir(parents=True, exist_ok=True)
 
@@ -59,36 +59,36 @@ def test_locker_release_all_when_empty(tmp_path: Path, monkeypatch) -> None:
 
 
 def test_locker_release_requires_owner_or_force_unlock(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(tmp_path))
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", "run_owner_a")
-    monkeypatch.setenv("CORTEXPILOT_LOCK_OWNER_TOKEN", "owner_a")
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(tmp_path))
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", "run_owner_a")
+    monkeypatch.setenv("OPENVIBECODING_LOCK_OWNER_TOKEN", "owner_a")
     target = ["src/owned.py"]
 
     assert acquire_lock(target) is True
 
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", "run_owner_b")
-    monkeypatch.setenv("CORTEXPILOT_LOCK_OWNER_TOKEN", "owner_b")
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", "run_owner_b")
+    monkeypatch.setenv("OPENVIBECODING_LOCK_OWNER_TOKEN", "owner_b")
     release_lock(target)
     assert acquire_lock(target) is False
 
-    monkeypatch.setenv("CORTEXPILOT_FORCE_UNLOCK", "1")
+    monkeypatch.setenv("OPENVIBECODING_FORCE_UNLOCK", "1")
     release_lock(target)
-    monkeypatch.delenv("CORTEXPILOT_FORCE_UNLOCK", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_FORCE_UNLOCK", raising=False)
     assert acquire_lock(target) is True
     release_lock(target)
 
 
 def test_locker_sanitize_allowed_paths_non_string_entries(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(tmp_path))
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", "run_sanitize")
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(tmp_path))
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", "run_sanitize")
 
     assert acquire_lock(cast(list[str], ["src/ok.py", None, " ", "src/ok.py"])) is True
     release_lock(cast(list[str], ["src/ok.py", 123, ""]))
 
 
 def test_locker_rejects_traversal_and_absolute_allowed_paths(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(tmp_path))
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", "run_path_safety")
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(tmp_path))
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", "run_path_safety")
 
     assert acquire_lock(["../escape.py"]) is False
     assert acquire_lock(["/tmp/escape.py"]) is False
@@ -97,16 +97,16 @@ def test_locker_rejects_traversal_and_absolute_allowed_paths(tmp_path: Path, mon
 
 
 def test_locker_partial_failure_cleanup_does_not_remove_replaced_foreign_lock(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(tmp_path))
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", "run-owner-a")
-    monkeypatch.setenv("CORTEXPILOT_LOCK_OWNER_TOKEN", "owner_a")
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(tmp_path))
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", "run-owner-a")
+    monkeypatch.setenv("OPENVIBECODING_LOCK_OWNER_TOKEN", "owner_a")
     locks_root = tmp_path / "locks"
     locks_root.mkdir(parents=True, exist_ok=True)
 
     existing = _lock_path("b.txt", locks_root)
     existing.write_text("held", encoding="utf-8")
 
-    import cortexpilot_orch.locks.locker as locker_module
+    import openvibecoding_orch.locks.locker as locker_module
 
     original_write = locker_module._write_lock
 
@@ -133,7 +133,7 @@ def test_locker_partial_failure_cleanup_does_not_remove_replaced_foreign_lock(tm
 
 
 def test_locker_auto_cleanup_stale_run(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(tmp_path))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(tmp_path))
     locks_root = tmp_path / "locks"
     locks_root.mkdir(parents=True, exist_ok=True)
     runs_root = tmp_path / "runs"

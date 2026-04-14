@@ -3,9 +3,9 @@ import json
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-import cortexpilot_orch.config as config_module
-from cortexpilot_orch.config import load_config
-from cortexpilot_orch.runtime.retention import apply_retention_plan, build_retention_plan, write_retention_report
+import openvibecoding_orch.config as config_module
+from openvibecoding_orch.config import load_config
+from openvibecoding_orch.runtime.retention import apply_retention_plan, build_retention_plan, write_retention_report
 
 
 def _touch(path: Path) -> None:
@@ -23,25 +23,25 @@ def _age(path: Path, *, days: int = 0, hours: int = 0) -> None:
 
 def test_retention_dry_plan_and_apply(tmp_path: Path, monkeypatch) -> None:
     repo_root = tmp_path / "repo"
-    runtime_root = repo_root / ".runtime-cache" / "cortexpilot"
+    runtime_root = repo_root / ".runtime-cache" / "openvibecoding"
     runs_root = runtime_root / "runs"
     worktree_root = runtime_root / "worktrees"
     logs_root = repo_root / ".runtime-cache" / "logs"
     cache_root = repo_root / ".runtime-cache" / "cache"
 
-    monkeypatch.setenv("CORTEXPILOT_REPO_ROOT", str(repo_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(worktree_root))
-    monkeypatch.setenv("CORTEXPILOT_LOGS_ROOT", str(logs_root))
-    monkeypatch.setenv("CORTEXPILOT_CACHE_ROOT", str(cache_root))
-    monkeypatch.setenv("CORTEXPILOT_MACHINE_CACHE_ROOT", str(tmp_path / "machine-cache"))
-    monkeypatch.setenv("CORTEXPILOT_RETENTION_RUN_DAYS", "1")
-    monkeypatch.setenv("CORTEXPILOT_RETENTION_MAX_RUNS", "1")
-    monkeypatch.setenv("CORTEXPILOT_RETENTION_LOG_DAYS", "1")
-    monkeypatch.setenv("CORTEXPILOT_RETENTION_WORKTREE_DAYS", "1")
-    monkeypatch.setenv("CORTEXPILOT_RETENTION_LOG_MAX_FILES", "1")
-    monkeypatch.setenv("CORTEXPILOT_RETENTION_CACHE_HOURS", "1")
+    monkeypatch.setenv("OPENVIBECODING_REPO_ROOT", str(repo_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(worktree_root))
+    monkeypatch.setenv("OPENVIBECODING_LOGS_ROOT", str(logs_root))
+    monkeypatch.setenv("OPENVIBECODING_CACHE_ROOT", str(cache_root))
+    monkeypatch.setenv("OPENVIBECODING_MACHINE_CACHE_ROOT", str(tmp_path / "machine-cache"))
+    monkeypatch.setenv("OPENVIBECODING_RETENTION_RUN_DAYS", "1")
+    monkeypatch.setenv("OPENVIBECODING_RETENTION_MAX_RUNS", "1")
+    monkeypatch.setenv("OPENVIBECODING_RETENTION_LOG_DAYS", "1")
+    monkeypatch.setenv("OPENVIBECODING_RETENTION_WORKTREE_DAYS", "1")
+    monkeypatch.setenv("OPENVIBECODING_RETENTION_LOG_MAX_FILES", "1")
+    monkeypatch.setenv("OPENVIBECODING_RETENTION_CACHE_HOURS", "1")
 
     run_old = runs_root / "run_old"
     run_new = runs_root / "run_new"
@@ -95,15 +95,15 @@ def test_retention_dry_plan_and_apply(tmp_path: Path, monkeypatch) -> None:
 
 def test_machine_cache_summary_excludes_repo_browser_root_from_cap_pressure(tmp_path: Path, monkeypatch) -> None:
     repo_root = tmp_path / "repo"
-    runtime_root = repo_root / ".runtime-cache" / "cortexpilot"
+    runtime_root = repo_root / ".runtime-cache" / "openvibecoding"
     machine_root = tmp_path / "machine-cache"
     browser_profile = machine_root / "browser" / "chrome-user-data" / "Profile 1"
     playwright_root = machine_root / "playwright"
 
-    monkeypatch.setenv("CORTEXPILOT_REPO_ROOT", str(repo_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_MACHINE_CACHE_ROOT", str(machine_root))
-    monkeypatch.setenv("CORTEXPILOT_RETENTION_MACHINE_CACHE_CAP_BYTES", "50")
+    monkeypatch.setenv("OPENVIBECODING_REPO_ROOT", str(repo_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_MACHINE_CACHE_ROOT", str(machine_root))
+    monkeypatch.setenv("OPENVIBECODING_RETENTION_MACHINE_CACHE_CAP_BYTES", "50")
     config_module._ENV_LOADED = False
     config_module._CONFIG_CACHE = None
 
@@ -121,10 +121,10 @@ def test_machine_cache_summary_excludes_repo_browser_root_from_cap_pressure(tmp_
                         "default_cap_bytes": 50,
                         "auto_prune_interval_sec": 1800,
                         "protected_prefixes": [
-                            "${CORTEXPILOT_MACHINE_CACHE_ROOT}/browser",
+                            "${OPENVIBECODING_MACHINE_CACHE_ROOT}/browser",
                         ],
                         "cap_excluded_prefixes": [
-                            "${CORTEXPILOT_MACHINE_CACHE_ROOT}/browser",
+                            "${OPENVIBECODING_MACHINE_CACHE_ROOT}/browser",
                     ],
                 },
                 "shared_realpath_prefixes": [],
@@ -144,7 +144,7 @@ def test_machine_cache_summary_excludes_repo_browser_root_from_cap_pressure(tmp_
                     "repo_external_related": [
                         {
                             "id": "external_playwright",
-                            "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/playwright",
+                            "path": "${OPENVIBECODING_MACHINE_CACHE_ROOT}/playwright",
                             "type": "machine-scoped Playwright browser cache",
                             "ownership": "repo-controlled external browser download root",
                             "ownership_confidence": "High",

@@ -11,14 +11,14 @@ from typing import Any
 
 import pytest
 
-from cortexpilot_orch.gates import integrated_gate
-from cortexpilot_orch.runners import agents_handoff, agents_mcp_config, agents_payload
-from cortexpilot_orch.scheduler import artifact_refs, runtime_utils
-from cortexpilot_orch.services.orchestration_service import OrchestrationService
+from openvibecoding_orch.gates import integrated_gate
+from openvibecoding_orch.runners import agents_handoff, agents_mcp_config, agents_payload
+from openvibecoding_orch.scheduler import artifact_refs, runtime_utils
+from openvibecoding_orch.services.orchestration_service import OrchestrationService
 
 
 def test_orchestration_service_delegates_all_entrypoints(monkeypatch, tmp_path: Path) -> None:
-    import cortexpilot_orch.services.orchestration_service as service_module
+    import openvibecoding_orch.services.orchestration_service as service_module
 
     cfg = types.SimpleNamespace(repo_root=tmp_path / "repo", runs_root=tmp_path / "runs")
     cfg.repo_root.mkdir(parents=True, exist_ok=True)
@@ -66,7 +66,7 @@ def test_orchestration_service_delegates_all_entrypoints(monkeypatch, tmp_path: 
 
 
 def test_orchestration_service_write_side_actions(monkeypatch, tmp_path: Path) -> None:
-    import cortexpilot_orch.services.orchestration_service as service_module
+    import openvibecoding_orch.services.orchestration_service as service_module
 
     cfg = types.SimpleNamespace(repo_root=tmp_path / "repo", runs_root=tmp_path / "runs")
     cfg.repo_root.mkdir(parents=True, exist_ok=True)
@@ -147,19 +147,19 @@ def test_integrated_gate_load_registry_branches(monkeypatch, tmp_path: Path) -> 
     )
     monkeypatch.setattr(integrated_gate, "_REPO_ROOT", fallback_root)
 
-    monkeypatch.setenv("CORTEXPILOT_TOOL_REGISTRY", "configs/registry.json")
+    monkeypatch.setenv("OPENVIBECODING_TOOL_REGISTRY", "configs/registry.json")
     (repo_root / "configs").mkdir(parents=True, exist_ok=True)
     (repo_root / "configs" / "registry.json").write_text("{", encoding="utf-8")
     invalid = integrated_gate.validate_integrated_tools(repo_root, ["codex"])
     assert invalid["ok"] is False
     assert invalid["integrated"] == []
 
-    monkeypatch.setenv("CORTEXPILOT_TOOL_REGISTRY", "configs/missing.json")
+    monkeypatch.setenv("OPENVIBECODING_TOOL_REGISTRY", "configs/missing.json")
     fallback = integrated_gate.validate_integrated_tools(repo_root, ["codex"])
     assert fallback["ok"] is True
     assert fallback["integrated"] == ["codex"]
 
-    monkeypatch.delenv("CORTEXPILOT_TOOL_REGISTRY", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_TOOL_REGISTRY", raising=False)
     same_root_empty = integrated_gate.validate_integrated_tools(fallback_root, ["missing-tool"])
     assert same_root_empty["ok"] is False
     assert same_root_empty["missing"] == ["missing-tool"]
@@ -252,10 +252,10 @@ def _install_fake_otel_modules(monkeypatch, with_http_exporter: bool) -> dict[st
 def test_tracer_http_fallback_console_and_required(monkeypatch) -> None:
     captured = _install_fake_otel_modules(monkeypatch, with_http_exporter=False)
 
-    monkeypatch.setenv("CORTEXPILOT_OTLP_ENDPOINT", "http://127.0.0.1:4318/v1/traces")
-    monkeypatch.setenv("CORTEXPILOT_OTLP_PROTOCOL", "http")
-    monkeypatch.setenv("CORTEXPILOT_OTLP_HEADERS", "token=abc, malformed, x = y")
-    tracer_module = importlib.reload(importlib.import_module("cortexpilot_orch.observability.tracer"))
+    monkeypatch.setenv("OPENVIBECODING_OTLP_ENDPOINT", "http://127.0.0.1:4318/v1/traces")
+    monkeypatch.setenv("OPENVIBECODING_OTLP_PROTOCOL", "http")
+    monkeypatch.setenv("OPENVIBECODING_OTLP_HEADERS", "token=abc, malformed, x = y")
+    tracer_module = importlib.reload(importlib.import_module("openvibecoding_orch.observability.tracer"))
 
     provider = captured["provider"]
     assert provider is not None
@@ -268,13 +268,13 @@ def test_tracer_http_fallback_console_and_required(monkeypatch) -> None:
     assert status["enabled"] is True
     assert status["otlp_protocol"] == "http"
 
-    monkeypatch.delenv("CORTEXPILOT_OTLP_ENDPOINT", raising=False)
-    monkeypatch.setenv("CORTEXPILOT_ENABLE_CONSOLE_TRACE", "true")
-    tracer_module = importlib.reload(importlib.import_module("cortexpilot_orch.observability.tracer"))
+    monkeypatch.delenv("OPENVIBECODING_OTLP_ENDPOINT", raising=False)
+    monkeypatch.setenv("OPENVIBECODING_ENABLE_CONSOLE_TRACE", "true")
+    tracer_module = importlib.reload(importlib.import_module("openvibecoding_orch.observability.tracer"))
     assert tracer_module.tracing_status()["console_enabled"] is True
 
-    monkeypatch.setenv("CORTEXPILOT_OTEL_REQUIRED", "true")
-    monkeypatch.delenv("CORTEXPILOT_ENABLE_CONSOLE_TRACE", raising=False)
+    monkeypatch.setenv("OPENVIBECODING_OTEL_REQUIRED", "true")
+    monkeypatch.delenv("OPENVIBECODING_ENABLE_CONSOLE_TRACE", raising=False)
     monkeypatch.setattr(tracer_module, "_HAS_OTEL", False)
     with pytest.raises(RuntimeError, match="OTel tracing required"):
         tracer_module.ensure_tracing()
@@ -283,9 +283,9 @@ def test_tracer_http_fallback_console_and_required(monkeypatch) -> None:
 def test_tracer_http_exporter_branch(monkeypatch) -> None:
     captured = _install_fake_otel_modules(monkeypatch, with_http_exporter=True)
 
-    monkeypatch.setenv("CORTEXPILOT_OTLP_ENDPOINT", "http://127.0.0.1:4318/v1/traces")
-    monkeypatch.setenv("CORTEXPILOT_OTLP_PROTOCOL", "http")
-    tracer_module = importlib.reload(importlib.import_module("cortexpilot_orch.observability.tracer"))
+    monkeypatch.setenv("OPENVIBECODING_OTLP_ENDPOINT", "http://127.0.0.1:4318/v1/traces")
+    monkeypatch.setenv("OPENVIBECODING_OTLP_PROTOCOL", "http")
+    tracer_module = importlib.reload(importlib.import_module("openvibecoding_orch.observability.tracer"))
 
     provider = captured["provider"]
     assert provider is not None
@@ -303,7 +303,7 @@ def test_tracer_import_failure_and_trace_span_noop(monkeypatch) -> None:
         return original_import(name, globals, locals, fromlist, level)
 
     monkeypatch.setattr(builtins, "__import__", _raising_import)
-    tracer_module = importlib.reload(importlib.import_module("cortexpilot_orch.observability.tracer"))
+    tracer_module = importlib.reload(importlib.import_module("openvibecoding_orch.observability.tracer"))
     assert tracer_module._HAS_OTEL is False
 
     @tracer_module.trace_span("noop")
@@ -457,7 +457,7 @@ def test_agents_handoff_branch_matrix(monkeypatch) -> None:
     bad3, err3 = agents_handoff._parse_handoff_payload('{"summary": "  ", "risks": []}')
     assert bad3 is None and "missing summary" in err3["error"]
 
-    monkeypatch.setenv("CORTEXPILOT_AGENTS_FORCE_HANDOFF", "true")
+    monkeypatch.setenv("OPENVIBECODING_AGENTS_FORCE_HANDOFF", "true")
     assert agents_handoff._handoff_required({"owner_agent": {"role": "PM"}, "assigned_agent": {"role": "PM"}})
 
 
@@ -490,7 +490,7 @@ def test_temporal_workflows_force_import_fallback(monkeypatch) -> None:
         return original_import(name, globals, locals, fromlist, level)
 
     monkeypatch.setattr(builtins, "__import__", _raising_import)
-    workflows = importlib.reload(importlib.import_module("cortexpilot_orch.temporal.workflows"))
+    workflows = importlib.reload(importlib.import_module("openvibecoding_orch.temporal.workflows"))
 
     request = workflows.RunRequest(
         repo_root="/tmp/repo",

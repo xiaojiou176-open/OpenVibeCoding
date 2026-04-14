@@ -6,8 +6,8 @@ from pathlib import Path
 
 import pytest
 
-from cortexpilot_orch.planning import intake
-from cortexpilot_orch.runners.provider_resolution import ProviderCredentials
+from openvibecoding_orch.planning import intake
+from openvibecoding_orch.runners.provider_resolution import ProviderCredentials
 
 
 class _CfgBase:
@@ -106,7 +106,7 @@ def test_intake_preferred_api_key_alias_and_fallback_branches(monkeypatch) -> No
 def test_intake_execute_chain_uses_repo_root_and_orchestrator(monkeypatch, tmp_path: Path) -> None:
     captured: dict[str, object] = {}
 
-    scheduler_mod = types.ModuleType("cortexpilot_orch.scheduler.scheduler")
+    scheduler_mod = types.ModuleType("openvibecoding_orch.scheduler.scheduler")
 
     class FakeOrchestrator:
         def __init__(self, root: Path) -> None:
@@ -118,7 +118,7 @@ def test_intake_execute_chain_uses_repo_root_and_orchestrator(monkeypatch, tmp_p
             return {"run_id": "run-exec"}
 
     scheduler_mod.Orchestrator = FakeOrchestrator
-    monkeypatch.setitem(sys.modules, "cortexpilot_orch.scheduler.scheduler", scheduler_mod)
+    monkeypatch.setitem(sys.modules, "openvibecoding_orch.scheduler.scheduler", scheduler_mod)
 
     chain_path = tmp_path / "task_chain.json"
     chain_path.write_text("{}", encoding="utf-8")
@@ -200,8 +200,8 @@ def test_intake_run_agent_set_default_client_exception_and_no_stream(monkeypatch
 
 def test_intake_service_answer_payload_and_contract_edge_branches(monkeypatch, tmp_path: Path) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runtime_root / "runs"))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runtime_root / "runs"))
 
     service = intake.IntakeService()
     monkeypatch.setattr(service._validator, "validate_report", lambda *_args, **_kwargs: None)
@@ -245,11 +245,11 @@ def test_intake_service_answer_payload_and_contract_edge_branches(monkeypatch, t
     monkeypatch.setattr(intake, "build_task_chain_from_bundle", lambda *_args, **_kwargs: {"chain_id": "chain-1", "steps": []})
     monkeypatch.setattr(intake, "_execute_chain", lambda *_args, **_kwargs: {"run_id": "run-edge"})
 
-    monkeypatch.setenv("CORTEXPILOT_RUNNER", "codex")
+    monkeypatch.setenv("OPENVIBECODING_RUNNER", "codex")
     ready = service2.answer(intake_id, ["not-a-dict-payload"])
     assert ready["status"] == "READY"
     assert ready["chain_run_id"] == "run-edge"
-    assert os.getenv("CORTEXPILOT_RUNNER") == "codex"
+    assert os.getenv("OPENVIBECODING_RUNNER") == "codex"
 
     service2._store.write_response(
         intake_id,
