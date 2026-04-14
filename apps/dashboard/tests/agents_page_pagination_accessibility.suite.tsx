@@ -209,7 +209,7 @@ describe("agents page pagination semantics", () => {
     const registeredAgentsLink = screen
       .getAllByRole("link", { name: "Go to the full registered agent list" })
       .find((link) => link.getAttribute("href") === "#agents-role-catalog-title");
-    expect(registeredAgentsLink).toBeDefined();
+    expect(Boolean(registeredAgentsLink)).toBe(true);
     expect(registeredAgentsLink).toHaveAttribute("href", "#agents-role-catalog-title");
     expect(registeredAgentsLink).toHaveTextContent("View role catalog");
 
