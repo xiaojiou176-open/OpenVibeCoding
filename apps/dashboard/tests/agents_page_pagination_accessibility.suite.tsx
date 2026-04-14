@@ -196,7 +196,7 @@ describe("agents page pagination semantics", () => {
     const runDetailLink = screen
       .getAllByRole("link", { name: "Detail" })
       .find((link) => link.getAttribute("title")?.includes("run detail"));
-    expect(runDetailLink).toBeDefined();
+    expect(Boolean(runDetailLink)).toBe(true);
     expect(runDetailLink).toHaveAttribute("href", "/runs/run%20alpha%2F1");
     expect(runDetailLink).toHaveAttribute("title", expect.stringContaining("run detail"));
 
