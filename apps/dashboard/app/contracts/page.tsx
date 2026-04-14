@@ -179,6 +179,11 @@ export default async function ContractsPage({
             </p>
             <h2 className="section-title">{shellCopy.actionTitle}</h2>
             <p>{shellCopy.actionSubtitle}</p>
+            <p className="desk-question">
+              {locale === "zh-CN"
+                ? "这张桌子第一眼只回答一个问题：现在哪份合约还不值得信。"
+                : "This desk should answer one question first: which contract is still not trustworthy."}
+            </p>
             <p className="cell-sub mono muted">
               {locale === "zh-CN"
                 ? "不要先扎进 JSON。先判断哪份合约缺执行权、缺证明入口或缺验收，再去对应桌面。"

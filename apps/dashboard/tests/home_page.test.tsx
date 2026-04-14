@@ -276,9 +276,9 @@ describe("dashboard home run-summary clarity", () => {
     ] as never[]);
 
     render(await Home());
-    expect(screen.getByText("Operator risk bulletin")).toBeInTheDocument();
-    expect(screen.getByText("Primary risk: Manual review required")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Next action: inspect failure events" })).toHaveAttribute("href", "/events");
+    expect(screen.getByText("Where to go first")).toBeInTheDocument();
+    expect(screen.getByText("Workflow plus Proof is the truth path")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Investigate high-risk failures" })).toHaveAttribute("href", "/events");
     expect(screen.queryByText(/^manual$/i)).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Run run-1" })).toHaveAttribute("href", "/runs/run-1");
     expect(screen.getByText(/Task: task-1 · Manual review required/)).toBeInTheDocument();
@@ -296,15 +296,12 @@ describe("dashboard home run-summary clarity", () => {
     ] as never[]);
 
     render(await Home());
-    expect(screen.getByText("Success 1 / Running 0 / Failed 3")).toHaveClass("metric-value--danger");
-    expect(screen.getByText("High risk: failure rate is elevated, investigate first (75%)")).toHaveClass("badge--failed");
+    expect(screen.getByText("Start in Command Tower or Events")).toBeInTheDocument();
+    expect(screen.getByText("Workflow plus Proof is the truth path")).toBeInTheDocument();
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Investigate high-risk failures" })).toHaveAttribute("href", "/events");
     expect(screen.getAllByRole("link", { name: /Handle failure run-/ })).toHaveLength(3);
     expect(screen.getByRole("link", { name: "Handle failure run-1" })).toHaveAttribute("href", "/events?run_id=run-1");
-    const progressBar = screen.getByRole("progressbar", { name: "Failure share 3/4" });
-    expect(progressBar).toHaveAttribute("max", "4");
-    expect(progressBar).toHaveAttribute("value", "3");
   });
 
   it("renders long run id with suffix-plus-task format for faster distinction", async () => {
@@ -334,7 +331,7 @@ describe("dashboard home run-summary clarity", () => {
 
     render(await Home());
 
-    expect(screen.getAllByText("not-a-date")).toHaveLength(2);
+    expect(screen.getAllByText("not-a-date")).toHaveLength(1);
     expect(screen.getByText("Task: - · Unclassified")).toBeInTheDocument();
     expect(screen.getByText("-", { selector: "span.mono.muted" })).toBeInTheDocument();
   });

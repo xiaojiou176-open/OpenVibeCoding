@@ -616,6 +616,15 @@
     padding: var(--space-4);
   }
 
+   .pm-mission-head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pm-mission-grid {
+    grid-template-columns: 1fr;
+  }
+
   .pm-chat-bubble {
     max-width: 100%;
   }

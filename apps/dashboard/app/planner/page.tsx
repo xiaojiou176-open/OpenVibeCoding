@@ -390,6 +390,11 @@ export default async function PlannerPage() {
               <p className="cell-sub mono muted">OpenVibeCoding / planner desk</p>
               <h1 id="planner-page-title" className="page-title">{text.title}</h1>
               <p className="page-subtitle">{text.subtitle}</p>
+              <p className="desk-question">
+                {locale === "zh-CN"
+                  ? "这张桌子第一眼只回答一个问题：下一波该派谁、该继续哪条线。"
+                  : "This desk should answer one question first: who moves next and which wave continues."}
+              </p>
             </div>
             <div className="planner-primary-actions">
               <Button asChild>

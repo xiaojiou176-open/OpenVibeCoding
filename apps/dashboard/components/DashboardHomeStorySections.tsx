@@ -293,6 +293,58 @@ export default function DashboardHomeStorySections({
                 : "Start from PM intake and let the first task teach the rest of the system.",
           },
         ];
+  const dispatchBrief =
+    locale === "zh-CN"
+      ? [
+          {
+            kicker: "现在发生什么",
+            title: hasRunHistory ? `${runningCount} 条运行在推进` : "系统还在等待第一条运行",
+            desc: hasRunHistory
+              ? "先读 tower，再决定是不是要切到 Workflow Case 或证明室。"
+              : "先用第一条任务把 command loop 真的跑起来。",
+          },
+          {
+            kicker: "先去哪一桌",
+            title: failedCount > 0 ? "先去指挥塔或失败事件" : hasRunHistory ? "先去指挥塔" : "先去 PM 入口",
+            desc: failedCount > 0
+              ? "先分诊高风险线，再考虑继续派发。"
+              : hasRunHistory
+                ? "首页不是路由墙。先从主驾驶舱看全局。"
+                : "先写请求，再让系统自己把后续房间点亮。",
+          },
+          {
+            kicker: "为什么可信",
+            title: hasRunHistory ? "Workflow + Proof 才算真相" : "先跑出第一条证据链",
+            desc: hasRunHistory
+              ? "不要只看漂亮的首页卡片。真正可托底的是 Workflow Case 和 Proof & Replay。"
+              : "没有第一条任务，就没有值得相信的 tower / workflow / proof 节奏。",
+          },
+        ]
+      : [
+          {
+            kicker: "What is live now",
+            title: hasRunHistory ? `${runningCount} runs are moving` : "The system is still waiting for the first run",
+            desc: hasRunHistory
+              ? "Read the tower first, then decide whether to branch into Workflow Cases or Proof."
+              : "Run one real task so the command loop becomes a live system instead of a promise.",
+          },
+          {
+            kicker: "Where to go first",
+            title: failedCount > 0 ? "Start in Command Tower or Events" : hasRunHistory ? "Start in Command Tower" : "Start in PM intake",
+            desc: failedCount > 0
+              ? "Triage the risky lane before you queue or promote anything else."
+              : hasRunHistory
+                ? "This home page should not behave like a route wall. Start from the cockpit."
+                : "Write the request first, then let the rest of the system light up around it.",
+          },
+          {
+            kicker: "Why this is trustworthy",
+            title: hasRunHistory ? "Workflow plus Proof is the truth path" : "Earn the first proof chain",
+            desc: hasRunHistory
+              ? "Do not trust the homepage alone. Workflow Cases and Proof & Replay are where the operator truth actually hardens."
+              : "Without one real task, the tower, workflow, and proof rooms are still only a shell.",
+          },
+        ];
 
   return (
     <>
@@ -316,7 +368,16 @@ export default function DashboardHomeStorySections({
                 ? "首页第一屏先回答四件事：你现在在哪、系统正在发生什么、哪里堵住了、下一步该进哪条操作路径。"
                 : "The first screen should answer four questions immediately: where you are, what is happening now, what is blocked, and which surface to open next."}
             </p>
-              <nav aria-label="Home primary actions" className="home-briefing-actions">
+            <div className="home-briefing-directive" aria-label={locale === "zh-CN" ? "首页 dispatch brief" : "Homepage dispatch brief"}>
+              {dispatchBrief.map((item) => (
+                <div key={item.kicker} className="home-dispatch-item">
+                  <span className="home-dispatch-kicker">{item.kicker}</span>
+                  <strong className="home-dispatch-title">{item.title}</strong>
+                  <p className="home-dispatch-desc">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+            <nav aria-label="Home primary actions" className="home-briefing-actions">
               <Button asChild variant="default">
                 <Link href={primaryActionHref} prefetch>{shellCopy.primaryAction}</Link>
               </Button>

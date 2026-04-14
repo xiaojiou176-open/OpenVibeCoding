@@ -420,6 +420,11 @@ export default async function AgentsPage({ searchParams }: AgentsPageProps) {
                 ? "不要把这页做成注册表 dump。先判断失败队列、执行席位和调度姿态，再下钻 state machine、locks 和 role catalog。"
                 : "Do not let this page read like a registry dump. Judge the failure queue, execution seats, and scheduler posture before drilling into state machines, locks, or the role catalog."}
             </p>
+            <p className="desk-question">
+              {locale === "zh-CN"
+                ? "这张桌子第一眼只回答一个问题：哪张席位过载、缺位，或者需要你先处理。"
+                : "This desk should answer one question first: which seat is overloaded, missing, or needs you right now."}
+            </p>
             <nav className="home-briefing-actions" aria-label="Agent desk actions">
               <Button asChild variant={highRiskOps > 0 ? "warning" : "default"}>
                 <Link href="#agents-state-machine-title">{agentsPageCopy.actions.inspectRiskDesk}</Link>

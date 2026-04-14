@@ -185,6 +185,46 @@ export default function PMIntakeCenterPanel(props: Props) {
     pmJourneyContext.stage === "discover"
       ? { ...pmJourneyContext, primaryAction: stagePrimaryActionLabel }
       : pmJourneyContext;
+  const missionCopy =
+    displayJourneyContext.stage === "discover"
+      ? locale === "zh-CN"
+        ? {
+            title: "先把第一条任务送进系统",
+            desc: "这一屏只做一件事：把目标、验收口径和范围约束写清，然后发出第一条请求。",
+          }
+        : {
+            title: "Send the first real task into the system",
+            desc: "This screen should do one thing well: define the goal, acceptance bar, and scope, then send the first request.",
+          }
+      : displayJourneyContext.stage === "clarify"
+        ? locale === "zh-CN"
+          ? {
+              title: "先完成澄清，再让系统继续跑",
+              desc: "现在的唯一主动作是把澄清问题答完，别同时分心去看旁支信息。",
+            }
+          : {
+              title: "Finish clarifiers before you ask the system for more",
+              desc: "The only job right now is to clear the open clarifiers before you split attention elsewhere.",
+            }
+        : displayJourneyContext.stage === "execute"
+          ? locale === "zh-CN"
+            ? {
+                title: "执行已经开始，盯住链路和异常",
+                desc: "把中心注意力留给 chain、异常和下一步约束，不要让次级控件抢戏。",
+              }
+            : {
+                title: "Execution is live, so watch the chain and the anomalies",
+                desc: "Keep your attention on the chain, the exceptions, and the next constraint instead of secondary controls.",
+              }
+          : locale === "zh-CN"
+            ? {
+                title: "结果已回流，先给结论再继续",
+                desc: "先看 replay 和关键证据，再决定归档、重试，还是继续迭代。",
+              }
+            : {
+                title: "Results are back, so decide before you drift",
+                desc: "Review replay and the key evidence first, then decide whether to archive, retry, or continue.",
+              };
 
   function handleLayoutModeSelection(mode: PMLayoutMode) {
     if (layoutMode === mode) {
@@ -243,9 +283,29 @@ export default function PMIntakeCenterPanel(props: Props) {
 
       {chatError && <p className="alert alert-danger" role="alert">{chatError}</p>}
       {chatNotice && <p className="alert alert-success" role="status" aria-live="polite">{chatNotice}</p>}
-      <section className="pm-context-card">
-        <p className="pm-context-card-title">{copy.firstRunTitle}</p>
-        <p className="pm-context-card-desc">{firstRunStage} · {headerHint}</p>
+      <section className="pm-context-card pm-mission-card">
+        <div className="pm-mission-head">
+          <div className="pm-mission-copy">
+            <span className="pm-mission-kicker">Mission room</span>
+            <p className="pm-context-card-title">{missionCopy.title}</p>
+            <p className="pm-context-card-desc">{missionCopy.desc}</p>
+          </div>
+          <span className="pm-mission-stage">{pmStageText}</span>
+        </div>
+        <div className="pm-mission-grid" aria-label={locale === "zh-CN" ? "当前任务线索" : "Current mission signals"}>
+          <div className="pm-mission-fact">
+            <span className="pm-mission-fact-label">{locale === "zh-CN" ? "当前会话" : "Current session"}</span>
+            <strong>{activeSessionLabel}</strong>
+          </div>
+          <div className="pm-mission-fact">
+            <span className="pm-mission-fact-label">{locale === "zh-CN" ? "下一步" : "Next move"}</span>
+            <strong>{displayJourneyContext.stage === "discover" ? discoverPrimaryCta : firstRunNextCta}</strong>
+          </div>
+          <div className="pm-mission-fact">
+            <span className="pm-mission-fact-label">{locale === "zh-CN" ? "操作焦点" : "Operator focus"}</span>
+            <strong>{headerHint}</strong>
+          </div>
+        </div>
         <div className="pm-actions">
           <Button
             variant="default"

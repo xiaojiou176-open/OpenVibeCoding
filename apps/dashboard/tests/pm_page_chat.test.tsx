@@ -257,9 +257,8 @@ describe("pm page chat-driven flow", () => {
     await screen.findByText(/ID pm-history-1/);
 
     const contextDesc = document.querySelector(".pm-context-card-desc");
-    expect(screen.getByText(/First-run path: send request/)).toBeInTheDocument();
-    expect(contextDesc).toHaveTextContent("Current next step: send the first request");
-    expect(contextDesc).toHaveTextContent("I will turn this request into a session automatically.");
+    expect(screen.getByText("Send the first real task into the system")).toBeInTheDocument();
+    expect(contextDesc).toHaveTextContent("This screen should do one thing well");
     expect(screen.getByRole("button", { name: /Next: enter the first request/ })).toBeInTheDocument();
     expect(screen.getByLabelText(PM_CHAT_INPUT_LABEL)).toHaveAttribute(
       "placeholder",
@@ -274,9 +273,8 @@ describe("pm page chat-driven flow", () => {
     await screen.findByText(/ID pm-history-1/);
 
     const contextDesc = document.querySelector(".pm-context-card-desc");
-    expect(screen.getByText(/First-run path: send request/)).toBeInTheDocument();
-    expect(contextDesc).toHaveTextContent("Current next step: send the first request");
-    expect(contextDesc).toHaveTextContent("I will turn this request into a session automatically.");
+    expect(screen.getByText("Send the first real task into the system")).toBeInTheDocument();
+    expect(contextDesc).toHaveTextContent("This screen should do one thing well");
     expect(screen.getByRole("button", { name: /Next: enter the first request/ })).toBeInTheDocument();
     expect(screen.getByLabelText(PM_CHAT_INPUT_LABEL)).toHaveAttribute(
       "placeholder",

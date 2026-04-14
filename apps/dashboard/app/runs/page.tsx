@@ -100,6 +100,11 @@ export default async function RunsPage({ searchParams }: RunsPageProps) {
             <p className="cell-sub mono muted">OpenVibeCoding / proof and replay</p>
             <h1 id="runs-page-title" className="page-title">{runsPageCopy.title}</h1>
             <p className="page-subtitle">{runsPageCopy.subtitle}</p>
+            <p className="desk-question">
+              {locale === "zh-CN"
+                ? "这张桌子第一眼只回答一个问题：现在哪条运行最值得立刻证明。"
+                : "This desk should answer one question first: which run deserves proof right now."}
+            </p>
           </div>
           <Badge>{runsPageCopy.countsBadge(runs.length)}</Badge>
         </div>

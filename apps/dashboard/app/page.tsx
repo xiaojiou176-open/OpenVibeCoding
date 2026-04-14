@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { Button } from "../components/ui/button";
-import { Badge, type BadgeVariant } from "../components/ui/badge";
+import { Badge } from "../components/ui/badge";
 import { Card } from "../components/ui/card";
 import DashboardHomeStorySections from "../components/DashboardHomeStorySections";
 import { fetchRuns, fetchWorkflows } from "../lib/api";
@@ -168,7 +168,6 @@ export default async function Home() {
   const { data: workflows, warning: workflowsWarning } = await safeLoad(fetchWorkflows, [], "workflow list");
   const latestRuns = Array.isArray(runs) ? runs.slice(0, 12) : [];
   const latestWorkflows = Array.isArray(workflows) ? workflows.slice(0, 3) : [];
-  const latestRun = latestRuns[0];
   const hasDegradedRunsData = Boolean(warning);
   const hasDegradedWorkflowData = Boolean(workflowsWarning);
   const latestFailure = latestRuns.find((run) =>
@@ -185,80 +184,7 @@ export default async function Home() {
   const statusSampleCount = latestRuns.length;
   const hasRunHistory = statusSampleCount > 0;
   const failureRate = statusSampleCount > 0 ? failedCount / statusSampleCount : 0;
-  const failureRatePercent = Math.round(failureRate * 100);
-  const latestRunStatus = String(latestRun?.status || "UNKNOWN").toUpperCase();
-  const latestRunIsFailed = ["FAILED", "FAILURE", "ERROR"].includes(latestRunStatus);
-  const latestRunIsSuccess = ["SUCCESS", "DONE", "PASSED"].includes(latestRunStatus);
-  const latestRunIsRunning = hasRunHistory && !latestRunIsFailed && !latestRunIsSuccess;
-  const latestRunStatusClass = latestRunIsFailed
-    ? "metric-value--danger"
-    : latestRunIsSuccess
-      ? "metric-value--success"
-      : latestRunIsRunning
-        ? "metric-value--warning"
-        : "metric-value--primary";
-  const distributionValueClass =
-    hasDegradedRunsData
-      ? "metric-value--warning"
-      : failureRate >= 0.5
-      ? "metric-value--danger"
-      : failureRate >= 0.25
-        ? "metric-value--warning"
-        : failedCount === 0
-          ? "metric-value--success"
-          : "metric-value--primary";
-  const distributionRiskBadgeVariant: BadgeVariant =
-    hasDegradedRunsData
-      ? "warning"
-      : failureRate >= 0.5
-      ? "failed"
-      : failureRate >= 0.25
-        ? "warning"
-        : failedCount === 0
-          ? "success"
-          : "running";
-  const distributionRiskText =
-    hasDegradedRunsData
-      ? "Data degraded: the run list is temporarily unavailable"
-      : failureRate >= 0.5
-      ? "High risk: failure rate is elevated, investigate first"
-      : failureRate >= 0.25
-        ? "Attention: failure rate is rising, monitor abnormal events"
-        : failedCount === 0
-          ? "Stable: no recent failed runs"
-          : "Controlled: a few failures exist, keep monitoring";
-  const latestFailureCategory =
-    (latestFailure
-      ? outcomeLabelEn(latestFailure.failure_class) ||
-        outcomeLabelEn(latestFailure.outcome_type)
-      : undefined) || "-";
-  const latestFailureHint = firstEnglishText(latestFailure?.action_hint_zh) || "inspect failure events";
   const latestFailureGovernanceHref = latestFailure ? "/events" : "/runs";
-  const latestFailureGovernanceLabel = latestFailure
-    ? `Next action: ${latestFailureHint}`
-    : "Next action: open runs";
-  const riskSummaryTitle =
-    hasDegradedRunsData
-      ? "Degraded inputs"
-      : !hasRunHistory
-      ? "Waiting for first run"
-      : failureRate >= 0.5 || latestRunIsFailed
-      ? "High-risk alert"
-      : failureRate >= 0.25 || latestRunIsRunning
-        ? "Risk rising"
-        : failedCount === 0
-          ? "Stable"
-          : "Controlled";
-  const riskSummaryClass =
-    hasDegradedRunsData
-      ? "metric-value--warning"
-      : !hasRunHistory
-      ? "metric-value--primary"
-      : failureRate >= 0.5 || latestRunIsFailed
-      ? "metric-value--danger"
-      : failureRate >= 0.25 || latestRunIsRunning
-      ? "metric-value--warning"
-      : "metric-value--success";
   const warningText =
     firstEnglishText(warning) || "The run list is temporarily unavailable. Try again soon.";
   const governanceDeckTitle =
@@ -289,46 +215,16 @@ export default async function Home() {
         showFirstTaskGuide={!hasRunHistory}
       />
 
-      {hasRunHistory ? (
-        <section className="app-section" aria-label="Risk and status summary">
-          {warning ? (
-            <Card variant="compact" role="status" aria-live="polite">
-              <p className="ct-home-empty-text">Some home data is degraded. Core entry actions and the latest snapshot remain available.</p>
-              <p className="mono muted">{warningText}</p>
-            </Card>
-          ) : null}
-          <div className="stats-grid">
-            <article className="metric-card">
-              <p className="metric-label">Operator risk bulletin</p>
-              <p className={`metric-value ${riskSummaryClass}`}>{riskSummaryTitle}</p>
-              <p className={`cell-sub mono ${latestRunStatusClass}`}>
-                Current posture: {hasDegradedRunsData ? "Degraded inputs" : statusLabelEn(latestRun?.status)}
-              </p>
-              <p className={`cell-sub mono ${hasDegradedRunsData ? "cell-warning" : latestFailure ? "cell-danger" : "muted"}`}>
-                Primary risk: {hasDegradedRunsData ? "run list unavailable" : String(latestFailureCategory)}
-              </p>
-              <p className="cell-sub mono muted">{formatLocalTime(latestRun?.last_event_ts || latestRun?.created_at)}</p>
-              <Link href={latestFailureGovernanceHref} className="cell-sub mono">
-                {hasDegradedRunsData ? "Next action: inspect data sources and the run list" : latestFailureGovernanceLabel}
-              </Link>
-            </article>
-            <article className="metric-card">
-              <p className="metric-label">Status distribution across the last 12 runs</p>
-              <p className={`metric-value ${distributionValueClass}`}>{`Success ${successCount} / Running ${runningCount} / Failed ${failedCount}`}</p>
-              <div className="inline-stack" aria-label="Failure-rate risk signal">
-                <progress
-                  className="run-progress"
-                  max={Math.max(statusSampleCount, 1)}
-                  value={failedCount}
-                  aria-label={`Failure share ${failedCount}/${statusSampleCount}`}
-                />
-                <Badge variant={distributionRiskBadgeVariant} role="status" aria-live="polite">
-                  {`${distributionRiskText} (${failureRatePercent}%)`}
-                </Badge>
-              </div>
-              <p className="cell-sub mono muted">Total: {hasDegradedRunsData ? "-" : statusSampleCount}</p>
-            </article>
-          </div>
+      {hasRunHistory && warning ? (
+        <section className="app-section" aria-label="Home data degradation">
+          <Card variant="compact" role="status" aria-live="polite">
+            <p className="ct-home-empty-text">
+              {locale === "zh-CN"
+                ? "首页数据当前是降级快照，但主入口与最新读面仍可继续使用。"
+                : "Home data is currently degraded, but the main entry actions and latest read surfaces remain available."}
+            </p>
+            <p className="mono muted">{warningText}</p>
+          </Card>
         </section>
       ) : null}
 
