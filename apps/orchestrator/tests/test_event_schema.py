@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from cortexpilot_orch.store.run_store import RunStore
+from openvibecoding_orch.store.run_store import RunStore
 
 
 def _read_events(path: Path) -> list[dict]:

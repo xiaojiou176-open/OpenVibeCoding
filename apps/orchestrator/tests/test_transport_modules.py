@@ -6,8 +6,8 @@ from pathlib import Path
 
 import pytest
 
-from cortexpilot_orch.transport import codex_profile_pool as profile_pool
-from cortexpilot_orch.transport import mcp_jsonl
+from openvibecoding_orch.transport import codex_profile_pool as profile_pool
+from openvibecoding_orch.transport import mcp_jsonl
 
 
 class _FakeSelector:
@@ -37,8 +37,8 @@ class _Proc:
 
 
 def test_profile_pool_parse_and_state_roundtrip(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(tmp_path / "runtime"))
-    monkeypatch.setenv("CORTEXPILOT_CODEX_PROFILE_POOL", "A,a,B")
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(tmp_path / "runtime"))
+    monkeypatch.setenv("OPENVIBECODING_CODEX_PROFILE_POOL", "A,a,B")
 
     assert profile_pool._parse_pool_env() == ["A", "B"]
 
@@ -61,8 +61,8 @@ def test_profile_pool_parse_and_state_roundtrip(tmp_path: Path, monkeypatch) -> 
 
 
 def test_profile_pool_pick_profile_rotation(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(tmp_path / "runtime"))
-    monkeypatch.setenv("CORTEXPILOT_CODEX_PROFILE_POOL", "alpha,beta")
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(tmp_path / "runtime"))
+    monkeypatch.setenv("OPENVIBECODING_CODEX_PROFILE_POOL", "alpha,beta")
 
     first = profile_pool.pick_profile()
     second = profile_pool.pick_profile()
@@ -77,13 +77,13 @@ def test_profile_pool_pick_profile_rotation(tmp_path: Path, monkeypatch) -> None
     after_bad_index = profile_pool.pick_profile()
     assert after_bad_index == "alpha"
 
-    monkeypatch.delenv("CORTEXPILOT_CODEX_PROFILE_POOL", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_CODEX_PROFILE_POOL", raising=False)
     assert profile_pool.pick_profile() is None
 
 
 def test_profile_pool_pick_profile_fail_closed_when_lock_missing(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(tmp_path / "runtime"))
-    monkeypatch.setenv("CORTEXPILOT_CODEX_PROFILE_POOL", "alpha,beta")
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(tmp_path / "runtime"))
+    monkeypatch.setenv("OPENVIBECODING_CODEX_PROFILE_POOL", "alpha,beta")
 
     monkeypatch.setattr(profile_pool, "_acquire_file_lock", lambda timeout_sec=5.0: None)
 
@@ -92,7 +92,7 @@ def test_profile_pool_pick_profile_fail_closed_when_lock_missing(tmp_path: Path,
 
 
 def test_profile_pool_lock_self_heal_on_stale_pid(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(tmp_path / "runtime"))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(tmp_path / "runtime"))
     lock_path = profile_pool._pool_lock_path()
     lock_path.parent.mkdir(parents=True, exist_ok=True)
     lock_path.write_text(json.dumps({"pid": 999999, "ts": time.time()}), encoding="utf-8")
@@ -106,8 +106,8 @@ def test_profile_pool_lock_self_heal_on_stale_pid(tmp_path: Path, monkeypatch) -
 
 
 def test_profile_pool_lock_self_heal_on_stale_ttl(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(tmp_path / "runtime"))
-    monkeypatch.setenv("CORTEXPILOT_CODEX_PROFILE_POOL_LOCK_TTL_SEC", "1")
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(tmp_path / "runtime"))
+    monkeypatch.setenv("OPENVIBECODING_CODEX_PROFILE_POOL_LOCK_TTL_SEC", "1")
     lock_path = profile_pool._pool_lock_path()
     lock_path.parent.mkdir(parents=True, exist_ok=True)
     lock_path.write_text(json.dumps({"pid": os.getpid(), "ts": time.time() - 10}), encoding="utf-8")
@@ -119,8 +119,8 @@ def test_profile_pool_lock_self_heal_on_stale_ttl(tmp_path: Path, monkeypatch) -
 
 
 def test_profile_pool_lock_does_not_preempt_active_lock(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(tmp_path / "runtime"))
-    monkeypatch.setenv("CORTEXPILOT_CODEX_PROFILE_POOL_LOCK_TTL_SEC", "120")
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(tmp_path / "runtime"))
+    monkeypatch.setenv("OPENVIBECODING_CODEX_PROFILE_POOL_LOCK_TTL_SEC", "120")
     lock_path = profile_pool._pool_lock_path()
     lock_path.parent.mkdir(parents=True, exist_ok=True)
     active_payload = {"pid": os.getpid(), "ts": time.time()}
@@ -133,8 +133,8 @@ def test_profile_pool_lock_does_not_preempt_active_lock(tmp_path: Path, monkeypa
 
 
 def test_profile_pool_lock_self_heal_on_invalid_payload_by_ttl(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(tmp_path / "runtime"))
-    monkeypatch.setenv("CORTEXPILOT_CODEX_PROFILE_POOL_LOCK_TTL_SEC", "1")
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(tmp_path / "runtime"))
+    monkeypatch.setenv("OPENVIBECODING_CODEX_PROFILE_POOL_LOCK_TTL_SEC", "1")
     lock_path = profile_pool._pool_lock_path()
     lock_path.parent.mkdir(parents=True, exist_ok=True)
     lock_path.write_text("{not-json", encoding="utf-8")
@@ -149,8 +149,8 @@ def test_profile_pool_lock_self_heal_on_invalid_payload_by_ttl(tmp_path: Path, m
 
 
 def test_profile_pool_release_keeps_active_non_owner_lock(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(tmp_path / "runtime"))
-    monkeypatch.setenv("CORTEXPILOT_CODEX_PROFILE_POOL_LOCK_TTL_SEC", "120")
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(tmp_path / "runtime"))
+    monkeypatch.setenv("OPENVIBECODING_CODEX_PROFILE_POOL_LOCK_TTL_SEC", "120")
     lock_path = profile_pool._pool_lock_path()
     lock_path.parent.mkdir(parents=True, exist_ok=True)
     lock_path.write_text(json.dumps({"pid": 999999, "ts": time.time()}), encoding="utf-8")
@@ -217,7 +217,7 @@ def test_jsonl_stream_read_line_when_stdout_becomes_none() -> None:
 
 
 def test_profile_pool_release_none_and_write_failure(monkeypatch, tmp_path: Path) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(tmp_path / "runtime"))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(tmp_path / "runtime"))
 
     profile_pool._release_file_lock(None)
 
@@ -256,8 +256,8 @@ def test_profile_pool_release_none_and_write_failure(monkeypatch, tmp_path: Path
 
 
 def test_profile_pool_error_and_parse_branches(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(tmp_path / "runtime"))
-    monkeypatch.setenv("CORTEXPILOT_CODEX_PROFILE_POOL", "p1,p2")
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(tmp_path / "runtime"))
+    monkeypatch.setenv("OPENVIBECODING_CODEX_PROFILE_POOL", "p1,p2")
 
     profile_pool._release_file_lock(None)
 
@@ -275,7 +275,7 @@ def test_profile_pool_error_and_parse_branches(tmp_path: Path, monkeypatch) -> N
         profile_pool._write_state(profile_pool._pool_path(), {"index": 0})
 
     monkeypatch.undo()
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(tmp_path / "runtime"))
-    monkeypatch.setenv("CORTEXPILOT_CODEX_PROFILE_POOL", "p1,p2")
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(tmp_path / "runtime"))
+    monkeypatch.setenv("OPENVIBECODING_CODEX_PROFILE_POOL", "p1,p2")
     profile_pool._write_state(profile_pool._pool_path(), {"index": "bad"})
     assert profile_pool.pick_profile() == "p1"

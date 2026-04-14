@@ -1,5 +1,5 @@
 {
-  "name": "cortexpilot-ci-core",
+  "name": "openvibecoding-ci-core",
   "dockerComposeFile": [
     "../infra/ci/compose.yml"
   ],

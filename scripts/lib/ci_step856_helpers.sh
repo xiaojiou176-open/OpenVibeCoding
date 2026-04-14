@@ -2,7 +2,7 @@
 
 run_ci_step85_86_desktop_real_gates() {
   echo "🚀 [STEP 8.5/12] Start: Desktop first-entry real E2E (full + degraded parallel)"
-  if [ "${CORTEXPILOT_CI_DESKTOP_FIRST_ENTRY_E2E:-1}" = "1" ]; then
+  if [ "${OPENVIBECODING_CI_DESKTOP_FIRST_ENTRY_E2E:-1}" = "1" ]; then
     DESKTOP_E2E_FULL_LOG=".runtime-cache/test_output/ci_desktop_first_entry_full.log"
     DESKTOP_E2E_DEGRADED_LOG=".runtime-cache/test_output/ci_desktop_first_entry_degraded.log"
     DESKTOP_FIRST_ENTRY_TIMEOUT_SEC="${STEP8_5_TIMEOUT_SEC}"
@@ -11,13 +11,13 @@ run_ci_step85_86_desktop_real_gates() {
     set +e
     (
       set -o pipefail
-      CORTEXPILOT_E2E_API_PORT=18500 CORTEXPILOT_E2E_WEB_PORT=4173 \
+      OPENVIBECODING_E2E_API_PORT=18500 OPENVIBECODING_E2E_WEB_PORT=4173 \
         npm run desktop:e2e:first-entry:real:full 2>&1 | tee "$DESKTOP_E2E_FULL_LOG"
     ) &
     desktop_full_pid=$!
     (
       set -o pipefail
-      CORTEXPILOT_E2E_API_PORT=18600 CORTEXPILOT_E2E_WEB_PORT=4174 \
+      OPENVIBECODING_E2E_API_PORT=18600 OPENVIBECODING_E2E_WEB_PORT=4174 \
         npm run desktop:e2e:first-entry:real:degraded 2>&1 | tee "$DESKTOP_E2E_DEGRADED_LOG"
     ) &
     desktop_degraded_pid=$!
@@ -52,12 +52,12 @@ run_ci_step85_86_desktop_real_gates() {
       exit 1
     fi
   else
-    require_skip_gate_break_glass_or_fail "CORTEXPILOT_CI_DESKTOP_FIRST_ENTRY_E2E" "desktop_first_entry_e2e_skip"
-    echo "⚠️ [WARN] CORTEXPILOT_CI_DESKTOP_FIRST_ENTRY_E2E=0, skip desktop first-entry e2e gate (break-glass)"
+    require_skip_gate_break_glass_or_fail "OPENVIBECODING_CI_DESKTOP_FIRST_ENTRY_E2E" "desktop_first_entry_e2e_skip"
+    echo "⚠️ [WARN] OPENVIBECODING_CI_DESKTOP_FIRST_ENTRY_E2E=0, skip desktop first-entry e2e gate (break-glass)"
   fi
   echo "✅ [STEP 8.5/12] Completed"
   echo "🚀 [STEP 8.6/12] Start: Tauri real-shell E2E (nightly full gate)"
-  if [ "${CORTEXPILOT_CI_NIGHTLY_FULL:-0}" = "1" ] && [ "${CORTEXPILOT_CI_TAURI_REAL_E2E:-1}" = "1" ]; then
+  if [ "${OPENVIBECODING_CI_NIGHTLY_FULL:-0}" = "1" ] && [ "${OPENVIBECODING_CI_TAURI_REAL_E2E:-1}" = "1" ]; then
     if [ "$(uname -s)" != "Darwin" ]; then
       echo "❌ [ci] tauri real shell e2e requires macOS runner"
       exit 1
@@ -67,7 +67,7 @@ run_ci_step85_86_desktop_real_gates() {
     run_with_timeout_heartbeat_and_cleanup \
       "ci.sh:step8.6:desktop_tauri_real_e2e" \
       "${STEP8_6_TIMEOUT_SEC}" \
-      bash -lc "set -o pipefail; CORTEXPILOT_E2E_API_PORT='${CORTEXPILOT_CI_TAURI_REAL_API_PORT:-18700}' CORTEXPILOT_E2E_TAURI_PORT='${CORTEXPILOT_CI_TAURI_REAL_WEB_PORT:-1430}' npm run desktop:e2e:tauri:real 2>&1 | tee '$DESKTOP_TAURI_REAL_LOG'"
+      bash -lc "set -o pipefail; OPENVIBECODING_E2E_API_PORT='${OPENVIBECODING_CI_TAURI_REAL_API_PORT:-18700}' OPENVIBECODING_E2E_TAURI_PORT='${OPENVIBECODING_CI_TAURI_REAL_WEB_PORT:-1430}' npm run desktop:e2e:tauri:real 2>&1 | tee '$DESKTOP_TAURI_REAL_LOG'"
     desktop_tauri_status=$?
     set -e
     if [[ "$desktop_tauri_status" -ne 0 ]]; then
@@ -76,7 +76,7 @@ run_ci_step85_86_desktop_real_gates() {
       exit 1
     fi
   else
-    echo "⚠️ [WARN] skip tauri real shell e2e (need CORTEXPILOT_CI_NIGHTLY_FULL=1 and CORTEXPILOT_CI_TAURI_REAL_E2E=1)"
+    echo "⚠️ [WARN] skip tauri real shell e2e (need OPENVIBECODING_CI_NIGHTLY_FULL=1 and OPENVIBECODING_CI_TAURI_REAL_E2E=1)"
   fi
   echo "✅ [STEP 8.6/12] Completed"
 }

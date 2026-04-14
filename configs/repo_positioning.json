@@ -3,7 +3,7 @@
     {
       "path": "README.md",
       "must_include": [
-        "CortexPilot is a contract-first multi-agent orchestration repository.",
+        "OpenVibeCoding is a contract-first multi-agent orchestration repository.",
         "## Public Collaboration Files",
         "MIT License"
       ]

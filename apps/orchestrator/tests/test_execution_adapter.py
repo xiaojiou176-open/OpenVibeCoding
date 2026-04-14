@@ -3,8 +3,8 @@ from pathlib import Path
 
 import pytest
 
-from cortexpilot_orch.runners import execution_adapter as adapter
-from cortexpilot_orch.store.run_store import RunStore
+from openvibecoding_orch.runners import execution_adapter as adapter
+from openvibecoding_orch.store.run_store import RunStore
 
 
 def test_claude_adapter_injects_anthropic_via_contract_without_mutating_process_env(
@@ -17,9 +17,9 @@ def test_claude_adapter_injects_anthropic_via_contract_without_mutating_process_
             pass
 
         def run_contract(self, contract, worktree_path, schema_path, mock_mode=False):
-            captured["provider"] = os.environ.get("CORTEXPILOT_PROVIDER")
-            captured["provider_model"] = os.environ.get("CORTEXPILOT_PROVIDER_MODEL")
-            captured["provider_base_url"] = os.environ.get("CORTEXPILOT_PROVIDER_BASE_URL")
+            captured["provider"] = os.environ.get("OPENVIBECODING_PROVIDER")
+            captured["provider_model"] = os.environ.get("OPENVIBECODING_PROVIDER_MODEL")
+            captured["provider_base_url"] = os.environ.get("OPENVIBECODING_PROVIDER_BASE_URL")
             captured["contract"] = contract
             captured["worktree_path"] = worktree_path
             captured["schema_path"] = schema_path
@@ -27,9 +27,9 @@ def test_claude_adapter_injects_anthropic_via_contract_without_mutating_process_
             return {"status": "SUCCESS", "summary": "ok", "runner": "fake-claude"}
 
     monkeypatch.setattr(adapter, "AgentsRunner", FakeAgentsRunner)
-    monkeypatch.setenv("CORTEXPILOT_PROVIDER", "openai")
-    monkeypatch.setenv("CORTEXPILOT_PROVIDER_MODEL", "gemini-3.1-pro-preview")
-    monkeypatch.delenv("CORTEXPILOT_PROVIDER_BASE_URL", raising=False)
+    monkeypatch.setenv("OPENVIBECODING_PROVIDER", "openai")
+    monkeypatch.setenv("OPENVIBECODING_PROVIDER_MODEL", "gemini-3.1-pro-preview")
+    monkeypatch.delenv("OPENVIBECODING_PROVIDER_BASE_URL", raising=False)
 
     run_store = RunStore(runs_root=tmp_path / "runs")
     claude_adapter = adapter.ClaudeExecutionAdapter(run_store)
@@ -64,9 +64,9 @@ def test_claude_adapter_injects_anthropic_via_contract_without_mutating_process_
     assert execution.get("mcp_first") is True
     assert execution.get("max_attempts") == 1
 
-    assert os.environ.get("CORTEXPILOT_PROVIDER") == "openai"
-    assert os.environ.get("CORTEXPILOT_PROVIDER_MODEL") == "gemini-3.1-pro-preview"
-    assert "CORTEXPILOT_PROVIDER_BASE_URL" not in os.environ
+    assert os.environ.get("OPENVIBECODING_PROVIDER") == "openai"
+    assert os.environ.get("OPENVIBECODING_PROVIDER_MODEL") == "gemini-3.1-pro-preview"
+    assert "OPENVIBECODING_PROVIDER_BASE_URL" not in os.environ
 
 
 def test_claude_adapter_restores_process_env_even_when_runner_raises(
@@ -81,9 +81,9 @@ def test_claude_adapter_restores_process_env_even_when_runner_raises(
             raise RuntimeError("runner boom")
 
     monkeypatch.setattr(adapter, "AgentsRunner", FakeAgentsRunner)
-    monkeypatch.setenv("CORTEXPILOT_PROVIDER", "openai")
-    monkeypatch.setenv("CORTEXPILOT_PROVIDER_MODEL", "gemini-3.1-pro-preview")
-    monkeypatch.setenv("CORTEXPILOT_PROVIDER_BASE_URL", "http://localhost:1456/v1")
+    monkeypatch.setenv("OPENVIBECODING_PROVIDER", "openai")
+    monkeypatch.setenv("OPENVIBECODING_PROVIDER_MODEL", "gemini-3.1-pro-preview")
+    monkeypatch.setenv("OPENVIBECODING_PROVIDER_BASE_URL", "http://localhost:1456/v1")
 
     run_store = RunStore(runs_root=tmp_path / "runs")
     claude_adapter = adapter.ClaudeExecutionAdapter(run_store)
@@ -96,9 +96,9 @@ def test_claude_adapter_restores_process_env_even_when_runner_raises(
             mock_mode=True,
         )
 
-    assert os.environ.get("CORTEXPILOT_PROVIDER") == "openai"
-    assert os.environ.get("CORTEXPILOT_PROVIDER_MODEL") == "gemini-3.1-pro-preview"
-    assert os.environ.get("CORTEXPILOT_PROVIDER_BASE_URL") == "http://localhost:1456/v1"
+    assert os.environ.get("OPENVIBECODING_PROVIDER") == "openai"
+    assert os.environ.get("OPENVIBECODING_PROVIDER_MODEL") == "gemini-3.1-pro-preview"
+    assert os.environ.get("OPENVIBECODING_PROVIDER_BASE_URL") == "http://localhost:1456/v1"
 
 
 def test_codex_adapter_keeps_contract_output_shape_and_passthrough(tmp_path: Path, monkeypatch) -> None:

@@ -3,13 +3,13 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { DEFAULT_UI_LOCALE, getUiCopy, type UiLocale } from "@cortexpilot/frontend-shared/uiCopy";
+import { DEFAULT_UI_LOCALE, getUiCopy, type UiLocale } from "@openvibecoding/frontend-shared/uiCopy";
 import {
   detectPreferredUiLocale,
   readPreferredUiLocaleCookie,
   persistPreferredUiLocale,
   toggleUiLocale,
-} from "@cortexpilot/frontend-shared/uiLocale";
+} from "@openvibecoding/frontend-shared/uiLocale";
 import AppNav from "./AppNav";
 import { DashboardLocaleProvider } from "./DashboardLocaleContext";
 import { Badge } from "./ui/badge";

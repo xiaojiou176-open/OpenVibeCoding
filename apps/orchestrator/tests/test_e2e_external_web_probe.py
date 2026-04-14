@@ -198,8 +198,8 @@ experimental_bearer_token = "${OPENAI_API_KEY}"
         encoding="utf-8",
     )
     monkeypatch.setattr(module.Path, "home", staticmethod(lambda: fake_home))
-    monkeypatch.delenv("CORTEXPILOT_PROVIDER", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_PROVIDER_BASE_URL", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_PROVIDER", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_PROVIDER_BASE_URL", raising=False)
 
     resolved = module._resolve_provider_probe_target()
 
@@ -231,7 +231,7 @@ env_key = "CLIPROXYAPI_TOKEN"
     monkeypatch.delenv("CI", raising=False)
     monkeypatch.delenv("GITHUB_REF_NAME", raising=False)
     monkeypatch.delenv("GITHUB_BASE_REF", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_CI_PROFILE", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_CI_PROFILE", raising=False)
     monkeypatch.delenv("GEMINI_API_KEY", raising=False)
     monkeypatch.delenv("OPENAI_API_KEY", raising=False)
     monkeypatch.setenv("CLIPROXYAPI_TOKEN", "proxy-token")
@@ -266,7 +266,7 @@ experimental_bearer_token = "${LOCAL_PROXY_TOKEN}"
     monkeypatch.delenv("CI", raising=False)
     monkeypatch.delenv("GITHUB_REF_NAME", raising=False)
     monkeypatch.delenv("GITHUB_BASE_REF", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_CI_PROFILE", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_CI_PROFILE", raising=False)
     monkeypatch.delenv("GEMINI_API_KEY", raising=False)
     monkeypatch.delenv("OPENAI_API_KEY", raising=False)
     monkeypatch.setenv("LOCAL_PROXY_TOKEN", "proxy-token")

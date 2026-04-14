@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from typing import Any
 
-from cortexpilot_orch.runners import mcp_logging, mcp_server_lifecycle, mcp_streaming
+from openvibecoding_orch.runners import mcp_logging, mcp_server_lifecycle, mcp_streaming
 
 
 class _DummyStore:
@@ -31,40 +31,40 @@ class _Event:
 
 
 def test_mcp_server_lifecycle_env_resolution(monkeypatch) -> None:
-    monkeypatch.delenv("CORTEXPILOT_MCP_TIMEOUT_SEC", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_MCP_CONNECT_TIMEOUT_SEC", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_MCP_CLEANUP_TIMEOUT_SEC", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_MCP_TOOL_TIMEOUT_SEC", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_MCP_TIMEOUT_SEC", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_MCP_CONNECT_TIMEOUT_SEC", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_MCP_CLEANUP_TIMEOUT_SEC", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_MCP_TOOL_TIMEOUT_SEC", raising=False)
 
     assert mcp_server_lifecycle.resolve_mcp_timeout_seconds() == 600.0
     assert mcp_server_lifecycle.resolve_mcp_connect_timeout_sec() == 20.0
     assert mcp_server_lifecycle.resolve_mcp_cleanup_timeout_sec() == 5.0
     assert mcp_server_lifecycle.resolve_mcp_tool_timeout_sec() is None
 
-    monkeypatch.setenv("CORTEXPILOT_MCP_TIMEOUT_SEC", "bad")
-    monkeypatch.setenv("CORTEXPILOT_MCP_CONNECT_TIMEOUT_SEC", "bad")
-    monkeypatch.setenv("CORTEXPILOT_MCP_CLEANUP_TIMEOUT_SEC", "bad")
-    monkeypatch.setenv("CORTEXPILOT_MCP_TOOL_TIMEOUT_SEC", "bad")
+    monkeypatch.setenv("OPENVIBECODING_MCP_TIMEOUT_SEC", "bad")
+    monkeypatch.setenv("OPENVIBECODING_MCP_CONNECT_TIMEOUT_SEC", "bad")
+    monkeypatch.setenv("OPENVIBECODING_MCP_CLEANUP_TIMEOUT_SEC", "bad")
+    monkeypatch.setenv("OPENVIBECODING_MCP_TOOL_TIMEOUT_SEC", "bad")
     assert mcp_server_lifecycle.resolve_mcp_timeout_seconds() == 600.0
     assert mcp_server_lifecycle.resolve_mcp_connect_timeout_sec() == 20.0
     assert mcp_server_lifecycle.resolve_mcp_cleanup_timeout_sec() == 5.0
     assert mcp_server_lifecycle.resolve_mcp_tool_timeout_sec() is None
 
-    monkeypatch.setenv("CORTEXPILOT_MCP_TIMEOUT_SEC", "0")
-    monkeypatch.setenv("CORTEXPILOT_MCP_CONNECT_TIMEOUT_SEC", "0")
-    monkeypatch.setenv("CORTEXPILOT_MCP_CLEANUP_TIMEOUT_SEC", "0")
-    monkeypatch.setenv("CORTEXPILOT_MCP_TOOL_TIMEOUT_SEC", "3")
+    monkeypatch.setenv("OPENVIBECODING_MCP_TIMEOUT_SEC", "0")
+    monkeypatch.setenv("OPENVIBECODING_MCP_CONNECT_TIMEOUT_SEC", "0")
+    monkeypatch.setenv("OPENVIBECODING_MCP_CLEANUP_TIMEOUT_SEC", "0")
+    monkeypatch.setenv("OPENVIBECODING_MCP_TOOL_TIMEOUT_SEC", "3")
     assert mcp_server_lifecycle.resolve_mcp_timeout_seconds() is None
     assert mcp_server_lifecycle.resolve_mcp_connect_timeout_sec() is None
     assert mcp_server_lifecycle.resolve_mcp_cleanup_timeout_sec() is None
     assert mcp_server_lifecycle.resolve_mcp_tool_timeout_sec() == 3.0
 
-    monkeypatch.delenv("CORTEXPILOT_MCP_TIMEOUT_SEC", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_MCP_CONNECT_TIMEOUT_SEC", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_MCP_CLEANUP_TIMEOUT_SEC", raising=False)
-    monkeypatch.setenv("CORTEXPILOT_MCP_SERVER_TIMEOUT_SEC", "777")
-    monkeypatch.setenv("CORTEXPILOT_MCP_SERVER_CONNECT_TIMEOUT_SEC", "44")
-    monkeypatch.setenv("CORTEXPILOT_MCP_SERVER_CLEANUP_TIMEOUT_SEC", "9")
+    monkeypatch.delenv("OPENVIBECODING_MCP_TIMEOUT_SEC", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_MCP_CONNECT_TIMEOUT_SEC", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_MCP_CLEANUP_TIMEOUT_SEC", raising=False)
+    monkeypatch.setenv("OPENVIBECODING_MCP_SERVER_TIMEOUT_SEC", "777")
+    monkeypatch.setenv("OPENVIBECODING_MCP_SERVER_CONNECT_TIMEOUT_SEC", "44")
+    monkeypatch.setenv("OPENVIBECODING_MCP_SERVER_CLEANUP_TIMEOUT_SEC", "9")
     assert mcp_server_lifecycle.resolve_mcp_timeout_seconds() == 600.0
     assert mcp_server_lifecycle.resolve_mcp_connect_timeout_sec() == 20.0
     assert mcp_server_lifecycle.resolve_mcp_cleanup_timeout_sec() == 5.0
@@ -86,11 +86,11 @@ def test_mcp_streaming_summaries_and_log_every(monkeypatch) -> None:
     assert err_result["status"] == "error"
     assert unknown_result == {"status": "unknown"}
 
-    monkeypatch.setenv("CORTEXPILOT_STREAM_LOG_EVERY", "")
+    monkeypatch.setenv("OPENVIBECODING_STREAM_LOG_EVERY", "")
     assert mcp_streaming.resolve_stream_log_every() == 0
-    monkeypatch.setenv("CORTEXPILOT_STREAM_LOG_EVERY", "bad")
+    monkeypatch.setenv("OPENVIBECODING_STREAM_LOG_EVERY", "bad")
     assert mcp_streaming.resolve_stream_log_every() == 0
-    monkeypatch.setenv("CORTEXPILOT_STREAM_LOG_EVERY", "4")
+    monkeypatch.setenv("OPENVIBECODING_STREAM_LOG_EVERY", "4")
     assert mcp_streaming.resolve_stream_log_every() == 4
 
 

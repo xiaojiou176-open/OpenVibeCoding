@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-codex_config_path="${CORTEXPILOT_CODEX_CONFIG_PATH:-$HOME/.codex/config.toml}"
-PYTHON_BIN="${CORTEXPILOT_PROVIDER_HARDCUT_PYTHON_BIN:-}"
+codex_config_path="${OPENVIBECODING_CODEX_CONFIG_PATH:-$HOME/.codex/config.toml}"
+PYTHON_BIN="${OPENVIBECODING_PROVIDER_HARDCUT_PYTHON_BIN:-}"
 if [[ -z "$PYTHON_BIN" ]]; then
   if command -v python3 >/dev/null 2>&1; then
     PYTHON_BIN="python3"
@@ -107,30 +107,30 @@ check_consistency_or_fail() {
   done
 }
 
-check_provider_env_var "CORTEXPILOT_E2E_CODEX_PROVIDER"
-check_provider_env_var "CORTEXPILOT_CI_PM_CHAT_PROVIDER"
-check_provider_env_var "CORTEXPILOT_CI_PM_CHAT_RUNTIME_OPTIONS_PROVIDER"
-check_provider_env_var "CORTEXPILOT_CI_DEFAULT_PROVIDER"
-check_provider_env_var "CORTEXPILOT_MODEL_PROVIDER"
+check_provider_env_var "OPENVIBECODING_E2E_CODEX_PROVIDER"
+check_provider_env_var "OPENVIBECODING_CI_PM_CHAT_PROVIDER"
+check_provider_env_var "OPENVIBECODING_CI_PM_CHAT_RUNTIME_OPTIONS_PROVIDER"
+check_provider_env_var "OPENVIBECODING_CI_DEFAULT_PROVIDER"
+check_provider_env_var "OPENVIBECODING_MODEL_PROVIDER"
 check_provider_env_var "PM_CHAT_CODEX_PROVIDER"
 check_provider_env_var "PM_CHAT_RUNTIME_OPTIONS_PROVIDER"
-check_provider_env_var "CORTEXPILOT_RUNTIME_OPTIONS_PROVIDER"
-check_provider_env_var "CORTEXPILOT_PROVIDER"
+check_provider_env_var "OPENVIBECODING_RUNTIME_OPTIONS_PROVIDER"
+check_provider_env_var "OPENVIBECODING_PROVIDER"
 
-check_base_url_env_var "CORTEXPILOT_E2E_CODEX_BASE_URL"
-check_base_url_env_var "CORTEXPILOT_CI_PM_CHAT_BASE_URL"
-check_base_url_env_var "CORTEXPILOT_CI_DEFAULT_BASE_URL"
-check_base_url_env_var "CORTEXPILOT_MODEL_BASE_URL"
+check_base_url_env_var "OPENVIBECODING_E2E_CODEX_BASE_URL"
+check_base_url_env_var "OPENVIBECODING_CI_PM_CHAT_BASE_URL"
+check_base_url_env_var "OPENVIBECODING_CI_DEFAULT_BASE_URL"
+check_base_url_env_var "OPENVIBECODING_MODEL_BASE_URL"
 check_base_url_env_var "PM_CHAT_CODEX_BASE_URL"
 
-check_model_env_var "CORTEXPILOT_E2E_CODEX_MODEL"
-check_model_env_var "CORTEXPILOT_CI_PM_CHAT_MODEL"
-check_model_env_var "CORTEXPILOT_CI_DEFAULT_MODEL"
-check_model_env_var "CORTEXPILOT_MODEL_NAME"
-check_model_env_var "CORTEXPILOT_MODEL"
+check_model_env_var "OPENVIBECODING_E2E_CODEX_MODEL"
+check_model_env_var "OPENVIBECODING_CI_PM_CHAT_MODEL"
+check_model_env_var "OPENVIBECODING_CI_DEFAULT_MODEL"
+check_model_env_var "OPENVIBECODING_MODEL_NAME"
+check_model_env_var "OPENVIBECODING_MODEL"
 check_model_env_var "PM_CHAT_CODEX_MODEL"
 
-if [[ "${CORTEXPILOT_PROVIDER_HARDCUT_SKIP_CODEX_CONFIG:-0}" != "1" ]] && [[ -n "$PYTHON_BIN" ]] && [[ -f "$codex_config_path" ]]; then
+if [[ "${OPENVIBECODING_PROVIDER_HARDCUT_SKIP_CODEX_CONFIG:-0}" != "1" ]] && [[ -n "$PYTHON_BIN" ]] && [[ -f "$codex_config_path" ]]; then
   eval "$("$PYTHON_BIN" - "$codex_config_path" <<'PY'
 import pathlib
 import shlex

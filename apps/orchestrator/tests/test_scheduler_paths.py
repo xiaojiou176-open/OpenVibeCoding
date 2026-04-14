@@ -3,8 +3,8 @@ import hashlib
 import subprocess
 from pathlib import Path
 
-from cortexpilot_orch.scheduler import scheduler as sched
-from cortexpilot_orch.scheduler.scheduler import Orchestrator
+from openvibecoding_orch.scheduler import scheduler as sched
+from openvibecoding_orch.scheduler.scheduler import Orchestrator
 
 
 def _git(cmd: list[str], cwd: Path) -> None:
@@ -164,9 +164,9 @@ def test_scheduler_lock_failure(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime"
     runs_root = runtime_root / "runs"
     worktree_root = runtime_root / "worktrees"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(worktree_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(worktree_root))
 
     contract = _base_contract("task_lock")
     contract_path = repo / "contract.json"
@@ -188,9 +188,9 @@ def test_scheduler_tool_request_invalid(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime"
     runs_root = runtime_root / "runs"
     worktree_root = runtime_root / "worktrees"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(worktree_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(worktree_root))
 
     search_path = repo / "search_requests.json"
     raw = _write_json(search_path, {"queries": []})
@@ -216,9 +216,9 @@ def test_scheduler_fix_loop_triggered_then_passes(tmp_path: Path, monkeypatch) -
     runtime_root = tmp_path / "runtime"
     runs_root = runtime_root / "runs"
     worktree_root = runtime_root / "worktrees"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(worktree_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(worktree_root))
 
     contract = _base_contract("task_fix_loop")
     contract["timeout_retry"]["max_retries"] = 1
@@ -267,9 +267,9 @@ def test_scheduler_reviewer_gate_failure(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime"
     runs_root = runtime_root / "runs"
     worktree_root = runtime_root / "worktrees"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(worktree_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(worktree_root))
 
     contract = _base_contract("task_review_gate")
     contract_path = repo / "contract.json"
@@ -294,10 +294,10 @@ def test_scheduler_reviewer_fallback_and_review_failed(tmp_path: Path, monkeypat
     runtime_root = tmp_path / "runtime"
     runs_root = runtime_root / "runs"
     worktree_root = runtime_root / "worktrees"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(worktree_root))
-    monkeypatch.setenv("CORTEXPILOT_REVIEWER_MODE", "codex")
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(worktree_root))
+    monkeypatch.setenv("OPENVIBECODING_REVIEWER_MODE", "codex")
 
     contract = _base_contract("task_review_fail")
     contract_path = repo / "contract.json"
@@ -307,7 +307,7 @@ def test_scheduler_reviewer_fallback_and_review_failed(tmp_path: Path, monkeypat
     monkeypatch.setattr(sched, "validate_diff", lambda *args, **kwargs: {"ok": True, "changed_files": []})
     monkeypatch.setattr(sched, "_collect_diff_text", lambda *args, **kwargs: "diff")
 
-    import cortexpilot_orch.reviewer.reviewer as reviewer_mod
+    import openvibecoding_orch.reviewer.reviewer as reviewer_mod
 
     class BoomReviewer:
         def review_task(self, *args, **kwargs):

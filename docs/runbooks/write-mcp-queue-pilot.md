@@ -1,7 +1,7 @@
 # Write-MCP Queue Pilot
 
 This runbook defines the **smallest honest** write-capable MCP pilot that
-CortexPilot can describe today without pretending the public MCP contract has
+OpenVibeCoding can describe today without pretending the public MCP contract has
 already become broadly writable.
 
 It is an internal operator runbook, not a public product promise.
@@ -49,9 +49,9 @@ That means the pilot is not:
 ### MCP pilot entry
 
 - CLI entrypoint:
-  - `python -m cortexpilot_orch.cli mcp-queue-pilot-server`
+  - `python -m openvibecoding_orch.cli mcp-queue-pilot-server`
 - code:
-  - `apps/orchestrator/src/cortexpilot_orch/mcp_queue_pilot_server.py`
+  - `apps/orchestrator/src/openvibecoding_orch/mcp_queue_pilot_server.py`
 
 ### HTTP control-plane helpers
 
@@ -65,7 +65,7 @@ That means the pilot is not:
 ### Store / audit path
 
 - queue ledger path:
-  - `.runtime-cache/cortexpilot/queue.jsonl`
+  - `.runtime-cache/openvibecoding/queue.jsonl`
 
 ## How the pilot stays fail-closed
 
@@ -76,7 +76,7 @@ The current repo-owned implementation already enforces these boundaries:
      state
 2. apply is default-off
    - `enqueue_from_run` is blocked until
-     `CORTEXPILOT_MCP_QUEUE_PILOT_ENABLE_APPLY=1`
+     `OPENVIBECODING_MCP_QUEUE_PILOT_ENABLE_APPLY=1`
 3. apply requires explicit confirmation
    - `confirm=true` is mandatory
 4. apply requires a trusted operator role
@@ -165,7 +165,7 @@ new explicit owner decision and fresh evidence:
 Repo-owned builder surfaces may expose guarded operator helpers, but they do
 not change the public product truth:
 
-- `@cortexpilot/frontend-api-client` may surface queue preview/cancel helpers
+- `@openvibecoding/frontend-api-client` may surface queue preview/cancel helpers
 - generated contract paths may include queue preview/cancel routes
 - public docs must still say:
   - read-only MCP is the shipped contract
@@ -204,7 +204,7 @@ human boundary before any broader write claim can be made:
 
 Use this sentence unless fresh evidence changes it:
 
-> CortexPilot still ships a read-only public MCP surface. The only truthful
+> OpenVibeCoding still ships a read-only public MCP surface. The only truthful
 > write-shaped repo-side pilot today is a default-off, confirm-gated,
 > trusted-operator queue enqueue path derived from an existing run, with queue
 > cancel as the rollback path for pending pilot items.

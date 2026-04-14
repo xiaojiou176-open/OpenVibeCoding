@@ -37,37 +37,37 @@ tmpdir="$(TMPDIR="$tmp_root" mktemp -d)"
 trap 'rm -rf "$tmpdir"' EXIT
 
 mkdir -p \
-  "$tmpdir/apps/orchestrator/src/cortexpilot_orch/scheduler" \
-  "$tmpdir/apps/orchestrator/src/cortexpilot_orch/api" \
-  "$tmpdir/apps/orchestrator/src/cortexpilot_orch/chain" \
-  "$tmpdir/apps/orchestrator/src/cortexpilot_orch/runners"
+  "$tmpdir/apps/orchestrator/src/openvibecoding_orch/scheduler" \
+  "$tmpdir/apps/orchestrator/src/openvibecoding_orch/api" \
+  "$tmpdir/apps/orchestrator/src/openvibecoding_orch/chain" \
+  "$tmpdir/apps/orchestrator/src/openvibecoding_orch/runners"
 
-cat >"$tmpdir/apps/orchestrator/src/cortexpilot_orch/scheduler/safe.py" <<'PY'
+cat >"$tmpdir/apps/orchestrator/src/openvibecoding_orch/scheduler/safe.py" <<'PY'
 def schedule():
     return "ok"
 PY
 
-cat >"$tmpdir/apps/orchestrator/src/cortexpilot_orch/api/safe.py" <<'PY'
+cat >"$tmpdir/apps/orchestrator/src/openvibecoding_orch/api/safe.py" <<'PY'
 def list_runs():
     return []
 PY
 
-cat >"$tmpdir/apps/orchestrator/src/cortexpilot_orch/chain/safe.py" <<'PY'
+cat >"$tmpdir/apps/orchestrator/src/openvibecoding_orch/chain/safe.py" <<'PY'
 def build_chain():
     return {"stage": "safe"}
 PY
 
-cat >"$tmpdir/apps/orchestrator/src/cortexpilot_orch/runners/provider_resolution.py" <<'PY'
+cat >"$tmpdir/apps/orchestrator/src/openvibecoding_orch/runners/provider_resolution.py" <<'PY'
 def resolve_runtime_provider():
     return "gemini"
 PY
 
 info "case: pass on clean scheduler/api/chain and allowlisted provider_resolution"
 must_pass run_case \
-  CORTEXPILOT_ORCH_DECOUPLE_GATE_ROOT="$tmpdir" \
-  CORTEXPILOT_ORCH_DECOUPLE_GATE_PATHS="apps/orchestrator/src/cortexpilot_orch/scheduler:apps/orchestrator/src/cortexpilot_orch/api:apps/orchestrator/src/cortexpilot_orch/chain:apps/orchestrator/src/cortexpilot_orch/runners"
+  OPENVIBECODING_ORCH_DECOUPLE_GATE_ROOT="$tmpdir" \
+  OPENVIBECODING_ORCH_DECOUPLE_GATE_PATHS="apps/orchestrator/src/openvibecoding_orch/scheduler:apps/orchestrator/src/openvibecoding_orch/api:apps/orchestrator/src/openvibecoding_orch/chain:apps/orchestrator/src/openvibecoding_orch/runners"
 
-cat >"$tmpdir/apps/orchestrator/src/cortexpilot_orch/scheduler/bad_provider_branch.py" <<'PY'
+cat >"$tmpdir/apps/orchestrator/src/openvibecoding_orch/scheduler/bad_provider_branch.py" <<'PY'
 def choose_runtime(provider):
     if provider == "openai":
         return "oai"
@@ -76,7 +76,7 @@ PY
 
 info "case: fail when provider branch leaks into scheduler"
 must_fail run_case \
-  CORTEXPILOT_ORCH_DECOUPLE_GATE_ROOT="$tmpdir" \
-  CORTEXPILOT_ORCH_DECOUPLE_GATE_PATHS="apps/orchestrator/src/cortexpilot_orch/scheduler:apps/orchestrator/src/cortexpilot_orch/api:apps/orchestrator/src/cortexpilot_orch/chain"
+  OPENVIBECODING_ORCH_DECOUPLE_GATE_ROOT="$tmpdir" \
+  OPENVIBECODING_ORCH_DECOUPLE_GATE_PATHS="apps/orchestrator/src/openvibecoding_orch/scheduler:apps/orchestrator/src/openvibecoding_orch/api:apps/orchestrator/src/openvibecoding_orch/chain"
 
 info "all orchestrator decoupling gate cases passed"

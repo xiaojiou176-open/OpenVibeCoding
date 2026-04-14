@@ -165,7 +165,7 @@ def _source_heuristic(path: str, repo_root: Path) -> tuple[list[str], list[str]]
             heuristic_reasons.append("module_import_token")
             selected.update(import_hits)
 
-    if module_name and module_dir and module_dir not in {".", "cortexpilot_orch"}:
+    if module_name and module_dir and module_dir not in {".", "openvibecoding_orch"}:
         dir_hits = _find_tests_by_glob(
             repo_root,
             f"apps/orchestrator/tests/test*{module_dir}*{module_name}*.py",

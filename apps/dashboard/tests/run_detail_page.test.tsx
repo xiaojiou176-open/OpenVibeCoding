@@ -52,7 +52,7 @@ describe("run detail page copy", () => {
   it("switches page-level copy with the zh-CN locale cookie", async () => {
     mockCookies.mockResolvedValueOnce({
       get: () => ({ value: "zh-CN" }),
-      toString: () => "cortexpilot.ui.locale=zh-CN",
+      toString: () => "openvibecoding.ui.locale=zh-CN",
     });
 
     render(await RunDetailPage({ params: Promise.resolve({ id: "run-zh" }) }));

@@ -1,5 +1,5 @@
 {
-  "name": "cortexpilot-desktop",
+  "name": "openvibecoding-desktop",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -29,9 +29,9 @@
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "@cortexpilot/frontend-api-client": "file:../../packages/frontend-api-client",
-    "@cortexpilot/frontend-api-contract": "file:../../packages/frontend-api-contract",
-    "@cortexpilot/frontend-shared": "file:../../packages/frontend-shared",
+    "@openvibecoding/frontend-api-client": "file:../../packages/frontend-api-client",
+    "@openvibecoding/frontend-api-contract": "file:../../packages/frontend-api-contract",
+    "@openvibecoding/frontend-shared": "file:../../packages/frontend-shared",
     "@tauri-apps/api": "2.10.1",
     "@tauri-apps/plugin-deep-link": "2.4.7",
     "@tauri-apps/plugin-global-shortcut": "2.3.1",

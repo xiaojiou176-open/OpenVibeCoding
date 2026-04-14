@@ -49,7 +49,7 @@ def main() -> int:
     output_path = Path(args.output).expanduser().resolve()
     output_path.parent.mkdir(parents=True, exist_ok=True)
     payload = {
-        "report_type": "cortexpilot_upstream_same_run_cohesion",
+        "report_type": "openvibecoding_upstream_same_run_cohesion",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "status": "pass" if not errors else "fail",
         "matrix": str(Path(args.matrix).expanduser().resolve()),

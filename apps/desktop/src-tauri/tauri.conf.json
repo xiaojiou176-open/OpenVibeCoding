@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "CortexPilot Command Tower Desktop",
+  "productName": "OpenVibeCoding Command Tower Desktop",
   "version": "0.1.0",
-  "identifier": "com.cortexpilot.desktop",
+  "identifier": "com.openvibecoding.desktop",
   "build": {
     "beforeDevCommand": "npm run dev -- --host 127.0.0.1 --port 1420",
     "devUrl": "http://localhost:1420",
@@ -13,7 +13,7 @@
     "macOSPrivateApi": true,
     "windows": [
       {
-        "title": "CortexPilot Command Tower Desktop",
+        "title": "OpenVibeCoding Command Tower Desktop",
         "width": 1400,
         "height": 900,
         "minWidth": 1024,
@@ -43,7 +43,7 @@
     "deep-link": {
       "desktop": {
         "schemes": [
-          "cortexpilot"
+          "openvibecoding"
         ]
       }
     }

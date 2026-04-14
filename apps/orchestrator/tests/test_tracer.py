@@ -78,7 +78,7 @@ def test_tracer_with_fake_otel(monkeypatch) -> None:
         otel_otlp,
     )
 
-    tracer_module = importlib.reload(importlib.import_module("cortexpilot_orch.observability.tracer"))
+    tracer_module = importlib.reload(importlib.import_module("openvibecoding_orch.observability.tracer"))
 
     assert tracer_module.get_tracer() is not None
 
@@ -165,13 +165,13 @@ def test_tracer_otlp_and_console(monkeypatch) -> None:
         otel_otlp,
     )
 
-    monkeypatch.setenv("CORTEXPILOT_OTLP_ENDPOINT", "http://localhost:4317")
-    tracer_module = importlib.reload(importlib.import_module("cortexpilot_orch.observability.tracer"))
+    monkeypatch.setenv("OPENVIBECODING_OTLP_ENDPOINT", "http://localhost:4317")
+    tracer_module = importlib.reload(importlib.import_module("openvibecoding_orch.observability.tracer"))
     assert tracer_module.get_tracer() is not None
 
 
 def test_tracer_none_and_no_otel(monkeypatch) -> None:
-    import cortexpilot_orch.observability.tracer as tracer
+    import openvibecoding_orch.observability.tracer as tracer
 
     monkeypatch.setattr(tracer, "_HAS_OTEL", False)
     assert tracer.get_tracer() is None

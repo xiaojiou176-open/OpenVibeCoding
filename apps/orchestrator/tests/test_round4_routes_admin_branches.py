@@ -9,8 +9,8 @@ import pytest
 from fastapi import HTTPException
 from starlette.requests import Request as StarletteRequest
 
-from cortexpilot_orch.api import deps as api_deps
-from cortexpilot_orch.api import routes_admin
+from openvibecoding_orch.api import deps as api_deps
+from openvibecoding_orch.api import routes_admin
 
 
 def _make_request(headers: dict[str, str] | None = None, *, verified: bool = False) -> StarletteRequest:
@@ -26,28 +26,28 @@ def _make_request(headers: dict[str, str] | None = None, *, verified: bool = Fal
     }
     request = StarletteRequest(scope)
     if verified:
-        request.state.cortexpilot_api_auth_verified = True
+        request.state.openvibecoding_api_auth_verified = True
     return request
 
 
 def test_round4_routes_admin_role_helpers_and_rbac(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_APPROVAL_ALLOWED_ROLES", "ops,tech_lead")
+    monkeypatch.setenv("OPENVIBECODING_APPROVAL_ALLOWED_ROLES", "ops,tech_lead")
     assert routes_admin._approval_roles() == {"OPS", "TECH_LEAD"}
 
-    monkeypatch.setenv("CORTEXPILOT_APPROVAL_ALLOWED_ROLES", " , ")
+    monkeypatch.setenv("OPENVIBECODING_APPROVAL_ALLOWED_ROLES", " , ")
     assert routes_admin._approval_roles() == routes_admin._DEFAULT_APPROVAL_ROLES
 
     assert routes_admin._request_role(None) == ""
 
-    assert routes_admin._request_role(_make_request({"x-cortexpilot-role": "OPS"})) == "OPS"
+    assert routes_admin._request_role(_make_request({"x-openvibecoding-role": "OPS"})) == "OPS"
 
     monkeypatch.setattr(routes_admin, "load_config", lambda: SimpleNamespace(api_auth_required=False))
     assert routes_admin._role_header_is_trusted(None) is True
-    assert routes_admin._role_header_is_trusted(_make_request({"x-cortexpilot-role": "OPS"})) is True
+    assert routes_admin._role_header_is_trusted(_make_request({"x-openvibecoding-role": "OPS"})) is True
 
     monkeypatch.setattr(routes_admin, "load_config", lambda: SimpleNamespace(api_auth_required=True))
-    assert routes_admin._role_header_is_trusted(_make_request({"x-cortexpilot-role": "OPS"}, verified=False)) is False
-    assert routes_admin._role_header_is_trusted(_make_request({"x-cortexpilot-role": "OPS"}, verified=True)) is True
+    assert routes_admin._role_header_is_trusted(_make_request({"x-openvibecoding-role": "OPS"}, verified=False)) is False
+    assert routes_admin._role_header_is_trusted(_make_request({"x-openvibecoding-role": "OPS"}, verified=True)) is True
 
     with pytest.raises(HTTPException) as exc_none:
         routes_admin._enforce_approval_rbac(None)
@@ -60,16 +60,16 @@ def test_round4_routes_admin_role_helpers_and_rbac(monkeypatch: pytest.MonkeyPat
     assert exc_missing.value.detail["code"] == "ROLE_REQUIRED"
 
     with pytest.raises(HTTPException) as exc_untrusted:
-        routes_admin._enforce_approval_rbac(_make_request({"x-cortexpilot-role": "TECH_LEAD"}, verified=False))
+        routes_admin._enforce_approval_rbac(_make_request({"x-openvibecoding-role": "TECH_LEAD"}, verified=False))
     assert exc_untrusted.value.status_code == 403
     assert exc_untrusted.value.detail["code"] == "ROLE_HEADER_UNTRUSTED"
 
     with pytest.raises(HTTPException) as exc_forbidden:
-        routes_admin._enforce_approval_rbac(_make_request({"x-cortexpilot-role": "WORKER"}, verified=True))
+        routes_admin._enforce_approval_rbac(_make_request({"x-openvibecoding-role": "WORKER"}, verified=True))
     assert exc_forbidden.value.status_code == 403
     assert exc_forbidden.value.detail["code"] == "ROLE_FORBIDDEN"
 
-    routes_admin._enforce_approval_rbac(_make_request({"x-cortexpilot-role": "TECH_LEAD"}, verified=True))
+    routes_admin._enforce_approval_rbac(_make_request({"x-openvibecoding-role": "TECH_LEAD"}, verified=True))
 
 
 def test_round4_routes_admin_pending_collection_and_route_deps(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
@@ -140,7 +140,7 @@ def test_round4_routes_admin_pending_collection_and_route_deps(monkeypatch: pyte
     assert routes_admin.list_pending_approvals(request=None, admin_deps=None) == []
 
     route_result = routes_admin.list_pending_approvals_route(
-        _make_request({"x-cortexpilot-role": "TECH_LEAD"}),
+        _make_request({"x-openvibecoding-role": "TECH_LEAD"}),
         admin_deps=SimpleNamespace(list_pending_approvals=lambda: [{"run_id": "ok"}]),
     )
     assert route_result == [{"run_id": "ok"}]

@@ -289,7 +289,7 @@ def test_reuse_clean_room_recovery_record_returns_none_when_stale_or_failed(tmp_
 def test_run_check_falls_back_to_real_smoke_command_when_reuse_is_not_allowed(tmp_path: Path, monkeypatch) -> None:
     module = _load_module()
     module.ROOT = tmp_path
-    monkeypatch.delenv("CORTEXPILOT_CI_ROUTE_ID", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_CI_ROUTE_ID", raising=False)
 
     def _fake_run(cmd: list[str]) -> tuple[bool, str]:
         assert cmd == ["python3", "scripts/verify_upstream_slices.py", "--mode", "smoke"]

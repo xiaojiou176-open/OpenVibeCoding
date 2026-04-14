@@ -4,8 +4,8 @@ import os
 from pathlib import Path
 from typing import Any
 
-from cortexpilot_orch.scheduler import preflight_gate_runtime_helpers as helpers
-from cortexpilot_orch.scheduler.preflight_gate_types import PreflightOps
+from openvibecoding_orch.scheduler import preflight_gate_runtime_helpers as helpers
+from openvibecoding_orch.scheduler.preflight_gate_types import PreflightOps
 
 
 class _FakeStore:
@@ -151,7 +151,7 @@ def test_preflight_requires_approval_for_dangerous_filesystem(monkeypatch, tmp_p
 
 
 def test_preflight_success_with_sampling_and_force_unlock(monkeypatch, tmp_path: Path) -> None:
-    monkeypatch.delenv("CORTEXPILOT_NETWORK_APPROVED", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_NETWORK_APPROVED", raising=False)
     requested_tools: list[str] = []
     released_paths: list[list[str]] = []
     command_labels: list[str] = []
@@ -199,7 +199,7 @@ def test_preflight_success_with_sampling_and_force_unlock(monkeypatch, tmp_path:
     assert requested_tools == ["codex", "sampling", "foo", "search"]
     assert any(ev.get("event") == "LOCK_FORCE_RELEASED" for ev in store.events)
     assert any(ev.get("event") == "MCP_SAMPLING_GATE_RESULT" for ev in store.events)
-    assert os.getenv("CORTEXPILOT_NETWORK_APPROVED") == "1"
+    assert os.getenv("OPENVIBECODING_NETWORK_APPROVED") == "1"
 
 
 def test_preflight_lock_failure_and_cleanup_events(monkeypatch, tmp_path: Path) -> None:
@@ -260,7 +260,7 @@ def test_preflight_integrated_gate_failure(monkeypatch, tmp_path: Path) -> None:
 
 
 def test_preflight_mcp_concurrency_required_failure(monkeypatch, tmp_path: Path) -> None:
-    monkeypatch.setenv("CORTEXPILOT_MCP_CONCURRENCY_REQUIRED", "true")
+    monkeypatch.setenv("OPENVIBECODING_MCP_CONCURRENCY_REQUIRED", "true")
     contract = _base_contract()
     ops = _build_ops(
         validate_mcp_concurrency=lambda _mode: {"ok": False, "reason": "invalid mode"},

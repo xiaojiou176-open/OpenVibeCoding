@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://cortexpilot.local/schemas/evidence_manifest.schema.json",
-  "title": "CortexPilot Evidence Manifest",
+  "$id": "https://openvibecoding.local/schemas/evidence_manifest.schema.json",
+  "title": "OpenVibeCoding Evidence Manifest",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -18,7 +18,7 @@
   "properties": {
     "manifest_type": {
       "type": "string",
-      "const": "cortexpilot_evidence_manifest"
+      "const": "openvibecoding_evidence_manifest"
     },
     "schema_version": {
       "type": "integer",

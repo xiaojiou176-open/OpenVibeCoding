@@ -1,21 +1,21 @@
 // GENERATED FILE. DO NOT EDIT.
-// Source: docs/api/openapi.cortexpilot.json
+// Source: docs/api/openapi.openvibecoding.json
 
 export const FRONTEND_API_CONTRACT = {
   "defaultApiBase": "http://127.0.0.1:10000",
   "envKeys": [
-    "NEXT_PUBLIC_CORTEXPILOT_API_BASE",
-    "NEXT_PUBLIC_CORTEXPILOT_API_BASE",
-    "VITE_CORTEXPILOT_API_BASE",
-    "VITE_CORTEXPILOT_API_BASE",
-    "CORTEXPILOT_API_BASE",
-    "CORTEXPILOT_API_BASE"
+    "NEXT_PUBLIC_OPENVIBECODING_API_BASE",
+    "NEXT_PUBLIC_OPENVIBECODING_API_BASE",
+    "VITE_OPENVIBECODING_API_BASE",
+    "VITE_OPENVIBECODING_API_BASE",
+    "OPENVIBECODING_API_BASE",
+    "OPENVIBECODING_API_BASE"
   ],
   "headers": {
     "requestId": "x-request-id",
     "traceId": "x-trace-id",
     "traceparent": "traceparent",
-    "runId": "x-cortexpilot-run-id"
+    "runId": "x-openvibecoding-run-id"
   },
   "network": {
     "fetchCredentials": "include",
@@ -83,8 +83,8 @@ export const FRONTEND_API_CONTRACT = {
       "unresolved"
     ],
     "runtimeBindingSourceModels": [
-      "env.CORTEXPILOT_CODEX_MODEL",
-      "env.CORTEXPILOT_PROVIDER_MODEL",
+      "env.OPENVIBECODING_CODEX_MODEL",
+      "env.OPENVIBECODING_PROVIDER_MODEL",
       "role_contract.runtime_binding.model",
       "unresolved"
     ],

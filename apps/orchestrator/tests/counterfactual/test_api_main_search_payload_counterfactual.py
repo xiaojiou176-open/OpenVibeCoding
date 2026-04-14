@@ -6,8 +6,8 @@ from pathlib import Path
 from fastapi.testclient import TestClient
 import pytest
 
-from cortexpilot_orch.api import main as api_main
-from cortexpilot_orch.api import search_payload_helpers
+from openvibecoding_orch.api import main as api_main
+from openvibecoding_orch.api import search_payload_helpers
 
 
 def _write_manifest(run_dir: Path, payload: dict) -> None:
@@ -39,7 +39,7 @@ def test_main_search_payload_wrappers_delegate_to_helper_module(
     assert api_main._extract_search_queries({"inputs": {"artifacts": []}}) == expected_queries
 
     runs_root = tmp_path / "runs"
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
     run_id = "run-delegated"
     run_dir = runs_root / run_id
     _write_manifest(run_dir, {"run_id": run_id, "task_id": "task", "status": "RUNNING"})
@@ -52,7 +52,7 @@ def test_run_search_endpoint_fails_loud_when_search_payload_builder_breaks(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     runs_root = tmp_path / "runs"
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
 
     run_id = "run-search-builder-counterfactual"
     run_dir = runs_root / run_id
@@ -75,7 +75,7 @@ def test_promote_evidence_fails_loud_when_search_query_extractor_breaks(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     runs_root = tmp_path / "runs"
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
 
     run_id = "run-search-query-counterfactual"
     run_dir = runs_root / run_id
@@ -97,7 +97,7 @@ def test_promote_evidence_fails_loud_when_search_query_extractor_breaks(
     client = TestClient(api_main.app)
     response = client.post(
         f"/api/runs/{run_id}/evidence/promote",
-        headers={"x-cortexpilot-role": "TECH_LEAD"},
+        headers={"x-openvibecoding-role": "TECH_LEAD"},
     )
 
     assert response.status_code == 500

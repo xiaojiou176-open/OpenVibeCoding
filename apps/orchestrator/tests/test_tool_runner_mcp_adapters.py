@@ -4,8 +4,8 @@ import hashlib
 import json
 from pathlib import Path
 
-from cortexpilot_orch.runners.tool_runner import ToolRunner
-from cortexpilot_orch.store.run_store import RunStore
+from openvibecoding_orch.runners.tool_runner import ToolRunner
+from openvibecoding_orch.store.run_store import RunStore
 
 
 def _output_schema_artifacts(role: str = "worker") -> list[dict]:
@@ -27,7 +27,7 @@ def _output_schema_artifacts(role: str = "worker") -> list[dict]:
 
 
 def _write_active_contract(store: RunStore, run_id: str, mcp_tools: list[str], monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(store._runs_root.parent))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(store._runs_root.parent))
     contract = {
         "task_id": "adapter_task",
         "owner_agent": {"role": "TECH_LEAD", "agent_id": "owner"},
@@ -93,9 +93,9 @@ def test_tool_runner_adapter_allowed_success(tmp_path: Path, monkeypatch) -> Non
         captured["tool_name"] = tool_name
         captured["payload"] = payload
 
-    monkeypatch.setattr("cortexpilot_orch.runners.tool_runner.mcp_adapter.record_mcp_call", _record)
+    monkeypatch.setattr("openvibecoding_orch.runners.tool_runner.mcp_adapter.record_mcp_call", _record)
     monkeypatch.setattr(
-        "cortexpilot_orch.runners.tool_runner.execute_mcp_adapter",
+        "openvibecoding_orch.runners.tool_runner.execute_mcp_adapter",
         lambda *_args, **_kwargs: {
             "ok": True,
             "adapter": "aider",
@@ -126,9 +126,9 @@ def test_tool_runner_adapter_allowed_execution_failure(tmp_path: Path, monkeypat
     run_id = store.create_run("run_adapter_allowed_failure")
     _write_active_contract(store, run_id, ["aider"], monkeypatch)
 
-    monkeypatch.setattr("cortexpilot_orch.runners.tool_runner.mcp_adapter.record_mcp_call", lambda *_args, **_kwargs: None)
+    monkeypatch.setattr("openvibecoding_orch.runners.tool_runner.mcp_adapter.record_mcp_call", lambda *_args, **_kwargs: None)
     monkeypatch.setattr(
-        "cortexpilot_orch.runners.tool_runner.execute_mcp_adapter",
+        "openvibecoding_orch.runners.tool_runner.execute_mcp_adapter",
         lambda *_args, **_kwargs: {
             "ok": False,
             "adapter": "aider",
@@ -165,9 +165,9 @@ def test_tool_runner_adapter_alias_allowed_with_canonical_permission(tmp_path: P
         captured["tool_name"] = tool_name
         captured["payload"] = payload
 
-    monkeypatch.setattr("cortexpilot_orch.runners.tool_runner.mcp_adapter.record_mcp_call", _record)
+    monkeypatch.setattr("openvibecoding_orch.runners.tool_runner.mcp_adapter.record_mcp_call", _record)
     monkeypatch.setattr(
-        "cortexpilot_orch.runners.tool_runner.execute_mcp_adapter",
+        "openvibecoding_orch.runners.tool_runner.execute_mcp_adapter",
         lambda *_args, **_kwargs: {
             "ok": True,
             "adapter": "open_interpreter",
@@ -193,7 +193,7 @@ def test_tool_runner_non_adapter_tool_fails_closed(tmp_path: Path, monkeypatch) 
     run_id = store.create_run("run_non_adapter_fail_closed")
     _write_active_contract(store, run_id, ["codex"], monkeypatch)
 
-    monkeypatch.setattr("cortexpilot_orch.runners.tool_runner.mcp_adapter.record_mcp_call", lambda *_args, **_kwargs: None)
+    monkeypatch.setattr("openvibecoding_orch.runners.tool_runner.mcp_adapter.record_mcp_call", lambda *_args, **_kwargs: None)
 
     runner = ToolRunner(run_id, store)
     result = runner.run_mcp("codex", {"payload": {}})

@@ -60,7 +60,7 @@ def test_verify_upstream_slices_handles_spacey_python_path_via_governance_wrappe
 
     env = {
         **os.environ,
-        "CORTEXPILOT_PYTHON": str(spaced_python),
+        "OPENVIBECODING_PYTHON": str(spaced_python),
     }
     proc = subprocess.run(
         [sys.executable, str(VERIFY_SCRIPT), "--matrix", str(matrix_path), "--mode", "smoke"],

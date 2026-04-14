@@ -6,7 +6,7 @@ cd "$ROOT_DIR"
 source "$ROOT_DIR/scripts/lib/env.sh"
 
 SCRIPT_MODE="truth_only"
-CLOSEOUT_RUN_ID_BASE="${CORTEXPILOT_UI_CLOSEOUT_RUN_ID_BASE:-}"
+CLOSEOUT_RUN_ID_BASE="${OPENVIBECODING_UI_CLOSEOUT_RUN_ID_BASE:-}"
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --strict-closeout)
@@ -30,13 +30,13 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ "$SCRIPT_MODE" == "strict_closeout" ]]; then
-  export NEXT_PUBLIC_CORTEXPILOT_OPERATOR_ROLE="${NEXT_PUBLIC_CORTEXPILOT_OPERATOR_ROLE:-TECH_LEAD}"
+  export NEXT_PUBLIC_OPENVIBECODING_OPERATOR_ROLE="${NEXT_PUBLIC_OPENVIBECODING_OPERATOR_ROLE:-TECH_LEAD}"
 fi
 
-CLOSEOUT_STEP_TIMEOUT_SEC="${CORTEXPILOT_UI_CLOSEOUT_STEP_TIMEOUT_SEC:-5400}"
-CLOSEOUT_STEP_KILL_GRACE_SEC="${CORTEXPILOT_UI_CLOSEOUT_STEP_KILL_GRACE_SEC:-15}"
-TRUTH_LOCK_WAIT_SEC="${CORTEXPILOT_UI_TRUTH_LOCK_WAIT_SEC:-0}"
-TRUTH_LOCK_DIR="${ROOT_DIR}/.runtime-cache/cortexpilot/locks/ui_e2e_truth_gate.lock"
+CLOSEOUT_STEP_TIMEOUT_SEC="${OPENVIBECODING_UI_CLOSEOUT_STEP_TIMEOUT_SEC:-5400}"
+CLOSEOUT_STEP_KILL_GRACE_SEC="${OPENVIBECODING_UI_CLOSEOUT_STEP_KILL_GRACE_SEC:-15}"
+TRUTH_LOCK_WAIT_SEC="${OPENVIBECODING_UI_TRUTH_LOCK_WAIT_SEC:-0}"
+TRUTH_LOCK_DIR="${ROOT_DIR}/.runtime-cache/openvibecoding/locks/ui_e2e_truth_gate.lock"
 TRUTH_LOCK_OWNER_FILE="${TRUTH_LOCK_DIR}/owner.env"
 TRUTH_LOCK_HELD=0
 
@@ -216,25 +216,25 @@ PY
 }
 
 if ! is_non_negative_int "$CLOSEOUT_STEP_TIMEOUT_SEC"; then
-  echo "❌ [ui-truth] CORTEXPILOT_UI_CLOSEOUT_STEP_TIMEOUT_SEC must be non-negative integer: $CLOSEOUT_STEP_TIMEOUT_SEC" >&2
+  echo "❌ [ui-truth] OPENVIBECODING_UI_CLOSEOUT_STEP_TIMEOUT_SEC must be non-negative integer: $CLOSEOUT_STEP_TIMEOUT_SEC" >&2
   exit 2
 fi
 if ! is_non_negative_int "$CLOSEOUT_STEP_KILL_GRACE_SEC"; then
-  echo "❌ [ui-truth] CORTEXPILOT_UI_CLOSEOUT_STEP_KILL_GRACE_SEC must be non-negative integer: $CLOSEOUT_STEP_KILL_GRACE_SEC" >&2
+  echo "❌ [ui-truth] OPENVIBECODING_UI_CLOSEOUT_STEP_KILL_GRACE_SEC must be non-negative integer: $CLOSEOUT_STEP_KILL_GRACE_SEC" >&2
   exit 2
 fi
 if ! is_non_negative_int "$TRUTH_LOCK_WAIT_SEC"; then
-  echo "❌ [ui-truth] CORTEXPILOT_UI_TRUTH_LOCK_WAIT_SEC must be non-negative integer: $TRUTH_LOCK_WAIT_SEC" >&2
+  echo "❌ [ui-truth] OPENVIBECODING_UI_TRUTH_LOCK_WAIT_SEC must be non-negative integer: $TRUTH_LOCK_WAIT_SEC" >&2
   exit 2
 fi
 
 resolve_python_bin() {
-  if [[ -n "${CORTEXPILOT_UI_CLOSEOUT_PYTHON_BIN:-}" ]]; then
-    echo "${CORTEXPILOT_UI_CLOSEOUT_PYTHON_BIN}"
+  if [[ -n "${OPENVIBECODING_UI_CLOSEOUT_PYTHON_BIN:-}" ]]; then
+    echo "${OPENVIBECODING_UI_CLOSEOUT_PYTHON_BIN}"
     return 0
   fi
-  if [[ -n "${CORTEXPILOT_PYTHON:-}" ]] && [[ -x "${CORTEXPILOT_PYTHON}" ]]; then
-    echo "${CORTEXPILOT_PYTHON}"
+  if [[ -n "${OPENVIBECODING_PYTHON:-}" ]] && [[ -x "${OPENVIBECODING_PYTHON}" ]]; then
+    echo "${OPENVIBECODING_PYTHON}"
     return 0
   fi
   echo "python3"
@@ -458,12 +458,12 @@ run_strict_truth_closeout() {
   local p1_report=".runtime-cache/test_output/ui_regression/${p1_run_id}/flake_report.json"
   local strict_report=".runtime-cache/test_output/ui_full_gemini_audit/${strict_run_id}/report.json"
   local click_report=".runtime-cache/test_output/ui_full_gemini_audit/${strict_run_id}/click_inventory_report.json"
-  local p0_commands="${CORTEXPILOT_UI_CLOSEOUT_P0_COMMANDS_FILE:-scripts/ui_regression_p0.commands}"
-  local p1_commands="${CORTEXPILOT_UI_CLOSEOUT_P1_COMMANDS_FILE:-scripts/ui_regression_p1.commands}"
-  local p0_iterations="${CORTEXPILOT_UI_CLOSEOUT_P0_ITERATIONS:-8}"
-  local p1_iterations="${CORTEXPILOT_UI_CLOSEOUT_P1_ITERATIONS:-8}"
-  local p0_threshold="${CORTEXPILOT_UI_CLOSEOUT_P0_THRESHOLD_PERCENT:-0.5}"
-  local p1_threshold="${CORTEXPILOT_UI_CLOSEOUT_P1_THRESHOLD_PERCENT:-1.0}"
+  local p0_commands="${OPENVIBECODING_UI_CLOSEOUT_P0_COMMANDS_FILE:-scripts/ui_regression_p0.commands}"
+  local p1_commands="${OPENVIBECODING_UI_CLOSEOUT_P1_COMMANDS_FILE:-scripts/ui_regression_p1.commands}"
+  local p0_iterations="${OPENVIBECODING_UI_CLOSEOUT_P0_ITERATIONS:-8}"
+  local p1_iterations="${OPENVIBECODING_UI_CLOSEOUT_P1_ITERATIONS:-8}"
+  local p0_threshold="${OPENVIBECODING_UI_CLOSEOUT_P0_THRESHOLD_PERCENT:-0.5}"
+  local p1_threshold="${OPENVIBECODING_UI_CLOSEOUT_P1_THRESHOLD_PERCENT:-1.0}"
   local closeout_out_dir=".runtime-cache/test_output/ui_regression"
   local closeout_step_records="${closeout_out_dir}/${base_run_id}.closeout_steps.jsonl"
   local closeout_summary="${closeout_out_dir}/${base_run_id}.closeout_summary.json"
@@ -511,14 +511,14 @@ run_strict_truth_closeout() {
   echo "🧭 [ui-closeout] run truth gate with strict same-batch evidence binding"
   if ! run_closeout_step "${closeout_step_records}" "${closeout_out_dir}" "${base_run_id}" "truth_gate_strict" \
     env \
-      CORTEXPILOT_UI_TRUTH_GATE_STRICT=1 \
-      CORTEXPILOT_UI_TRUTH_DISABLE_AUTO_LATEST=1 \
-      CORTEXPILOT_UI_TRUTH_REQUIRE_RUN_ID_MATCH=1 \
-      CORTEXPILOT_UI_TRUTH_GATE_REPORT="${truth_report}" \
-      CORTEXPILOT_UI_P0_REPORT="${p0_report}" \
-      CORTEXPILOT_UI_P1_REPORT="${p1_report}" \
-      CORTEXPILOT_UI_CLICK_INVENTORY_REPORT="${click_report}" \
-      CORTEXPILOT_UI_TRUTH_SKIP_LOCK=1 \
+      OPENVIBECODING_UI_TRUTH_GATE_STRICT=1 \
+      OPENVIBECODING_UI_TRUTH_DISABLE_AUTO_LATEST=1 \
+      OPENVIBECODING_UI_TRUTH_REQUIRE_RUN_ID_MATCH=1 \
+      OPENVIBECODING_UI_TRUTH_GATE_REPORT="${truth_report}" \
+      OPENVIBECODING_UI_P0_REPORT="${p0_report}" \
+      OPENVIBECODING_UI_P1_REPORT="${p1_report}" \
+      OPENVIBECODING_UI_CLICK_INVENTORY_REPORT="${click_report}" \
+      OPENVIBECODING_UI_TRUTH_SKIP_LOCK=1 \
       bash "$0" --truth-only; then
     closeout_failed=1
   fi
@@ -564,7 +564,7 @@ run_strict_truth_closeout() {
   return "${closeout_failed}"
 }
 
-if [[ "${CORTEXPILOT_UI_TRUTH_SKIP_LOCK:-0}" != "1" ]]; then
+if [[ "${OPENVIBECODING_UI_TRUTH_SKIP_LOCK:-0}" != "1" ]]; then
   detect_conflicting_truth_processes
   acquire_truth_lock
   trap 'release_truth_lock' EXIT INT TERM
@@ -575,34 +575,34 @@ if [[ "$SCRIPT_MODE" == "strict_closeout" ]]; then
   exit $?
 fi
 
-MATRIX_FILE="${CORTEXPILOT_UI_MATRIX_FILE:-docs/governance/ui-button-coverage-matrix.md}"
-FLAKE_REPORT_ROOT="${CORTEXPILOT_UI_FLAKE_REPORT_ROOT:-.runtime-cache/test_output/ui_regression}"
-FULL_AUDIT_REPORT_ROOT="${CORTEXPILOT_UI_FULL_AUDIT_REPORT_ROOT:-.runtime-cache/test_output/ui_full_gemini_audit}"
-OUT_JSON="${CORTEXPILOT_UI_TRUTH_GATE_REPORT:-.runtime-cache/test_output/ui_regression/ui_e2e_truth_gate.json}"
-STRICT="${CORTEXPILOT_UI_TRUTH_GATE_STRICT:-0}"
+MATRIX_FILE="${OPENVIBECODING_UI_MATRIX_FILE:-docs/governance/ui-button-coverage-matrix.md}"
+FLAKE_REPORT_ROOT="${OPENVIBECODING_UI_FLAKE_REPORT_ROOT:-.runtime-cache/test_output/ui_regression}"
+FULL_AUDIT_REPORT_ROOT="${OPENVIBECODING_UI_FULL_AUDIT_REPORT_ROOT:-.runtime-cache/test_output/ui_full_gemini_audit}"
+OUT_JSON="${OPENVIBECODING_UI_TRUTH_GATE_REPORT:-.runtime-cache/test_output/ui_regression/ui_e2e_truth_gate.json}"
+STRICT="${OPENVIBECODING_UI_TRUTH_GATE_STRICT:-0}"
 STRICT_ENABLED=0
 case "${STRICT}" in
   1 | true | TRUE | yes | YES | y | Y)
     STRICT_ENABLED=1
     ;;
 esac
-CHAIN_REPORT="${CORTEXPILOT_UI_CHAIN_REPORT:-}"
-TAURI_REPORT="${CORTEXPILOT_UI_TAURI_REPORT:-}"
-CLICK_INVENTORY_REQUIRED="${CORTEXPILOT_UI_CLICK_INVENTORY_REQUIRED:-0}"
-TRUTH_DISABLE_AUTO_LATEST="${CORTEXPILOT_UI_TRUTH_DISABLE_AUTO_LATEST:-1}"
-TRUTH_REQUIRE_RUN_ID_MATCH="${CORTEXPILOT_UI_TRUTH_REQUIRE_RUN_ID_MATCH:-1}"
-TRUTH_ENFORCE_FLAKE_POLICY="${CORTEXPILOT_UI_TRUTH_ENFORCE_FLAKE_POLICY:-0}"
-TRUTH_P0_MAX_THRESHOLD_PERCENT="${CORTEXPILOT_UI_TRUTH_P0_MAX_THRESHOLD_PERCENT:-0.5}"
-TRUTH_P1_MAX_THRESHOLD_PERCENT="${CORTEXPILOT_UI_TRUTH_P1_MAX_THRESHOLD_PERCENT:-1.0}"
-TRUTH_P0_MIN_ITERATIONS="${CORTEXPILOT_UI_TRUTH_P0_MIN_ITERATIONS:-8}"
-TRUTH_P1_MIN_ITERATIONS="${CORTEXPILOT_UI_TRUTH_P1_MIN_ITERATIONS:-8}"
-TRUTH_BREAK_GLASS="${CORTEXPILOT_UI_TRUTH_BREAK_GLASS:-0}"
-TRUTH_BREAK_GLASS_REASON="${CORTEXPILOT_UI_TRUTH_BREAK_GLASS_REASON:-}"
-TRUTH_BREAK_GLASS_TICKET="${CORTEXPILOT_UI_TRUTH_BREAK_GLASS_TICKET:-}"
-TRUTH_BREAK_GLASS_AUDIT_LOG="${CORTEXPILOT_UI_TRUTH_BREAK_GLASS_AUDIT_LOG:-.runtime-cache/test_output/ui_regression/ui_truth_break_glass_audit.jsonl}"
-LATEST_MANIFEST_PATH="${CORTEXPILOT_UI_LATEST_MANIFEST_PATH:-.runtime-cache/test_output/latest_manifest.json}"
-LATEST_MANIFEST_RESOLVER="${CORTEXPILOT_UI_LATEST_MANIFEST_RESOLVER:-scripts/resolve_latest_manifest.py}"
-EVIDENCE_COMPLETENESS_CHECKER="${CORTEXPILOT_UI_EVIDENCE_COMPLETENESS_CHECKER:-scripts/check_evidence_completeness.py}"
+CHAIN_REPORT="${OPENVIBECODING_UI_CHAIN_REPORT:-}"
+TAURI_REPORT="${OPENVIBECODING_UI_TAURI_REPORT:-}"
+CLICK_INVENTORY_REQUIRED="${OPENVIBECODING_UI_CLICK_INVENTORY_REQUIRED:-0}"
+TRUTH_DISABLE_AUTO_LATEST="${OPENVIBECODING_UI_TRUTH_DISABLE_AUTO_LATEST:-1}"
+TRUTH_REQUIRE_RUN_ID_MATCH="${OPENVIBECODING_UI_TRUTH_REQUIRE_RUN_ID_MATCH:-1}"
+TRUTH_ENFORCE_FLAKE_POLICY="${OPENVIBECODING_UI_TRUTH_ENFORCE_FLAKE_POLICY:-0}"
+TRUTH_P0_MAX_THRESHOLD_PERCENT="${OPENVIBECODING_UI_TRUTH_P0_MAX_THRESHOLD_PERCENT:-0.5}"
+TRUTH_P1_MAX_THRESHOLD_PERCENT="${OPENVIBECODING_UI_TRUTH_P1_MAX_THRESHOLD_PERCENT:-1.0}"
+TRUTH_P0_MIN_ITERATIONS="${OPENVIBECODING_UI_TRUTH_P0_MIN_ITERATIONS:-8}"
+TRUTH_P1_MIN_ITERATIONS="${OPENVIBECODING_UI_TRUTH_P1_MIN_ITERATIONS:-8}"
+TRUTH_BREAK_GLASS="${OPENVIBECODING_UI_TRUTH_BREAK_GLASS:-0}"
+TRUTH_BREAK_GLASS_REASON="${OPENVIBECODING_UI_TRUTH_BREAK_GLASS_REASON:-}"
+TRUTH_BREAK_GLASS_TICKET="${OPENVIBECODING_UI_TRUTH_BREAK_GLASS_TICKET:-}"
+TRUTH_BREAK_GLASS_AUDIT_LOG="${OPENVIBECODING_UI_TRUTH_BREAK_GLASS_AUDIT_LOG:-.runtime-cache/test_output/ui_regression/ui_truth_break_glass_audit.jsonl}"
+LATEST_MANIFEST_PATH="${OPENVIBECODING_UI_LATEST_MANIFEST_PATH:-.runtime-cache/test_output/latest_manifest.json}"
+LATEST_MANIFEST_RESOLVER="${OPENVIBECODING_UI_LATEST_MANIFEST_RESOLVER:-scripts/resolve_latest_manifest.py}"
+EVIDENCE_COMPLETENESS_CHECKER="${OPENVIBECODING_UI_EVIDENCE_COMPLETENESS_CHECKER:-scripts/check_evidence_completeness.py}"
 
 audit_truth_break_glass() {
   local scope="${1:-ui_truth_gate}"
@@ -630,11 +630,11 @@ PY
 require_truth_break_glass_or_fail() {
   local scope="${1:-ui_truth_gate_override}"
   if [[ "$TRUTH_BREAK_GLASS" != "1" ]]; then
-    echo "❌ [ui-truth] ${scope} blocked (fail-closed). set CORTEXPILOT_UI_TRUTH_BREAK_GLASS=1 with reason/ticket" >&2
+    echo "❌ [ui-truth] ${scope} blocked (fail-closed). set OPENVIBECODING_UI_TRUTH_BREAK_GLASS=1 with reason/ticket" >&2
     exit 1
   fi
   if [[ -z "$TRUTH_BREAK_GLASS_REASON" || -z "$TRUTH_BREAK_GLASS_TICKET" ]]; then
-    echo "❌ [ui-truth] break-glass requires CORTEXPILOT_UI_TRUTH_BREAK_GLASS_REASON and CORTEXPILOT_UI_TRUTH_BREAK_GLASS_TICKET" >&2
+    echo "❌ [ui-truth] break-glass requires OPENVIBECODING_UI_TRUTH_BREAK_GLASS_REASON and OPENVIBECODING_UI_TRUTH_BREAK_GLASS_TICKET" >&2
     exit 1
   fi
   local audit_line
@@ -703,11 +703,11 @@ run_auto_latest_completeness_sentinel
 P0_ENV_OVERRIDE_SET=0
 P0_SOURCE="auto_latest_manifest"
 P0_SELECTION_BASIS="manifest:ui_regression.p0_flake_report"
-if [[ "${CORTEXPILOT_UI_P0_REPORT+x}" == "x" ]]; then
+if [[ "${OPENVIBECODING_UI_P0_REPORT+x}" == "x" ]]; then
   P0_ENV_OVERRIDE_SET=1
   P0_SOURCE="manual_override"
-  P0_SELECTION_BASIS="env:CORTEXPILOT_UI_P0_REPORT"
-  P0_REPORT="${CORTEXPILOT_UI_P0_REPORT}"
+  P0_SELECTION_BASIS="env:OPENVIBECODING_UI_P0_REPORT"
+  P0_REPORT="${OPENVIBECODING_UI_P0_REPORT}"
 else
   if [[ "$TRUTH_DISABLE_AUTO_LATEST" == "1" ]]; then
     P0_SOURCE="explicit_required"
@@ -721,11 +721,11 @@ fi
 P1_ENV_OVERRIDE_SET=0
 P1_SOURCE="auto_latest_manifest"
 P1_SELECTION_BASIS="manifest:ui_regression.p1_flake_report"
-if [[ "${CORTEXPILOT_UI_P1_REPORT+x}" == "x" ]]; then
+if [[ "${OPENVIBECODING_UI_P1_REPORT+x}" == "x" ]]; then
   P1_ENV_OVERRIDE_SET=1
   P1_SOURCE="manual_override"
-  P1_SELECTION_BASIS="env:CORTEXPILOT_UI_P1_REPORT"
-  P1_REPORT="${CORTEXPILOT_UI_P1_REPORT}"
+  P1_SELECTION_BASIS="env:OPENVIBECODING_UI_P1_REPORT"
+  P1_REPORT="${OPENVIBECODING_UI_P1_REPORT}"
 else
   if [[ "$TRUTH_DISABLE_AUTO_LATEST" == "1" ]]; then
     P1_SOURCE="explicit_required"
@@ -739,7 +739,7 @@ fi
 if [[ -z "${P0_REPORT:-}" ]]; then
   P0_REPORT="$FLAKE_REPORT_ROOT/p0_flake_report_not_found.json"
   if [[ "$P0_SOURCE" == "manual_override" ]]; then
-    P0_SELECTION_BASIS="env:CORTEXPILOT_UI_P0_REPORT(empty)"
+    P0_SELECTION_BASIS="env:OPENVIBECODING_UI_P0_REPORT(empty)"
   else
     P0_SELECTION_BASIS="auto_latest_not_found"
   fi
@@ -747,7 +747,7 @@ fi
 if [[ -z "${P1_REPORT:-}" ]]; then
   P1_REPORT="$FLAKE_REPORT_ROOT/p1_flake_report_not_found.json"
   if [[ "$P1_SOURCE" == "manual_override" ]]; then
-    P1_SELECTION_BASIS="env:CORTEXPILOT_UI_P1_REPORT(empty)"
+    P1_SELECTION_BASIS="env:OPENVIBECODING_UI_P1_REPORT(empty)"
   else
     P1_SELECTION_BASIS="auto_latest_not_found"
   fi
@@ -756,11 +756,11 @@ fi
 CLICK_INVENTORY_ENV_OVERRIDE_SET=0
 CLICK_INVENTORY_SOURCE="auto_latest_manifest"
 CLICK_INVENTORY_SELECTION_BASIS="manifest:ui_full_gemini_audit.click_inventory_report"
-if [[ "${CORTEXPILOT_UI_CLICK_INVENTORY_REPORT+x}" == "x" ]]; then
+if [[ "${OPENVIBECODING_UI_CLICK_INVENTORY_REPORT+x}" == "x" ]]; then
   CLICK_INVENTORY_ENV_OVERRIDE_SET=1
   CLICK_INVENTORY_SOURCE="manual_override"
-  CLICK_INVENTORY_SELECTION_BASIS="env:CORTEXPILOT_UI_CLICK_INVENTORY_REPORT"
-  CLICK_INVENTORY_REPORT="${CORTEXPILOT_UI_CLICK_INVENTORY_REPORT}"
+  CLICK_INVENTORY_SELECTION_BASIS="env:OPENVIBECODING_UI_CLICK_INVENTORY_REPORT"
+  CLICK_INVENTORY_REPORT="${OPENVIBECODING_UI_CLICK_INVENTORY_REPORT}"
 else
   if [[ "$STRICT_ENABLED" == "1" ]]; then
     CLICK_INVENTORY_SOURCE="strict_explicit_required"
@@ -777,7 +777,7 @@ fi
 
 if [[ -z "${CLICK_INVENTORY_REPORT:-}" ]]; then
   if [[ "$CLICK_INVENTORY_SOURCE" == "manual_override" ]]; then
-    CLICK_INVENTORY_SELECTION_BASIS="env:CORTEXPILOT_UI_CLICK_INVENTORY_REPORT(empty)"
+    CLICK_INVENTORY_SELECTION_BASIS="env:OPENVIBECODING_UI_CLICK_INVENTORY_REPORT(empty)"
   elif [[ "$CLICK_INVENTORY_SOURCE" == "strict_explicit_required" ]]; then
     CLICK_INVENTORY_SELECTION_BASIS="strict_requires_env(empty)"
   else
@@ -919,7 +919,7 @@ def _validate_flake_payload(name, report_path, payload):
     errors = []
     if not isinstance(payload, dict):
         return errors + ["payload_not_object"]
-    if payload.get("report_type") != "cortexpilot_ui_regression_flake_report":
+    if payload.get("report_type") != "openvibecoding_ui_regression_flake_report":
         errors.append("report_type_mismatch")
     schema_version = payload.get("schema_version")
     if not isinstance(schema_version, int) or schema_version < 1:
@@ -1456,9 +1456,9 @@ for key in required_check_keys:
             )
         elif key in {"p0_report_explicit", "p1_report_explicit", "click_inventory_report_explicit"}:
             env_name = {
-                "p0_report_explicit": "CORTEXPILOT_UI_P0_REPORT",
-                "p1_report_explicit": "CORTEXPILOT_UI_P1_REPORT",
-                "click_inventory_report_explicit": "CORTEXPILOT_UI_CLICK_INVENTORY_REPORT",
+                "p0_report_explicit": "OPENVIBECODING_UI_P0_REPORT",
+                "p1_report_explicit": "OPENVIBECODING_UI_P1_REPORT",
+                "click_inventory_report_explicit": "OPENVIBECODING_UI_CLICK_INVENTORY_REPORT",
             }[key]
             detail.update(
                 {
@@ -1472,7 +1472,7 @@ for key in required_check_keys:
                 {
                     "reason": "strict_click_inventory_explicit_required",
                     "strict": strict,
-                    "required_env": "CORTEXPILOT_UI_CLICK_INVENTORY_REPORT",
+                    "required_env": "OPENVIBECODING_UI_CLICK_INVENTORY_REPORT",
                 }
             )
         elif key == "matrix_generated_at_valid":

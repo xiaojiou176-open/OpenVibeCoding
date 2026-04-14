@@ -10,7 +10,7 @@
     />
     <meta
       name="keywords"
-      content="OpenVibeCoding, CortexPilot runtime, skills, Codex skills, Claude Code skills, OpenClaw skills, repo-owned playbooks, agent workflows, MCP"
+      content="OpenVibeCoding, OpenVibeCoding runtime, skills, Codex skills, Claude Code skills, OpenClaw skills, repo-owned playbooks, agent workflows, MCP"
     />
     <link rel="canonical" href="https://xiaojiou176-open.github.io/OpenVibeCoding/skills/" />
     <meta property="og:title" content="OpenVibeCoding | Skills quickstart for coding-agent teams" />
@@ -193,7 +193,7 @@
         </nav>
         <h1>Skills quickstart for coding-agent teams.</h1>
         <p class="lede">
-          OpenVibeCoding is the public shell for the CortexPilot runtime, and it already ships a public, repo-owned skills quickstart here. The truthful adoption path today is:
+          OpenVibeCoding is the public shell for the OpenVibeCoding runtime, and it already ships a public, repo-owned skills quickstart here. The truthful adoption path today is:
           <strong>reuse repo-owned playbooks</strong> for Codex / Claude Code workflows, and adapt the same playbooks for adjacent tools such as OpenClaw without pretending OpenVibeCoding is already a listed or shipped item inside those official plugin ecosystems.
         </p>
         <div class="actions">
@@ -247,7 +247,7 @@
         </p>
         <p>
           The current bundle now carries one registry-shaped skill artifact too:
-          <code>public-skills/cortexpilot-adoption-router/manifest.yaml</code>.
+          <code>public-skills/openvibecoding-adoption-router/manifest.yaml</code>.
           That makes the adoption-router skill package-ready across Codex /
           Claude Code / OpenClaw style installs without pretending the local
           bundle example is the canonical public root or that Codex / Claude
@@ -260,7 +260,7 @@
         <p>
           If you want a drop-in starting point instead of a vague “reuse the repo's skills,” keep the copied surface small and explicit.
         </p>
-        <pre><code>vendor/CortexPilot/
+        <pre><code>vendor/OpenVibeCoding/
   README.md
   docs/README.md
   AGENTS.md
@@ -348,7 +348,7 @@
           <li>Start from the native ecosystem docs first, so you know what the host tool already provides.</li>
           <li>Use OpenVibeCoding skills to carry the repo's own read order, safety rails, and done semantics into that workflow.</li>
           <li>Pair the skill with the repo's truthful entrypoints: compatibility matrix, read-only MCP, builder packages, and proof-first use cases.</li>
-          <li>For OpenClaw specifically, treat the official skills workspace and ClawHub registry as the native host surface, then adapt CortexPilot playbooks around it instead of relabeling CortexPilot as the native plugin.</li>
+          <li>For OpenClaw specifically, treat the official skills workspace and ClawHub registry as the native host surface, then adapt OpenVibeCoding playbooks around it instead of relabeling OpenVibeCoding as the native plugin.</li>
         </ol>
       </section>
 

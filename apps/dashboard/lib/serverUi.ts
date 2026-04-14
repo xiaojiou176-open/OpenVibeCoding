@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
-import { DEFAULT_UI_LOCALE, getUiCopy, type UiCopy, type UiLocale } from "@cortexpilot/frontend-shared/uiCopy";
-import { normalizeUiLocale, UI_LOCALE_STORAGE_KEY } from "@cortexpilot/frontend-shared/uiLocale";
+import { DEFAULT_UI_LOCALE, getUiCopy, type UiCopy, type UiLocale } from "@openvibecoding/frontend-shared/uiCopy";
+import { normalizeUiLocale, UI_LOCALE_STORAGE_KEY } from "@openvibecoding/frontend-shared/uiLocale";
 
 export async function resolveDashboardUiLocale(): Promise<UiLocale> {
   try {

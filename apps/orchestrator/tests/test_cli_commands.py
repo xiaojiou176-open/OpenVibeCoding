@@ -5,8 +5,8 @@ import subprocess
 
 from typer.testing import CliRunner
 
-from cortexpilot_orch import cli
-from cortexpilot_orch.cli import app
+from openvibecoding_orch import cli
+from openvibecoding_orch.cli import app
 import hashlib
 
 
@@ -118,9 +118,9 @@ def create_tiny_repo(base_dir: Path) -> Path:
 
 def test_cli_init_and_doctor(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runtime_root / "runs"))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(runtime_root / "worktrees"))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runtime_root / "runs"))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(runtime_root / "worktrees"))
 
     runner = CliRunner()
     result = runner.invoke(app, ["init"])
@@ -144,11 +144,11 @@ def test_cli_run_and_run_chain(tmp_path: Path, monkeypatch) -> None:
     worktree_root = runtime_root / "worktrees"
     contracts_root = tmp_path / "contracts"
 
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(worktree_root))
-    monkeypatch.setenv("CORTEXPILOT_SCHEMA_ROOT", str(schema_root))
-    monkeypatch.setenv("CORTEXPILOT_CONTRACT_ROOT", str(contracts_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(worktree_root))
+    monkeypatch.setenv("OPENVIBECODING_SCHEMA_ROOT", str(schema_root))
+    monkeypatch.setenv("OPENVIBECODING_CONTRACT_ROOT", str(contracts_root))
 
     repo = create_tiny_repo(tmp_path / "repo_run")
     monkeypatch.chdir(repo)
@@ -213,12 +213,12 @@ def test_cli_queue_and_session_alias(tmp_path: Path, monkeypatch) -> None:
     contracts_root = tmp_path / "contracts"
     alias_path = tmp_path / "alias_map.json"
 
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(worktree_root))
-    monkeypatch.setenv("CORTEXPILOT_SCHEMA_ROOT", str(schema_root))
-    monkeypatch.setenv("CORTEXPILOT_CONTRACT_ROOT", str(contracts_root))
-    monkeypatch.setenv("CORTEXPILOT_SESSION_ALIAS_PATH", str(alias_path))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(worktree_root))
+    monkeypatch.setenv("OPENVIBECODING_SCHEMA_ROOT", str(schema_root))
+    monkeypatch.setenv("OPENVIBECODING_CONTRACT_ROOT", str(contracts_root))
+    monkeypatch.setenv("OPENVIBECODING_SESSION_ALIAS_PATH", str(alias_path))
 
     repo = create_tiny_repo(tmp_path / "repo_queue")
     monkeypatch.chdir(repo)
@@ -266,7 +266,7 @@ def test_cli_queue_and_session_alias(tmp_path: Path, monkeypatch) -> None:
 
 def test_cli_run_next_empty_queue(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
     runner = CliRunner()
     result = runner.invoke(app, ["run-next", "--mock"])
     assert result.exit_code == 0
@@ -277,8 +277,8 @@ def test_cli_compile_plan_and_replay_guard(tmp_path: Path, monkeypatch) -> None:
     repo_root = Path(__file__).resolve().parents[3]
     schema_root = repo_root / "schemas"
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_SCHEMA_ROOT", str(schema_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_SCHEMA_ROOT", str(schema_root))
 
     repo = create_tiny_repo(tmp_path / "repo_compile")
     monkeypatch.chdir(repo)
@@ -343,8 +343,8 @@ def test_cli_compile_plan_and_replay_guard(tmp_path: Path, monkeypatch) -> None:
 def test_read_manifest_status_unknown(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime"
     runs_root = runtime_root / "runs"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
 
     status = cli._read_manifest_status("missing")
     assert status == "UNKNOWN"
@@ -356,14 +356,14 @@ def test_cleanup_runtime_cli(tmp_path: Path, monkeypatch) -> None:
     worktree_root = runtime_root / "worktrees"
     logs_root = tmp_path / "logs"
 
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(worktree_root))
-    monkeypatch.setenv("CORTEXPILOT_LOGS_ROOT", str(logs_root))
-    monkeypatch.setenv("CORTEXPILOT_RETENTION_RUN_DAYS", "0")
-    monkeypatch.setenv("CORTEXPILOT_RETENTION_MAX_RUNS", "1")
-    monkeypatch.setenv("CORTEXPILOT_RETENTION_LOG_DAYS", "0")
-    monkeypatch.setenv("CORTEXPILOT_RETENTION_WORKTREE_DAYS", "0")
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(worktree_root))
+    monkeypatch.setenv("OPENVIBECODING_LOGS_ROOT", str(logs_root))
+    monkeypatch.setenv("OPENVIBECODING_RETENTION_RUN_DAYS", "0")
+    monkeypatch.setenv("OPENVIBECODING_RETENTION_MAX_RUNS", "1")
+    monkeypatch.setenv("OPENVIBECODING_RETENTION_LOG_DAYS", "0")
+    monkeypatch.setenv("OPENVIBECODING_RETENTION_WORKTREE_DAYS", "0")
 
     (runs_root / "run_1").mkdir(parents=True, exist_ok=True)
     (runs_root / "run_2").mkdir(parents=True, exist_ok=True)
@@ -390,9 +390,9 @@ def test_cleanup_runtime_cli(tmp_path: Path, monkeypatch) -> None:
 
 def test_cli_doctor_missing_head(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runtime_root / "runs"))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(runtime_root / "worktrees"))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runtime_root / "runs"))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(runtime_root / "worktrees"))
 
     class DummyErr(Exception):
         pass

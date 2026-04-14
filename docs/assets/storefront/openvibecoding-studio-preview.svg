@@ -1,0 +1,33 @@
+<svg width="1280" height="420" viewBox="0 0 1280 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">OpenVibeCoding studio preview</title>
+  <desc id="desc">Preview card for OpenVibeCoding showing a practical promise and three concrete outcomes.</desc>
+  <defs>
+    <linearGradient id="bg" x1="78" y1="32" x2="1190" y2="382" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F172A"/>
+      <stop offset="0.52" stop-color="#111827"/>
+      <stop offset="1" stop-color="#172554"/>
+    </linearGradient>
+    <linearGradient id="orbA" x1="920" y1="40" x2="1188" y2="220" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#60A5FA"/>
+      <stop offset="1" stop-color="#2563EB"/>
+    </linearGradient>
+    <linearGradient id="orbB" x1="860" y1="120" x2="1134" y2="330" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2DD4BF"/>
+      <stop offset="1" stop-color="#0F766E"/>
+    </linearGradient>
+  </defs>
+  <rect x="24" y="24" width="1232" height="372" rx="32" fill="url(#bg)"/>
+  <circle cx="1036" cy="120" r="122" fill="url(#orbA)" fill-opacity="0.22"/>
+  <circle cx="1124" cy="238" r="92" fill="url(#orbB)" fill-opacity="0.18"/>
+  <rect x="86" y="72" width="246" height="34" rx="17" fill="#0B1220" stroke="#334155"/>
+  <text x="108" y="94" fill="#E2E8F0" font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="15" font-weight="700">xiaojiou176-open studio system</text>
+  <text x="86" y="164" fill="#F8FAFC" font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="52" font-weight="800">OpenVibeCoding</text>
+  <text x="86" y="212" fill="#CBD5E1" font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="24" font-weight="600">Run governed AI tasks, inspect evidence bundles,</text>
+  <text x="86" y="246" fill="#CBD5E1" font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="24" font-weight="600">and replay failures without guessing.</text>
+  <rect x="86" y="292" width="172" height="30" rx="15" fill="#111827" stroke="#1F2937"/>
+  <rect x="272" y="292" width="182" height="30" rx="15" fill="#111827" stroke="#1F2937"/>
+  <rect x="468" y="292" width="150" height="30" rx="15" fill="#111827" stroke="#1F2937"/>
+  <text x="110" y="312" fill="#BFDBFE" font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="700">GOVERN RUNS</text>
+  <text x="296" y="312" fill="#99F6E4" font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="700">REVIEW EVIDENCE</text>
+  <text x="492" y="312" fill="#DDD6FE" font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="14" font-weight="700">REPLAY SAFELY</text>
+</svg>

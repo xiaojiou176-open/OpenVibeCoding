@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import type { ReactNode } from "react";
-import { getUiCopy, type UiLocale } from "@cortexpilot/frontend-shared/uiCopy";
+import { getUiCopy, type UiLocale } from "@openvibecoding/frontend-shared/uiCopy";
 import type { RunSummary, EventRecord } from "../lib/types";
 import type { CommandTowerOverviewPayload } from "../lib/types";
 import { fetchRuns, fetchAllEvents, fetchCommandTowerOverview } from "../lib/api";

@@ -1,12 +1,12 @@
 import type { ComponentType, KeyboardEvent as ReactKeyboardEvent, RefObject } from "react";
 
-import type { UiCopy } from "@cortexpilot/frontend-shared/uiCopy";
+import type { UiCopy } from "@openvibecoding/frontend-shared/uiCopy";
 import type { CommandTowerAlert, CommandTowerOverviewPayload, PmSessionStatus, PmSessionSummary } from "../../lib/types";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 import Link from "next/link";
-import type { StatusVariant } from "@cortexpilot/frontend-shared/statusPresentation";
+import type { StatusVariant } from "@openvibecoding/frontend-shared/statusPresentation";
 
 type SortMode = "updated_desc" | "created_desc" | "failed_desc" | "blocked_desc";
 type FocusMode = "all" | "high_risk" | "blocked" | "running";

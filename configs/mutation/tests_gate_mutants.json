@@ -1,5 +1,5 @@
 {
-  "target": "apps/orchestrator/src/cortexpilot_orch/gates/tests_gate.py",
+  "target": "apps/orchestrator/src/openvibecoding_orch/gates/tests_gate.py",
   "mutants": [
     {
       "name": "normalize_tests_timeout_ignore_input",

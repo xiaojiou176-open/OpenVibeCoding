@@ -4,8 +4,8 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
-CURRENT_RUN_ROOT=".runtime-cache/cortexpilot/reports/ci/current_run"
-CURRENT_RUN_ROUTE_REPORT=".runtime-cache/cortexpilot/reports/ci/routes/local-advisory.json"
+CURRENT_RUN_ROOT=".runtime-cache/openvibecoding/reports/ci/current_run"
+CURRENT_RUN_ROUTE_REPORT=".runtime-cache/openvibecoding/reports/ci/routes/local-advisory.json"
 CURRENT_RUN_SOURCE_MANIFEST="${CURRENT_RUN_ROOT}/source_manifest.json"
 
 cleanup_forbidden_python_residue() {
@@ -62,7 +62,7 @@ echo "== normalize transient residue =="
 cleanup_forbidden_python_residue
 echo
 echo "== repo-side truth =="
-CORTEXPILOT_HYGIENE_SKIP_UPSTREAM=1 bash scripts/check_repo_hygiene.sh
+OPENVIBECODING_HYGIENE_SKIP_UPSTREAM=1 bash scripts/check_repo_hygiene.sh
 echo
 
 echo "== external truth =="
@@ -78,4 +78,4 @@ echo
 echo "ℹ️ [truth-triage] completed"
 echo "   repo-side truth: see current shell output"
 echo "   external truth: .runtime-cache/test_output/governance/upstream_inventory_report.json + .runtime-cache/test_output/governance/upstream_same_run_cohesion.json"
-echo "   current-run truth: .runtime-cache/cortexpilot/reports/ci/current_run/consistency.json"
+echo "   current-run truth: .runtime-cache/openvibecoding/reports/ci/current_run/consistency.json"

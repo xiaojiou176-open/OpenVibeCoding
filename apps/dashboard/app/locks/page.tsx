@@ -39,7 +39,7 @@ export default function LocksPage() {
   const mutationCapability = mutationExecutionCapability();
   const normalizedRole = mutationCapability.operatorRole || "";
   const hasMutationRole = mutationCapability.executable;
-  const roleGateReason = hasMutationRole ? "" : "NEXT_PUBLIC_CORTEXPILOT_OPERATOR_ROLE is not configured in this environment, so release actions are disabled.";
+  const roleGateReason = hasMutationRole ? "" : "NEXT_PUBLIC_OPENVIBECODING_OPERATOR_ROLE is not configured in this environment, so release actions are disabled.";
 
   async function loadLocks(options: { soft?: boolean; preserveWarning?: boolean } = {}) {
     const soft = options.soft ?? false;

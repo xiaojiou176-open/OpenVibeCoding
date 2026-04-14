@@ -6,7 +6,7 @@ from typing import Any
 
 import pytest
 
-from cortexpilot_orch.runners import langgraph_contract_subflow
+from openvibecoding_orch.runners import langgraph_contract_subflow
 
 
 class _DummyStore:

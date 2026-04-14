@@ -13,7 +13,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "apps" / "orchestrator" / "src"))
 
-from cortexpilot_orch.runtime.space_governance import (
+from openvibecoding_orch.runtime.space_governance import (
     load_space_governance_policy,
     path_size_bytes,
     revalidate_cleanup_targets,
@@ -24,7 +24,7 @@ DEFAULT_POLICY = ROOT / "configs" / "space_governance_policy.json"
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Apply CortexPilot space cleanup after gate revalidation.")
+    parser = argparse.ArgumentParser(description="Apply OpenVibeCoding space cleanup after gate revalidation.")
     parser.add_argument("--policy", default=str(DEFAULT_POLICY))
     parser.add_argument("--gate-json", required=True)
     parser.add_argument("--result-json", required=True)

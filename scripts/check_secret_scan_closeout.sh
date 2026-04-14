@@ -37,13 +37,13 @@ run_current_scan() {
 run_fresh_clone_scan() {
   echo "🔐 [secret-scan-closeout] running fresh-clone secret scan"
   local tmp_root
-  tmp_root="$(cortexpilot_machine_tmp_root "$ROOT_DIR")"
+  tmp_root="$(openvibecoding_machine_tmp_root "$ROOT_DIR")"
   mkdir -p "$tmp_root"
   local clone_dir
   clone_dir="$(mktemp -d "${tmp_root}/secret-scan-closeout-clone.XXXXXX")"
   trap 'rm -rf "$clone_dir"' RETURN
   git clone --quiet --no-local "$ROOT_DIR" "$clone_dir"
-  CORTEXPILOT_SECURITY_SCAN_ROOT="$clone_dir" bash "$ROOT_DIR/scripts/security_scan.sh"
+  OPENVIBECODING_SECURITY_SCAN_ROOT="$clone_dir" bash "$ROOT_DIR/scripts/security_scan.sh"
   rm -rf "$clone_dir"
   trap - RETURN
 }

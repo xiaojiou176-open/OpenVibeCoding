@@ -13,8 +13,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT = ROOT / ".runtime-cache" / "test_output" / "governance" / "governance_evidence_manifest.json"
 DEFAULT_UPSTREAM_MATRIX = ROOT / "configs" / "upstream_compat_matrix.json"
-UPSTREAM_RECORD_FRESH_SEC = int(os.environ.get("CORTEXPILOT_UPSTREAM_RECORD_FRESH_SEC", "1800"))
-CHECK_OUTPUT_MAX_CHARS = int(os.environ.get("CORTEXPILOT_GOVERNANCE_CHECK_OUTPUT_MAX_CHARS", "12000"))
+UPSTREAM_RECORD_FRESH_SEC = int(os.environ.get("OPENVIBECODING_UPSTREAM_RECORD_FRESH_SEC", "1800"))
+CHECK_OUTPUT_MAX_CHARS = int(os.environ.get("OPENVIBECODING_GOVERNANCE_CHECK_OUTPUT_MAX_CHARS", "12000"))
 FORBIDDEN_REPORT_TOKENS = ("jarvis-command-tower", "jarvis")
 FORBIDDEN_REPORT_REPLACEMENT = "[legacy-redacted]"
 UPSTREAM_EXEMPT_ROUTE_IDS = {"trusted_pr", "untrusted_pr", "push_main"}
@@ -46,9 +46,9 @@ CHECKS = {
             "id": "retention_report",
             "weight": 3,
             "command": ["bash", "-lc", "bash scripts/cleanup_runtime.sh dry-run && python3 scripts/check_retention_report.py"],
-            "artifacts": [".runtime-cache/cortexpilot/reports/retention_report.json"],
+            "artifacts": [".runtime-cache/openvibecoding/reports/retention_report.json"],
         },
-        {"id": "cleanup_demoted", "weight": 2, "command": ["bash", "-lc", "CORTEXPILOT_HYGIENE_SKIP_UPSTREAM=1 bash scripts/check_repo_hygiene.sh"]},
+        {"id": "cleanup_demoted", "weight": 2, "command": ["bash", "-lc", "OPENVIBECODING_HYGIENE_SKIP_UPSTREAM=1 bash scripts/check_repo_hygiene.sh"]},
     ],
     "logging": [
         {
@@ -73,7 +73,7 @@ CHECKS = {
             "command": [
                 "bash",
                 "-lc",
-                "source scripts/lib/env.sh && PYTHONPATH=apps/orchestrator/src ${CORTEXPILOT_PYTHON:-python3} -m pytest apps/orchestrator/tests/test_observability_logger.py -q",
+                "source scripts/lib/env.sh && PYTHONPATH=apps/orchestrator/src ${OPENVIBECODING_PYTHON:-python3} -m pytest apps/orchestrator/tests/test_observability_logger.py -q",
             ],
         },
         {
@@ -89,7 +89,7 @@ CHECKS = {
     "root_cleanliness": [
         {"id": "allowlist_gate", "weight": 4, "command": ["python3", "scripts/check_root_allowlist.py", "--mode", "authoritative"]},
         {"id": "no_forbidden_outputs", "weight": 3, "command": ["python3", "scripts/check_root_semantic_cleanliness.py"]},
-        {"id": "hygiene_gate", "weight": 3, "command": ["bash", "-lc", "CORTEXPILOT_HYGIENE_SKIP_UPSTREAM=1 bash scripts/check_repo_hygiene.sh"]},
+        {"id": "hygiene_gate", "weight": 3, "command": ["bash", "-lc", "OPENVIBECODING_HYGIENE_SKIP_UPSTREAM=1 bash scripts/check_repo_hygiene.sh"]},
     ],
     "upstream": [
         {
@@ -117,7 +117,7 @@ CHECKS = {
                 "python3",
                 "-c",
                 (
-                    "from pathlib import Path; text=Path('apps/orchestrator/src/cortexpilot_orch/runners/provider_resolution.py')"
+                    "from pathlib import Path; text=Path('apps/orchestrator/src/openvibecoding_orch/runners/provider_resolution.py')"
                     ".read_text(encoding='utf-8'); banned=['/internal/','private implementation']; "
                     "raise SystemExit(1 if any(item in text for item in banned) else 0)"
                 ),
@@ -320,7 +320,7 @@ def _reuse_clean_room_recovery_record(check: dict[str, object]) -> dict[str, obj
 
 
 def _current_ci_route_id() -> str:
-    return str(os.environ.get("CORTEXPILOT_CI_ROUTE_ID") or "").strip()
+    return str(os.environ.get("OPENVIBECODING_CI_ROUTE_ID") or "").strip()
 
 
 def _route_exempt_upstream_check(check: dict[str, object]) -> dict[str, object] | None:

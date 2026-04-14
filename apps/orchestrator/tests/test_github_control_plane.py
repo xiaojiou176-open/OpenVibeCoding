@@ -8,7 +8,7 @@ from pathlib import Path
 
 def _load_module() -> object:
     script_path = Path(__file__).resolve().parents[3] / "scripts" / "check_github_control_plane.py"
-    spec = importlib.util.spec_from_file_location("cortexpilot_check_github_control_plane", script_path)
+    spec = importlib.util.spec_from_file_location("openvibecoding_check_github_control_plane", script_path)
     module = importlib.util.module_from_spec(spec)
     assert spec and spec.loader
     spec.loader.exec_module(module)

@@ -1,5 +1,5 @@
 import type { EventRecord, ReportRecord } from "../../lib/types";
-import type { StatusVariant } from "@cortexpilot/frontend-shared/statusPresentation";
+import type { StatusVariant } from "@openvibecoding/frontend-shared/statusPresentation";
 
 export type LifecycleSnapshot = {
   required_path?: string[];

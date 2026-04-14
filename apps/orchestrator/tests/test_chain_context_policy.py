@@ -3,9 +3,9 @@ import json
 import subprocess
 from pathlib import Path
 
-from cortexpilot_orch.chain.runner import ChainRunner
-from cortexpilot_orch.scheduler.scheduler import Orchestrator
-from cortexpilot_orch.store.run_store import RunStore
+from openvibecoding_orch.chain.runner import ChainRunner
+from openvibecoding_orch.scheduler.scheduler import Orchestrator
+from openvibecoding_orch.store.run_store import RunStore
 
 
 def _output_schema_artifacts(role: str = "worker") -> list[dict]:
@@ -69,10 +69,10 @@ def test_context_policy_summary_only_blocks_raw(tmp_path: Path, monkeypatch) -> 
     _git(["git", "commit", "-m", "init"], repo)
 
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runtime_root / "runs"))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(runtime_root / "worktrees"))
-    monkeypatch.setenv("CORTEXPILOT_SCHEMA_ROOT", str(Path("schemas")))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runtime_root / "runs"))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(runtime_root / "worktrees"))
+    monkeypatch.setenv("OPENVIBECODING_SCHEMA_ROOT", str(Path("schemas")))
 
     artifacts = [
         *_output_schema_artifacts("worker"),
@@ -113,10 +113,10 @@ def test_context_policy_isolated_blocks_artifacts(tmp_path: Path, monkeypatch) -
     _git(["git", "commit", "-m", "init"], repo)
 
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runtime_root / "runs"))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(runtime_root / "worktrees"))
-    monkeypatch.setenv("CORTEXPILOT_SCHEMA_ROOT", str(Path("schemas")))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runtime_root / "runs"))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(runtime_root / "worktrees"))
+    monkeypatch.setenv("OPENVIBECODING_SCHEMA_ROOT", str(Path("schemas")))
 
     artifacts = [{"name": "summary.json", "uri": "file://summary", "sha256": "1" * 64}]
     chain = {

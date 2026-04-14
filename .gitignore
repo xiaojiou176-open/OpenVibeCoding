@@ -1,5 +1,5 @@
 # ============================================================
-# CortexPilot Git Ignore Policy (Layered)
+# OpenVibeCoding Git Ignore Policy (Layered)
 # Goal: keep repo reproducible, clean, and noise-free.
 # ============================================================
 
@@ -87,7 +87,7 @@ coverage.xml
 .opencode/
 .serena/
 .cursorrules/
-**/.cache/cortexpilot/modules-root/
+**/.cache/openvibecoding/modules-root/
 
 # ------------------------------
 # Generated contract outputs
@@ -95,8 +95,8 @@ coverage.xml
 contracts/results/
 contracts/reviews/
 contracts/tasks/
-.runtime-cache/cortexpilot/contracts/
-**/.runtime-cache/cortexpilot/contracts/
+.runtime-cache/openvibecoding/contracts/
+**/.runtime-cache/openvibecoding/contracts/
 
 # ------------------------------
 # Policies: ignore by default, track SSOT payloads only

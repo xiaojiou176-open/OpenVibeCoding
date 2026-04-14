@@ -1,9 +1,9 @@
 import { FRONTEND_API_CONTRACT } from "./frontendApiContract";
 
 type DashboardPublicEnvKey =
-  | "NEXT_PUBLIC_CORTEXPILOT_API_BASE"
-  | "NEXT_PUBLIC_CORTEXPILOT_PUBLIC_DOCS_BASE_URL"
-  | "NEXT_PUBLIC_CORTEXPILOT_OPERATOR_ROLE"
+  | "NEXT_PUBLIC_OPENVIBECODING_API_BASE"
+  | "NEXT_PUBLIC_OPENVIBECODING_PUBLIC_DOCS_BASE_URL"
+  | "NEXT_PUBLIC_OPENVIBECODING_OPERATOR_ROLE"
   | "NEXT_PUBLIC_API_BASE"
   | "NEXT_PUBLIC_PM_COPY_VARIANT";
 
@@ -12,12 +12,12 @@ const DASHBOARD_PUBLIC_DOCS_PATH_RE = /^\/(ai-surfaces|api|builders|compatibilit
 
 function readPublicEnv(key: DashboardPublicEnvKey): string {
   switch (key) {
-    case "NEXT_PUBLIC_CORTEXPILOT_API_BASE":
-      return String(process.env.NEXT_PUBLIC_CORTEXPILOT_API_BASE || "").trim();
-    case "NEXT_PUBLIC_CORTEXPILOT_PUBLIC_DOCS_BASE_URL":
-      return String(process.env.NEXT_PUBLIC_CORTEXPILOT_PUBLIC_DOCS_BASE_URL || "").trim();
-    case "NEXT_PUBLIC_CORTEXPILOT_OPERATOR_ROLE":
-      return String(process.env.NEXT_PUBLIC_CORTEXPILOT_OPERATOR_ROLE || "").trim();
+    case "NEXT_PUBLIC_OPENVIBECODING_API_BASE":
+      return String(process.env.NEXT_PUBLIC_OPENVIBECODING_API_BASE || "").trim();
+    case "NEXT_PUBLIC_OPENVIBECODING_PUBLIC_DOCS_BASE_URL":
+      return String(process.env.NEXT_PUBLIC_OPENVIBECODING_PUBLIC_DOCS_BASE_URL || "").trim();
+    case "NEXT_PUBLIC_OPENVIBECODING_OPERATOR_ROLE":
+      return String(process.env.NEXT_PUBLIC_OPENVIBECODING_OPERATOR_ROLE || "").trim();
     case "NEXT_PUBLIC_API_BASE":
       return String(process.env.NEXT_PUBLIC_API_BASE || "").trim();
     case "NEXT_PUBLIC_PM_COPY_VARIANT":
@@ -29,7 +29,7 @@ function readPublicEnv(key: DashboardPublicEnvKey): string {
 
 export function resolveDashboardApiBase(): string {
   const candidates = [
-    readPublicEnv("NEXT_PUBLIC_CORTEXPILOT_API_BASE"),
+    readPublicEnv("NEXT_PUBLIC_OPENVIBECODING_API_BASE"),
     readPublicEnv("NEXT_PUBLIC_API_BASE"),
     FRONTEND_API_CONTRACT.defaultApiBase,
   ];
@@ -46,7 +46,7 @@ export function resolveDashboardPmCopyVariantEnv(): string {
 }
 
 export function resolveDashboardPublicDocsBaseUrl(): string {
-  const configuredBase = readPublicEnv("NEXT_PUBLIC_CORTEXPILOT_PUBLIC_DOCS_BASE_URL");
+  const configuredBase = readPublicEnv("NEXT_PUBLIC_OPENVIBECODING_PUBLIC_DOCS_BASE_URL");
   if (configuredBase) {
     if (configuredBase === "/") {
       return "";
@@ -69,7 +69,7 @@ export function resolveDashboardPublicDocsHref(href: string): string {
 }
 
 export function resolveDashboardOperatorRoleEnv(): string {
-  const candidates = [readPublicEnv("NEXT_PUBLIC_CORTEXPILOT_OPERATOR_ROLE")];
+  const candidates = [readPublicEnv("NEXT_PUBLIC_OPENVIBECODING_OPERATOR_ROLE")];
   for (const candidate of candidates) {
     if (candidate) {
       return candidate.toUpperCase();

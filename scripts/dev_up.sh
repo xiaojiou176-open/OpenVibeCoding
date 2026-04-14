@@ -5,17 +5,17 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
 source "$ROOT_DIR/scripts/lib/env.sh"
-PYTHON_BIN="${CORTEXPILOT_PYTHON:-}"
+PYTHON_BIN="${OPENVIBECODING_PYTHON:-}"
 
-HOST="$(cortexpilot_env_get CORTEXPILOT_DEV_HOST "127.0.0.1")"
-API_PORT="$(cortexpilot_env_get CORTEXPILOT_API_PORT "10000")"
-DASHBOARD_PORT="$(cortexpilot_env_get CORTEXPILOT_DASHBOARD_PORT "3100")"
-API_AUTH_REQUIRED="$(cortexpilot_env_normalize_bool "$(cortexpilot_env_get CORTEXPILOT_API_AUTH_REQUIRED "false")")"
-DEV_API_TOKEN="$(cortexpilot_env_get CORTEXPILOT_API_TOKEN "cortexpilot-dev-token")"
+HOST="$(openvibecoding_env_get OPENVIBECODING_DEV_HOST "127.0.0.1")"
+API_PORT="$(openvibecoding_env_get OPENVIBECODING_API_PORT "10000")"
+DASHBOARD_PORT="$(openvibecoding_env_get OPENVIBECODING_DASHBOARD_PORT "3100")"
+API_AUTH_REQUIRED="$(openvibecoding_env_normalize_bool "$(openvibecoding_env_get OPENVIBECODING_API_AUTH_REQUIRED "false")")"
+DEV_API_TOKEN="$(openvibecoding_env_get OPENVIBECODING_API_TOKEN "openvibecoding-dev-token")"
 
-PID_DIR="$ROOT_DIR/.runtime-cache/cortexpilot/temp"
+PID_DIR="$ROOT_DIR/.runtime-cache/openvibecoding/temp"
 LOG_DIR="$ROOT_DIR/.runtime-cache/logs/runtime"
-PID_FILE="$PID_DIR/cortexpilot-dev-api.pid"
+PID_FILE="$PID_DIR/openvibecoding-dev-api.pid"
 API_LOG_FILE="$LOG_DIR/api-dev.log"
 DASHBOARD_LOCK_FILE="$ROOT_DIR/apps/dashboard/.next/dev/lock"
 
@@ -76,12 +76,12 @@ clear_stale_dashboard_lock() {
   echo "🧹 cleared stale Dashboard lock: $DASHBOARD_LOCK_FILE"
 }
 
-API_PORT="$(resolve_port "$API_PORT" "API" "CORTEXPILOT_API_PORT")"
-DASHBOARD_PORT="$(resolve_port "$DASHBOARD_PORT" "Dashboard" "CORTEXPILOT_DASHBOARD_PORT" "$API_PORT")"
+API_PORT="$(resolve_port "$API_PORT" "API" "OPENVIBECODING_API_PORT")"
+DASHBOARD_PORT="$(resolve_port "$DASHBOARD_PORT" "Dashboard" "OPENVIBECODING_DASHBOARD_PORT" "$API_PORT")"
 clear_stale_dashboard_lock
 
 if [ -z "$PYTHON_BIN" ] || [ ! -x "$PYTHON_BIN" ]; then
-  echo "❌ managed Python toolchain not found: ${CORTEXPILOT_PYTHON:-<unset>}"
+  echo "❌ managed Python toolchain not found: ${OPENVIBECODING_PYTHON:-<unset>}"
   echo "Run: ./scripts/bootstrap.sh"
   exit 1
 fi
@@ -98,10 +98,10 @@ fi
 
 echo "🚀 starting Orchestrator API: http://$HOST:$API_PORT"
 PYTHONPATH=apps/orchestrator/src \
-CORTEXPILOT_API_AUTH_REQUIRED="$API_AUTH_REQUIRED" \
-CORTEXPILOT_API_TOKEN="$DEV_API_TOKEN" \
-CORTEXPILOT_DASHBOARD_PORT="$DASHBOARD_PORT" \
-"$PYTHON_BIN" -m cortexpilot_orch.cli serve \
+OPENVIBECODING_API_AUTH_REQUIRED="$API_AUTH_REQUIRED" \
+OPENVIBECODING_API_TOKEN="$DEV_API_TOKEN" \
+OPENVIBECODING_DASHBOARD_PORT="$DASHBOARD_PORT" \
+"$PYTHON_BIN" -m openvibecoding_orch.cli serve \
   --host "$HOST" --port "$API_PORT" \
   >"$API_LOG_FILE" 2>&1 &
 API_PID=$!
@@ -127,7 +127,7 @@ trap cleanup EXIT INT TERM
 
 echo "✅ API started (pid=$API_PID), log: $API_LOG_FILE"
 echo "🌐 starting Dashboard: http://$HOST:$DASHBOARD_PORT"
-echo "ℹ️ local full-stack dev uses a localhost-only API lane; browser bearer auth stays disabled unless you explicitly set CORTEXPILOT_API_AUTH_REQUIRED=true"
+echo "ℹ️ local full-stack dev uses a localhost-only API lane; browser bearer auth stays disabled unless you explicitly set OPENVIBECODING_API_AUTH_REQUIRED=true"
 
 if ! command -v pnpm >/dev/null 2>&1; then
   echo "❌ pnpm not found. Install pnpm and retry."
@@ -135,12 +135,12 @@ if ! command -v pnpm >/dev/null 2>&1; then
 fi
 
 dashboard_api_token=""
-if cortexpilot_env_is_true "$API_AUTH_REQUIRED"; then
+if openvibecoding_env_is_true "$API_AUTH_REQUIRED"; then
   dashboard_api_token="$DEV_API_TOKEN"
 fi
 
 echo "🔐 API auth required: $API_AUTH_REQUIRED"
-NEXT_PUBLIC_CORTEXPILOT_API_BASE="http://$HOST:$API_PORT" \
-NEXT_PUBLIC_CORTEXPILOT_API_TOKEN="$dashboard_api_token" \
+NEXT_PUBLIC_OPENVIBECODING_API_BASE="http://$HOST:$API_PORT" \
+NEXT_PUBLIC_OPENVIBECODING_API_TOKEN="$dashboard_api_token" \
 PORT="$DASHBOARD_PORT" \
 bash scripts/run_workspace_app.sh dashboard dev

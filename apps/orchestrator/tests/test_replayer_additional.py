@@ -5,7 +5,7 @@ from pathlib import Path
 
 import subprocess
 
-from cortexpilot_orch.replay.replayer import (
+from openvibecoding_orch.replay.replayer import (
     ReplayRunner,
     _collect_evidence_hashes,
     _collect_diff_text,
@@ -18,7 +18,7 @@ from cortexpilot_orch.replay.replayer import (
     _load_changed_files,
     _load_events,
 )
-from cortexpilot_orch.store.run_store import RunStore
+from openvibecoding_orch.store.run_store import RunStore
 
 
 def _output_schema_artifacts(role: str = "worker") -> list[dict]:
@@ -271,7 +271,7 @@ def test_replayer_collect_diff_and_hash_events(tmp_path: Path) -> None:
 
 
 def test_replay_verify_contract_signature_invalid_strict(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_CONTRACT_HMAC_KEY", "secret")
+    monkeypatch.setenv("OPENVIBECODING_CONTRACT_HMAC_KEY", "secret")
     store = RunStore(runs_root=tmp_path)
     run_id = store.create_run("sig_invalid")
     run_dir = tmp_path / run_id

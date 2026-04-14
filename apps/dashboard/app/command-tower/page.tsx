@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
-import { getUiCopy } from "@cortexpilot/frontend-shared/uiCopy";
-import { normalizeUiLocale, UI_LOCALE_STORAGE_KEY } from "@cortexpilot/frontend-shared/uiLocale";
+import { getUiCopy } from "@openvibecoding/frontend-shared/uiCopy";
+import { normalizeUiLocale, UI_LOCALE_STORAGE_KEY } from "@openvibecoding/frontend-shared/uiLocale";
 import Link from "next/link";
 import { Suspense } from "react";
 import CommandTowerHomeLiveClient from "./CommandTowerHomeLiveClient";
@@ -9,7 +9,7 @@ import ControlPlaneStatusCallout from "../../components/control-plane/ControlPla
 import { fetchCommandTowerOverview, fetchPmSessions } from "../../lib/api";
 import { safeLoad } from "../../lib/serverPageData";
 import type { CommandTowerOverviewPayload, PmSessionSummary } from "../../lib/types";
-import type { UiLocale } from "@cortexpilot/frontend-shared/uiCopy";
+import type { UiLocale } from "@openvibecoding/frontend-shared/uiCopy";
 
 export const metadata: Metadata = {
   title: "Command Tower | OpenVibeCoding",

@@ -112,16 +112,16 @@ dimensions = [
             Check("ui_matrix_sync", 2, has(ci_combined_text, "scripts/sync_ui_button_matrix.py"), "scripts/sync_ui_button_matrix.py"),
             Check("ui_todo_p0", 2, has(ci_combined_text, "scripts/check_ui_matrix_todo_gate.py --tiers P0"), "scripts/check_ui_matrix_todo_gate.py --tiers P0"),
             Check("ui_todo_p1", 2, has(ci_combined_text, "scripts/check_ui_matrix_todo_gate.py --tiers P1"), "scripts/check_ui_matrix_todo_gate.py --tiers P1"),
-            Check("truth_strict_default", 2, has(ci_combined_text, 'CORTEXPILOT_UI_TRUTH_GATE_STRICT="${CORTEXPILOT_CI_UI_TRUTH_GATE_STRICT:-1}"'), "CORTEXPILOT_CI_UI_TRUTH_GATE_STRICT default=1"),
+            Check("truth_strict_default", 2, has(ci_combined_text, 'OPENVIBECODING_UI_TRUTH_GATE_STRICT="${OPENVIBECODING_CI_UI_TRUTH_GATE_STRICT:-1}"'), "OPENVIBECODING_CI_UI_TRUTH_GATE_STRICT default=1"),
         ],
     ),
     build_dimension(
         "ui_strict_click_consumption",
         "UI Strict Click Consumption",
         [
-            Check("strict_click_switch", 2, has(ci_combined_text, "CORTEXPILOT_CI_UI_STRICT_CLICK_GATE"), "CORTEXPILOT_CI_UI_STRICT_CLICK_GATE"),
+            Check("strict_click_switch", 2, has(ci_combined_text, "OPENVIBECODING_CI_UI_STRICT_CLICK_GATE"), "OPENVIBECODING_CI_UI_STRICT_CLICK_GATE"),
             Check("strict_click_parser", 3, has(ci_combined_text, "scripts/ui_full_e2e_gemini_strict_gate.py"), "scripts/ui_full_e2e_gemini_strict_gate.py"),
-            Check("click_inventory_required", 3, has(ci_combined_text, "CORTEXPILOT_UI_CLICK_INVENTORY_REQUIRED"), "CORTEXPILOT_UI_CLICK_INVENTORY_REQUIRED"),
+            Check("click_inventory_required", 3, has(ci_combined_text, "OPENVIBECODING_UI_CLICK_INVENTORY_REQUIRED"), "OPENVIBECODING_UI_CLICK_INVENTORY_REQUIRED"),
             Check(
                 "click_inventory_resolution",
                 2,
@@ -187,13 +187,13 @@ redlines = [
     {
         "id": "strict_click_chain_connected",
         "passed": has(ci_combined_text, "scripts/ui_full_e2e_gemini_strict_gate.py")
-        and has(ci_combined_text, "CORTEXPILOT_UI_CLICK_INVENTORY_REQUIRED")
+        and has(ci_combined_text, "OPENVIBECODING_UI_CLICK_INVENTORY_REQUIRED")
         and has(ci_combined_text, "resolve_click_inventory_from_ui_full_report"),
         "evidence": "scripts/ci.sh strict click consume -> truth gate click inventory required",
     },
     {
         "id": "truth_gate_strict_default",
-        "passed": has(ci_combined_text, 'CORTEXPILOT_UI_TRUTH_GATE_STRICT="${CORTEXPILOT_CI_UI_TRUTH_GATE_STRICT:-1}"'),
+        "passed": has(ci_combined_text, 'OPENVIBECODING_UI_TRUTH_GATE_STRICT="${OPENVIBECODING_CI_UI_TRUTH_GATE_STRICT:-1}"'),
         "evidence": "scripts/ci.sh truth gate strict default",
     },
     {

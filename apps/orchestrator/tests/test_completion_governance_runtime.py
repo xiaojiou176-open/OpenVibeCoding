@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from cortexpilot_orch.scheduler.completion_governance import evaluate_completion_governance
+from openvibecoding_orch.scheduler.completion_governance import evaluate_completion_governance
 
 
 def _write_artifact(run_dir: Path, filename: str, payload: object) -> None:

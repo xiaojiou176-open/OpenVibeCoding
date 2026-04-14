@@ -6,8 +6,8 @@ import { Card } from "../components/ui/card";
 import DashboardHomeStorySections from "../components/DashboardHomeStorySections";
 import { fetchRuns, fetchWorkflows } from "../lib/api";
 import { safeLoad } from "../lib/serverPageData";
-import { getUiCopy } from "@cortexpilot/frontend-shared/uiCopy";
-import { normalizeUiLocale, UI_LOCALE_STORAGE_KEY } from "@cortexpilot/frontend-shared/uiLocale";
+import { getUiCopy } from "@openvibecoding/frontend-shared/uiCopy";
+import { normalizeUiLocale, UI_LOCALE_STORAGE_KEY } from "@openvibecoding/frontend-shared/uiLocale";
 
 const CJK_TEXT_RE = /[\u3400-\u9fff]/;
 

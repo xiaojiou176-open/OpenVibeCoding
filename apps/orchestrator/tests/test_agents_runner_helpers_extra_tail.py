@@ -6,8 +6,8 @@ from pathlib import Path
 
 import pytest
 
-from cortexpilot_orch.runners.agents_runner import AgentsRunner
-from cortexpilot_orch.store.run_store import RunStore
+from openvibecoding_orch.runners.agents_runner import AgentsRunner
+from openvibecoding_orch.store.run_store import RunStore
 
 from .test_agents_runner_helpers_extra import _base_contract, agents_runner
 
@@ -44,7 +44,7 @@ def test_agents_patch_initialized_runtime_behaviors() -> None:
         _elicitation_callback=lambda *_a, **_k: None,
         _list_roots_callback=lambda *_a, **_k: None,
         _task_handlers=DummyHandlers(),
-        _client_info={"name": "cortexpilot", "version": "0.1.0"},
+        _client_info={"name": "openvibecoding", "version": "0.1.0"},
         send_request=_send_request_supported,
         send_notification=_send_notification,
         _server_capabilities=None,
@@ -68,7 +68,7 @@ def test_agents_patch_initialized_runtime_behaviors() -> None:
         _elicitation_callback=lambda *_a, **_k: None,
         _list_roots_callback=lambda *_a, **_k: None,
         _task_handlers=DummyHandlers(),
-        _client_info={"name": "cortexpilot", "version": "0.1.0"},
+        _client_info={"name": "openvibecoding", "version": "0.1.0"},
         send_request=_send_request_unsupported,
         send_notification=_send_notification,
         _server_capabilities=None,
@@ -149,9 +149,9 @@ def test_agents_runner_hard_timebox_timeout(tmp_path: Path, monkeypatch) -> None
 
     store = RunStore(runs_root=tmp_path)
     run_id = store.create_run("task_timebox_timeout")
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", run_id)
-    monkeypatch.setenv("CORTEXPILOT_CODEX_TIMEBOX_SEC", "0.2")
-    monkeypatch.setenv("CORTEXPILOT_STREAM_LOG_EVERY", "1")
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", run_id)
+    monkeypatch.setenv("OPENVIBECODING_CODEX_TIMEBOX_SEC", "0.2")
+    monkeypatch.setenv("OPENVIBECODING_STREAM_LOG_EVERY", "1")
 
     runner = AgentsRunner(store)
     repo_root = Path(__file__).resolve().parents[3]

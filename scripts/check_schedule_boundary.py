@@ -11,12 +11,12 @@ ORCH_SRC = ROOT_DIR / "apps" / "orchestrator" / "src"
 if str(ORCH_SRC) not in sys.path:
     sys.path.insert(0, str(ORCH_SRC))
 
-from cortexpilot_orch.contract.validator import ContractValidator
-from cortexpilot_orch.queue import QueueStore
+from openvibecoding_orch.contract.validator import ContractValidator
+from openvibecoding_orch.queue import QueueStore
 
 
 def _queue_path() -> Path:
-    runtime_root = Path(os.getenv("CORTEXPILOT_RUNTIME_ROOT", ".runtime-cache/cortexpilot"))
+    runtime_root = Path(os.getenv("OPENVIBECODING_RUNTIME_ROOT", ".runtime-cache/openvibecoding"))
     return runtime_root / "queue.jsonl"
 
 

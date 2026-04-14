@@ -372,7 +372,7 @@ describe("batch4 pm intake actions hook chat-first fallbacks", () => {
 
     await act(async () => {
       result.current.state.setWorkspacePath("apps/dashboard");
-      result.current.state.setRepoName("cortexpilot");
+      result.current.state.setRepoName("openvibecoding");
       result.current.state.setAllowedPaths("\n");
       result.current.state.setConstraints("constraint-a");
       result.current.state.setSearchQueries("search-a");
@@ -451,7 +451,7 @@ describe("batch4 pm intake actions hook chat-first fallbacks", () => {
 
     await act(async () => {
       result.current.state.setWorkspacePath("apps/dashboard");
-      result.current.state.setRepoName("cortexpilot");
+      result.current.state.setRepoName("openvibecoding");
       result.current.state.setObjective("create-flow");
     });
 

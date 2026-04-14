@@ -33,7 +33,7 @@ def main() -> int:
     finished_at = datetime.now(timezone.utc).isoformat()
     duration_sec = max(0, int(time.time()) - int(args.started_epoch))
     payload = {
-        "report_type": "cortexpilot_ci_slice_summary",
+        "report_type": "openvibecoding_ci_slice_summary",
         "slice": args.slice,
         "status": args.status,
         "started_at": args.started_at,

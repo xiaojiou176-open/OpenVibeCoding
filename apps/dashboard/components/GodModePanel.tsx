@@ -67,7 +67,7 @@ export default function GodModePanel() {
   const mutationCapability = mutationExecutionCapability();
   const normalizedRole = mutationCapability.operatorRole || "";
   const hasMutationRole = mutationCapability.executable;
-  const roleGateReason = hasMutationRole ? "" : "NEXT_PUBLIC_CORTEXPILOT_OPERATOR_ROLE is not configured. Approval actions are disabled.";
+  const roleGateReason = hasMutationRole ? "" : "NEXT_PUBLIC_OPENVIBECODING_OPERATOR_ROLE is not configured. Approval actions are disabled.";
   const queueState = inferQueueUiState(pendingLoading, pendingError, pending.length);
   const queueBadge = queueBadgeMeta(queueState, pending.length, {
     loading: approvalCopy.queueLoadingBadge,

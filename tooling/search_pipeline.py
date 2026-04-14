@@ -7,8 +7,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from cortexpilot_orch.store.run_store import RunStore
-from cortexpilot_orch.contract.validator import ContractValidator
+from openvibecoding_orch.store.run_store import RunStore
+from openvibecoding_orch.contract.validator import ContractValidator
 
 
 def _now_ts() -> str:

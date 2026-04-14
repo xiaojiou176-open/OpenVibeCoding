@@ -2,12 +2,12 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-SCAN_ROOT="${CORTEXPILOT_ORCH_DECOUPLE_GATE_ROOT:-$ROOT_DIR}"
+SCAN_ROOT="${OPENVIBECODING_ORCH_DECOUPLE_GATE_ROOT:-$ROOT_DIR}"
 
 DEFAULT_TARGETS=(
-  "apps/orchestrator/src/cortexpilot_orch/scheduler"
-  "apps/orchestrator/src/cortexpilot_orch/api"
-  "apps/orchestrator/src/cortexpilot_orch/chain"
+  "apps/orchestrator/src/openvibecoding_orch/scheduler"
+  "apps/orchestrator/src/openvibecoding_orch/api"
+  "apps/orchestrator/src/openvibecoding_orch/chain"
 )
 
 DEFAULT_ALLOWLIST_REGEX=(
@@ -19,13 +19,13 @@ DEFAULT_ALLOWLIST_REGEX=(
 )
 
 TARGETS=("${DEFAULT_TARGETS[@]}")
-if [[ -n "${CORTEXPILOT_ORCH_DECOUPLE_GATE_PATHS:-}" ]]; then
-  IFS=':' read -r -a TARGETS <<<"${CORTEXPILOT_ORCH_DECOUPLE_GATE_PATHS}"
+if [[ -n "${OPENVIBECODING_ORCH_DECOUPLE_GATE_PATHS:-}" ]]; then
+  IFS=':' read -r -a TARGETS <<<"${OPENVIBECODING_ORCH_DECOUPLE_GATE_PATHS}"
 fi
 
 ALLOWLIST_REGEX=("${DEFAULT_ALLOWLIST_REGEX[@]}")
-if [[ -n "${CORTEXPILOT_ORCH_DECOUPLE_GATE_ALLOWLIST_REGEX:-}" ]]; then
-  IFS=':' read -r -a EXTRA_ALLOWLIST <<<"${CORTEXPILOT_ORCH_DECOUPLE_GATE_ALLOWLIST_REGEX}"
+if [[ -n "${OPENVIBECODING_ORCH_DECOUPLE_GATE_ALLOWLIST_REGEX:-}" ]]; then
+  IFS=':' read -r -a EXTRA_ALLOWLIST <<<"${OPENVIBECODING_ORCH_DECOUPLE_GATE_ALLOWLIST_REGEX}"
   ALLOWLIST_REGEX+=("${EXTRA_ALLOWLIST[@]}")
 fi
 

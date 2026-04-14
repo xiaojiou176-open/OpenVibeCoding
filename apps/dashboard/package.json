@@ -1,5 +1,5 @@
 {
-  "name": "cortexpilot-dashboard",
+  "name": "openvibecoding-dashboard",
   "private": true,
   "version": "0.1.0",
   "scripts": {
@@ -14,9 +14,9 @@
     "typecheck": "tsc --noEmit -p tsconfig.typecheck.json"
   },
   "dependencies": {
-    "@cortexpilot/frontend-api-client": "file:../../packages/frontend-api-client",
-    "@cortexpilot/frontend-api-contract": "file:../../packages/frontend-api-contract",
-    "@cortexpilot/frontend-shared": "file:../../packages/frontend-shared",
+    "@openvibecoding/frontend-api-client": "file:../../packages/frontend-api-client",
+    "@openvibecoding/frontend-api-contract": "file:../../packages/frontend-api-contract",
+    "@openvibecoding/frontend-shared": "file:../../packages/frontend-shared",
     "@radix-ui/react-slot": "1.2.4",
     "axe-core": "4.11.1",
     "class-variance-authority": "0.7.1",

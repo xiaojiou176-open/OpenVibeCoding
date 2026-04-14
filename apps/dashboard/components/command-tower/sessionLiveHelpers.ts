@@ -1,5 +1,5 @@
 import type { EventRecord } from "../../lib/types";
-import type { StatusVariant } from "@cortexpilot/frontend-shared/statusPresentation";
+import type { StatusVariant } from "@openvibecoding/frontend-shared/statusPresentation";
 
 export const BASE_INTERVAL_MS = 1500;
 export const MAX_INTERVAL_MS = 8000;

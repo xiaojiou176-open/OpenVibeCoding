@@ -5,7 +5,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 source "$ROOT_DIR/scripts/lib/release_tool_helpers.sh"
 
-ACTIONLINT_BIN="$(cortexpilot_actionlint_bin "$ROOT_DIR")"
+ACTIONLINT_BIN="$(openvibecoding_actionlint_bin "$ROOT_DIR")"
 
 if [[ "$#" -eq 0 ]]; then
   exec "$ACTIONLINT_BIN"

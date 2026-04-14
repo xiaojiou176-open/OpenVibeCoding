@@ -7,9 +7,9 @@ from pathlib import Path
 
 import pytest
 
-from cortexpilot_orch.runners import agents_runner
-from cortexpilot_orch.runners.agents_runner import AgentsRunner
-from cortexpilot_orch.store.run_store import RunStore
+from openvibecoding_orch.runners import agents_runner
+from openvibecoding_orch.runners.agents_runner import AgentsRunner
+from openvibecoding_orch.store.run_store import RunStore
 
 
 def _output_schema_artifacts(role: str = "worker") -> list[dict]:
@@ -73,7 +73,7 @@ def test_materialize_worker_codex_home_and_probe(tmp_path: Path, monkeypatch) ->
 
     # Missing role/base config should fail loudly.
     monkeypatch.setenv("CODEX_HOME", str(tmp_path / "missing-role"))
-    monkeypatch.setenv("CORTEXPILOT_CODEX_BASE_HOME", str(tmp_path / "missing-base"))
+    monkeypatch.setenv("OPENVIBECODING_CODEX_BASE_HOME", str(tmp_path / "missing-base"))
     with pytest.raises(RuntimeError, match="role config missing"):
         agents_runner._materialize_worker_codex_home(
             store,
@@ -107,7 +107,7 @@ def test_materialize_worker_codex_home_and_probe(tmp_path: Path, monkeypatch) ->
     (role_home / "requirements.toml").write_text("[]", encoding="utf-8")
 
     monkeypatch.setenv("CODEX_HOME", str(role_home))
-    monkeypatch.setenv("CORTEXPILOT_CODEX_BASE_HOME", str(base_home))
+    monkeypatch.setenv("OPENVIBECODING_CODEX_BASE_HOME", str(base_home))
 
     target = agents_runner._materialize_worker_codex_home(
         store,
@@ -218,7 +218,7 @@ def test_materialize_worker_codex_home_fallback_to_default_catalog(tmp_path: Pat
 
     monkeypatch.setenv("HOME", str(home_root))
     monkeypatch.setenv("CODEX_HOME", str(role_home))
-    monkeypatch.delenv("CORTEXPILOT_CODEX_BASE_HOME", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_CODEX_BASE_HOME", raising=False)
 
     target = agents_runner._materialize_worker_codex_home(
         store,
@@ -273,15 +273,15 @@ def test_probe_ready_and_snapshot_helpers() -> None:
 
 
 def test_resolve_codex_base_url_fallback_to_equilibrium(monkeypatch) -> None:
-    monkeypatch.delenv("CORTEXPILOT_CODEX_BASE_URL", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_PROVIDER_BASE_URL", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_CODEX_BASE_URL", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_PROVIDER_BASE_URL", raising=False)
     monkeypatch.setattr(agents_runner, "_equilibrium_healthcheck", lambda *_args, **_kwargs: True)
     assert agents_runner._resolve_codex_base_url() == "http://127.0.0.1:1456/v1"
 
 
 def test_resolve_codex_base_url_prefers_agents_base(monkeypatch) -> None:
-    monkeypatch.delenv("CORTEXPILOT_CODEX_BASE_URL", raising=False)
-    monkeypatch.setenv("CORTEXPILOT_PROVIDER_BASE_URL", "http://127.0.0.1:2456/v1")
+    monkeypatch.delenv("OPENVIBECODING_CODEX_BASE_URL", raising=False)
+    monkeypatch.setenv("OPENVIBECODING_PROVIDER_BASE_URL", "http://127.0.0.1:2456/v1")
     assert agents_runner._resolve_codex_base_url() == "http://127.0.0.1:2456/v1"
 
 
@@ -306,7 +306,7 @@ def test_agents_small_helpers(monkeypatch) -> None:
     assert not agents_runner._path_allowed("apps/a.txt", ["apps/"])
     assert agents_runner._path_allowed("apps/a.txt", ["apps/a.txt"])
 
-    monkeypatch.setenv("CORTEXPILOT_CODEX_PROFILE", "")
+    monkeypatch.setenv("OPENVIBECODING_CODEX_PROFILE", "")
     profile = agents_runner._resolve_profile()
     assert profile is None or isinstance(profile, str)
 
@@ -387,7 +387,7 @@ def _install_fake_agents_sdk(monkeypatch) -> None:
 def test_agents_runner_fixed_output_bypass(tmp_path: Path, monkeypatch) -> None:
     store = RunStore(runs_root=tmp_path)
     run_id = store.create_run("task_fixed")
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", run_id)
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", run_id)
 
     monkeypatch.setenv("GEMINI_API_KEY", "test-key")
     _install_fake_agents_sdk(monkeypatch)
@@ -419,7 +419,7 @@ def test_agents_runner_fixed_output_bypass(tmp_path: Path, monkeypatch) -> None:
 def test_agents_runner_missing_mcp_tool_set(tmp_path: Path, monkeypatch) -> None:
     store = RunStore(runs_root=tmp_path)
     run_id = store.create_run("task_no_mcp")
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", run_id)
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", run_id)
     monkeypatch.setenv("GEMINI_API_KEY", "test-key")
     _install_fake_agents_sdk(monkeypatch)
     monkeypatch.setattr(agents_runner.ContractValidator, "validate_contract", lambda self, contract: contract)

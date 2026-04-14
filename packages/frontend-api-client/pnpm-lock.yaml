@@ -8,6 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@cortexpilot/frontend-api-contract':
+      '@openvibecoding/frontend-api-contract':
         specifier: workspace:^0.1.0
         version: link:../frontend-api-contract

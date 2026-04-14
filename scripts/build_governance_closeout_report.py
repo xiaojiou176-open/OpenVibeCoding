@@ -147,8 +147,8 @@ def main() -> int:
     parser.add_argument("--upstream-report", default=str(ROOT / ".runtime-cache" / "test_output" / "governance" / "upstream_inventory_report.json"))
     parser.add_argument("--upstream-same-run-report", default=str(ROOT / ".runtime-cache" / "test_output" / "governance" / "upstream_same_run_cohesion.json"))
     parser.add_argument("--clean-room-report", default=str(ROOT / ".runtime-cache" / "test_output" / "governance" / "clean_room_recovery.json"))
-    parser.add_argument("--retention-report", default=str(ROOT / ".runtime-cache" / "cortexpilot" / "reports" / "retention_report.json"))
-    parser.add_argument("--current-run-consistency", default=str(ROOT / ".runtime-cache" / "cortexpilot" / "reports" / "ci" / "current_run" / "consistency.json"))
+    parser.add_argument("--retention-report", default=str(ROOT / ".runtime-cache" / "openvibecoding" / "reports" / "retention_report.json"))
+    parser.add_argument("--current-run-consistency", default=str(ROOT / ".runtime-cache" / "openvibecoding" / "reports" / "ci" / "current_run" / "consistency.json"))
     parser.add_argument("--output-json", default=str(DEFAULT_JSON))
     parser.add_argument("--output-md", default=str(DEFAULT_MD))
     parser.add_argument("--mode", default="manual")
@@ -234,7 +234,7 @@ def main() -> int:
         fresh_commands.append("python3 scripts/check_ci_current_run_sources.py")
 
     report = {
-        "report_type": "cortexpilot_governance_closeout",
+        "report_type": "openvibecoding_governance_closeout",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "mode": args.mode,
         "fresh_commands": fresh_commands,

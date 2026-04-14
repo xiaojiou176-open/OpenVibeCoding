@@ -9,7 +9,7 @@ import textwrap
 
 from fastapi.testclient import TestClient
 
-from cortexpilot_orch.api import main as api_main
+from openvibecoding_orch.api import main as api_main
 
 
 def _write_json(path: Path, payload: object) -> None:
@@ -48,7 +48,7 @@ def _agent_registry_payload() -> dict:
             {
                 "agent_id": "agent-1",
                 "role": "WORKER",
-                "codex_home": "$HOME/.codex-homes/cortexpilot-worker-core",
+                "codex_home": "$HOME/.codex-homes/openvibecoding-worker-core",
                 "defaults": {
                     "sandbox": "workspace-write",
                     "approval_policy": "never",
@@ -62,7 +62,7 @@ def _agent_registry_payload() -> dict:
             {
                 "agent_id": "agent-1",
                 "role": "TECH_LEAD",
-                "codex_home": "$HOME/.codex-homes/cortexpilot-techlead",
+                "codex_home": "$HOME/.codex-homes/openvibecoding-techlead",
                 "defaults": {
                     "sandbox": "read-only",
                     "approval_policy": "never",
@@ -116,11 +116,11 @@ def test_role_config_routes_preview_and_apply(tmp_path: Path, monkeypatch) -> No
     role_config_path = repo_root / "policies" / "role_config_registry.json"
     _write_json(role_config_path, _role_config_registry_payload())
 
-    monkeypatch.setenv("CORTEXPILOT_AGENT_REGISTRY", str(repo_root / "policies" / "agent_registry.json"))
-    monkeypatch.setenv("CORTEXPILOT_ROLE_CONFIG_REGISTRY", str(role_config_path))
-    monkeypatch.delenv("CORTEXPILOT_PROVIDER_BASE_URL", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_CODEX_MODEL", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_PROVIDER_MODEL", raising=False)
+    monkeypatch.setenv("OPENVIBECODING_AGENT_REGISTRY", str(repo_root / "policies" / "agent_registry.json"))
+    monkeypatch.setenv("OPENVIBECODING_ROLE_CONFIG_REGISTRY", str(role_config_path))
+    monkeypatch.delenv("OPENVIBECODING_PROVIDER_BASE_URL", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_CODEX_MODEL", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_PROVIDER_MODEL", raising=False)
 
     client = TestClient(api_main.app)
 
@@ -170,7 +170,7 @@ def test_role_config_routes_preview_and_apply(tmp_path: Path, monkeypatch) -> No
 
     apply_response = client.post(
         "/api/agents/roles/worker/config/apply",
-        headers={"x-cortexpilot-role": "TECH_LEAD"},
+        headers={"x-openvibecoding-role": "TECH_LEAD"},
         json={
             "system_prompt_ref": "policies/agents/codex/roles/50_worker_core.md",
             "skills_bundle_ref": "policies/skills_bundle_registry.json#bundles.worker_delivery_core_v1",
@@ -202,8 +202,8 @@ def test_role_config_routes_fail_closed_on_invalid_provider(tmp_path: Path, monk
     _write_json(repo_root / "policies" / "skills_bundle_registry.json", _skills_bundle_registry_payload())
     _write_json(repo_root / "policies" / "role_config_registry.json", _role_config_registry_payload())
 
-    monkeypatch.setenv("CORTEXPILOT_AGENT_REGISTRY", str(repo_root / "policies" / "agent_registry.json"))
-    monkeypatch.setenv("CORTEXPILOT_ROLE_CONFIG_REGISTRY", str(repo_root / "policies" / "role_config_registry.json"))
+    monkeypatch.setenv("OPENVIBECODING_AGENT_REGISTRY", str(repo_root / "policies" / "agent_registry.json"))
+    monkeypatch.setenv("OPENVIBECODING_ROLE_CONFIG_REGISTRY", str(repo_root / "policies" / "role_config_registry.json"))
 
     client = TestClient(api_main.app)
     preview_response = client.post(
@@ -240,7 +240,7 @@ def test_role_config_runtime_capability_import_stays_lightweight(tmp_path: Path)
 
             builtins.__import__ = blocked_import
 
-            module = importlib.import_module("cortexpilot_orch.contract.role_config_registry")
+            module = importlib.import_module("openvibecoding_orch.contract.role_config_registry")
             summary = module.build_runtime_capability_summary(
                 {
                     "runner": "codex",

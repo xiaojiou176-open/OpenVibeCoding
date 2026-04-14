@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://cortexpilot.local/schemas/log_event.v2.json",
-  "title": "CortexPilot log event envelope v2",
+  "$id": "https://openvibecoding.local/schemas/log_event.v2.json",
+  "title": "OpenVibeCoding log event envelope v2",
   "type": "object",
   "additionalProperties": false,
   "required": [

@@ -1,4 +1,4 @@
-import { FRONTEND_API_CONTRACT } from "@cortexpilot/frontend-api-contract";
+import { FRONTEND_API_CONTRACT } from "@openvibecoding/frontend-api-contract";
 import { createAuthCore } from "./core/auth.js";
 import { createHttpCore } from "./core/http.js";
 import { createSseCore } from "./core/sse.js";

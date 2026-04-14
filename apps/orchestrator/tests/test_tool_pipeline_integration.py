@@ -6,10 +6,10 @@ import time
 from functools import partial
 from pathlib import Path
 
-from cortexpilot_orch.config import reset_cached_config
-from cortexpilot_orch.scheduler import scheduler as scheduler_module
-from cortexpilot_orch.scheduler import scheduler_bridge
-from cortexpilot_orch.scheduler.scheduler import Orchestrator
+from openvibecoding_orch.config import reset_cached_config
+from openvibecoding_orch.scheduler import scheduler as scheduler_module
+from openvibecoding_orch.scheduler import scheduler_bridge
+from openvibecoding_orch.scheduler.scheduler import Orchestrator
 
 
 def _sha256_text(text: str) -> str:
@@ -166,9 +166,9 @@ def _reset_scheduler_tool_hooks(monkeypatch) -> None:
 
 
 def _configure_runtime_roots(monkeypatch, runtime_root: Path, runs_root: Path, worktree_root: Path) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(worktree_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(worktree_root))
     # Keep env-driven runtime paths deterministic across xdist workers.
     reset_cached_config()
 
@@ -211,11 +211,11 @@ def test_tool_pipeline_network_gate_denied(tmp_path: Path, monkeypatch) -> None:
     runs_root = runtime_root / "runs"
     worktree_root = runtime_root / "worktrees"
     _configure_runtime_roots(monkeypatch, runtime_root, runs_root, worktree_root)
-    monkeypatch.setenv("CORTEXPILOT_SEARCH_MODE", "mock")
-    monkeypatch.setenv("CORTEXPILOT_CHAIN_EXEC_MODE", "inline")
+    monkeypatch.setenv("OPENVIBECODING_SEARCH_MODE", "mock")
+    monkeypatch.setenv("OPENVIBECODING_CHAIN_EXEC_MODE", "inline")
 
     search_path = repo / "search_requests.json"
-    search_body = _write_json(search_path, {"queries": ["cortexpilot"]})
+    search_body = _write_json(search_path, {"queries": ["openvibecoding"]})
     artifacts = [
         {
             "name": "search_requests.json",
@@ -252,8 +252,8 @@ def test_tool_pipeline_search_browser_tampermonkey(tmp_path: Path, monkeypatch) 
     runs_root = runtime_root / "runs"
     worktree_root = runtime_root / "worktrees"
     _configure_runtime_roots(monkeypatch, runtime_root, runs_root, worktree_root)
-    monkeypatch.setenv("CORTEXPILOT_SEARCH_MODE", "mock")
-    monkeypatch.setenv("CORTEXPILOT_CHAIN_EXEC_MODE", "inline")
+    monkeypatch.setenv("OPENVIBECODING_SEARCH_MODE", "mock")
+    monkeypatch.setenv("OPENVIBECODING_CHAIN_EXEC_MODE", "inline")
     class _BrowserOk:
         def __init__(self, *_args, **_kwargs) -> None:
             pass
@@ -261,10 +261,10 @@ def test_tool_pipeline_search_browser_tampermonkey(tmp_path: Path, monkeypatch) 
         def run_script(self, _script: str, _url: str) -> dict:
             return {"ok": True, "mode": "mock", "artifacts": {}, "duration_ms": 0}
 
-    monkeypatch.setattr("cortexpilot_orch.runners.tool_runner.BrowserRunner", _BrowserOk)
+    monkeypatch.setattr("openvibecoding_orch.runners.tool_runner.BrowserRunner", _BrowserOk)
 
     search_path = repo / "search_requests.json"
-    search_body = _write_json(search_path, {"queries": ["cortexpilot"], "repeat": 2, "parallel": 2})
+    search_body = _write_json(search_path, {"queries": ["openvibecoding"], "repeat": 2, "parallel": 2})
 
     html_path = repo / "page.html"
     html_path.write_text("<html><body>ok</body></html>", encoding="utf-8")
@@ -281,7 +281,7 @@ def test_tool_pipeline_search_browser_tampermonkey(tmp_path: Path, monkeypatch) 
     )
     _pin_tool_requests(
         monkeypatch,
-        search_request={"queries": ["cortexpilot"], "repeat": 2, "parallel": 2},
+        search_request={"queries": ["openvibecoding"], "repeat": 2, "parallel": 2},
         browser_request={"tasks": [{"url": html_path.as_uri(), "script": "return document.title;"}]},
         tamper_request={"tasks": [{"script": "deal_scrape", "raw_output": "ok", "parsed": {"items": 1}}]},
     )
@@ -345,20 +345,20 @@ def test_tool_pipeline_searcher_short_circuits_before_codex_runner(tmp_path: Pat
     runs_root = runtime_root / "runs"
     worktree_root = runtime_root / "worktrees"
     _configure_runtime_roots(monkeypatch, runtime_root, runs_root, worktree_root)
-    monkeypatch.setenv("CORTEXPILOT_SEARCH_MODE", "mock")
-    monkeypatch.setenv("CORTEXPILOT_CHAIN_EXEC_MODE", "inline")
-    monkeypatch.setenv("CORTEXPILOT_RUNNER", "codex")
-    monkeypatch.setenv("CORTEXPILOT_MCP_ONLY", "1")
-    monkeypatch.setenv("CORTEXPILOT_ALLOW_CODEX_EXEC", "1")
+    monkeypatch.setenv("OPENVIBECODING_SEARCH_MODE", "mock")
+    monkeypatch.setenv("OPENVIBECODING_CHAIN_EXEC_MODE", "inline")
+    monkeypatch.setenv("OPENVIBECODING_RUNNER", "codex")
+    monkeypatch.setenv("OPENVIBECODING_MCP_ONLY", "1")
+    monkeypatch.setenv("OPENVIBECODING_ALLOW_CODEX_EXEC", "1")
 
     search_path = repo / "search_requests.json"
     search_body = _write_json(
         search_path,
-        {"queries": ["cortexpilot"], "providers": ["chatgpt_web", "grok_web"], "repeat": 2, "parallel": 2},
+        {"queries": ["openvibecoding"], "providers": ["chatgpt_web", "grok_web"], "repeat": 2, "parallel": 2},
     )
     _pin_tool_requests(
         monkeypatch,
-        search_request={"queries": ["cortexpilot"], "providers": ["chatgpt_web", "grok_web"], "repeat": 2, "parallel": 2},
+        search_request={"queries": ["openvibecoding"], "providers": ["chatgpt_web", "grok_web"], "repeat": 2, "parallel": 2},
     )
 
     artifacts = [
@@ -375,7 +375,7 @@ def test_tool_pipeline_searcher_short_circuits_before_codex_runner(tmp_path: Pat
     _write_json(contract_path, contract)
 
     monkeypatch.setattr(
-        "cortexpilot_orch.runners.codex_runner.CodexRunner.run_contract",
+        "openvibecoding_orch.runners.codex_runner.CodexRunner.run_contract",
         lambda *_args, **_kwargs: (_ for _ in ()).throw(AssertionError("codex runner should not execute after search pipeline success")),
     )
 
@@ -404,8 +404,8 @@ def test_tool_pipeline_browser_failure_marks_run_failed(tmp_path: Path, monkeypa
     runs_root = runtime_root / "runs"
     worktree_root = runtime_root / "worktrees"
     _configure_runtime_roots(monkeypatch, runtime_root, runs_root, worktree_root)
-    monkeypatch.setenv("CORTEXPILOT_SEARCH_MODE", "mock")
-    monkeypatch.setenv("CORTEXPILOT_CHAIN_EXEC_MODE", "inline")
+    monkeypatch.setenv("OPENVIBECODING_SEARCH_MODE", "mock")
+    monkeypatch.setenv("OPENVIBECODING_CHAIN_EXEC_MODE", "inline")
 
     browser_path = repo / "browser_tasks.json"
     browser_body = _write_json(
@@ -437,7 +437,7 @@ def test_tool_pipeline_browser_failure_marks_run_failed(tmp_path: Path, monkeypa
         def run_script(self, _script: str, _url: str) -> dict:
             return {"ok": False, "mode": "mock", "error": "browser down", "artifacts": {}, "duration_ms": 0}
 
-    monkeypatch.setattr("cortexpilot_orch.runners.tool_runner.BrowserRunner", _BrowserFail)
+    monkeypatch.setattr("openvibecoding_orch.runners.tool_runner.BrowserRunner", _BrowserFail)
 
     monkeypatch.chdir(repo)
     orch = Orchestrator(repo)
@@ -472,7 +472,7 @@ def test_tool_pipeline_tampermonkey_failure_marks_run_failed(tmp_path: Path, mon
     runs_root = runtime_root / "runs"
     worktree_root = runtime_root / "worktrees"
     _configure_runtime_roots(monkeypatch, runtime_root, runs_root, worktree_root)
-    monkeypatch.setenv("CORTEXPILOT_SEARCH_MODE", "mock")
+    monkeypatch.setenv("OPENVIBECODING_SEARCH_MODE", "mock")
 
     tamper_path = repo / "tampermonkey_tasks.json"
     tamper_body = _write_json(
@@ -495,7 +495,7 @@ def test_tool_pipeline_tampermonkey_failure_marks_run_failed(tmp_path: Path, mon
     def _fail_tamper(*args, **kwargs):
         raise RuntimeError("tamper down")
 
-    monkeypatch.setattr("cortexpilot_orch.scheduler.scheduler.run_tampermonkey", _fail_tamper)
+    monkeypatch.setattr("openvibecoding_orch.scheduler.scheduler.run_tampermonkey", _fail_tamper)
 
     monkeypatch.chdir(repo)
     orch = Orchestrator(repo)
@@ -523,7 +523,7 @@ def test_tool_pipeline_tampermonkey_exec_failure_marks_run_failed(tmp_path: Path
     runs_root = runtime_root / "runs"
     worktree_root = runtime_root / "worktrees"
     _configure_runtime_roots(monkeypatch, runtime_root, runs_root, worktree_root)
-    monkeypatch.setenv("CORTEXPILOT_SEARCH_MODE", "mock")
+    monkeypatch.setenv("OPENVIBECODING_SEARCH_MODE", "mock")
 
     tamper_path = repo / "tampermonkey_tasks.json"
     tamper_body = _write_json(
@@ -546,7 +546,7 @@ def test_tool_pipeline_tampermonkey_exec_failure_marks_run_failed(tmp_path: Path
     def _exec_fail(*args, **kwargs):
         return {"ok": False, "error": "execution failed"}
 
-    monkeypatch.setattr("cortexpilot_orch.scheduler.scheduler.run_tampermonkey", _exec_fail)
+    monkeypatch.setattr("openvibecoding_orch.scheduler.scheduler.run_tampermonkey", _exec_fail)
 
     monkeypatch.chdir(repo)
     orch = Orchestrator(repo)

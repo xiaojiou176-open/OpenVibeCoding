@@ -6,22 +6,22 @@ APP_DIR="$ROOT_DIR/apps/desktop"
 source "$ROOT_DIR/scripts/lib/toolchain_env.sh"
 source "$ROOT_DIR/scripts/lib/machine_cache_retention.sh"
 
-STORE_DIR="${CORTEXPILOT_PNPM_STORE_DIR:-$(cortexpilot_pnpm_store_dir "$ROOT_DIR")/desktop}"
-INSTALL_NODE_LINKER="${CORTEXPILOT_DESKTOP_PNPM_NODE_LINKER:-hoisted}"
-INSTALL_PACKAGE_IMPORT_METHOD="${CORTEXPILOT_DESKTOP_PNPM_IMPORT_METHOD:-copy}"
-INSTALL_SHAMEFULLY_HOIST="${CORTEXPILOT_DESKTOP_PNPM_SHAMEFULLY_HOIST:-1}"
+STORE_DIR="${OPENVIBECODING_PNPM_STORE_DIR:-$(openvibecoding_pnpm_store_dir "$ROOT_DIR")/desktop}"
+INSTALL_NODE_LINKER="${OPENVIBECODING_DESKTOP_PNPM_NODE_LINKER:-hoisted}"
+INSTALL_PACKAGE_IMPORT_METHOD="${OPENVIBECODING_DESKTOP_PNPM_IMPORT_METHOD:-copy}"
+INSTALL_SHAMEFULLY_HOIST="${OPENVIBECODING_DESKTOP_PNPM_SHAMEFULLY_HOIST:-1}"
 BASE_INSTALL_NODE_LINKER="$INSTALL_NODE_LINKER"
 BASE_INSTALL_SHAMEFULLY_HOIST="$INSTALL_SHAMEFULLY_HOIST"
 NETWORK_RETRY_ATTEMPTS=2
 NETWORK_RETRY_SLEEP_SECONDS=5
 INSTALL_LOG="$ROOT_DIR/.runtime-cache/logs/runtime/deps_install/install_desktop_deps.log"
-LOCK_DIR="$ROOT_DIR/.runtime-cache/cortexpilot/locks/install-desktop-deps.lock"
+LOCK_DIR="$ROOT_DIR/.runtime-cache/openvibecoding/locks/install-desktop-deps.lock"
 LOCK_OWNER_FILE="$LOCK_DIR/owner"
 LOCK_HELD=0
-MIN_ENOSPC_RECOVERY_HEADROOM_GIB="${CORTEXPILOT_DESKTOP_ENOSPC_MIN_HEADROOM_GIB:-3}"
+MIN_ENOSPC_RECOVERY_HEADROOM_GIB="${OPENVIBECODING_DESKTOP_ENOSPC_MIN_HEADROOM_GIB:-3}"
 WORKSPACE_RETRY_STORE_ACTIVE=0
 
-cortexpilot_maybe_auto_prune_machine_cache "$ROOT_DIR" "install_desktop_deps"
+openvibecoding_maybe_auto_prune_machine_cache "$ROOT_DIR" "install_desktop_deps"
 
 resolve_writable_store_dir() {
   local candidate="$1"
@@ -29,7 +29,7 @@ resolve_writable_store_dir() {
     printf '%s\n' "$candidate"
     return 0
   fi
-  cortexpilot_pnpm_local_retry_dir "$ROOT_DIR" "desktop"
+  openvibecoding_pnpm_local_retry_dir "$ROOT_DIR" "desktop"
 }
 
 release_install_lock() {
@@ -92,7 +92,7 @@ EOF
 }
 
 fresh_retry_store_dir() {
-  cortexpilot_pnpm_local_retry_dir "$ROOT_DIR" "desktop"
+  openvibecoding_pnpm_local_retry_dir "$ROOT_DIR" "desktop"
 }
 
 workspace_retry_store_dir() {
@@ -103,7 +103,7 @@ workspace_retry_store_dir() {
 
 cleanup_stale_retry_stores() {
   local retry_prefix
-  retry_prefix="$(cortexpilot_pnpm_local_retry_prefix "$ROOT_DIR" "desktop")"
+  retry_prefix="$(openvibecoding_pnpm_local_retry_prefix "$ROOT_DIR" "desktop")"
   local candidate=""
   shopt -s nullglob
   for candidate in "${retry_prefix}".*; do
@@ -278,7 +278,7 @@ recover_with_workspace_store() {
   local previous_import_method="$INSTALL_PACKAGE_IMPORT_METHOD"
   local previous_node_linker="$INSTALL_NODE_LINKER"
   local previous_shamefully_hoist="$INSTALL_SHAMEFULLY_HOIST"
-  INSTALL_PACKAGE_IMPORT_METHOD="${CORTEXPILOT_DESKTOP_ENOSPC_IMPORT_METHOD:-hardlink}"
+  INSTALL_PACKAGE_IMPORT_METHOD="${OPENVIBECODING_DESKTOP_ENOSPC_IMPORT_METHOD:-hardlink}"
   INSTALL_NODE_LINKER="$BASE_INSTALL_NODE_LINKER"
   INSTALL_SHAMEFULLY_HOIST="$BASE_INSTALL_SHAMEFULLY_HOIST"
   if ! reset_app_node_modules; then
@@ -318,7 +318,7 @@ reset_app_node_modules() {
     return 0
   fi
 
-  local quarantine_root="$ROOT_DIR/.runtime-cache/cortexpilot/temp/install-desktop-deps"
+  local quarantine_root="$ROOT_DIR/.runtime-cache/openvibecoding/temp/install-desktop-deps"
   local quarantine_dir="$quarantine_root/node_modules.$(date +%s).$$"
   mkdir -p "$quarantine_root"
   if mv "$target" "$quarantine_dir" 2>/dev/null; then

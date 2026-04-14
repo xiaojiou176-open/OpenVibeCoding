@@ -5,8 +5,8 @@ from typing import Any
 
 import pytest
 
-from cortexpilot_orch.scheduler import task_execution_runtime_helpers as runtime_helpers
-from cortexpilot_orch.store.run_store import RunStore
+from openvibecoding_orch.scheduler import task_execution_runtime_helpers as runtime_helpers
+from openvibecoding_orch.store.run_store import RunStore
 
 
 class _Runner:
@@ -174,7 +174,7 @@ def test_runtime_flow_runner_failed_returns_early(tmp_path: Path, monkeypatch) -
 
 
 def test_runtime_flow_diff_gate_scoped_revert_and_rollback_fail(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_DIFF_GATE_SCOPED_REVERT", "true")
+    monkeypatch.setenv("OPENVIBECODING_DIFF_GATE_SCOPED_REVERT", "true")
     kwargs = _build_kwargs(
         tmp_path=tmp_path,
         monkeypatch=monkeypatch,
@@ -327,7 +327,7 @@ def test_runtime_flow_retry_handles_non_list_artifacts(tmp_path: Path, monkeypat
 
 
 def test_runtime_flow_diff_scoped_revert_failure_path(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_DIFF_GATE_SCOPED_REVERT", "true")
+    monkeypatch.setenv("OPENVIBECODING_DIFF_GATE_SCOPED_REVERT", "true")
     kwargs = _build_kwargs(
         tmp_path=tmp_path,
         monkeypatch=monkeypatch,
@@ -344,7 +344,7 @@ def test_runtime_flow_diff_scoped_revert_failure_path(tmp_path: Path, monkeypatc
 
 
 def test_runtime_flow_evals_enabled_with_non_dict_report(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_EVALS_ENABLED", "1")
+    monkeypatch.setenv("OPENVIBECODING_EVALS_ENABLED", "1")
     kwargs = _build_kwargs(tmp_path=tmp_path, monkeypatch=monkeypatch)
     kwargs["run_evals_gate_fn"] = lambda *_a, **_k: {"ok": True, "report": "not-a-dict"}
 

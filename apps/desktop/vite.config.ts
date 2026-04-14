@@ -5,9 +5,9 @@ import path from "node:path";
 // Recommended overrides: local -> VITEST_MAX_WORKERS=50% / VITEST_POOL=forks; use threads only for explicit diagnostics.
 const maxWorkers = process.env.DESKTOP_VITEST_MAX_WORKERS ?? process.env.VITEST_MAX_WORKERS ?? "50%";
 const pool = process.env.DESKTOP_VITEST_POOL ?? process.env.VITEST_POOL ?? "forks";
-const coverageRunId = process.env.CORTEXPILOT_DESKTOP_COVERAGE_RUN_ID ?? `${process.pid}`;
-const coverageReportsDirectory = process.env.CORTEXPILOT_DESKTOP_COVERAGE_DIR ?? path.join("coverage", `run-${coverageRunId}`);
-const shouldEmitHtmlCoverage = !process.env.CI || process.env.CORTEXPILOT_COVERAGE_HTML === "1";
+const coverageRunId = process.env.OPENVIBECODING_DESKTOP_COVERAGE_RUN_ID ?? `${process.pid}`;
+const coverageReportsDirectory = process.env.OPENVIBECODING_DESKTOP_COVERAGE_DIR ?? path.join("coverage", `run-${coverageRunId}`);
+const shouldEmitHtmlCoverage = !process.env.CI || process.env.OPENVIBECODING_COVERAGE_HTML === "1";
 const coverageReporter = shouldEmitHtmlCoverage ? ["text", "html", "json-summary"] : ["text", "json-summary"];
 
 function chunkDesktopVendors(id: string): string | undefined {
@@ -36,13 +36,13 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      "@cortexpilot/frontend-shared/uiCopy": path.resolve(process.cwd(), "../../packages/frontend-shared/uiCopy.ts"),
-      "@cortexpilot/frontend-shared/uiLocale": path.resolve(process.cwd(), "../../packages/frontend-shared/uiLocale.ts"),
+      "@openvibecoding/frontend-shared/uiCopy": path.resolve(process.cwd(), "../../packages/frontend-shared/uiCopy.ts"),
+      "@openvibecoding/frontend-shared/uiLocale": path.resolve(process.cwd(), "../../packages/frontend-shared/uiLocale.ts"),
     },
   },
   build: {
     // Keep debuggability without exposing full source maps by default.
-    sourcemap: process.env.CORTEXPILOT_DESKTOP_SOURCEMAP === "full" ? true : "hidden",
+    sourcemap: process.env.OPENVIBECODING_DESKTOP_SOURCEMAP === "full" ? true : "hidden",
     rollupOptions: {
       output: {
         manualChunks: chunkDesktopVendors

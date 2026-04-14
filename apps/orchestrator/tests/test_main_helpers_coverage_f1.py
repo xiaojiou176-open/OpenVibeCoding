@@ -5,9 +5,9 @@ import json
 import os
 from pathlib import Path
 
-from cortexpilot_orch.api import main_run_views_helpers
-from cortexpilot_orch.api import main_state_store_helpers
-from cortexpilot_orch.contract.compiler import build_role_binding_summary
+from openvibecoding_orch.api import main_run_views_helpers
+from openvibecoding_orch.api import main_state_store_helpers
+from openvibecoding_orch.contract.compiler import build_role_binding_summary
 
 
 def _write_json(path: Path, payload: object) -> None:

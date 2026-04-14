@@ -8,7 +8,7 @@ import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-from cortexpilot_orch.runtime.space_governance import (
+from openvibecoding_orch.runtime.space_governance import (
     build_space_governance_report,
     evaluate_cleanup_gate,
     load_space_governance_policy,
@@ -21,7 +21,7 @@ SCRIPT_ROOT = Path(__file__).resolve().parents[3]
 
 def _load_gate_script_module():
     spec = importlib.util.spec_from_file_location(
-        "cortexpilot_check_space_cleanup_gate",
+        "openvibecoding_check_space_cleanup_gate",
         SCRIPT_ROOT / "scripts" / "check_space_cleanup_gate.py",
     )
     assert spec is not None and spec.loader is not None
@@ -32,7 +32,7 @@ def _load_gate_script_module():
 
 def _load_inventory_script_module():
     spec = importlib.util.spec_from_file_location(
-        "cortexpilot_check_space_governance_inventory",
+        "openvibecoding_check_space_governance_inventory",
         SCRIPT_ROOT / "scripts" / "check_space_governance_inventory.py",
     )
     assert spec is not None and spec.loader is not None
@@ -108,7 +108,7 @@ def _base_policy(repo_root: Path, home_root: Path) -> dict:
             "repo_external_related": [
                 {
                     "id": "external_python_toolchain_current",
-                    "path": str(home_root / ".cache" / "cortexpilot" / "toolchains" / "python" / "current"),
+                    "path": str(home_root / ".cache" / "openvibecoding" / "toolchains" / "python" / "current"),
                     "type": "toolchain symlink",
                     "ownership": "repo related",
                     "ownership_confidence": "Medium",
@@ -153,35 +153,35 @@ def test_toolchain_env_machine_tmp_root_defaults_ci_and_override(tmp_path: Path)
     env = os.environ.copy()
     env["HOME"] = str(home_root)
     env.pop("XDG_CACHE_HOME", None)
-    env.pop("CORTEXPILOT_MACHINE_CACHE_ROOT", None)
+    env.pop("OPENVIBECODING_MACHINE_CACHE_ROOT", None)
     env.pop("CI", None)
     env.pop("GITHUB_ACTIONS", None)
     env.pop("RUNNER_TEMP", None)
 
     proc = subprocess.run(
-        ["bash", "-lc", f"source '{helper_path}' && cortexpilot_machine_tmp_root '{repo_root}'"],
+        ["bash", "-lc", f"source '{helper_path}' && openvibecoding_machine_tmp_root '{repo_root}'"],
         capture_output=True,
         text=True,
         check=True,
         env=env,
     )
-    assert proc.stdout.strip() == str(home_root / ".cache" / "cortexpilot" / "tmp")
+    assert proc.stdout.strip() == str(home_root / ".cache" / "openvibecoding" / "tmp")
 
     env["RUNNER_TEMP"] = str(tmp_path / "runner-temp")
     env["CI"] = "1"
     env["GITHUB_ACTIONS"] = "true"
     proc = subprocess.run(
-        ["bash", "-lc", f"source '{helper_path}' && cortexpilot_machine_tmp_root '{repo_root}'"],
+        ["bash", "-lc", f"source '{helper_path}' && openvibecoding_machine_tmp_root '{repo_root}'"],
         capture_output=True,
         text=True,
         check=True,
         env=env,
     )
-    assert proc.stdout.strip() == str(tmp_path / "runner-temp" / "cortexpilot-machine-cache" / "tmp")
+    assert proc.stdout.strip() == str(tmp_path / "runner-temp" / "openvibecoding-machine-cache" / "tmp")
 
-    env["CORTEXPILOT_MACHINE_CACHE_ROOT"] = str(tmp_path / "machine-cache")
+    env["OPENVIBECODING_MACHINE_CACHE_ROOT"] = str(tmp_path / "machine-cache")
     proc = subprocess.run(
-        ["bash", "-lc", f"source '{helper_path}' && cortexpilot_machine_tmp_root '{repo_root}'"],
+        ["bash", "-lc", f"source '{helper_path}' && openvibecoding_machine_tmp_root '{repo_root}'"],
         capture_output=True,
         text=True,
         check=True,
@@ -199,17 +199,17 @@ def test_resolve_policy_path_uses_machine_cache_root_placeholder_defaults_and_ov
 
     monkeypatch.setenv("HOME", str(home_root))
     monkeypatch.delenv("XDG_CACHE_HOME", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_MACHINE_CACHE_ROOT", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_MACHINE_CACHE_ROOT", raising=False)
 
     resolved = resolve_policy_path(
-        raw_path="${CORTEXPILOT_MACHINE_CACHE_ROOT}/tmp/docker-ci/runner-temp-1000",
+        raw_path="${OPENVIBECODING_MACHINE_CACHE_ROOT}/tmp/docker-ci/runner-temp-1000",
         repo_root=repo_root,
     )
-    assert resolved == home_root / ".cache" / "cortexpilot" / "tmp" / "docker-ci" / "runner-temp-1000"
+    assert resolved == home_root / ".cache" / "openvibecoding" / "tmp" / "docker-ci" / "runner-temp-1000"
 
-    monkeypatch.setenv("CORTEXPILOT_MACHINE_CACHE_ROOT", str(tmp_path / "machine-cache"))
+    monkeypatch.setenv("OPENVIBECODING_MACHINE_CACHE_ROOT", str(tmp_path / "machine-cache"))
     resolved = resolve_policy_path(
-        raw_path="${CORTEXPILOT_MACHINE_CACHE_ROOT}/tmp/clean-room-machine-cache.test",
+        raw_path="${OPENVIBECODING_MACHINE_CACHE_ROOT}/tmp/clean-room-machine-cache.test",
         repo_root=repo_root,
     )
     assert resolved == tmp_path / "machine-cache" / "tmp" / "clean-room-machine-cache.test"
@@ -224,7 +224,7 @@ def test_space_governance_report_marks_shared_symlink_targets(tmp_path: Path) ->
 
     jarvis_target = home_root / ".cache" / "jarvis" / "toolchains" / "python" / "current"
     _write_file(jarvis_target / "bin" / "python", "python")
-    symlink_path = home_root / ".cache" / "cortexpilot" / "toolchains" / "python" / "current"
+    symlink_path = home_root / ".cache" / "openvibecoding" / "toolchains" / "python" / "current"
     symlink_path.parent.mkdir(parents=True, exist_ok=True)
     symlink_path.symlink_to(jarvis_target, target_is_directory=True)
 
@@ -316,8 +316,8 @@ def test_wave3_does_not_promote_unrelated_playwright_or_cargo_processes_to_targe
     home_root = tmp_path / "home"
     _write_file(repo_root / "package.json", json.dumps({"scripts": {"bootstrap": "echo ok"}}))
     _write_file(repo_root / "scripts" / "install_dashboard_deps.sh", "#!/usr/bin/env bash\n")
-    _write_file(home_root / ".cache" / "cortexpilot" / "playwright" / "browsers.json", "{}")
-    _age(home_root / ".cache" / "cortexpilot" / "playwright" / "browsers.json", hours=96)
+    _write_file(home_root / ".cache" / "openvibecoding" / "playwright" / "browsers.json", "{}")
+    _age(home_root / ".cache" / "openvibecoding" / "playwright" / "browsers.json", hours=96)
 
     policy_path = tmp_path / "space_policy.json"
     policy_payload = _base_policy(repo_root, home_root)
@@ -326,7 +326,7 @@ def test_wave3_does_not_promote_unrelated_playwright_or_cargo_processes_to_targe
     policy_payload["layers"]["repo_external_related"].append(
         {
             "id": "external_playwright_cache",
-            "path": str(home_root / ".cache" / "cortexpilot" / "playwright"),
+            "path": str(home_root / ".cache" / "openvibecoding" / "playwright"),
             "type": "playwright cache",
             "ownership": "repo related",
             "ownership_confidence": "High",
@@ -344,7 +344,7 @@ def test_wave3_does_not_promote_unrelated_playwright_or_cargo_processes_to_targe
     policy_payload["wave_targets"]["wave3"] = {
         "target_ids": ["external_playwright_cache"],
         "process_groups": ["playwright", "cargo"],
-        "process_path_hints": [str(home_root / ".cache" / "cortexpilot" / "playwright")],
+        "process_path_hints": [str(home_root / ".cache" / "openvibecoding" / "playwright")],
         "process_command_hints": ["playwright", "cargo"],
         "required_rebuild_commands": ["bootstrap"],
     }
@@ -380,7 +380,7 @@ def test_wave3_does_not_promote_unrelated_playwright_or_cargo_processes_to_targe
 
 
 def test_wave1_does_not_promote_other_repo_runtime_cache_processes_to_target_scoped(tmp_path: Path) -> None:
-    repo_root = tmp_path / "cortexpilot_repo"
+    repo_root = tmp_path / "openvibecoding_repo"
     home_root = tmp_path / "home"
     _write_file(repo_root / "package.json", json.dumps({"scripts": {"bootstrap": "echo ok"}}))
     _write_file(repo_root / "scripts" / "install_dashboard_deps.sh", "#!/usr/bin/env bash\n")
@@ -393,7 +393,7 @@ def test_wave1_does_not_promote_other_repo_runtime_cache_processes_to_target_sco
     policy_payload["process_groups"]["docker"] = {"patterns": ["\\bdocker\\b"]}
     policy_payload["wave_targets"]["wave1"]["process_groups"] = ["docker", "node", "python"]
     policy_payload["wave_targets"]["wave1"]["process_path_hints"] = [".runtime-cache"]
-    policy_payload["wave_targets"]["wave1"]["process_command_hints"] = ["CortexPilot", ".runtime-cache"]
+    policy_payload["wave_targets"]["wave1"]["process_command_hints"] = ["OpenVibeCoding", ".runtime-cache"]
     policy_path.write_text(json.dumps(policy_payload, ensure_ascii=False, indent=2), encoding="utf-8")
     policy = load_space_governance_policy(policy_path)
 
@@ -456,7 +456,7 @@ def test_space_governance_report_uses_exclusive_summary_for_external_rollup(tmp_
     home_root = tmp_path / "home"
     _write_file(repo_root / "package.json", json.dumps({"scripts": {"bootstrap": "echo ok"}}))
     _write_file(repo_root / "scripts" / "install_dashboard_deps.sh", "#!/usr/bin/env bash\n")
-    pnpm_store_file = home_root / ".cache" / "cortexpilot" / "pnpm-store" / "pkg" / "artifact.tgz"
+    pnpm_store_file = home_root / ".cache" / "openvibecoding" / "pnpm-store" / "pkg" / "artifact.tgz"
     _write_file(pnpm_store_file, "x" * 1024)
 
     policy_path = tmp_path / "space_policy.json"
@@ -465,7 +465,7 @@ def test_space_governance_report_uses_exclusive_summary_for_external_rollup(tmp_
         0,
         {
             "id": "external_machine_cache_root",
-            "path": str(home_root / ".cache" / "cortexpilot"),
+            "path": str(home_root / ".cache" / "openvibecoding"),
             "type": "machine cache root",
             "ownership": "repo external root",
             "ownership_confidence": "High",
@@ -483,7 +483,7 @@ def test_space_governance_report_uses_exclusive_summary_for_external_rollup(tmp_
         1,
         {
             "id": "external_pnpm_store",
-            "path": str(home_root / ".cache" / "cortexpilot" / "pnpm-store"),
+            "path": str(home_root / ".cache" / "openvibecoding" / "pnpm-store"),
             "type": "pnpm store",
             "ownership": "repo external pnpm store",
             "ownership_confidence": "High",
@@ -526,13 +526,13 @@ def test_wave3_reports_machine_tmp_entries_with_producer_and_lifecycle(
     _write_file(repo_root / "scripts" / "check_clean_room_recovery.sh", "#!/usr/bin/env bash\n")
 
     docker_runner_file = (
-        home_root / ".cache" / "cortexpilot" / "tmp" / "docker-ci" / "runner-temp-1000" / "marker.txt"
+        home_root / ".cache" / "openvibecoding" / "tmp" / "docker-ci" / "runner-temp-1000" / "marker.txt"
     )
     clean_room_file = (
-        home_root / ".cache" / "cortexpilot" / "tmp" / "clean-room-machine-cache.ABCD" / "marker.txt"
+        home_root / ".cache" / "openvibecoding" / "tmp" / "clean-room-machine-cache.ABCD" / "marker.txt"
     )
     preserve_file = (
-        home_root / ".cache" / "cortexpilot" / "tmp" / "clean-room-preserve.WXYZ" / "marker.txt"
+        home_root / ".cache" / "openvibecoding" / "tmp" / "clean-room-preserve.WXYZ" / "marker.txt"
     )
     _write_file(docker_runner_file, "runner")
     _write_file(clean_room_file, "clean-room")
@@ -543,7 +543,7 @@ def test_wave3_reports_machine_tmp_entries_with_producer_and_lifecycle(
 
     monkeypatch.setenv("HOME", str(home_root))
     monkeypatch.delenv("XDG_CACHE_HOME", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_MACHINE_CACHE_ROOT", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_MACHINE_CACHE_ROOT", raising=False)
 
     policy_payload = _base_policy(repo_root, home_root)
     policy_payload["rebuild_commands"].extend(
@@ -568,7 +568,7 @@ def test_wave3_reports_machine_tmp_entries_with_producer_and_lifecycle(
         0,
         {
             "id": "external_machine_cache_root",
-            "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}",
+            "path": "${OPENVIBECODING_MACHINE_CACHE_ROOT}",
             "type": "machine cache root",
             "ownership": "repo external root",
             "ownership_confidence": "High",
@@ -586,7 +586,7 @@ def test_wave3_reports_machine_tmp_entries_with_producer_and_lifecycle(
         [
             {
                 "id": "external_tmp_docker_ci_runner_temp",
-                "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/tmp/docker-ci/runner-temp-*",
+                "path": "${OPENVIBECODING_MACHINE_CACHE_ROOT}/tmp/docker-ci/runner-temp-*",
                 "type": "docker_ci runner temp",
                 "ownership": "repo-owned docker_ci temp",
                 "ownership_confidence": "High",
@@ -608,7 +608,7 @@ def test_wave3_reports_machine_tmp_entries_with_producer_and_lifecycle(
             },
             {
                 "id": "external_tmp_clean_room_machine_cache",
-                "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/tmp/clean-room-machine-cache.*",
+                "path": "${OPENVIBECODING_MACHINE_CACHE_ROOT}/tmp/clean-room-machine-cache.*",
                 "type": "clean-room machine cache",
                 "ownership": "repo-owned clean-room temp",
                 "ownership_confidence": "High",
@@ -630,7 +630,7 @@ def test_wave3_reports_machine_tmp_entries_with_producer_and_lifecycle(
             },
             {
                 "id": "external_tmp_clean_room_preserve",
-                "path": "${CORTEXPILOT_MACHINE_CACHE_ROOT}/tmp/clean-room-preserve.*",
+                "path": "${OPENVIBECODING_MACHINE_CACHE_ROOT}/tmp/clean-room-preserve.*",
                 "type": "clean-room preserve temp",
                 "ownership": "repo-owned clean-room preserve temp",
                 "ownership_confidence": "High",
@@ -659,7 +659,7 @@ def test_wave3_reports_machine_tmp_entries_with_producer_and_lifecycle(
             "external_tmp_clean_room_preserve",
         ],
         "process_groups": ["node", "python"],
-        "process_path_hints": ["${CORTEXPILOT_MACHINE_CACHE_ROOT}/tmp"],
+        "process_path_hints": ["${OPENVIBECODING_MACHINE_CACHE_ROOT}/tmp"],
         "process_command_hints": ["scripts/docker_ci.sh", "scripts/check_clean_room_recovery.sh"],
         "required_rebuild_commands": ["docker_ci_test_quick", "clean_room_recovery"],
     }
@@ -712,7 +712,7 @@ def test_wave3_reports_machine_tmp_entries_with_producer_and_lifecycle(
 
 def test_space_governance_report_embeds_machine_cache_retention_snapshot(tmp_path: Path) -> None:
     repo_root = tmp_path / "repo"
-    runtime_root = repo_root / ".runtime-cache" / "cortexpilot"
+    runtime_root = repo_root / ".runtime-cache" / "openvibecoding"
     reports_root = runtime_root / "reports"
     reports_root.mkdir(parents=True, exist_ok=True)
     retention_payload = {
@@ -747,7 +747,7 @@ def test_space_governance_report_backfills_auto_prune_state_when_retention_repor
     tmp_path: Path, monkeypatch
 ) -> None:
     repo_root = tmp_path / "repo"
-    runtime_root = repo_root / ".runtime-cache" / "cortexpilot"
+    runtime_root = repo_root / ".runtime-cache" / "openvibecoding"
     reports_root = runtime_root / "reports"
     reports_root.mkdir(parents=True, exist_ok=True)
     (reports_root / "retention_report.json").write_text(
@@ -762,9 +762,9 @@ def test_space_governance_report_backfills_auto_prune_state_when_retention_repor
         encoding="utf-8",
     )
 
-    monkeypatch.setenv("CORTEXPILOT_REPO_ROOT", str(repo_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_MACHINE_CACHE_ROOT", str(machine_cache_root))
+    monkeypatch.setenv("OPENVIBECODING_REPO_ROOT", str(repo_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_MACHINE_CACHE_ROOT", str(machine_cache_root))
 
     home_root = tmp_path / "home"
     _write_file(repo_root / "package.json", json.dumps({"scripts": {"bootstrap": "echo ok"}}))
@@ -780,7 +780,7 @@ def test_space_governance_report_backfills_auto_prune_state_when_retention_repor
 
 def test_space_governance_report_embeds_docker_runtime_summary(tmp_path: Path) -> None:
     repo_root = tmp_path / "repo"
-    runtime_root = repo_root / ".runtime-cache" / "cortexpilot"
+    runtime_root = repo_root / ".runtime-cache" / "openvibecoding"
     reports_root = runtime_root / "reports" / "space_governance"
     reports_root.mkdir(parents=True, exist_ok=True)
     (runtime_root / "reports" / "retention_report.json").write_text(
@@ -880,7 +880,7 @@ def test_cleanup_gate_defers_additional_serial_only_targets(tmp_path: Path) -> N
 def test_inventory_consistency_script_catches_undeclared_cleanup_target(tmp_path: Path, monkeypatch) -> None:
     runtime_policy = {
         "version": 1,
-        "runtime_roots": {"runtime_root": ".runtime-cache/cortexpilot"},
+        "runtime_roots": {"runtime_root": ".runtime-cache/openvibecoding"},
         "namespaces": {},
         "machine_managed_repo_local_roots": ["apps/dashboard/node_modules"],
         "space_governance_gray_zone_roots": [],
@@ -888,7 +888,7 @@ def test_inventory_consistency_script_catches_undeclared_cleanup_target(tmp_path
         "workspace_pollution_scan_roots": [],
         "workspace_forbidden_dirnames": [],
         "workspace_forbidden_file_globs": [],
-        "machine_cache_roots": ["~/.cache/cortexpilot"],
+        "machine_cache_roots": ["~/.cache/openvibecoding"],
         "cleanup_policy": {},
         "forbidden_top_level_outputs": ["node_modules", ".pnp.cjs", ".pnp.loader.mjs", "Users"],
         "legacy_runtime_paths": [],

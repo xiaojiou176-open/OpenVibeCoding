@@ -17,8 +17,8 @@ from typing import Any
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 DEFAULT_OUTPUT = ROOT_DIR / ".runtime-cache" / "test_output" / "repo_coverage" / "repo_coverage_report.json"
-DEFAULT_THRESHOLD = float(os.environ.get("CORTEXPILOT_REPO_COVERAGE_GATE_THRESHOLD", "95"))
-MAX_RUN_ARTIFACT_AGE_SECONDS = int(os.environ.get("CORTEXPILOT_REPO_COVERAGE_MAX_RUN_ARTIFACT_AGE_SECONDS", "21600"))
+DEFAULT_THRESHOLD = float(os.environ.get("OPENVIBECODING_REPO_COVERAGE_GATE_THRESHOLD", "95"))
+MAX_RUN_ARTIFACT_AGE_SECONDS = int(os.environ.get("OPENVIBECODING_REPO_COVERAGE_MAX_RUN_ARTIFACT_AGE_SECONDS", "21600"))
 
 SOURCE_SELECTION_LAYERS: dict[str, list[tuple[str, Any]]] = {
     "orchestrator": [

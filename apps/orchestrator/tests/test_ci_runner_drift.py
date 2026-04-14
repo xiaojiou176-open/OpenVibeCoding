@@ -44,7 +44,7 @@ def test_push_main_treats_missing_host_tools_as_report_only(tmp_path: Path, monk
         return outputs[name]
 
     monkeypatch.setattr(module, "_run_command", fake_run)
-    monkeypatch.setenv("CORTEXPILOT_CI_ROUTE_ID", "push_main")
+    monkeypatch.setenv("OPENVIBECODING_CI_ROUTE_ID", "push_main")
     monkeypatch.setattr(
         module,
         "DEFAULT_OUT_DIR",
@@ -83,7 +83,7 @@ def test_local_strict_mode_still_fails_on_missing_host_tools(tmp_path: Path, mon
         return outputs[name]
 
     monkeypatch.setattr(module, "_run_command", fake_run)
-    monkeypatch.delenv("CORTEXPILOT_CI_ROUTE_ID", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_CI_ROUTE_ID", raising=False)
     monkeypatch.setattr(
         module,
         "DEFAULT_OUT_DIR",

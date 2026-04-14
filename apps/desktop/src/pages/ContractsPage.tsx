@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { getUiCopy, type UiLocale } from "@cortexpilot/frontend-shared/uiCopy";
-import { detectPreferredUiLocale } from "@cortexpilot/frontend-shared/uiLocale";
+import { getUiCopy, type UiLocale } from "@openvibecoding/frontend-shared/uiCopy";
+import { detectPreferredUiLocale } from "@openvibecoding/frontend-shared/uiLocale";
 import type { ContractRecord } from "../lib/types";
 import { fetchContracts } from "../lib/api";
 import { Badge } from "../components/ui/Badge";

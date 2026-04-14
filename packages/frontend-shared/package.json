@@ -1,8 +1,8 @@
 {
-  "name": "@cortexpilot/frontend-shared",
+  "name": "@openvibecoding/frontend-shared",
   "version": "0.1.0",
   "private": true,
-  "description": "Shared frontend copy, locale, status-presentation, and UI-facing types for CortexPilot operator surfaces.",
+  "description": "Shared frontend copy, locale, status-presentation, and UI-facing types for OpenVibeCoding operator surfaces.",
   "homepage": "https://xiaojiou176-open.github.io/OpenVibeCoding/builders/",
   "repository": {
     "type": "git",
@@ -14,7 +14,7 @@
   },
   "license": "MIT",
   "keywords": [
-    "cortexpilot",
+    "openvibecoding",
     "frontend",
     "ui-copy",
     "locale",

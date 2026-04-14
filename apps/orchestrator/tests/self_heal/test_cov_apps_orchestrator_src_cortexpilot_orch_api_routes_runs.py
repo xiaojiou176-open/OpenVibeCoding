@@ -4,8 +4,8 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from starlette.requests import Request
 
-from cortexpilot_orch.api import deps as api_deps
-from cortexpilot_orch.api import routes_runs
+from openvibecoding_orch.api import deps as api_deps
+from openvibecoding_orch.api import routes_runs
 
 
 @pytest.fixture(autouse=True)

@@ -59,7 +59,7 @@ def run_codex_chunked_for_file(
     last_invalid_artifact = ""
 
     repo_root = Path(__file__).resolve().parents[1]
-    chunk_temp_dir = repo_root / ".runtime-cache" / "cortexpilot" / "temp" / "codex_jsonl_chunks" / jsonl_path.stem
+    chunk_temp_dir = repo_root / ".runtime-cache" / "openvibecoding" / "temp" / "codex_jsonl_chunks" / jsonl_path.stem
     chunk_temp_dir.mkdir(parents=True, exist_ok=True)
 
     for chunk_index, chunk_turns in enumerate(chunks, 1):

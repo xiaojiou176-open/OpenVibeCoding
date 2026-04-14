@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import type { Metadata } from "next";
-import { getUiCopy } from "@cortexpilot/frontend-shared/uiCopy";
-import { normalizeUiLocale, UI_LOCALE_STORAGE_KEY } from "@cortexpilot/frontend-shared/uiLocale";
+import { getUiCopy } from "@openvibecoding/frontend-shared/uiCopy";
+import { normalizeUiLocale, UI_LOCALE_STORAGE_KEY } from "@openvibecoding/frontend-shared/uiLocale";
 import Link from "next/link";
 import EventTimeline from "../../../components/EventTimeline";
 import type { BadgeVariant } from "../../../components/ui/badge";

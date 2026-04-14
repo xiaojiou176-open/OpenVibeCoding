@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from cortexpilot_orch.runners import agents_prompting
+from openvibecoding_orch.runners import agents_prompting
 
 
 def test_resolve_roles_root_and_role_prompt_paths(tmp_path: Path, monkeypatch) -> None:
@@ -14,11 +14,11 @@ def test_resolve_roles_root_and_role_prompt_paths(tmp_path: Path, monkeypatch) -
 
     assert agents_prompting.resolve_roles_root(worktree) == local_roles
 
-    monkeypatch.setenv("CORTEXPILOT_SKIP_ROLE_PROMPT", "true")
+    monkeypatch.setenv("OPENVIBECODING_SKIP_ROLE_PROMPT", "true")
     assert agents_prompting.load_role_prompt("WORKER", worktree) == ""
     assert agents_prompting.resolve_role_prompt_path("WORKER", worktree) is None
 
-    monkeypatch.setenv("CORTEXPILOT_SKIP_ROLE_PROMPT", "false")
+    monkeypatch.setenv("OPENVIBECODING_SKIP_ROLE_PROMPT", "false")
     assert agents_prompting.load_role_prompt("WORKER", worktree) == "worker local"
     assert agents_prompting.resolve_role_prompt_path("WORKER", worktree) == local_roles / "50_worker_core.md"
 
@@ -132,16 +132,16 @@ def test_instruction_decoration_payload_and_prompts(tmp_path: Path, monkeypatch)
     fixed = "RETURN EXACTLY THIS JSON\n{\"ok\": true}\nOUTPUT JSON ONLY"
     assert agents_prompting.decorate_instruction("WORKER", fixed, worktree, schema, "schema.json") == fixed
 
-    monkeypatch.setenv("CORTEXPILOT_SKIP_ROLE_PROMPT", "true")
+    monkeypatch.setenv("OPENVIBECODING_SKIP_ROLE_PROMPT", "true")
     decorated_no_role = agents_prompting.decorate_instruction("WORKER", "do work", worktree, schema, "schema.json")
     assert "Output JSON only" in decorated_no_role
     assert "ROLE PROMPT" not in decorated_no_role
 
-    monkeypatch.setenv("CORTEXPILOT_SKIP_ROLE_PROMPT", "false")
+    monkeypatch.setenv("OPENVIBECODING_SKIP_ROLE_PROMPT", "false")
     decorated_with_role = agents_prompting.decorate_instruction("WORKER", "do work", worktree, schema, "schema.json")
     assert "ROLE PROMPT" in decorated_with_role
 
-    monkeypatch.setenv("CORTEXPILOT_INLINE_OUTPUT_SCHEMA", "false")
+    monkeypatch.setenv("OPENVIBECODING_INLINE_OUTPUT_SCHEMA", "false")
     decorated_without_inline_schema = agents_prompting.decorate_instruction(
         "WORKER",
         "do work",
@@ -150,7 +150,7 @@ def test_instruction_decoration_payload_and_prompts(tmp_path: Path, monkeypatch)
         "schema.json",
     )
     assert "\"type\": \"object\"" not in decorated_without_inline_schema
-    monkeypatch.setenv("CORTEXPILOT_INLINE_OUTPUT_SCHEMA", "true")
+    monkeypatch.setenv("OPENVIBECODING_INLINE_OUTPUT_SCHEMA", "true")
 
     contract = {
         "tool_permissions": {
@@ -159,7 +159,7 @@ def test_instruction_decoration_payload_and_prompts(tmp_path: Path, monkeypatch)
             "network": "deny",
         }
     }
-    monkeypatch.setenv("CORTEXPILOT_CODEX_MODEL", "gpt-5.2-codex")
+    monkeypatch.setenv("OPENVIBECODING_CODEX_MODEL", "gpt-5.2-codex")
     payload = agents_prompting.build_codex_payload(contract, "run", worktree)
     assert payload["sandbox"] == "workspace-write"
     assert payload["approval-policy"] == "never"
@@ -170,7 +170,7 @@ def test_instruction_decoration_payload_and_prompts(tmp_path: Path, monkeypatch)
     assert payload2["sandbox"] == "read-only"
     assert payload2["approval-policy"] == "on-request"
 
-    monkeypatch.setenv("CORTEXPILOT_CODEX_TIMEBOX_SEC", "120")
+    monkeypatch.setenv("OPENVIBECODING_CODEX_TIMEBOX_SEC", "120")
     force_text = agents_prompting.agent_instructions("task-1", "mcp__tool", {"k": "v"}, True, "schema.json")
     assert "EXACTLY as-is" in force_text
     assert "120 seconds" in force_text

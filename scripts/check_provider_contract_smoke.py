@@ -17,7 +17,7 @@ ORCH_SRC = ROOT / "apps" / "orchestrator" / "src"
 if str(ORCH_SRC) not in sys.path:
     sys.path.insert(0, str(ORCH_SRC))
 
-from cortexpilot_orch.runners.provider_resolution import (  # noqa: E402
+from openvibecoding_orch.runners.provider_resolution import (  # noqa: E402
     resolve_preferred_api_key,
     resolve_provider_credentials,
     resolve_provider_inventory_id,
@@ -84,7 +84,7 @@ def _emit_report(output_path: Path, *, status: int, success: bool) -> None:
 
 
 def _resolve_codex_config() -> dict[str, str]:
-    config_path = Path(os.environ.get("CORTEXPILOT_CODEX_CONFIG_PATH", Path.home() / ".codex" / "config.toml")).expanduser()
+    config_path = Path(os.environ.get("OPENVIBECODING_CODEX_CONFIG_PATH", Path.home() / ".codex" / "config.toml")).expanduser()
     if tomllib is None or not config_path.exists():
         return {"provider": "", "base_url": "", "model": "", "api_key": "", "key_source": "none"}
     try:

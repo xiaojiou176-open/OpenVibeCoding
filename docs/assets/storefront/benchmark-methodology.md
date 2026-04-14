@@ -1,6 +1,6 @@
 # Public Benchmark Methodology
 
-This document exists so CortexPilot can talk about benchmark evidence without
+This document exists so OpenVibeCoding can talk about benchmark evidence without
 inventing numbers.
 
 ## Current State
@@ -73,9 +73,9 @@ npm run bench:e2e:speed:gate
 
 Default thresholds are driven by:
 
-- `CORTEXPILOT_BENCH_MAX_FAIL_RATE`
-- `CORTEXPILOT_BENCH_UI_FULL_GEMINI_STRICT_MAX_P95_SEC`
-- `CORTEXPILOT_BENCH_DASHBOARD_HIGH_RISK_E2E_MAX_P95_SEC`
+- `OPENVIBECODING_BENCH_MAX_FAIL_RATE`
+- `OPENVIBECODING_BENCH_UI_FULL_GEMINI_STRICT_MAX_P95_SEC`
+- `OPENVIBECODING_BENCH_DASHBOARD_HIGH_RISK_E2E_MAX_P95_SEC`
 
 The gate is intentionally strict about artifact presence: if no benchmark
 summary exists yet, it fails instead of inventing a baseline.

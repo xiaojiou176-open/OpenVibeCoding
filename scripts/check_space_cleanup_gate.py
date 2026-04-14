@@ -10,7 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "apps" / "orchestrator" / "src"))
 
-from cortexpilot_orch.runtime.space_governance import (
+from openvibecoding_orch.runtime.space_governance import (
     build_space_governance_report,
     evaluate_cleanup_gate,
     load_space_governance_policy,
@@ -18,7 +18,7 @@ from cortexpilot_orch.runtime.space_governance import (
     policy_hash,
 )
 DEFAULT_POLICY = ROOT / "configs" / "space_governance_policy.json"
-DEFAULT_REPORT_JSON = ROOT / ".runtime-cache" / "cortexpilot" / "reports" / "space_governance" / "report.json"
+DEFAULT_REPORT_JSON = ROOT / ".runtime-cache" / "openvibecoding" / "reports" / "space_governance" / "report.json"
 DEFAULT_OUTPUT_JSON = ROOT / ".runtime-cache" / "test_output" / "space_governance" / "cleanup_gate.json"
 
 
@@ -52,7 +52,7 @@ def report_is_fresh_for_gate(report: dict, *, policy: dict) -> bool:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Evaluate the CortexPilot disk-space cleanup preflight gate.")
+    parser = argparse.ArgumentParser(description="Evaluate the OpenVibeCoding disk-space cleanup preflight gate.")
     parser.add_argument("--policy", default=str(DEFAULT_POLICY))
     parser.add_argument("--report-json", default=str(DEFAULT_REPORT_JSON))
     parser.add_argument("--output-json", default=str(DEFAULT_OUTPUT_JSON))

@@ -6,14 +6,14 @@ cd "$ROOT_DIR"
 source "$ROOT_DIR/scripts/lib/env.sh"
 
 MODE="gate"
-SCOPE="${CORTEXPILOT_DEAD_CODE_SCOPE:-incremental}"
-BASE_REF="${CORTEXPILOT_DEAD_CODE_BASE_REF:-}"
-WARN_SYMBOLS="${CORTEXPILOT_DEAD_CODE_WARN_SYMBOLS:-5}"
-WARN_LINES="${CORTEXPILOT_DEAD_CODE_WARN_LINES:-50}"
-FAIL_SYMBOLS="${CORTEXPILOT_DEAD_CODE_FAIL_SYMBOLS:-5}"
-FAIL_LINES="${CORTEXPILOT_DEAD_CODE_FAIL_LINES:-50}"
-SEVERE_LINES="${CORTEXPILOT_DEAD_CODE_SEVERE_LINES:-500}"
-OUT_DIR="${CORTEXPILOT_DEAD_CODE_OUT_DIR:-.runtime-cache/test_output/dead_code_gate}"
+SCOPE="${OPENVIBECODING_DEAD_CODE_SCOPE:-incremental}"
+BASE_REF="${OPENVIBECODING_DEAD_CODE_BASE_REF:-}"
+WARN_SYMBOLS="${OPENVIBECODING_DEAD_CODE_WARN_SYMBOLS:-5}"
+WARN_LINES="${OPENVIBECODING_DEAD_CODE_WARN_LINES:-50}"
+FAIL_SYMBOLS="${OPENVIBECODING_DEAD_CODE_FAIL_SYMBOLS:-5}"
+FAIL_LINES="${OPENVIBECODING_DEAD_CODE_FAIL_LINES:-50}"
+SEVERE_LINES="${OPENVIBECODING_DEAD_CODE_SEVERE_LINES:-500}"
+OUT_DIR="${OPENVIBECODING_DEAD_CODE_OUT_DIR:-.runtime-cache/test_output/dead_code_gate}"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -282,7 +282,7 @@ def parse_tsc_findings(changed: Set[str], added: Dict[str, Set[int]], app_dir: s
 
 
 def parse_vulture_findings(changed: Set[str], added: Dict[str, Set[int]]) -> Tuple[List[Finding], str]:
-    venv_python_raw = os.environ.get("CORTEXPILOT_PYTHON", "").strip()
+    venv_python_raw = os.environ.get("OPENVIBECODING_PYTHON", "").strip()
     if venv_python_raw:
         venv_python = Path(venv_python_raw)
     else:
@@ -361,7 +361,7 @@ def _dep_decl_line(package_json_path: Path, dep_name: str) -> int:
 
 
 def parse_depcheck_findings(changed_all: Set[str], added: Dict[str, Set[int]], app_dir: str) -> Tuple[List[Finding], str]:
-    depcheck_enabled = os.environ.get("CORTEXPILOT_DEAD_CODE_ENABLE_DEPCHECK", "0").strip().lower() in {"1", "true", "yes"}
+    depcheck_enabled = os.environ.get("OPENVIBECODING_DEAD_CODE_ENABLE_DEPCHECK", "0").strip().lower() in {"1", "true", "yes"}
     if not depcheck_enabled:
         return [], "skipped:depcheck_probe_disabled"
 
@@ -399,7 +399,7 @@ def parse_depcheck_findings(changed_all: Set[str], added: Dict[str, Set[int]], a
         return [], "skipped:depcheck_parse_error"
 
     ignore_raw = os.environ.get(
-        "CORTEXPILOT_DEAD_CODE_DEPCHECK_IGNORE",
+        "OPENVIBECODING_DEAD_CODE_DEPCHECK_IGNORE",
         "depcheck,@axe-core/cli,lighthouse,@vitest/coverage-v8,typescript",
     )
     ignored = {item.strip() for item in ignore_raw.split(",") if item.strip()}
@@ -690,8 +690,8 @@ def has_non_test_typescript_change(prefix: str) -> bool:
 
 dashboard_ts_requires_tsc = has_non_test_typescript_change("apps/dashboard/")
 desktop_ts_requires_tsc = has_non_test_typescript_change("apps/desktop/")
-ci_slice = str(os.environ.get("CORTEXPILOT_CI_SLICE") or "").strip()
-ci_route_id = str(os.environ.get("CORTEXPILOT_CI_ROUTE_ID") or "").strip()
+ci_slice = str(os.environ.get("OPENVIBECODING_CI_SLICE") or "").strip()
+ci_route_id = str(os.environ.get("OPENVIBECODING_CI_ROUTE_ID") or "").strip()
 
 
 def should_ignore_tsc_skip(detector_name: str, status: str) -> bool:

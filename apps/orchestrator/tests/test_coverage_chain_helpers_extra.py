@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from cortexpilot_orch.planning import coverage_chain
+from openvibecoding_orch.planning import coverage_chain
 
 
 def test_run_coverage_scan_invokes_subprocess(monkeypatch, tmp_path: Path) -> None:
@@ -37,17 +37,17 @@ def test_load_coverage_targets_handles_invalid_payload_shapes(tmp_path: Path) ->
 
     payload = {
         "files": {
-            "apps/orchestrator/src/cortexpilot_orch/__init__.py": {
+            "apps/orchestrator/src/openvibecoding_orch/__init__.py": {
                 "summary": {
                     "percent_covered": 1.0,
                 }
             },
-            "apps/orchestrator/src/cortexpilot_orch/service/foo.py": {
+            "apps/orchestrator/src/openvibecoding_orch/service/foo.py": {
                 "summary": {
                     "percent_covered": 72.0,
                 }
             },
-            "apps/orchestrator/src/cortexpilot_orch/service/bar.py": {
+            "apps/orchestrator/src/openvibecoding_orch/service/bar.py": {
                 "summary": "not-dict",
             },
             "other/path.py": {
@@ -63,16 +63,16 @@ def test_load_coverage_targets_handles_invalid_payload_shapes(tmp_path: Path) ->
         coverage_path,
         threshold=90.0,
         max_workers=3,
-        include_prefix="apps/orchestrator/src/cortexpilot_orch/",
+        include_prefix="apps/orchestrator/src/openvibecoding_orch/",
         coverage_metric="branches",
     )
 
-    assert [item.module_name for item in targets] == ["cortexpilot_orch.service.foo"]
+    assert [item.module_name for item in targets] == ["openvibecoding_orch.service.foo"]
 
 
 def test_coverage_chain_default_python_and_timeout_fallback(monkeypatch) -> None:
-    monkeypatch.delenv("CORTEXPILOT_PYTHON", raising=False)
-    monkeypatch.setenv("CORTEXPILOT_COVERAGE_WORKER_TIMEOUT_SEC", "bad-timeout")
+    monkeypatch.delenv("OPENVIBECODING_PYTHON", raising=False)
+    monkeypatch.setenv("OPENVIBECODING_COVERAGE_WORKER_TIMEOUT_SEC", "bad-timeout")
 
     python_bin = coverage_chain._preferred_worker_python()
     timeout_sec = coverage_chain._worker_timeout_sec()

@@ -7,8 +7,8 @@ from pathlib import Path
 import pytest
 from fastapi import HTTPException
 
-from cortexpilot_orch.api import main as api_main
-from cortexpilot_orch.api import main_state_store_helpers
+from openvibecoding_orch.api import main as api_main
+from openvibecoding_orch.api import main_state_store_helpers
 
 
 def _write_json(path: Path, payload: object) -> None:
@@ -21,10 +21,10 @@ def _setup_env(monkeypatch, tmp_path: Path) -> tuple[Path, Path, Path]:
     runs_root = runtime_root / "runs"
     repo_root = tmp_path / "repo"
     contract_root = tmp_path / "contracts"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_REPO_ROOT", str(repo_root))
-    monkeypatch.setenv("CORTEXPILOT_CONTRACT_ROOT", str(contract_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_REPO_ROOT", str(repo_root))
+    monkeypatch.setenv("OPENVIBECODING_CONTRACT_ROOT", str(contract_root))
     return runtime_root, runs_root, contract_root
 
 
@@ -276,13 +276,13 @@ def test_ui_truth_gate_blocks_on_chain_or_tauri_failure_even_non_strict(tmp_path
     env = dict(os.environ)
     env.update(
         {
-            "CORTEXPILOT_UI_MATRIX_FILE": str(matrix_path),
-            "CORTEXPILOT_UI_P0_REPORT": str(p0_report),
-            "CORTEXPILOT_UI_P1_REPORT": str(p1_report),
-            "CORTEXPILOT_UI_CHAIN_REPORT": str(chain_report),
-            "CORTEXPILOT_UI_TAURI_REPORT": str(missing_tauri_report),
-            "CORTEXPILOT_UI_TRUTH_GATE_REPORT": str(out_report),
-            "CORTEXPILOT_UI_TRUTH_GATE_STRICT": "0",
+            "OPENVIBECODING_UI_MATRIX_FILE": str(matrix_path),
+            "OPENVIBECODING_UI_P0_REPORT": str(p0_report),
+            "OPENVIBECODING_UI_P1_REPORT": str(p1_report),
+            "OPENVIBECODING_UI_CHAIN_REPORT": str(chain_report),
+            "OPENVIBECODING_UI_TAURI_REPORT": str(missing_tauri_report),
+            "OPENVIBECODING_UI_TRUTH_GATE_REPORT": str(out_report),
+            "OPENVIBECODING_UI_TRUTH_GATE_STRICT": "0",
         }
     )
     result = subprocess.run(
@@ -317,7 +317,7 @@ def _prepare_ui_truth_gate_baseline_inputs(tmp_path: Path) -> tuple[Path, Path, 
         path.write_text(
             json.dumps(
                 {
-                    "report_type": "cortexpilot_ui_regression_flake_report",
+                    "report_type": "openvibecoding_ui_regression_flake_report",
                     "schema_version": 1,
                     "producer_script": "scripts/ui_regression_flake_gate.sh",
                     "run_id": run_id,
@@ -407,18 +407,18 @@ def test_ui_truth_gate_auto_click_inventory_does_not_block_when_not_required(tmp
     env = dict(os.environ)
     env.update(
         {
-            "CORTEXPILOT_UI_MATRIX_FILE": str(matrix_path),
-            "CORTEXPILOT_UI_FLAKE_REPORT_ROOT": str(tmp_path),
-            "CORTEXPILOT_UI_P0_REPORT": str(p0_report),
-            "CORTEXPILOT_UI_P1_REPORT": str(p1_report),
-            "CORTEXPILOT_UI_TRUTH_GATE_REPORT": str(out_report),
-            "CORTEXPILOT_UI_TRUTH_GATE_STRICT": "0",
-            "CORTEXPILOT_UI_FULL_AUDIT_REPORT_ROOT": str(full_audit_root),
-            "CORTEXPILOT_UI_LATEST_MANIFEST_PATH": str(latest_manifest),
-            "CORTEXPILOT_UI_TRUTH_DISABLE_AUTO_LATEST": "0",
-            "CORTEXPILOT_UI_TRUTH_BREAK_GLASS": "1",
-            "CORTEXPILOT_UI_TRUTH_BREAK_GLASS_REASON": "test-auto-latest",
-            "CORTEXPILOT_UI_TRUTH_BREAK_GLASS_TICKET": "TEST-UI-TRUTH-001",
+            "OPENVIBECODING_UI_MATRIX_FILE": str(matrix_path),
+            "OPENVIBECODING_UI_FLAKE_REPORT_ROOT": str(tmp_path),
+            "OPENVIBECODING_UI_P0_REPORT": str(p0_report),
+            "OPENVIBECODING_UI_P1_REPORT": str(p1_report),
+            "OPENVIBECODING_UI_TRUTH_GATE_REPORT": str(out_report),
+            "OPENVIBECODING_UI_TRUTH_GATE_STRICT": "0",
+            "OPENVIBECODING_UI_FULL_AUDIT_REPORT_ROOT": str(full_audit_root),
+            "OPENVIBECODING_UI_LATEST_MANIFEST_PATH": str(latest_manifest),
+            "OPENVIBECODING_UI_TRUTH_DISABLE_AUTO_LATEST": "0",
+            "OPENVIBECODING_UI_TRUTH_BREAK_GLASS": "1",
+            "OPENVIBECODING_UI_TRUTH_BREAK_GLASS_REASON": "test-auto-latest",
+            "OPENVIBECODING_UI_TRUTH_BREAK_GLASS_TICKET": "TEST-UI-TRUTH-001",
         }
     )
     result = subprocess.run(
@@ -469,14 +469,14 @@ def test_ui_truth_gate_click_inventory_blocks_when_required(tmp_path: Path) -> N
     env = dict(os.environ)
     env.update(
         {
-            "CORTEXPILOT_UI_MATRIX_FILE": str(matrix_path),
-            "CORTEXPILOT_UI_FLAKE_REPORT_ROOT": str(tmp_path),
-            "CORTEXPILOT_UI_P0_REPORT": str(p0_report),
-            "CORTEXPILOT_UI_P1_REPORT": str(p1_report),
-            "CORTEXPILOT_UI_TRUTH_GATE_REPORT": str(out_report),
-            "CORTEXPILOT_UI_TRUTH_GATE_STRICT": "1",
-            "CORTEXPILOT_UI_FULL_AUDIT_REPORT_ROOT": str(full_audit_root),
-            "CORTEXPILOT_UI_CLICK_INVENTORY_REQUIRED": "1",
+            "OPENVIBECODING_UI_MATRIX_FILE": str(matrix_path),
+            "OPENVIBECODING_UI_FLAKE_REPORT_ROOT": str(tmp_path),
+            "OPENVIBECODING_UI_P0_REPORT": str(p0_report),
+            "OPENVIBECODING_UI_P1_REPORT": str(p1_report),
+            "OPENVIBECODING_UI_TRUTH_GATE_REPORT": str(out_report),
+            "OPENVIBECODING_UI_TRUTH_GATE_STRICT": "1",
+            "OPENVIBECODING_UI_FULL_AUDIT_REPORT_ROOT": str(full_audit_root),
+            "OPENVIBECODING_UI_CLICK_INVENTORY_REQUIRED": "1",
         }
     )
     result = subprocess.run(
@@ -532,18 +532,18 @@ def test_ui_truth_gate_blocks_when_flake_policy_is_too_weak(tmp_path: Path) -> N
     env = dict(os.environ)
     env.update(
         {
-            "CORTEXPILOT_UI_MATRIX_FILE": str(matrix_path),
-            "CORTEXPILOT_UI_FLAKE_REPORT_ROOT": str(tmp_path),
-            "CORTEXPILOT_UI_P0_REPORT": str(p0_report),
-            "CORTEXPILOT_UI_P1_REPORT": str(p1_report),
-            "CORTEXPILOT_UI_TRUTH_GATE_REPORT": str(out_report),
-            "CORTEXPILOT_UI_TRUTH_GATE_STRICT": "1",
-            "CORTEXPILOT_UI_TRUTH_ENFORCE_FLAKE_POLICY": "1",
-            "CORTEXPILOT_UI_TRUTH_P0_MAX_THRESHOLD_PERCENT": "0.5",
-            "CORTEXPILOT_UI_TRUTH_P1_MAX_THRESHOLD_PERCENT": "1.0",
-            "CORTEXPILOT_UI_TRUTH_P0_MIN_ITERATIONS": "8",
-            "CORTEXPILOT_UI_TRUTH_P1_MIN_ITERATIONS": "8",
-            "CORTEXPILOT_UI_TRUTH_REQUIRE_RUN_ID_MATCH": "1",
+            "OPENVIBECODING_UI_MATRIX_FILE": str(matrix_path),
+            "OPENVIBECODING_UI_FLAKE_REPORT_ROOT": str(tmp_path),
+            "OPENVIBECODING_UI_P0_REPORT": str(p0_report),
+            "OPENVIBECODING_UI_P1_REPORT": str(p1_report),
+            "OPENVIBECODING_UI_TRUTH_GATE_REPORT": str(out_report),
+            "OPENVIBECODING_UI_TRUTH_GATE_STRICT": "1",
+            "OPENVIBECODING_UI_TRUTH_ENFORCE_FLAKE_POLICY": "1",
+            "OPENVIBECODING_UI_TRUTH_P0_MAX_THRESHOLD_PERCENT": "0.5",
+            "OPENVIBECODING_UI_TRUTH_P1_MAX_THRESHOLD_PERCENT": "1.0",
+            "OPENVIBECODING_UI_TRUTH_P0_MIN_ITERATIONS": "8",
+            "OPENVIBECODING_UI_TRUTH_P1_MIN_ITERATIONS": "8",
+            "OPENVIBECODING_UI_TRUTH_REQUIRE_RUN_ID_MATCH": "1",
         }
     )
     result = subprocess.run(

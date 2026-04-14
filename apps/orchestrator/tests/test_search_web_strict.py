@@ -21,7 +21,7 @@ def test_web_allowlist_match() -> None:
 
 
 def test_default_web_allowlist_minimal(monkeypatch) -> None:
-    monkeypatch.delenv("CORTEXPILOT_WEB_ALLOWLIST", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_WEB_ALLOWLIST", raising=False)
     allowlist = _web_allowlist()
     assert len(allowlist) >= 3
     assert any(urlparse(item).hostname == "chatgpt.com" for item in allowlist)
@@ -29,10 +29,10 @@ def test_default_web_allowlist_minimal(monkeypatch) -> None:
 
 
 def test_web_search_strict_failure(monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_WEB_SEARCH_FALLBACK_POLICY", "strict")
-    monkeypatch.setenv("CORTEXPILOT_BROWSER_PROFILE_MODE", "allow_profile")
-    monkeypatch.setenv("CORTEXPILOT_BROWSER_PROFILE_DIR", os.path.join(os.getcwd(), "missing_profile_dir"))
-    result = search_verify("cortexpilot", provider="chatgpt_web")
+    monkeypatch.setenv("OPENVIBECODING_WEB_SEARCH_FALLBACK_POLICY", "strict")
+    monkeypatch.setenv("OPENVIBECODING_BROWSER_PROFILE_MODE", "allow_profile")
+    monkeypatch.setenv("OPENVIBECODING_BROWSER_PROFILE_DIR", os.path.join(os.getcwd(), "missing_profile_dir"))
+    result = search_verify("openvibecoding", provider="chatgpt_web")
     assert result["ok"] is False
     assert result["mode"] == "web"
     assert "error" in result
@@ -318,9 +318,9 @@ def test_browser_search_closes_session_before_playwright_exit(monkeypatch, tmp_p
         "tooling.search.search_engine._web_stealth_provider",
         lambda browser_policy=None: types.SimpleNamespace(launch_args=lambda: [], apply=lambda **_kwargs: {"events": []}),
     )
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(tmp_path / ".runtime-cache" / "cortexpilot"))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(tmp_path / ".runtime-cache" / "openvibecoding"))
 
-    results, error = _browser_search("cortexpilot")
+    results, error = _browser_search("openvibecoding")
 
     assert error is None
     assert results == [{"title": "ok", "href": "https://example.com"}]
@@ -333,7 +333,7 @@ def test_browser_ddg_fail_closed_when_singleton_attach_fails(monkeypatch) -> Non
         lambda query, browser_policy=None: ([], "browser_ddg_failed: singleton attach failed"),
     )
 
-    result = search_verify("cortexpilot", provider="browser_ddg")
+    result = search_verify("openvibecoding", provider="browser_ddg")
 
     assert result["ok"] is False
     assert result["mode"] == "browser"

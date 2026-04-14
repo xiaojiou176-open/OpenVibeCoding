@@ -5,7 +5,7 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
-from cortexpilot_orch.scheduler import artifact_pipeline
+from openvibecoding_orch.scheduler import artifact_pipeline
 
 
 class _Store:
@@ -25,7 +25,7 @@ def test_path_helpers_and_artifact_items(tmp_path: Path, monkeypatch) -> None:
     repo_root.mkdir()
     runtime_root = tmp_path / "runtime"
     runtime_root.mkdir()
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
 
     assert artifact_pipeline.is_within(repo_root / "a", repo_root) is True
     assert artifact_pipeline.is_within(Path("/tmp/outside"), repo_root) is False

@@ -155,7 +155,7 @@ describe("workflow detail page", () => {
   it("renders zh-CN page-level copy when the locale cookie is set", async () => {
     mockCookies.mockResolvedValueOnce({
       get: () => ({ value: "zh-CN" }),
-      toString: () => "cortexpilot.ui.locale=zh-CN",
+      toString: () => "openvibecoding.ui.locale=zh-CN",
     });
 
     const view = await WorkflowDetailPage({

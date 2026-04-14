@@ -4,121 +4,121 @@
 repos:
   - repo: local
     hooks:
-      - id: cortexpilot-pre-commit-quality-gate
-        name: cortexpilot-pre-commit-quality-gate
-        entry: env CORTEXPILOT_HOST_COMPAT=1 bash scripts/pre_commit_quality_gate.sh
+      - id: openvibecoding-pre-commit-quality-gate
+        name: openvibecoding-pre-commit-quality-gate
+        entry: env OPENVIBECODING_HOST_COMPAT=1 bash scripts/pre_commit_quality_gate.sh
         language: system
         pass_filenames: false
         stages: [pre-commit]
 
-      - id: cortexpilot-pre-push-quality-gate-full
-        name: cortexpilot-pre-push-quality-gate-full-host-compat
-        entry: env CORTEXPILOT_HOST_COMPAT=1 bash scripts/pre_push_quality_gate.sh
+      - id: openvibecoding-pre-push-quality-gate-full
+        name: openvibecoding-pre-push-quality-gate-full-host-compat
+        entry: env OPENVIBECODING_HOST_COMPAT=1 bash scripts/pre_push_quality_gate.sh
         language: system
         pass_filenames: false
         stages: [pre-push]
 
-      - id: cortexpilot-repo-hygiene
-        name: cortexpilot-repo-hygiene
+      - id: openvibecoding-repo-hygiene
+        name: openvibecoding-repo-hygiene
         entry: bash scripts/check_repo_hygiene.sh
         language: system
         pass_filenames: false
         stages: [manual]
 
-      - id: cortexpilot-public-sensitive-surface-gate
-        name: cortexpilot-public-sensitive-surface-gate
+      - id: openvibecoding-public-sensitive-surface-gate
+        name: openvibecoding-public-sensitive-surface-gate
         entry: bash scripts/run_governance_py.sh scripts/check_public_sensitive_surface.py
         language: system
         pass_filenames: false
         always_run: true
         stages: [pre-commit]
 
-      - id: cortexpilot-github-security-alerts-gate
-        name: cortexpilot-github-security-alerts-gate
+      - id: openvibecoding-github-security-alerts-gate
+        name: openvibecoding-github-security-alerts-gate
         entry: bash scripts/run_governance_py.sh scripts/check_github_security_alerts.py --mode require
         language: system
         pass_filenames: false
         always_run: true
         stages: [manual]
 
-      - id: cortexpilot-root-semantic-cleanliness
-        name: cortexpilot-root-semantic-cleanliness
+      - id: openvibecoding-root-semantic-cleanliness
+        name: openvibecoding-root-semantic-cleanliness
         entry: bash scripts/run_governance_py.sh scripts/check_root_semantic_cleanliness.py
         language: system
         pass_filenames: false
         stages: [pre-commit]
 
-      - id: cortexpilot-env-governance
-        name: cortexpilot-env-governance
+      - id: openvibecoding-env-governance
+        name: openvibecoding-env-governance
         entry: bash scripts/run_governance_py.sh scripts/check_env_governance.py --mode gate
         language: system
         pass_filenames: false
         stages: [pre-commit]
 
-      - id: cortexpilot-dead-code-warning
-        name: cortexpilot-dead-code-warning
+      - id: openvibecoding-dead-code-warning
+        name: openvibecoding-dead-code-warning
         entry: bash scripts/dead_code_gate.sh --mode warn
         language: system
         pass_filenames: false
         stages: [pre-commit]
 
-      - id: cortexpilot-test-smell-gate
-        name: cortexpilot-test-smell-gate
+      - id: openvibecoding-test-smell-gate
+        name: openvibecoding-test-smell-gate
         entry: bash scripts/test_smell_gate.sh
         language: system
         pass_filenames: false
         always_run: true
         stages: [manual]
 
-      - id: cortexpilot-ui-protocol-gate
-        name: cortexpilot-ui-protocol-gate
+      - id: openvibecoding-ui-protocol-gate
+        name: openvibecoding-ui-protocol-gate
         entry: bash scripts/ui_protocol_gate.sh
         language: system
         pass_filenames: false
         stages: [pre-commit]
 
-      - id: cortexpilot-ui-gemini-quick-gate
-        name: cortexpilot-ui-gemini-quick-gate
+      - id: openvibecoding-ui-gemini-quick-gate
+        name: openvibecoding-ui-gemini-quick-gate
         entry: bash scripts/run_governance_py.sh scripts/ui_ux_gemini_quick_gate.py
         language: system
         pass_filenames: false
         always_run: true
         stages: [manual]
 
-      - id: cortexpilot-doc-sync-gate
-        name: cortexpilot-doc-sync-gate
+      - id: openvibecoding-doc-sync-gate
+        name: openvibecoding-doc-sync-gate
         entry: bash scripts/hooks/doc_sync_gate.sh
         language: system
         pass_filenames: false
         always_run: true
         stages: [manual]
 
-      - id: cortexpilot-doc-drift-gate
-        name: cortexpilot-doc-drift-gate
+      - id: openvibecoding-doc-drift-gate
+        name: openvibecoding-doc-drift-gate
         entry: bash scripts/hooks/doc_drift_gate.sh
         language: system
         pass_filenames: false
         always_run: true
         stages: [manual]
 
-      - id: cortexpilot-allowed-paths-gate
-        name: cortexpilot-allowed-paths-gate
+      - id: openvibecoding-allowed-paths-gate
+        name: openvibecoding-allowed-paths-gate
         entry: bash scripts/hooks/allowed_paths_gate.sh
         language: system
         pass_filenames: false
         always_run: true
         stages: [pre-commit]
 
-      - id: cortexpilot-navigation-completeness-gate
-        name: cortexpilot-navigation-completeness-gate
+      - id: openvibecoding-navigation-completeness-gate
+        name: openvibecoding-navigation-completeness-gate
         entry: bash scripts/hooks/navigation_completeness_gate.sh
         language: system
         pass_filenames: false
         always_run: true
         stages: [pre-commit]
 
-      - id: cortexpilot-gitleaks-gate
-        name: cortexpilot-gitleaks-gate
+      - id: openvibecoding-gitleaks-gate
+        name: openvibecoding-gitleaks-gate
         entry: gitleaks protect --staged --config .gitleaks.toml --redact
         language: system
         pass_filenames: false

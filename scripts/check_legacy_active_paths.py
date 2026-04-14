@@ -23,12 +23,12 @@ IGNORED_FILES = {"CHANGELOG.md", "scripts/check_legacy_active_paths.py"}
 FORBIDDEN_PATTERNS = (
     ("legacy_config_changed_scope", re.compile(r"(?<![A-Za-z0-9_.-])config/changed_scope/")),
     ("legacy_root_out", re.compile(r"(?<![A-Za-z0-9_.-])out/")),
-    ("legacy_runtime_contract_root", re.compile(r"(?<!\.runtime-cache/)cortexpilot/contracts/")),
+    ("legacy_runtime_contract_root", re.compile(r"(?<!\.runtime-cache/)openvibecoding/contracts/")),
     ("legacy_codex_tmp", re.compile(r"(?<![A-Za-z0-9_.-])codex/tmp/")),
     ("legacy_python_venv", re.compile(rf"(?<![A-Za-z0-9_.-]){re.escape(LEGACY_VENV_SEGMENT)}/bin/")),
     ("legacy_cargo_root", re.compile(rf"(?<![A-Za-z0-9_.-]){re.escape(LEGACY_CARGO_SEGMENT)}/")),
 )
-FORBIDDEN_ROOTS = ("config", "out", "cortexpilot", "codex", LEGACY_VENV_SEGMENT, LEGACY_CARGO_SEGMENT)
+FORBIDDEN_ROOTS = ("config", "out", "openvibecoding", "codex", LEGACY_VENV_SEGMENT, LEGACY_CARGO_SEGMENT)
 
 
 def iter_active_files() -> list[Path]:

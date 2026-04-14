@@ -99,7 +99,7 @@ describe("workflows queue page", () => {
   it("uses shared locale copy for the workflow list surface", async () => {
     mockCookies.mockResolvedValue({
       get: () => ({ value: "zh-CN" }),
-      toString: () => "cortexpilot.ui-locale=zh-CN",
+      toString: () => "openvibecoding.ui-locale=zh-CN",
     });
 
     const view = await WorkflowsPage();

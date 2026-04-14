@@ -1,8 +1,8 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "io.github.xiaojiou176-open/cortexpilot-readonly",
-  "title": "CortexPilot Read-only MCP",
-  "description": "Read-only MCP surface for CortexPilot command-tower, workflow proof, queue state, replay, and incident inspection.",
+  "name": "io.github.xiaojiou176-open/openvibecoding-readonly",
+  "title": "OpenVibeCoding Read-only MCP",
+  "description": "Read-only MCP surface for OpenVibeCoding command-tower, workflow proof, queue state, replay, and incident inspection.",
   "websiteUrl": "https://xiaojiou176-open.github.io/OpenVibeCoding/mcp/",
   "repository": {
     "url": "https://github.com/xiaojiou176-open/OpenVibeCoding",
@@ -12,7 +12,7 @@
   "packages": [
     {
       "registryType": "pypi",
-      "identifier": "cortexpilot-orchestrator",
+      "identifier": "openvibecoding-orchestrator",
       "version": "0.1.0a4",
       "transport": {
         "type": "stdio"

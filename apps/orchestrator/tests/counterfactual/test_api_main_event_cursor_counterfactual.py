@@ -7,8 +7,8 @@ from pathlib import Path
 from fastapi.testclient import TestClient
 import pytest
 
-from cortexpilot_orch.api import event_cursor
-from cortexpilot_orch.api import main as api_main
+from openvibecoding_orch.api import event_cursor
+from openvibecoding_orch.api import main as api_main
 
 
 def _write_manifest(run_dir: Path, payload: dict) -> None:
@@ -36,7 +36,7 @@ def test_main_event_cursor_wrappers_delegate_to_event_cursor_module(monkeypatch:
 
 def test_run_events_endpoint_fails_loud_when_event_filter_module_breaks(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     runs_root = tmp_path / "runs"
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
 
     run_id = "run_counterfactual"
     run_dir = runs_root / run_id

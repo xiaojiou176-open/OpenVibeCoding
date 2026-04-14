@@ -11,13 +11,13 @@ if [[ $# -lt 1 ]]; then
 fi
 
 resolve_python_bin() {
-  if [[ -n "${CORTEXPILOT_PYTHON:-}" && -x "${CORTEXPILOT_PYTHON}" ]]; then
-    printf '%s\n' "${CORTEXPILOT_PYTHON}"
+  if [[ -n "${OPENVIBECODING_PYTHON:-}" && -x "${OPENVIBECODING_PYTHON}" ]]; then
+    printf '%s\n' "${OPENVIBECODING_PYTHON}"
     return 0
   fi
 
   local managed_python=""
-  managed_python="$(cortexpilot_python_bin "$ROOT_DIR" 2>/dev/null || true)"
+  managed_python="$(openvibecoding_python_bin "$ROOT_DIR" 2>/dev/null || true)"
   if [[ -x "$managed_python" ]]; then
     printf '%s\n' "$managed_python"
     return 0
@@ -28,7 +28,7 @@ resolve_python_bin() {
     return 0
   fi
 
-  echo "missing python interpreter: set CORTEXPILOT_PYTHON or bootstrap the managed toolchain" >&2
+  echo "missing python interpreter: set OPENVIBECODING_PYTHON or bootstrap the managed toolchain" >&2
   return 1
 }
 

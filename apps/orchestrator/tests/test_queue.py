@@ -5,8 +5,8 @@ from datetime import datetime, timedelta, timezone
 
 import pytest
 
-from cortexpilot_orch.contract.validator import ContractValidator
-from cortexpilot_orch.queue import QueueStore
+from openvibecoding_orch.contract.validator import ContractValidator
+from openvibecoding_orch.queue import QueueStore
 
 
 def _output_schema_artifacts(role: str = "worker") -> list[dict]:
@@ -53,7 +53,7 @@ def _valid_contract() -> dict:
 
 def test_queue_enqueue_and_claim(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
 
     contract = _valid_contract()
     contract_path = tmp_path / "contract.json"
@@ -79,7 +79,7 @@ def test_queue_enqueue_and_claim(tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 
 def test_queue_store_respects_priority_and_schedule(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
 
     store = QueueStore()
     contract_path = tmp_path / "contract.json"
@@ -104,7 +104,7 @@ def test_queue_store_respects_priority_and_schedule(tmp_path: Path, monkeypatch:
 
 def test_queue_store_treats_naive_schedule_values_as_unset(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
 
     store = QueueStore()
     contract_path = tmp_path / "contract.json"
@@ -125,7 +125,7 @@ def test_queue_store_treats_naive_schedule_values_as_unset(tmp_path: Path, monke
 def test_queue_store_ignores_invalid_lines_and_merges_latest_task_state(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     runtime_root = tmp_path / "runtime"
     queue_path = runtime_root / "queue.jsonl"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
     queue_path.parent.mkdir(parents=True, exist_ok=True)
     queue_path.write_text(
         "\n".join(
@@ -150,7 +150,7 @@ def test_queue_store_ignores_invalid_lines_and_merges_latest_task_state(tmp_path
 
 def test_queue_store_branch_matrix_for_claimed_completed_failed_and_at_risk(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
 
     store = QueueStore()
     contract_path = tmp_path / "contract.json"
@@ -178,8 +178,8 @@ def test_queue_store_branch_matrix_for_claimed_completed_failed_and_at_risk(tmp_
 
 def test_queue_store_fails_closed_without_fcntl(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setattr("cortexpilot_orch.queue.store.fcntl", None)
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setattr("openvibecoding_orch.queue.store.fcntl", None)
 
     store = QueueStore()
     contract_path = tmp_path / "contract.json"
@@ -192,7 +192,7 @@ def test_queue_store_fails_closed_without_fcntl(tmp_path: Path, monkeypatch: pyt
 def test_queue_store_without_storage_returns_empty_state(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     runtime_root = tmp_path / "runtime"
     queue_path = runtime_root / "missing" / "queue.jsonl"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
 
     store = QueueStore(queue_path=queue_path, ensure_storage=False)
 
@@ -205,7 +205,7 @@ def test_queue_store_claim_next_reuses_queue_id_and_returns_none_when_empty(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
 
     store = QueueStore()
     contract_path = tmp_path / "contract.json"
@@ -223,7 +223,7 @@ def test_queue_store_claim_next_reuses_queue_id_and_returns_none_when_empty(
 
 def test_queue_store_markers_keep_explicit_queue_id(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
 
     store = QueueStore()
     contract_path = tmp_path / "contract.json"
@@ -242,7 +242,7 @@ def test_queue_store_markers_keep_explicit_queue_id(tmp_path: Path, monkeypatch:
 
 def test_queue_store_preview_enqueue_coerces_invalid_metadata(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
 
     store = QueueStore()
     contract_path = tmp_path / "contract.json"
@@ -270,7 +270,7 @@ def test_queue_store_preview_enqueue_coerces_invalid_metadata(tmp_path: Path, mo
 
 def test_queue_store_cancel_branch_matrix(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
 
     store = QueueStore()
     contract_path = tmp_path / "contract.json"
@@ -301,7 +301,7 @@ def test_queue_store_cancel_branch_matrix(tmp_path: Path, monkeypatch: pytest.Mo
 
 def test_queue_store_preview_and_cancel_surface_preserves_reason_metadata(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
 
     store = QueueStore()
     contract_path = tmp_path / "contract.json"

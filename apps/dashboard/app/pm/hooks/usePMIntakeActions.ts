@@ -551,7 +551,7 @@ export function usePMIntakeActions(state: PMIntakeDataState) {
       const nextRunId = asString(response.run_id);
       setRunId(nextRunId);
       setChatNotice(`Execution started (run_id: ${nextRunId || "-"})`);
-      appendChat("CortexPilot Command Tower", `Execution started, run_id: ${nextRunId || "(empty)"}`, activeChatSessionId, {
+      appendChat("OpenVibeCoding Command Tower", `Execution started, run_id: ${nextRunId || "(empty)"}`, activeChatSessionId, {
         kind: "delegation",
         card: {
           title: "Delegated to Tech Lead",
@@ -564,7 +564,7 @@ export function usePMIntakeActions(state: PMIntakeDataState) {
     } catch (cause) {
       if (isRequestAborted(cause)) {
         setChatNotice("Request cancelled.");
-        appendChat("CortexPilot Command Tower", "Cancelled the active request.", activeChatSessionId, {
+        appendChat("OpenVibeCoding Command Tower", "Cancelled the active request.", activeChatSessionId, {
           kind: "alert",
           card: { title: "Request cancelled", subtitle: "The active execution stopped. Existing context is preserved." },
         });
@@ -573,7 +573,7 @@ export function usePMIntakeActions(state: PMIntakeDataState) {
       console.error(`[pm-intake] run failed: ${errorDetail(cause)} (intake=${intakeId || "-"}, run=${runId || "-"})`);
       setError(sanitizeErrorMessage(cause, "Start execution failed"));
       setChatNotice("");
-      appendChat("CortexPilot Command Tower", `Execution trigger failed: ${sanitizeErrorMessage(cause, "Start execution failed")}`, activeChatSessionId, {
+      appendChat("OpenVibeCoding Command Tower", `Execution trigger failed: ${sanitizeErrorMessage(cause, "Start execution failed")}`, activeChatSessionId, {
         kind: "alert",
         card: { title: "Gate alert", subtitle: sanitizeErrorMessage(cause, "Start execution failed") },
       });

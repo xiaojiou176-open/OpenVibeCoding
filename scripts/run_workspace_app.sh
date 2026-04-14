@@ -41,7 +41,7 @@ cleanup() {
     "$ROOT_DIR/apps/dashboard/tsconfig.typecheck.tsbuildinfo" \
     "$ROOT_DIR/apps/desktop/tsconfig.tsbuildinfo" \
     >/dev/null 2>&1 || true
-  if [[ "${CORTEXPILOT_RUN_WORKSPACE_APP_CLEANUP:-0}" == "1" ]]; then
+  if [[ "${OPENVIBECODING_RUN_WORKSPACE_APP_CLEANUP:-0}" == "1" ]]; then
     bash "$ROOT_DIR/scripts/cleanup_workspace_modules.sh" >/dev/null 2>&1 || true
   fi
 }

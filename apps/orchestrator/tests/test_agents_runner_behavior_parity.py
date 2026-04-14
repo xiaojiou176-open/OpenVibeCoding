@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from cortexpilot_orch.runners import agents_binding, agents_handoff, agents_mcp_config, agents_payload
-from cortexpilot_orch.runners import agents_runner
+from openvibecoding_orch.runners import agents_binding, agents_handoff, agents_mcp_config, agents_payload
+from openvibecoding_orch.runners import agents_runner
 
 
 def test_handoff_validation_parity() -> None:

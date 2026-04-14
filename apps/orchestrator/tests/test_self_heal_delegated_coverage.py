@@ -3,10 +3,10 @@ from pathlib import Path
 import pytest
 from fastapi import HTTPException
 
-from cortexpilot_orch.api import main as api_main
-from cortexpilot_orch.runners import agents_runner
-from cortexpilot_orch.scheduler import core_helpers
-from cortexpilot_orch.store.run_store import RunStore
+from openvibecoding_orch.api import main as api_main
+from openvibecoding_orch.runners import agents_runner
+from openvibecoding_orch.scheduler import core_helpers
+from openvibecoding_orch.store.run_store import RunStore
 
 
 def test_agents_runner_guard_clauses() -> None:
@@ -21,11 +21,11 @@ def test_agents_runner_guard_clauses() -> None:
 
 
 def test_scheduler_trace_url_early_returns(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_TRACE_URL_TEMPLATE", "{missing}")
+    monkeypatch.setenv("OPENVIBECODING_TRACE_URL_TEMPLATE", "{missing}")
     assert core_helpers.trace_url("trace", "run") == ""
 
-    monkeypatch.delenv("CORTEXPILOT_TRACE_URL_TEMPLATE", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_TRACE_BASE_URL", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_TRACE_URL_TEMPLATE", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_TRACE_BASE_URL", raising=False)
     assert core_helpers.trace_url("trace", "run") == ""
 
 
@@ -33,9 +33,9 @@ def test_api_main_early_returns(tmp_path: Path, monkeypatch: pytest.MonkeyPatch)
     runtime_root = tmp_path / "runtime"
     runs_root = runtime_root / "runs"
     repo_root = tmp_path / "repo"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_REPO_ROOT", str(repo_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_REPO_ROOT", str(repo_root))
 
     default = {"ok": True}
     assert api_main._read_json(tmp_path / "missing.json", default) == default
@@ -66,8 +66,8 @@ def test_core_helpers_self_heal_branches(tmp_path: Path, monkeypatch: pytest.Mon
     text_file.write_text("hello", encoding="utf-8")
     assert len(core_helpers.sha256_file(text_file)) == 64
 
-    monkeypatch.delenv("CORTEXPILOT_TRACE_URL_TEMPLATE", raising=False)
-    monkeypatch.setenv("CORTEXPILOT_TRACE_BASE_URL", "https://trace.local/base/")
+    monkeypatch.delenv("OPENVIBECODING_TRACE_URL_TEMPLATE", raising=False)
+    monkeypatch.setenv("OPENVIBECODING_TRACE_BASE_URL", "https://trace.local/base/")
     assert core_helpers.trace_url("trace-123", "run-123") == "https://trace.local/base/trace-123"
 
     no_media = core_helpers.artifact_ref_from_hash("a", "b.txt", "sha", 1)
@@ -86,7 +86,7 @@ def test_core_helpers_self_heal_branches(tmp_path: Path, monkeypatch: pytest.Mon
     assert str(repo_root / "AGENTS.override.md") in overrides
     assert str(codex_home / "AGENTS.override.md") in overrides
 
-    monkeypatch.setenv("CORTEXPILOT_CODEX_HOME_PER_RUN", "true")
+    monkeypatch.setenv("OPENVIBECODING_CODEX_HOME_PER_RUN", "true")
     assert core_helpers.per_run_codex_home_enabled() is True
 
     base_home = tmp_path / "base_home"

@@ -1,6 +1,6 @@
 import { type KeyboardEvent as ReactKeyboardEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { DEFAULT_UI_LOCALE, getUiCopy, type UiLocale } from "@cortexpilot/frontend-shared/uiCopy";
-import type { DesktopWorkMode } from "@cortexpilot/frontend-api-contract/ui-flow";
+import { DEFAULT_UI_LOCALE, getUiCopy, type UiLocale } from "@openvibecoding/frontend-shared/uiCopy";
+import type { DesktopWorkMode } from "@openvibecoding/frontend-api-contract/ui-flow";
 import type {
   CommandTowerOverviewPayload,
   CommandTowerAlertsPayload,
@@ -524,7 +524,7 @@ export function CommandTowerPage({
               </fieldset>
               <label className="ct-filter-group">
                 <span className="ct-filter-label">{commandTowerCopy.projectKey}</span>
-                <Input ref={projectInputRef} className="ct-filter-input" value={draftProjectKey} onChange={(e) => setDraftProjectKey(e.target.value)} onKeyDown={handleFilterKeyDown} placeholder="cortexpilot" />
+                <Input ref={projectInputRef} className="ct-filter-input" value={draftProjectKey} onChange={(e) => setDraftProjectKey(e.target.value)} onKeyDown={handleFilterKeyDown} placeholder="openvibecoding" />
               </label>
               <label className="ct-filter-group ct-filter-group-sort">
                 <span className="ct-filter-label">{commandTowerCopy.sort}</span>

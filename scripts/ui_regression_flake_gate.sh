@@ -15,7 +15,7 @@ ALLOW_OVERWRITE="${UI_REGRESSION_ALLOW_OVERWRITE:-0}"
 ATTEMPT_TIMEOUT_SEC="${UI_REGRESSION_ATTEMPT_TIMEOUT_SEC:-900}"
 ATTEMPT_KILL_GRACE_SEC="${UI_REGRESSION_ATTEMPT_KILL_GRACE_SEC:-12}"
 LOCK_WAIT_SEC="${UI_REGRESSION_LOCK_WAIT_SEC:-0}"
-LOCK_DIR="${ROOT_DIR}/.runtime-cache/cortexpilot/locks/ui_regression_flake_gate.lock"
+LOCK_DIR="${ROOT_DIR}/.runtime-cache/openvibecoding/locks/ui_regression_flake_gate.lock"
 LOCK_OWNER_FILE="${LOCK_DIR}/owner.env"
 LOCK_HELD=0
 
@@ -173,8 +173,8 @@ detect_lingering_ui_e2e_processes() {
     'apps/desktop/node_modules/.*/vite/bin/vite.js --host 127.0.0.1 --port 19273 --strictPort'
     'apps/desktop/node_modules/.*/vite/bin/vite.js preview --host 127.0.0.1 --port 4311'
     'apps/dashboard/node_modules/.*/next/dist/bin/next start --hostname 127.0.0.1 --port 3211'
-    '.runtime-cache/cache/toolchains/python/current/bin/python -m cortexpilot_orch.cli serve --host 127.0.0.1 --port 18500'
-    '.runtime-cache/cache/toolchains/python/current/bin/python -m cortexpilot_orch.cli serve --host 127.0.0.1 --port 18600'
+    '.runtime-cache/cache/toolchains/python/current/bin/python -m openvibecoding_orch.cli serve --host 127.0.0.1 --port 18500'
+    '.runtime-cache/cache/toolchains/python/current/bin/python -m openvibecoding_orch.cli serve --host 127.0.0.1 --port 18600'
   )
   local -a matches=()
   local pid=""
@@ -447,7 +447,7 @@ kill_grace_sec = int(sys.argv[5])
 started_epoch = time.time()
 
 env = os.environ.copy()
-env["CORTEXPILOT_E2E_ARTIFACT_SUFFIX"] = artifact_suffix
+env["OPENVIBECODING_E2E_ARTIFACT_SUFFIX"] = artifact_suffix
 log_path.parent.mkdir(parents=True, exist_ok=True)
 
 with log_path.open("w", encoding="utf-8", errors="replace") as log_handle:
@@ -768,7 +768,7 @@ completed_all_attempts = total == planned_attempts and len(incomplete_commands) 
 gate_passed = completed_all_attempts and (flake_rate_percent <= threshold_percent)
 
 report_json = {
-    "report_type": "cortexpilot_ui_regression_flake_report",
+    "report_type": "openvibecoding_ui_regression_flake_report",
     "schema_version": 1,
     "producer_script": "scripts/ui_regression_flake_gate.sh",
     "run_id": run_id,

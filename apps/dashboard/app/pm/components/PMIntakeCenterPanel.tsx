@@ -277,9 +277,9 @@ export default function PMIntakeCenterPanel(props: Props) {
                     {" ---"}
                   </div>
                 )}
-                <article className={`pm-chat-bubble ${item.role === "PM" ? "is-pm" : "is-cortexpilot"} is-${item.kind}`}>
+                <article className={`pm-chat-bubble ${item.role === "PM" ? "is-pm" : "is-openvibecoding"} is-${item.kind}`}>
                   <header className="pm-bubble-header">
-                    <span className="pm-bubble-role">{item.role === "PM" ? "You" : "CortexPilot Command Tower"}</span>
+                    <span className="pm-bubble-role">{item.role === "PM" ? "You" : "OpenVibeCoding Command Tower"}</span>
                     <time className="pm-bubble-time">{shortTime(item.createdAt)}</time>
                   </header>
                   <p className="pm-bubble-text">{item.text}</p>

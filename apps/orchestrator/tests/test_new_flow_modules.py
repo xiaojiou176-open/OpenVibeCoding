@@ -5,11 +5,11 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from cortexpilot_orch.api import deps as api_deps
-from cortexpilot_orch.api import routes_admin, routes_intake, routes_pm, routes_runs
-from cortexpilot_orch.replay import reexec_flow, verify_flow
-from cortexpilot_orch.runners import agents_contract_flow, agents_stream_flow
-from cortexpilot_orch.scheduler import execute_flow, failure_handling, manifest_lifecycle, runtime_bootstrap
+from openvibecoding_orch.api import deps as api_deps
+from openvibecoding_orch.api import routes_admin, routes_intake, routes_pm, routes_runs
+from openvibecoding_orch.replay import reexec_flow, verify_flow
+from openvibecoding_orch.runners import agents_contract_flow, agents_stream_flow
+from openvibecoding_orch.scheduler import execute_flow, failure_handling, manifest_lifecycle, runtime_bootstrap
 
 
 class _DummyStore:
@@ -46,11 +46,11 @@ def test_failure_handling_updates_manifest_and_event() -> None:
 
 def test_runtime_bootstrap_creates_target_dirs(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runtime_root / "runs"))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(runtime_root / "worktrees"))
-    monkeypatch.setenv("CORTEXPILOT_LOGS_ROOT", str(tmp_path / "logs"))
-    monkeypatch.setenv("CORTEXPILOT_CACHE_ROOT", str(tmp_path / "cache"))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runtime_root / "runs"))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(runtime_root / "worktrees"))
+    monkeypatch.setenv("OPENVIBECODING_LOGS_ROOT", str(tmp_path / "logs"))
+    monkeypatch.setenv("OPENVIBECODING_CACHE_ROOT", str(tmp_path / "cache"))
 
     targets = runtime_bootstrap.ensure_runtime_dirs()
     assert targets["runtime_root"].exists()
@@ -110,7 +110,7 @@ def test_route_admin_ping_and_approve(monkeypatch) -> None:
     response = client.post(
         "/api/god-mode/approve",
         json={"run_id": "run_1"},
-        headers={"x-cortexpilot-role": "TECH_LEAD"},
+        headers={"x-openvibecoding-role": "TECH_LEAD"},
     )
     assert response.status_code == 200
     assert captured and captured[0]["run_id"] == "run_1"
@@ -128,7 +128,7 @@ def test_route_admin_approve_missing_mutation_handler_returns_structured_503(mon
     response = client.post(
         "/api/god-mode/approve",
         json={"run_id": "run_1"},
-        headers={"x-cortexpilot-role": "TECH_LEAD"},
+        headers={"x-openvibecoding-role": "TECH_LEAD"},
     )
     assert response.status_code == 503
     assert response.json()["detail"] == {
@@ -140,7 +140,7 @@ def test_route_admin_approve_missing_mutation_handler_returns_structured_503(mon
 
 
 def test_route_admin_approve_rejects_untrusted_role_header_when_api_auth_required(monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_API_AUTH_REQUIRED", "1")
+    monkeypatch.setenv("OPENVIBECODING_API_AUTH_REQUIRED", "1")
     monkeypatch.setattr(api_deps, "_admin_route_deps_provider", None)
     app = FastAPI()
     app.include_router(routes_admin.router)
@@ -150,7 +150,7 @@ def test_route_admin_approve_rejects_untrusted_role_header_when_api_auth_require
     response = client.post(
         "/api/god-mode/approve",
         json={"run_id": "run_1"},
-        headers={"x-cortexpilot-role": "TECH_LEAD"},
+        headers={"x-openvibecoding-role": "TECH_LEAD"},
     )
     assert response.status_code == 403
     assert response.json()["detail"]["code"] == "ROLE_HEADER_UNTRUSTED"
@@ -163,7 +163,7 @@ def test_route_dep_missing_returns_structured_503(monkeypatch) -> None:
     admin_app = FastAPI()
     admin_app.include_router(routes_admin.router)
     admin_client = TestClient(admin_app)
-    admin_response = admin_client.get("/api/god-mode/pending", headers={"x-cortexpilot-role": "TECH_LEAD"})
+    admin_response = admin_client.get("/api/god-mode/pending", headers={"x-openvibecoding-role": "TECH_LEAD"})
     assert admin_response.status_code == 503
     assert admin_response.json()["detail"] == {
         "code": "ROUTE_DEPS_NOT_CONFIGURED",
@@ -269,7 +269,7 @@ def test_route_admin_pending_partial_mapping_returns_structured_503(monkeypatch)
     app.state.routes_admin_handlers = {}
 
     client = TestClient(app)
-    response = client.get("/api/god-mode/pending", headers={"x-cortexpilot-role": "TECH_LEAD"})
+    response = client.get("/api/god-mode/pending", headers={"x-openvibecoding-role": "TECH_LEAD"})
     assert response.status_code == 503
     assert response.json()["detail"] == {
         "code": "ROUTE_DEPS_NOT_CONFIGURED",
@@ -296,7 +296,7 @@ def test_route_runs_endpoints(monkeypatch) -> None:
     }
 
     client = TestClient(app)
-    headers = {"x-cortexpilot-role": "TECH_LEAD"}
+    headers = {"x-openvibecoding-role": "TECH_LEAD"}
     assert client.get("/api/runs/run_1/_health").status_code == 200
     assert client.post("/api/runs/run_1/replay", json={"baseline_run_id": "run_0"}, headers=headers).status_code == 200
     assert client.post("/api/runs/run_1/verify", params={"strict": "true"}, headers=headers).status_code == 200

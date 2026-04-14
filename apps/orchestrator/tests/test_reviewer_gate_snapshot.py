@@ -1,7 +1,7 @@
 import subprocess
 from pathlib import Path
 
-from cortexpilot_orch.gates.reviewer_gate import snapshot_worktree, validate_reviewer_isolation
+from openvibecoding_orch.gates.reviewer_gate import snapshot_worktree, validate_reviewer_isolation
 
 
 def _git(cmd: list[str], cwd: Path) -> None:

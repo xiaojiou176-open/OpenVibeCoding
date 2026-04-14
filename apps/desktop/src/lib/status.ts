@@ -1,4 +1,4 @@
-import { mapBadgeByToken } from "@cortexpilot/frontend-api-contract";
+import { mapBadgeByToken } from "@openvibecoding/frontend-api-contract";
 
 const STATUS_BADGE_FALLBACK = { tone: "warning", label: "Needs review" } as const;
 

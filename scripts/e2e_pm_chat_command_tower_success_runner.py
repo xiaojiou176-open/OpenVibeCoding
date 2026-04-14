@@ -19,8 +19,8 @@ run_mock = str(run_mock_raw).strip().lower() in {"1", "true", "yes", "y"}
 reexec_strict = str(reexec_strict_raw).strip().lower() in {"1", "true", "yes", "y", "on"}
 allowed_paths_override = str(allowed_paths_override).strip()
 acceptance_cmd = str(acceptance_cmd).strip()
-orchestration_smoke_mode = str(os.getenv("CORTEXPILOT_E2E_ORCHESTRATION_SMOKE_MODE", "0")).strip().lower() in {"1", "true", "yes", "y", "on"}
-strict_acceptance_env = str(os.getenv("CORTEXPILOT_E2E_STRICT_ACCEPTANCE", "")).strip().lower()
+orchestration_smoke_mode = str(os.getenv("OPENVIBECODING_E2E_ORCHESTRATION_SMOKE_MODE", "0")).strip().lower() in {"1", "true", "yes", "y", "on"}
+strict_acceptance_env = str(os.getenv("OPENVIBECODING_E2E_STRICT_ACCEPTANCE", "")).strip().lower()
 if strict_acceptance_env in {"1", "true", "yes", "y", "on"}:
     strict_acceptance = True
 elif strict_acceptance_env in {"0", "false", "no", "n", "off"}:
@@ -32,46 +32,46 @@ dash_base = f"http://{host}:{dashboard_port}"
 
 run_id_wait_sec = int(
     os.getenv(
-        "CORTEXPILOT_E2E_RUN_ID_WAIT_SEC",
+        "OPENVIBECODING_E2E_RUN_ID_WAIT_SEC",
         "90" if orchestration_smoke_mode else ("120" if run_mock else "240"),
     )
 )
 status_wait_sec = int(
     os.getenv(
-        "CORTEXPILOT_E2E_STATUS_WAIT_SEC",
+        "OPENVIBECODING_E2E_STATUS_WAIT_SEC",
         "120" if orchestration_smoke_mode else ("180" if run_mock else "480"),
     )
 )
 stagnation_timeout_sec = int(
     os.getenv(
-        "CORTEXPILOT_E2E_STATUS_STAGNATION_SEC",
+        "OPENVIBECODING_E2E_STATUS_STAGNATION_SEC",
         "45" if orchestration_smoke_mode else ("90" if run_mock else "180"),
     )
 )
 api_post_timeout_sec = int(
     os.getenv(
-        "CORTEXPILOT_E2E_API_POST_TIMEOUT_SEC",
+        "OPENVIBECODING_E2E_API_POST_TIMEOUT_SEC",
         "90" if orchestration_smoke_mode else ("60" if run_mock else "180"),
     )
 )
 plan_ready_wait_sec = int(
     os.getenv(
-        "CORTEXPILOT_E2E_PLAN_READY_WAIT_SEC",
+        "OPENVIBECODING_E2E_PLAN_READY_WAIT_SEC",
         "90" if orchestration_smoke_mode else ("120" if run_mock else "240"),
     )
 )
-plan_ready_poll_sec = float(os.getenv("CORTEXPILOT_E2E_PLAN_READY_POLL_SEC", "2.0"))
-runtime_options_provider = str(os.getenv("CORTEXPILOT_E2E_RUNTIME_OPTIONS_PROVIDER", "")).strip()
+plan_ready_poll_sec = float(os.getenv("OPENVIBECODING_E2E_PLAN_READY_POLL_SEC", "2.0"))
+runtime_options_provider = str(os.getenv("OPENVIBECODING_E2E_RUNTIME_OPTIONS_PROVIDER", "")).strip()
 operator_role = "TECH_LEAD"
-ui_intake_required = str(os.getenv("CORTEXPILOT_E2E_REQUIRE_UI_INTAKE", "1" if run_mode == "real" else "0")).strip().lower() in {"1", "true", "yes", "y", "on"}
+ui_intake_required = str(os.getenv("OPENVIBECODING_E2E_REQUIRE_UI_INTAKE", "1" if run_mode == "real" else "0")).strip().lower() in {"1", "true", "yes", "y", "on"}
 ui_intake_wait_sec = int(
     os.getenv(
-        "CORTEXPILOT_E2E_UI_INTAKE_WAIT_SEC",
+        "OPENVIBECODING_E2E_UI_INTAKE_WAIT_SEC",
         "90" if orchestration_smoke_mode else ("150" if run_mode == "real" else "45"),
     )
 )
-check_pm_stop = str(os.getenv("CORTEXPILOT_E2E_CHECK_PM_STOP", "1")).strip().lower() in {"1", "true", "yes", "y", "on"}
-pm_stop_probe_delay_sec = int(os.getenv("CORTEXPILOT_E2E_PM_STOP_PROBE_DELAY_SEC", "8"))
+check_pm_stop = str(os.getenv("OPENVIBECODING_E2E_CHECK_PM_STOP", "1")).strip().lower() in {"1", "true", "yes", "y", "on"}
+pm_stop_probe_delay_sec = int(os.getenv("OPENVIBECODING_E2E_PM_STOP_PROBE_DELAY_SEC", "8"))
 last_session_events_payload: dict | list | None = None
 last_run_payload: dict | None = None
 default_mcp_tool_set = ["01-filesystem"]
@@ -83,7 +83,7 @@ def progress(msg: str) -> None:
 def _auth_headers(*, include_json_content_type: bool = False) -> dict[str, str]:
     headers: dict[str, str] = {"Authorization": f"Bearer {api_token}"}
     if operator_role:
-        headers["x-cortexpilot-role"] = operator_role
+        headers["x-openvibecoding-role"] = operator_role
     if include_json_content_type:
         headers["Content-Type"] = "application/json"
     return headers
@@ -228,7 +228,7 @@ with sync_playwright() as p:
         if repo_input.is_visible():
             current_repo = repo_input.input_value().strip()
             if not current_repo:
-                repo_input.fill("cortexpilot")
+                repo_input.fill("openvibecoding")
                 page.wait_for_timeout(100)
     except Exception:
         pass
@@ -772,7 +772,7 @@ with sync_playwright() as p:
             raise last_exc
         return []
 
-    max_answer_rounds = int(os.getenv("CORTEXPILOT_E2E_MAX_ANSWER_ROUNDS", "10"))
+    max_answer_rounds = int(os.getenv("OPENVIBECODING_E2E_MAX_ANSWER_ROUNDS", "10"))
     for idx in range(max_answer_rounds):
         answer_seed = answers[idx] if idx < len(answers) else ""
         if not answer_seed:

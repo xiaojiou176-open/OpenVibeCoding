@@ -1,6 +1,6 @@
 export type UiLocale = "en" | "zh-CN";
 
-export const UI_LOCALE_STORAGE_KEY = "cortexpilot.ui.locale";
+export const UI_LOCALE_STORAGE_KEY = "openvibecoding.ui.locale";
 export const DEFAULT_UI_LOCALE: UiLocale = "en";
 export const UI_LOCALE_COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365;
 

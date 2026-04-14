@@ -24,21 +24,21 @@ from tooling.browser.repo_chrome_singleton import (
 
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Manage the CortexPilot repo-owned Chrome singleton root and CDP instance."
+        description="Manage the OpenVibeCoding repo-owned Chrome singleton root and CDP instance."
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     migrate = subparsers.add_parser("migrate", help="Copy the named Chrome profile into the repo-owned root once.")
     migrate.add_argument("--source-root", default=str(default_source_chrome_root()))
-    migrate.add_argument("--source-profile-name", default="cortexpilot")
+    migrate.add_argument("--source-profile-name", default="openvibecoding")
     migrate.add_argument("--target-root", default=str(default_repo_chrome_user_data_dir()))
     migrate.add_argument("--target-profile-directory", default=DEFAULT_PROFILE_DIRECTORY)
-    migrate.add_argument("--target-display-name", default="cortexpilot")
+    migrate.add_argument("--target-display-name", default="openvibecoding")
     migrate.add_argument("--reseed", action="store_true")
 
     launch = subparsers.add_parser("launch", help="Attach to or launch the repo-owned Chrome singleton.")
     launch.add_argument("--target-root", default=str(default_repo_chrome_user_data_dir()))
-    launch.add_argument("--profile-name", default="cortexpilot")
+    launch.add_argument("--profile-name", default="openvibecoding")
     launch.add_argument("--cdp-host", default=default_cdp_host())
     launch.add_argument("--cdp-port", type=int, default=default_cdp_port())
     launch.add_argument("--chrome-path", default="")
@@ -46,7 +46,7 @@ def _build_parser() -> argparse.ArgumentParser:
 
     status = subparsers.add_parser("status", help="Report the repo-owned Chrome singleton state.")
     status.add_argument("--target-root", default=str(default_repo_chrome_user_data_dir()))
-    status.add_argument("--profile-name", default="cortexpilot")
+    status.add_argument("--profile-name", default="openvibecoding")
     status.add_argument("--cdp-host", default=default_cdp_host())
     status.add_argument("--cdp-port", type=int, default=default_cdp_port())
 

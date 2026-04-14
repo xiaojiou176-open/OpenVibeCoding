@@ -1262,19 +1262,19 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
           },
           {
             badge: "Thin client surface",
-            title: "@cortexpilot/frontend-api-client",
+            title: "@openvibecoding/frontend-api-client",
             desc: "Use the dashboard, desktop, and web client entry points when you want runs, Workflow Cases, approvals, and Command Tower reads from one import boundary.",
             href: "https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/packages/frontend-api-client/README.md",
           },
           {
             badge: "Contract-facing",
-            title: "@cortexpilot/frontend-api-contract",
+            title: "@openvibecoding/frontend-api-contract",
             desc: "Use the contract package README first when you want the human guide to the generated API boundary before opening raw type files.",
             href: "https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/packages/frontend-api-contract/docs/README.md",
           },
           {
             badge: "Presentation substrate",
-            title: "@cortexpilot/frontend-shared",
+            title: "@openvibecoding/frontend-shared",
             desc: "Use the shared brand copy, locale helpers, status presentation, and frontend-only types instead of rebuilding those surfaces per app.",
             href: "https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/packages/frontend-shared/README.md",
           },
@@ -1515,7 +1515,7 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
             laneNote: "Each lane card exposes quick actions so you can jump straight into live control, risk focus, or the next operator step.",
           },
           drawer: {
-            projectKeyPlaceholder: "e.g. cortexpilot",
+            projectKeyPlaceholder: "e.g. openvibecoding",
             focusViewSwitcherAriaLabel: "Focus view switcher",
           },
           viewModel: {
@@ -2557,19 +2557,19 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
           },
           {
             badge: "薄客户端",
-            title: "@cortexpilot/frontend-api-client",
+            title: "@openvibecoding/frontend-api-client",
             desc: "当你想从一个导入边界里拿到 runs、Workflow Cases、approvals 和 Command Tower 读取能力时，就从这里开始。",
             href: "https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/packages/frontend-api-client/README.md",
           },
           {
             badge: "契约层",
-            title: "@cortexpilot/frontend-api-contract",
+            title: "@openvibecoding/frontend-api-contract",
             desc: "如果你想先看生成契约边界的人类说明，再决定要不要打开原始类型文件，就先从这个 README 开始。",
             href: "https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/packages/frontend-api-contract/docs/README.md",
           },
           {
             badge: "表现层 substrate",
-            title: "@cortexpilot/frontend-shared",
+            title: "@openvibecoding/frontend-shared",
             desc: "品牌 copy、locale helper、status presentation 和 frontend-only types 已经集中到这一层，而不是散落在各 app 里。",
             href: "https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/packages/frontend-shared/README.md",
           },
@@ -2810,7 +2810,7 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
             laneNote: "每张 lane 卡都暴露了快捷动作，这样你可以直接跳到实时控制、风险聚焦或下一步操作。",
           },
           drawer: {
-            projectKeyPlaceholder: "例如 cortexpilot",
+            projectKeyPlaceholder: "例如 openvibecoding",
             focusViewSwitcherAriaLabel: "焦点视图切换器",
           },
           viewModel: {

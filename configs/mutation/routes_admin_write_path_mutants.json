@@ -1,5 +1,5 @@
 {
-  "target": "apps/orchestrator/src/cortexpilot_orch/api/routes_admin.py",
+  "target": "apps/orchestrator/src/openvibecoding_orch/api/routes_admin.py",
   "mutants": [
     {
       "name": "request_rbac_guard_disabled",

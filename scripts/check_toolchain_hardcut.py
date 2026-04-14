@@ -43,7 +43,7 @@ def _default_toolchain_bin() -> Path:
     configured_root = Path(
         str(
             (
-                Path(subprocess.run(["bash", "-lc", "source scripts/lib/toolchain_env.sh && cortexpilot_toolchain_cache_root \"$PWD\""], cwd=ROOT, capture_output=True, text=True, check=True).stdout.strip())
+                Path(subprocess.run(["bash", "-lc", "source scripts/lib/toolchain_env.sh && openvibecoding_toolchain_cache_root \"$PWD\""], cwd=ROOT, capture_output=True, text=True, check=True).stdout.strip())
             )
         )
     )

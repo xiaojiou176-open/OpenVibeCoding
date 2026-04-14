@@ -3,7 +3,7 @@ import sys
 import types
 from pathlib import Path
 
-from cortexpilot_orch.runners import agents_runner
+from openvibecoding_orch.runners import agents_runner
 
 from .test_agents_runner_failure_matrix_extra import (
     _DummyMCPDefault,

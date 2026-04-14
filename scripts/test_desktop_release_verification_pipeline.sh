@@ -35,8 +35,8 @@ setup_case_workspace() {
   local fake_bin="$case_dir/fake-bin"
   local icon_dir="$case_dir/icons"
   local bundle_dir="$case_dir/bundle"
-  local app_path="$bundle_dir/macos/CortexPilot Desktop.app"
-  local dmg_path="$bundle_dir/dmg/CortexPilot Desktop_0.1.0_aarch64.dmg"
+  local app_path="$bundle_dir/macos/OpenVibeCoding Desktop.app"
+  local dmg_path="$bundle_dir/dmg/OpenVibeCoding Desktop_0.1.0_aarch64.dmg"
   local report_dir="$case_dir/reports"
 
   mkdir -p "$fake_bin" "$icon_dir" "$app_path" "$(dirname "$dmg_path")" "$report_dir"

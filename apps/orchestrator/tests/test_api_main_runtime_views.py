@@ -12,14 +12,14 @@ from .helpers.api_main_test_io import (
     _write_manifest,
     _write_report,
 )
-from cortexpilot_orch.api import main as api_main
+from openvibecoding_orch.api import main as api_main
 
 
 def test_api_workflows_list_and_detail(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime"
     runs_root = runtime_root / "runs"
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
 
     run_a = runs_root / "run_a"
     run_b = runs_root / "run_b"
@@ -33,7 +33,7 @@ def test_api_workflows_list_and_detail(tmp_path: Path, monkeypatch) -> None:
             "created_at": "2024-01-01T00:00:00Z",
             "workflow": {
                 "workflow_id": "wf-alpha",
-                "task_queue": "cortexpilot-orch",
+                "task_queue": "openvibecoding-orch",
                 "namespace": "default",
                 "status": "RUNNING",
             },
@@ -48,7 +48,7 @@ def test_api_workflows_list_and_detail(tmp_path: Path, monkeypatch) -> None:
             "created_at": "2024-01-02T00:00:00Z",
             "workflow": {
                 "workflow_id": "wf-alpha",
-                "task_queue": "cortexpilot-orch",
+                "task_queue": "openvibecoding-orch",
                 "namespace": "default",
                 "status": "SUCCESS",
             },
@@ -63,7 +63,7 @@ def test_api_workflows_list_and_detail(tmp_path: Path, monkeypatch) -> None:
             "created_at": "2024-01-03T00:00:00Z",
             "workflow": {
                 "workflow_id": "wf-beta",
-                "task_queue": "cortexpilot-orch",
+                "task_queue": "openvibecoding-orch",
                 "namespace": "default",
                 "status": "FAILURE",
             },
@@ -150,8 +150,8 @@ def test_api_workflows_list_and_detail(tmp_path: Path, monkeypatch) -> None:
 def test_api_queue_list_enqueue_and_run_next(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime"
     runs_root = runtime_root / "runs"
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
 
     run_dir = runs_root / "run_source"
     _write_manifest(
@@ -160,7 +160,7 @@ def test_api_queue_list_enqueue_and_run_next(tmp_path: Path, monkeypatch) -> Non
             "run_id": "run_source",
             "task_id": "task_source",
             "status": "SUCCESS",
-            "workflow": {"workflow_id": "wf-queue", "task_queue": "cortexpilot-orch", "namespace": "default", "status": "SUCCESS"},
+            "workflow": {"workflow_id": "wf-queue", "task_queue": "openvibecoding-orch", "namespace": "default", "status": "SUCCESS"},
         },
     )
     _write_contract(
@@ -192,7 +192,7 @@ def test_api_queue_list_enqueue_and_run_next(tmp_path: Path, monkeypatch) -> Non
     enqueue = client.post(
         "/api/queue/from-run/run_source",
         json={"priority": 5},
-        headers={"x-cortexpilot-role": "OWNER"},
+        headers={"x-openvibecoding-role": "OWNER"},
     )
     assert enqueue.status_code == 200
     assert enqueue.json()["workflow_id"] == "wf-queue"
@@ -203,7 +203,7 @@ def test_api_queue_list_enqueue_and_run_next(tmp_path: Path, monkeypatch) -> Non
     assert queue_items.json()[0]["task_id"] == "task_source"
     assert queue_items.json()[0]["eligible"] is True
 
-    run_next = client.post("/api/queue/run-next", json={"mock": True}, headers={"x-cortexpilot-role": "OWNER"})
+    run_next = client.post("/api/queue/run-next", json={"mock": True}, headers={"x-openvibecoding-role": "OWNER"})
     assert run_next.status_code == 200
     assert run_next.json()["ok"] is True
     assert run_next.json()["run_id"] == "run_from_queue"
@@ -212,8 +212,8 @@ def test_api_queue_list_enqueue_and_run_next(tmp_path: Path, monkeypatch) -> Non
 def test_api_queue_preview_and_cancel_roundtrip(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime"
     runs_root = runtime_root / "runs"
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
 
     run_dir = runs_root / "run_source"
     _write_manifest(
@@ -222,7 +222,7 @@ def test_api_queue_preview_and_cancel_roundtrip(tmp_path: Path, monkeypatch) -> 
             "run_id": "run_source",
             "task_id": "task_source",
             "status": "SUCCESS",
-            "workflow": {"workflow_id": "wf-queue", "task_queue": "cortexpilot-orch", "namespace": "default", "status": "SUCCESS"},
+            "workflow": {"workflow_id": "wf-queue", "task_queue": "openvibecoding-orch", "namespace": "default", "status": "SUCCESS"},
         },
     )
     _write_contract(
@@ -239,7 +239,7 @@ def test_api_queue_preview_and_cancel_roundtrip(tmp_path: Path, monkeypatch) -> 
     preview = client.post(
         "/api/queue/from-run/run_source/preview",
         json={"priority": 3},
-        headers={"x-cortexpilot-role": "OWNER"},
+        headers={"x-openvibecoding-role": "OWNER"},
     )
     assert preview.status_code == 200
     preview_payload = preview.json()
@@ -254,7 +254,7 @@ def test_api_queue_preview_and_cancel_roundtrip(tmp_path: Path, monkeypatch) -> 
     enqueue = client.post(
         "/api/queue/from-run/run_source",
         json={"priority": 3},
-        headers={"x-cortexpilot-role": "OWNER"},
+        headers={"x-openvibecoding-role": "OWNER"},
     )
     assert enqueue.status_code == 200
     queue_id = enqueue.json()["queue_id"]
@@ -262,7 +262,7 @@ def test_api_queue_preview_and_cancel_roundtrip(tmp_path: Path, monkeypatch) -> 
     cancel = client.post(
         f"/api/queue/{queue_id}/cancel",
         json={"reason": "operator aborted pilot"},
-        headers={"x-cortexpilot-role": "OWNER"},
+        headers={"x-openvibecoding-role": "OWNER"},
     )
     assert cancel.status_code == 200
     cancel_payload = cancel.json()
@@ -281,8 +281,8 @@ def test_api_queue_preview_and_cancel_roundtrip(tmp_path: Path, monkeypatch) -> 
 def test_api_queue_rejects_naive_schedule_input(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime"
     runs_root = runtime_root / "runs"
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
 
     run_dir = runs_root / "run_source"
     _write_manifest(
@@ -291,7 +291,7 @@ def test_api_queue_rejects_naive_schedule_input(tmp_path: Path, monkeypatch) -> 
             "run_id": "run_source",
             "task_id": "task_source",
             "status": "SUCCESS",
-            "workflow": {"workflow_id": "wf-queue", "task_queue": "cortexpilot-orch", "namespace": "default", "status": "SUCCESS"},
+            "workflow": {"workflow_id": "wf-queue", "task_queue": "openvibecoding-orch", "namespace": "default", "status": "SUCCESS"},
         },
     )
     _write_contract(
@@ -307,7 +307,7 @@ def test_api_queue_rejects_naive_schedule_input(tmp_path: Path, monkeypatch) -> 
     enqueue = client.post(
         "/api/queue/from-run/run_source",
         json={"priority": 5, "scheduled_at": "2026-03-30T12:00"},
-        headers={"x-cortexpilot-role": "OWNER"},
+        headers={"x-openvibecoding-role": "OWNER"},
     )
     assert enqueue.status_code == 422
 
@@ -315,8 +315,8 @@ def test_api_queue_rejects_naive_schedule_input(tmp_path: Path, monkeypatch) -> 
 def test_api_reports_include_proof_pack_for_successful_public_slice(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime"
     runs_root = runtime_root / "runs"
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
 
     run_dir = runs_root / "run_news_digest"
     _write_manifest(
@@ -403,10 +403,10 @@ def test_api_agents_policies_locks_worktrees(tmp_path: Path, monkeypatch) -> Non
         encoding="utf-8",
     )
 
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(worktree_root))
-    monkeypatch.setenv("CORTEXPILOT_REPO_ROOT", str(repo_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(worktree_root))
+    monkeypatch.setenv("OPENVIBECODING_REPO_ROOT", str(repo_root))
 
     run_id = "run_lock"
     run_dir = runs_root / run_id
@@ -421,7 +421,7 @@ def test_api_agents_policies_locks_worktrees(tmp_path: Path, monkeypatch) -> Non
         lambda: [
             f"worktree {worktree_path}",
             "HEAD abc123",
-            "branch refs/heads/cortexpilot-run-run_lock",
+            "branch refs/heads/openvibecoding-run-run_lock",
             "locked",
         ],
     )
@@ -465,9 +465,9 @@ def test_api_pm_intake_flow(tmp_path: Path, monkeypatch) -> None:
         src = Path(__file__).resolve().parents[3] / "schemas" / name
         (schema_root / name).write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
 
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_REPO_ROOT", str(repo_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_REPO_ROOT", str(repo_root))
     monkeypatch.setenv("GEMINI_API_KEY", "")  # force provider fallback path
 
     client = TestClient(api_main.app)
@@ -502,9 +502,9 @@ def test_api_pm_intake_custom_policy_requires_privileged_role(tmp_path: Path, mo
         src = Path(__file__).resolve().parents[3] / "schemas" / name
         (schema_root / name).write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
 
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_REPO_ROOT", str(repo_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_REPO_ROOT", str(repo_root))
 
     client = TestClient(api_main.app)
 
@@ -549,8 +549,8 @@ def test_api_pm_intake_custom_policy_requires_privileged_role(tmp_path: Path, mo
 def test_api_search_promote_and_agent_status(tmp_path: Path, monkeypatch) -> None:
     runs_root = tmp_path / "runs"
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
 
     run_id = "run_search"
     run_dir = runs_root / run_id
@@ -604,7 +604,7 @@ def test_api_search_promote_and_agent_status(tmp_path: Path, monkeypatch) -> Non
 
     promote_resp = client.post(
         f"/api/runs/{run_id}/evidence/promote",
-        headers={"x-cortexpilot-role": "TECH_LEAD"},
+        headers={"x-openvibecoding-role": "TECH_LEAD"},
     )
     assert promote_resp.status_code == 200
     assert promote_resp.json()["ok"] is True
@@ -615,7 +615,7 @@ def test_api_search_promote_and_agent_status(tmp_path: Path, monkeypatch) -> Non
     status_payload = status_resp.json()["agents"][0]
     assert status_payload["stage"] == "WAITING_APPROVAL"
 
-    pending_resp = client.get("/api/god-mode/pending", headers={"x-cortexpilot-role": "TECH_LEAD"})
+    pending_resp = client.get("/api/god-mode/pending", headers={"x-openvibecoding-role": "TECH_LEAD"})
     assert pending_resp.status_code == 200
     pending_payload = pending_resp.json()[0]
     assert pending_payload["run_id"] == run_id

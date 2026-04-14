@@ -35,9 +35,9 @@ import RunsPage from "../app/runs/page";
 import { metadata } from "../app/layout";
 import DashboardShellChrome from "../components/DashboardShellChrome";
 import { fetchRuns, fetchWorkflows } from "../lib/api";
-import { getUiCopy } from "@cortexpilot/frontend-shared/uiCopy";
+import { getUiCopy } from "@openvibecoding/frontend-shared/uiCopy";
 
-const ORIGINAL_PUBLIC_DOCS_BASE_URL = process.env.NEXT_PUBLIC_CORTEXPILOT_PUBLIC_DOCS_BASE_URL;
+const ORIGINAL_PUBLIC_DOCS_BASE_URL = process.env.NEXT_PUBLIC_OPENVIBECODING_PUBLIC_DOCS_BASE_URL;
 
 describe("dashboard home run-summary clarity", () => {
   const mockFetchRuns = vi.mocked(fetchRuns);
@@ -51,8 +51,8 @@ describe("dashboard home run-summary clarity", () => {
       get: () => undefined,
       toString: () => "",
     });
-    if (ORIGINAL_PUBLIC_DOCS_BASE_URL === undefined) delete process.env.NEXT_PUBLIC_CORTEXPILOT_PUBLIC_DOCS_BASE_URL;
-    else process.env.NEXT_PUBLIC_CORTEXPILOT_PUBLIC_DOCS_BASE_URL = ORIGINAL_PUBLIC_DOCS_BASE_URL;
+    if (ORIGINAL_PUBLIC_DOCS_BASE_URL === undefined) delete process.env.NEXT_PUBLIC_OPENVIBECODING_PUBLIC_DOCS_BASE_URL;
+    else process.env.NEXT_PUBLIC_OPENVIBECODING_PUBLIC_DOCS_BASE_URL = ORIGINAL_PUBLIC_DOCS_BASE_URL;
   });
 
   it("renders first-run CTA and onboarding guidance when no runs", async () => {
@@ -161,49 +161,49 @@ describe("dashboard home run-summary clarity", () => {
   });
 
   it("routes public docs CTAs through the configured docs base", async () => {
-    process.env.NEXT_PUBLIC_CORTEXPILOT_PUBLIC_DOCS_BASE_URL = "https://docs.example/cortexpilot/";
+    process.env.NEXT_PUBLIC_OPENVIBECODING_PUBLIC_DOCS_BASE_URL = "https://docs.example/openvibecoding/";
 
     render(await Home());
 
     expect(screen.getByRole("link", { name: "Open AI + MCP + API surfaces" })).toHaveAttribute(
       "href",
-      "https://docs.example/cortexpilot/ai-surfaces/"
+      "https://docs.example/openvibecoding/ai-surfaces/"
     );
     expect(screen.getByRole("link", { name: "Open ecosystem map" })).toHaveAttribute(
       "href",
-      "https://docs.example/cortexpilot/ecosystem/"
+      "https://docs.example/openvibecoding/ecosystem/"
     );
     expect(screen.getByRole("link", { name: "Open builder quickstart" })).toHaveAttribute(
       "href",
-      "https://docs.example/cortexpilot/builders/"
+      "https://docs.example/openvibecoding/builders/"
     );
     expect(screen.getByRole("link", { name: "See first proven workflow" })).toHaveAttribute(
       "href",
-      "https://docs.example/cortexpilot/use-cases/"
+      "https://docs.example/openvibecoding/use-cases/"
     );
     expect(screen.getByText("Compatibility matrix").closest("a")).toHaveAttribute(
       "href",
-      "https://docs.example/cortexpilot/compatibility/"
+      "https://docs.example/openvibecoding/compatibility/"
     );
     expect(screen.getByText("Integration guide").closest("a")).toHaveAttribute(
       "href",
-      "https://docs.example/cortexpilot/integrations/"
+      "https://docs.example/openvibecoding/integrations/"
     );
     expect(screen.getByText("Skills quickstart").closest("a")).toHaveAttribute(
       "href",
-      "https://docs.example/cortexpilot/skills/"
+      "https://docs.example/openvibecoding/skills/"
     );
     expect(screen.getByText("Read-only MCP quickstart").closest("a")).toHaveAttribute(
       "href",
-      "https://docs.example/cortexpilot/mcp/"
+      "https://docs.example/openvibecoding/mcp/"
     );
     expect(screen.getByText("API and contract quickstart").closest("a")).toHaveAttribute(
       "href",
-      "https://docs.example/cortexpilot/api/"
+      "https://docs.example/openvibecoding/api/"
     );
     expect(screen.getByRole("link", { name: "Open ecosystem map" })).toHaveAttribute(
       "href",
-      "https://docs.example/cortexpilot/ecosystem/"
+      "https://docs.example/openvibecoding/ecosystem/"
     );
   });
 
@@ -224,8 +224,8 @@ describe("dashboard home run-summary clarity", () => {
 
   it("renders zh-CN home copy when the locale cookie requests it", async () => {
     mockCookies.mockResolvedValue({
-      get: (name: string) => (name === "cortexpilot.ui.locale" ? { value: "zh-CN" } : undefined),
-      toString: () => "cortexpilot.ui.locale=zh-CN",
+      get: (name: string) => (name === "openvibecoding.ui.locale" ? { value: "zh-CN" } : undefined),
+      toString: () => "openvibecoding.ui.locale=zh-CN",
     });
 
     render(await Home());

@@ -1,0 +1,17 @@
+{
+  "name": "openvibecoding-coding-agent-bundle",
+  "version": "0.1.0",
+  "description": "Repo-owned OpenVibeCoding skill bundle for local Codex and compatible coding-agent installs.",
+  "author": "OpenVibeCoding",
+  "homepage": "https://github.com/xiaojiou176-open/OpenVibeCoding",
+  "repository": "https://github.com/xiaojiou176-open/OpenVibeCoding",
+  "license": "MIT",
+  "keywords": [
+    "openvibecoding",
+    "codex",
+    "workflow-cases",
+    "proof-and-replay",
+    "skills"
+  ],
+  "skills": "./skills/"
+}

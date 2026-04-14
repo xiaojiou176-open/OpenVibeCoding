@@ -7,7 +7,7 @@ This workflow now sits beside runtime retention rather than replacing it:
 
 - `retention.py` owns canonical runtime lanes such as `.runtime-cache/logs`,
   `.runtime-cache/cache`, runs/worktrees/contracts/intakes/codex-homes, plus
-  repo-owned machine-cache child retention under `~/.cache/cortexpilot`, and
+  repo-owned machine-cache child retention under `~/.cache/openvibecoding`, and
   emits `retention_report.json`.
 - `space_governance.py` owns high-yield cleanup candidates, low-risk workspace
   residue, and repo-external strong-related cache surfaces, and emits
@@ -26,16 +26,16 @@ npm run docker:runtime:audit
 
 ## What The Workflow Produces
 
-- `.runtime-cache/cortexpilot/reports/space_governance/report.json`
-- `.runtime-cache/cortexpilot/reports/space_governance/report.md`
+- `.runtime-cache/openvibecoding/reports/space_governance/report.json`
+- `.runtime-cache/openvibecoding/reports/space_governance/report.md`
 - `.runtime-cache/test_output/space_governance/cleanup_gate_<wave>.json`
 
 ## Policy Boundaries
 
 - Repo-internal high-yield surfaces include dashboard/desktop `node_modules`,
   orchestrator `.venv`, and desktop `dist`.
-- Repo-external strong-related surfaces are limited to the CortexPilot machine
-  cache namespace under `~/.cache/cortexpilot`.
+- Repo-external strong-related surfaces are limited to the OpenVibeCoding machine
+  cache namespace under `~/.cache/openvibecoding`.
 - Repo-authored runtime/test/temp/evidence artifacts stay under
   `.runtime-cache/`; app-local dependency/build roots such as
   `node_modules`, `.next`, `.venv`, and `*.tsbuildinfo` remain explicit
@@ -44,15 +44,15 @@ npm run docker:runtime:audit
   namespace, but only through repo-owned child paths that are explicitly marked
   in `configs/space_governance_policy.json`. The cap never turns the rollup root
   itself into an apply target.
-- `~/.cache/cortexpilot/browser/**` is a special-case repo-owned persistent
+- `~/.cache/openvibecoding/browser/**` is a special-case repo-owned persistent
   browser workspace. It stays visible in audit/report output, but it is both
   `protected` and `cap-excluded`, so TTL/cap auto-prune never treats it as a
   reclaim target.
 - Heavy machine-scoped temp producers also belong to that same governed
   namespace: local `docker_ci` host runner temp now defaults to
-  `~/.cache/cortexpilot/tmp/docker-ci/runner-temp-*`, while clean-room
-  recovery uses `~/.cache/cortexpilot/tmp/clean-room-machine-cache.*` and
-  `~/.cache/cortexpilot/tmp/clean-room-preserve.*`.
+  `~/.cache/openvibecoding/tmp/docker-ci/runner-temp-*`, while clean-room
+  recovery uses `~/.cache/openvibecoding/tmp/clean-room-machine-cache.*` and
+  `~/.cache/openvibecoding/tmp/clean-room-preserve.*`.
 - Shared ecosystem layers such as Docker Desktop, global Cargo/Rustup, global
   uv, and global Playwright remain observation-only unless a separate audit
   proves safe attribution.
@@ -73,11 +73,11 @@ npm run docker:runtime:prune:aggressive:full
 
 Current semantics:
 
-- `docker:runtime:audit` reports `cortexpilot-ci-core:local`,
-  `cortexpilot-ci-desktop-native:local`, stopped containers derived from those
+- `docker:runtime:audit` reports `openvibecoding-ci-core:local`,
+  `openvibecoding-ci-desktop-native:local`, stopped containers derived from those
   images, repo-related named volumes, and a workstation-global Docker summary
   for observation only
-- `docker:runtime:prune:rebuildable` removes stopped CortexPilot-owned
+- `docker:runtime:prune:rebuildable` removes stopped OpenVibeCoding-owned
   containers only
 - `docker:runtime:prune:aggressive` extends rebuildable cleanup and may also
   remove the canonical local CI image or repo-related named volumes when
@@ -87,11 +87,11 @@ Current semantics:
 
 The Docker runtime lane is the canonical operator path for Docker-heavy local
 CI residue. Keep `space:cleanup:wave*` focused on repo-local residue and the
-governed `~/.cache/cortexpilot` namespace. Workstation-global Docker/cache
+governed `~/.cache/openvibecoding` namespace. Workstation-global Docker/cache
 totals remain observation-only and are not apply targets for this lane.
 
 The lane now also writes a structured receipt to
-`.runtime-cache/cortexpilot/reports/space_governance/docker_runtime.json`.
+`.runtime-cache/openvibecoding/reports/space_governance/docker_runtime.json`.
 That receipt includes managed image/container/volume/build-cache totals,
 planned reclaim bytes, actual reclaimed bytes, and any `skipped_active`
 surfaces that stayed live.
@@ -109,7 +109,7 @@ into an unsupported environment.
 - `wave2` is for repo-local dependency surfaces and gray-zone build outputs.
   Heavy repo-local targets stay serial-only: clean one, rebuild/verify it, then
   move to the next.
-- `wave3` is for `~/.cache/cortexpilot` and requires explicit shared-cache
+- `wave3` is for `~/.cache/openvibecoding` and requires explicit shared-cache
   confirmation. The preferred apply targets are child paths such as
   `pnpm-store/dashboard`, `pnpm-store/desktop`, `pnpm-store/v10`,
   `playwright`, and the governed machine-temp roots under `tmp/`, not the
@@ -119,7 +119,7 @@ into an unsupported environment.
   - `tmp/docker-ci/runner-temp-*`
   - `tmp/clean-room-machine-cache.*`
   - `tmp/clean-room-preserve.*`
-- Automatic retention TTLs inside `~/.cache/cortexpilot` are currently:
+- Automatic retention TTLs inside `~/.cache/openvibecoding` are currently:
   - `tmp/**` repo-owned child roots: **24h**
   - `playwright/`: **7d**
   - `pnpm-store/dashboard` and `pnpm-store/desktop`: **7d**
@@ -131,11 +131,11 @@ into an unsupported environment.
   eligible child paths under cap pressure until the projected total returns
   below the threshold or only protected surfaces remain.
 - The repo-owned singleton browser subtree under
-  `~/.cache/cortexpilot/browser/` is outside that cap-pressure math. It is a
+  `~/.cache/openvibecoding/browser/` is outside that cap-pressure math. It is a
   persistent workspace for the single headed Chrome instance and must not be
   treated as reclaimable machine cache.
 - These paths stay `repo_external_related`, must resolve inside
-  `~/.cache/cortexpilot/tmp/**`, and must fail closed if they escape into
+  `~/.cache/openvibecoding/tmp/**`, and must fail closed if they escape into
   unrelated temp roots or shared/system-owned browser temp trees.
 - `toolchains/python/current`, shared observation layers, and any
   `observe-only` entry remain reportable but never become automatic retention
@@ -153,7 +153,7 @@ into an unsupported environment.
   - `scripts/docker_ci.sh`
   - `scripts/check_clean_room_recovery.sh`
 - Auto-prune uses the existing `cleanup runtime --apply` path with root-noise
-  cleanup disabled, so CortexPilot still has one cleanup world instead of a
+  cleanup disabled, so OpenVibeCoding still has one cleanup world instead of a
   separate machine-cache-only deletion path.
 - Docker runtime is now a separate operator lane rather than part of the
   generic wave cleanup:
@@ -162,14 +162,14 @@ into an unsupported environment.
   - `npm run docker:runtime:prune:aggressive`
   - `npm run docker:runtime:prune:aggressive:full`
 - Lane semantics:
-  - `audit` inventories `cortexpilot-ci-core:local`,
-    `cortexpilot-ci-desktop-native:local`, exited repo containers, repo-related
+  - `audit` inventories `openvibecoding-ci-core:local`,
+    `openvibecoding-ci-desktop-native:local`, exited repo containers, repo-related
     named volumes, and a workstation-global Docker summary that is explicitly
     observation-only.
   - `rebuildable` removes exited repo containers and keeps shared Docker/cache
     layers untouched.
-  - `aggressive` can additionally remove `cortexpilot-ci-core:local` and
-    `cortexpilot-ci-desktop-native:local` when they are not backing running
+  - `aggressive` can additionally remove `openvibecoding-ci-core:local` and
+    `openvibecoding-ci-desktop-native:local` when they are not backing running
     containers.
   - `aggressive:full` extends `aggressive` by also removing repo-related named
     volumes that match the configured prefix.
@@ -180,7 +180,7 @@ into an unsupported environment.
   cross-repo symlink targets must fail closed rather than partially cleaning.
 - `observe-only` means the object can appear in reports but must not enter apply
   scope. This covers shared observation layers and high-risk gray zones such as
-  `~/.cache/cortexpilot/toolchains/python/current` until live owner validation
+  `~/.cache/openvibecoding/toolchains/python/current` until live owner validation
   exists.
 - Cleanup receipts now carry expected reclaim bytes, execution order,
   post-cleanup verification commands, and per-target verification outcomes so a

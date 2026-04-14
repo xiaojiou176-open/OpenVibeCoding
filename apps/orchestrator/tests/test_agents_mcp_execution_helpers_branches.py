@@ -6,8 +6,8 @@ from typing import Any
 
 import pytest
 
-from cortexpilot_orch.runners import agents_mcp_execution_helpers as helpers
-from cortexpilot_orch.runners.provider_resolution import ProviderResolutionError
+from openvibecoding_orch.runners import agents_mcp_execution_helpers as helpers
+from openvibecoding_orch.runners.provider_resolution import ProviderResolutionError
 
 
 class _Store:
@@ -32,7 +32,7 @@ class _Store:
 
 class _Agent:
     def __init__(self, **kwargs: Any) -> None:
-        self.name = str(kwargs.get("name", "CortexPilotWorker"))
+        self.name = str(kwargs.get("name", "OpenVibeCodingWorker"))
 
 
 class _Result:
@@ -196,7 +196,7 @@ def test_run_worker_execution_sets_provider_specific_env_key(
     )
     result = asyncio.run(helpers.run_worker_execution(**kwargs))
     assert isinstance(result, _Result)
-    assert captured_env["CORTEXPILOT_PROVIDER"] == provider
+    assert captured_env["OPENVIBECODING_PROVIDER"] == provider
     assert captured_env[expected_key_name] in {"openai-key", "anthropic-key"}
 
 

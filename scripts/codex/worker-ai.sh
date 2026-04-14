@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 set -euo pipefail
-CODEX_HOME="$HOME/.codex-homes/cortexpilot-worker-ai"
+CODEX_HOME="$HOME/.codex-homes/openvibecoding-worker-ai"
 export CODEX_HOME
 exec codex "$@"

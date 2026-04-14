@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from cortexpilot_orch.api import search_payload_helpers
+from openvibecoding_orch.api import search_payload_helpers
 
 
 def test_extract_search_queries_skips_invalid_entries_then_reads_list(tmp_path: Path) -> None:

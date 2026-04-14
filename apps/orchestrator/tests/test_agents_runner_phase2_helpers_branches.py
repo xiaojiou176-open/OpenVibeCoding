@@ -6,7 +6,7 @@ from typing import Any
 
 import pytest
 
-from cortexpilot_orch.runners import agents_runner_phase2_helpers as helpers
+from openvibecoding_orch.runners import agents_runner_phase2_helpers as helpers
 
 
 class _ModelBehaviorError(RuntimeError):

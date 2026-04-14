@@ -1,6 +1,6 @@
 # Contracts Workspace
 
-This directory holds contract artifacts for CortexPilot governance.
+This directory holds contract artifacts for OpenVibeCoding governance.
 
 - packs/: source-of-truth task-pack manifests for registry-driven intake surfaces.
 - plans/: PM or Tech Lead plans (plan schema).
@@ -13,13 +13,13 @@ This directory holds contract artifacts for CortexPilot governance.
   - Reviewer/Test steps are modeled as read-only contracts (`task_type=REVIEW|TEST`) with scope declared in `allowed_paths`.
   - Reviewer `allowed_paths` includes reviewed worker outputs to accept dependency patch context under strict diff gate.
   - Multi-reviewer chains with overlapping review scope run serially (no shared `parallel_group`) to avoid lock contention by design.
-- Runtime-generated task/review/result contracts are written under `.runtime-cache/cortexpilot/contracts/{tasks,reviews,results}`.
+- Runtime-generated task/review/result contracts are written under `.runtime-cache/openvibecoding/contracts/{tasks,reviews,results}`.
 - Runtime-generated pack metadata must not write back into `contracts/packs/`; pack manifests stay source-owned and repo-tracked.
 - Pack manifests now also carry `input_fields` plus `evidence_contract`
   metadata so dashboard and desktop intake surfaces can render pack-specific
   forms without inventing their own field registry.
 - `contracts/` is source-of-truth workspace only; any runtime path that writes back into `contracts/tasks|reviews|results` is governance drift.
-- Auto-generated coverage self-heal chains therefore land under `.runtime-cache/cortexpilot/contracts/tasks`, even when their schema/source examples live in this directory.
+- Auto-generated coverage self-heal chains therefore land under `.runtime-cache/openvibecoding/contracts/tasks`, even when their schema/source examples live in this directory.
 
 ## Sampling Request Routing (Scheduler Contract Semantics)
 
@@ -43,6 +43,6 @@ These examples describe canonical failure semantics and required evidence shape;
 
 ## Compatibility Notes (P0 Adapter Rollout)
 
-- Adapter routing is additive; it does not replace CortexPilot primary orchestration.
+- Adapter routing is additive; it does not replace OpenVibeCoding primary orchestration.
 - Existing sampling-only requests remain valid (`tool` omitted still routes to sampling).
 - Adapter tools remain policy-gated by contract `tool_permissions.mcp_tools`; denied tools fail with deterministic `error/reason`.

@@ -13,8 +13,8 @@ describe("usePersistedWorkspaceBindings", () => {
     const setWorkspacePath = vi.fn();
     const setRepoName = vi.fn();
 
-    window.localStorage.setItem("cortexpilot.pm.workspace", "apps/custom");
-    window.localStorage.setItem("cortexpilot.pm.repo", "custom-repo");
+    window.localStorage.setItem("openvibecoding.pm.workspace", "apps/custom");
+    window.localStorage.setItem("openvibecoding.pm.repo", "custom-repo");
 
     renderHook(() =>
       usePersistedWorkspaceBindings({
@@ -46,7 +46,7 @@ describe("usePersistedWorkspaceBindings", () => {
 
     await waitFor(() => {
       expect(setWorkspacePath).toHaveBeenCalledWith("apps/dashboard");
-      expect(setRepoName).toHaveBeenCalledWith("cortexpilot");
+      expect(setRepoName).toHaveBeenCalledWith("openvibecoding");
     });
   });
 
@@ -72,21 +72,21 @@ describe("usePersistedWorkspaceBindings", () => {
     );
 
     await waitFor(() => {
-      expect(window.localStorage.getItem("cortexpilot.pm.workspace")).toBeNull();
-      expect(window.localStorage.getItem("cortexpilot.pm.repo")).toBeNull();
+      expect(window.localStorage.getItem("openvibecoding.pm.workspace")).toBeNull();
+      expect(window.localStorage.getItem("openvibecoding.pm.repo")).toBeNull();
     });
 
     rerender({
       workspacePath: " apps/orchestrator ",
-      repoName: " cortexpilot-main ",
+      repoName: " openvibecoding-main ",
     });
 
     await waitFor(() => {
-      expect(window.localStorage.getItem("cortexpilot.pm.workspace")).toBe("apps/orchestrator");
-      expect(window.localStorage.getItem("cortexpilot.pm.repo")).toBe("cortexpilot-main");
+      expect(window.localStorage.getItem("openvibecoding.pm.workspace")).toBe("apps/orchestrator");
+      expect(window.localStorage.getItem("openvibecoding.pm.repo")).toBe("openvibecoding-main");
     });
 
-    expect(setItemSpy).toHaveBeenCalledWith("cortexpilot.pm.workspace", "apps/orchestrator");
-    expect(setItemSpy).toHaveBeenCalledWith("cortexpilot.pm.repo", "cortexpilot-main");
+    expect(setItemSpy).toHaveBeenCalledWith("openvibecoding.pm.workspace", "apps/orchestrator");
+    expect(setItemSpy).toHaveBeenCalledWith("openvibecoding.pm.repo", "openvibecoding-main");
   });
 });

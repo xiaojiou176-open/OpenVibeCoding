@@ -1,8 +1,8 @@
 {
-  "name": "@cortexpilot/frontend-api-contract",
+  "name": "@openvibecoding/frontend-api-contract",
   "version": "0.1.0",
   "private": false,
-  "description": "Generated frontend-safe route, query, and type contract surface for CortexPilot control-plane consumers.",
+  "description": "Generated frontend-safe route, query, and type contract surface for OpenVibeCoding control-plane consumers.",
   "homepage": "https://xiaojiou176-open.github.io/OpenVibeCoding/api/",
   "repository": {
     "type": "git",
@@ -14,7 +14,7 @@
   },
   "license": "MIT",
   "keywords": [
-    "cortexpilot",
+    "openvibecoding",
     "frontend",
     "api-contract",
     "types",

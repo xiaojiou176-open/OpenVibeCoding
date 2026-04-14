@@ -5,10 +5,10 @@ from pathlib import Path
 
 import pytest
 
-from cortexpilot_orch.runners import agents_mcp_runtime
-from cortexpilot_orch.runners import agents_runner_execution_helpers as execution_helpers
-from cortexpilot_orch.runners.provider_resolution import ProviderCredentials
-from cortexpilot_orch.store.run_store import RunStore
+from openvibecoding_orch.runners import agents_mcp_runtime
+from openvibecoding_orch.runners import agents_runner_execution_helpers as execution_helpers
+from openvibecoding_orch.runners.provider_resolution import ProviderCredentials
+from openvibecoding_orch.store.run_store import RunStore
 
 
 def test_agents_mcp_runtime_key_resolution_exception_and_empty_fallback(
@@ -56,8 +56,8 @@ def test_agents_mcp_runtime_materialize_worker_codex_home_fallback_catalog_branc
     )
 
     monkeypatch.setenv("CODEX_HOME", str(role_home))
-    monkeypatch.delenv("CORTEXPILOT_CODEX_BASE_HOME", raising=False)
-    monkeypatch.setenv("CORTEXPILOT_CODEX_MODEL", "gemini-model")
+    monkeypatch.delenv("OPENVIBECODING_CODEX_BASE_HOME", raising=False)
+    monkeypatch.setenv("OPENVIBECODING_CODEX_MODEL", "gemini-model")
     monkeypatch.setattr(agents_mcp_runtime.Path, "home", staticmethod(lambda: fallback_home_parent))
     monkeypatch.setattr(agents_mcp_runtime, "resolve_runtime_provider_from_env", lambda: "gemini")
     monkeypatch.setattr(
@@ -132,7 +132,7 @@ def test_agents_mcp_runtime_materialize_worker_codex_home_strips_generic_secret_
     )
 
     monkeypatch.setenv("CODEX_HOME", str(role_home))
-    monkeypatch.setenv("CORTEXPILOT_CODEX_BASE_HOME", str(base_home))
+    monkeypatch.setenv("OPENVIBECODING_CODEX_BASE_HOME", str(base_home))
     monkeypatch.setattr(agents_mcp_runtime, "resolve_runtime_provider_from_env", lambda: "gemini")
     monkeypatch.setattr(
         agents_mcp_runtime,
@@ -201,7 +201,7 @@ def test_agents_mcp_runtime_materialize_worker_codex_home_strips_nested_agent_ta
     )
 
     monkeypatch.setenv("CODEX_HOME", str(role_home))
-    monkeypatch.setenv("CORTEXPILOT_CODEX_BASE_HOME", str(base_home))
+    monkeypatch.setenv("OPENVIBECODING_CODEX_BASE_HOME", str(base_home))
     monkeypatch.setattr(agents_mcp_runtime, "resolve_runtime_provider_from_env", lambda: "gemini")
     monkeypatch.setattr(
         agents_mcp_runtime,

@@ -7,9 +7,9 @@ from fastapi import FastAPI, HTTPException
 from fastapi.testclient import TestClient
 from starlette.requests import Request
 
-from cortexpilot_orch.api import deps as api_deps
-from cortexpilot_orch.api import routes_admin
-from cortexpilot_orch.store import run_store as run_store_module
+from openvibecoding_orch.api import deps as api_deps
+from openvibecoding_orch.api import routes_admin
+from openvibecoding_orch.store import run_store as run_store_module
 
 
 @pytest.fixture(autouse=True)
@@ -21,7 +21,7 @@ def _reset_admin_provider() -> None:
 
 
 def _approval_headers() -> dict[str, str]:
-    return {"x-cortexpilot-role": "TECH_LEAD"}
+    return {"x-openvibecoding-role": "TECH_LEAD"}
 
 
 @pytest.mark.parametrize(
@@ -249,7 +249,7 @@ def test_approve_god_mode_fail_closed_when_pending_check_handler_unconfigured(
             "type": "http",
             "method": "POST",
             "path": "/api/god-mode/approve",
-            "headers": [(b"x-cortexpilot-role", b"TECH_LEAD")],
+            "headers": [(b"x-openvibecoding-role", b"TECH_LEAD")],
             "app": app,
         }
     )

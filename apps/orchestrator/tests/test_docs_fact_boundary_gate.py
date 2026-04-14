@@ -8,7 +8,7 @@ from pathlib import Path
 
 def _load_gate_module() -> object:
     script_path = Path(__file__).resolve().parents[3] / "scripts" / "check_docs_manual_fact_boundary.py"
-    spec = importlib.util.spec_from_file_location("cortexpilot_docs_fact_boundary_gate", script_path)
+    spec = importlib.util.spec_from_file_location("openvibecoding_docs_fact_boundary_gate", script_path)
     module = importlib.util.module_from_spec(spec)
     assert spec and spec.loader
     spec.loader.exec_module(module)

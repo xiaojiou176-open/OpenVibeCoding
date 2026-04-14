@@ -18,7 +18,7 @@ The goal is to help the next prompts choose the best web follow-up slices withou
 | Run compare surface | Present as decision-first compare page with summary, deltas, and next step | Present with decision summary + action context | Decision baseline landed on both surfaces | Prompt 4 polish | dashboard run compare page + desktop run compare page |
 | Proof / Incident action surface | Run Detail now exposes compare / proof / incident cards before deep-dive tabs | Run Detail replay area now exposes compare decision + action context | Baseline decision surface landed; dashboard still richer | Prompt 4 | `apps/dashboard/app/runs/[id]/page.tsx`, `apps/desktop/src/pages/RunDetailPage.tsx` |
 | AI operator copilot brief | Present on dashboard Run Detail, Run Compare, Workflow Case detail, and Flight Plan preview as bounded explain-only panels | Present on desktop Run Detail, Run Compare, Workflow Detail, and Flight Plan preview as compact parity | Prompt 7 closes the highest-value parity gap without creating a second truth pipeline | Prompt 7 | dashboard + desktop copilot panels and surfaces |
-| Read-only MCP access | Repo-local `mcp-readonly-server` now exposes run/workflow/queue/approval/diff-gate/compare/proof/incident reads | No dedicated desktop shell entry; desktop consumes the same backend truth through UI APIs | Prompt 4 now has an agent-facing read node without changing desktop surface parity goals | Prompt 5 | `apps/orchestrator/src/cortexpilot_orch/mcp_readonly_server.py`, `services/control_plane_read_service.py` |
+| Read-only MCP access | Repo-local `mcp-readonly-server` now exposes run/workflow/queue/approval/diff-gate/compare/proof/incident reads | No dedicated desktop shell entry; desktop consumes the same backend truth through UI APIs | Prompt 4 now has an agent-facing read node without changing desktop surface parity goals | Prompt 5 | `apps/orchestrator/src/openvibecoding_orch/mcp_readonly_server.py`, `services/control_plane_read_service.py` |
 | Degraded/error/operator messaging | Run Detail, Workflow Detail, and Command Tower now share more explicit control-plane guidance | Desktop still relies more on local page wording | Cross-surface baseline started; desktop still needs copy consolidation | Prompt 4 | workflow pages, run detail, command tower |
 | Public task-pack front door | Prompt 1 now shows all three tracked public cases on the web front door | Desktop remains operator-shell-first | Web is the primary landing surface and now carries the baseline | Prompt 2 polish later | `contracts/packs/*.json`, `apps/dashboard/app/page.tsx` |
 
@@ -46,7 +46,7 @@ The goal is to help the next prompts choose the best web follow-up slices withou
 
 - Dashboard Run Detail is now the primary AI operator copilot launcher.
 - Dashboard Run Compare now reuses the same bounded brief, so delta review and next-step explanation live on the same run-scoped truth chain.
-- The repo now ships a read-only MCP server entry, so Prompt 4 no longer depends only on UI surfaces to expose CortexPilot state outward.
+- The repo now ships a read-only MCP server entry, so Prompt 4 no longer depends only on UI surfaces to expose OpenVibeCoding state outward.
 
 ### Prompt-7 outcome
 

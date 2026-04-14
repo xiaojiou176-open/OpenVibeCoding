@@ -6,11 +6,11 @@
     <title>OpenVibeCoding | API and contract quickstart</title>
     <meta
       name="description"
-      content="API and contract quickstart for OpenVibeCoding: OpenAPI entrypoints, thin frontend API client, contract-facing types, and the shortest adoption path for Codex, Claude Code, and OpenClaw teams on top of the CortexPilot runtime."
+      content="API and contract quickstart for OpenVibeCoding: OpenAPI entrypoints, thin frontend API client, contract-facing types, and the shortest adoption path for Codex, Claude Code, and OpenClaw teams on top of the OpenVibeCoding runtime."
     />
     <meta
       name="keywords"
-      content="OpenVibeCoding API, CortexPilot OpenAPI, frontend API client, contract types, Codex API workflow, Claude Code API workflow, OpenClaw builder path"
+      content="OpenVibeCoding API, OpenVibeCoding OpenAPI, frontend API client, contract types, Codex API workflow, Claude Code API workflow, OpenClaw builder path"
     />
     <link rel="canonical" href="https://xiaojiou176-open.github.io/OpenVibeCoding/api/" />
     <meta property="og:title" content="OpenVibeCoding | API and contract quickstart" />
@@ -47,7 +47,7 @@
             "name": "Is OpenVibeCoding a full SDK platform today?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "No. OpenVibeCoding already exposes a useful API and contract edge on top of the CortexPilot runtime, but the public builder story is still a thin client plus generated contract package plus shared presentation substrate, not a full SDK platform."
+              "text": "No. OpenVibeCoding already exposes a useful API and contract edge on top of the OpenVibeCoding runtime, but the public builder story is still a thin client plus generated contract package plus shared presentation substrate, not a full SDK platform."
             }
           },
           {
@@ -241,18 +241,18 @@
         </nav>
         <h1>API and contract quickstart.</h1>
         <p class="lede">
-          OpenVibeCoding is the public shell for the CortexPilot runtime, and it already exposes a useful API and contract edge for dashboard, desktop, and custom frontend consumers.
+          OpenVibeCoding is the public shell for the OpenVibeCoding runtime, and it already exposes a useful API and contract edge for dashboard, desktop, and custom frontend consumers.
           This page is the shortest truthful map when your first question is about <strong>HTTP routes, type boundaries, thin client helpers, or builder bootstrap</strong>.
         </p>
         <p class="lede">
           If your first question is instead about protocol-level inspection, read-only MCP, or how a coding-agent team should adopt the system truthfully, this page should route you to the better next click instead of making you reverse-engineer the package story from source.
         </p>
         <p class="lede">
-          Current package boundary: <code>@cortexpilot/frontend-api-client</code> and
-          <code>@cortexpilot/frontend-api-contract</code> now carry publish-ready metadata,
+          Current package boundary: <code>@openvibecoding/frontend-api-client</code> and
+          <code>@openvibecoding/frontend-api-contract</code> now carry publish-ready metadata,
           but no public package release is live yet. The truthful external adoption path
           today is still clone-and-reuse or vendor-and-adapt, while
-          <code>@cortexpilot/frontend-shared</code> remains a repo-owned presentation
+          <code>@openvibecoding/frontend-shared</code> remains a repo-owned presentation
           substrate rather than a standalone registry story.
         </p>
         <div class="actions">
@@ -309,24 +309,24 @@
             <span class="badge primary">OpenAPI</span>
             <h3>Machine-facing contract</h3>
             <p>Use the public OpenAPI document when you want the raw HTTP route contract before client or UI sugar.</p>
-            <p><a href="https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/docs/api/openapi.cortexpilot.json">Open OpenAPI document</a></p>
+            <p><a href="https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/docs/api/openapi.openvibecoding.json">Open OpenAPI document</a></p>
           </article>
           <article class="card">
             <span class="badge primary">Client</span>
             <h3>Thin frontend API helpers</h3>
-            <p>Use <code>@cortexpilot/frontend-api-client</code> when you are working inside a clone, shared workspace, or vendored internal package path and want convenience helpers over runs, Workflow Cases, approvals, and command-tower reads.</p>
+            <p>Use <code>@openvibecoding/frontend-api-client</code> when you are working inside a clone, shared workspace, or vendored internal package path and want convenience helpers over runs, Workflow Cases, approvals, and command-tower reads.</p>
             <p><a href="https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/packages/frontend-api-client/README.md">Open client README</a></p>
           </article>
           <article class="card">
             <span class="badge primary">Contract</span>
             <h3>Generated type boundary</h3>
-            <p>Use <code>@cortexpilot/frontend-api-contract</code> when you are inside the same repo or a vendored workspace copy and want route/query/type boundaries without importing backend modules.</p>
+            <p>Use <code>@openvibecoding/frontend-api-contract</code> when you are inside the same repo or a vendored workspace copy and want route/query/type boundaries without importing backend modules.</p>
             <p><a href="https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/packages/frontend-api-contract/docs/README.md">Open contract guide</a></p>
           </article>
           <article class="card">
             <span class="badge primary">Shared substrate</span>
             <h3>Locale and presentation reuse</h3>
-            <p>Use <code>@cortexpilot/frontend-shared</code> when you are reusing CortexPilot from a clone or vendored workspace and need shared copy, locale helpers, and status presentation across dashboard and desktop surfaces.</p>
+            <p>Use <code>@openvibecoding/frontend-shared</code> when you are reusing OpenVibeCoding from a clone or vendored workspace and need shared copy, locale helpers, and status presentation across dashboard and desktop surfaces.</p>
             <p><a href="https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/packages/frontend-shared/README.md">Open shared README</a></p>
           </article>
         </div>
@@ -386,7 +386,7 @@
           <article class="card">
             <span class="badge warn">Boundary</span>
             <h3>Shared stays repo-owned</h3>
-            <p><code>@cortexpilot/frontend-shared</code> remains the repo-owned presentation substrate for dashboard and desktop surfaces, not a standalone distribution unit today.</p>
+            <p><code>@openvibecoding/frontend-shared</code> remains the repo-owned presentation substrate for dashboard and desktop surfaces, not a standalone distribution unit today.</p>
           </article>
         </div>
       </section>

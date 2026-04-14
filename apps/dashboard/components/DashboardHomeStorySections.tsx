@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { DEFAULT_UI_LOCALE, getUiCopy, type UiLocale } from "@cortexpilot/frontend-shared/uiCopy";
+import { DEFAULT_UI_LOCALE, getUiCopy, type UiLocale } from "@openvibecoding/frontend-shared/uiCopy";
 import { resolveDashboardPublicDocsHref } from "../lib/env";
 import { Badge } from "./ui/badge";
 import { Button, type ButtonVariant } from "./ui/button";

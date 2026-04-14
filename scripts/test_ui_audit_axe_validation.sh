@@ -71,9 +71,9 @@ JSON
 verify_axe_payloads() {
   local max_violations="$1"
   shift
-  CORTEXPILOT_UI_AUDIT_AXE_MAX_VIOLATIONS="$max_violations" node -e '
+  OPENVIBECODING_UI_AUDIT_AXE_MAX_VIOLATIONS="$max_violations" node -e '
 const fs = require("node:fs");
-const maxViolations = Number(process.env.CORTEXPILOT_UI_AUDIT_AXE_MAX_VIOLATIONS ?? "0");
+const maxViolations = Number(process.env.OPENVIBECODING_UI_AUDIT_AXE_MAX_VIOLATIONS ?? "0");
 if (!Number.isFinite(maxViolations) || maxViolations < 0) {
   console.error("invalid max violations");
   process.exit(1);

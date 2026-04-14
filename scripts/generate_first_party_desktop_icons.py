@@ -143,7 +143,7 @@ def _outside_rounded_square(nx: float, ny: float, radius: float) -> bool:
 
 def _write_ico(path: Path) -> None:
     images: list[tuple[int, bytes]] = []
-    with tempfile.TemporaryDirectory(prefix="cortexpilot-icon-ico-") as tmp:
+    with tempfile.TemporaryDirectory(prefix="openvibecoding-icon-ico-") as tmp:
         tmp_dir = Path(tmp)
         for size in ICO_SIZES:
             payload = _write_png(tmp_dir / f"{size}.png", size)
@@ -177,7 +177,7 @@ def _write_icns(path: Path) -> None:
     if shutil.which("iconutil") is None:
         raise SystemExit("iconutil is required to generate icon.icns on this host")
 
-    with tempfile.TemporaryDirectory(prefix="cortexpilot-iconset-", suffix=".iconset") as tmp:
+    with tempfile.TemporaryDirectory(prefix="openvibecoding-iconset-", suffix=".iconset") as tmp:
         iconset = Path(tmp)
         mapping = {
             16: "icon_16x16.png",

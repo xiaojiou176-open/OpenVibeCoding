@@ -2,8 +2,8 @@ import json
 import importlib
 from pathlib import Path
 
-from cortexpilot_orch.runners.tool_runner import ToolRunner
-from cortexpilot_orch.store.run_store import RunStore
+from openvibecoding_orch.runners.tool_runner import ToolRunner
+from openvibecoding_orch.store.run_store import RunStore
 import hashlib
 import sys
 
@@ -27,7 +27,7 @@ def _output_schema_artifacts(role: str = "worker") -> list[dict]:
 
 
 def _write_active_contract(store: RunStore, run_id: str, mcp_tools: list[str], monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(store._runs_root.parent))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(store._runs_root.parent))
     contract = {
         "task_id": "tool_task",
         "owner_agent": {"role": "TECH_LEAD", "agent_id": "owner"},
@@ -75,7 +75,7 @@ def test_tool_runner_browser_failure(tmp_path: Path, monkeypatch) -> None:
         def run_script(self, script, url):
             raise RuntimeError("boom")
 
-    monkeypatch.setattr("cortexpilot_orch.runners.tool_runner.BrowserRunner", DummyBrowser)
+    monkeypatch.setattr("openvibecoding_orch.runners.tool_runner.BrowserRunner", DummyBrowser)
 
     task_id = "task_browser_fail"
     runner = ToolRunner(run_id, store)
@@ -108,7 +108,7 @@ def test_tool_runner_browser_error_payload(tmp_path: Path, monkeypatch) -> None:
                 ],
             }
 
-    monkeypatch.setattr("cortexpilot_orch.runners.tool_runner.BrowserRunner", DummyBrowser)
+    monkeypatch.setattr("openvibecoding_orch.runners.tool_runner.BrowserRunner", DummyBrowser)
 
     task_id = "task_browser_payload"
     runner = ToolRunner(run_id, store)
@@ -130,10 +130,10 @@ def test_tool_runner_search_failure(tmp_path: Path, monkeypatch) -> None:
     def _raise(*args, **kwargs):
         raise RuntimeError("search down")
 
-    monkeypatch.setattr("cortexpilot_orch.runners.tool_runner.search_verify", _raise)
+    monkeypatch.setattr("openvibecoding_orch.runners.tool_runner.search_verify", _raise)
 
     runner = ToolRunner(run_id, store)
-    result = runner.run_search("cortexpilot", provider="duckduckgo")
+    result = runner.run_search("openvibecoding", provider="duckduckgo")
     assert result["ok"] is False
 
     events = _read_events(tmp_path, run_id)
@@ -149,10 +149,10 @@ def test_tool_runner_search_result_ok_false_logs_failure(tmp_path: Path, monkeyp
     def _fake(*args, **kwargs):
         return {"ok": False, "mode": "web", "error": "blocked"}
 
-    monkeypatch.setattr("cortexpilot_orch.runners.tool_runner.search_verify", _fake)
+    monkeypatch.setattr("openvibecoding_orch.runners.tool_runner.search_verify", _fake)
 
     runner = ToolRunner(run_id, store)
-    result = runner.run_search("cortexpilot", provider="chatgpt_web")
+    result = runner.run_search("openvibecoding", provider="chatgpt_web")
     assert result["ok"] is False
 
     events = _read_events(tmp_path, run_id)
@@ -174,10 +174,10 @@ def test_tool_runner_browser_ddg_fail_closed_logs_explicit_browser_error(tmp_pat
             "results": [],
         }
 
-    monkeypatch.setattr("cortexpilot_orch.runners.tool_runner.search_verify", _fake)
+    monkeypatch.setattr("openvibecoding_orch.runners.tool_runner.search_verify", _fake)
 
     runner = ToolRunner(run_id, store)
-    result = runner.run_search("cortexpilot", provider="browser")
+    result = runner.run_search("openvibecoding", provider="browser")
     assert result["ok"] is False
     assert result["resolved_provider"] == "browser_ddg"
 
@@ -196,7 +196,7 @@ def test_tool_runner_mcp_failure(tmp_path: Path, monkeypatch) -> None:
     def _raise(*args, **kwargs):
         raise RuntimeError("mcp down")
 
-    monkeypatch.setattr("cortexpilot_orch.runners.tool_runner.mcp_adapter.record_mcp_call", _raise)
+    monkeypatch.setattr("openvibecoding_orch.runners.tool_runner.mcp_adapter.record_mcp_call", _raise)
 
     runner = ToolRunner(run_id, store)
     result = runner.run_mcp("codex", {"payload": {}})
@@ -228,7 +228,7 @@ def test_tool_runner_sampling_requires_approval(tmp_path: Path, monkeypatch) -> 
     run_id = store.create_run("run_sampling_blocked")
     _write_active_contract(store, run_id, ["codex", "sampling"], monkeypatch)
 
-    monkeypatch.delenv("CORTEXPILOT_SAMPLING_APPROVED", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_SAMPLING_APPROVED", raising=False)
 
     runner = ToolRunner(run_id, store)
     result = runner.run_mcp("sampling", {"payload": {"query": "ping"}})
@@ -246,7 +246,7 @@ def test_tool_runner_sampling_approved(tmp_path: Path, monkeypatch) -> None:
     run_id = store.create_run("run_sampling_ok")
     _write_active_contract(store, run_id, ["codex", "sampling"], monkeypatch)
 
-    monkeypatch.setenv("CORTEXPILOT_SAMPLING_APPROVED", "true")
+    monkeypatch.setenv("OPENVIBECODING_SAMPLING_APPROVED", "true")
 
     runner = ToolRunner(run_id, store)
     result = runner.run_mcp("sampling", {"payload": {"query": "ping"}})
@@ -270,7 +270,7 @@ def test_tool_runner_browser_init_typeerror_policy_compat_fallback(tmp_path: Pat
         def run_script(self, script, url):
             return {"ok": True, "mode": "playwright", "duration_ms": 3, "artifacts": {"trace": "t.zip"}}
 
-    monkeypatch.setattr("cortexpilot_orch.runners.tool_runner.BrowserRunner", CompatBrowser)
+    monkeypatch.setattr("openvibecoding_orch.runners.tool_runner.BrowserRunner", CompatBrowser)
 
     runner = ToolRunner(run_id, store)
     result = runner.run_browser(
@@ -298,10 +298,10 @@ def test_tool_runner_search_typeerror_policy_compat_fallback(tmp_path: Path, mon
             raise TypeError("unexpected keyword argument 'browser_policy'")
         return {"ok": True, "mode": "web", "duration_ms": 5, "meta": {"artifacts": {}}}
 
-    monkeypatch.setattr("cortexpilot_orch.runners.tool_runner.search_verify", _search)
+    monkeypatch.setattr("openvibecoding_orch.runners.tool_runner.search_verify", _search)
 
     runner = ToolRunner(run_id, store)
-    result = runner.run_search("cortexpilot", provider="codex_web", browser_policy={"profile_mode": "ephemeral"})
+    result = runner.run_search("openvibecoding", provider="codex_web", browser_policy={"profile_mode": "ephemeral"})
     assert result["ok"] is True
     assert calls["count"] == 2
 
@@ -354,7 +354,7 @@ def test_tool_runner_resolve_task_id_contract_blank_falls_back_default(tmp_path:
 
 
 def test_tool_runner_module_import_keeps_sys_path_when_root_already_present(monkeypatch) -> None:
-    module_name = "cortexpilot_orch.runners.tool_runner"
+    module_name = "openvibecoding_orch.runners.tool_runner"
     module = importlib.import_module(module_name)
     root_str = str(module.ROOT)
     if root_str not in sys.path:

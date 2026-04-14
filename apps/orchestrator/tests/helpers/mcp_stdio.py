@@ -13,7 +13,7 @@ except Exception:  # noqa: BLE001
     LATEST_PROTOCOL_VERSION = "2025-11-25"
     SUPPORTED_PROTOCOL_VERSIONS = [LATEST_PROTOCOL_VERSION]
 
-from cortexpilot_orch.transport.mcp_jsonl import JsonlStream, send_json
+from openvibecoding_orch.transport.mcp_jsonl import JsonlStream, send_json
 
 
 # === MCP STDIO CONFIG ===
@@ -63,7 +63,7 @@ def list_tools(handle: McpServerHandle, request_id: int) -> list[str]:
 def probe_initialize(
     handle: McpServerHandle,
     request_id: int = 4,
-    client_name: str = "cortexpilot_test_b",
+    client_name: str = "openvibecoding_test_b",
     timeout: float = 2.0,
 ) -> dict | None:
     send_json(
@@ -87,10 +87,10 @@ def probe_initialize(
 
 # === MCP STDIO SPAWN ===
 def _build_isolated_codex_env() -> tuple[dict[str, str], str]:
-    codex_home = tempfile.mkdtemp(prefix="cortexpilot_mcp_home_")
+    codex_home = tempfile.mkdtemp(prefix="openvibecoding_mcp_home_")
     env = os.environ.copy()
     env["CODEX_HOME"] = codex_home
-    env["CORTEXPILOT_CODEX_BASE_HOME"] = codex_home
+    env["OPENVIBECODING_CODEX_BASE_HOME"] = codex_home
     return env, codex_home
 
 
@@ -122,7 +122,7 @@ def initialize_with_protocol(
     handle: McpServerHandle,
     protocol_version: str,
     request_id: int = 1,
-    client_name: str = "cortexpilot_test",
+    client_name: str = "openvibecoding_test",
     timeout: float = 5.0,
 ) -> dict:
     send_json(

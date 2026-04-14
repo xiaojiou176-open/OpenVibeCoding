@@ -13,7 +13,7 @@ import {
   toCanonicalStage,
   toCanonicalStatusStrict,
   toCanonicalToken,
-} from "@cortexpilot/frontend-shared/statusPresentation";
+} from "@openvibecoding/frontend-shared/statusPresentation";
 
 export type RunOutcomeSemantic = "gate_blocked" | "environment_error" | "manual_pending" | "functional_failure" | "unknown";
 export const DESKTOP_DEFAULT_LOCALE: UiLocale = "en";

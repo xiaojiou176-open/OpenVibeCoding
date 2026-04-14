@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from cortexpilot_orch.mcp_queue_pilot_server import CortexPilotQueuePilotMcpServer
+from openvibecoding_orch.mcp_queue_pilot_server import OpenVibeCodingQueuePilotMcpServer
 
 
 def test_mcp_queue_pilot_server_lists_tools_and_requires_confirm_for_apply(monkeypatch) -> None:
@@ -19,7 +19,7 @@ def test_mcp_queue_pilot_server_lists_tools_and_requires_confirm_for_apply(monke
         captured["apply"] = {"run_id": run_id, "payload": payload}
         return {"queue_id": "queue-1", "task_id": "task-1", "status": "PENDING"}
 
-    server = CortexPilotQueuePilotMcpServer(
+    server = OpenVibeCodingQueuePilotMcpServer(
         preview_enqueue_fn=_preview,
         enqueue_fn=_apply,
     )
@@ -74,7 +74,7 @@ def test_mcp_queue_pilot_server_lists_tools_and_requires_confirm_for_apply(monke
     assert blocked_apply is not None
     assert blocked_apply["result"]["isError"] is True
 
-    monkeypatch.setenv("CORTEXPILOT_MCP_QUEUE_PILOT_ENABLE_APPLY", "1")
+    monkeypatch.setenv("OPENVIBECODING_MCP_QUEUE_PILOT_ENABLE_APPLY", "1")
 
     apply_response = server.handle_message(
         {

@@ -1,6 +1,6 @@
 # Contributing
 
-Thank you for considering a contribution to CortexPilot.
+Thank you for considering a contribution to OpenVibeCoding.
 
 ## Good Contributions
 

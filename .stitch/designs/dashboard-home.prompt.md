@@ -1,4 +1,4 @@
-Build a premium web dashboard home page for **CortexPilot**, the command tower
+Build a premium web dashboard home page for **OpenVibeCoding**, the command tower
 for AI engineering.
 
 The page must feel like a briefing deck for an L0 control plane, not a generic

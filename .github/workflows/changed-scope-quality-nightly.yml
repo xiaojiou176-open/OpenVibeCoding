@@ -113,7 +113,7 @@ jobs:
           fi
           cat > .runtime-cache/test_output/changed_scope_quality/meta/truth_status.json <<EOF
           {
-            "report_type": "cortexpilot_changed_scope_truth_status",
+            "report_type": "openvibecoding_changed_scope_truth_status",
             "sample_fallback_used": ${sample_fallback_used},
             "analytics_only": true,
             "blocking_quality_gate": false,

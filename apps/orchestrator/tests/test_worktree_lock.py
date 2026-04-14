@@ -2,8 +2,8 @@ import os
 import subprocess
 from pathlib import Path
 
-from cortexpilot_orch.locks import locker
-from cortexpilot_orch.worktrees import manager
+from openvibecoding_orch.locks import locker
+from openvibecoding_orch.worktrees import manager
 
 
 def _git_output(args: list[str], cwd: Path | None = None) -> str:
@@ -25,7 +25,7 @@ def _init_repo(repo: Path) -> None:
 
 
 def test_worktree_create_and_remove(tmp_path: Path):
-    os.environ["CORTEXPILOT_WORKTREE_ROOT"] = str(tmp_path)
+    os.environ["OPENVIBECODING_WORKTREE_ROOT"] = str(tmp_path)
     run_id = "run_test_worktree"
     task_id = "task-worktree"
     baseline = "HEAD"
@@ -54,19 +54,19 @@ def test_worktree_create_and_remove(tmp_path: Path):
 
 
 def test_locks_atomic(tmp_path: Path):
-    os.environ["CORTEXPILOT_RUNTIME_ROOT"] = str(tmp_path)
-    os.environ["CORTEXPILOT_RUN_ID"] = "run_a"
+    os.environ["OPENVIBECODING_RUNTIME_ROOT"] = str(tmp_path)
+    os.environ["OPENVIBECODING_RUN_ID"] = "run_a"
     target = ["src/main.py"]
 
     assert locker.acquire_lock(target) is True
 
-    os.environ["CORTEXPILOT_RUN_ID"] = "run_b"
+    os.environ["OPENVIBECODING_RUN_ID"] = "run_b"
     assert locker.acquire_lock(target) is False
 
     locker.release_lock(target)
     assert locker.acquire_lock(target) is False
-    os.environ["CORTEXPILOT_RUN_ID"] = "run_a"
+    os.environ["OPENVIBECODING_RUN_ID"] = "run_a"
     locker.release_lock(target)
-    os.environ["CORTEXPILOT_RUN_ID"] = "run_b"
+    os.environ["OPENVIBECODING_RUN_ID"] = "run_b"
     assert locker.acquire_lock(target) is True
     locker.release_lock(target)

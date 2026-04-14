@@ -8,17 +8,17 @@ from pathlib import Path
 
 import pytest
 
-from cortexpilot_orch.planning import intake
-from cortexpilot_orch.runners import agents_mcp_execution_helpers, agents_mcp_runtime
-from cortexpilot_orch.runners import provider_resolution as provider_resolution_module
-from cortexpilot_orch import config as config_module
-from cortexpilot_orch.runners.provider_resolution import (
+from openvibecoding_orch.planning import intake
+from openvibecoding_orch.runners import agents_mcp_execution_helpers, agents_mcp_runtime
+from openvibecoding_orch.runners import provider_resolution as provider_resolution_module
+from openvibecoding_orch import config as config_module
+from openvibecoding_orch.runners.provider_resolution import (
     build_llm_compat_client,
     ProviderResolutionError,
     resolve_runtime_provider_from_contract,
 )
-from cortexpilot_orch.scheduler import scheduler_bridge_runtime
-from cortexpilot_orch.store.run_store import RunStore
+from openvibecoding_orch.scheduler import scheduler_bridge_runtime
+from openvibecoding_orch.store.run_store import RunStore
 
 
 class _Cfg:
@@ -177,8 +177,8 @@ def test_mcp_runtime_materialize_injects_provider_model_key_and_base_url(
     )
 
     monkeypatch.setenv("CODEX_HOME", str(role_home))
-    monkeypatch.setenv("CORTEXPILOT_CODEX_BASE_HOME", str(base_home))
-    monkeypatch.setenv("CORTEXPILOT_CODEX_MODEL", "openai-model")
+    monkeypatch.setenv("OPENVIBECODING_CODEX_BASE_HOME", str(base_home))
+    monkeypatch.setenv("OPENVIBECODING_CODEX_MODEL", "openai-model")
     monkeypatch.setattr(agents_mcp_runtime, "resolve_runtime_provider_from_env", lambda env=None: "openai")
     monkeypatch.setattr(agents_mcp_runtime, "resolve_provider_credentials", lambda env=None: _Creds(openai="okey"))
 
@@ -224,7 +224,7 @@ def test_mcp_execution_env_injects_provider_specific_key_and_base_url(
 
     class DummyAgent:
         def __init__(self, **kwargs) -> None:
-            self.name = "CortexPilotWorker"
+            self.name = "OpenVibeCodingWorker"
             self.kwargs = kwargs
 
     class DummyResult:
@@ -285,9 +285,9 @@ def test_mcp_execution_env_injects_provider_specific_key_and_base_url(
 
     asyncio.run(_execute())
 
-    assert captured_env["CORTEXPILOT_PROVIDER"] == "equilibrium"
-    assert captured_env["CORTEXPILOT_PROVIDER_BASE_URL"] == "http://127.0.0.1:1456/v1"
-    assert captured_env["CORTEXPILOT_EQUILIBRIUM_API_KEY"] == "equ-key"
+    assert captured_env["OPENVIBECODING_PROVIDER"] == "equilibrium"
+    assert captured_env["OPENVIBECODING_PROVIDER_BASE_URL"] == "http://127.0.0.1:1456/v1"
+    assert captured_env["OPENVIBECODING_EQUILIBRIUM_API_KEY"] == "equ-key"
 
 
 def test_mcp_execution_tool_call_persistence_redacts_sensitive_args(
@@ -325,7 +325,7 @@ def test_mcp_execution_tool_call_persistence_redacts_sensitive_args(
 
     class DummyAgent:
         def __init__(self, **kwargs) -> None:
-            self.name = "CortexPilotWorker"
+            self.name = "OpenVibeCodingWorker"
             self.kwargs = kwargs
 
     class DummyResult:
@@ -426,8 +426,8 @@ def test_select_runner_prefers_contract_provider_override_over_env(
 
     fake_module = types.SimpleNamespace(build_execution_adapter=_build_execution_adapter)
     monkeypatch.setattr(scheduler_bridge_runtime, "import_module", lambda _name: fake_module)
-    monkeypatch.setenv("CORTEXPILOT_RUNNER", "agents")
-    monkeypatch.setenv("CORTEXPILOT_PROVIDER", "gemini")
+    monkeypatch.setenv("OPENVIBECODING_RUNNER", "agents")
+    monkeypatch.setenv("OPENVIBECODING_PROVIDER", "gemini")
 
     store = RunStore(runs_root=tmp_path / "runs")
     runner = scheduler_bridge_runtime.select_runner(
@@ -461,8 +461,8 @@ def test_select_runner_keeps_runner_resolution_when_provider_override_missing(
 
     fake_module = types.SimpleNamespace(build_execution_adapter=_build_execution_adapter)
     monkeypatch.setattr(scheduler_bridge_runtime, "import_module", lambda _name: fake_module)
-    monkeypatch.setenv("CORTEXPILOT_RUNNER", "agents")
-    monkeypatch.setenv("CORTEXPILOT_PROVIDER", "openai")
+    monkeypatch.setenv("OPENVIBECODING_RUNNER", "agents")
+    monkeypatch.setenv("OPENVIBECODING_PROVIDER", "openai")
 
     store = RunStore(runs_root=tmp_path / "runs")
     runner = scheduler_bridge_runtime.select_runner(
@@ -478,7 +478,7 @@ def test_select_runner_keeps_runner_resolution_when_provider_override_missing(
 def test_contract_provider_override_takes_precedence_over_env_provider() -> None:
     resolved = resolve_runtime_provider_from_contract(
         {"runtime_options": {"provider": "openai"}},
-        env={"CORTEXPILOT_PROVIDER": "gemini"},
+        env={"OPENVIBECODING_PROVIDER": "gemini"},
     )
     assert resolved == "openai"
 
@@ -487,7 +487,7 @@ def test_contract_provider_invalid_value_is_blocked() -> None:
     with pytest.raises(ProviderResolutionError) as exc_info:
         resolve_runtime_provider_from_contract(
             {"runtime_options": {"provider": "legacy"}},
-            env={"CORTEXPILOT_PROVIDER": "gemini"},
+            env={"OPENVIBECODING_PROVIDER": "gemini"},
         )
     assert exc_info.value.code == "PROVIDER_UNSUPPORTED"
     assert "register provider-gateway:legacy first" in str(exc_info.value)
@@ -513,7 +513,7 @@ def test_build_llm_compat_client_litellm_switch_falls_back_to_openai_client(
             return _OpenAIModule()
         raise AssertionError(f"unexpected import: {name}")
 
-    monkeypatch.setenv("CORTEXPILOT_PROVIDER_USE_LITELLM", "1")
+    monkeypatch.setenv("OPENVIBECODING_PROVIDER_USE_LITELLM", "1")
     monkeypatch.setattr(provider_resolution_module.importlib, "import_module", _import_module)
 
     client = build_llm_compat_client(api_key="k", base_url="https://llm.example/v1")
@@ -523,7 +523,7 @@ def test_build_llm_compat_client_litellm_switch_falls_back_to_openai_client(
 
 
 def test_build_llm_compat_client_uses_openai_path_when_switch_disabled(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.delenv("CORTEXPILOT_PROVIDER_USE_LITELLM", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_PROVIDER_USE_LITELLM", raising=False)
 
     class _AsyncOpenAI:
         def __init__(self, **kwargs) -> None:
@@ -724,7 +724,7 @@ def test_invoke_switchyard_runtime_retries_transient_5xx_and_generates_unique_fa
 def test_resolve_provider_credentials_reads_equilibrium_key_from_env(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    monkeypatch.setenv("CORTEXPILOT_EQUILIBRIUM_API_KEY", "eq-only")
+    monkeypatch.setenv("OPENVIBECODING_EQUILIBRIUM_API_KEY", "eq-only")
     credentials = provider_resolution_module.resolve_provider_credentials()
     assert credentials.equilibrium_api_key == "eq-only"
 
@@ -732,7 +732,7 @@ def test_resolve_provider_credentials_reads_equilibrium_key_from_env(
 def test_load_config_propagates_equilibrium_key_into_runner_config(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    monkeypatch.setenv("CORTEXPILOT_EQUILIBRIUM_API_KEY", "eq-only")
+    monkeypatch.setenv("OPENVIBECODING_EQUILIBRIUM_API_KEY", "eq-only")
     cfg = config_module.load_config()
     assert cfg.runner.equilibrium_api_key == "eq-only"
 
@@ -741,7 +741,7 @@ def test_resolve_runtime_base_url_uses_canonical_env_key(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     base_url = "https://api.provider.local/v1"
-    monkeypatch.setenv("CORTEXPILOT_PROVIDER_BASE_URL", base_url)
+    monkeypatch.setenv("OPENVIBECODING_PROVIDER_BASE_URL", base_url)
     resolved = provider_resolution_module.resolve_runtime_base_url_from_env()
     assert resolved == base_url
 
@@ -906,7 +906,7 @@ def test_agents_mcp_runtime_helper_branches_runtime_root_and_toml(monkeypatch: p
 
     store = RunStore(runs_root=tmp_path / "runs")
     override_root = tmp_path / "runtime-root"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(override_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(override_root))
     assert agents_mcp_runtime.runtime_root_from_store(store) == override_root
     assert agents_mcp_runtime.fixed_output_cwd(store) == str(override_root.resolve())
 
@@ -932,7 +932,7 @@ def test_agents_mcp_runtime_materialize_missing_tool_set_and_provider_error(
     (base_home / "config.toml").write_text('model_provider = "gemini"\n', encoding="utf-8")
 
     monkeypatch.setenv("CODEX_HOME", str(role_home))
-    monkeypatch.setenv("CORTEXPILOT_CODEX_BASE_HOME", str(base_home))
+    monkeypatch.setenv("OPENVIBECODING_CODEX_BASE_HOME", str(base_home))
     store = RunStore(runs_root=runs_root)
 
     with pytest.raises(RuntimeError, match="mcp_tool_set missing in base config"):
@@ -1130,7 +1130,7 @@ def test_agents_mcp_runtime_patch_initialized_notification_runtime_paths(
         _elicitation_callback=lambda *_args, **_kwargs: None,
         _list_roots_callback=lambda *_args, **_kwargs: None,
         _task_handlers=_Handlers(),
-        _client_info={"name": "cortexpilot", "version": "0.1"},
+        _client_info={"name": "openvibecoding", "version": "0.1"},
         send_request=_send_request_non_codex,
         send_notification=_send_notification,
         _server_capabilities=None,
@@ -1153,7 +1153,7 @@ def test_agents_mcp_runtime_patch_initialized_notification_runtime_paths(
         _elicitation_callback=lambda *_args, **_kwargs: None,
         _list_roots_callback=lambda *_args, **_kwargs: None,
         _task_handlers=_Handlers(),
-        _client_info={"name": "cortexpilot", "version": "0.1"},
+        _client_info={"name": "openvibecoding", "version": "0.1"},
         send_request=_send_request_codex,
         send_notification=_send_notification,
         _server_capabilities=None,
@@ -1174,7 +1174,7 @@ def test_agents_mcp_runtime_patch_initialized_notification_runtime_paths(
         _elicitation_callback=lambda *_args, **_kwargs: None,
         _list_roots_callback=lambda *_args, **_kwargs: None,
         _task_handlers=_Handlers(),
-        _client_info={"name": "cortexpilot", "version": "0.1"},
+        _client_info={"name": "openvibecoding", "version": "0.1"},
         send_request=_send_request_unsupported,
         send_notification=_send_notification,
         _server_capabilities=None,

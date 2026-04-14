@@ -43,7 +43,7 @@ def _apply_auth_cookies(*, context: Any, base_dashboard: str, api_token: str) ->
         return
     context.add_cookies(
         [
-            {"name": "cortexpilot_api_token", "value": token, "url": base_dashboard},
+            {"name": "openvibecoding_api_token", "value": token, "url": base_dashboard},
             {"name": "api_token", "value": token, "url": base_dashboard},
         ]
     )

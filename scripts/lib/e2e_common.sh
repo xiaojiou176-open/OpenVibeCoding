@@ -5,7 +5,7 @@ e2e_require_python_venv() {
   # shellcheck disable=SC1090
   source "$root_dir/scripts/lib/toolchain_env.sh"
   local python_bin
-  python_bin="$(cortexpilot_python_bin "$root_dir" || true)"
+  python_bin="$(openvibecoding_python_bin "$root_dir" || true)"
   if [[ -z "$python_bin" || ! -x "$python_bin" ]]; then
     echo "❌ python toolchain missing"
     return 1
@@ -285,7 +285,7 @@ e2e_prepare_dashboard_generated_file_restore() {
   E2E_DASHBOARD_RESTORE_DIR=""
   E2E_DASHBOARD_RESTORE_TARGETS=""
 
-  local restore_dir="$root_dir/.runtime-cache/cortexpilot/temp/dashboard-generated-restore.$$"
+  local restore_dir="$root_dir/.runtime-cache/openvibecoding/temp/dashboard-generated-restore.$$"
   mkdir -p "$restore_dir"
   local targets=(
     "apps/dashboard/next-env.d.ts"

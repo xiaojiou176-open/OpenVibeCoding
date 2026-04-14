@@ -3,7 +3,7 @@ from __future__ import annotations
 from types import SimpleNamespace
 from typing import Any
 
-from cortexpilot_orch.scheduler import execute_task_preflight
+from openvibecoding_orch.scheduler import execute_task_preflight
 
 
 def _mk_fn(tag: str):

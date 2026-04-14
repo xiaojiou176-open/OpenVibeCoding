@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-from cortexpilot_orch.api import pm_session_aggregation
+from openvibecoding_orch.api import pm_session_aggregation
 
 
 _BASE_OVERVIEW_PAYLOAD = {
@@ -27,8 +27,8 @@ _BASE_OVERVIEW_PAYLOAD = {
 
 def test_command_tower_overview_uses_ttl_cache(monkeypatch, tmp_path: Path) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_COMMAND_TOWER_OVERVIEW_TTL_SEC", "0.05")
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_COMMAND_TOWER_OVERVIEW_TTL_SEC", "0.05")
 
     call_count = 0
 
@@ -61,8 +61,8 @@ def test_command_tower_overview_uses_ttl_cache(monkeypatch, tmp_path: Path) -> N
 
 def test_command_tower_alerts_reuses_overview_snapshot(monkeypatch, tmp_path: Path) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_COMMAND_TOWER_OVERVIEW_TTL_SEC", "2")
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_COMMAND_TOWER_OVERVIEW_TTL_SEC", "2")
 
     call_count = 0
 
@@ -90,8 +90,8 @@ def test_command_tower_alerts_reuses_overview_snapshot(monkeypatch, tmp_path: Pa
 
 def test_pm_sessions_summary_snapshot_uses_ttl_cache(monkeypatch, tmp_path: Path) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_COMMAND_TOWER_OVERVIEW_TTL_SEC", "0.05")
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_COMMAND_TOWER_OVERVIEW_TTL_SEC", "0.05")
 
     call_count = 0
 

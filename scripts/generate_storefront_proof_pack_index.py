@@ -121,7 +121,7 @@ def build_index(registry_payload: dict[str, Any]) -> dict[str, Any]:
         rendered_bundles.append(rendered)
 
     return {
-        "artifact_type": "cortexpilot_public_proof_pack_index",
+        "artifact_type": "openvibecoding_public_proof_pack_index",
         "generated_by": "scripts/generate_storefront_proof_pack_index.py",
         "source_registry": str(Path(registry_payload.get("source_registry") or "configs/storefront_proof_bundle_registry.json")),
         "vocabulary_contract": registry_payload.get("vocabulary_contract", {}),

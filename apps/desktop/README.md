@@ -1,6 +1,6 @@
 # Desktop Module
 
-`apps/desktop/` is the Tauri command-tower shell for CortexPilot.
+`apps/desktop/` is the Tauri command-tower shell for OpenVibeCoding.
 
 ## What It Owns
 
@@ -55,7 +55,7 @@ npm --prefix apps/desktop run tauri:dev
   stays aligned with the dashboard's bilingual operator wording instead of
   keeping a separate page-local literal map.
 - Desktop `Run Detail` and `Overview` now keep their high-frequency operator
-  copy on the shared `@cortexpilot/frontend-shared/uiCopy` contract and route
+  copy on the shared `@openvibecoding/frontend-shared/uiCopy` contract and route
   status labels through shared status-presentation helpers, so `en` / `zh-CN`
   operator rendering does not depend on page-local literal maps.
 - Desktop `Run Detail` now also mirrors `role_binding_read_model` inside the

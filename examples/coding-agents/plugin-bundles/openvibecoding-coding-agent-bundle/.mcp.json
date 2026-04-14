@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "openvibecoding-readonly": {
+      "command": "bash",
+      "args": [
+        "./bin/run-openvibecoding-readonly-mcp.sh"
+      ]
+    }
+  }
+}

@@ -5,7 +5,7 @@ import time
 from pathlib import Path
 from typing import Any
 
-from cortexpilot_orch.observability.tracer import trace_span
+from openvibecoding_orch.observability.tracer import trace_span
 from tooling.browser.human_behavior import apply_human_behavior
 from tooling.browser.policy import browser_human_behavior_enabled, browser_human_behavior_level
 from tooling.browser.session_manager import BrowserSessionHandle, BrowserSessionManager
@@ -41,10 +41,10 @@ class BrowserRunner:
         self._artifacts_dir = artifacts_dir
         self._artifacts_dir.mkdir(parents=True, exist_ok=True)
         if headless is None:
-            env = os.getenv("CORTEXPILOT_HEADLESS", "true").lower()
+            env = os.getenv("OPENVIBECODING_HEADLESS", "true").lower()
             headless = env not in {"0", "false", "no"}
         self._headless = headless
-        timeout_ms = os.getenv("CORTEXPILOT_PLAYWRIGHT_TIMEOUT_MS", "30000")
+        timeout_ms = os.getenv("OPENVIBECODING_PLAYWRIGHT_TIMEOUT_MS", "30000")
         try:
             self._timeout_ms = int(timeout_ms)
         except ValueError:
@@ -81,7 +81,7 @@ class BrowserRunner:
         return {"screenshot": str(screenshot_path), "source": str(source_path)}
 
     def _allowlist(self) -> list[str]:
-        raw = os.getenv("CORTEXPILOT_BROWSER_ALLOWLIST", "").strip()
+        raw = os.getenv("OPENVIBECODING_BROWSER_ALLOWLIST", "").strip()
         if not raw:
             return []
         return [item.strip() for item in raw.split(",") if item.strip()]

@@ -1,13 +1,13 @@
 import json
 from pathlib import Path
 
-from cortexpilot_orch.store.run_store import RunStore
+from openvibecoding_orch.store.run_store import RunStore
 from tooling.tampermonkey.runner import run_tampermonkey
 
 
 def test_tampermonkey_artifacts_unique(tmp_path: Path, monkeypatch) -> None:
     runs_root = tmp_path / "runs"
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
     store = RunStore(runs_root)
     run_id = store.create_run("task_tm")
 

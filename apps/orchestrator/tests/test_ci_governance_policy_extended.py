@@ -49,8 +49,8 @@ def _base_policy() -> dict:
             "policy-and-security",
             "core-tests",
         ],
-        "artifact_roots_required": [".runtime-cache/test_output", ".runtime-cache/logs", ".runtime-cache/cortexpilot/reports"],
-        "artifact_roots_release_required": [".runtime-cache/cortexpilot/release"],
+        "artifact_roots_required": [".runtime-cache/test_output", ".runtime-cache/logs", ".runtime-cache/openvibecoding/reports"],
+        "artifact_roots_release_required": [".runtime-cache/openvibecoding/release"],
         "retry_green_policy": {"max_retry_green_count": 0},
         "slice_slo_sec": {
             "quick-feedback": 300,
@@ -120,17 +120,17 @@ def _base_policy() -> dict:
             },
         },
         "strict_env_contract": {
-            "allowlisted_cortexpilot_env": [
-                "CORTEXPILOT_DOC_GATE_MODE",
-                "CORTEXPILOT_DOC_GATE_BASE_SHA",
-                "CORTEXPILOT_DOC_GATE_HEAD_SHA",
-                "CORTEXPILOT_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE",
-                "CORTEXPILOT_CI_LIVE_PREFLIGHT_PROVIDER_API_MODE",
-                "CORTEXPILOT_CI_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE",
-                "CORTEXPILOT_CI_ROUTE_ID",
-                "CORTEXPILOT_CI_TRUST_CLASS",
-                "CORTEXPILOT_CI_RUNNER_CLASS",
-                "CORTEXPILOT_CI_CLOUD_BOOTSTRAP_ALLOWED",
+            "allowlisted_openvibecoding_env": [
+                "OPENVIBECODING_DOC_GATE_MODE",
+                "OPENVIBECODING_DOC_GATE_BASE_SHA",
+                "OPENVIBECODING_DOC_GATE_HEAD_SHA",
+                "OPENVIBECODING_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE",
+                "OPENVIBECODING_CI_LIVE_PREFLIGHT_PROVIDER_API_MODE",
+                "OPENVIBECODING_CI_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE",
+                "OPENVIBECODING_CI_ROUTE_ID",
+                "OPENVIBECODING_CI_TRUST_CLASS",
+                "OPENVIBECODING_CI_RUNNER_CLASS",
+                "OPENVIBECODING_CI_CLOUD_BOOTSTRAP_ALLOWED",
             ],
             "forbid_dotenv_fallback": True,
         },
@@ -184,7 +184,7 @@ jobs:
           path: |
             .runtime-cache/test_output
             .runtime-cache/logs
-            .runtime-cache/cortexpilot/reports
+            .runtime-cache/openvibecoding/reports
   untrusted-pr-basic-gates:
     runs-on: ubuntu-24.04
     steps:
@@ -194,7 +194,7 @@ jobs:
           path: |
             .runtime-cache/test_output
             .runtime-cache/logs
-            .runtime-cache/cortexpilot/reports
+            .runtime-cache/openvibecoding/reports
   policy-and-security:
     runs-on: ubuntu-24.04
     steps:
@@ -203,8 +203,8 @@ jobs:
           path: |
             .runtime-cache/test_output
             .runtime-cache/logs
-            .runtime-cache/cortexpilot/reports
-            .runtime-cache/cortexpilot/release
+            .runtime-cache/openvibecoding/reports
+            .runtime-cache/openvibecoding/release
   core-tests:
     runs-on: ubuntu-24.04
     steps:
@@ -213,7 +213,7 @@ jobs:
           path: |
             .runtime-cache/test_output
             .runtime-cache/logs
-            .runtime-cache/cortexpilot/reports
+            .runtime-cache/openvibecoding/reports
   ui-truth:
     if: needs.ci-trust-boundary.outputs.trusted_route_allowed == 'true' && needs.ci-trust-boundary.outputs.sensitive_dispatch_allowed == 'true' && github.event_name == 'workflow_dispatch' && github.event.inputs.run_ui_truth == 'true'
     environment: owner-approved-sensitive
@@ -224,7 +224,7 @@ jobs:
           path: |
             .runtime-cache/test_output
             .runtime-cache/logs
-            .runtime-cache/cortexpilot/reports
+            .runtime-cache/openvibecoding/reports
   resilience-and-e2e:
     if: needs.ci-trust-boundary.outputs.trusted_route_allowed == 'true' && needs.ci-trust-boundary.outputs.sensitive_dispatch_allowed == 'true' && github.event_name == 'workflow_dispatch' && github.event.inputs.run_resilience_and_e2e == 'true'
     environment: owner-approved-sensitive
@@ -235,7 +235,7 @@ jobs:
           path: |
             .runtime-cache/test_output
             .runtime-cache/logs
-            .runtime-cache/cortexpilot/reports
+            .runtime-cache/openvibecoding/reports
   release-evidence:
     if: needs.ci-trust-boundary.outputs.trusted_route_allowed == 'true' && needs.ci-trust-boundary.outputs.sensitive_dispatch_allowed == 'true' && github.event_name == 'workflow_dispatch' && github.event.inputs.run_release_evidence == 'true'
     environment: owner-approved-sensitive
@@ -247,8 +247,8 @@ jobs:
           path: |
             .runtime-cache/test_output
             .runtime-cache/logs
-            .runtime-cache/cortexpilot/release
-            .runtime-cache/cortexpilot/reports
+            .runtime-cache/openvibecoding/release
+            .runtime-cache/openvibecoding/reports
           name: ci-route-report-${{ needs.ci-trust-boundary.outputs.route_id }}-${{ github.run_id }}
   pr-release-critical-gates:
     runs-on: ubuntu-24.04
@@ -268,25 +268,25 @@ jobs:
     needs: [quick-feedback, ci-trust-boundary, pr-release-critical-gates]
 """
     docker_ci = """
-STRICT_CI_CORTEXPILOT_ENV_ALLOWLIST=(
-  CORTEXPILOT_DOC_GATE_MODE
-  CORTEXPILOT_DOC_GATE_BASE_SHA
-  CORTEXPILOT_DOC_GATE_HEAD_SHA
-  CORTEXPILOT_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE
-  CORTEXPILOT_CI_LIVE_PREFLIGHT_PROVIDER_API_MODE
-  CORTEXPILOT_CI_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE
-  CORTEXPILOT_CI_ROUTE_ID
-  CORTEXPILOT_CI_TRUST_CLASS
-  CORTEXPILOT_CI_RUNNER_CLASS
-  CORTEXPILOT_CI_CLOUD_BOOTSTRAP_ALLOWED
+STRICT_CI_OPENVIBECODING_ENV_ALLOWLIST=(
+  OPENVIBECODING_DOC_GATE_MODE
+  OPENVIBECODING_DOC_GATE_BASE_SHA
+  OPENVIBECODING_DOC_GATE_HEAD_SHA
+  OPENVIBECODING_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE
+  OPENVIBECODING_CI_LIVE_PREFLIGHT_PROVIDER_API_MODE
+  OPENVIBECODING_CI_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE
+  OPENVIBECODING_CI_ROUTE_ID
+  OPENVIBECODING_CI_TRUST_CLASS
+  OPENVIBECODING_CI_RUNNER_CLASS
+  OPENVIBECODING_CI_CLOUD_BOOTSTRAP_ALLOWED
 )
-append_strict_ci_cortexpilot_allowlist
+append_strict_ci_openvibecoding_allowlist
 if [[ ! -v "${var_name}" ]] && ! is_truthy "${GITHUB_ACTIONS:-0}"; then
   :
 fi
 """
     if not include_allowlist:
-        docker_ci = "STRICT_CI_CORTEXPILOT_ENV_ALLOWLIST=(\n  CORTEXPILOT_DOC_GATE_MODE\n)\n"
+        docker_ci = "STRICT_CI_OPENVIBECODING_ENV_ALLOWLIST=(\n  OPENVIBECODING_DOC_GATE_MODE\n)\n"
     if not include_route_artifact:
         workflow = workflow.replace(
             "          name: ci-route-report-${{ needs.ci-trust-boundary.outputs.route_id }}-${{ github.run_id }}\n",
@@ -405,7 +405,7 @@ def test_ci_download_artifacts_restore_runtime_layout_instead_of_workspace_root(
     workflow_text = (REPO_ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
 
     assert workflow_text.count("path: .runtime-cache\n") == 4
-    assert workflow_text.count("path: .runtime-cache/cortexpilot/reports/ci/routes\n") == 4
+    assert workflow_text.count("path: .runtime-cache/openvibecoding/reports/ci/routes\n") == 4
     assert 'echo "ROUTE_ID=${ROUTE_ID}"' in workflow_text
     assert '} >> "${GITHUB_ENV}"' in workflow_text
     assert "uses: actions/download-artifact" in workflow_text

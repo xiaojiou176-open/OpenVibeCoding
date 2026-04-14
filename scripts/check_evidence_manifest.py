@@ -254,7 +254,7 @@ def validate_manifest(
         errors=errors,
     )
 
-    if payload.get("manifest_type") != "cortexpilot_evidence_manifest":
+    if payload.get("manifest_type") != "openvibecoding_evidence_manifest":
         errors.append(f"root.manifest_type invalid: {payload.get('manifest_type')!r}")
 
     if payload.get("schema_version") != 2:
@@ -493,7 +493,7 @@ def validate_manifest(
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Validate CortexPilot evidence manifest schema.")
+    parser = argparse.ArgumentParser(description="Validate OpenVibeCoding evidence manifest schema.")
     parser.add_argument("--manifest", required=True, help="Path to evidence manifest JSON.")
     parser.add_argument(
         "--schema",

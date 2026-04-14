@@ -22,7 +22,7 @@ def _require(condition: bool, errors: list[str], message: str) -> None:
 
 def _parse_strict_allowlist(path: Path) -> list[str]:
     text = path.read_text(encoding="utf-8")
-    match = re.search(r"STRICT_CI_CORTEXPILOT_ENV_ALLOWLIST=\((.*?)\)", text, re.S)
+    match = re.search(r"STRICT_CI_OPENVIBECODING_ENV_ALLOWLIST=\((.*?)\)", text, re.S)
     if not match:
         return []
     items = []
@@ -95,7 +95,7 @@ def main() -> int:
 
     _require("self_hosted_allowed" not in workflow_text, errors, "legacy self_hosted_allowed contract still present in workflow")
     _require('runner_class="self_hosted"' not in workflow_text, errors, "legacy self_hosted runner_class assignment still present in workflow")
-    _require("CORTEXPILOT_CI_RUNNER_CLASS: self_hosted" not in workflow_text, errors, "legacy self_hosted runner_class env still present in workflow")
+    _require("OPENVIBECODING_CI_RUNNER_CLASS: self_hosted" not in workflow_text, errors, "legacy self_hosted runner_class env still present in workflow")
 
     for job_name in policy["runner_contract"]["github_hosted"]:
         job = jobs.get(job_name) or {}
@@ -166,12 +166,12 @@ def main() -> int:
         _require(root in release_upload_text, errors, f"release-evidence upload artifact path missing `{root}`")
 
     strict_env = policy.get("strict_env_contract") or {}
-    expected_allowlist = strict_env.get("allowlisted_cortexpilot_env") or []
+    expected_allowlist = strict_env.get("allowlisted_openvibecoding_env") or []
     parsed_allowlist = _parse_strict_allowlist(docker_ci_path)
-    _require(parsed_allowlist == expected_allowlist, errors, "strict_env_contract.allowlisted_cortexpilot_env drift vs scripts/docker_ci.sh")
+    _require(parsed_allowlist == expected_allowlist, errors, "strict_env_contract.allowlisted_openvibecoding_env drift vs scripts/docker_ci.sh")
     if strict_env.get("forbid_dotenv_fallback") is True:
         _require(_has_strict_dotenv_boundary(docker_ci_text), errors, "docker_ci strict dotenv boundary missing")
-        _require('append_strict_ci_cortexpilot_allowlist' in docker_ci_text, errors, "docker_ci strict allowlist hook missing")
+        _require('append_strict_ci_openvibecoding_allowlist' in docker_ci_text, errors, "docker_ci strict allowlist hook missing")
 
     freshness = policy.get("freshness_contract") or {}
     _require(isinstance(freshness.get("max_report_age_sec"), int) and int(freshness.get("max_report_age_sec")) > 0, errors, "freshness_contract.max_report_age_sec invalid")
@@ -212,7 +212,7 @@ def main() -> int:
                 route_jobs = set((route_contract.get(route_id) or {}).get("required_jobs") or [])
                 _require(job_name not in route_jobs, errors, f"{job_name} must not be part of {route_id} required_jobs")
 
-    _require("CORTEXPILOT_CI_ROUTE_ID" in docker_ci_text, errors, "docker_ci must pass route metadata into strict container path")
+    _require("OPENVIBECODING_CI_ROUTE_ID" in docker_ci_text, errors, "docker_ci must pass route metadata into strict container path")
 
     if errors:
         print("❌ [ci-governance-policy] violations:")

@@ -4,36 +4,36 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 source "$ROOT_DIR/scripts/lib/toolchain_env.sh"
 source "$ROOT_DIR/scripts/lib/machine_cache_retention.sh"
-IMAGE_NAME="cortexpilot-ci-core:local"
-DESKTOP_NATIVE_IMAGE_NAME="cortexpilot-ci-desktop-native:local"
+IMAGE_NAME="openvibecoding-ci-core:local"
+DESKTOP_NATIVE_IMAGE_NAME="openvibecoding-ci-desktop-native:local"
 CONTAINER_RUN_ARGS=()
-DOCKER_CI_STAGE_CONTEXT="${CORTEXPILOT_DOCKER_CI_STAGE_CONTEXT:-docker_ci}"
-DOCKER_PRECHECK_TIMEOUT_SEC="${CORTEXPILOT_DOCKER_PRECHECK_TIMEOUT_SEC:-20}"
-DOCKER_PRECHECK_RETRIES_RAW="${CORTEXPILOT_DOCKER_PRECHECK_RETRIES:-4}"
+DOCKER_CI_STAGE_CONTEXT="${OPENVIBECODING_DOCKER_CI_STAGE_CONTEXT:-docker_ci}"
+DOCKER_PRECHECK_TIMEOUT_SEC="${OPENVIBECODING_DOCKER_PRECHECK_TIMEOUT_SEC:-20}"
+DOCKER_PRECHECK_RETRIES_RAW="${OPENVIBECODING_DOCKER_PRECHECK_RETRIES:-4}"
 if [[ "${DOCKER_PRECHECK_RETRIES_RAW}" =~ ^[0-9]+$ ]]; then
   DOCKER_PRECHECK_RETRIES="${DOCKER_PRECHECK_RETRIES_RAW}"
 else
-  echo "⚠️ [docker_ci] invalid CORTEXPILOT_DOCKER_PRECHECK_RETRIES=${DOCKER_PRECHECK_RETRIES_RAW}; using default 4" >&2
+  echo "⚠️ [docker_ci] invalid OPENVIBECODING_DOCKER_PRECHECK_RETRIES=${DOCKER_PRECHECK_RETRIES_RAW}; using default 4" >&2
   DOCKER_PRECHECK_RETRIES="4"
 fi
-DOCKER_PRECHECK_RETRY_SLEEP_SEC_RAW="${CORTEXPILOT_DOCKER_PRECHECK_RETRY_SLEEP_SEC:-5}"
+DOCKER_PRECHECK_RETRY_SLEEP_SEC_RAW="${OPENVIBECODING_DOCKER_PRECHECK_RETRY_SLEEP_SEC:-5}"
 if [[ "${DOCKER_PRECHECK_RETRY_SLEEP_SEC_RAW}" =~ ^[0-9]+$ ]]; then
   DOCKER_PRECHECK_RETRY_SLEEP_SEC="${DOCKER_PRECHECK_RETRY_SLEEP_SEC_RAW}"
 else
-  echo "⚠️ [docker_ci] invalid CORTEXPILOT_DOCKER_PRECHECK_RETRY_SLEEP_SEC=${DOCKER_PRECHECK_RETRY_SLEEP_SEC_RAW}; using default 5" >&2
+  echo "⚠️ [docker_ci] invalid OPENVIBECODING_DOCKER_PRECHECK_RETRY_SLEEP_SEC=${DOCKER_PRECHECK_RETRY_SLEEP_SEC_RAW}; using default 5" >&2
   DOCKER_PRECHECK_RETRY_SLEEP_SEC="5"
 fi
-STRICT_CI_CORTEXPILOT_ENV_ALLOWLIST=(
-  CORTEXPILOT_DOC_GATE_MODE
-  CORTEXPILOT_DOC_GATE_BASE_SHA
-  CORTEXPILOT_DOC_GATE_HEAD_SHA
-  CORTEXPILOT_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE
-  CORTEXPILOT_CI_LIVE_PREFLIGHT_PROVIDER_API_MODE
-  CORTEXPILOT_CI_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE
-  CORTEXPILOT_CI_ROUTE_ID
-  CORTEXPILOT_CI_TRUST_CLASS
-  CORTEXPILOT_CI_RUNNER_CLASS
-  CORTEXPILOT_CI_CLOUD_BOOTSTRAP_ALLOWED
+STRICT_CI_OPENVIBECODING_ENV_ALLOWLIST=(
+  OPENVIBECODING_DOC_GATE_MODE
+  OPENVIBECODING_DOC_GATE_BASE_SHA
+  OPENVIBECODING_DOC_GATE_HEAD_SHA
+  OPENVIBECODING_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE
+  OPENVIBECODING_CI_LIVE_PREFLIGHT_PROVIDER_API_MODE
+  OPENVIBECODING_CI_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE
+  OPENVIBECODING_CI_ROUTE_ID
+  OPENVIBECODING_CI_TRUST_CLASS
+  OPENVIBECODING_CI_RUNNER_CLASS
+  OPENVIBECODING_CI_CLOUD_BOOTSTRAP_ALLOWED
 )
 
 usage() {
@@ -208,16 +208,16 @@ PY
 }
 
 ensure_host_dispatch_context_or_fail() {
-  if is_truthy "${CORTEXPILOT_CI_CONTAINER:-0}"; then
-    echo "❌ scripts/docker_ci.sh cannot invoke nested docker runs when CORTEXPILOT_CI_CONTAINER=1" >&2
-    echo "   run the target gate script directly in-container, or set CORTEXPILOT_HOST_COMPAT=1 on host to bypass auto-routing" >&2
+  if is_truthy "${OPENVIBECODING_CI_CONTAINER:-0}"; then
+    echo "❌ scripts/docker_ci.sh cannot invoke nested docker runs when OPENVIBECODING_CI_CONTAINER=1" >&2
+    echo "   run the target gate script directly in-container, or set OPENVIBECODING_HOST_COMPAT=1 on host to bypass auto-routing" >&2
     exit 2
   fi
 }
 
 docker_buildx_local_cache_enabled() {
-  local raw="${CORTEXPILOT_DOCKER_BUILDX_LOCAL_CACHE:-1}"
-  if is_truthy "${CI:-0}" || is_truthy "${GITHUB_ACTIONS:-0}" || is_truthy "${CORTEXPILOT_CI_CONTAINER:-0}"; then
+  local raw="${OPENVIBECODING_DOCKER_BUILDX_LOCAL_CACHE:-1}"
+  if is_truthy "${CI:-0}" || is_truthy "${GITHUB_ACTIONS:-0}" || is_truthy "${OPENVIBECODING_CI_CONTAINER:-0}"; then
     return 1
   fi
   local normalized
@@ -262,10 +262,10 @@ PY
   emit_stage "inspect-image-cache" "image=${image_name}"
   if docker image inspect "${image_name}" >/dev/null 2>&1; then
     existing_hash="$(
-      docker image inspect "${image_name}" --format '{{ index .Config.Labels "org.cortexpilot.ci.input-hash" }}' 2>/dev/null || true
+      docker image inspect "${image_name}" --format '{{ index .Config.Labels "org.openvibecoding.ci.input-hash" }}' 2>/dev/null || true
     )"
   fi
-  if [[ "${CORTEXPILOT_DOCKER_CI_FORCE_REBUILD:-0}" != "1" && -n "${existing_hash}" && "${existing_hash}" == "${input_hash}" ]]; then
+  if [[ "${OPENVIBECODING_DOCKER_CI_FORCE_REBUILD:-0}" != "1" && -n "${existing_hash}" && "${existing_hash}" == "${input_hash}" ]]; then
     emit_stage "reuse-image" "image=${image_name} input_hash=${input_hash}"
     return 0
   fi
@@ -275,7 +275,7 @@ PY
   fi
   emit_stage "docker-build" "image=${image_name} input_hash=${input_hash}"
   if docker_buildx_local_cache_enabled; then
-    buildx_cache_dir="$(cortexpilot_docker_buildx_cache_dir "$ROOT_DIR" "$image_name")"
+    buildx_cache_dir="$(openvibecoding_docker_buildx_cache_dir "$ROOT_DIR" "$image_name")"
     buildx_cache_dir_next="${buildx_cache_dir}.next.$$"
     mkdir -p "$(dirname "$buildx_cache_dir")"
     rm -rf "${buildx_cache_dir_next}" >/dev/null 2>&1 || true
@@ -285,7 +285,7 @@ PY
       buildx build
       --load
       --build-arg "TARGETARCH=${targetarch}"
-      --label "org.cortexpilot.ci.input-hash=${input_hash}"
+      --label "org.openvibecoding.ci.input-hash=${input_hash}"
       --cache-to "type=local,dest=${buildx_cache_dir_next},mode=max"
       -t "${image_name}"
       -f "${dockerfile_path}"
@@ -303,7 +303,7 @@ PY
   else
     docker build \
       --build-arg "TARGETARCH=${targetarch}" \
-      --label "org.cortexpilot.ci.input-hash=${input_hash}" \
+      --label "org.openvibecoding.ci.input-hash=${input_hash}" \
       -t "${image_name}" \
       -f "${dockerfile_path}" \
       "${ROOT_DIR}"
@@ -340,16 +340,16 @@ resolve_targetarch_or_fail() {
 
 prepare_runner_temp_mount() {
   # Keep heavy local CI runner temp under the repo-owned machine cache instead of Darwin TMPDIR.
-  cortexpilot_maybe_auto_prune_machine_cache "$ROOT_DIR" "docker_ci_runner_temp"
-  local default_host_runner_temp="$(cortexpilot_machine_tmp_root "$ROOT_DIR")/docker-ci/runner-temp-$(id -u)"
-  local host_runner_temp="${CORTEXPILOT_DOCKER_CI_RUNNER_TEMP_HOST:-${RUNNER_TEMP:-${default_host_runner_temp}}}"
+  openvibecoding_maybe_auto_prune_machine_cache "$ROOT_DIR" "docker_ci_runner_temp"
+  local default_host_runner_temp="$(openvibecoding_machine_tmp_root "$ROOT_DIR")/docker-ci/runner-temp-$(id -u)"
+  local host_runner_temp="${OPENVIBECODING_DOCKER_CI_RUNNER_TEMP_HOST:-${RUNNER_TEMP:-${default_host_runner_temp}}}"
   mkdir -p "${host_runner_temp}"
   local target_uid
   local target_gid
   target_uid="$(resolve_host_uid)"
   target_gid="$(resolve_host_gid)"
   chown -R "${target_uid}:${target_gid}" "${host_runner_temp}" >/dev/null 2>&1 || true
-  export CORTEXPILOT_DOCKER_CI_RUNNER_TEMP_HOST="${host_runner_temp}"
+  export OPENVIBECODING_DOCKER_CI_RUNNER_TEMP_HOST="${host_runner_temp}"
 }
 
 resolve_host_uid() {
@@ -397,9 +397,9 @@ PY
   fi
 }
 
-append_strict_ci_cortexpilot_allowlist() {
+append_strict_ci_openvibecoding_allowlist() {
   local env_name
-  for env_name in "${STRICT_CI_CORTEXPILOT_ENV_ALLOWLIST[@]}"; do
+  for env_name in "${STRICT_CI_OPENVIBECODING_ENV_ALLOWLIST[@]}"; do
     append_env_passthrough "${env_name}"
   done
 }
@@ -443,9 +443,9 @@ prepare_container_run_args() {
   done
 
   if is_truthy "${GITHUB_ACTIONS:-0}"; then
-    append_strict_ci_cortexpilot_allowlist
+    append_strict_ci_openvibecoding_allowlist
   else
-    append_prefixed_env_passthrough "CORTEXPILOT_"
+    append_prefixed_env_passthrough "OPENVIBECODING_"
   fi
 }
 
@@ -464,7 +464,7 @@ run_in_container() {
   local command_string="$1"
   local host_uid
   local host_gid
-  local container_home="/tmp/cortexpilot-runner-temp/home"
+  local container_home="/tmp/openvibecoding-runner-temp/home"
   ensure_host_dispatch_context_or_fail
   emit_stage "prepare-runner-temp" "image=${IMAGE_NAME}"
   prepare_runner_temp_mount
@@ -478,21 +478,21 @@ run_in_container() {
   emit_stage "docker-run" "image=${IMAGE_NAME}"
   docker run --rm --init \
     -v "${ROOT_DIR}:/workspace" \
-    -v "${CORTEXPILOT_DOCKER_CI_RUNNER_TEMP_HOST}:/tmp/cortexpilot-runner-temp" \
+    -v "${OPENVIBECODING_DOCKER_CI_RUNNER_TEMP_HOST}:/tmp/openvibecoding-runner-temp" \
     -w /workspace \
     --user "${host_uid}:${host_gid}" \
-    -e RUNNER_TEMP=/tmp/cortexpilot-runner-temp \
-    -e CARGO_HOME=/tmp/cortexpilot-runner-temp/cargo \
-    -e XDG_CACHE_HOME=/tmp/cortexpilot-runner-temp/xdg-cache \
-    -e UV_CACHE_DIR=/tmp/cortexpilot-runner-temp/uv-cache \
-    -e COREPACK_HOME=/tmp/cortexpilot-runner-temp/corepack \
+    -e RUNNER_TEMP=/tmp/openvibecoding-runner-temp \
+    -e CARGO_HOME=/tmp/openvibecoding-runner-temp/cargo \
+    -e XDG_CACHE_HOME=/tmp/openvibecoding-runner-temp/xdg-cache \
+    -e UV_CACHE_DIR=/tmp/openvibecoding-runner-temp/uv-cache \
+    -e COREPACK_HOME=/tmp/openvibecoding-runner-temp/corepack \
     -e HOME="${container_home}" \
-    -e CORTEXPILOT_CI_CONTAINER=1 \
+    -e OPENVIBECODING_CI_CONTAINER=1 \
     -e PLAYWRIGHT_BROWSERS_PATH=/ms-playwright \
     -e PYTHONDONTWRITEBYTECODE=1 \
     "${CONTAINER_RUN_ARGS[@]}" \
     "${IMAGE_NAME}" \
-    bash -lc "unset CORTEXPILOT_MACHINE_CACHE_ROOT CORTEXPILOT_TOOLCHAIN_CACHE_ROOT CORTEXPILOT_PNPM_STORE_DIR CORTEXPILOT_PYTHON VIRTUAL_ENV; export RUNNER_TEMP='/tmp/cortexpilot-runner-temp' XDG_CACHE_HOME='/tmp/cortexpilot-runner-temp/xdg-cache' UV_CACHE_DIR='/tmp/cortexpilot-runner-temp/uv-cache' COREPACK_HOME='/tmp/cortexpilot-runner-temp/corepack' CARGO_HOME='/tmp/cortexpilot-runner-temp/cargo' HOME='${container_home}' PLAYWRIGHT_BROWSERS_PATH='/ms-playwright' CORTEXPILOT_DEFAULT_ENV_ROOT='${container_home}/.config/cortexpilot' CORTEXPILOT_DISABLE_ZSH_ENV_FALLBACK=1 PYTHONDONTWRITEBYTECODE=1; mkdir -p '${container_home}' '${container_home}/.config/cortexpilot' '/tmp/cortexpilot-runner-temp/xdg-cache' '/tmp/cortexpilot-runner-temp/uv-cache' '/tmp/cortexpilot-runner-temp/corepack' '/tmp/cortexpilot-runner-temp/cargo' && ${command_string}"
+    bash -lc "unset OPENVIBECODING_MACHINE_CACHE_ROOT OPENVIBECODING_TOOLCHAIN_CACHE_ROOT OPENVIBECODING_PNPM_STORE_DIR OPENVIBECODING_PYTHON VIRTUAL_ENV; export RUNNER_TEMP='/tmp/openvibecoding-runner-temp' XDG_CACHE_HOME='/tmp/openvibecoding-runner-temp/xdg-cache' UV_CACHE_DIR='/tmp/openvibecoding-runner-temp/uv-cache' COREPACK_HOME='/tmp/openvibecoding-runner-temp/corepack' CARGO_HOME='/tmp/openvibecoding-runner-temp/cargo' HOME='${container_home}' PLAYWRIGHT_BROWSERS_PATH='/ms-playwright' OPENVIBECODING_DEFAULT_ENV_ROOT='${container_home}/.config/openvibecoding' OPENVIBECODING_DISABLE_ZSH_ENV_FALLBACK=1 PYTHONDONTWRITEBYTECODE=1; mkdir -p '${container_home}' '${container_home}/.config/openvibecoding' '/tmp/openvibecoding-runner-temp/xdg-cache' '/tmp/openvibecoding-runner-temp/uv-cache' '/tmp/openvibecoding-runner-temp/corepack' '/tmp/openvibecoding-runner-temp/cargo' && ${command_string}"
   emit_stage "docker-run-complete" "image=${IMAGE_NAME}"
 }
 
@@ -501,7 +501,7 @@ run_in_custom_image() {
   local command_string="$2"
   local host_uid
   local host_gid
-  local container_home="/tmp/cortexpilot-runner-temp/home"
+  local container_home="/tmp/openvibecoding-runner-temp/home"
   ensure_host_dispatch_context_or_fail
   emit_stage "prepare-runner-temp" "image=${image_name}"
   prepare_runner_temp_mount
@@ -513,21 +513,21 @@ run_in_custom_image() {
   emit_stage "docker-run" "image=${image_name}"
   docker run --rm --init \
     -v "${ROOT_DIR}:/workspace" \
-    -v "${CORTEXPILOT_DOCKER_CI_RUNNER_TEMP_HOST}:/tmp/cortexpilot-runner-temp" \
+    -v "${OPENVIBECODING_DOCKER_CI_RUNNER_TEMP_HOST}:/tmp/openvibecoding-runner-temp" \
     -w /workspace \
     --user "${host_uid}:${host_gid}" \
-    -e RUNNER_TEMP=/tmp/cortexpilot-runner-temp \
-    -e CARGO_HOME=/tmp/cortexpilot-runner-temp/cargo \
-    -e XDG_CACHE_HOME=/tmp/cortexpilot-runner-temp/xdg-cache \
-    -e UV_CACHE_DIR=/tmp/cortexpilot-runner-temp/uv-cache \
-    -e COREPACK_HOME=/tmp/cortexpilot-runner-temp/corepack \
+    -e RUNNER_TEMP=/tmp/openvibecoding-runner-temp \
+    -e CARGO_HOME=/tmp/openvibecoding-runner-temp/cargo \
+    -e XDG_CACHE_HOME=/tmp/openvibecoding-runner-temp/xdg-cache \
+    -e UV_CACHE_DIR=/tmp/openvibecoding-runner-temp/uv-cache \
+    -e COREPACK_HOME=/tmp/openvibecoding-runner-temp/corepack \
     -e HOME="${container_home}" \
-    -e CORTEXPILOT_CI_CONTAINER=1 \
+    -e OPENVIBECODING_CI_CONTAINER=1 \
     -e PLAYWRIGHT_BROWSERS_PATH=/ms-playwright \
     -e PYTHONDONTWRITEBYTECODE=1 \
     "${CONTAINER_RUN_ARGS[@]}" \
     "${image_name}" \
-    bash -lc "unset CORTEXPILOT_MACHINE_CACHE_ROOT CORTEXPILOT_TOOLCHAIN_CACHE_ROOT CORTEXPILOT_PNPM_STORE_DIR CORTEXPILOT_PYTHON VIRTUAL_ENV; export RUNNER_TEMP='/tmp/cortexpilot-runner-temp' XDG_CACHE_HOME='/tmp/cortexpilot-runner-temp/xdg-cache' UV_CACHE_DIR='/tmp/cortexpilot-runner-temp/uv-cache' COREPACK_HOME='/tmp/cortexpilot-runner-temp/corepack' CARGO_HOME='/tmp/cortexpilot-runner-temp/cargo' HOME='${container_home}' PLAYWRIGHT_BROWSERS_PATH='/ms-playwright' CORTEXPILOT_DEFAULT_ENV_ROOT='${container_home}/.config/cortexpilot' CORTEXPILOT_DISABLE_ZSH_ENV_FALLBACK=1 PYTHONDONTWRITEBYTECODE=1; mkdir -p '${container_home}' '${container_home}/.config/cortexpilot' '/tmp/cortexpilot-runner-temp/xdg-cache' '/tmp/cortexpilot-runner-temp/uv-cache' '/tmp/cortexpilot-runner-temp/corepack' '/tmp/cortexpilot-runner-temp/cargo' && ${command_string}"
+    bash -lc "unset OPENVIBECODING_MACHINE_CACHE_ROOT OPENVIBECODING_TOOLCHAIN_CACHE_ROOT OPENVIBECODING_PNPM_STORE_DIR OPENVIBECODING_PYTHON VIRTUAL_ENV; export RUNNER_TEMP='/tmp/openvibecoding-runner-temp' XDG_CACHE_HOME='/tmp/openvibecoding-runner-temp/xdg-cache' UV_CACHE_DIR='/tmp/openvibecoding-runner-temp/uv-cache' COREPACK_HOME='/tmp/openvibecoding-runner-temp/corepack' CARGO_HOME='/tmp/openvibecoding-runner-temp/cargo' HOME='${container_home}' PLAYWRIGHT_BROWSERS_PATH='/ms-playwright' OPENVIBECODING_DEFAULT_ENV_ROOT='${container_home}/.config/openvibecoding' OPENVIBECODING_DISABLE_ZSH_ENV_FALLBACK=1 PYTHONDONTWRITEBYTECODE=1; mkdir -p '${container_home}' '${container_home}/.config/openvibecoding' '/tmp/openvibecoding-runner-temp/xdg-cache' '/tmp/openvibecoding-runner-temp/uv-cache' '/tmp/openvibecoding-runner-temp/corepack' '/tmp/openvibecoding-runner-temp/cargo' && ${command_string}"
   emit_stage "docker-run-complete" "image=${image_name}"
 }
 
@@ -556,17 +556,17 @@ ensure_no_extra_args() {
 run_lane_full_ci() {
   ensure_no_extra_args "lane full-ci" "$@"
   if is_truthy "${GITHUB_ACTIONS:-0}"; then
-    run_in_container_argv env CI=1 CORTEXPILOT_CI_PROFILE=strict bash scripts/ci.sh
+    run_in_container_argv env CI=1 OPENVIBECODING_CI_PROFILE=strict bash scripts/ci.sh
     return
   fi
   run_in_container_argv env \
     CI=1 \
-    CORTEXPILOT_CI_PROFILE=strict \
-    CORTEXPILOT_CI_UI_STRICT_BREAK_GLASS=1 \
-    CORTEXPILOT_CI_UI_STRICT_BREAK_GLASS_REASON=LOCAL_ONLY_UI_WARN_AUDIT \
-    CORTEXPILOT_CI_UI_STRICT_BREAK_GLASS_TICKET=LOCAL-ONLY-STRICT-UI \
-    CORTEXPILOT_CI_UI_STRICT_REQUIRE_GEMINI_VERDICT=0 \
-    CORTEXPILOT_UI_AUDIT_ALLOW_LIGHTHOUSE_FAILURE=1 \
+    OPENVIBECODING_CI_PROFILE=strict \
+    OPENVIBECODING_CI_UI_STRICT_BREAK_GLASS=1 \
+    OPENVIBECODING_CI_UI_STRICT_BREAK_GLASS_REASON=LOCAL_ONLY_UI_WARN_AUDIT \
+    OPENVIBECODING_CI_UI_STRICT_BREAK_GLASS_TICKET=LOCAL-ONLY-STRICT-UI \
+    OPENVIBECODING_CI_UI_STRICT_REQUIRE_GEMINI_VERDICT=0 \
+    OPENVIBECODING_UI_AUDIT_ALLOW_LIGHTHOUSE_FAILURE=1 \
     bash scripts/ci.sh
 }
 
@@ -591,18 +591,18 @@ run_lane_ci_slice() {
   local slice_name="$1"
   shift || true
   ensure_no_extra_args "lane ${slice_name}" "$@"
-  run_in_container_argv env CI=1 CORTEXPILOT_CI_PROFILE=strict bash scripts/ci_slice_runner.sh "${slice_name#ci-}"
+  run_in_container_argv env CI=1 OPENVIBECODING_CI_PROFILE=strict bash scripts/ci_slice_runner.sh "${slice_name#ci-}"
 }
 
 run_lane_ci_core_image_smoke() {
   ensure_no_extra_args "lane ci-core-image-smoke" "$@"
-  set_stage_context "${CORTEXPILOT_DOCKER_CI_STAGE_CONTEXT:-ci-core-image-smoke}"
+  set_stage_context "${OPENVIBECODING_DOCKER_CI_STAGE_CONTEXT:-ci-core-image-smoke}"
   bash scripts/verify_ci_core_image_smoke.sh
 }
 
 run_lane_ci_control_plane_doctor() {
   ensure_no_extra_args "lane ci-control-plane-doctor" "$@"
-  if is_truthy "${CORTEXPILOT_CI_CONTAINER:-0}"; then
+  if is_truthy "${OPENVIBECODING_CI_CONTAINER:-0}"; then
     bash scripts/ci_control_plane_doctor.sh
     return
   fi
@@ -615,7 +615,7 @@ run_lane_orchestrator_tests() {
 bash scripts/bootstrap.sh python
 mkdir -p .runtime-cache/test_output/orchestrator-tests
 source scripts/lib/env.sh
-PYTHONPATH=apps/orchestrator/src "${CORTEXPILOT_PYTHON:-python3}" -m pytest \
+PYTHONPATH=apps/orchestrator/src "${OPENVIBECODING_PYTHON:-python3}" -m pytest \
   apps/orchestrator/tests/test_schema_validation.py \
   apps/orchestrator/tests/test_policy_registry_alignment.py \
   -q -n 0 \
@@ -657,13 +657,13 @@ cat > "$OUT_DIR/p1_flake_report.json" <<'P1'
   "incomplete_commands": []
 }
 P1
-CORTEXPILOT_UI_MATRIX_FILE="$OUT_DIR/ui-button-coverage-matrix-lite.md" \
-CORTEXPILOT_UI_P0_REPORT="$OUT_DIR/p0_flake_report.json" \
-CORTEXPILOT_UI_P1_REPORT="$OUT_DIR/p1_flake_report.json" \
-CORTEXPILOT_UI_TRUTH_GATE_REPORT="$OUT_DIR/ui_e2e_truth_gate_report.json" \
-CORTEXPILOT_UI_TRUTH_GATE_STRICT=0 \
-CORTEXPILOT_UI_TRUTH_DISABLE_AUTO_LATEST=1 \
-CORTEXPILOT_UI_TRUTH_REQUIRE_RUN_ID_MATCH=1 \
+OPENVIBECODING_UI_MATRIX_FILE="$OUT_DIR/ui-button-coverage-matrix-lite.md" \
+OPENVIBECODING_UI_P0_REPORT="$OUT_DIR/p0_flake_report.json" \
+OPENVIBECODING_UI_P1_REPORT="$OUT_DIR/p1_flake_report.json" \
+OPENVIBECODING_UI_TRUTH_GATE_REPORT="$OUT_DIR/ui_e2e_truth_gate_report.json" \
+OPENVIBECODING_UI_TRUTH_GATE_STRICT=0 \
+OPENVIBECODING_UI_TRUTH_DISABLE_AUTO_LATEST=1 \
+OPENVIBECODING_UI_TRUTH_REQUIRE_RUN_ID_MATCH=1 \
 bash scripts/ui_e2e_truth_gate.sh 2>&1 | tee "$OUT_DIR/ui_truth_gate_lite.log"
 cat > "$OUT_DIR/SYNTHETIC_NON_BLOCKING_NOTICE.md" <<'NOTICE'
 # Synthetic / Non-Blocking Signal
@@ -680,20 +680,20 @@ EOF
 run_lane_ui_truth_strict() {
   ensure_no_extra_args "lane ui-truth-strict" "$@"
   run_in_container 'set -euo pipefail
-export CORTEXPILOT_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE="${CORTEXPILOT_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE:-require}"
+export OPENVIBECODING_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE="${OPENVIBECODING_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE:-require}"
 bash scripts/bootstrap.sh full
 bash scripts/ui_regression_operational_gate.sh --profile pr'
 }
 
 run_lane_ui_audit_smoke() {
   ensure_no_extra_args "lane ui-audit-smoke" "$@"
-  set_stage_context "${CORTEXPILOT_DOCKER_CI_STAGE_CONTEXT:-ui-audit-smoke}"
+  set_stage_context "${OPENVIBECODING_DOCKER_CI_STAGE_CONTEXT:-ui-audit-smoke}"
   run_in_container 'set -euo pipefail
 echo "ℹ️ [ui-audit-smoke] stage=bootstrap-python"
 bash scripts/bootstrap.sh python
 echo "ℹ️ [ui-audit-smoke] stage=resolve-python"
 source scripts/lib/toolchain_env.sh
-PYTHON_BIN="$(cortexpilot_python_bin "$PWD")"
+PYTHON_BIN="$(openvibecoding_python_bin "$PWD")"
 echo "ℹ️ [ui-audit-smoke] stage=install-playwright-chromium"
 PLAYWRIGHT_BROWSERS_PATH=/ms-playwright "$PYTHON_BIN" -m playwright install chromium >/dev/null
 echo "ℹ️ [ui-audit-smoke] stage=run-ui-audit-gate"
@@ -703,7 +703,7 @@ bash scripts/ui_audit_gate.sh'
 
 run_lane_desktop_native_smoke() {
   ensure_no_extra_args "lane desktop-native-smoke" "$@"
-  set_stage_context "${CORTEXPILOT_DOCKER_CI_STAGE_CONTEXT:-desktop-native-smoke}"
+  set_stage_context "${OPENVIBECODING_DOCKER_CI_STAGE_CONTEXT:-desktop-native-smoke}"
   emit_stage "build-core-image"
   build_image
   emit_stage "build-desktop-native-image"
@@ -723,7 +723,7 @@ bash scripts/run_workspace_app.sh desktop build >/dev/null
 echo "ℹ️ [desktop-native-smoke] stage=verify-frontend-dist"
 test -d apps/desktop/dist
 echo "ℹ️ [desktop-native-smoke] stage=stage-frontend-dist"
-DESKTOP_NATIVE_FRONTEND_DIST="$(mktemp -d /tmp/cortexpilot-desktop-native-dist.XXXXXX)"
+DESKTOP_NATIVE_FRONTEND_DIST="$(mktemp -d /tmp/openvibecoding-desktop-native-dist.XXXXXX)"
 python3 - <<'PY' "apps/desktop/dist" "$DESKTOP_NATIVE_FRONTEND_DIST"
 import shutil
 import sys
@@ -740,8 +740,8 @@ for child in src.iterdir():
     else:
         shutil.copy2(child, target)
 PY
-export CARGO_HOME="/tmp/cortexpilot-desktop-native-cargo"
-export CARGO_TARGET_DIR="/tmp/cortexpilot-desktop-native-target"
+export CARGO_HOME="/tmp/openvibecoding-desktop-native-cargo"
+export CARGO_TARGET_DIR="/tmp/openvibecoding-desktop-native-target"
 export CARGO_INCREMENTAL=0
 export CARGO_BUILD_JOBS=1
 echo "ℹ️ [desktop-native-smoke] stage=reset-cargo-caches"
@@ -766,7 +766,7 @@ bash scripts/mutation_gate.sh'
 
 run_lane_ci_smoke() {
   ensure_no_extra_args "lane ci-smoke" "$@"
-  set_stage_context "${CORTEXPILOT_DOCKER_CI_STAGE_CONTEXT:-ci-smoke}"
+  set_stage_context "${OPENVIBECODING_DOCKER_CI_STAGE_CONTEXT:-ci-smoke}"
   run_in_container 'echo "ci smoke start"; uname -a; echo "ci smoke ok"'
 }
 
@@ -998,16 +998,16 @@ main() {
       ensure_docker
       ensure_no_extra_args "ci" "$@"
       if is_truthy "${GITHUB_ACTIONS:-0}"; then
-        run_in_container_argv env CI=1 CORTEXPILOT_CI_PROFILE=strict bash scripts/ci.sh
+        run_in_container_argv env CI=1 OPENVIBECODING_CI_PROFILE=strict bash scripts/ci.sh
       else
         run_in_container_argv env \
           CI=1 \
-          CORTEXPILOT_CI_PROFILE=strict \
-          CORTEXPILOT_CI_UI_STRICT_BREAK_GLASS=1 \
-          CORTEXPILOT_CI_UI_STRICT_BREAK_GLASS_REASON=LOCAL_ONLY_UI_WARN_AUDIT \
-          CORTEXPILOT_CI_UI_STRICT_BREAK_GLASS_TICKET=LOCAL-ONLY-STRICT-UI \
-          CORTEXPILOT_CI_UI_STRICT_REQUIRE_GEMINI_VERDICT=0 \
-          CORTEXPILOT_UI_AUDIT_ALLOW_LIGHTHOUSE_FAILURE=1 \
+          OPENVIBECODING_CI_PROFILE=strict \
+          OPENVIBECODING_CI_UI_STRICT_BREAK_GLASS=1 \
+          OPENVIBECODING_CI_UI_STRICT_BREAK_GLASS_REASON=LOCAL_ONLY_UI_WARN_AUDIT \
+          OPENVIBECODING_CI_UI_STRICT_BREAK_GLASS_TICKET=LOCAL-ONLY-STRICT-UI \
+          OPENVIBECODING_CI_UI_STRICT_REQUIRE_GEMINI_VERDICT=0 \
+          OPENVIBECODING_UI_AUDIT_ALLOW_LIGHTHOUSE_FAILURE=1 \
           bash scripts/ci.sh
       fi
       ;;

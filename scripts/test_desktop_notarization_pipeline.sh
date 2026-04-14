@@ -34,8 +34,8 @@ setup_case_workspace() {
   local case_name="$1"
   local case_dir="$TMP_ROOT/$case_name"
   local fake_bin="$case_dir/fake-bin"
-  local app_path="$case_dir/CortexPilot Desktop.app"
-  local dmg_path="$case_dir/CortexPilot Desktop_0.1.0_aarch64.dmg"
+  local app_path="$case_dir/OpenVibeCoding Desktop.app"
+  local dmg_path="$case_dir/OpenVibeCoding Desktop_0.1.0_aarch64.dmg"
   local report_dir="$case_dir/reports"
 
   mkdir -p "$fake_bin" "$app_path" "$report_dir"

@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_INVENTORY = ROOT / "configs" / "upstream_inventory.json"
 DEFAULT_MATRIX = ROOT / "configs" / "upstream_compat_matrix.json"
 DEFAULT_CI_POLICY = ROOT / "configs" / "ci_governance_policy.json"
-DEFAULT_PROVIDER_FILE = ROOT / "apps" / "orchestrator" / "src" / "cortexpilot_orch" / "runners" / "provider_resolution.py"
+DEFAULT_PROVIDER_FILE = ROOT / "apps" / "orchestrator" / "src" / "openvibecoding_orch" / "runners" / "provider_resolution.py"
 DEFAULT_CI_DOCKERFILE = ROOT / "infra" / "ci" / "Dockerfile.core"
 DEFAULT_OUTPUT = ROOT / ".runtime-cache" / "test_output" / "governance" / "upstream_inventory_report.json"
 
@@ -170,12 +170,12 @@ def main() -> int:
 
     dockerfile_lines = DEFAULT_CI_DOCKERFILE.read_text(encoding="utf-8").splitlines()
     dockerfile_from = next((line.split("FROM", 1)[1].strip() for line in dockerfile_lines if line.startswith("FROM ")), "")
-    ci_image = next((entry for entry in upstreams if entry.get("id") == "ci-image:cortexpilot-ci-core"), None)
+    ci_image = next((entry for entry in upstreams if entry.get("id") == "ci-image:openvibecoding-ci-core"), None)
     if isinstance(ci_image, dict):
         recorded_pin = str(ci_image.get("pin") or "").strip()
         if dockerfile_from and recorded_pin != dockerfile_from:
             errors.append(
-                "ci-image:cortexpilot-ci-core pin drift vs infra/ci/Dockerfile.core "
+                "ci-image:openvibecoding-ci-core pin drift vs infra/ci/Dockerfile.core "
                 f"(inventory={recorded_pin!r}, dockerfile={dockerfile_from!r})"
             )
 

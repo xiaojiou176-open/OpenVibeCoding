@@ -25,7 +25,7 @@ is_truthy() {
   [[ "${normalized}" == "1" || "${normalized}" == "true" || "${normalized}" == "yes" || "${normalized}" == "on" ]]
 }
 
-PYTHON="$(cortexpilot_python_bin "$ROOT_DIR" || true)"
+PYTHON="$(openvibecoding_python_bin "$ROOT_DIR" || true)"
 PYTHON_LOCKFILE="apps/orchestrator/uv.lock"
 declare -a ORCH_CRITICAL_COV_ARGS=()
 
@@ -74,15 +74,15 @@ sync_python_deps_from_lock_or_fail() {
   uv pip sync --python "$py_bin" --link-mode copy "$PYTHON_LOCKFILE"
 }
 
-CI_BREAK_GLASS_AUDIT_LOG="${CORTEXPILOT_CI_BREAK_GLASS_AUDIT_LOG:-.runtime-cache/test_output/ci_break_glass_audit.jsonl}"
+CI_BREAK_GLASS_AUDIT_LOG="${OPENVIBECODING_CI_BREAK_GLASS_AUDIT_LOG:-.runtime-cache/test_output/ci_break_glass_audit.jsonl}"
 mkdir -p "$(dirname "$CI_BREAK_GLASS_AUDIT_LOG")"
 log_ci_event "$ROOT_DIR" "ci_main_impl" "start" "info" '{"gate":"ci-main"}'
 
 resolve_ci_break_glass() {
   local scope="${1:-global}"
-  local enabled_var="${2:-CORTEXPILOT_CI_BREAK_GLASS}"
-  local reason_var="${3:-CORTEXPILOT_CI_BREAK_GLASS_REASON}"
-  local ticket_var="${4:-CORTEXPILOT_CI_BREAK_GLASS_TICKET}"
+  local enabled_var="${2:-OPENVIBECODING_CI_BREAK_GLASS}"
+  local reason_var="${3:-OPENVIBECODING_CI_BREAK_GLASS_REASON}"
+  local ticket_var="${4:-OPENVIBECODING_CI_BREAK_GLASS_TICKET}"
   local enabled="${!enabled_var:-0}"
   local reason="${!reason_var:-}"
   local ticket="${!ticket_var:-}"
@@ -152,7 +152,7 @@ require_skip_gate_break_glass_or_fail() {
 
 resolve_provider_api_mode_or_fail() {
   local scope="${1:-provider_api_mode}"
-  local mode_var="${2:-CORTEXPILOT_CI_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE}"
+  local mode_var="${2:-OPENVIBECODING_CI_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE}"
   local default_mode="${3:-require}"
   local break_glass_var="${4:-${mode_var}_BREAK_GLASS}"
   local reason_var="${5:-${break_glass_var}_REASON}"
@@ -204,9 +204,9 @@ is_ci_environment() {
   return 1
 }
 
-CI_PROFILE="${CORTEXPILOT_CI_PROFILE:-auto}"
+CI_PROFILE="${OPENVIBECODING_CI_PROFILE:-auto}"
 if [[ "$CI_PROFILE" != "auto" && "$CI_PROFILE" != "prepush" && "$CI_PROFILE" != "strict" ]]; then
-  echo "❌ [ci] unsupported CORTEXPILOT_CI_PROFILE=${CI_PROFILE}. expected: auto|prepush|strict"
+  echo "❌ [ci] unsupported OPENVIBECODING_CI_PROFILE=${CI_PROFILE}. expected: auto|prepush|strict"
   exit 1
 fi
 if [[ "$CI_PROFILE" == "auto" ]]; then
@@ -222,18 +222,18 @@ if is_ci_environment && [[ "$CI_PROFILE" != "strict" ]]; then
 fi
 echo "ℹ️ [ci] execution profile=${CI_PROFILE}"
 
-if [[ "$CI_PROFILE" == "prepush" && "${CORTEXPILOT_CI_DOTENV_KEY_AUTOLOAD:-1}" == "1" ]]; then
+if [[ "$CI_PROFILE" == "prepush" && "${OPENVIBECODING_CI_DOTENV_KEY_AUTOLOAD:-1}" == "1" ]]; then
   load_env_var_from_dotenv_if_missing "GEMINI_API_KEY"
   load_env_var_from_dotenv_if_missing "OPENAI_API_KEY"
   load_env_var_from_dotenv_if_missing "ANTHROPIC_API_KEY"
 fi
 
-CI_SLICE="${CORTEXPILOT_CI_SLICE:-full}"
+CI_SLICE="${OPENVIBECODING_CI_SLICE:-full}"
 case "$CI_SLICE" in
   full|policy-and-security|core-tests|ui-truth|resilience-and-e2e|release-evidence)
     ;;
   *)
-    echo "❌ [ci] unsupported CORTEXPILOT_CI_SLICE=${CI_SLICE}. expected: full|policy-and-security|core-tests|ui-truth|resilience-and-e2e|release-evidence"
+    echo "❌ [ci] unsupported OPENVIBECODING_CI_SLICE=${CI_SLICE}. expected: full|policy-and-security|core-tests|ui-truth|resilience-and-e2e|release-evidence"
     exit 1
     ;;
 esac
@@ -256,7 +256,7 @@ ci_ui_truth_enabled() {
   if [[ "$CI_SLICE" == "ui-truth" ]]; then
     return 0
   fi
-  if is_truthy "${CORTEXPILOT_CI_INCLUDE_UI_TRUTH:-0}"; then
+  if is_truthy "${OPENVIBECODING_CI_INCLUDE_UI_TRUTH:-0}"; then
     return 0
   fi
   return 1
@@ -279,7 +279,7 @@ gate_name, attempts_used, max_attempts, final_status, output_path = sys.argv[1:]
 attempts_used_i = int(attempts_used)
 max_attempts_i = int(max_attempts)
 payload = {
-    "report_type": "cortexpilot_ci_retry_telemetry",
+    "report_type": "openvibecoding_ci_retry_telemetry",
     "generated_at": datetime.now(timezone.utc).isoformat(),
     "gate": gate_name,
     "attempts_used": attempts_used_i,
@@ -380,7 +380,7 @@ stop_heartbeat() {
 wait_with_heartbeat() {
   local pid="${1:-}"
   local label="${2:-ci.sh:wait}"
-  local interval_sec="${3:-${CORTEXPILOT_CI_HEARTBEAT_INTERVAL_SEC:-60}}"
+  local interval_sec="${3:-${OPENVIBECODING_CI_HEARTBEAT_INTERVAL_SEC:-60}}"
   local heartbeat_pid=""
   local wait_status=0
   if [[ -z "$pid" ]]; then
@@ -401,8 +401,8 @@ wait_with_timeout_heartbeat_and_cleanup() {
   local pid="${1:-}"
   local label="${2:-ci.sh:wait-timeout}"
   local timeout_sec="${3:-0}"
-  local interval_sec="${4:-${CORTEXPILOT_CI_HEARTBEAT_INTERVAL_SEC:-60}}"
-  local grace_sec="${CORTEXPILOT_CI_TIMEOUT_KILL_GRACE_SEC:-10}"
+  local interval_sec="${4:-${OPENVIBECODING_CI_HEARTBEAT_INTERVAL_SEC:-60}}"
+  local grace_sec="${OPENVIBECODING_CI_TIMEOUT_KILL_GRACE_SEC:-10}"
   local heartbeat_pid=""
   local wait_status=0
   local timed_out=0
@@ -514,8 +514,8 @@ run_with_timeout_heartbeat_and_cleanup() {
     return 2
   fi
 
-  local grace_sec="${CORTEXPILOT_CI_TIMEOUT_KILL_GRACE_SEC:-10}"
-  local interval_sec="${CORTEXPILOT_CI_HEARTBEAT_INTERVAL_SEC:-60}"
+  local grace_sec="${OPENVIBECODING_CI_TIMEOUT_KILL_GRACE_SEC:-10}"
+  local interval_sec="${OPENVIBECODING_CI_HEARTBEAT_INTERVAL_SEC:-60}"
   local cmd_pid=""
   local heartbeat_pid=""
   local watchdog_pid=""
@@ -621,7 +621,7 @@ resolve_step_timeout() {
 resolve_ci_step67_timeout() {
   local default_value="${1:-1800}"
   resolve_step_timeout \
-    "CORTEXPILOT_CI_STEP67_TIMEOUT_SEC" \
+    "OPENVIBECODING_CI_STEP67_TIMEOUT_SEC" \
     "$default_value"
 }
 
@@ -633,8 +633,8 @@ resolve_ci_step8_timeout() {
     "$key" \
     "$default_value" \
     "$group_key" \
-    "CORTEXPILOT_CI_STEP8_TIMEOUT_SEC" \
-    "CORTEXPILOT_CI_STEP_TIMEOUT_SEC"
+    "OPENVIBECODING_CI_STEP8_TIMEOUT_SEC" \
+    "OPENVIBECODING_CI_STEP_TIMEOUT_SEC"
 }
 
 enforce_orchestrator_critical_modules_branch_coverage() {
@@ -698,7 +698,7 @@ PY
 }
 
 load_orchestrator_critical_modules_config_or_fail() {
-  local config_path="${CORTEXPILOT_COVERAGE_CRITICAL_MODULES_CONFIG:-configs/coverage_critical_modules.json}"
+  local config_path="${OPENVIBECODING_COVERAGE_CRITICAL_MODULES_CONFIG:-configs/coverage_critical_modules.json}"
   if [[ ! -r "$config_path" ]]; then
     echo "❌ [ci] coverage critical modules config is not readable: ${config_path}" >&2
     exit 1
@@ -761,11 +761,11 @@ PY
 }
 
 run_policy_shadow_snapshot() {
-  local shadow_enabled="${CORTEXPILOT_CI_POLICY_SHADOW_ENABLED:-1}"
+  local shadow_enabled="${OPENVIBECODING_CI_POLICY_SHADOW_ENABLED:-1}"
   local snapshot_path=".runtime-cache/test_output/ci/ci_policy_snapshot.json"
   echo "ℹ️ [ci] policy shadow: enabled=${shadow_enabled}, snapshot_path=${snapshot_path}"
   if [[ "$shadow_enabled" != "1" ]]; then
-    echo "⚠️ [WARN] policy shadow snapshot disabled (CORTEXPILOT_CI_POLICY_SHADOW_ENABLED=${shadow_enabled})"
+    echo "⚠️ [WARN] policy shadow snapshot disabled (OPENVIBECODING_CI_POLICY_SHADOW_ENABLED=${shadow_enabled})"
     return 0
   fi
   if [[ ! -f "scripts/resolve_ci_policy.py" ]]; then
@@ -786,16 +786,16 @@ run_policy_shadow_snapshot() {
   echo "✅ [ci] policy shadow snapshot generated: ${snapshot_path}"
 }
 
-ENV_GOV_MAX_DEPRECATED_COUNT="${CORTEXPILOT_CI_ENV_GOV_MAX_DEPRECATED_COUNT:-10}"
-ENV_GOV_MAX_DEPRECATED_RATIO="${CORTEXPILOT_CI_ENV_GOV_MAX_DEPRECATED_RATIO:-0.03}"
+ENV_GOV_MAX_DEPRECATED_COUNT="${OPENVIBECODING_CI_ENV_GOV_MAX_DEPRECATED_COUNT:-10}"
+ENV_GOV_MAX_DEPRECATED_RATIO="${OPENVIBECODING_CI_ENV_GOV_MAX_DEPRECATED_RATIO:-0.03}"
 
 validate_env_governance_budget_or_fail() {
   if ! [[ "$ENV_GOV_MAX_DEPRECATED_COUNT" =~ ^[0-9]+$ ]]; then
-    echo "❌ [ci] CORTEXPILOT_CI_ENV_GOV_MAX_DEPRECATED_COUNT must be a non-negative integer, got: ${ENV_GOV_MAX_DEPRECATED_COUNT}"
+    echo "❌ [ci] OPENVIBECODING_CI_ENV_GOV_MAX_DEPRECATED_COUNT must be a non-negative integer, got: ${ENV_GOV_MAX_DEPRECATED_COUNT}"
     exit 1
   fi
   if ! [[ "$ENV_GOV_MAX_DEPRECATED_RATIO" =~ ^[0-9]+([.][0-9]+)?$ ]]; then
-    echo "❌ [ci] CORTEXPILOT_CI_ENV_GOV_MAX_DEPRECATED_RATIO must be numeric, got: ${ENV_GOV_MAX_DEPRECATED_RATIO}"
+    echo "❌ [ci] OPENVIBECODING_CI_ENV_GOV_MAX_DEPRECATED_RATIO must be numeric, got: ${ENV_GOV_MAX_DEPRECATED_RATIO}"
     exit 1
   fi
   if ! python3 - "$ENV_GOV_MAX_DEPRECATED_RATIO" <<'PY'
@@ -805,19 +805,19 @@ if ratio < 0 or ratio > 1:
     raise SystemExit(1)
 PY
   then
-    echo "❌ [ci] CORTEXPILOT_CI_ENV_GOV_MAX_DEPRECATED_RATIO must be within [0, 1], got: ${ENV_GOV_MAX_DEPRECATED_RATIO}"
+    echo "❌ [ci] OPENVIBECODING_CI_ENV_GOV_MAX_DEPRECATED_RATIO must be within [0, 1], got: ${ENV_GOV_MAX_DEPRECATED_RATIO}"
     exit 1
   fi
 }
 
 run_env_governance_report() {
-  local report_enabled="${CORTEXPILOT_CI_ENV_GOV_REPORT_ENABLED:-1}"
+  local report_enabled="${OPENVIBECODING_CI_ENV_GOV_REPORT_ENABLED:-1}"
   local max_deprecated_count="${ENV_GOV_MAX_DEPRECATED_COUNT}"
   local max_deprecated_ratio="${ENV_GOV_MAX_DEPRECATED_RATIO}"
   echo "ℹ️ [ci] env governance report: enabled=${report_enabled}"
   echo "ℹ️ [ci] env governance deprecated budget: max_count=${max_deprecated_count}, max_ratio=${max_deprecated_ratio}"
   if [[ "$report_enabled" != "1" ]]; then
-    echo "⚠️ [WARN] env governance report disabled (CORTEXPILOT_CI_ENV_GOV_REPORT_ENABLED=${report_enabled})"
+    echo "⚠️ [WARN] env governance report disabled (OPENVIBECODING_CI_ENV_GOV_REPORT_ENABLED=${report_enabled})"
     return 0
   fi
   if [[ ! -f "scripts/report_env_governance.py" ]]; then
@@ -843,49 +843,49 @@ run_env_governance_report() {
   echo "✅ [ci] env governance report generated: ${output_dir}/report.json ${output_dir}/report.md"
 }
 
-if [[ -n "${CORTEXPILOT_CI_BREAK_GLASS_VALIDATE_ONLY_GATE:-}" ]]; then
+if [[ -n "${OPENVIBECODING_CI_BREAK_GLASS_VALIDATE_ONLY_GATE:-}" ]]; then
   if is_ci_environment; then
     CI_VALIDATE_ONLY_BREAK_GLASS_ACTIVE="$(
       resolve_ci_break_glass \
         "validate_only_early_exit" \
-        "CORTEXPILOT_CI_BREAK_GLASS" \
-        "CORTEXPILOT_CI_BREAK_GLASS_REASON" \
-        "CORTEXPILOT_CI_BREAK_GLASS_TICKET"
+        "OPENVIBECODING_CI_BREAK_GLASS" \
+        "OPENVIBECODING_CI_BREAK_GLASS_REASON" \
+        "OPENVIBECODING_CI_BREAK_GLASS_TICKET"
     )" || {
       echo "❌ [ci] CI validate-only requires break-glass metadata"
-      echo "❌ [ci] required vars: CORTEXPILOT_CI_BREAK_GLASS=1 + CORTEXPILOT_CI_BREAK_GLASS_REASON + CORTEXPILOT_CI_BREAK_GLASS_TICKET"
+      echo "❌ [ci] required vars: OPENVIBECODING_CI_BREAK_GLASS=1 + OPENVIBECODING_CI_BREAK_GLASS_REASON + OPENVIBECODING_CI_BREAK_GLASS_TICKET"
       exit 1
     }
     if [[ "$CI_VALIDATE_ONLY_BREAK_GLASS_ACTIVE" != "1" ]]; then
       echo "❌ [ci] CI validate-only early exit is blocked (fail-closed)"
-      echo "❌ [ci] set CORTEXPILOT_CI_BREAK_GLASS=1 with reason/ticket to enable audited break-glass"
+      echo "❌ [ci] set OPENVIBECODING_CI_BREAK_GLASS=1 with reason/ticket to enable audited break-glass"
       exit 1
     fi
   fi
   require_skip_gate_break_glass_or_fail \
-    "${CORTEXPILOT_CI_BREAK_GLASS_VALIDATE_ONLY_GATE}" \
-    "validate_only_${CORTEXPILOT_CI_BREAK_GLASS_VALIDATE_ONLY_GATE}"
-  echo "✅ [ci] break-glass validate-only passed: gate=${CORTEXPILOT_CI_BREAK_GLASS_VALIDATE_ONLY_GATE}"
+    "${OPENVIBECODING_CI_BREAK_GLASS_VALIDATE_ONLY_GATE}" \
+    "validate_only_${OPENVIBECODING_CI_BREAK_GLASS_VALIDATE_ONLY_GATE}"
+  echo "✅ [ci] break-glass validate-only passed: gate=${OPENVIBECODING_CI_BREAK_GLASS_VALIDATE_ONLY_GATE}"
   exit 0
 fi
 
 CI_LIVE_PREFLIGHT_PROVIDER_API_MODE="$(
   resolve_provider_api_mode_or_fail \
     "live_preflight_provider_api_mode_downgrade" \
-    "CORTEXPILOT_CI_LIVE_PREFLIGHT_PROVIDER_API_MODE" \
+    "OPENVIBECODING_CI_LIVE_PREFLIGHT_PROVIDER_API_MODE" \
     "require" \
-    "CORTEXPILOT_CI_LIVE_PREFLIGHT_PROVIDER_API_MODE_BREAK_GLASS" \
-    "CORTEXPILOT_CI_LIVE_PREFLIGHT_PROVIDER_API_MODE_BREAK_GLASS_REASON" \
-    "CORTEXPILOT_CI_LIVE_PREFLIGHT_PROVIDER_API_MODE_BREAK_GLASS_TICKET"
+    "OPENVIBECODING_CI_LIVE_PREFLIGHT_PROVIDER_API_MODE_BREAK_GLASS" \
+    "OPENVIBECODING_CI_LIVE_PREFLIGHT_PROVIDER_API_MODE_BREAK_GLASS_REASON" \
+    "OPENVIBECODING_CI_LIVE_PREFLIGHT_PROVIDER_API_MODE_BREAK_GLASS_TICKET"
 )"
 CI_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE="$(
   resolve_provider_api_mode_or_fail \
     "external_web_probe_provider_api_mode_downgrade" \
-    "CORTEXPILOT_CI_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE" \
+    "OPENVIBECODING_CI_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE" \
     "require" \
-    "CORTEXPILOT_CI_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE_BREAK_GLASS" \
-    "CORTEXPILOT_CI_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE_BREAK_GLASS_REASON" \
-    "CORTEXPILOT_CI_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE_BREAK_GLASS_TICKET"
+    "OPENVIBECODING_CI_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE_BREAK_GLASS" \
+    "OPENVIBECODING_CI_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE_BREAK_GLASS_REASON" \
+    "OPENVIBECODING_CI_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE_BREAK_GLASS_TICKET"
 )"
 
 echo "🚀 [STEP 1/12] Start: Python environment repair"
@@ -895,12 +895,12 @@ ensure_python() {
     return
   fi
   local venv_root
-  venv_root="$(cortexpilot_python_venv_root "$ROOT_DIR")"
+  venv_root="$(openvibecoding_python_venv_root "$ROOT_DIR")"
   echo "⚠️ [WARN] broken or missing Python toolchain, recreating at ${venv_root}..."
   rm -rf "$venv_root"
   mkdir -p "$(dirname "$venv_root")"
   python3 -m venv "$venv_root"
-  PYTHON="$(cortexpilot_python_bin "$ROOT_DIR")"
+  PYTHON="$(openvibecoding_python_bin "$ROOT_DIR")"
   sync_python_deps_from_lock_or_fail "$PYTHON"
 }
 ensure_python
@@ -921,40 +921,40 @@ bash scripts/check_repo_hygiene.sh
 echo "ℹ️ [STEP 2/12] repo-side hygiene passed; refreshing governance evidence (includes external truth receipts)"
 bash scripts/run_governance_py.sh scripts/refresh_governance_evidence_manifest.py
 bash scripts/run_governance_py.sh scripts/build_governance_scorecard.py --enforce
-if [[ "${CORTEXPILOT_CI_ROUTE_ID:-local_full_ci}" != "trusted_pr" && "${CORTEXPILOT_CI_ROUTE_ID:-local_full_ci}" != "untrusted_pr" ]]; then
+if [[ "${OPENVIBECODING_CI_ROUTE_ID:-local_full_ci}" != "trusted_pr" && "${OPENVIBECODING_CI_ROUTE_ID:-local_full_ci}" != "untrusted_pr" ]]; then
   bash scripts/run_governance_py.sh scripts/build_governance_closeout_report.py --mode ci
 else
-  echo "ℹ️ [ci] skip governance closeout report on ${CORTEXPILOT_CI_ROUTE_ID:-unknown} route; authoritative closeout belongs to final closeout lanes"
+  echo "ℹ️ [ci] skip governance closeout report on ${OPENVIBECODING_CI_ROUTE_ID:-unknown} route; authoritative closeout belongs to final closeout lanes"
 fi
 echo "✅ [STEP 2/12] Completed"
 echo "🚀 [STEP 3/12] Start: Secret scanning gate"
 default_scanner_required=1
 set +e
-CORTEXPILOT_SECURITY_REQUIRE_SCANNER="${CORTEXPILOT_SECURITY_REQUIRE_SCANNER:-$default_scanner_required}" bash scripts/check_secret_scan_closeout.sh --mode current
+OPENVIBECODING_SECURITY_REQUIRE_SCANNER="${OPENVIBECODING_SECURITY_REQUIRE_SCANNER:-$default_scanner_required}" bash scripts/check_secret_scan_closeout.sh --mode current
 security_scan_status=$?
 set -e
 if [ "$security_scan_status" -ne 0 ]; then
   SECURITY_SCAN_BREAK_GLASS_ACTIVE="$(
     resolve_ci_break_glass \
       "security_scan_gate" \
-      "CORTEXPILOT_CI_SECURITY_SCAN_BREAK_GLASS" \
-      "CORTEXPILOT_CI_SECURITY_SCAN_BREAK_GLASS_REASON" \
-      "CORTEXPILOT_CI_SECURITY_SCAN_BREAK_GLASS_TICKET"
+      "OPENVIBECODING_CI_SECURITY_SCAN_BREAK_GLASS" \
+      "OPENVIBECODING_CI_SECURITY_SCAN_BREAK_GLASS_REASON" \
+      "OPENVIBECODING_CI_SECURITY_SCAN_BREAK_GLASS_TICKET"
   )" || {
     echo "❌ [ci] security scan failed and break-glass metadata is invalid"
-    echo "❌ [ci] required vars: CORTEXPILOT_CI_SECURITY_SCAN_BREAK_GLASS=1 + CORTEXPILOT_CI_SECURITY_SCAN_BREAK_GLASS_REASON + CORTEXPILOT_CI_SECURITY_SCAN_BREAK_GLASS_TICKET"
+    echo "❌ [ci] required vars: OPENVIBECODING_CI_SECURITY_SCAN_BREAK_GLASS=1 + OPENVIBECODING_CI_SECURITY_SCAN_BREAK_GLASS_REASON + OPENVIBECODING_CI_SECURITY_SCAN_BREAK_GLASS_TICKET"
     exit 1
   }
   if [[ "$SECURITY_SCAN_BREAK_GLASS_ACTIVE" != "1" ]]; then
     echo "❌ [ci] security scan gate failed (exit=${security_scan_status})"
-    echo "❌ [ci] break-glass disabled. set CORTEXPILOT_CI_SECURITY_SCAN_BREAK_GLASS=1 with reason/ticket to continue with audit trail."
+    echo "❌ [ci] break-glass disabled. set OPENVIBECODING_CI_SECURITY_SCAN_BREAK_GLASS=1 with reason/ticket to continue with audit trail."
     exit "$security_scan_status"
   fi
   echo "⚠️ [ci] security scan gate bypassed via audited break-glass"
 fi
 echo "✅ [STEP 3/12] Completed"
 echo "🚀 [STEP 3.5/12] Start: CI policy resolution regression"
-STEP35_TIMEOUT_SEC="$(resolve_step_timeout "CORTEXPILOT_CI_STEP35_TIMEOUT_SEC" "900" "CORTEXPILOT_CI_STEP3_TIMEOUT_SEC" "CORTEXPILOT_CI_STEP_TIMEOUT_SEC")"
+STEP35_TIMEOUT_SEC="$(resolve_step_timeout "OPENVIBECODING_CI_STEP35_TIMEOUT_SEC" "900" "OPENVIBECODING_CI_STEP3_TIMEOUT_SEC" "OPENVIBECODING_CI_STEP_TIMEOUT_SEC")"
 set +e
 bash scripts/test_ci_policy_resolution.sh &
 ci_policy_pid=$!
@@ -1003,11 +1003,11 @@ if [[ "$ci_policy_status" -ne 0 || "$perf_policy_status" -ne 0 || "$provider_har
 fi
 echo "✅ [STEP 3.5/12] Completed"
 echo "🚀 [STEP 3.6/12] Start: Dead code incremental quality gate"
-if [ "${CORTEXPILOT_CI_DEAD_CODE_GATE:-1}" = "1" ]; then
+if [ "${OPENVIBECODING_CI_DEAD_CODE_GATE:-1}" = "1" ]; then
   bash scripts/dead_code_gate.sh --mode gate
 else
-  require_skip_gate_break_glass_or_fail "CORTEXPILOT_CI_DEAD_CODE_GATE" "dead_code_gate_skip"
-  echo "⚠️ [WARN] CORTEXPILOT_CI_DEAD_CODE_GATE=0, skip dead code gate (break-glass)"
+  require_skip_gate_break_glass_or_fail "OPENVIBECODING_CI_DEAD_CODE_GATE" "dead_code_gate_skip"
+  echo "⚠️ [WARN] OPENVIBECODING_CI_DEAD_CODE_GATE=0, skip dead code gate (break-glass)"
 fi
 echo "✅ [STEP 3.6/12] Completed"
 echo "🚀 [STEP 3.7/12] Start: Env governance gate"
@@ -1016,19 +1016,19 @@ bash scripts/run_governance_py.sh scripts/check_env_governance.py --mode gate \
   --max-deprecated-ratio "${ENV_GOV_MAX_DEPRECATED_RATIO}"
 echo "✅ [STEP 3.7/12] Completed"
 echo "🚀 [STEP 3.75/12] Start: Provider hardcut release gate (Phase 3 release-critical)"
-if [ "${CORTEXPILOT_CI_PROVIDER_HARDCUT_GATE:-1}" = "1" ]; then
+if [ "${OPENVIBECODING_CI_PROVIDER_HARDCUT_GATE:-1}" = "1" ]; then
   bash scripts/provider_hardcut_gate.sh
 else
-  require_skip_gate_break_glass_or_fail "CORTEXPILOT_CI_PROVIDER_HARDCUT_GATE" "provider_hardcut_gate_skip"
-  echo "⚠️ [WARN] CORTEXPILOT_CI_PROVIDER_HARDCUT_GATE=0, skip provider hardcut gate (break-glass, release-critical override)"
+  require_skip_gate_break_glass_or_fail "OPENVIBECODING_CI_PROVIDER_HARDCUT_GATE" "provider_hardcut_gate_skip"
+  echo "⚠️ [WARN] OPENVIBECODING_CI_PROVIDER_HARDCUT_GATE=0, skip provider hardcut gate (break-glass, release-critical override)"
 fi
 echo "✅ [STEP 3.75/12] Completed"
 echo "🚀 [STEP 3.76/12] Start: Orchestrator decoupling release gate (Phase 3 release-critical)"
-if [ "${CORTEXPILOT_CI_ORCHESTRATOR_DECOUPLING_GATE:-1}" = "1" ]; then
+if [ "${OPENVIBECODING_CI_ORCHESTRATOR_DECOUPLING_GATE:-1}" = "1" ]; then
   bash scripts/orchestrator_decoupling_gate.sh
 else
-  require_skip_gate_break_glass_or_fail "CORTEXPILOT_CI_ORCHESTRATOR_DECOUPLING_GATE" "orchestrator_decoupling_gate_skip"
-  echo "⚠️ [WARN] CORTEXPILOT_CI_ORCHESTRATOR_DECOUPLING_GATE=0, skip orchestrator decoupling gate (break-glass, release-critical override)"
+  require_skip_gate_break_glass_or_fail "OPENVIBECODING_CI_ORCHESTRATOR_DECOUPLING_GATE" "orchestrator_decoupling_gate_skip"
+  echo "⚠️ [WARN] OPENVIBECODING_CI_ORCHESTRATOR_DECOUPLING_GATE=0, skip orchestrator decoupling gate (break-glass, release-critical override)"
 fi
 echo "✅ [STEP 3.76/12] Completed"
 echo "🚀 [STEP 3.8/12] Start: Test-smell gate"
@@ -1038,8 +1038,8 @@ echo "🚀 [STEP 3.81/12] Start: E2E marker consistency gate"
 "$PYTHON" scripts/check_e2e_marker_consistency.py
 echo "✅ [STEP 3.81/12] Completed"
 echo "🚀 [STEP 3.82/12] Start: GitHub-hosted runner toolchain drift gate"
-if [[ "${CORTEXPILOT_CI_ROUTE_ID:-local_full_ci}" == "trusted_pr" || "${CORTEXPILOT_CI_ROUTE_ID:-local_full_ci}" == "untrusted_pr" ]]; then
-  echo "ℹ️ [ci] skip strict runner drift gate on ${CORTEXPILOT_CI_ROUTE_ID:-unknown} route; GitHub-hosted toolchain drift stays report-only on pull_request lanes"
+if [[ "${OPENVIBECODING_CI_ROUTE_ID:-local_full_ci}" == "trusted_pr" || "${OPENVIBECODING_CI_ROUTE_ID:-local_full_ci}" == "untrusted_pr" ]]; then
+  echo "ℹ️ [ci] skip strict runner drift gate on ${OPENVIBECODING_CI_ROUTE_ID:-unknown} route; GitHub-hosted toolchain drift stays report-only on pull_request lanes"
 else
   bash scripts/run_governance_py.sh scripts/check_ci_runner_drift.py --mode strict
 fi
@@ -1047,29 +1047,29 @@ echo "✅ [STEP 3.82/12] Completed"
 fi
 if ci_slice_enabled "core-tests"; then
 echo "🚀 [STEP 4/12] Start: Backend + Dashboard parallel test phase"
-COV_FAIL_UNDER="${CORTEXPILOT_COV_FAIL_UNDER:-85}"
-MIN_DEFAULT_COVERAGE_FLOOR="${CORTEXPILOT_DEFAULT_COVERAGE_FLOOR:-80}"
+COV_FAIL_UNDER="${OPENVIBECODING_COV_FAIL_UNDER:-85}"
+MIN_DEFAULT_COVERAGE_FLOOR="${OPENVIBECODING_DEFAULT_COVERAGE_FLOOR:-80}"
 DEFAULT_COVERAGE_HARD_FLOOR=80
 ORCH_CORE_COVERAGE_HARD_FLOOR=95
 if ! [[ "$COV_FAIL_UNDER" =~ ^[0-9]+$ ]]; then
-  echo "❌ [ci] CORTEXPILOT_COV_FAIL_UNDER must be an integer, got: ${COV_FAIL_UNDER}"
+  echo "❌ [ci] OPENVIBECODING_COV_FAIL_UNDER must be an integer, got: ${COV_FAIL_UNDER}"
   exit 1
 fi
 if ! [[ "$MIN_DEFAULT_COVERAGE_FLOOR" =~ ^[0-9]+$ ]]; then
-  echo "❌ [ci] CORTEXPILOT_DEFAULT_COVERAGE_FLOOR must be an integer, got: ${MIN_DEFAULT_COVERAGE_FLOOR}"
+  echo "❌ [ci] OPENVIBECODING_DEFAULT_COVERAGE_FLOOR must be an integer, got: ${MIN_DEFAULT_COVERAGE_FLOOR}"
   exit 1
 fi
 if [[ "$MIN_DEFAULT_COVERAGE_FLOOR" -lt "$DEFAULT_COVERAGE_HARD_FLOOR" ]]; then
-  echo "❌ [ci] CORTEXPILOT_DEFAULT_COVERAGE_FLOOR must be >= hard floor ${DEFAULT_COVERAGE_HARD_FLOOR}, got: ${MIN_DEFAULT_COVERAGE_FLOOR}"
+  echo "❌ [ci] OPENVIBECODING_DEFAULT_COVERAGE_FLOOR must be >= hard floor ${DEFAULT_COVERAGE_HARD_FLOOR}, got: ${MIN_DEFAULT_COVERAGE_FLOOR}"
   exit 1
 fi
 if [[ "$COV_FAIL_UNDER" -lt "$MIN_DEFAULT_COVERAGE_FLOOR" ]]; then
-  echo "❌ [ci] CORTEXPILOT_COV_FAIL_UNDER must be >= ${MIN_DEFAULT_COVERAGE_FLOOR}, got: ${COV_FAIL_UNDER}"
+  echo "❌ [ci] OPENVIBECODING_COV_FAIL_UNDER must be >= ${MIN_DEFAULT_COVERAGE_FLOOR}, got: ${COV_FAIL_UNDER}"
   exit 1
 fi
-ORCH_CORE_COV_FAIL_UNDER="${CORTEXPILOT_ORCH_CORE_COV_FAIL_UNDER:-95}"
+ORCH_CORE_COV_FAIL_UNDER="${OPENVIBECODING_ORCH_CORE_COV_FAIL_UNDER:-95}"
 if ! [[ "$ORCH_CORE_COV_FAIL_UNDER" =~ ^[0-9]+([.][0-9]+)?$ ]]; then
-  echo "❌ [ci] CORTEXPILOT_ORCH_CORE_COV_FAIL_UNDER must be numeric, got: ${ORCH_CORE_COV_FAIL_UNDER}"
+  echo "❌ [ci] OPENVIBECODING_ORCH_CORE_COV_FAIL_UNDER must be numeric, got: ${ORCH_CORE_COV_FAIL_UNDER}"
   exit 1
 fi
 if ! python3 - "$ORCH_CORE_COV_FAIL_UNDER" "$ORCH_CORE_COVERAGE_HARD_FLOOR" <<'PY'
@@ -1079,15 +1079,15 @@ hard_floor = float(sys.argv[2])
 raise SystemExit(0 if value >= hard_floor else 1)
 PY
 then
-  echo "❌ [ci] CORTEXPILOT_ORCH_CORE_COV_FAIL_UNDER must be >= hard floor ${ORCH_CORE_COVERAGE_HARD_FLOOR}, got: ${ORCH_CORE_COV_FAIL_UNDER}"
+  echo "❌ [ci] OPENVIBECODING_ORCH_CORE_COV_FAIL_UNDER must be >= hard floor ${ORCH_CORE_COVERAGE_HARD_FLOOR}, got: ${ORCH_CORE_COV_FAIL_UNDER}"
   exit 1
 fi
 load_orchestrator_critical_modules_config_or_fail
-PYTEST_PARALLEL_ARGS="${CORTEXPILOT_PYTEST_PARALLEL_ARGS:--n auto --dist loadscope}"
-if [[ -z "${CORTEXPILOT_CI_TEST_PHASE_PARALLEL:-}" ]]; then
-  CORTEXPILOT_CI_TEST_PHASE_PARALLEL="1"
+PYTEST_PARALLEL_ARGS="${OPENVIBECODING_PYTEST_PARALLEL_ARGS:--n auto --dist loadscope}"
+if [[ -z "${OPENVIBECODING_CI_TEST_PHASE_PARALLEL:-}" ]]; then
+  OPENVIBECODING_CI_TEST_PHASE_PARALLEL="1"
 else
-  CORTEXPILOT_CI_TEST_PHASE_PARALLEL="${CORTEXPILOT_CI_TEST_PHASE_PARALLEL}"
+  OPENVIBECODING_CI_TEST_PHASE_PARALLEL="${OPENVIBECODING_CI_TEST_PHASE_PARALLEL}"
 fi
 CI_TEST_OUTPUT_DIR=".runtime-cache/test_output/ci"
 PYTEST_PARALLEL_LOG="${CI_TEST_OUTPUT_DIR}/ci_gate_parallel_latest.log"
@@ -1099,7 +1099,7 @@ phase_start_epoch="$(date +%s)"
 orch_duration_sec=0
 dash_duration_sec=0
 phase_total_duration_sec=0
-echo "ℹ️ [ci] test phase config: parallel=${CORTEXPILOT_CI_TEST_PHASE_PARALLEL}, cov_fail_under=${COV_FAIL_UNDER}, pytest_parallel_args=${PYTEST_PARALLEL_ARGS}"
+echo "ℹ️ [ci] test phase config: parallel=${OPENVIBECODING_CI_TEST_PHASE_PARALLEL}, cov_fail_under=${COV_FAIL_UNDER}, pytest_parallel_args=${PYTEST_PARALLEL_ARGS}"
 echo "ℹ️ [ci] test phase logs: orchestrator=${ORCH_STAGE_LOG}, dashboard=${DASH_STAGE_LOG}, orchestrator_parallel=${PYTEST_PARALLEL_LOG}"
 echo "ℹ️ [ci] coverage tiering policy: default_floor=${MIN_DEFAULT_COVERAGE_FLOOR}, default_hard_floor=${DEFAULT_COVERAGE_HARD_FLOOR}, global_gate=${COV_FAIL_UNDER}, critical_modules_gate=${ORCH_CORE_COV_FAIL_UNDER}, critical_hard_floor=${ORCH_CORE_COVERAGE_HARD_FLOOR}, critical_modules=${ORCH_CRITICAL_MODULES}"
 run_orchestrator_ci_phase() {
@@ -1109,15 +1109,15 @@ run_orchestrator_ci_phase() {
   rm -f .coverage .coverage.*
   set +e
   local heartbeat_pid=""
-  start_heartbeat "ci.sh:orchestrator-pytest-parallel" "${CORTEXPILOT_CI_HEARTBEAT_INTERVAL_SEC:-60}" heartbeat_pid
+  start_heartbeat "ci.sh:orchestrator-pytest-parallel" "${OPENVIBECODING_CI_HEARTBEAT_INTERVAL_SEC:-60}" heartbeat_pid
   PYTHONPATH=apps/orchestrator/src "$PYTHON" -m pytest apps/orchestrator/tests -m "not e2e and not serial" \
-    $PYTEST_PARALLEL_ARGS --cov=cortexpilot_orch --cov-branch "${ORCH_CRITICAL_COV_ARGS[@]}" --cov-report=term-missing --cov-report="json:${ORCH_COVERAGE_JSON_REPORT}" --cov-fail-under="$COV_FAIL_UNDER" \
+    $PYTEST_PARALLEL_ARGS --cov=openvibecoding_orch --cov-branch "${ORCH_CRITICAL_COV_ARGS[@]}" --cov-report=term-missing --cov-report="json:${ORCH_COVERAGE_JSON_REPORT}" --cov-fail-under="$COV_FAIL_UNDER" \
     2>&1 | tee "$PYTEST_PARALLEL_LOG"
   parallel_status=${PIPESTATUS[0]}
   stop_heartbeat "$heartbeat_pid"
   set -e
   if [[ "$parallel_status" -ne 0 ]]; then
-    force_serial_recheck="${CORTEXPILOT_FORCE_SERIAL_RECHECK:-0}"
+    force_serial_recheck="${OPENVIBECODING_FORCE_SERIAL_RECHECK:-0}"
     should_serial_recheck=0
     if rg -q "INTERNALERROR|no such table: meta|WorkerController|_pytest/capture.py|FileNotFoundError: \\[Errno 2\\] No such file or directory" "$PYTEST_PARALLEL_LOG"; then
       echo "⚠️ [WARN] detected xdist/coverage parallel infra issue; rerunning serially (-n 0)"
@@ -1127,17 +1127,17 @@ run_orchestrator_ci_phase() {
     fi
     if [[ "$force_serial_recheck" == "1" ]]; then
       should_serial_recheck=1
-      echo "⚠️ [WARN] CORTEXPILOT_FORCE_SERIAL_RECHECK=1; forcing serial recheck"
+      echo "⚠️ [WARN] OPENVIBECODING_FORCE_SERIAL_RECHECK=1; forcing serial recheck"
     fi
     if [[ "$should_serial_recheck" -ne 1 ]]; then
       echo "❌ [ci] orchestrator parallel stage failed (no serial recheck). log=$PYTEST_PARALLEL_LOG"
       return "$parallel_status"
     fi
     rm -f .coverage .coverage.*
-    start_heartbeat "ci.sh:orchestrator-pytest-serial-recheck" "${CORTEXPILOT_CI_HEARTBEAT_INTERVAL_SEC:-60}" heartbeat_pid
+    start_heartbeat "ci.sh:orchestrator-pytest-serial-recheck" "${OPENVIBECODING_CI_HEARTBEAT_INTERVAL_SEC:-60}" heartbeat_pid
     set +e
     PYTHONPATH=apps/orchestrator/src "$PYTHON" -m pytest apps/orchestrator/tests -m "not e2e and not serial" \
-      -n 0 --cov=cortexpilot_orch --cov-branch "${ORCH_CRITICAL_COV_ARGS[@]}" --cov-report=term-missing --cov-report="json:${ORCH_COVERAGE_JSON_REPORT}" --cov-fail-under="$COV_FAIL_UNDER"
+      -n 0 --cov=openvibecoding_orch --cov-branch "${ORCH_CRITICAL_COV_ARGS[@]}" --cov-report=term-missing --cov-report="json:${ORCH_COVERAGE_JSON_REPORT}" --cov-fail-under="$COV_FAIL_UNDER"
     serial_status=$?
     stop_heartbeat "$heartbeat_pid"
     set -e
@@ -1150,7 +1150,7 @@ run_dashboard_ci_phase() {
   export TMPDIR="${TMPDIR:-${RUNNER_TEMP:-$ROOT_DIR/.runtime-cache/cache}/dashboard-tmp}"
   mkdir -p "$TMPDIR"
   bash "$ROOT_DIR/scripts/install_dashboard_deps.sh"
-  if [[ "${CORTEXPILOT_CI_CONTAINER:-0}" == "1" ]]; then
+  if [[ "${OPENVIBECODING_CI_CONTAINER:-0}" == "1" ]]; then
     export DASHBOARD_VITEST_MAX_WORKERS="${DASHBOARD_VITEST_MAX_WORKERS:-1}"
     export DASHBOARD_VITEST_POOL="${DASHBOARD_VITEST_POOL:-forks}"
   else
@@ -1159,8 +1159,8 @@ run_dashboard_ci_phase() {
   fi
   export VITEST_MAX_WORKERS="${VITEST_MAX_WORKERS:-${DASHBOARD_VITEST_MAX_WORKERS}}"
   export VITEST_POOL="${VITEST_POOL:-${DASHBOARD_VITEST_POOL}}"
-  export CORTEXPILOT_COVERAGE_HTML="${CORTEXPILOT_COVERAGE_HTML:-0}"
-  export CORTEXPILOT_DASHBOARD_SERIAL_COVERAGE="${CORTEXPILOT_DASHBOARD_SERIAL_COVERAGE:-1}"
+  export OPENVIBECODING_COVERAGE_HTML="${OPENVIBECODING_COVERAGE_HTML:-0}"
+  export OPENVIBECODING_DASHBOARD_SERIAL_COVERAGE="${OPENVIBECODING_DASHBOARD_SERIAL_COVERAGE:-1}"
   local dashboard_test_status=0
   local dashboard_tsc_status=0
   cd apps/dashboard
@@ -1181,8 +1181,8 @@ run_dashboard_ci_phase() {
   fi
   return 0
 }
-if [[ "$CORTEXPILOT_CI_TEST_PHASE_PARALLEL" = "1" ]]; then
-  echo "ℹ️ [ci] parallel mode enabled: CORTEXPILOT_CI_TEST_PHASE_PARALLEL=1"
+if [[ "$OPENVIBECODING_CI_TEST_PHASE_PARALLEL" = "1" ]]; then
+  echo "ℹ️ [ci] parallel mode enabled: OPENVIBECODING_CI_TEST_PHASE_PARALLEL=1"
   set +e
   orch_start_epoch="$(date +%s)"
   (
@@ -1204,7 +1204,7 @@ if [[ "$CORTEXPILOT_CI_TEST_PHASE_PARALLEL" = "1" ]]; then
   dash_duration_sec="$((dash_end_epoch - dash_start_epoch))"
   set -e
 else
-  echo "ℹ️ [ci] serial mode enabled: CORTEXPILOT_CI_TEST_PHASE_PARALLEL=${CORTEXPILOT_CI_TEST_PHASE_PARALLEL}"
+  echo "ℹ️ [ci] serial mode enabled: OPENVIBECODING_CI_TEST_PHASE_PARALLEL=${OPENVIBECODING_CI_TEST_PHASE_PARALLEL}"
   set +e
   orch_start_epoch="$(date +%s)"
   run_orchestrator_ci_phase 2>&1 | tee "$ORCH_STAGE_LOG"
@@ -1247,18 +1247,18 @@ if ci_slice_enabled "resilience-and-e2e"; then
 echo "🚀 [STEP 7.8/12] Start: Live fast gate (short tests + external preflight)"
 bash scripts/test_quick.sh
 "$PYTHON" scripts/e2e_external_web_probe.py \
-  --url "${CORTEXPILOT_CI_LIVE_PREFLIGHT_URL:-https://example.com}" \
-  --timeout-ms "${CORTEXPILOT_CI_LIVE_PREFLIGHT_NAV_TIMEOUT_MS:-15000}" \
+  --url "${OPENVIBECODING_CI_LIVE_PREFLIGHT_URL:-https://example.com}" \
+  --timeout-ms "${OPENVIBECODING_CI_LIVE_PREFLIGHT_NAV_TIMEOUT_MS:-15000}" \
   --provider-api-mode "${CI_LIVE_PREFLIGHT_PROVIDER_API_MODE}" \
-    --provider-api-timeout-sec "${CORTEXPILOT_CI_LIVE_PREFLIGHT_PROVIDER_TIMEOUT_SEC:-12}" \
-    --hard-timeout-sec "${CORTEXPILOT_CI_LIVE_PREFLIGHT_HARD_TIMEOUT_SEC:-120}"
+    --provider-api-timeout-sec "${OPENVIBECODING_CI_LIVE_PREFLIGHT_PROVIDER_TIMEOUT_SEC:-12}" \
+    --hard-timeout-sec "${OPENVIBECODING_CI_LIVE_PREFLIGHT_HARD_TIMEOUT_SEC:-120}"
 echo "✅ [STEP 7.8/12] Completed"
 echo "🚀 [STEP 8/12] Start: E2E (heartbeat + timeout)"
 E2E_STEP_ARGS=(--skip-fast-gate --skip-live-preflight)
 set +e
 run_with_timeout_heartbeat_and_cleanup \
   "ci.sh:step8:e2e" \
-  "$(resolve_step_timeout "CORTEXPILOT_CI_STEP8_E2E_TIMEOUT_SEC" "5400" "CORTEXPILOT_CI_STEP8_TIMEOUT_SEC" "CORTEXPILOT_CI_STEP_TIMEOUT_SEC")" \
+  "$(resolve_step_timeout "OPENVIBECODING_CI_STEP8_E2E_TIMEOUT_SEC" "5400" "OPENVIBECODING_CI_STEP8_TIMEOUT_SEC" "OPENVIBECODING_CI_STEP_TIMEOUT_SEC")" \
   bash scripts/e2e.sh "${E2E_STEP_ARGS[@]}"
 e2e_status=$?
 set -e
@@ -1288,19 +1288,19 @@ if [[ "$CI_PROFILE" == "prepush" ]]; then
   step8_8_parallel_timeout_default="2400"
   step8_8_serial_timeout_default="2400"
 fi
-STEP8_2_TIMEOUT_SEC="$(resolve_step_timeout "CORTEXPILOT_CI_STEP8_2_TIMEOUT_SEC" "$step8_2_timeout_default" "CORTEXPILOT_CI_STEP8_TIMEOUT_SEC" "CORTEXPILOT_CI_STEP_TIMEOUT_SEC")"
-STEP8_3_TIMEOUT_SEC="$(resolve_step_timeout "CORTEXPILOT_CI_STEP8_3_TIMEOUT_SEC" "$step8_3_timeout_default" "CORTEXPILOT_CI_STEP8_TIMEOUT_SEC" "CORTEXPILOT_CI_STEP_TIMEOUT_SEC")"
-STEP8_4_INVENTORY_TIMEOUT_SEC="$(resolve_ci_step8_timeout "CORTEXPILOT_CI_STEP8_4_INVENTORY_TIMEOUT_SEC" "$step8_4_inventory_timeout_default" "CORTEXPILOT_CI_STEP8_4_TIMEOUT_SEC")"
-STEP8_4_SYNC_TIMEOUT_SEC="$(resolve_ci_step8_timeout "CORTEXPILOT_CI_STEP8_4_SYNC_TIMEOUT_SEC" "$step8_4_sync_timeout_default" "CORTEXPILOT_CI_STEP8_4_TIMEOUT_SEC")"
-STEP8_4_CHECK_TIMEOUT_SEC="$(resolve_ci_step8_timeout "CORTEXPILOT_CI_STEP8_4_CHECK_TIMEOUT_SEC" "$step8_4_check_timeout_default" "CORTEXPILOT_CI_STEP8_4_TIMEOUT_SEC")"
-STEP8_4_TODO_TIMEOUT_SEC="$(resolve_ci_step8_timeout "CORTEXPILOT_CI_STEP8_4_TODO_TIMEOUT_SEC" "$step8_4_todo_timeout_default" "CORTEXPILOT_CI_STEP8_4_TIMEOUT_SEC")"
-STEP8_5_TIMEOUT_SEC="$(resolve_step_timeout "CORTEXPILOT_CI_STEP8_5_TIMEOUT_SEC" "$step8_5_timeout_default" "CORTEXPILOT_CI_STEP8_TIMEOUT_SEC" "CORTEXPILOT_CI_STEP_TIMEOUT_SEC")"
-STEP8_6_TIMEOUT_SEC="$(resolve_step_timeout "CORTEXPILOT_CI_STEP8_6_TIMEOUT_SEC" "$step8_6_timeout_default" "CORTEXPILOT_CI_STEP8_TIMEOUT_SEC" "CORTEXPILOT_CI_STEP_TIMEOUT_SEC")"
-STEP8_7_FLAKE_TIMEOUT_SEC="$(resolve_ci_step8_timeout "CORTEXPILOT_CI_STEP8_7_TIMEOUT_SEC" "$step8_7_flake_timeout_default")"
-STEP8_7_TAXONOMY_TIMEOUT_SEC="$(resolve_ci_step8_timeout "CORTEXPILOT_CI_STEP8_7_TAXONOMY_TIMEOUT_SEC" "$step8_7_taxonomy_timeout_default" "CORTEXPILOT_CI_STEP8_7_TIMEOUT_SEC")"
-STEP8_7_PARALLEL_TIMEOUT_SEC="$(resolve_ci_step8_timeout "CORTEXPILOT_CI_STEP8_7_TIMEOUT_SEC" "$step8_7_parallel_timeout_default")"
-STEP8_8_PARALLEL_TIMEOUT_SEC="$(resolve_ci_step8_timeout "CORTEXPILOT_CI_STEP8_8_PARALLEL_TIMEOUT_SEC" "$step8_8_parallel_timeout_default" "CORTEXPILOT_CI_STEP8_8_TIMEOUT_SEC")"
-STEP8_8_SERIAL_TIMEOUT_SEC="$(resolve_ci_step8_timeout "CORTEXPILOT_CI_STEP8_8_SERIAL_TIMEOUT_SEC" "$step8_8_serial_timeout_default" "CORTEXPILOT_CI_STEP8_8_TIMEOUT_SEC")"
+STEP8_2_TIMEOUT_SEC="$(resolve_step_timeout "OPENVIBECODING_CI_STEP8_2_TIMEOUT_SEC" "$step8_2_timeout_default" "OPENVIBECODING_CI_STEP8_TIMEOUT_SEC" "OPENVIBECODING_CI_STEP_TIMEOUT_SEC")"
+STEP8_3_TIMEOUT_SEC="$(resolve_step_timeout "OPENVIBECODING_CI_STEP8_3_TIMEOUT_SEC" "$step8_3_timeout_default" "OPENVIBECODING_CI_STEP8_TIMEOUT_SEC" "OPENVIBECODING_CI_STEP_TIMEOUT_SEC")"
+STEP8_4_INVENTORY_TIMEOUT_SEC="$(resolve_ci_step8_timeout "OPENVIBECODING_CI_STEP8_4_INVENTORY_TIMEOUT_SEC" "$step8_4_inventory_timeout_default" "OPENVIBECODING_CI_STEP8_4_TIMEOUT_SEC")"
+STEP8_4_SYNC_TIMEOUT_SEC="$(resolve_ci_step8_timeout "OPENVIBECODING_CI_STEP8_4_SYNC_TIMEOUT_SEC" "$step8_4_sync_timeout_default" "OPENVIBECODING_CI_STEP8_4_TIMEOUT_SEC")"
+STEP8_4_CHECK_TIMEOUT_SEC="$(resolve_ci_step8_timeout "OPENVIBECODING_CI_STEP8_4_CHECK_TIMEOUT_SEC" "$step8_4_check_timeout_default" "OPENVIBECODING_CI_STEP8_4_TIMEOUT_SEC")"
+STEP8_4_TODO_TIMEOUT_SEC="$(resolve_ci_step8_timeout "OPENVIBECODING_CI_STEP8_4_TODO_TIMEOUT_SEC" "$step8_4_todo_timeout_default" "OPENVIBECODING_CI_STEP8_4_TIMEOUT_SEC")"
+STEP8_5_TIMEOUT_SEC="$(resolve_step_timeout "OPENVIBECODING_CI_STEP8_5_TIMEOUT_SEC" "$step8_5_timeout_default" "OPENVIBECODING_CI_STEP8_TIMEOUT_SEC" "OPENVIBECODING_CI_STEP_TIMEOUT_SEC")"
+STEP8_6_TIMEOUT_SEC="$(resolve_step_timeout "OPENVIBECODING_CI_STEP8_6_TIMEOUT_SEC" "$step8_6_timeout_default" "OPENVIBECODING_CI_STEP8_TIMEOUT_SEC" "OPENVIBECODING_CI_STEP_TIMEOUT_SEC")"
+STEP8_7_FLAKE_TIMEOUT_SEC="$(resolve_ci_step8_timeout "OPENVIBECODING_CI_STEP8_7_TIMEOUT_SEC" "$step8_7_flake_timeout_default")"
+STEP8_7_TAXONOMY_TIMEOUT_SEC="$(resolve_ci_step8_timeout "OPENVIBECODING_CI_STEP8_7_TAXONOMY_TIMEOUT_SEC" "$step8_7_taxonomy_timeout_default" "OPENVIBECODING_CI_STEP8_7_TIMEOUT_SEC")"
+STEP8_7_PARALLEL_TIMEOUT_SEC="$(resolve_ci_step8_timeout "OPENVIBECODING_CI_STEP8_7_TIMEOUT_SEC" "$step8_7_parallel_timeout_default")"
+STEP8_8_PARALLEL_TIMEOUT_SEC="$(resolve_ci_step8_timeout "OPENVIBECODING_CI_STEP8_8_PARALLEL_TIMEOUT_SEC" "$step8_8_parallel_timeout_default" "OPENVIBECODING_CI_STEP8_8_TIMEOUT_SEC")"
+STEP8_8_SERIAL_TIMEOUT_SEC="$(resolve_ci_step8_timeout "OPENVIBECODING_CI_STEP8_8_SERIAL_TIMEOUT_SEC" "$step8_8_serial_timeout_default" "OPENVIBECODING_CI_STEP8_8_TIMEOUT_SEC")"
 if ci_slice_enabled "resilience-and-e2e"; then
 echo "🚀 [STEP 8.2/12] Start: Test realism matrix"
 echo "🚀 [STEP 8.3/12] Start: External real-network probe"
@@ -1316,18 +1316,18 @@ set +e
 ) >"$STEP8_2_LOG" 2>&1 &
 step8_2_pid=$!
 (
-  if [ "${CORTEXPILOT_CI_EXTERNAL_WEB_PROBE_GATE:-1}" = "1" ]; then
+  if [ "${OPENVIBECODING_CI_EXTERNAL_WEB_PROBE_GATE:-1}" = "1" ]; then
     run_with_timeout_heartbeat_and_cleanup \
       "ci.sh:step8.3:external_web_probe" \
       "${STEP8_3_TIMEOUT_SEC}" \
       "$PYTHON" scripts/e2e_external_web_probe.py \
-        --url "${CORTEXPILOT_CI_EXTERNAL_WEB_PROBE_URL:-https://example.com}" \
+        --url "${OPENVIBECODING_CI_EXTERNAL_WEB_PROBE_URL:-https://example.com}" \
         --provider-api-mode "${CI_EXTERNAL_WEB_PROBE_PROVIDER_API_MODE}" \
-        --provider-api-timeout-sec "${CORTEXPILOT_CI_EXTERNAL_WEB_PROBE_PROVIDER_TIMEOUT_SEC:-12}" \
-        --hard-timeout-sec "${CORTEXPILOT_CI_EXTERNAL_WEB_PROBE_HARD_TIMEOUT_SEC:-120}"
+        --provider-api-timeout-sec "${OPENVIBECODING_CI_EXTERNAL_WEB_PROBE_PROVIDER_TIMEOUT_SEC:-12}" \
+        --hard-timeout-sec "${OPENVIBECODING_CI_EXTERNAL_WEB_PROBE_HARD_TIMEOUT_SEC:-120}"
   else
-    require_skip_gate_break_glass_or_fail "CORTEXPILOT_CI_EXTERNAL_WEB_PROBE_GATE" "external_web_probe_gate_skip"
-    echo "⚠️ [WARN] CORTEXPILOT_CI_EXTERNAL_WEB_PROBE_GATE=0, skip external web probe gate (break-glass)"
+    require_skip_gate_break_glass_or_fail "OPENVIBECODING_CI_EXTERNAL_WEB_PROBE_GATE" "external_web_probe_gate_skip"
+    echo "⚠️ [WARN] OPENVIBECODING_CI_EXTERNAL_WEB_PROBE_GATE=0, skip external web probe gate (break-glass)"
   fi
 ) >"$STEP8_3_LOG" 2>&1 &
 step8_3_pid=$!
@@ -1351,7 +1351,7 @@ source "$ROOT_DIR/scripts/lib/ci_ui_full_audit_helpers.sh"
 run_ci_step88_ui_strict_click_gate
 run_ci_step89_ui_truth_gate
 elif [[ "$CI_SLICE" == "full" ]]; then
-echo "ℹ️ [ci] ui-truth/Gemini audit lanes are opt-in for default full runs; use scripts/ci_slice_runner.sh ui-truth or set CORTEXPILOT_CI_INCLUDE_UI_TRUTH=1 to run them explicitly"
+echo "ℹ️ [ci] ui-truth/Gemini audit lanes are opt-in for default full runs; use scripts/ci_slice_runner.sh ui-truth or set OPENVIBECODING_CI_INCLUDE_UI_TRUTH=1 to run them explicitly"
 fi
 if ci_slice_enabled "resilience-and-e2e"; then
 run_ci_step9_resilience_gates

@@ -18,7 +18,7 @@ from ci_current_run_support import (
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_POLICY = ROOT / "configs" / "ci_governance_policy.json"
 DEFAULT_DOCTOR_REPORT = ROOT / ".runtime-cache" / "test_output" / "ci_control_plane_doctor" / "report.json"
-DEFAULT_RUNNER_DRIFT_REPORT = ROOT / ".runtime-cache" / "cortexpilot" / "reports" / "ci" / "runner_drift" / "report.json"
+DEFAULT_RUNNER_DRIFT_REPORT = ROOT / ".runtime-cache" / "openvibecoding" / "reports" / "ci" / "runner_drift" / "report.json"
 
 
 def _load(path: Path | None) -> dict:
@@ -31,7 +31,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Build CI runner health/quarantine dashboard.")
     parser.add_argument("--policy", default=str(DEFAULT_POLICY))
     parser.add_argument("--source-manifest", default="")
-    parser.add_argument("--out-dir", default=".runtime-cache/cortexpilot/reports/ci/runner_health")
+    parser.add_argument("--out-dir", default=".runtime-cache/openvibecoding/reports/ci/runner_health")
     parser.add_argument("--allow-local-advisory", action="store_true")
     return parser.parse_args()
 
@@ -94,7 +94,7 @@ def main() -> int:
         or slo_breach_count >= int(quarantine.get("slo_breach_count_blocking", 999999))
     )
     payload = {
-        "report_type": "cortexpilot_ci_runner_health_dashboard",
+        "report_type": "openvibecoding_ci_runner_health_dashboard",
         "generated_at": now_utc(),
         "authoritative": bool(authority["authoritative_current_truth"]),
         "advisory_local_only": advisory_local_only,

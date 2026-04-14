@@ -3,7 +3,7 @@
 This runbook is the repo-side blueprint for a future guarded hosted operator
 pilot on Render.
 
-It is **not** proof that CortexPilot already runs as a hosted operator service.
+It is **not** proof that OpenVibeCoding already runs as a hosted operator service.
 Treat it as a deployment contract draft that burns down the repo-side work until
 the remaining steps are only Render-account, secret, DNS, and live verification
 actions.
@@ -23,7 +23,7 @@ Use this cut only for a narrow operator pilot:
 ## What already exists
 
 - public front door on GitHub Pages
-- API auth via `CORTEXPILOT_API_TOKEN`
+- API auth via `OPENVIBECODING_API_TOKEN`
 - repo-owned role-config preview/apply HTTP surfaces
 - `/health` and `/api/health` for simple platform probes
 - repo-owned run/worktree rollback semantics
@@ -46,14 +46,14 @@ the narrow pilot above.
 
 Service intent:
 
-1. `cortexpilot-api`
+1. `openvibecoding-api`
    - Python web service
-   - starts `python -m cortexpilot_orch.cli serve --host 0.0.0.0 --port $PORT`
+   - starts `python -m openvibecoding_orch.cli serve --host 0.0.0.0 --port $PORT`
    - keeps auth on by default
    - requires a persistent disk because runtime state, queue state, run bundles,
      and logs are file-backed today
 
-2. `cortexpilot-dashboard`
+2. `openvibecoding-dashboard`
    - Node/Next.js web service
    - builds the repo-owned dashboard shell
    - requires the public API base URL plus a server-side operator token for
@@ -63,23 +63,23 @@ Service intent:
 
 ### API service
 
-- `CORTEXPILOT_API_AUTH_REQUIRED=true`
-- `CORTEXPILOT_API_TOKEN`
-- `CORTEXPILOT_API_ALLOWED_ORIGINS`
-- `CORTEXPILOT_PROVIDER`
+- `OPENVIBECODING_API_AUTH_REQUIRED=true`
+- `OPENVIBECODING_API_TOKEN`
+- `OPENVIBECODING_API_ALLOWED_ORIGINS`
+- `OPENVIBECODING_PROVIDER`
 - provider credential for the chosen provider:
   - `GEMINI_API_KEY`, or
   - `OPENAI_API_KEY`, or
   - `ANTHROPIC_API_KEY`
-- `CORTEXPILOT_RUNTIME_ROOT=/var/data/cortexpilot`
-- `CORTEXPILOT_RUNS_ROOT=/var/data/cortexpilot/runs`
-- `CORTEXPILOT_WORKTREE_ROOT=/var/data/cortexpilot/worktrees`
-- `CORTEXPILOT_LOGS_ROOT=/var/data/logs`
+- `OPENVIBECODING_RUNTIME_ROOT=/var/data/openvibecoding`
+- `OPENVIBECODING_RUNS_ROOT=/var/data/openvibecoding/runs`
+- `OPENVIBECODING_WORKTREE_ROOT=/var/data/openvibecoding/worktrees`
+- `OPENVIBECODING_LOGS_ROOT=/var/data/logs`
 
 ### Dashboard service
 
-- `NEXT_PUBLIC_CORTEXPILOT_API_BASE`
-- `CORTEXPILOT_API_TOKEN`
+- `NEXT_PUBLIC_OPENVIBECODING_API_BASE`
+- `OPENVIBECODING_API_TOKEN`
 
 ## Manual Render steps that still require a human
 
@@ -88,9 +88,9 @@ Service intent:
 3. Create the persistent disk for the API service.
 4. Fill the secret env vars in the Render dashboard.
 5. Deploy once to obtain the public API URL.
-6. Copy that API URL into `NEXT_PUBLIC_CORTEXPILOT_API_BASE`.
-7. Set `CORTEXPILOT_API_ALLOWED_ORIGINS` to the dashboard URL.
-8. Keep `CORTEXPILOT_API_TOKEN` server-only; do not mirror it through any
+6. Copy that API URL into `NEXT_PUBLIC_OPENVIBECODING_API_BASE`.
+7. Set `OPENVIBECODING_API_ALLOWED_ORIGINS` to the dashboard URL.
+8. Keep `OPENVIBECODING_API_TOKEN` server-only; do not mirror it through any
    `NEXT_PUBLIC_*` variable.
 9. Re-deploy the dashboard so browser calls use the final API origin.
 10. If a custom domain is desired, configure DNS and validate it in Render.

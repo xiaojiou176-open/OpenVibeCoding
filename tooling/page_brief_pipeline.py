@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 from typing import Any
 from urllib.parse import urlparse
 
-from cortexpilot_orch.store.run_store import RunStore
+from openvibecoding_orch.store.run_store import RunStore
 
 DEFAULT_PAGE_BRIEF_FOCUS = "Summarize the page for a first-time reader."
 PAGE_BRIEF_BROWSER_SCRIPT = r"""

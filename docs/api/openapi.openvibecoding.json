@@ -1,0 +1,577 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "OpenVibeCoding Command Tower Public Frontend API Contract",
+    "version": "1.0.0",
+    "description": "Canonical public API contract SSOT for Dashboard/Desktop frontend clients."
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:10000"
+    }
+  ],
+  "tags": [
+    {
+      "name": "command-tower"
+    },
+    {
+      "name": "runs"
+    },
+    {
+      "name": "agents"
+    },
+    {
+      "name": "contracts"
+    },
+    {
+      "name": "workflows"
+    },
+    {
+      "name": "pm-sessions"
+    }
+  ],
+  "paths": {
+    "/api/command-tower/overview": {
+      "get": {
+        "tags": [
+          "command-tower"
+        ],
+        "operationId": "fetchCommandTowerOverview",
+        "responses": {
+          "200": {
+            "description": "Command Tower overview payload"
+          }
+        }
+      }
+    },
+    "/api/command-tower/alerts": {
+      "get": {
+        "tags": [
+          "command-tower"
+        ],
+        "operationId": "fetchCommandTowerAlerts",
+        "responses": {
+          "200": {
+            "description": "Command Tower alerts payload"
+          }
+        }
+      }
+    },
+    "/api/runs": {
+      "get": {
+        "tags": [
+          "runs"
+        ],
+        "operationId": "fetchRuns",
+        "responses": {
+          "200": {
+            "description": "Run summary list payload"
+          }
+        }
+      }
+    },
+    "/api/runs/{run_id}": {
+      "get": {
+        "tags": [
+          "runs"
+        ],
+        "operationId": "fetchRun",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Run detail payload including role_binding_read_model"
+          }
+        }
+      }
+    },
+    "/api/runs/{run_id}/events": {
+      "get": {
+        "tags": [
+          "runs"
+        ],
+        "operationId": "fetchRunEvents",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Run event timeline payload"
+          }
+        }
+      }
+    },
+    "/api/runs/{run_id}/events/stream": {
+      "get": {
+        "tags": [
+          "runs"
+        ],
+        "operationId": "openRunEventsStream",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Run event stream"
+          }
+        }
+      }
+    },
+    "/api/runs/{run_id}/diff": {
+      "get": {
+        "tags": [
+          "runs"
+        ],
+        "operationId": "fetchRunDiff",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Run diff payload"
+          }
+        }
+      }
+    },
+    "/api/runs/{run_id}/reports": {
+      "get": {
+        "tags": [
+          "runs"
+        ],
+        "operationId": "fetchRunReports",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Run report payload"
+          }
+        }
+      }
+    },
+    "/api/agents": {
+      "get": {
+        "tags": [
+          "agents"
+        ],
+        "operationId": "fetchAgents",
+        "responses": {
+          "200": {
+            "description": "Global read-only role catalog plus registered agent inventory payload"
+          }
+        }
+      }
+    },
+    "/api/agents/status": {
+      "get": {
+        "tags": [
+          "agents"
+        ],
+        "operationId": "fetchAgentStatus",
+        "responses": {
+          "200": {
+            "description": "Run-scoped agent state machine advisory payload"
+          }
+        }
+      }
+    },
+    "/api/agents/roles/{role}/config": {
+      "get": {
+        "tags": [
+          "agents"
+        ],
+        "operationId": "fetchRoleConfig",
+        "responses": {
+          "200": {
+            "description": "Repo-owned role configuration control-plane surface for one role"
+          }
+        }
+      }
+    },
+    "/api/agents/roles/{role}/config/preview": {
+      "post": {
+        "tags": [
+          "agents"
+        ],
+        "operationId": "previewRoleConfig",
+        "responses": {
+          "200": {
+            "description": "Validated role configuration preview with change summary and derived readback"
+          }
+        }
+      }
+    },
+    "/api/agents/roles/{role}/config/apply": {
+      "post": {
+        "tags": [
+          "agents"
+        ],
+        "operationId": "applyRoleConfig",
+        "responses": {
+          "200": {
+            "description": "Persisted role configuration update result with refreshed control-plane readback"
+          }
+        }
+      }
+    },
+    "/api/queue/from-run/{run_id}/preview": {
+      "post": {
+        "tags": [
+          "queue"
+        ],
+        "operationId": "previewEnqueueRunQueue",
+        "responses": {
+          "200": {
+            "description": "Validated queue-enqueue preview for one existing run with no queue mutation"
+          }
+        }
+      }
+    },
+    "/api/queue/{queue_id}/cancel": {
+      "post": {
+        "tags": [
+          "queue"
+        ],
+        "operationId": "cancelQueueItem",
+        "responses": {
+          "200": {
+            "description": "Queue cancel result for one pending queue item"
+          }
+        }
+      }
+    },
+    "/api/contracts": {
+      "get": {
+        "tags": [
+          "contracts"
+        ],
+        "operationId": "fetchContracts",
+        "responses": {
+          "200": {
+            "description": "Read-only contract artifact inspector payload with normalized bundle/runtime projection"
+          }
+        }
+      }
+    },
+    "/api/workflows": {
+      "get": {
+        "tags": [
+          "workflows"
+        ],
+        "operationId": "fetchWorkflows",
+        "responses": {
+          "200": {
+            "description": "Workflow summary list payload"
+          }
+        }
+      }
+    },
+    "/api/workflows/{workflow_id}": {
+      "get": {
+        "tags": [
+          "workflows"
+        ],
+        "operationId": "fetchWorkflow",
+        "parameters": [
+          {
+            "name": "workflow_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Workflow detail payload including workflow_case_read_model"
+          }
+        }
+      }
+    },
+    "/api/pm/sessions": {
+      "get": {
+        "tags": [
+          "pm-sessions"
+        ],
+        "operationId": "fetchPmSessions",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "status[]",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "types",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "types[]",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "run_ids",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "run_ids[]",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "PM session list payload"
+          }
+        }
+      }
+    },
+    "/api/pm/sessions/{pm_session_id}/messages": {
+      "post": {
+        "tags": [
+          "pm-sessions"
+        ],
+        "operationId": "postPmSessionMessage",
+        "parameters": [
+          {
+            "name": "pm_session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "PM session message write result"
+          }
+        }
+      }
+    }
+  },
+  "x-openvibecoding-frontend-contract": {
+    "defaultApiBase": "http://127.0.0.1:10000",
+    "envKeys": [
+      "NEXT_PUBLIC_OPENVIBECODING_API_BASE",
+      "NEXT_PUBLIC_OPENVIBECODING_API_BASE",
+      "VITE_OPENVIBECODING_API_BASE",
+      "VITE_OPENVIBECODING_API_BASE",
+      "OPENVIBECODING_API_BASE",
+      "OPENVIBECODING_API_BASE"
+    ],
+    "headers": {
+      "requestId": "x-request-id",
+      "traceId": "x-trace-id",
+      "traceparent": "traceparent",
+      "runId": "x-openvibecoding-run-id"
+    },
+    "network": {
+      "fetchCredentials": "include",
+      "eventSourceWithCredentials": true
+    },
+    "query": {
+      "status": "status",
+      "statusArray": "status[]",
+      "types": "types",
+      "typesArray": "types[]",
+      "runIds": "run_ids",
+      "runIdsArray": "run_ids[]"
+    },
+    "paths": {
+      "commandTowerOverview": "/api/command-tower/overview",
+      "commandTowerAlerts": "/api/command-tower/alerts",
+      "runs": "/api/runs",
+      "runDetail": "/api/runs/{run_id}",
+      "runEvents": "/api/runs/{run_id}/events",
+      "runEventsStream": "/api/runs/{run_id}/events/stream",
+      "runDiff": "/api/runs/{run_id}/diff",
+      "runReports": "/api/runs/{run_id}/reports",
+      "agents": "/api/agents",
+      "agentStatus": "/api/agents/status",
+      "roleConfig": "/api/agents/roles/{role}/config",
+      "roleConfigPreview": "/api/agents/roles/{role}/config/preview",
+      "roleConfigApply": "/api/agents/roles/{role}/config/apply",
+      "contracts": "/api/contracts",
+      "queue": "/api/queue",
+      "queueEnqueuePreview": "/api/queue/from-run/{run_id}/preview",
+      "queueCancel": "/api/queue/{queue_id}/cancel",
+      "workflows": "/api/workflows",
+      "workflowDetail": "/api/workflows/{workflow_id}",
+      "pmSessions": "/api/pm/sessions",
+      "pmSessionMessages": "/api/pm/sessions/{pm_session_id}/messages"
+    },
+    "pmSessionSortOptions": [
+      "updated_desc",
+      "created_desc",
+      "failed_desc",
+      "blocked_desc"
+    ],
+    "uiFlow": {
+      "pmJourneyStages": [
+        "discover",
+        "clarify",
+        "execute",
+        "verify"
+      ],
+      "commandTowerPriorityLanes": [
+        "live",
+        "risk",
+        "actions",
+        "details"
+      ],
+      "desktopWorkModes": [
+        "execute",
+        "observe",
+        "handoff"
+      ]
+    },
+    "readModels": {
+      "bindingStatuses": [
+        "unresolved",
+        "resolved",
+        "registry-backed"
+      ],
+      "bindingValidationModes": [
+        "fail-closed"
+      ],
+      "executionAuthorities": [
+        "task_contract"
+      ],
+      "runtimeBindingStatuses": [
+        "unresolved",
+        "partially-resolved",
+        "contract-derived"
+      ],
+      "runtimeBindingAuthorityScopes": [
+        "contract-derived-read-model"
+      ],
+      "runtimeBindingSourceRunners": [
+        "runtime_options.runner",
+        "role_contract.runtime_binding.runner",
+        "unresolved"
+      ],
+      "runtimeBindingSourceProviders": [
+        "runtime_options.provider",
+        "role_contract.runtime_binding.provider",
+        "unresolved"
+      ],
+      "runtimeBindingSourceModels": [
+        "env.OPENVIBECODING_CODEX_MODEL",
+        "env.OPENVIBECODING_PROVIDER_MODEL",
+        "role_contract.runtime_binding.model",
+        "unresolved"
+      ],
+      "roleBindingAuthorities": [
+        "contract-derived-read-model"
+      ],
+      "roleBindingSources": [
+        "persisted from contract",
+        "derived from compiled role_contract and runtime inputs; not an execution authority surface"
+      ],
+      "roleConfigAuthorities": [
+        "repo-owned-role-config"
+      ],
+      "roleConfigFieldModes": [
+        "editable-now",
+        "derived-read-only",
+        "authority-source",
+        "reserved-for-later"
+      ],
+      "roleConfigOverlayStates": [
+        "repo-owned-defaults"
+      ],
+      "roleConfigValidationModes": [
+        "fail-closed"
+      ],
+      "runtimeCapabilityStatuses": [
+        "previewable"
+      ],
+      "runtimeCapabilityLanes": [
+        "standard-provider-path",
+        "switchyard-chat-compatible"
+      ],
+      "runtimeCapabilityProviderStatuses": [
+        "unresolved",
+        "allowlisted",
+        "unsupported"
+      ],
+      "runtimeCapabilityToolExecutionStates": [
+        "provider-path-required",
+        "fail-closed"
+      ],
+      "workflowCaseAuthorities": [
+        "workflow-case-read-model"
+      ],
+      "workflowCaseSources": [
+        "latest linked run manifest.role_binding_summary"
+      ]
+    }
+  }
+}

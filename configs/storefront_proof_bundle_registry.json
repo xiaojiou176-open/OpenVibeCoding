@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "artifact_type": "cortexpilot_storefront_proof_bundle_registry",
+  "artifact_type": "openvibecoding_storefront_proof_bundle_registry",
   "vocabulary_contract": {
     "proven_workflow_label": "first proven workflow",
     "proof_pack_label": "public proof pack",

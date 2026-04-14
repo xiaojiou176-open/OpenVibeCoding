@@ -22,7 +22,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--source-manifest", default="")
     parser.add_argument(
         "--out-dir",
-        default=".runtime-cache/cortexpilot/reports/ci/cost_profile",
+        default=".runtime-cache/openvibecoding/reports/ci/cost_profile",
     )
     return parser.parse_args()
 
@@ -61,7 +61,7 @@ def main() -> int:
         if payload.get("retry_green") is True:
             retry_green += 1
     payload = {
-        "report_type": "cortexpilot_ci_cost_profile",
+        "report_type": "openvibecoding_ci_cost_profile",
         "generated_at": now_utc(),
         "authoritative": bool(authority["authoritative_current_truth"]),
         **authority,

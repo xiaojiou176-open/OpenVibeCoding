@@ -37,7 +37,7 @@ def _build_runtime_args() -> argparse.Namespace:
         dashboard_port=19700,
         external_api_base="",
         external_dashboard_base="",
-        api_token="cortexpilot-e2e-token",
+        api_token="openvibecoding-e2e-token",
         provider="gemini",
         provider_base_url="",
         provider_model="",

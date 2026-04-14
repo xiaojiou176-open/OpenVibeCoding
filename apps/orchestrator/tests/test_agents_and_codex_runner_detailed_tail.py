@@ -1,20 +1,20 @@
 from pathlib import Path
 
-from cortexpilot_orch.runners.agents_runner import (
+from openvibecoding_orch.runners.agents_runner import (
     AgentsRunner,
     _build_codex_payload,
     _extract_binding_from_result,
     _resolve_session_binding,
 )
-from cortexpilot_orch.runners.codex_runner import (
+from openvibecoding_orch.runners.codex_runner import (
     CodexRunner,
     _codex_allowed,
     _codex_flags,
     _extract_session_id,
     _extract_thread_id,
 )
-from cortexpilot_orch.store.run_store import RunStore
-from cortexpilot_orch.store.session_map import SessionAliasStore
+from openvibecoding_orch.store.run_store import RunStore
+from openvibecoding_orch.store.session_map import SessionAliasStore
 
 from .test_agents_and_codex_runner_detailed import _base_contract
 
@@ -28,7 +28,7 @@ def test_agents_runner_helpers(tmp_path: Path, monkeypatch) -> None:
     assert payload["approval-policy"] == "on-request"
 
     alias_path = tmp_path / "alias_map.json"
-    monkeypatch.setenv("CORTEXPILOT_SESSION_ALIAS_PATH", str(alias_path))
+    monkeypatch.setenv("OPENVIBECODING_SESSION_ALIAS_PATH", str(alias_path))
     store = SessionAliasStore()
     store.set_alias("agent-1", "session-x", thread_id="thread-x", note="seed")
     thread_id, session_id = _resolve_session_binding(contract)
@@ -69,7 +69,7 @@ def test_agents_runner_missing_instruction(tmp_path: Path) -> None:
 def test_agents_runner_codex_not_allowed(tmp_path: Path, monkeypatch) -> None:
     store = RunStore(runs_root=tmp_path)
     run_id = store.create_run("task_codex_denied")
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", run_id)
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", run_id)
     contract = _base_contract("task_codex_denied")
     contract["tool_permissions"]["mcp_tools"] = []
     runner = AgentsRunner(store)
@@ -105,7 +105,7 @@ def test_agents_runner_contract_invalid(tmp_path: Path) -> None:
 def test_agents_runner_mock_result_schema_invalid(tmp_path: Path, monkeypatch) -> None:
     store = RunStore(runs_root=tmp_path)
     run_id = store.create_run("task_mock_invalid")
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", run_id)
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", run_id)
 
     runner = AgentsRunner(store)
     repo_root = Path(__file__).resolve().parents[3]
@@ -117,7 +117,7 @@ def test_agents_runner_mock_result_schema_invalid(tmp_path: Path, monkeypatch) -
 def test_codex_runner_missing_instruction_and_denied(tmp_path: Path, monkeypatch) -> None:
     store = RunStore(runs_root=tmp_path)
     run_id = store.create_run("task_codex_missing_instruction")
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", run_id)
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", run_id)
     contract = _base_contract("task_codex_missing_instruction")
     contract["inputs"]["spec"] = ""
     runner = CodexRunner(store)
@@ -135,7 +135,7 @@ def test_codex_runner_missing_instruction_and_denied(tmp_path: Path, monkeypatch
 def test_codex_runner_schema_missing_and_contract_invalid(tmp_path: Path, monkeypatch) -> None:
     store = RunStore(runs_root=tmp_path)
     run_id = store.create_run("task_codex_schema_missing")
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", run_id)
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", run_id)
     runner = CodexRunner(store)
 
     result = runner.run_contract(_base_contract("task_codex_schema_missing"), tmp_path, tmp_path / "nope.json", mock_mode=False)
@@ -154,7 +154,7 @@ def test_codex_runner_schema_missing_and_contract_invalid(tmp_path: Path, monkey
 def test_codex_runner_mock_result_schema_invalid(tmp_path: Path, monkeypatch) -> None:
     store = RunStore(runs_root=tmp_path)
     run_id = store.create_run("task_codex_mock_invalid")
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", run_id)
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", run_id)
 
     runner = CodexRunner(store)
     repo_root = Path(__file__).resolve().parents[3]

@@ -193,8 +193,8 @@ describe("desktop api client", () => {
   });
 
   it("uses bearer header for SSE stream when desktop api token is present", async () => {
-    const previousToken = process.env.VITE_CORTEXPILOT_API_TOKEN;
-    process.env.VITE_CORTEXPILOT_API_TOKEN = "desktop-token";
+    const previousToken = process.env.VITE_OPENVIBECODING_API_TOKEN;
+    process.env.VITE_OPENVIBECODING_API_TOKEN = "desktop-token";
     vi.resetModules();
 
     const fetchSpy = vi.fn(async () => {
@@ -219,13 +219,13 @@ describe("desktop api client", () => {
     expect(init?.headers).toMatchObject({ Authorization: "Bearer desktop-token" });
     expect(String(firstCall[0] || "")).toContain("/api/runs/run-1/events/stream?tail=1");
 
-    if (previousToken === undefined) delete process.env.VITE_CORTEXPILOT_API_TOKEN;
-    else process.env.VITE_CORTEXPILOT_API_TOKEN = previousToken;
+    if (previousToken === undefined) delete process.env.VITE_OPENVIBECODING_API_TOKEN;
+    else process.env.VITE_OPENVIBECODING_API_TOKEN = previousToken;
   });
 
   it("uses refreshed bearer token after env rotation within same module instance", async () => {
-    const previousToken = process.env.VITE_CORTEXPILOT_API_TOKEN;
-    process.env.VITE_CORTEXPILOT_API_TOKEN = "desktop-token-old";
+    const previousToken = process.env.VITE_OPENVIBECODING_API_TOKEN;
+    process.env.VITE_OPENVIBECODING_API_TOKEN = "desktop-token-old";
     vi.resetModules();
 
     const fetchSpy = vi.fn(async () => jsonResponse({ ok: true }));
@@ -234,7 +234,7 @@ describe("desktop api client", () => {
 
     await api.fetchDesktopOverview();
 
-    process.env.VITE_CORTEXPILOT_API_TOKEN = "desktop-token-new";
+    process.env.VITE_OPENVIBECODING_API_TOKEN = "desktop-token-new";
     await api.fetchDesktopSessions();
 
     const fetchCalls = fetchSpy.mock.calls as unknown as Array<[unknown, RequestInit | undefined]>;
@@ -244,13 +244,13 @@ describe("desktop api client", () => {
     });
     expect(authHeaders).toEqual(["Bearer desktop-token-old", "Bearer desktop-token-new"]);
 
-    if (previousToken === undefined) delete process.env.VITE_CORTEXPILOT_API_TOKEN;
-    else process.env.VITE_CORTEXPILOT_API_TOKEN = previousToken;
+    if (previousToken === undefined) delete process.env.VITE_OPENVIBECODING_API_TOKEN;
+    else process.env.VITE_OPENVIBECODING_API_TOKEN = previousToken;
   });
 
   it("treats remote stream EOF as normal completion without fallback error", async () => {
-    const previousToken = process.env.VITE_CORTEXPILOT_API_TOKEN;
-    process.env.VITE_CORTEXPILOT_API_TOKEN = "desktop-token";
+    const previousToken = process.env.VITE_OPENVIBECODING_API_TOKEN;
+    process.env.VITE_OPENVIBECODING_API_TOKEN = "desktop-token";
     vi.resetModules();
 
     const fetchSpy = vi.fn(async () => {
@@ -272,8 +272,8 @@ describe("desktop api client", () => {
     expect(onError).not.toHaveBeenCalled();
     stream.close();
 
-    if (previousToken === undefined) delete process.env.VITE_CORTEXPILOT_API_TOKEN;
-    else process.env.VITE_CORTEXPILOT_API_TOKEN = previousToken;
+    if (previousToken === undefined) delete process.env.VITE_OPENVIBECODING_API_TOKEN;
+    else process.env.VITE_OPENVIBECODING_API_TOKEN = previousToken;
   });
 
   it("serializes scalar session filters and optional paging fields", async () => {
@@ -319,8 +319,8 @@ describe("desktop api client", () => {
   });
 
   it("uses contract-backed role-config paths and desktop operator role for mutations", async () => {
-    const previousRole = process.env.VITE_CORTEXPILOT_OPERATOR_ROLE;
-    process.env.VITE_CORTEXPILOT_OPERATOR_ROLE = "ops";
+    const previousRole = process.env.VITE_OPENVIBECODING_OPERATOR_ROLE;
+    process.env.VITE_OPENVIBECODING_OPERATOR_ROLE = "ops";
     vi.resetModules();
 
     const fetchSpy = vi.fn(async () => jsonResponse({ ok: true }));
@@ -346,12 +346,12 @@ describe("desktop api client", () => {
     expect(urls[0]).toContain("/api/agents/roles/worker/config");
     expect(urls[1]).toContain("/api/agents/roles/worker/config/preview");
     expect(urls[2]).toContain("/api/agents/roles/worker/config/apply");
-    expect((calls[1][1]?.headers as Record<string, string>)["x-cortexpilot-role"]).toBe("OPS");
-    expect((calls[2][1]?.headers as Record<string, string>)["x-cortexpilot-role"]).toBe("OPS");
+    expect((calls[1][1]?.headers as Record<string, string>)["x-openvibecoding-role"]).toBe("OPS");
+    expect((calls[2][1]?.headers as Record<string, string>)["x-openvibecoding-role"]).toBe("OPS");
     expect(api.mutationExecutionCapability()).toEqual({ executable: true, operatorRole: "OPS" });
 
-    if (previousRole === undefined) delete process.env.VITE_CORTEXPILOT_OPERATOR_ROLE;
-    else process.env.VITE_CORTEXPILOT_OPERATOR_ROLE = previousRole;
+    if (previousRole === undefined) delete process.env.VITE_OPENVIBECODING_OPERATOR_ROLE;
+    else process.env.VITE_OPENVIBECODING_OPERATOR_ROLE = previousRole;
   });
 
   it("includes trimmed baseline_run_id in replay payload when provided", async () => {
@@ -386,8 +386,8 @@ describe("desktop api client", () => {
   });
 
   it("uses EventSource branch when token is absent and keeps query params", () => {
-    const previousToken = process.env.VITE_CORTEXPILOT_API_TOKEN;
-    delete process.env.VITE_CORTEXPILOT_API_TOKEN;
+    const previousToken = process.env.VITE_OPENVIBECODING_API_TOKEN;
+    delete process.env.VITE_OPENVIBECODING_API_TOKEN;
     vi.resetModules();
     class MockEventSource {
       url: string;
@@ -401,13 +401,13 @@ describe("desktop api client", () => {
     globalThis.EventSource = MockEventSource as unknown as typeof EventSource;
     const stream = openEventsStream("run-1", { since: "abc", limit: 20 }) as unknown as { url: string };
     expect(stream.url).toContain("/api/runs/run-1/events/stream?since=abc&limit=20");
-    if (previousToken === undefined) delete process.env.VITE_CORTEXPILOT_API_TOKEN;
-    else process.env.VITE_CORTEXPILOT_API_TOKEN = previousToken;
+    if (previousToken === undefined) delete process.env.VITE_OPENVIBECODING_API_TOKEN;
+    else process.env.VITE_OPENVIBECODING_API_TOKEN = previousToken;
   });
 
   it("consumes SSE data payloads in fetch-based stream mode", async () => {
-    const previousToken = process.env.VITE_CORTEXPILOT_API_TOKEN;
-    process.env.VITE_CORTEXPILOT_API_TOKEN = "desktop-token";
+    const previousToken = process.env.VITE_OPENVIBECODING_API_TOKEN;
+    process.env.VITE_OPENVIBECODING_API_TOKEN = "desktop-token";
     vi.resetModules();
     const fetchSpy = vi.fn(async () => {
       const body = new ReadableStream<Uint8Array>({
@@ -431,8 +431,8 @@ describe("desktop api client", () => {
     expect(onMessage).toHaveBeenCalledTimes(1);
     expect(String(onMessage.mock.calls[0][0].data)).toBe("line1\nline2");
     stream.close();
-    if (previousToken === undefined) delete process.env.VITE_CORTEXPILOT_API_TOKEN;
-    else process.env.VITE_CORTEXPILOT_API_TOKEN = previousToken;
+    if (previousToken === undefined) delete process.env.VITE_OPENVIBECODING_API_TOKEN;
+    else process.env.VITE_OPENVIBECODING_API_TOKEN = previousToken;
   });
 
   it("maps json detail.message for intake errors", async () => {

@@ -84,7 +84,7 @@ def _write(output: Path, payload: dict[str, Any]) -> None:
 
 def command_seed(args: argparse.Namespace) -> int:
     payload = {
-        "report_type": "cortexpilot_ci_route_report",
+        "report_type": "openvibecoding_ci_route_report",
         "generated_at": now_utc(),
         "route_id": args.route_id,
         "trust_class": args.trust_class,
@@ -128,7 +128,7 @@ def command_finalize(args: argparse.Namespace) -> int:
 def command_validate(args: argparse.Namespace) -> int:
     payload = load_json(resolve_path(args.input), label="ci route report")
     errors: list[str] = []
-    if payload.get("report_type") != "cortexpilot_ci_route_report":
+    if payload.get("report_type") != "openvibecoding_ci_route_report":
         errors.append("report_type drift")
     if payload.get("route_id") != args.expected_route_id:
         errors.append(f"route_id mismatch: {payload.get('route_id')} != {args.expected_route_id}")

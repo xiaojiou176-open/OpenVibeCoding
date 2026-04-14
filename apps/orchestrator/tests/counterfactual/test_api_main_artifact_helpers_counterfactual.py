@@ -6,8 +6,8 @@ from pathlib import Path
 from fastapi.testclient import TestClient
 import pytest
 
-from cortexpilot_orch.api import artifact_helpers
-from cortexpilot_orch.api import main as api_main
+from openvibecoding_orch.api import artifact_helpers
+from openvibecoding_orch.api import main as api_main
 
 
 def _write_manifest(run_dir: Path, payload: dict) -> None:
@@ -34,7 +34,7 @@ def test_run_search_endpoint_fails_loud_when_artifact_helper_breaks(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     runs_root = tmp_path / "runs"
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
 
     run_id = "run_artifact_counterfactual"
     run_dir = runs_root / run_id

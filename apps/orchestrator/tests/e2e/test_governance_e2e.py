@@ -309,7 +309,7 @@ def test_dashboard_e2e_browser_allowlist_block(tmp_path: Path) -> None:
     worktree_root = runtime_root / "worktrees"
 
     base_env = build_env(repo_root, runtime_root, runs_root, worktree_root)
-    base_env["CORTEXPILOT_BROWSER_ALLOWLIST"] = "https://chatgpt.com/"
+    base_env["OPENVIBECODING_BROWSER_ALLOWLIST"] = "https://chatgpt.com/"
     api_proc, api_port = start_api(repo_root, base_env, tmp_path / "api.log")
     ui_proc, ui_port = start_ui(repo_root, base_env, api_port, tmp_path / "ui.log")
 

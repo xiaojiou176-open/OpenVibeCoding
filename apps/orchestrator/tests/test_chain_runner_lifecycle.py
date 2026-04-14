@@ -4,8 +4,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import pytest
-from cortexpilot_orch.chain.runner import ChainRunner
-from cortexpilot_orch.store.run_store import RunStore
+from openvibecoding_orch.chain.runner import ChainRunner
+from openvibecoding_orch.store.run_store import RunStore
 
 
 def _now() -> str:
@@ -14,7 +14,7 @@ def _now() -> str:
 
 @pytest.fixture(autouse=True)
 def _disable_strict_nontrivial(monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_ACCEPTANCE_STRICT_NONTRIVIAL", "0")
+    monkeypatch.setenv("OPENVIBECODING_ACCEPTANCE_STRICT_NONTRIVIAL", "0")
 
 
 def _output_schema_artifacts(role: str) -> list[dict]:
@@ -265,8 +265,8 @@ def test_chain_runner_lifecycle_enforced_fails_on_reviewer_quorum(tmp_path: Path
 
 
 def test_chain_runner_lifecycle_mock_mode_ignores_subprocess_exec_mode(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_CHAIN_EXEC_MODE", "subprocess")
-    monkeypatch.setenv("CORTEXPILOT_CHAIN_SUBPROCESS_TIMEOUT_SEC", "1")
+    monkeypatch.setenv("OPENVIBECODING_CHAIN_EXEC_MODE", "subprocess")
+    monkeypatch.setenv("OPENVIBECODING_CHAIN_SUBPROCESS_TIMEOUT_SEC", "1")
 
     store = RunStore(runs_root=tmp_path)
     runner = ChainRunner(tmp_path, store, _execute_stub(store, {"review_a": "PASS", "review_b": "PASS"}))

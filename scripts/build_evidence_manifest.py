@@ -411,7 +411,7 @@ def build_manifest(args: argparse.Namespace) -> dict[str, Any]:
     overall_status = "pass" if all(status == "pass" for status in overall_components) else "fail"
 
     manifest = {
-        "manifest_type": "cortexpilot_evidence_manifest",
+        "manifest_type": "openvibecoding_evidence_manifest",
         "schema_version": 2,
         "generated_at": _now_utc(),
         "overall_status": overall_status,
@@ -462,7 +462,7 @@ def build_manifest(args: argparse.Namespace) -> dict[str, Any]:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Build CortexPilot evidence manifest.")
+    parser = argparse.ArgumentParser(description="Build OpenVibeCoding evidence manifest.")
     parser.add_argument(
         "--truth-report",
         default=str(DEFAULT_TRUTH_REPORT),

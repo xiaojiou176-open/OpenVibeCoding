@@ -50,7 +50,7 @@ threshold = float(sys.argv[4])
 iterations = int(sys.argv[5])
 attempts_sha = hashlib.sha256(attempts_path.read_bytes()).hexdigest()
 payload = {
-    "report_type": "cortexpilot_ui_regression_flake_report",
+    "report_type": "openvibecoding_ui_regression_flake_report",
     "schema_version": 1,
     "producer_script": "scripts/ui_regression_flake_gate.sh",
     "run_id": run_id,
@@ -112,7 +112,7 @@ fi
 
 info "case: hygiene gate blocks residual unix socket artifacts"
 set +e
-CORTEXPILOT_GITHUB_ALERTS_MODE=off bash scripts/check_repo_hygiene.sh >/dev/null 2>&1
+OPENVIBECODING_GITHUB_ALERTS_MODE=off bash scripts/check_repo_hygiene.sh >/dev/null 2>&1
 baseline_hygiene_status=$?
 set -e
 if [[ $baseline_hygiene_status -ne 0 ]]; then
@@ -132,7 +132,7 @@ sock.bind(str(path))
 sock.close()
 PY
 set +e
-CORTEXPILOT_GITHUB_ALERTS_MODE=off bash scripts/check_repo_hygiene.sh >/dev/null 2>&1
+OPENVIBECODING_GITHUB_ALERTS_MODE=off bash scripts/check_repo_hygiene.sh >/dev/null 2>&1
 socket_hygiene_status=$?
 set -e
 if [[ $socket_hygiene_status -eq 0 ]]; then
@@ -140,10 +140,10 @@ if [[ $socket_hygiene_status -eq 0 ]]; then
 fi
 rm -f "$socket_probe"
 if [[ $baseline_hygiene_status -eq 0 ]]; then
-  CORTEXPILOT_GITHUB_ALERTS_MODE=off bash scripts/check_repo_hygiene.sh >/dev/null
+  OPENVIBECODING_GITHUB_ALERTS_MODE=off bash scripts/check_repo_hygiene.sh >/dev/null
 else
   set +e
-  post_cleanup_hygiene_output="$(CORTEXPILOT_GITHUB_ALERTS_MODE=off bash scripts/check_repo_hygiene.sh 2>&1)"
+  post_cleanup_hygiene_output="$(OPENVIBECODING_GITHUB_ALERTS_MODE=off bash scripts/check_repo_hygiene.sh 2>&1)"
   post_cleanup_hygiene_status=$?
   set -e
   if [[ $post_cleanup_hygiene_status -eq 0 ]]; then
@@ -158,7 +158,7 @@ fi
 
 info "case: hygiene gate blocks maintainer-local paths and raw token-like fixture literals"
 set +e
-CORTEXPILOT_GITHUB_ALERTS_MODE=off bash scripts/check_repo_hygiene.sh >/dev/null 2>&1
+OPENVIBECODING_GITHUB_ALERTS_MODE=off bash scripts/check_repo_hygiene.sh >/dev/null 2>&1
 baseline_sensitive_surface_status=$?
 set -e
 if [[ $baseline_sensitive_surface_status -ne 0 ]]; then
@@ -172,7 +172,7 @@ cp "$sensitive_surface_probe" "$sensitive_surface_backup"
   printf 'Raw fixture literal: %s\n' "$raw_fixture"
 } >>"$sensitive_surface_probe"
 set +e
-CORTEXPILOT_GITHUB_ALERTS_MODE=off bash scripts/check_repo_hygiene.sh >/dev/null 2>&1
+OPENVIBECODING_GITHUB_ALERTS_MODE=off bash scripts/check_repo_hygiene.sh >/dev/null 2>&1
 sensitive_surface_status=$?
 set -e
 if [[ $sensitive_surface_status -eq 0 ]]; then
@@ -180,7 +180,7 @@ if [[ $sensitive_surface_status -eq 0 ]]; then
 fi
 cp "$sensitive_surface_backup" "$sensitive_surface_probe"
 if [[ $baseline_sensitive_surface_status -eq 0 ]]; then
-  CORTEXPILOT_GITHUB_ALERTS_MODE=off bash scripts/check_repo_hygiene.sh >/dev/null
+  OPENVIBECODING_GITHUB_ALERTS_MODE=off bash scripts/check_repo_hygiene.sh >/dev/null
 fi
 fi
 
@@ -199,11 +199,11 @@ JSON
 create_flake_report "$tmpdir/flake/p0_case/flake_report.json" "run_same" "0.5" "8"
 create_flake_report "$tmpdir/flake/p1_case/flake_report.json" "run_same" "1.0" "8"
 
-if CORTEXPILOT_UI_MATRIX_FILE="$tmpdir/matrix.md" \
-  CORTEXPILOT_UI_FLAKE_REPORT_ROOT="$tmpdir/flake" \
-  CORTEXPILOT_UI_FULL_AUDIT_REPORT_ROOT="$tmpdir/full" \
-  CORTEXPILOT_UI_TRUTH_GATE_REPORT="$tmpdir/truth_default.json" \
-  CORTEXPILOT_UI_TRUTH_SKIP_LOCK=1 \
+if OPENVIBECODING_UI_MATRIX_FILE="$tmpdir/matrix.md" \
+  OPENVIBECODING_UI_FLAKE_REPORT_ROOT="$tmpdir/flake" \
+  OPENVIBECODING_UI_FULL_AUDIT_REPORT_ROOT="$tmpdir/full" \
+  OPENVIBECODING_UI_TRUTH_GATE_REPORT="$tmpdir/truth_default.json" \
+  OPENVIBECODING_UI_TRUTH_SKIP_LOCK=1 \
   bash scripts/ui_e2e_truth_gate.sh >/dev/null 2>&1; then
   fail "ui truth gate unexpectedly passed without explicit reports"
 fi
@@ -217,14 +217,14 @@ JSON
 cat >"$tmpdir/forged_p1.json" <<'JSON'
 {"run_id":"run_same","gate_passed":true,"completed_all_attempts":true}
 JSON
-if CORTEXPILOT_UI_MATRIX_FILE="$tmpdir/matrix.md" \
-  CORTEXPILOT_UI_FLAKE_REPORT_ROOT="$tmpdir/flake" \
-  CORTEXPILOT_UI_TRUTH_GATE_REPORT="$tmpdir/truth_forged.json" \
-  CORTEXPILOT_UI_P0_REPORT="$tmpdir/forged_p0.json" \
-  CORTEXPILOT_UI_P1_REPORT="$tmpdir/forged_p1.json" \
-  CORTEXPILOT_UI_TRUTH_DISABLE_AUTO_LATEST=1 \
-  CORTEXPILOT_UI_TRUTH_REQUIRE_RUN_ID_MATCH=1 \
-  CORTEXPILOT_UI_TRUTH_SKIP_LOCK=1 \
+if OPENVIBECODING_UI_MATRIX_FILE="$tmpdir/matrix.md" \
+  OPENVIBECODING_UI_FLAKE_REPORT_ROOT="$tmpdir/flake" \
+  OPENVIBECODING_UI_TRUTH_GATE_REPORT="$tmpdir/truth_forged.json" \
+  OPENVIBECODING_UI_P0_REPORT="$tmpdir/forged_p0.json" \
+  OPENVIBECODING_UI_P1_REPORT="$tmpdir/forged_p1.json" \
+  OPENVIBECODING_UI_TRUTH_DISABLE_AUTO_LATEST=1 \
+  OPENVIBECODING_UI_TRUTH_REQUIRE_RUN_ID_MATCH=1 \
+  OPENVIBECODING_UI_TRUTH_SKIP_LOCK=1 \
   bash scripts/ui_e2e_truth_gate.sh >/dev/null 2>&1; then
   fail "ui truth gate unexpectedly accepted forged explicit report input"
 fi
@@ -255,35 +255,35 @@ cat >"$tmpdir/latest_manifest.json" <<JSON
   }
 }
 JSON
-CORTEXPILOT_UI_MATRIX_FILE="$tmpdir/matrix.md" \
-CORTEXPILOT_UI_FLAKE_REPORT_ROOT="$tmpdir/flake" \
-CORTEXPILOT_UI_FULL_AUDIT_REPORT_ROOT="$tmpdir/full" \
-CORTEXPILOT_UI_TRUTH_GATE_REPORT="$tmpdir/truth_break_glass.json" \
-CORTEXPILOT_UI_LATEST_MANIFEST_PATH="$tmpdir/latest_manifest.json" \
-CORTEXPILOT_UI_TRUTH_DISABLE_AUTO_LATEST=0 \
-CORTEXPILOT_UI_TRUTH_BREAK_GLASS=1 \
-CORTEXPILOT_UI_TRUTH_BREAK_GLASS_REASON="test override" \
-CORTEXPILOT_UI_TRUTH_BREAK_GLASS_TICKET="TEST-123" \
-CORTEXPILOT_UI_TRUTH_SKIP_LOCK=1 \
+OPENVIBECODING_UI_MATRIX_FILE="$tmpdir/matrix.md" \
+OPENVIBECODING_UI_FLAKE_REPORT_ROOT="$tmpdir/flake" \
+OPENVIBECODING_UI_FULL_AUDIT_REPORT_ROOT="$tmpdir/full" \
+OPENVIBECODING_UI_TRUTH_GATE_REPORT="$tmpdir/truth_break_glass.json" \
+OPENVIBECODING_UI_LATEST_MANIFEST_PATH="$tmpdir/latest_manifest.json" \
+OPENVIBECODING_UI_TRUTH_DISABLE_AUTO_LATEST=0 \
+OPENVIBECODING_UI_TRUTH_BREAK_GLASS=1 \
+OPENVIBECODING_UI_TRUTH_BREAK_GLASS_REASON="test override" \
+OPENVIBECODING_UI_TRUTH_BREAK_GLASS_TICKET="TEST-123" \
+OPENVIBECODING_UI_TRUTH_SKIP_LOCK=1 \
 bash scripts/ui_e2e_truth_gate.sh >/dev/null
 assert_file_contains "$tmpdir/truth_break_glass.json" "\"active\": true"
 assert_file_contains "$tmpdir/truth_break_glass.json" "\"overall_passed\": true"
 
 info "case: ui truth strict does not allow break-glass to override key checks"
-if CORTEXPILOT_UI_MATRIX_FILE="$tmpdir/matrix.md" \
-  CORTEXPILOT_UI_FLAKE_REPORT_ROOT="$tmpdir/flake" \
-  CORTEXPILOT_UI_FULL_AUDIT_REPORT_ROOT="$tmpdir/full" \
-  CORTEXPILOT_UI_TRUTH_GATE_REPORT="$tmpdir/truth_strict_break_glass_blocked.json" \
-  CORTEXPILOT_UI_P0_REPORT="$tmpdir/flake/p0_case/flake_report.json" \
-  CORTEXPILOT_UI_P1_REPORT="$tmpdir/flake/p1_case/flake_report.json" \
-  CORTEXPILOT_UI_CLICK_INVENTORY_REPORT="$tmpdir/full/full_case/click_inventory_report.json" \
-  CORTEXPILOT_UI_TRUTH_GATE_STRICT=1 \
-  CORTEXPILOT_UI_TRUTH_DISABLE_AUTO_LATEST=1 \
-  CORTEXPILOT_UI_TRUTH_REQUIRE_RUN_ID_MATCH=1 \
-  CORTEXPILOT_UI_TRUTH_BREAK_GLASS=1 \
-  CORTEXPILOT_UI_TRUTH_BREAK_GLASS_REASON="strict-check-override-test" \
-  CORTEXPILOT_UI_TRUTH_BREAK_GLASS_TICKET="TEST-STRICT-OVERRIDE-001" \
-  CORTEXPILOT_UI_TRUTH_SKIP_LOCK=1 \
+if OPENVIBECODING_UI_MATRIX_FILE="$tmpdir/matrix.md" \
+  OPENVIBECODING_UI_FLAKE_REPORT_ROOT="$tmpdir/flake" \
+  OPENVIBECODING_UI_FULL_AUDIT_REPORT_ROOT="$tmpdir/full" \
+  OPENVIBECODING_UI_TRUTH_GATE_REPORT="$tmpdir/truth_strict_break_glass_blocked.json" \
+  OPENVIBECODING_UI_P0_REPORT="$tmpdir/flake/p0_case/flake_report.json" \
+  OPENVIBECODING_UI_P1_REPORT="$tmpdir/flake/p1_case/flake_report.json" \
+  OPENVIBECODING_UI_CLICK_INVENTORY_REPORT="$tmpdir/full/full_case/click_inventory_report.json" \
+  OPENVIBECODING_UI_TRUTH_GATE_STRICT=1 \
+  OPENVIBECODING_UI_TRUTH_DISABLE_AUTO_LATEST=1 \
+  OPENVIBECODING_UI_TRUTH_REQUIRE_RUN_ID_MATCH=1 \
+  OPENVIBECODING_UI_TRUTH_BREAK_GLASS=1 \
+  OPENVIBECODING_UI_TRUTH_BREAK_GLASS_REASON="strict-check-override-test" \
+  OPENVIBECODING_UI_TRUTH_BREAK_GLASS_TICKET="TEST-STRICT-OVERRIDE-001" \
+  OPENVIBECODING_UI_TRUTH_SKIP_LOCK=1 \
   bash scripts/ui_e2e_truth_gate.sh >/dev/null 2>&1; then
   fail "ui truth strict unexpectedly allowed break-glass override on key checks"
 fi
@@ -300,16 +300,16 @@ MD
 cat >"$tmpdir/incident_map_bad_type.json" <<'JSON'
 {"incidents":[{"incident_id":"INCIDENT-001","regression_tests":[0]}]}
 JSON
-if CORTEXPILOT_INCIDENT_DIR="$tmpdir/incidents" \
-  CORTEXPILOT_INCIDENT_MAP_PATH="$tmpdir/incident_map_bad_type.json" \
+if OPENVIBECODING_INCIDENT_DIR="$tmpdir/incidents" \
+  OPENVIBECODING_INCIDENT_MAP_PATH="$tmpdir/incident_map_bad_type.json" \
   bash scripts/check_incident_regression_gate.sh >/dev/null 2>&1; then
   fail "incident gate unexpectedly accepted non-string regression_tests entry"
 fi
 cat >"$tmpdir/incident_map_empty_string.json" <<'JSON'
 {"incidents":[{"incident_id":"INCIDENT-001","regression_tests":["   "]}]}
 JSON
-if CORTEXPILOT_INCIDENT_DIR="$tmpdir/incidents" \
-  CORTEXPILOT_INCIDENT_MAP_PATH="$tmpdir/incident_map_empty_string.json" \
+if OPENVIBECODING_INCIDENT_DIR="$tmpdir/incidents" \
+  OPENVIBECODING_INCIDENT_MAP_PATH="$tmpdir/incident_map_empty_string.json" \
   bash scripts/check_incident_regression_gate.sh >/dev/null 2>&1; then
   fail "incident gate unexpectedly accepted blank regression_tests entry"
 fi
@@ -323,36 +323,36 @@ PY
 cat >"$tmpdir/incident_map_missing_target.json" <<'JSON'
 {"incidents":[{"incident_id":"INCIDENT-001","regression_tests":[".runtime-cache/test_output/nonexistent_incident_target.py::test_case"]}]}
 JSON
-if CORTEXPILOT_INCIDENT_DIR="$tmpdir/incidents" \
-  CORTEXPILOT_INCIDENT_MAP_PATH="$tmpdir/incident_map_missing_target.json" \
+if OPENVIBECODING_INCIDENT_DIR="$tmpdir/incidents" \
+  OPENVIBECODING_INCIDENT_MAP_PATH="$tmpdir/incident_map_missing_target.json" \
   bash scripts/check_incident_regression_gate.sh >/dev/null 2>&1; then
   fail "incident gate unexpectedly accepted missing regression test target"
 fi
 cat >"$tmpdir/incident_map_ok.json" <<JSON
 {"incidents":[{"incident_id":"INCIDENT-001","regression_tests":["$incident_target_rel::test_case"]}]}
 JSON
-CORTEXPILOT_INCIDENT_DIR="$tmpdir/incidents" \
-CORTEXPILOT_INCIDENT_MAP_PATH="$tmpdir/incident_map_ok.json" \
+OPENVIBECODING_INCIDENT_DIR="$tmpdir/incidents" \
+OPENVIBECODING_INCIDENT_MAP_PATH="$tmpdir/incident_map_ok.json" \
 bash scripts/check_incident_regression_gate.sh >/dev/null
 
 info "case: critical gate skip is fail-closed without break-glass"
 if env -i PATH="$PATH" HOME="${HOME:-/tmp}" \
-  CORTEXPILOT_CI_BREAK_GLASS_VALIDATE_ONLY_GATE=CORTEXPILOT_CI_MUTATION_GATE \
-  CORTEXPILOT_CI_MUTATION_GATE=0 \
+  OPENVIBECODING_CI_BREAK_GLASS_VALIDATE_ONLY_GATE=OPENVIBECODING_CI_MUTATION_GATE \
+  OPENVIBECODING_CI_MUTATION_GATE=0 \
   bash scripts/ci.sh >/dev/null 2>&1; then
   fail "ci validate-only unexpectedly allowed gate skip without break-glass"
 fi
 env -i PATH="$PATH" HOME="${HOME:-/tmp}" \
-CORTEXPILOT_CI_BREAK_GLASS_VALIDATE_ONLY_GATE=CORTEXPILOT_CI_MUTATION_GATE \
-CORTEXPILOT_CI_MUTATION_GATE=0 \
-CORTEXPILOT_CI_MUTATION_GATE_BREAK_GLASS=1 \
-CORTEXPILOT_CI_MUTATION_GATE_BREAK_GLASS_REASON="test break glass" \
-CORTEXPILOT_CI_MUTATION_GATE_BREAK_GLASS_TICKET="TEST-456" \
+OPENVIBECODING_CI_BREAK_GLASS_VALIDATE_ONLY_GATE=OPENVIBECODING_CI_MUTATION_GATE \
+OPENVIBECODING_CI_MUTATION_GATE=0 \
+OPENVIBECODING_CI_MUTATION_GATE_BREAK_GLASS=1 \
+OPENVIBECODING_CI_MUTATION_GATE_BREAK_GLASS_REASON="test break glass" \
+OPENVIBECODING_CI_MUTATION_GATE_BREAK_GLASS_TICKET="TEST-456" \
 bash scripts/ci.sh >/dev/null
 
 info "case: CI validate-only is fail-closed without audited break-glass"
 if env -i PATH="$PATH" HOME="${HOME:-/tmp}" CI=1 \
-  CORTEXPILOT_CI_BREAK_GLASS_VALIDATE_ONLY_GATE=CORTEXPILOT_CI_MUTATION_GATE \
+  OPENVIBECODING_CI_BREAK_GLASS_VALIDATE_ONLY_GATE=OPENVIBECODING_CI_MUTATION_GATE \
   bash scripts/ci.sh >/dev/null 2>&1; then
   fail "ci validate-only unexpectedly allowed early exit without audited break-glass"
 fi
@@ -360,14 +360,14 @@ fi
 info "case: CI validate-only allows audited break-glass and writes audit record"
 ci_validate_only_audit_log="$tmpdir/ci_validate_only_break_glass.jsonl"
 env -i PATH="$PATH" HOME="${HOME:-/tmp}" CI=1 \
-CORTEXPILOT_CI_BREAK_GLASS_AUDIT_LOG="$ci_validate_only_audit_log" \
-CORTEXPILOT_CI_BREAK_GLASS=1 \
-CORTEXPILOT_CI_BREAK_GLASS_REASON="ci validate-only break-glass test" \
-CORTEXPILOT_CI_BREAK_GLASS_TICKET="TEST-789" \
-CORTEXPILOT_CI_BREAK_GLASS_VALIDATE_ONLY_GATE=CORTEXPILOT_CI_MUTATION_GATE \
+OPENVIBECODING_CI_BREAK_GLASS_AUDIT_LOG="$ci_validate_only_audit_log" \
+OPENVIBECODING_CI_BREAK_GLASS=1 \
+OPENVIBECODING_CI_BREAK_GLASS_REASON="ci validate-only break-glass test" \
+OPENVIBECODING_CI_BREAK_GLASS_TICKET="TEST-789" \
+OPENVIBECODING_CI_BREAK_GLASS_VALIDATE_ONLY_GATE=OPENVIBECODING_CI_MUTATION_GATE \
 bash scripts/ci.sh >/dev/null
 assert_file_contains "$ci_validate_only_audit_log" "\"scope\": \"validate_only_early_exit\""
-assert_file_contains "$ci_validate_only_audit_log" "\"enabled_var\": \"CORTEXPILOT_CI_BREAK_GLASS\""
+assert_file_contains "$ci_validate_only_audit_log" "\"enabled_var\": \"OPENVIBECODING_CI_BREAK_GLASS\""
 
 info "case: test.sh nounset guard protects PIPESTATUS lookups"
 assert_file_contains "scripts/test.sh" "parallel_status=\"\${PIPESTATUS[0]:-1}\""
@@ -397,10 +397,10 @@ assert_file_contains "$tmpdir/repo_coverage_report.json" "\"percent_branches_cov
 
 info "case: PM chat resolver blocks auto-mock fallback in mainline context"
 pm_policy_out="$(env -i PATH="$PATH" HOME="${HOME:-/tmp}" LD_LIBRARY_PATH="${LD_LIBRARY_PATH:-}" \
-  CORTEXPILOT_CI_PM_CHAT_DISABLE_CODEX_CONFIG=1 \
-  CORTEXPILOT_CI_PM_CHAT_DISABLE_ZSH_ENV=1 \
-  CORTEXPILOT_CI_PM_CHAT_DISABLE_DOTENV=1 \
-  CORTEXPILOT_CI_PROFILE=strict \
+  OPENVIBECODING_CI_PM_CHAT_DISABLE_CODEX_CONFIG=1 \
+  OPENVIBECODING_CI_PM_CHAT_DISABLE_ZSH_ENV=1 \
+  OPENVIBECODING_CI_PM_CHAT_DISABLE_DOTENV=1 \
+  OPENVIBECODING_CI_PROFILE=strict \
   bash scripts/resolve_ci_pm_chat_env.sh)"
 if [[ "$pm_policy_out" != *"PM_CHAT_MODE=real"* ]]; then
   fail "resolve_ci_pm_chat_env unexpectedly selected mock mode in mainline context"
@@ -420,16 +420,16 @@ info "case: security scan requires scanner by default in mainline context"
 assert_file_contains "scripts/security_scan.sh" "if is_mainline_context; then"
 assert_file_contains "scripts/security_scan.sh" "require_scanner_default=\"1\""
 assert_file_contains "scripts/security_scan.sh" "is_placeholder_example_uri"
-assert_file_contains "scripts/security_scan.sh" "cortexpilot-trufflehog.jsonl"
+assert_file_contains "scripts/security_scan.sh" "openvibecoding-trufflehog.jsonl"
 assert_file_contains "scripts/security_scan.sh" "source \"$ROOT_DIR/scripts/lib/release_tool_helpers.sh\""
 
 info "case: public sensitive surface gate is wired into repo hygiene + pre-commit"
 assert_file_contains "scripts/check_repo_hygiene.sh" "scripts/check_public_sensitive_surface.py"
-assert_file_contains ".pre-commit-config.yaml" "cortexpilot-public-sensitive-surface-gate"
+assert_file_contains ".pre-commit-config.yaml" "openvibecoding-public-sensitive-surface-gate"
 
 info "case: github security alert gate is wired into hygiene + pre-commit + pre-push + quick-feedback"
 assert_file_contains "scripts/check_repo_hygiene.sh" "scripts/check_github_security_alerts.py"
-assert_file_contains ".pre-commit-config.yaml" "cortexpilot-github-security-alerts-gate"
+assert_file_contains ".pre-commit-config.yaml" "openvibecoding-github-security-alerts-gate"
 assert_file_contains "scripts/pre_push_quality_gate.sh" "scripts/check_github_security_alerts.py"
 assert_file_contains ".github/workflows/ci.yml" "scripts/check_github_security_alerts.py --repo xiaojiou176-open/OpenVibeCoding"
 
@@ -458,7 +458,7 @@ flake_override_cmd="$tmpdir/mock_e2e:first-entry:real.sh"
 cat >"$flake_override_cmd" <<'SH'
 #!/usr/bin/env bash
 set -euo pipefail
-suffix="${CORTEXPILOT_E2E_ARTIFACT_SUFFIX:-missing}"
+suffix="${OPENVIBECODING_E2E_ARTIFACT_SUFFIX:-missing}"
 out_dir=".runtime-cache/test_output/desktop_trust"
 mkdir -p "$out_dir"
 cat >"$out_dir/override.${suffix}.json" <<JSON

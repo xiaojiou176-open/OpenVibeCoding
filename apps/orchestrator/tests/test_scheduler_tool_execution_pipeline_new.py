@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from cortexpilot_orch.scheduler import tool_execution_pipeline
+from openvibecoding_orch.scheduler import tool_execution_pipeline
 
 
 class _Store:
@@ -103,7 +103,7 @@ def test_run_search_pipeline_adjustments_and_ai_enabled(tmp_path: Path, monkeypa
         "verify_search_results_ai",
         lambda raw_question, results, verification, model=None: {"ok": True, "report": {"score": 1}},
     )
-    monkeypatch.setenv("CORTEXPILOT_SEARCH_VERIFY_AI", "1")
+    monkeypatch.setenv("OPENVIBECODING_SEARCH_VERIFY_AI", "1")
 
     result = tool_execution_pipeline.run_search_pipeline(
         run_id="run-2",
@@ -143,7 +143,7 @@ def test_run_search_pipeline_ai_disabled_and_failure_paths(tmp_path: Path, monke
         raise AssertionError("verify_search_results_ai should not be called when verify_ai.enabled=false")
 
     monkeypatch.setattr(tool_execution_pipeline, "verify_search_results_ai", _should_not_call)
-    monkeypatch.setenv("CORTEXPILOT_SEARCH_VERIFY_AI", "1")
+    monkeypatch.setenv("OPENVIBECODING_SEARCH_VERIFY_AI", "1")
 
     result = tool_execution_pipeline.run_search_pipeline(
         run_id="run-3",

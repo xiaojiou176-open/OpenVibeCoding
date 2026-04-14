@@ -48,4 +48,4 @@ Please report issues involving:
 - branch protection and other GitHub security controls should be treated as
   separate governance checks; they do not replace the private reporting path
 
-Thank you for helping keep CortexPilot safer for contributors and users.
+Thank you for helping keep OpenVibeCoding safer for contributors and users.

@@ -8,7 +8,7 @@ from pathlib import Path
 
 def _load_generator_module() -> object:
     script_path = Path(__file__).resolve().parents[3] / "scripts" / "generate_storefront_proof_pack_index.py"
-    spec = importlib.util.spec_from_file_location("cortexpilot_generate_storefront_proof_pack_index", script_path)
+    spec = importlib.util.spec_from_file_location("openvibecoding_generate_storefront_proof_pack_index", script_path)
     module = importlib.util.module_from_spec(spec)
     assert spec and spec.loader
     spec.loader.exec_module(module)
@@ -17,7 +17,7 @@ def _load_generator_module() -> object:
 
 def _load_gate_module() -> object:
     script_path = Path(__file__).resolve().parents[3] / "scripts" / "check_storefront_proof_assets.py"
-    spec = importlib.util.spec_from_file_location("cortexpilot_storefront_proof_assets_gate", script_path)
+    spec = importlib.util.spec_from_file_location("openvibecoding_storefront_proof_assets_gate", script_path)
     module = importlib.util.module_from_spec(spec)
     assert spec and spec.loader
     spec.loader.exec_module(module)
@@ -107,7 +107,7 @@ def _write_fixture(root: Path) -> None:
     (root / "docs" / "assets" / "storefront" / "live-capture-requirements.json").write_text(
         json.dumps(
             {
-                "artifact_type": "cortexpilot_storefront_live_capture_requirements",
+                "artifact_type": "openvibecoding_storefront_live_capture_requirements",
                 "required_assets": [
                     {"asset_id": "healthy_live_capture_gif", "status": "present"},
                     {"asset_id": "healthy_english_first_dashboard_home_capture", "status": "present"},
@@ -136,7 +136,7 @@ def _write_fixture(root: Path) -> None:
         json.dumps(
             {
                 "schema_version": 1,
-                "artifact_type": "cortexpilot_storefront_proof_bundle_registry",
+                "artifact_type": "openvibecoding_storefront_proof_bundle_registry",
                 "vocabulary_contract": {
                     "proven_workflow_label": "first proven workflow",
                     "proof_pack_label": "public proof pack",

@@ -21,7 +21,7 @@ DEMO_STATUS_PATH = ROOT / "docs" / "assets" / "storefront" / "demo-status.md"
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Validate the static public front-door contract for CortexPilot."
+        description="Validate the static public front-door contract for OpenVibeCoding."
     )
     return parser.parse_args()
 

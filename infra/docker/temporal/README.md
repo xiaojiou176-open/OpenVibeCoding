@@ -1,7 +1,7 @@
 # Temporal (Addon)
 
 This folder ships a starter `docker-compose.yml` and `.env.example`.
-Do not replace CortexPilot events until the governance model is stable.
+Do not replace OpenVibeCoding events until the governance model is stable.
 
 Runbook:
 1. `cp .env.example .env`

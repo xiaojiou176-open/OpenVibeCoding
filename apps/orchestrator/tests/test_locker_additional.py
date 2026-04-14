@@ -2,7 +2,7 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
-from cortexpilot_orch.locks import locker
+from openvibecoding_orch.locks import locker
 
 
 def _write_manifest(runtime_root: Path, run_id: str, status: str) -> None:
@@ -34,8 +34,8 @@ def test_locker_parse_and_time_helpers(tmp_path: Path) -> None:
 
 def test_lock_staleness_and_cleanup(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", "run_active")
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", "run_active")
 
     allowed_path = "src/main.py"
     locks_root = runtime_root / "locks"
@@ -62,7 +62,7 @@ def test_lock_staleness_and_cleanup(tmp_path: Path, monkeypatch) -> None:
     assert locker.acquire_lock([allowed_path]) is True
 
     _write_manifest(runtime_root, "run_active", "SUCCESS")
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", "run_new")
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", "run_new")
     ok, removed_after, remaining_after = locker.acquire_lock_with_cleanup([allowed_path], auto_cleanup=True)
     assert ok is True
     assert removed_after
@@ -73,7 +73,7 @@ def test_lock_staleness_and_cleanup(tmp_path: Path, monkeypatch) -> None:
 
 def test_lock_pid_dead_cleanup_for_running_manifest(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
 
     allowed_path = "src/orphan.py"
     locks_root = runtime_root / "locks"
@@ -101,21 +101,21 @@ def test_lock_pid_dead_cleanup_for_running_manifest(tmp_path: Path, monkeypatch)
 
 def test_lock_ttl_and_non_cleanup_paths(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", "run_a")
-    monkeypatch.delenv("CORTEXPILOT_LOCK_TTL_SEC", raising=False)
-    monkeypatch.delenv("CORTEXPILOT_LOCK_TTL_SEC_DEFAULT", raising=False)
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", "run_a")
+    monkeypatch.delenv("OPENVIBECODING_LOCK_TTL_SEC", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_LOCK_TTL_SEC_DEFAULT", raising=False)
 
     ttl_disabled, source_disabled = locker.resolve_lock_ttl(auto_cleanup=False)
     assert ttl_disabled == 0
     assert source_disabled == "disabled"
 
-    monkeypatch.setenv("CORTEXPILOT_LOCK_TTL_SEC", "invalid")
+    monkeypatch.setenv("OPENVIBECODING_LOCK_TTL_SEC", "invalid")
     ttl_invalid, source_invalid = locker.resolve_lock_ttl(auto_cleanup=True)
     assert ttl_invalid == 0
     assert source_invalid == "env_invalid"
 
-    monkeypatch.setenv("CORTEXPILOT_LOCK_TTL_SEC", "120")
+    monkeypatch.setenv("OPENVIBECODING_LOCK_TTL_SEC", "120")
     ttl_env, source_env = locker.resolve_lock_ttl(auto_cleanup=True)
     assert ttl_env == 120
     assert source_env == "env"
@@ -123,7 +123,7 @@ def test_lock_ttl_and_non_cleanup_paths(tmp_path: Path, monkeypatch) -> None:
     target = ["src/feature.py"]
     assert locker.acquire_lock(target) is True
 
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", "run_b")
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", "run_b")
     ok, removed, remaining = locker.acquire_lock_with_cleanup(target, auto_cleanup=False)
     assert ok is False
     assert removed == []

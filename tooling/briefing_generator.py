@@ -33,7 +33,7 @@ class RunSummary:
 
 
 def _runs_root() -> Path:
-    return Path(os.getenv("CORTEXPILOT_RUNS_ROOT", ".runtime-cache/cortexpilot/runs"))
+    return Path(os.getenv("OPENVIBECODING_RUNS_ROOT", ".runtime-cache/openvibecoding/runs"))
 
 
 def _parse_ts(raw: str) -> datetime | None:
@@ -197,7 +197,7 @@ def generate_briefing(
     lines.append("")
 
     if output_path is None:
-        output_path = Path(".runtime-cache/cortexpilot/briefings")
+        output_path = Path(".runtime-cache/openvibecoding/briefings")
         output_path.mkdir(parents=True, exist_ok=True)
         output_path = output_path / f"briefing_{start.date().isoformat()}.md"
     else:
@@ -208,8 +208,8 @@ def generate_briefing(
 
 
 def _build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Generate a CortexPilot morning briefing.")
-    parser.add_argument("--runs-root", default=".runtime-cache/cortexpilot/runs")
+    parser = argparse.ArgumentParser(description="Generate a OpenVibeCoding morning briefing.")
+    parser.add_argument("--runs-root", default=".runtime-cache/openvibecoding/runs")
     parser.add_argument(
         "--date",
         default="",

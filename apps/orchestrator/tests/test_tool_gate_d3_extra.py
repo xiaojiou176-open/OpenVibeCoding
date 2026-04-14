@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from cortexpilot_orch.gates import tool_gate as tg
+from openvibecoding_orch.gates import tool_gate as tg
 
 
 _DEFAULT_PACK = {"allow": [], "deny_substrings": [], "forbidden_actions": []}

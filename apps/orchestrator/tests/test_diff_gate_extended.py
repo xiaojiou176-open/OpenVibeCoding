@@ -3,8 +3,8 @@ from pathlib import Path
 
 import pytest
 
-from cortexpilot_orch.gates import diff_gate
-from cortexpilot_orch.gates.diff_gate import validate_diff
+from openvibecoding_orch.gates import diff_gate
+from openvibecoding_orch.gates.diff_gate import validate_diff
 
 
 def _git(cmd: list[str], cwd: Path) -> None:
@@ -92,7 +92,7 @@ def test_diff_gate_helpers() -> None:
 
 
 def test_diff_gate_protected_env(monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_PROTECTED_PATHS", "a.txt, b.txt")
+    monkeypatch.setenv("OPENVIBECODING_PROTECTED_PATHS", "a.txt, b.txt")
     protected = diff_gate._default_protected_paths()
     assert protected == ["a.txt", "b.txt"]
     assert diff_gate._is_protected("a.txt", ["", "a.txt"]) is True

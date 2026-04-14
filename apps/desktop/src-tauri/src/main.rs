@@ -6,7 +6,7 @@ use tauri::{App, AppHandle, Emitter, Manager, Wry};
 
 fn emit_runtime_event(app: &AppHandle, event: &str, detail: &str) {
     let _ = app.emit(
-        "cortexpilot://desktop-runtime",
+        "openvibecoding://desktop-runtime",
         serde_json::json!({
             "event": event,
             "detail": detail,
@@ -80,5 +80,5 @@ fn main() {
             }
         })
         .run(tauri::generate_context!())
-        .expect("failed to start cortexpilot desktop app");
+        .expect("failed to start openvibecoding desktop app");
 }

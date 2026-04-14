@@ -1,10 +1,10 @@
 {
   "version": 1,
   "runtime_roots": {
-    "runtime_root": ".runtime-cache/cortexpilot",
-    "runtime_contract_root": ".runtime-cache/cortexpilot/contracts",
-    "runs_root": ".runtime-cache/cortexpilot/runs",
-    "worktree_root": ".runtime-cache/cortexpilot/worktrees",
+    "runtime_root": ".runtime-cache/openvibecoding",
+    "runtime_contract_root": ".runtime-cache/openvibecoding/contracts",
+    "runs_root": ".runtime-cache/openvibecoding/runs",
+    "worktree_root": ".runtime-cache/openvibecoding/worktrees",
     "logs_root": ".runtime-cache/logs",
     "cache_root": ".runtime-cache/cache",
     "test_output_root": ".runtime-cache/test_output"
@@ -29,25 +29,25 @@
     "governance_reports": ".runtime-cache/test_output/governance",
     "upstream_verification": ".runtime-cache/test_output/governance/upstream",
     "worker_markers": ".runtime-cache/test_output/worker_markers",
-    "runtime_contracts": ".runtime-cache/cortexpilot/contracts",
-    "active_contract": ".runtime-cache/cortexpilot/active",
-    "runs": ".runtime-cache/cortexpilot/runs",
-    "runs_diagnostic": ".runtime-cache/cortexpilot/runs_diagnostic",
-    "worktrees": ".runtime-cache/cortexpilot/worktrees",
-    "reports": ".runtime-cache/cortexpilot/reports",
-    "reports_space_governance": ".runtime-cache/cortexpilot/reports/space_governance",
-    "reports_ci": ".runtime-cache/cortexpilot/reports/ci",
-    "reports_ci_current_run": ".runtime-cache/cortexpilot/reports/ci/current_run",
-    "release": ".runtime-cache/cortexpilot/release",
-    "backups": ".runtime-cache/cortexpilot/backups",
-    "briefings": ".runtime-cache/cortexpilot/briefings",
-    "intakes": ".runtime-cache/cortexpilot/intakes",
-    "workflow_cases": ".runtime-cache/cortexpilot/workflow-cases",
-    "codex_homes": ".runtime-cache/cortexpilot/codex-homes",
-    "browser_profiles": ".runtime-cache/cortexpilot/browser-profiles",
-    "temp": ".runtime-cache/cortexpilot/temp",
-    "locks": ".runtime-cache/cortexpilot/locks",
-    "web_search": ".runtime-cache/cortexpilot/web-search"
+    "runtime_contracts": ".runtime-cache/openvibecoding/contracts",
+    "active_contract": ".runtime-cache/openvibecoding/active",
+    "runs": ".runtime-cache/openvibecoding/runs",
+    "runs_diagnostic": ".runtime-cache/openvibecoding/runs_diagnostic",
+    "worktrees": ".runtime-cache/openvibecoding/worktrees",
+    "reports": ".runtime-cache/openvibecoding/reports",
+    "reports_space_governance": ".runtime-cache/openvibecoding/reports/space_governance",
+    "reports_ci": ".runtime-cache/openvibecoding/reports/ci",
+    "reports_ci_current_run": ".runtime-cache/openvibecoding/reports/ci/current_run",
+    "release": ".runtime-cache/openvibecoding/release",
+    "backups": ".runtime-cache/openvibecoding/backups",
+    "briefings": ".runtime-cache/openvibecoding/briefings",
+    "intakes": ".runtime-cache/openvibecoding/intakes",
+    "workflow_cases": ".runtime-cache/openvibecoding/workflow-cases",
+    "codex_homes": ".runtime-cache/openvibecoding/codex-homes",
+    "browser_profiles": ".runtime-cache/openvibecoding/browser-profiles",
+    "temp": ".runtime-cache/openvibecoding/temp",
+    "locks": ".runtime-cache/openvibecoding/locks",
+    "web_search": ".runtime-cache/openvibecoding/web-search"
   },
   "machine_managed_repo_local_roots": [
     "apps/orchestrator/.venv",
@@ -102,9 +102,9 @@
     "*.tsbuildinfo"
   ],
   "machine_cache_roots": [
-    "~/.cache/cortexpilot",
-    "$RUNNER_TEMP/cortexpilot-machine-cache",
-    "$CORTEXPILOT_MACHINE_CACHE_ROOT"
+    "~/.cache/openvibecoding",
+    "$RUNNER_TEMP/openvibecoding-machine-cache",
+    "$OPENVIBECODING_MACHINE_CACHE_ROOT"
   ],
   "cache_classes": {
     "repo_authored_runtime": {
@@ -112,8 +112,8 @@
       "description": "Repo-authored runtime, test, temp, reports, locks, browser temp artifacts, and other governed machine-local evidence must live under .runtime-cache/."
     },
     "repo_owned_external_machine_cache": {
-      "root": "~/.cache/cortexpilot",
-      "description": "Repo-owned external caches and persistent browser state belong under ~/.cache/cortexpilot/. Reclaimable examples include pnpm-store, Playwright browser downloads, docker-ci runner temp, docker-buildx local cache, and clean-room machine temp; the repo-owned browser singleton subtree under ~/.cache/cortexpilot/browser/ is persistent and excluded from TTL/cap cleanup."
+      "root": "~/.cache/openvibecoding",
+      "description": "Repo-owned external caches and persistent browser state belong under ~/.cache/openvibecoding/. Reclaimable examples include pnpm-store, Playwright browser downloads, docker-ci runner temp, docker-buildx local cache, and clean-room machine temp; the repo-owned browser singleton subtree under ~/.cache/openvibecoding/browser/ is persistent and excluded from TTL/cap cleanup."
     },
     "build_dependency_exceptions": {
       "description": "Framework/build/dependency roots may remain outside .runtime-cache/, but they are explicit exceptions rather than part of the unified runtime cache story."
@@ -146,9 +146,9 @@
     "Users"
   ],
   "legacy_runtime_paths": [
-    "cortexpilot/contracts/results",
-    "cortexpilot/contracts/reviews",
-    "cortexpilot/contracts/tasks",
+    "openvibecoding/contracts/results",
+    "openvibecoding/contracts/reviews",
+    "openvibecoding/contracts/tasks",
     ".runtime-cache/browser-profiles",
     ".runtime-cache/temp",
     ".runtime-cache/codex"

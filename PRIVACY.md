@@ -1,6 +1,6 @@
 # Privacy Notes
 
-CortexPilot is source code, not a hosted service.
+OpenVibeCoding is source code, not a hosted service.
 
 ## Default Local Behavior
 
@@ -9,7 +9,7 @@ stays local:
 
 - logs under `.runtime-cache/logs/`
 - test and governance artifacts under `.runtime-cache/test_output/`
-- runtime-generated contracts under `.runtime-cache/cortexpilot/contracts/`
+- runtime-generated contracts under `.runtime-cache/openvibecoding/contracts/`
 
 ## Sensitive Data Rules
 

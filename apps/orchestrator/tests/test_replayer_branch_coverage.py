@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from cortexpilot_orch.replay.replayer import (
+from openvibecoding_orch.replay.replayer import (
     ReplayRunner,
     _collect_evidence_hashes,
     _git,
@@ -15,7 +15,7 @@ from cortexpilot_orch.replay.replayer import (
     _load_baseline_hashes,
     _load_events,
 )
-from cortexpilot_orch.store.run_store import RunStore
+from openvibecoding_orch.store.run_store import RunStore
 
 
 def _write(path: Path, payload: object) -> None:

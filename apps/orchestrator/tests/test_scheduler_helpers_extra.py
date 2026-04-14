@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from cortexpilot_orch.scheduler import scheduler as sched
+from openvibecoding_orch.scheduler import scheduler as sched
 
 
 def _git(cmd: list[str], cwd: Path) -> None:

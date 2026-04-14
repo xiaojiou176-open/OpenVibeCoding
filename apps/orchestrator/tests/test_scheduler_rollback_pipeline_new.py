@@ -3,7 +3,7 @@ from __future__ import annotations
 import subprocess
 from pathlib import Path
 
-from cortexpilot_orch.scheduler import rollback_pipeline
+from openvibecoding_orch.scheduler import rollback_pipeline
 
 
 def test_timeout_retry_and_retry_helpers() -> None:

@@ -23,7 +23,7 @@ const networkPath = resolve(outputDir, "first_entry_no_block_real.network.json")
 
 function resolvePythonBin() {
   const candidates = [
-    String(process.env.CORTEXPILOT_PYTHON || "").trim(),
+    String(process.env.OPENVIBECODING_PYTHON || "").trim(),
     resolve(repoRoot, ".runtime-cache", "cache", "toolchains", "python", "current", "bin", "python"),
     resolve(repoRoot, ".venv", "bin", "python"),
   ].filter(Boolean);
@@ -103,7 +103,7 @@ async function fetchWithRetry(input, init = {}, options = {}) {
 }
 
 async function postJson(baseUrl, path, payload) {
-  const apiToken = String(process.env.CORTEXPILOT_API_TOKEN || "cortexpilot-dev-token").trim();
+  const apiToken = String(process.env.OPENVIBECODING_API_TOKEN || "openvibecoding-dev-token").trim();
   const headers = { "Content-Type": "application/json" };
   if (apiToken) headers.Authorization = `Bearer ${apiToken}`;
   const res = await fetchWithRetry(`${baseUrl}${path}`, {
@@ -127,7 +127,7 @@ async function postJson(baseUrl, path, payload) {
 }
 
 async function getJson(baseUrl, path) {
-  const apiToken = String(process.env.CORTEXPILOT_API_TOKEN || "cortexpilot-dev-token").trim();
+  const apiToken = String(process.env.OPENVIBECODING_API_TOKEN || "openvibecoding-dev-token").trim();
   const headers = {};
   if (apiToken) headers.Authorization = `Bearer ${apiToken}`;
   const res = await fetchWithRetry(`${baseUrl}${path}`, {
@@ -429,8 +429,8 @@ async function run() {
   const webPort = await findAvailablePort(19173, 200);
   const apiBase = `http://127.0.0.1:${apiPort}`;
   const webBase = `http://127.0.0.1:${webPort}`;
-  const apiToken = String(process.env.CORTEXPILOT_API_TOKEN || "cortexpilot-dev-token").trim();
-  const forceCriticalBlocker = String(process.env.CORTEXPILOT_DESKTOP_E2E_FORCE_CRITICAL_BLOCKER || "").trim() === "1";
+  const apiToken = String(process.env.OPENVIBECODING_API_TOKEN || "openvibecoding-dev-token").trim();
+  const forceCriticalBlocker = String(process.env.OPENVIBECODING_DESKTOP_E2E_FORCE_CRITICAL_BLOCKER || "").trim() === "1";
 
   const report = {
     scenario: "desktop first entry should not be blocked by stale pending decision (real backend)",
@@ -449,16 +449,16 @@ async function run() {
   const pythonBin = resolvePythonBin();
   const apiServer = spawn(
     pythonBin,
-    ["-m", "cortexpilot_orch.cli", "serve", "--host", "127.0.0.1", "--port", String(apiPort)],
+    ["-m", "openvibecoding_orch.cli", "serve", "--host", "127.0.0.1", "--port", String(apiPort)],
     {
       cwd: repoRoot,
       stdio: "ignore",
       env: {
         ...process.env,
         PYTHONPATH: "apps/orchestrator/src",
-        CORTEXPILOT_API_AUTH_REQUIRED: "true",
-        CORTEXPILOT_API_TOKEN: apiToken,
-        CORTEXPILOT_DASHBOARD_PORT: String(webPort),
+        OPENVIBECODING_API_AUTH_REQUIRED: "true",
+        OPENVIBECODING_API_TOKEN: apiToken,
+        OPENVIBECODING_DASHBOARD_PORT: String(webPort),
       },
     },
   );
@@ -471,8 +471,8 @@ async function run() {
       stdio: "ignore",
       env: {
         ...process.env,
-        VITE_CORTEXPILOT_API_BASE: apiBase,
-        VITE_CORTEXPILOT_API_TOKEN: apiToken,
+        VITE_OPENVIBECODING_API_BASE: apiBase,
+        VITE_OPENVIBECODING_API_TOKEN: apiToken,
       },
     },
   );

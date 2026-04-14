@@ -5,7 +5,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 source "$ROOT_DIR/scripts/lib/env.sh"
 
-OUT_FILE=".runtime-cache/cortexpilot/reports/ai/ai-repo-full-context.generated.md"
+OUT_FILE=".runtime-cache/openvibecoding/reports/ai/ai-repo-full-context.generated.md"
 mkdir -p "$(dirname "$OUT_FILE")"
 
 if ! command -v rg >/dev/null 2>&1; then
@@ -18,7 +18,7 @@ TS="$(date '+%Y-%m-%d %H:%M:%S %Z')"
 echo "🚀 [ai-pack] generating offline AI context pack: ${OUT_FILE}"
 
 {
-  echo '# CortexPilot Offline AI Context Pack (Generated)'
+  echo '# OpenVibeCoding Offline AI Context Pack (Generated)'
   echo
   printf '> Generated at: %s\n' "$TS"
   printf '> Source repo root: %s\n' "<repo-root>"
@@ -42,18 +42,18 @@ EOF
 ## 3) Orchestrator Module Map
 EOF
 
-  find apps/orchestrator/src/cortexpilot_orch -maxdepth 1 -mindepth 1 -type d \
-    | sed 's#^apps/orchestrator/src/cortexpilot_orch/##' \
+  find apps/orchestrator/src/openvibecoding_orch -maxdepth 1 -mindepth 1 -type d \
+    | sed 's#^apps/orchestrator/src/openvibecoding_orch/##' \
     | rg -v '^__pycache__$' \
     | sort \
-    | sed 's#^#- `cortexpilot_orch/#; s#$#`#'
+    | sed 's#^#- `openvibecoding_orch/#; s#$#`#'
 
   cat <<'EOF'
 
 ## 4) Backend API Route Inventory
 EOF
 
-  rg -n "@app\.(get|post|put|patch|delete)\(" apps/orchestrator/src/cortexpilot_orch/api/main.py -S \
+  rg -n "@app\.(get|post|put|patch|delete)\(" apps/orchestrator/src/openvibecoding_orch/api/main.py -S \
     | sed 's#^#- `#; s#$#`#'
 
   cat <<'EOF'
@@ -61,7 +61,7 @@ EOF
 ## 5) Backend CLI Command Inventory
 EOF
 
-  rg -n "@app\.command\(" apps/orchestrator/src/cortexpilot_orch/cli.py -S \
+  rg -n "@app\.command\(" apps/orchestrator/src/openvibecoding_orch/cli.py -S \
     | sed 's#^#- `#; s#$#`#'
 
   cat <<'EOF'
@@ -85,15 +85,15 @@ EOF
 
 ## 8) Runtime Contract Anchors
 
-- Run artifacts: `.runtime-cache/cortexpilot/runs/`
+- Run artifacts: `.runtime-cache/openvibecoding/runs/`
 - Logs: `.runtime-cache/logs/{runtime,error,e2e,access,ci,governance}/`
 - Cache: `.runtime-cache/cache/{runtime,test,build}/`
 
 ## 9) Latest Coverage Snapshot (if present)
 EOF
 
-  if [ -f .runtime-cache/test_output/orchestrator_coverage.json ] && [ -n "${CORTEXPILOT_PYTHON:-}" ] && [ -x "${CORTEXPILOT_PYTHON}" ]; then
-    "${CORTEXPILOT_PYTHON}" - <<'PY'
+  if [ -f .runtime-cache/test_output/orchestrator_coverage.json ] && [ -n "${OPENVIBECODING_PYTHON:-}" ] && [ -x "${OPENVIBECODING_PYTHON}" ]; then
+    "${OPENVIBECODING_PYTHON}" - <<'PY'
 import json
 from pathlib import Path
 p = Path('.runtime-cache/test_output/orchestrator_coverage.json')

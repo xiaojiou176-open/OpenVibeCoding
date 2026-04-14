@@ -1,7 +1,7 @@
 import { createRef, type ComponentProps } from "react";
 import { act, fireEvent, render, renderHook, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { getUiCopy } from "@cortexpilot/frontend-shared/uiCopy";
+import { getUiCopy } from "@openvibecoding/frontend-shared/uiCopy";
 
 import CommandTowerHomeLayout from "../components/command-tower/CommandTowerHomeLayout";
 import { useDrawerPreferences } from "../components/command-tower/hooks/useDrawerPreferences";
@@ -757,8 +757,8 @@ describe("command tower session live sync + home layout", () => {
   });
 
   it("hydrates and persists drawer preferences when testMode is disabled", async () => {
-    const collapsedStorageKey = "cortexpilot.test.drawer.collapsed";
-    const pinnedStorageKey = "cortexpilot.test.drawer.pinned";
+    const collapsedStorageKey = "openvibecoding.test.drawer.collapsed";
+    const pinnedStorageKey = "openvibecoding.test.drawer.pinned";
     window.localStorage.setItem(collapsedStorageKey, "1");
     window.localStorage.setItem(pinnedStorageKey, "0");
 
@@ -787,8 +787,8 @@ describe("command tower session live sync + home layout", () => {
   });
 
   it("keeps default drawer preferences when testMode is enabled", async () => {
-    const collapsedStorageKey = "cortexpilot.test.drawer.collapsed.default";
-    const pinnedStorageKey = "cortexpilot.test.drawer.pinned.default";
+    const collapsedStorageKey = "openvibecoding.test.drawer.collapsed.default";
+    const pinnedStorageKey = "openvibecoding.test.drawer.pinned.default";
     window.localStorage.setItem(collapsedStorageKey, "0");
     window.localStorage.setItem(pinnedStorageKey, "0");
 

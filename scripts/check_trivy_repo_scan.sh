@@ -5,8 +5,8 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 source "$ROOT_DIR/scripts/lib/release_tool_helpers.sh"
 
-trivy_bin="$(cortexpilot_trivy_bin "$ROOT_DIR")"
-trivy_cache_dir="$(cortexpilot_release_tool_cache_dir "$ROOT_DIR" "trivy")"
+trivy_bin="$(openvibecoding_trivy_bin "$ROOT_DIR")"
+trivy_cache_dir="$(openvibecoding_release_tool_cache_dir "$ROOT_DIR" "trivy")"
 mkdir -p "$trivy_cache_dir"
 
 echo "🔐 [trivy-repo-scan] start"

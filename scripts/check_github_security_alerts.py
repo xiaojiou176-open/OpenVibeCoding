@@ -86,7 +86,7 @@ def gh_api_json(path: str) -> list[dict[str, object]]:
             "Accept": "application/vnd.github+json",
             "Authorization": f"Bearer {token}",
             "X-GitHub-Api-Version": "2022-11-28",
-            "User-Agent": "cortexpilot-github-alert-gate",
+            "User-Agent": "openvibecoding-github-alert-gate",
         },
     )
     try:

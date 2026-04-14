@@ -7,11 +7,11 @@ from typing import Any
 
 import pytest
 
-from cortexpilot_orch.chain import parsers as chain_parsers
-from cortexpilot_orch.chain import helpers as chain_helpers
-from cortexpilot_orch.chain import runner as chain_runner
-from cortexpilot_orch.chain.runner import ChainRunner
-from cortexpilot_orch.store.run_store import RunStore
+from openvibecoding_orch.chain import parsers as chain_parsers
+from openvibecoding_orch.chain import helpers as chain_helpers
+from openvibecoding_orch.chain import runner as chain_runner
+from openvibecoding_orch.chain.runner import ChainRunner
+from openvibecoding_orch.store.run_store import RunStore
 
 
 def _execute_stub(_contract_path: Path, _mock_mode: bool) -> str:
@@ -272,13 +272,13 @@ def test_chain_lifecycle_helpers_and_subprocess_paths(tmp_path: Path, monkeypatc
 
     runner = ChainRunner(tmp_path, store, _execute_stub)
 
-    monkeypatch.delenv("CORTEXPILOT_CHAIN_SUBPROCESS_TIMEOUT_SEC", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_CHAIN_SUBPROCESS_TIMEOUT_SEC", raising=False)
     assert runner._resolve_chain_subprocess_timeout_sec() is None
-    monkeypatch.setenv("CORTEXPILOT_CHAIN_SUBPROCESS_TIMEOUT_SEC", "abc")
+    monkeypatch.setenv("OPENVIBECODING_CHAIN_SUBPROCESS_TIMEOUT_SEC", "abc")
     assert runner._resolve_chain_subprocess_timeout_sec() is None
-    monkeypatch.setenv("CORTEXPILOT_CHAIN_SUBPROCESS_TIMEOUT_SEC", "0")
+    monkeypatch.setenv("OPENVIBECODING_CHAIN_SUBPROCESS_TIMEOUT_SEC", "0")
     assert runner._resolve_chain_subprocess_timeout_sec() is None
-    monkeypatch.setenv("CORTEXPILOT_CHAIN_SUBPROCESS_TIMEOUT_SEC", "3.5")
+    monkeypatch.setenv("OPENVIBECODING_CHAIN_SUBPROCESS_TIMEOUT_SEC", "3.5")
     assert runner._resolve_chain_subprocess_timeout_sec() == 3.5
 
     def _timeout_run(*args, **kwargs):
@@ -334,7 +334,7 @@ def test_chain_lifecycle_helpers_and_subprocess_paths(tmp_path: Path, monkeypatc
             "event": "CHAIN_SUBPROCESS_TIMEOUT",
             "run_id": timeout_run_id,
             "meta": {
-                "cmd": ["python", "-m", "cortexpilot_orch.cli", "run", "artifacts/chain_step_2_worker_cov_02.json"],
+                "cmd": ["python", "-m", "openvibecoding_orch.cli", "run", "artifacts/chain_step_2_worker_cov_02.json"],
                 "timeout_sec": 12,
                 "stdout": "",
                 "stderr": "timeout",
@@ -348,7 +348,7 @@ def test_chain_lifecycle_helpers_and_subprocess_paths(tmp_path: Path, monkeypatc
             "event": "CHAIN_SUBPROCESS_TIMEOUT",
             "run_id": timeout_run_id,
             "meta": {
-                "cmd": ["python", "-m", "cortexpilot_orch.cli", "run", "artifacts/chain_step_3_worker_cov_03.json"],
+                "cmd": ["python", "-m", "openvibecoding_orch.cli", "run", "artifacts/chain_step_3_worker_cov_03.json"],
                 "timeout_sec": 12,
                 "stdout": "",
                 "stderr": "timeout",

@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from cortexpilot_orch.gates.tests_gate import run_evals_gate
+from openvibecoding_orch.gates.tests_gate import run_evals_gate
 
 
 def _write_allowlist(root: Path) -> None:

@@ -9,7 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 AUDIT_LOG = ROOT / ".runtime-cache" / "test_output" / "ci_break_glass_audit.jsonl"
-OUT_DIR = ROOT / ".runtime-cache" / "cortexpilot" / "reports" / "ci" / "break_glass"
+OUT_DIR = ROOT / ".runtime-cache" / "openvibecoding" / "reports" / "ci" / "break_glass"
 
 
 def main() -> int:
@@ -27,7 +27,7 @@ def main() -> int:
     scope_counter = Counter(str(item.get("scope") or "unknown") for item in rows)
     reason_counter = Counter(str(item.get("reason") or "unknown") for item in rows)
     payload = {
-        "report_type": "cortexpilot_ci_break_glass_dashboard",
+        "report_type": "openvibecoding_ci_break_glass_dashboard",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "audit_log": str(AUDIT_LOG),
         "total_events": len(rows),

@@ -2,7 +2,7 @@
 
 run_ci_step75_release_evidence_chain() {
   echo "🚀 [STEP 7.5/12] Start: Release-governance evidence chain"
-  CANARY_DRY_RUN_MODE="${CORTEXPILOT_CI_CANARY_DRY_RUN:-0}"
+  CANARY_DRY_RUN_MODE="${OPENVIBECODING_CI_CANARY_DRY_RUN:-0}"
   CANARY_WATCHDOG_ARGS=()
   if [[ "${CANARY_DRY_RUN_MODE}" == "1" ]]; then
     CANARY_WATCHDOG_ARGS+=(--dry-run)

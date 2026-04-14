@@ -5,10 +5,10 @@ from pathlib import Path
 
 import pytest
 
-from cortexpilot_orch.runners.app_server_runner import AppServerRunner
-from cortexpilot_orch.scheduler import scheduler as sched
-from cortexpilot_orch.scheduler import scheduler_bridge_runtime as bridge_runtime
-from cortexpilot_orch.store.run_store import RunStore
+from openvibecoding_orch.runners.app_server_runner import AppServerRunner
+from openvibecoding_orch.scheduler import scheduler as sched
+from openvibecoding_orch.scheduler import scheduler_bridge_runtime as bridge_runtime
+from openvibecoding_orch.store.run_store import RunStore
 
 
 def test_human_approval_flow_reads_events(tmp_path: Path, monkeypatch) -> None:
@@ -18,17 +18,17 @@ def test_human_approval_flow_reads_events(tmp_path: Path, monkeypatch) -> None:
     events_path = runs_root / run_id / "events.jsonl"
     events_path.write_text(json.dumps({"event": "HUMAN_APPROVAL_COMPLETED"}) + "\n", encoding="utf-8")
 
-    monkeypatch.setenv("CORTEXPILOT_GOD_MODE_TIMEOUT_SEC", "2")
+    monkeypatch.setenv("OPENVIBECODING_GOD_MODE_TIMEOUT_SEC", "2")
     approved = sched._await_human_approval(run_id, store)
     assert approved is True
 
 
 def test_requires_human_approval_respects_env(monkeypatch) -> None:
     contract = {"tool_permissions": {"network": "deny", "shell": "on-request"}}
-    monkeypatch.setenv("CORTEXPILOT_GOD_MODE_REQUIRED", "1")
+    monkeypatch.setenv("OPENVIBECODING_GOD_MODE_REQUIRED", "1")
     assert sched._requires_human_approval(contract, requires_network=False) is True
-    monkeypatch.setenv("CORTEXPILOT_GOD_MODE_REQUIRED", "0")
-    monkeypatch.setenv("CORTEXPILOT_GOD_MODE_ON_REQUEST", "1")
+    monkeypatch.setenv("OPENVIBECODING_GOD_MODE_REQUIRED", "0")
+    monkeypatch.setenv("OPENVIBECODING_GOD_MODE_ON_REQUEST", "1")
     assert sched._requires_human_approval(contract, requires_network=False) is True
 
 
@@ -37,7 +37,7 @@ def test_safe_artifact_path_and_json_loader(tmp_path: Path, monkeypatch) -> None
     repo_root.mkdir()
     runtime_root = tmp_path / "runtime"
     runtime_root.mkdir()
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
 
     repo_file = repo_root / "artifact.json"
     repo_file.write_text(json.dumps({"ok": True}), encoding="utf-8")
@@ -64,7 +64,7 @@ def test_safe_artifact_path_and_json_loader(tmp_path: Path, monkeypatch) -> None
 def test_load_search_requests_variants(tmp_path: Path, monkeypatch) -> None:
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(tmp_path / "runtime"))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(tmp_path / "runtime"))
 
     list_path = repo_root / "search_requests.json"
     list_path.write_text(json.dumps(["q1", "q2"]), encoding="utf-8")
@@ -230,22 +230,22 @@ def test_select_runner_does_not_probe_adapter_for_agents_or_app_server(tmp_path:
     store = RunStore(runs_root=tmp_path / "runs")
 
     def _forbidden_import(name: str):
-        if name == "cortexpilot_orch.runners.execution_adapter":
+        if name == "openvibecoding_orch.runners.execution_adapter":
             raise AssertionError("execution adapter must not be resolved for agents/app-server")
         raise ModuleNotFoundError(name)
 
     monkeypatch.setattr(bridge_runtime, "import_module", _forbidden_import)
 
-    monkeypatch.setenv("CORTEXPILOT_RUNNER", "agents")
+    monkeypatch.setenv("OPENVIBECODING_RUNNER", "agents")
     assert sched._select_runner({}, store).__class__.__name__ == "AgentsRunner"
 
-    monkeypatch.setenv("CORTEXPILOT_RUNNER", "app-server")
+    monkeypatch.setenv("OPENVIBECODING_RUNNER", "app-server")
     assert isinstance(sched._select_runner({}, store), AppServerRunner)
 
 
 def test_run_search_pipeline_with_verify(tmp_path: Path, monkeypatch) -> None:
     runs_root = tmp_path / "runs"
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
     store = RunStore(runs_root=runs_root)
     run_id = store.create_run("task_search")
 
@@ -299,7 +299,7 @@ def test_run_search_pipeline_with_verify(tmp_path: Path, monkeypatch) -> None:
 
 def test_run_search_pipeline_serializes_allow_profile_browser_sessions(tmp_path: Path, monkeypatch) -> None:
     runs_root = tmp_path / "runs"
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
     store = RunStore(runs_root=runs_root)
     run_id = store.create_run("task_search_serialized")
 
@@ -346,7 +346,7 @@ def test_orchestrator_replay_error_paths(tmp_path: Path, monkeypatch) -> None:
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
     runs_root = tmp_path / "runs"
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
     orch = sched.Orchestrator(repo_root)
 
     run_id = RunStore(runs_root=runs_root).create_run("task_replay")

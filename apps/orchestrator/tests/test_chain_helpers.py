@@ -1,7 +1,7 @@
 from pathlib import Path
 import json
 
-from cortexpilot_orch.chain.helpers import (
+from openvibecoding_orch.chain.helpers import (
     _check_exclusive_paths,
     _exclusive_paths_for_step,
     _normalize_depends,
@@ -9,7 +9,7 @@ from cortexpilot_orch.chain.helpers import (
     _prefix_before_glob,
     _step_task_id,
 )
-from cortexpilot_orch.chain.runner import (
+from openvibecoding_orch.chain.runner import (
     _apply_context_policy,
     _artifact_names,
     _is_purified_name,

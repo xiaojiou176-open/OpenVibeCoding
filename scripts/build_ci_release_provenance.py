@@ -11,7 +11,7 @@ from ci_current_run_support import current_truth_authority, load_source_manifest
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DOCKER_METADATA_TIMEOUT_SEC = int(os.environ.get("CORTEXPILOT_CI_DOCKER_METADATA_TIMEOUT_SEC", "30"))
+DOCKER_METADATA_TIMEOUT_SEC = int(os.environ.get("OPENVIBECODING_CI_DOCKER_METADATA_TIMEOUT_SEC", "30"))
 
 
 def _git(*args: str) -> str:
@@ -51,9 +51,9 @@ def _docker_inspect(image: str) -> tuple[dict, dict[str, object]]:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Build release provenance for the current CI run.")
     parser.add_argument("--source-manifest", default="")
-    parser.add_argument("--image", default=os.environ.get("CORTEXPILOT_CI_PROVENANCE_IMAGE", "cortexpilot-ci-core:local"))
+    parser.add_argument("--image", default=os.environ.get("OPENVIBECODING_CI_PROVENANCE_IMAGE", "openvibecoding-ci-core:local"))
     parser.add_argument("--strict", action="store_true")
-    parser.add_argument("--out-dir", default=".runtime-cache/cortexpilot/release/provenance")
+    parser.add_argument("--out-dir", default=".runtime-cache/openvibecoding/release/provenance")
     return parser.parse_args()
 
 
@@ -78,7 +78,7 @@ def main() -> int:
             return 1
     inspect, docker_probe = _docker_inspect(args.image)
     payload = {
-        "report_type": "cortexpilot_ci_release_provenance",
+        "report_type": "openvibecoding_ci_release_provenance",
         "generated_at": now_utc(),
         "authoritative": bool(authority["authoritative_current_truth"]),
         **authority,
@@ -94,7 +94,7 @@ def main() -> int:
             "name": args.image,
             "id": inspect.get("Id", ""),
             "repo_tags": inspect.get("RepoTags") or [],
-            "input_hash": ((inspect.get("Config") or {}).get("Labels") or {}).get("org.cortexpilot.ci.input-hash", ""),
+            "input_hash": ((inspect.get("Config") or {}).get("Labels") or {}).get("org.openvibecoding.ci.input-hash", ""),
         },
         "docker_probe": docker_probe,
         **meta,

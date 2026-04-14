@@ -10,7 +10,7 @@
     />
     <meta
       name="keywords"
-      content="OpenVibeCoding distribution status, CortexPilot release truth, read-only MCP, starter kits, builder packages, hosted deferred"
+      content="OpenVibeCoding distribution status, OpenVibeCoding release truth, read-only MCP, starter kits, builder packages, hosted deferred"
     />
     <link rel="canonical" href="https://xiaojiou176-open.github.io/OpenVibeCoding/distribution/" />
     <meta property="og:title" content="OpenVibeCoding | Distribution status and release truth" />
@@ -225,15 +225,15 @@
         </p>
         <p class="lede">
           The current package and discovery layer is real:
-          <strong>cortexpilot-orchestrator</strong> is live on PyPI,
+          <strong>openvibecoding-orchestrator</strong> is live on PyPI,
           the <strong>Official MCP Registry</strong> entry is live,
-          and <strong>cortexpilot-adoption-router</strong> is live on ClawHub.
+          and <strong>openvibecoding-adoption-router</strong> is live on ClawHub.
           <strong>OpenHands/extensions</strong> and <strong>MCP.so</strong>
           submissions are filed but still await external review or acceptance.
-          <strong>@cortexpilot/frontend-api-client</strong> and
-          <strong>@cortexpilot/frontend-api-contract</strong> remain
+          <strong>@openvibecoding/frontend-api-client</strong> and
+          <strong>@openvibecoding/frontend-api-contract</strong> remain
           <strong>publish-ready but deferred</strong>, while
-          <strong>@cortexpilot/frontend-shared</strong> remains a
+          <strong>@openvibecoding/frontend-shared</strong> remains a
           <strong>workspace-only presentation substrate</strong>.
           Hosted operator service, write-capable MCP, Docker image distribution, and standalone npm releases remain <strong>deferred</strong>.
         </p>
@@ -282,7 +282,7 @@
           The shipped public MCP surface is the repo-owned <strong>read-only stdio JSON-RPC</strong> server.
           The shortest official startup path is the wrapper:
         </p>
-        <pre><code>bash /absolute/path/to/CortexPilot/scripts/run_readonly_mcp.sh</code></pre>
+        <pre><code>bash /absolute/path/to/OpenVibeCoding/scripts/run_openvibecoding_readonly_mcp.sh</code></pre>
         <p>
           For the machine-readable contract, use
           <a href="https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/configs/mcp_public_manifest.json"><code>configs/mcp_public_manifest.json</code></a>.
@@ -333,23 +333,23 @@
                 <td><strong>Read-only MCP</strong></td>
                 <td><span class="badge shipped">shipped</span></td>
                 <td>Repo-owned read-only MCP server for runs, workflows, approvals, compare, proof, and incident summaries.</td>
-                <td><code>bash /absolute/path/to/CortexPilot/scripts/run_readonly_mcp.sh</code></td>
+                <td><code>bash /absolute/path/to/OpenVibeCoding/scripts/run_openvibecoding_readonly_mcp.sh</code></td>
                 <td>stdio JSON-RPC, read-only, no hosted account, no OAuth</td>
                 <td>Keep wrapper + manifest + starter files aligned; do not imply write-capable or hosted MCP.</td>
               </tr>
               <tr>
                 <td><strong>PyPI package</strong></td>
                 <td><span class="badge shipped">shipped</span></td>
-                <td><code>cortexpilot-orchestrator==0.1.0a4</code> is the published package for the public read-only MCP runtime.</td>
-                <td><a href="https://pypi.org/project/cortexpilot-orchestrator/0.1.0a4/">PyPI package</a></td>
+                <td><code>openvibecoding-orchestrator==0.1.0a4</code> is the published package for the public read-only MCP runtime.</td>
+                <td><a href="https://pypi.org/project/openvibecoding-orchestrator/0.1.0a4/">PyPI package</a></td>
                 <td>Package install only</td>
                 <td>Keep package README, entrypoints, and version markers aligned with registry truth.</td>
               </tr>
               <tr>
                 <td><strong>Official MCP Registry</strong></td>
                 <td><span class="badge shipped">shipped</span></td>
-                <td>The public registry entry for <code>io.github.xiaojiou176-open/cortexpilot-readonly</code> is live.</td>
-                <td><a href="https://registry.modelcontextprotocol.io/v0/servers?search=io.github.xiaojiou176-open/cortexpilot-readonly">Registry entry</a></td>
+                <td>The public registry entry for <code>io.github.xiaojiou176-open/openvibecoding-readonly</code> is live.</td>
+                <td><a href="https://registry.modelcontextprotocol.io/v0/servers?search=io.github.xiaojiou176-open/openvibecoding-readonly">Registry entry</a></td>
                 <td>Registry discovery, stdio package install</td>
                 <td>Keep <code>server.json</code>, PyPI metadata, and the MCP docs aligned.</td>
               </tr>
@@ -381,7 +381,7 @@
                 <td><strong>Coding-agent bundle</strong></td>
                 <td><span class="badge starter">bundle-compatible</span></td>
                 <td>Portable local bundle for Codex / Claude Code / OpenClaw-compatible installs.</td>
-                <td><code>examples/coding-agents/plugin-bundles/cortexpilot-coding-agent-bundle/</code></td>
+                <td><code>examples/coding-agents/plugin-bundles/openvibecoding-coding-agent-bundle/</code></td>
                 <td>Local bundle metadata + plugin-scoped read-only MCP</td>
                 <td>Keep local-first; do not call it a published listing.</td>
               </tr>
@@ -389,16 +389,16 @@
                 <td><strong>Repo-owned adoption-router skill</strong></td>
                 <td><span class="badge shipped">shipped</span></td>
                 <td>Cross-tool skill artifact with <code>SKILL.md</code> plus <code>manifest.yaml</code> for Codex / Claude Code / OpenClaw-compatible installs, shared between the public skill packet, the local bundle example, and the published ClawHub skill.</td>
-                <td><code>public-skills/cortexpilot-adoption-router/</code></td>
+                <td><code>public-skills/openvibecoding-adoption-router/</code></td>
                 <td>Repo-owned skill contract, public skill packet plus local bundle example</td>
                 <td>Keep the public packet, repo bundle, and published skill receipts aligned.</td>
               </tr>
               <tr>
                 <td><strong>ClawHub skill</strong></td>
                 <td><span class="badge shipped">shipped</span></td>
-                <td><code>cortexpilot-adoption-router</code> is live on ClawHub.</td>
-                <td><a href="https://www.clawhub.ai/skills/cortexpilot-adoption-router">ClawHub listing</a></td>
-                <td>Skill registry, no hosted CortexPilot account, no write-capable MCP</td>
+                <td><code>openvibecoding-adoption-router</code> is live on ClawHub.</td>
+                <td><a href="https://www.clawhub.ai/skills/openvibecoding-adoption-router">ClawHub listing</a></td>
+                <td>Skill registry, no hosted OpenVibeCoding account, no write-capable MCP</td>
                 <td>Keep the skill copy aligned with the repo bundle and public boundary.</td>
               </tr>
               <tr>
@@ -418,7 +418,7 @@
                 <td>Keep the issue body aligned with current package and registry truth.</td>
               </tr>
               <tr>
-                <td><strong>@cortexpilot/frontend-api-client</strong></td>
+                <td><strong>@openvibecoding/frontend-api-client</strong></td>
                 <td><span class="badge starter">publish-ready but deferred</span></td>
                 <td>Thin client helper with a publish-ready manifest, but no public npm release yet.</td>
                 <td><a href="../builders/">Builder quickstart</a></td>
@@ -426,7 +426,7 @@
                 <td>Keep the install story honest as clone/workspace reuse or vendor copy until the first npm release exists.</td>
               </tr>
               <tr>
-                <td><strong>@cortexpilot/frontend-api-contract</strong></td>
+                <td><strong>@openvibecoding/frontend-api-contract</strong></td>
                 <td><span class="badge starter">publish-ready but deferred</span></td>
                 <td>Generated contract-facing package with a publish-ready manifest, but no public npm release yet.</td>
                 <td><a href="../api/">API quickstart</a></td>
@@ -434,9 +434,9 @@
                 <td>Keep the install story honest as clone/workspace reuse or vendor copy until the first npm release exists.</td>
               </tr>
               <tr>
-                <td><strong>@cortexpilot/frontend-shared</strong></td>
+                <td><strong>@openvibecoding/frontend-shared</strong></td>
                 <td><span class="badge starter">not a standalone distribution unit</span></td>
-                <td>Shared UI copy, locale, and status substrate for CortexPilot-owned surfaces.</td>
+                <td>Shared UI copy, locale, and status substrate for OpenVibeCoding-owned surfaces.</td>
                 <td><a href="../builders/">Builder quickstart</a></td>
                 <td>Frontend-only presentation helpers</td>
                 <td>Keep repo-owned and workspace-only unless a separate reuse story is explicitly promoted later.</td>
@@ -452,7 +452,7 @@
               <tr>
                 <td><strong>Hosted Render pilot</strong></td>
                 <td><span class="badge deferred">deferred</span></td>
-                <td>Repo-owned hosted blueprint exists for guarded future pilots; CortexPilot is not a hosted operator product today.</td>
+                <td>Repo-owned hosted blueprint exists for guarded future pilots; OpenVibeCoding is not a hosted operator product today.</td>
                 <td><a href="https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/docs/runbooks/render-hosted-operator-pilot.md">Render pilot runbook</a></td>
                 <td>HTTP / token / protected operator flow</td>
                 <td>Keep as future pilot groundwork, not a live hosted claim.</td>

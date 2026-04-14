@@ -93,8 +93,8 @@ describe("command tower async hardening (home)", () => {
     fireEvent.click(failedCheckbox);
     fireEvent.click(failedCheckbox);
     fireEvent.click(failedCheckbox);
-    fireEvent.change(screen.getByPlaceholderText(/e\.g\. cortexpilot|cortexpilot/i), {
-      target: { value: "cortexpilot" },
+    fireEvent.change(screen.getByPlaceholderText(/e\.g\. openvibecoding|openvibecoding/i), {
+      target: { value: "openvibecoding" },
     });
     fireEvent.change(screen.getByRole("combobox"), {
       target: { value: "failed_desc" },
@@ -114,7 +114,7 @@ describe("command tower async hardening (home)", () => {
 
       expect(lastCall).not.toBeUndefined();
       expect(lastCall?.status).toEqual(["failed"]);
-      expect(lastCall?.projectKey).toBe("cortexpilot");
+      expect(lastCall?.projectKey).toBe("openvibecoding");
       expect(lastCall?.sort).toBe("failed_desc");
     });
   });
@@ -125,7 +125,7 @@ describe("command tower async hardening (home)", () => {
       window.history.pushState(
         {},
         "",
-        "/command-tower?status[]=failed&project_key=cortexpilot&sort=failed_desc&focus=blocked&live=0",
+        "/command-tower?status[]=failed&project_key=openvibecoding&sort=failed_desc&focus=blocked&live=0",
       );
 
       render(
@@ -144,7 +144,7 @@ describe("command tower async hardening (home)", () => {
             }
           | undefined;
         expect(lastCall?.status).toEqual(["failed"]);
-        expect(lastCall?.projectKey).toBe("cortexpilot");
+        expect(lastCall?.projectKey).toBe("openvibecoding");
         expect(lastCall?.sort).toBe("failed_desc");
       });
 
@@ -167,13 +167,13 @@ describe("command tower async hardening (home)", () => {
 
     await ensureDrawerOpen();
     const filterRegion = screen.getByRole("region", { name: /Filter console|Filters/i });
-    const projectInput = screen.getByPlaceholderText(/e\.g\. cortexpilot|cortexpilot/i);
-    fireEvent.change(projectInput, { target: { value: "cortexpilot" } });
+    const projectInput = screen.getByPlaceholderText(/e\.g\. openvibecoding|openvibecoding/i);
+    fireEvent.change(projectInput, { target: { value: "openvibecoding" } });
 
     fireEvent.click(within(filterRegion).getByRole("button", { name: /Apply filters|Apply/i }));
     await waitFor(() => {
       const lastCall = mockFetchPmSessions.mock.calls.at(-1)?.[0] as { projectKey?: string } | undefined;
-      expect(lastCall?.projectKey).toBe("cortexpilot");
+      expect(lastCall?.projectKey).toBe("openvibecoding");
     });
 
     fireEvent.click(within(filterRegion).getByRole("button", { name: /Reset filters|Reset/i }));
@@ -373,7 +373,7 @@ describe("command tower async hardening (home)", () => {
     });
 
     await ensureDrawerOpen();
-    const projectInput = screen.getByPlaceholderText(/e\.g\. cortexpilot|cortexpilot/i);
+    const projectInput = screen.getByPlaceholderText(/e\.g\. openvibecoding|openvibecoding/i);
     await act(async () => {
       fireEvent.change(projectInput, { target: { value: "tower" } });
     });
@@ -402,7 +402,7 @@ describe("command tower async hardening (home)", () => {
     await act(async () => {
       fireEvent.keyDown(projectInput, { key: "Escape" });
     });
-    expect(screen.getByPlaceholderText(/例如：cortexpilot|cortexpilot/)).toHaveValue("");
+    expect(screen.getByPlaceholderText(/例如：openvibecoding|openvibecoding/)).toHaveValue("");
   });
 
   it("stops polling loop immediately after pausing live refresh", async () => {
@@ -571,7 +571,7 @@ describe("command tower async hardening (home)", () => {
     );
 
     await ensureDrawerOpen();
-    fireEvent.keyDown(screen.getByPlaceholderText(/e\.g\. cortexpilot|cortexpilot/i), { key: "x" });
+    fireEvent.keyDown(screen.getByPlaceholderText(/e\.g\. openvibecoding|openvibecoding/i), { key: "x" });
 
     await act(async () => {
       await vi.advanceTimersByTimeAsync(10);

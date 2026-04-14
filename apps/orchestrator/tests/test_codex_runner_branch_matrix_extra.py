@@ -4,8 +4,8 @@ from pathlib import Path
 
 import pytest
 
-from cortexpilot_orch.runners import codex_runner as codex_mod
-from cortexpilot_orch.store.run_store import RunStore
+from openvibecoding_orch.runners import codex_runner as codex_mod
+from openvibecoding_orch.store.run_store import RunStore
 
 
 class _NoopValidator:
@@ -96,31 +96,31 @@ def test_codex_runner_helper_branches(monkeypatch: pytest.MonkeyPatch) -> None:
         "failure": None,
     }
 
-    monkeypatch.setenv("CORTEXPILOT_CODEX_PROFILE", "  profile-a  ")
+    monkeypatch.setenv("OPENVIBECODING_CODEX_PROFILE", "  profile-a  ")
     assert codex_mod._resolve_profile() == "profile-a"
-    monkeypatch.setenv("CORTEXPILOT_CODEX_PROFILE", "")
+    monkeypatch.setenv("OPENVIBECODING_CODEX_PROFILE", "")
     monkeypatch.setattr(codex_mod, "pick_profile", lambda: "pool-profile")
     assert codex_mod._resolve_profile() == "pool-profile"
 
-    monkeypatch.setenv("CORTEXPILOT_CODEX_MODEL", "  gpt-5.2-codex  ")
+    monkeypatch.setenv("OPENVIBECODING_CODEX_MODEL", "  gpt-5.2-codex  ")
     assert codex_mod._resolve_model() == "gpt-5.2-codex"
-    monkeypatch.setenv("CORTEXPILOT_CODEX_MODEL", "")
+    monkeypatch.setenv("OPENVIBECODING_CODEX_MODEL", "")
     assert codex_mod._resolve_model() is None
 
-    monkeypatch.setenv("CORTEXPILOT_CODEX_USE_OUTPUT_SCHEMA", "1")
+    monkeypatch.setenv("OPENVIBECODING_CODEX_USE_OUTPUT_SCHEMA", "1")
     assert codex_mod._use_output_schema() is True
-    monkeypatch.setenv("CORTEXPILOT_CODEX_USE_OUTPUT_SCHEMA", "")
+    monkeypatch.setenv("OPENVIBECODING_CODEX_USE_OUTPUT_SCHEMA", "")
     assert codex_mod._use_output_schema() is False
 
 
 def test_codex_runner_blocks_mcp_only_and_shell_deny(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     store = RunStore(runs_root=tmp_path)
     run_id = store.create_run("task-mcp-only")
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", run_id)
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", run_id)
 
     contract = _base_contract("task-mcp-only")
-    monkeypatch.setenv("CORTEXPILOT_MCP_ONLY", "1")
-    monkeypatch.delenv("CORTEXPILOT_ALLOW_CODEX_EXEC", raising=False)
+    monkeypatch.setenv("OPENVIBECODING_MCP_ONLY", "1")
+    monkeypatch.delenv("OPENVIBECODING_ALLOW_CODEX_EXEC", raising=False)
     blocked = codex_mod.CodexRunner(store).run_contract(
         contract,
         tmp_path,
@@ -132,7 +132,7 @@ def test_codex_runner_blocks_mcp_only_and_shell_deny(monkeypatch: pytest.MonkeyP
 
     contract_shell_deny = _base_contract("task-shell-deny")
     contract_shell_deny["tool_permissions"]["shell"] = "deny"
-    monkeypatch.setenv("CORTEXPILOT_MCP_ONLY", "0")
+    monkeypatch.setenv("OPENVIBECODING_MCP_ONLY", "0")
     denied = codex_mod.CodexRunner(store).run_contract(
         contract_shell_deny,
         tmp_path,
@@ -158,7 +158,7 @@ def test_codex_runner_blocks_mcp_only_and_shell_deny(monkeypatch: pytest.MonkeyP
 def test_codex_runner_mock_read_only_and_wrapper(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     store = RunStore(runs_root=tmp_path)
     run_id = store.create_run("task-read-only")
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", run_id)
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", run_id)
 
     repo_root = Path(__file__).resolve().parents[3]
     schema_path = repo_root / "schemas" / "task_result.v1.json"
@@ -188,7 +188,7 @@ def test_codex_runner_mock_read_only_and_wrapper(monkeypatch: pytest.MonkeyPatch
 def test_codex_runner_mock_mode_still_validates_contract(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     store = RunStore(runs_root=tmp_path)
     run_id = store.create_run("task-mock-validate")
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", run_id)
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", run_id)
 
     repo_root = Path(__file__).resolve().parents[3]
     schema_path = repo_root / "schemas" / "task_result.v1.json"
@@ -218,10 +218,10 @@ def test_codex_runner_resume_profile_and_non_json_stream(
 ) -> None:
     store = RunStore(runs_root=tmp_path)
     run_id = store.create_run("task-stream")
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", run_id)
-    monkeypatch.setenv("CORTEXPILOT_MCP_ONLY", "0")
-    monkeypatch.setenv("CORTEXPILOT_CODEX_PROFILE", "profile-z")
-    monkeypatch.setenv("CORTEXPILOT_CODEX_MODEL", "gpt-5.2-codex")
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", run_id)
+    monkeypatch.setenv("OPENVIBECODING_MCP_ONLY", "0")
+    monkeypatch.setenv("OPENVIBECODING_CODEX_PROFILE", "profile-z")
+    monkeypatch.setenv("OPENVIBECODING_CODEX_MODEL", "gpt-5.2-codex")
 
     repo_root = Path(__file__).resolve().parents[3]
     schema_path = repo_root / "schemas" / "task_result.v1.json"
@@ -280,9 +280,9 @@ def test_codex_runner_resume_profile_and_non_json_stream(
 def test_codex_runner_timeout_returns_failure(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
     store = RunStore(runs_root=tmp_path)
     run_id = store.create_run("task-timeout")
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", run_id)
-    monkeypatch.setenv("CORTEXPILOT_MCP_ONLY", "0")
-    monkeypatch.setenv("CORTEXPILOT_CODEX_EXEC_TIMEOUT_SEC", "60")
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", run_id)
+    monkeypatch.setenv("OPENVIBECODING_MCP_ONLY", "0")
+    monkeypatch.setenv("OPENVIBECODING_CODEX_EXEC_TIMEOUT_SEC", "60")
 
     repo_root = Path(__file__).resolve().parents[3]
     schema_path = repo_root / "schemas" / "task_result.v1.json"

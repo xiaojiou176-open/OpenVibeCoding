@@ -1,4 +1,4 @@
-Design a **Run Detail / Proof & Replay** page for CortexPilot.
+Design a **Run Detail / Proof & Replay** page for OpenVibeCoding.
 
 This page is the truth room.
 

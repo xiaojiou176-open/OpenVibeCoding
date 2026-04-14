@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from cortexpilot_orch.worktrees import manager as worktree_manager
+from openvibecoding_orch.worktrees import manager as worktree_manager
 
 
 def _init_repo(repo: Path) -> str:
@@ -23,7 +23,7 @@ def test_worktree_manager_create_and_remove(tmp_path: Path, monkeypatch) -> None
     baseline = _init_repo(repo)
 
     worktree_root = tmp_path / "worktrees"
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(worktree_root))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(worktree_root))
     monkeypatch.chdir(repo)
 
     worktree_path = worktree_manager.create_worktree("run-1", "task-1", baseline)

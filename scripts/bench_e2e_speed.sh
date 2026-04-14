@@ -7,7 +7,7 @@ source "$ROOT_DIR/scripts/lib/env.sh"
 
 PYTHON_BIN="${PYTHON_BIN:-}"
 if [[ -z "$PYTHON_BIN" ]]; then
-  PYTHON_BIN="${CORTEXPILOT_PYTHON:-}"
+  PYTHON_BIN="${OPENVIBECODING_PYTHON:-}"
 fi
 if [[ -z "$PYTHON_BIN" ]]; then
   echo "❌ [bench-e2e-speed] missing managed Python toolchain (run ./scripts/bootstrap.sh)" >&2

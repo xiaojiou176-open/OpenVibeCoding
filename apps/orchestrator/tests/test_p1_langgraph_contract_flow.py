@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from cortexpilot_orch.runners import agents_contract_flow
+from openvibecoding_orch.runners import agents_contract_flow
 
 
 class _DummyStore:
@@ -51,7 +51,7 @@ def test_contract_flow_default_path_keeps_legacy_runner(monkeypatch, tmp_path: P
 
     monkeypatch.setattr(agents_contract_flow, "AgentsRunner", _FakeRunner)
     monkeypatch.setattr(agents_contract_flow, "_resolve_langgraph_executor", _should_not_call)
-    monkeypatch.delenv("CORTEXPILOT_LANGGRAPH_CONTRACT_SUBFLOW", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_LANGGRAPH_CONTRACT_SUBFLOW", raising=False)
 
     contract = {"task_id": "task_legacy", "run_id": "run_legacy"}
     store = _DummyStore()
@@ -182,7 +182,7 @@ def test_contract_flow_enables_langgraph_when_subflow_enabled_without_engine(
 
     monkeypatch.setattr(agents_contract_flow, "AgentsRunner", _FakeRunner)
     monkeypatch.setattr(agents_contract_flow, "_resolve_langgraph_executor", lambda: _fake_langgraph)
-    monkeypatch.delenv("CORTEXPILOT_LANGGRAPH_CONTRACT_SUBFLOW", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_LANGGRAPH_CONTRACT_SUBFLOW", raising=False)
 
     contract = {
         "task_id": "task_subflow_enabled_no_engine",
@@ -228,7 +228,7 @@ def test_contract_flow_subflow_enabled_false_blocks_env_override(monkeypatch, tm
 
     monkeypatch.setattr(agents_contract_flow, "AgentsRunner", _FakeRunner)
     monkeypatch.setattr(agents_contract_flow, "_resolve_langgraph_executor", _should_not_call)
-    monkeypatch.setenv("CORTEXPILOT_LANGGRAPH_CONTRACT_SUBFLOW", "1")
+    monkeypatch.setenv("OPENVIBECODING_LANGGRAPH_CONTRACT_SUBFLOW", "1")
 
     contract = {
         "task_id": "task_subflow_disabled_no_engine",

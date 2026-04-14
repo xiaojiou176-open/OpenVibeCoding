@@ -29,8 +29,8 @@ def _load(path: Path | None) -> dict[str, Any]:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Validate current-run CI sources and linked reports.")
     parser.add_argument("--source-manifest", default="")
-    parser.add_argument("--out-json", default=".runtime-cache/cortexpilot/reports/ci/current_run/consistency.json")
-    parser.add_argument("--out-markdown", default=".runtime-cache/cortexpilot/reports/ci/current_run/consistency.md")
+    parser.add_argument("--out-json", default=".runtime-cache/openvibecoding/reports/ci/current_run/consistency.json")
+    parser.add_argument("--out-markdown", default=".runtime-cache/openvibecoding/reports/ci/current_run/consistency.md")
     return parser.parse_args()
 
 
@@ -44,7 +44,7 @@ def main() -> int:
         source_manifest = load_source_manifest(args.source_manifest or None)
     except ValueError as exc:
         payload = {
-            "report_type": "cortexpilot_ci_current_run_consistency",
+            "report_type": "openvibecoding_ci_current_run_consistency",
             "generated_at": now_utc(),
             "status": "fail",
             "errors": [
@@ -177,7 +177,7 @@ def main() -> int:
             errors.append(f"missing expected file: {path}")
 
     payload = {
-        "report_type": "cortexpilot_ci_current_run_consistency",
+        "report_type": "openvibecoding_ci_current_run_consistency",
         "generated_at": now_utc(),
         "status": "fail" if errors else ("pass" if authority["authoritative_current_truth"] else "advisory"),
         "errors": errors,

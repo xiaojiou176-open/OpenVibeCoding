@@ -124,28 +124,28 @@ This file mirrors the root AI entrypoint for tools that prefer `CLAUDE.md`.
 - when retention and space-governance contracts change, sync the root AI/docs
   entrypoints in the same patch; current examples include retention
   `log_lane_summary` + `space_bridge`, serial-only heavy cleanup ordering,
-  cleanup inventory consistency checks, and the rule that `~/.cache/cortexpilot`
+  cleanup inventory consistency checks, and the rule that `~/.cache/openvibecoding`
   is the repo-external strong-related root while shared ecosystem layers stay
   observe-only; current Docker runtime lane changes must keep cleanup scoped to
-  CortexPilot-owned images/containers/volumes while workstation-global
+  OpenVibeCoding-owned images/containers/volumes while workstation-global
   Docker/cache totals stay audit-only; current machine-temp examples also
-  include `~/.cache/cortexpilot/tmp/docker-ci/runner-temp-*`,
-  `~/.cache/cortexpilot/tmp/clean-room-machine-cache.*`, and
-  `~/.cache/cortexpilot/tmp/clean-room-preserve.*`, which stay
+  include `~/.cache/openvibecoding/tmp/docker-ci/runner-temp-*`,
+  `~/.cache/openvibecoding/tmp/clean-room-machine-cache.*`, and
+  `~/.cache/openvibecoding/tmp/clean-room-preserve.*`, which stay
   repo-external-related under wave3 instead of defaulting to Darwin `TMPDIR`;
   current closeout slices also include `machine_cache_summary` +
   `machine_cache_auto_prune` in the retention/space-governance bridge, the
   structured Docker runtime receipt at
-  `.runtime-cache/cortexpilot/reports/space_governance/docker_runtime.json`,
+  `.runtime-cache/openvibecoding/reports/space_governance/docker_runtime.json`,
   repo-owned buildx local cache under
-  `~/.cache/cortexpilot/docker-buildx-cache/`, plus the repo-owned singleton
-  Chrome root under `~/.cache/cortexpilot/browser/chrome-user-data/` that
+  `~/.cache/openvibecoding/docker-buildx-cache/`, plus the repo-owned singleton
+  Chrome root under `~/.cache/openvibecoding/browser/chrome-user-data/` that
   `allow_profile` now attaches to over the fixed CDP endpoint instead of
   reusing the default Chrome root; CI / docker / clean-room lanes still fail
   closed back to `ephemeral`
 - when workflow-case / proof-pack / compare / task-pack / queue-scheduling
   contracts change, sync the root AI/docs entrypoints in the same patch; the
-  current examples are `.runtime-cache/cortexpilot/workflow-cases/`,
+  current examples are `.runtime-cache/openvibecoding/workflow-cases/`,
   `proof_pack.json`, dedicated run-compare surfaces, desktop Flight Plan
   preview, and timezone-safe queue scheduling inputs
 - when Version B closeout work changes the public front door, shared locale
@@ -210,7 +210,7 @@ This file mirrors the root AI entrypoint for tools that prefer `CLAUDE.md`.
   "AI Work Command Tower for Codex, Claude Code, and MCP"
 - when a later Phase 2 wave hardens desktop `Run Detail` / `Overview`
   operator-surface locale coverage or moves more desktop strings onto
-  `@cortexpilot/frontend-shared`, keep the root AI entrypoints aligned in the
+  `@openvibecoding/frontend-shared`, keep the root AI entrypoints aligned in the
   same patch; current examples include locale-aware desktop status labels,
   shared-copy Run Detail table/action chrome, and zh-CN regression coverage
 - when a front-door discoverability wave adds or reprioritizes public
@@ -256,7 +256,7 @@ This file mirrors the root AI entrypoint for tools that prefer `CLAUDE.md`.
   current examples include `docs/agent-starters/index.html`,
   `docs/examples/agent-starters/`, `examples/coding-agents/`,
   `configs/root_allowlist.json`, and the root/docs wording that now separates
-  host-platform plugin reality from CortexPilot's own publication state
+  host-platform plugin reality from OpenVibeCoding's own publication state
 - when a later polish wave compresses the public homepage or dashboard-home
   discovery stack into a clearer route page, keep this file, `AGENTS.md`, and
   the root/docs/dashboard entrypoints aligned in the same patch; current
@@ -297,8 +297,8 @@ This file mirrors the root AI entrypoint for tools that prefer `CLAUDE.md`.
   generation chain or projects `role_binding_read_model` onto dashboard/desktop
   Run Detail surfaces, keep this file, the root AI/docs entrypoints, and the
   module READMEs aligned in the same patch; current examples include
-  `docs/api/openapi.cortexpilot.json`, generated
-  `@cortexpilot/frontend-api-contract` read-model types, and the read-only Run
+  `docs/api/openapi.openvibecoding.json`, generated
+  `@openvibecoding/frontend-api-contract` read-model types, and the read-only Run
   Detail operator summaries that continue to treat `task_contract` as
   execution authority
 - when a Prompt 9-style slice turns role / bundle / runtime truth into
@@ -327,7 +327,7 @@ This file mirrors the root AI entrypoint for tools that prefer `CLAUDE.md`.
 - when a Prompt 10 closeout fix changes how contract package entrypoints load
   on CI/governance paths, keep this file, the root AI/docs entrypoints, and
   the relevant module/docs READMEs aligned in the same patch; current examples
-  include lazy-loading `cortexpilot_orch.contract` so `ContractValidator`
+  include lazy-loading `openvibecoding_orch.contract` so `ContractValidator`
   imports and schedule-boundary checks stay below runtime-provider dependencies
   such as `httpx` on Quick Feedback lanes
 - when a Prompt 10 Wave 3 slice hardens builder/client entrypoints into a
@@ -347,10 +347,10 @@ This file mirrors the root AI entrypoint for tools that prefer `CLAUDE.md`.
   queue-first mutation groundwork, keep this file, `AGENTS.md`, and the root
   AI/docs entrypoints aligned in the same patch; current examples include
   `render.yaml`, `docs/runbooks/render-hosted-operator-pilot.md`, the hosted
-  `CORTEXPILOT_API_ALLOWED_ORIGINS` env wiring across `.env.example`,
+  `OPENVIBECODING_API_ALLOWED_ORIGINS` env wiring across `.env.example`,
   `apps/orchestrator/.env.example`, `configs/env.registry.json`, and
   `configs/env_direct_read_allowlist.json`, plus the rule that
-  `apps/orchestrator/src/cortexpilot_orch/mcp_queue_pilot_server.py` and queue
+  `apps/orchestrator/src/openvibecoding_orch/mcp_queue_pilot_server.py` and queue
   preview/cancel routes remain repo-owned operator groundwork instead of live
   hosted proof or public write-capable MCP
 - when a Final-100 hosted/operator follow-up only moves governance,
@@ -401,8 +401,8 @@ This file mirrors the root AI entrypoint for tools that prefer `CLAUDE.md`.
 <!-- GENERATED:ci-topology-summary:end -->
 
 <!-- GENERATED:current-run-evidence-summary:start -->
-- authoritative release-truth builders must consume `.runtime-cache/cortexpilot/reports/ci/current_run/source_manifest.json`.
-- the live current-run authority verdict belongs to `python3 scripts/check_ci_current_run_sources.py` and `.runtime-cache/cortexpilot/reports/ci/current_run/consistency.json`.
+- authoritative release-truth builders must consume `.runtime-cache/openvibecoding/reports/ci/current_run/source_manifest.json`.
+- the live current-run authority verdict belongs to `python3 scripts/check_ci_current_run_sources.py` and `.runtime-cache/openvibecoding/reports/ci/current_run/consistency.json`.
 - current-run builders: `artifact_index/current_run_index`, `cost_profile`, `runner_health`, `slo`, `portal`, `provenance`.
 - docs and wrappers must not hand-maintain live current-run status; they must point readers back to the checker receipts.
 - if the current-run source manifest is missing, authoritative current-run reports must fail closed or run only in explicit advisory mode.

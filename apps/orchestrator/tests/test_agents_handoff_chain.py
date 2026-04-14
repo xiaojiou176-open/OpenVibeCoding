@@ -4,8 +4,8 @@ import sys
 import types
 from pathlib import Path
 
-from cortexpilot_orch.runners.agents_runner import AgentsRunner
-from cortexpilot_orch.store.run_store import RunStore
+from openvibecoding_orch.runners.agents_runner import AgentsRunner
+from openvibecoding_orch.store.run_store import RunStore
 
 
 class DummyRunConfig:
@@ -74,7 +74,7 @@ def _base_contract(task_id: str) -> dict:
 def test_agents_runner_handoff_chain(monkeypatch, tmp_path: Path) -> None:
     store = RunStore(runs_root=tmp_path)
     run_id = store.create_run("task_chain")
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", run_id)
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", run_id)
     monkeypatch.setenv("GEMINI_API_KEY", "test-key")
 
     class DummyAgent:
@@ -141,9 +141,9 @@ def test_agents_runner_handoff_chain(monkeypatch, tmp_path: Path) -> None:
 def test_agents_runner_handoff_chain_timeout_fail_open(monkeypatch, tmp_path: Path) -> None:
     store = RunStore(runs_root=tmp_path)
     run_id = store.create_run("task_chain_timeout_fail_open")
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", run_id)
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", run_id)
     monkeypatch.setenv("GEMINI_API_KEY", "test-key")
-    monkeypatch.setenv("CORTEXPILOT_AGENTS_HANDOFF_TIMEOUT_FAIL_OPEN", "true")
+    monkeypatch.setenv("OPENVIBECODING_AGENTS_HANDOFF_TIMEOUT_FAIL_OPEN", "true")
 
     class DummyAgent:
         def __init__(self, name: str, instructions: str, mcp_servers: list):
@@ -155,7 +155,7 @@ def test_agents_runner_handoff_chain_timeout_fail_open(monkeypatch, tmp_path: Pa
         @staticmethod
         def run_streamed(agent, prompt, **kwargs):
             del prompt, kwargs
-            if agent.name.startswith("CortexPilotHandoff_"):
+            if agent.name.startswith("OpenVibeCodingHandoff_"):
                 raise RuntimeError("Request timed out.")
             payload = {
                 "task_id": "task_chain_timeout_fail_open",

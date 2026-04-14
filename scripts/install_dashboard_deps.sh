@@ -2,18 +2,18 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-APP_DIR="${CORTEXPILOT_DASHBOARD_APP_DIR:-$ROOT_DIR/apps/dashboard}"
+APP_DIR="${OPENVIBECODING_DASHBOARD_APP_DIR:-$ROOT_DIR/apps/dashboard}"
 source "$ROOT_DIR/scripts/lib/toolchain_env.sh"
 source "$ROOT_DIR/scripts/lib/machine_cache_retention.sh"
 
-STORE_DIR="${CORTEXPILOT_PNPM_STORE_DIR:-$(cortexpilot_pnpm_store_dir "$ROOT_DIR")/dashboard}"
-STATE_ROOT="$ROOT_DIR/.runtime-cache/cortexpilot/temp/install-dashboard-deps-state"
-if [[ "${CORTEXPILOT_CI_CONTAINER:-0}" == "1" && -n "${RUNNER_TEMP:-}" ]]; then
+STORE_DIR="${OPENVIBECODING_PNPM_STORE_DIR:-$(openvibecoding_pnpm_store_dir "$ROOT_DIR")/dashboard}"
+STATE_ROOT="$ROOT_DIR/.runtime-cache/openvibecoding/temp/install-dashboard-deps-state"
+if [[ "${OPENVIBECODING_CI_CONTAINER:-0}" == "1" && -n "${RUNNER_TEMP:-}" ]]; then
   STATE_ROOT="${RUNNER_TEMP}/install-dashboard-deps-state"
 fi
-INSTALL_NODE_LINKER="${CORTEXPILOT_DASHBOARD_PNPM_NODE_LINKER:-hoisted}"
-INSTALL_PACKAGE_IMPORT_METHOD="${CORTEXPILOT_DASHBOARD_PNPM_IMPORT_METHOD:-copy}"
-INSTALL_SHAMEFULLY_HOIST="${CORTEXPILOT_DASHBOARD_PNPM_SHAMEFULLY_HOIST:-1}"
+INSTALL_NODE_LINKER="${OPENVIBECODING_DASHBOARD_PNPM_NODE_LINKER:-hoisted}"
+INSTALL_PACKAGE_IMPORT_METHOD="${OPENVIBECODING_DASHBOARD_PNPM_IMPORT_METHOD:-copy}"
+INSTALL_SHAMEFULLY_HOIST="${OPENVIBECODING_DASHBOARD_PNPM_SHAMEFULLY_HOIST:-1}"
 BASE_INSTALL_NODE_LINKER="$INSTALL_NODE_LINKER"
 BASE_INSTALL_PACKAGE_IMPORT_METHOD="$INSTALL_PACKAGE_IMPORT_METHOD"
 BASE_INSTALL_SHAMEFULLY_HOIST="$INSTALL_SHAMEFULLY_HOIST"
@@ -23,10 +23,10 @@ INSTALL_LOG="$ROOT_DIR/.runtime-cache/logs/runtime/deps_install/install_dashboar
 LOCK_DIR="${STATE_ROOT}/install-dashboard-deps.lock"
 LOCK_OWNER_FILE="$LOCK_DIR/owner"
 LOCK_HELD=0
-MIN_ENOSPC_RECOVERY_HEADROOM_GIB="${CORTEXPILOT_DASHBOARD_ENOSPC_MIN_HEADROOM_GIB:-3}"
+MIN_ENOSPC_RECOVERY_HEADROOM_GIB="${OPENVIBECODING_DASHBOARD_ENOSPC_MIN_HEADROOM_GIB:-3}"
 WORKSPACE_RETRY_STORE_ACTIVE=0
 
-cortexpilot_maybe_auto_prune_machine_cache "$ROOT_DIR" "install_dashboard_deps"
+openvibecoding_maybe_auto_prune_machine_cache "$ROOT_DIR" "install_dashboard_deps"
 
 log_contains() {
   local needle="$1"
@@ -72,7 +72,7 @@ resolve_writable_store_dir() {
     printf '%s\n' "$candidate"
     return 0
   fi
-  cortexpilot_pnpm_local_retry_dir "$ROOT_DIR" "dashboard"
+  openvibecoding_pnpm_local_retry_dir "$ROOT_DIR" "dashboard"
 }
 
 release_install_lock() {
@@ -135,7 +135,7 @@ EOF
 }
 
 fresh_retry_store_dir() {
-  cortexpilot_pnpm_local_retry_dir "$ROOT_DIR" "dashboard"
+  openvibecoding_pnpm_local_retry_dir "$ROOT_DIR" "dashboard"
 }
 
 workspace_retry_store_dir() {
@@ -157,7 +157,7 @@ cleanup_stale_workspace_retry_stores() {
 
 cleanup_stale_retry_stores() {
   local retry_prefix
-  retry_prefix="$(cortexpilot_pnpm_local_retry_prefix "$ROOT_DIR" "dashboard")"
+  retry_prefix="$(openvibecoding_pnpm_local_retry_prefix "$ROOT_DIR" "dashboard")"
   local candidate=""
   shopt -s nullglob
   for candidate in "${retry_prefix}".*; do
@@ -379,7 +379,7 @@ recover_with_workspace_store() {
   local previous_import_method="$INSTALL_PACKAGE_IMPORT_METHOD"
   local previous_node_linker="$INSTALL_NODE_LINKER"
   local previous_shamefully_hoist="$INSTALL_SHAMEFULLY_HOIST"
-  INSTALL_PACKAGE_IMPORT_METHOD="${CORTEXPILOT_DASHBOARD_ENOSPC_IMPORT_METHOD:-hardlink}"
+  INSTALL_PACKAGE_IMPORT_METHOD="${OPENVIBECODING_DASHBOARD_ENOSPC_IMPORT_METHOD:-hardlink}"
   INSTALL_NODE_LINKER="$BASE_INSTALL_NODE_LINKER"
   INSTALL_SHAMEFULLY_HOIST="$BASE_INSTALL_SHAMEFULLY_HOIST"
   if ! reset_app_node_modules; then

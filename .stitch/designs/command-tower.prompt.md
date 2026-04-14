@@ -1,4 +1,4 @@
-Design a command-center page for CortexPilot's **Command Tower**.
+Design a command-center page for OpenVibeCoding's **Command Tower**.
 
 This page is the L0 cockpit for live AI engineering work.
 

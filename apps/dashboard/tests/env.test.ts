@@ -10,23 +10,23 @@ import {
 } from "../lib/env";
 
 const ORIGINAL_API_BASE = process.env.NEXT_PUBLIC_API_BASE;
-const ORIGINAL_CORTEXPILOT_API_BASE = process.env.NEXT_PUBLIC_CORTEXPILOT_API_BASE;
-const ORIGINAL_CORTEXPILOT_PUBLIC_DOCS_BASE_URL = process.env.NEXT_PUBLIC_CORTEXPILOT_PUBLIC_DOCS_BASE_URL;
-const ORIGINAL_CORTEXPILOT_OPERATOR_ROLE = process.env.NEXT_PUBLIC_CORTEXPILOT_OPERATOR_ROLE;
+const ORIGINAL_OPENVIBECODING_API_BASE = process.env.NEXT_PUBLIC_OPENVIBECODING_API_BASE;
+const ORIGINAL_OPENVIBECODING_PUBLIC_DOCS_BASE_URL = process.env.NEXT_PUBLIC_OPENVIBECODING_PUBLIC_DOCS_BASE_URL;
+const ORIGINAL_OPENVIBECODING_OPERATOR_ROLE = process.env.NEXT_PUBLIC_OPENVIBECODING_OPERATOR_ROLE;
 const ORIGINAL_PM_COPY_VARIANT = process.env.NEXT_PUBLIC_PM_COPY_VARIANT;
 
 function restoreEnv(): void {
   if (ORIGINAL_API_BASE === undefined) delete process.env.NEXT_PUBLIC_API_BASE;
   else process.env.NEXT_PUBLIC_API_BASE = ORIGINAL_API_BASE;
 
-  if (ORIGINAL_CORTEXPILOT_API_BASE === undefined) delete process.env.NEXT_PUBLIC_CORTEXPILOT_API_BASE;
-  else process.env.NEXT_PUBLIC_CORTEXPILOT_API_BASE = ORIGINAL_CORTEXPILOT_API_BASE;
+  if (ORIGINAL_OPENVIBECODING_API_BASE === undefined) delete process.env.NEXT_PUBLIC_OPENVIBECODING_API_BASE;
+  else process.env.NEXT_PUBLIC_OPENVIBECODING_API_BASE = ORIGINAL_OPENVIBECODING_API_BASE;
 
-  if (ORIGINAL_CORTEXPILOT_PUBLIC_DOCS_BASE_URL === undefined) delete process.env.NEXT_PUBLIC_CORTEXPILOT_PUBLIC_DOCS_BASE_URL;
-  else process.env.NEXT_PUBLIC_CORTEXPILOT_PUBLIC_DOCS_BASE_URL = ORIGINAL_CORTEXPILOT_PUBLIC_DOCS_BASE_URL;
+  if (ORIGINAL_OPENVIBECODING_PUBLIC_DOCS_BASE_URL === undefined) delete process.env.NEXT_PUBLIC_OPENVIBECODING_PUBLIC_DOCS_BASE_URL;
+  else process.env.NEXT_PUBLIC_OPENVIBECODING_PUBLIC_DOCS_BASE_URL = ORIGINAL_OPENVIBECODING_PUBLIC_DOCS_BASE_URL;
 
-  if (ORIGINAL_CORTEXPILOT_OPERATOR_ROLE === undefined) delete process.env.NEXT_PUBLIC_CORTEXPILOT_OPERATOR_ROLE;
-  else process.env.NEXT_PUBLIC_CORTEXPILOT_OPERATOR_ROLE = ORIGINAL_CORTEXPILOT_OPERATOR_ROLE;
+  if (ORIGINAL_OPENVIBECODING_OPERATOR_ROLE === undefined) delete process.env.NEXT_PUBLIC_OPENVIBECODING_OPERATOR_ROLE;
+  else process.env.NEXT_PUBLIC_OPENVIBECODING_OPERATOR_ROLE = ORIGINAL_OPENVIBECODING_OPERATOR_ROLE;
 
   if (ORIGINAL_PM_COPY_VARIANT === undefined) delete process.env.NEXT_PUBLIC_PM_COPY_VARIANT;
   else process.env.NEXT_PUBLIC_PM_COPY_VARIANT = ORIGINAL_PM_COPY_VARIANT;
@@ -37,11 +37,11 @@ describe("dashboard env helpers", () => {
     restoreEnv();
   });
 
-  it("prefers NEXT_PUBLIC_CORTEXPILOT_API_BASE and trims trailing slashes", () => {
-    process.env.NEXT_PUBLIC_CORTEXPILOT_API_BASE = " https://cortexpilot.example/api/// ";
+  it("prefers NEXT_PUBLIC_OPENVIBECODING_API_BASE and trims trailing slashes", () => {
+    process.env.NEXT_PUBLIC_OPENVIBECODING_API_BASE = " https://openvibecoding.example/api/// ";
     process.env.NEXT_PUBLIC_API_BASE = "https://fallback.example";
 
-    expect(resolveDashboardApiBase()).toBe("https://cortexpilot.example/api");
+    expect(resolveDashboardApiBase()).toBe("https://openvibecoding.example/api");
   });
 
   it("falls back to NEXT_PUBLIC_API_BASE when the product-specific env is absent", () => {
@@ -51,21 +51,21 @@ describe("dashboard env helpers", () => {
   });
 
   it("falls back to NEXT_PUBLIC_API_BASE when the preferred env is blank", () => {
-    process.env.NEXT_PUBLIC_CORTEXPILOT_API_BASE = "   ";
+    process.env.NEXT_PUBLIC_OPENVIBECODING_API_BASE = "   ";
     process.env.NEXT_PUBLIC_API_BASE = "https://fallback.example/base//";
 
     expect(resolveDashboardApiBase()).toBe("https://fallback.example/base");
   });
 
   it("uses the frontend contract default when both env values are absent", () => {
-    delete process.env.NEXT_PUBLIC_CORTEXPILOT_API_BASE;
+    delete process.env.NEXT_PUBLIC_OPENVIBECODING_API_BASE;
     delete process.env.NEXT_PUBLIC_API_BASE;
 
     expect(resolveDashboardApiBase()).toBe(FRONTEND_API_CONTRACT.defaultApiBase);
   });
 
   it("falls through to the final default return when every candidate is empty", () => {
-    delete process.env.NEXT_PUBLIC_CORTEXPILOT_API_BASE;
+    delete process.env.NEXT_PUBLIC_OPENVIBECODING_API_BASE;
     delete process.env.NEXT_PUBLIC_API_BASE;
     const previousDefault = FRONTEND_API_CONTRACT.defaultApiBase;
     try {
@@ -83,7 +83,7 @@ describe("dashboard env helpers", () => {
   });
 
   it("uses the default public docs base when the env override is absent", () => {
-    delete process.env.NEXT_PUBLIC_CORTEXPILOT_PUBLIC_DOCS_BASE_URL;
+    delete process.env.NEXT_PUBLIC_OPENVIBECODING_PUBLIC_DOCS_BASE_URL;
 
     expect(resolveDashboardPublicDocsBaseUrl()).toBe("https://xiaojiou176-open.github.io/OpenVibeCoding");
     expect(resolveDashboardPublicDocsHref("/ai-surfaces/")).toBe(
@@ -92,24 +92,24 @@ describe("dashboard env helpers", () => {
   });
 
   it("uses a configured public docs base and trims trailing slashes", () => {
-    process.env.NEXT_PUBLIC_CORTEXPILOT_PUBLIC_DOCS_BASE_URL = " https://docs.example/cortexpilot/// ";
+    process.env.NEXT_PUBLIC_OPENVIBECODING_PUBLIC_DOCS_BASE_URL = " https://docs.example/openvibecoding/// ";
 
-    expect(resolveDashboardPublicDocsBaseUrl()).toBe("https://docs.example/cortexpilot");
-    expect(resolveDashboardPublicDocsHref("/builders/")).toBe("https://docs.example/cortexpilot/builders/");
-    expect(resolveDashboardPublicDocsHref("/compatibility/")).toBe("https://docs.example/cortexpilot/compatibility/");
-    expect(resolveDashboardPublicDocsHref("/integrations/")).toBe("https://docs.example/cortexpilot/integrations/");
-    expect(resolveDashboardPublicDocsHref("/skills/")).toBe("https://docs.example/cortexpilot/skills/");
+    expect(resolveDashboardPublicDocsBaseUrl()).toBe("https://docs.example/openvibecoding");
+    expect(resolveDashboardPublicDocsHref("/builders/")).toBe("https://docs.example/openvibecoding/builders/");
+    expect(resolveDashboardPublicDocsHref("/compatibility/")).toBe("https://docs.example/openvibecoding/compatibility/");
+    expect(resolveDashboardPublicDocsHref("/integrations/")).toBe("https://docs.example/openvibecoding/integrations/");
+    expect(resolveDashboardPublicDocsHref("/skills/")).toBe("https://docs.example/openvibecoding/skills/");
   });
 
   it("allows same-origin public docs routes when the override is slash", () => {
-    process.env.NEXT_PUBLIC_CORTEXPILOT_PUBLIC_DOCS_BASE_URL = "/";
+    process.env.NEXT_PUBLIC_OPENVIBECODING_PUBLIC_DOCS_BASE_URL = "/";
 
     expect(resolveDashboardPublicDocsBaseUrl()).toBe("");
     expect(resolveDashboardPublicDocsHref("/mcp/")).toBe("/mcp/");
   });
 
   it("leaves non-public-docs href values untouched", () => {
-    process.env.NEXT_PUBLIC_CORTEXPILOT_PUBLIC_DOCS_BASE_URL = "https://docs.example/cortexpilot";
+    process.env.NEXT_PUBLIC_OPENVIBECODING_PUBLIC_DOCS_BASE_URL = "https://docs.example/openvibecoding";
 
     expect(resolveDashboardPublicDocsHref("/pm")).toBe("/pm");
     expect(resolveDashboardPublicDocsHref("https://github.com/xiaojiou176-open/OpenVibeCoding")).toBe(
@@ -117,8 +117,8 @@ describe("dashboard env helpers", () => {
     );
   });
 
-  it("uses NEXT_PUBLIC_CORTEXPILOT_OPERATOR_ROLE and normalizes casing", () => {
-    process.env.NEXT_PUBLIC_CORTEXPILOT_OPERATOR_ROLE = " tech_lead ";
+  it("uses NEXT_PUBLIC_OPENVIBECODING_OPERATOR_ROLE and normalizes casing", () => {
+    process.env.NEXT_PUBLIC_OPENVIBECODING_OPERATOR_ROLE = " tech_lead ";
     expect(resolveDashboardOperatorRoleEnv()).toBe("TECH_LEAD");
   });
 });

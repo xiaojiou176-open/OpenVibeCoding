@@ -128,7 +128,7 @@ def test_release_provenance_strict_fails_without_github_metadata(tmp_path: Path)
         str(manifest),
         "--strict",
         "--image",
-        "cortexpilot-ci-core:local",
+        "openvibecoding-ci-core:local",
     )
     assert proc.returncode != 0
     assert "strict mode requires non-empty workflow metadata" in (proc.stdout + proc.stderr)

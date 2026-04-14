@@ -39,7 +39,7 @@ def _report_meta(payload: dict[str, Any], *, path: Path) -> dict[str, Any]:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Build CI governance portal from current-run reports.")
     parser.add_argument("--source-manifest", default="")
-    parser.add_argument("--out-dir", default=".runtime-cache/cortexpilot/reports/ci/portal")
+    parser.add_argument("--out-dir", default=".runtime-cache/openvibecoding/reports/ci/portal")
     parser.add_argument("--allow-local-advisory", action="store_true")
     return parser.parse_args()
 
@@ -138,7 +138,7 @@ def main() -> int:
         else ("advisory" if structurally_pass else "fail")
     )
     payload = {
-        "report_type": "cortexpilot_ci_governance_portal",
+        "report_type": "openvibecoding_ci_governance_portal",
         "generated_at": now_utc(),
         "authoritative": bool(authority["authoritative_current_truth"]),
         "advisory_local_only": advisory_local_only,

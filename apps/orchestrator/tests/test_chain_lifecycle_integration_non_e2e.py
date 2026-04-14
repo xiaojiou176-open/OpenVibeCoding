@@ -213,7 +213,7 @@ def _build_env_with_chain_role_mcp(
         capabilities["mcp_tools"] = tools
     test_registry = tmp_path / "agent_registry.chain_non_e2e.json"
     test_registry.write_text(json.dumps(registry, ensure_ascii=False, indent=2), encoding="utf-8")
-    env["CORTEXPILOT_AGENT_REGISTRY"] = str(test_registry)
+    env["OPENVIBECODING_AGENT_REGISTRY"] = str(test_registry)
     return env
 
 

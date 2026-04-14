@@ -9,20 +9,20 @@ if [[ -z "${GEMINI_API_KEY:-}" ]]; then
   exit 1
 fi
 
-PROVIDER="$(printf '%s' "${CORTEXPILOT_EVAL_PROVIDER:-gemini}" | tr '[:upper:]' '[:lower:]')"
-MODEL="${CORTEXPILOT_EVAL_MODEL:-}"
-CONFIG="${CORTEXPILOT_EVAL_CONFIG:-$ROOT_DIR/tests/evals/promptfoo/promptfooconfig.yaml}"
+PROVIDER="$(printf '%s' "${OPENVIBECODING_EVAL_PROVIDER:-gemini}" | tr '[:upper:]' '[:lower:]')"
+MODEL="${OPENVIBECODING_EVAL_MODEL:-}"
+CONFIG="${OPENVIBECODING_EVAL_CONFIG:-$ROOT_DIR/tests/evals/promptfoo/promptfooconfig.yaml}"
 TMP_CONFIG=""
 
 case "$PROVIDER" in
   gemini)
     MODEL="${MODEL:-gemini-2.0-flash}"
-    TMP_CONFIG="$(mktemp "${TMPDIR:-/tmp}/cortexpilot-evals.XXXXXX.yaml")"
-    sed "s|__CORTEXPILOT_EVAL_MODEL__|${MODEL}|g" "$CONFIG" >"$TMP_CONFIG"
+    TMP_CONFIG="$(mktemp "${TMPDIR:-/tmp}/openvibecoding-evals.XXXXXX.yaml")"
+    sed "s|__OPENVIBECODING_EVAL_MODEL__|${MODEL}|g" "$CONFIG" >"$TMP_CONFIG"
     CONFIG="$TMP_CONFIG"
     ;;
   *)
-    echo "unsupported CORTEXPILOT_EVAL_PROVIDER: $PROVIDER (only: gemini)" >&2
+    echo "unsupported OPENVIBECODING_EVAL_PROVIDER: $PROVIDER (only: gemini)" >&2
     exit 1
     ;;
 esac

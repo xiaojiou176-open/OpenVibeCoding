@@ -49,7 +49,7 @@ class StealthProvider:
         mode = payload.get("stealth_mode") if isinstance(payload.get("stealth_mode"), str) else ""
         plugin_optional = payload.get("plugin_optional")
         if not isinstance(plugin_optional, bool):
-            plugin_optional = _to_bool(os.getenv("CORTEXPILOT_BROWSER_PLUGIN_OPTIONAL", ""), True)
+            plugin_optional = _to_bool(os.getenv("OPENVIBECODING_BROWSER_PLUGIN_OPTIONAL", ""), True)
         if not isinstance(mode, str) or not mode.strip():
             return cls.from_env()
         return cls(mode=mode, plugin_optional=bool(plugin_optional))
@@ -59,10 +59,10 @@ class StealthProvider:
         cls,
     ) -> "StealthProvider":
         raw_mode = _first_non_empty(
-            os.getenv("CORTEXPILOT_BROWSER_STEALTH_MODE"),
-            os.getenv("CORTEXPILOT_WEB_STEALTH_MODE"),
+            os.getenv("OPENVIBECODING_BROWSER_STEALTH_MODE"),
+            os.getenv("OPENVIBECODING_WEB_STEALTH_MODE"),
         ) or "none"
-        raw_optional = _first_non_empty(os.getenv("CORTEXPILOT_BROWSER_PLUGIN_OPTIONAL"))
+        raw_optional = _first_non_empty(os.getenv("OPENVIBECODING_BROWSER_PLUGIN_OPTIONAL"))
         plugin_optional = _to_bool(raw_optional, True)
         return cls(mode=raw_mode, plugin_optional=plugin_optional)
 

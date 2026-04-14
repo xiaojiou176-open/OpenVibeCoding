@@ -11,8 +11,8 @@ from ci_current_run_support import current_truth_authority, load_source_manifest
 
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT_DIR = ROOT / ".runtime-cache" / "cortexpilot" / "reports" / "ci" / "sbom"
-DOCKER_METADATA_TIMEOUT_SEC = int(os.environ.get("CORTEXPILOT_CI_DOCKER_METADATA_TIMEOUT_SEC", "30"))
+OUT_DIR = ROOT / ".runtime-cache" / "openvibecoding" / "reports" / "ci" / "sbom"
+DOCKER_METADATA_TIMEOUT_SEC = int(os.environ.get("OPENVIBECODING_CI_DOCKER_METADATA_TIMEOUT_SEC", "30"))
 
 
 def _run(args: list[str]) -> tuple[str, dict[str, object]]:
@@ -45,8 +45,8 @@ def _run(args: list[str]) -> tuple[str, dict[str, object]]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Build a lightweight SBOM/inventory for cortexpilot-ci-core image.")
-    parser.add_argument("--image", default="cortexpilot-ci-core:local", help="Docker image name")
+    parser = argparse.ArgumentParser(description="Build a lightweight SBOM/inventory for openvibecoding-ci-core image.")
+    parser.add_argument("--image", default="openvibecoding-ci-core:local", help="Docker image name")
     parser.add_argument("--source-manifest", default="")
     parser.add_argument("--out-dir", default=str(OUT_DIR), help="Output directory")
     args = parser.parse_args()
@@ -71,7 +71,7 @@ def main() -> int:
         ]
     )
     payload = {
-        "report_type": "cortexpilot_ci_image_sbom",
+        "report_type": "openvibecoding_ci_image_sbom",
         "generated_at": now_utc(),
         "authoritative": bool(authority["authoritative_current_truth"]),
         **authority,

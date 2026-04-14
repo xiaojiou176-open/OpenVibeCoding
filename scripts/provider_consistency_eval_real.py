@@ -257,8 +257,8 @@ def _cost_estimate(provider: str, in_tokens: int, out_tokens: int, env: dict[str
         "anthropic": (3.00, 15.00),
     }
     in_default, out_default = defaults[provider]
-    in_price = float(env.get(f"CORTEXPILOT_EVAL_{provider.upper()}_INPUT_USD_PER_1M", in_default))
-    out_price = float(env.get(f"CORTEXPILOT_EVAL_{provider.upper()}_OUTPUT_USD_PER_1M", out_default))
+    in_price = float(env.get(f"OPENVIBECODING_EVAL_{provider.upper()}_INPUT_USD_PER_1M", in_default))
+    out_price = float(env.get(f"OPENVIBECODING_EVAL_{provider.upper()}_OUTPUT_USD_PER_1M", out_default))
     cost = (in_tokens / 1_000_000.0) * in_price + (out_tokens / 1_000_000.0) * out_price
     meta = {
         "input_usd_per_1m": in_price,
@@ -385,16 +385,16 @@ def _read_env() -> dict[str, str]:
 
 
 def _build_lanes(env: dict[str, str]) -> tuple[list[ProviderLane], dict[str, Any]]:
-    cfg_path = Path(env.get("CORTEXPILOT_CODEX_CONFIG_PATH", str(DEFAULT_CODEX_CONFIG)))
+    cfg_path = Path(env.get("OPENVIBECODING_CODEX_CONFIG_PATH", str(DEFAULT_CODEX_CONFIG)))
     config = _load_codex_config(cfg_path)
     cfg_provider_name, cfg_provider = _resolve_cfg_provider(config)
     gateway_base = _normalize_base_url(str(cfg_provider.get("base_url") or ""))
     gateway_token_raw = str(cfg_provider.get("experimental_bearer_token") or cfg_provider.get("api_key") or "").strip()
     gateway_token = _resolve_token(gateway_token_raw, env)
 
-    gemini_model_logical = env.get("CORTEXPILOT_EVAL_GEMINI_MODEL", "gemini-3.1-pro").strip()
-    openai_model = env.get("CORTEXPILOT_EVAL_OPENAI_MODEL", "gpt-5.3-codex").strip()
-    anthropic_model_raw = env.get("CORTEXPILOT_EVAL_ANTHROPIC_MODEL", "anthropic/claude-sonnet-4-6").strip()
+    gemini_model_logical = env.get("OPENVIBECODING_EVAL_GEMINI_MODEL", "gemini-3.1-pro").strip()
+    openai_model = env.get("OPENVIBECODING_EVAL_OPENAI_MODEL", "gpt-5.3-codex").strip()
+    anthropic_model_raw = env.get("OPENVIBECODING_EVAL_ANTHROPIC_MODEL", "anthropic/claude-sonnet-4-6").strip()
     anthropic_model = _ANTHROPIC_ALIAS.get(anthropic_model_raw, anthropic_model_raw)
     gemini_model = _GEMINI_RUNTIME_MAP.get(gemini_model_logical, gemini_model_logical)
 
@@ -511,7 +511,7 @@ def _build_lanes(env: dict[str, str]) -> tuple[list[ProviderLane], dict[str, Any
             "export GEMINI_API_KEY='<real_gemini_key>'",
             "export OPENAI_API_KEY='<real_openai_key>'",
             "export ANTHROPIC_API_KEY='<real_anthropic_key>'",
-            "export CORTEXPILOT_CODEX_CONFIG_PATH=\"$HOME/.codex/config.toml\"",
+            "export OPENVIBECODING_CODEX_CONFIG_PATH=\"$HOME/.codex/config.toml\"",
         ],
     }
     return lanes, detection

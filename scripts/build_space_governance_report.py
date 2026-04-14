@@ -8,18 +8,18 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "apps" / "orchestrator" / "src"))
 
-from cortexpilot_orch.runtime.space_governance import (
+from openvibecoding_orch.runtime.space_governance import (
     build_space_governance_report,
     load_space_governance_policy,
     write_report_outputs,
 )
 DEFAULT_POLICY = ROOT / "configs" / "space_governance_policy.json"
-DEFAULT_OUTPUT_JSON = ROOT / ".runtime-cache" / "cortexpilot" / "reports" / "space_governance" / "report.json"
-DEFAULT_OUTPUT_MD = ROOT / ".runtime-cache" / "cortexpilot" / "reports" / "space_governance" / "report.md"
+DEFAULT_OUTPUT_JSON = ROOT / ".runtime-cache" / "openvibecoding" / "reports" / "space_governance" / "report.json"
+DEFAULT_OUTPUT_MD = ROOT / ".runtime-cache" / "openvibecoding" / "reports" / "space_governance" / "report.md"
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Build the CortexPilot disk-space governance report.")
+    parser = argparse.ArgumentParser(description="Build the OpenVibeCoding disk-space governance report.")
     parser.add_argument("--policy", default=str(DEFAULT_POLICY))
     parser.add_argument("--output-json", default=str(DEFAULT_OUTPUT_JSON))
     parser.add_argument("--output-md", default=str(DEFAULT_OUTPUT_MD))

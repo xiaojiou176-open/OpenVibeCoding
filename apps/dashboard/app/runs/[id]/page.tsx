@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
-import { getUiCopy } from "@cortexpilot/frontend-shared/uiCopy";
-import { normalizeUiLocale, UI_LOCALE_STORAGE_KEY } from "@cortexpilot/frontend-shared/uiLocale";
+import { getUiCopy } from "@openvibecoding/frontend-shared/uiCopy";
+import { normalizeUiLocale, UI_LOCALE_STORAGE_KEY } from "@openvibecoding/frontend-shared/uiLocale";
 import RunDetail from "../../../components/RunDetail";
 import { Badge } from "../../../components/ui/badge";
 import { Card } from "../../../components/ui/card";

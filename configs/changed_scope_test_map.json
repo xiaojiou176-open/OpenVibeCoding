@@ -13,8 +13,8 @@
     {
       "id": "orchestrator_api",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/api/*.py",
-        "apps/orchestrator/src/cortexpilot_orch/api/**/*.py"
+        "apps/orchestrator/src/openvibecoding_orch/api/*.py",
+        "apps/orchestrator/src/openvibecoding_orch/api/**/*.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_api_main.py"
@@ -55,8 +55,8 @@
     {
       "id": "orchestrator_api_routes_pm",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/api/routes_pm.py",
-        "apps/orchestrator/src/cortexpilot_orch/api/main_pm_intake_helpers.py"
+        "apps/orchestrator/src/openvibecoding_orch/api/routes_pm.py",
+        "apps/orchestrator/src/openvibecoding_orch/api/main_pm_intake_helpers.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_api_main_pm_sessions.py",
@@ -66,9 +66,9 @@
     {
       "id": "orchestrator_api_routes_runs",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/api/routes_runs.py",
-        "apps/orchestrator/src/cortexpilot_orch/api/main_runs_handlers.py",
-        "apps/orchestrator/src/cortexpilot_orch/api/main_run_views_helpers.py"
+        "apps/orchestrator/src/openvibecoding_orch/api/routes_runs.py",
+        "apps/orchestrator/src/openvibecoding_orch/api/main_runs_handlers.py",
+        "apps/orchestrator/src/openvibecoding_orch/api/main_run_views_helpers.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_main_runs_handlers_failure_classification.py",
@@ -78,7 +78,7 @@
     {
       "id": "orchestrator_api_routes_admin",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/api/routes_admin.py"
+        "apps/orchestrator/src/openvibecoding_orch/api/routes_admin.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_api_main.py",
@@ -88,8 +88,8 @@
     {
       "id": "orchestrator_api_routes_intake",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/api/routes_intake.py",
-        "apps/orchestrator/src/cortexpilot_orch/planning/intake.py"
+        "apps/orchestrator/src/openvibecoding_orch/api/routes_intake.py",
+        "apps/orchestrator/src/openvibecoding_orch/planning/intake.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_intake_plan_bundle.py",
@@ -99,7 +99,7 @@
     {
       "id": "orchestrator_pm_session_aggregation",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/api/pm_session_aggregation*.py"
+        "apps/orchestrator/src/openvibecoding_orch/api/pm_session_aggregation*.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_pm_session_aggregation_context.py",
@@ -109,11 +109,11 @@
     {
       "id": "orchestrator_scheduler_core",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/scheduler/scheduler.py",
-        "apps/orchestrator/src/cortexpilot_orch/scheduler/core_helpers.py",
-        "apps/orchestrator/src/cortexpilot_orch/scheduler/runtime_*.py",
-        "apps/orchestrator/src/cortexpilot_orch/scheduler/execute_flow.py",
-        "apps/orchestrator/src/cortexpilot_orch/scheduler/approval_flow.py"
+        "apps/orchestrator/src/openvibecoding_orch/scheduler/scheduler.py",
+        "apps/orchestrator/src/openvibecoding_orch/scheduler/core_helpers.py",
+        "apps/orchestrator/src/openvibecoding_orch/scheduler/runtime_*.py",
+        "apps/orchestrator/src/openvibecoding_orch/scheduler/execute_flow.py",
+        "apps/orchestrator/src/openvibecoding_orch/scheduler/approval_flow.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_scheduler_paths.py",
@@ -124,9 +124,9 @@
     {
       "id": "orchestrator_scheduler_policy",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/scheduler/policy_pipeline.py",
-        "apps/orchestrator/src/cortexpilot_orch/scheduler/preflight_gate_pipeline.py",
-        "apps/orchestrator/src/cortexpilot_orch/scheduler/preflight_gate_*.py"
+        "apps/orchestrator/src/openvibecoding_orch/scheduler/policy_pipeline.py",
+        "apps/orchestrator/src/openvibecoding_orch/scheduler/preflight_gate_pipeline.py",
+        "apps/orchestrator/src/openvibecoding_orch/scheduler/preflight_gate_*.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_scheduler_policy_pipeline_new.py",
@@ -136,11 +136,11 @@
     {
       "id": "orchestrator_scheduler_task_execution",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/scheduler/task_execution_pipeline.py",
-        "apps/orchestrator/src/cortexpilot_orch/scheduler/task_execution_runtime_helpers.py",
-        "apps/orchestrator/src/cortexpilot_orch/scheduler/task_execution_review_helpers.py",
-        "apps/orchestrator/src/cortexpilot_orch/scheduler/tool_execution_pipeline.py",
-        "apps/orchestrator/src/cortexpilot_orch/scheduler/evidence_pipeline.py"
+        "apps/orchestrator/src/openvibecoding_orch/scheduler/task_execution_pipeline.py",
+        "apps/orchestrator/src/openvibecoding_orch/scheduler/task_execution_runtime_helpers.py",
+        "apps/orchestrator/src/openvibecoding_orch/scheduler/task_execution_review_helpers.py",
+        "apps/orchestrator/src/openvibecoding_orch/scheduler/tool_execution_pipeline.py",
+        "apps/orchestrator/src/openvibecoding_orch/scheduler/evidence_pipeline.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_scheduler_task_execution_runtime_helpers.py",
@@ -151,8 +151,8 @@
     {
       "id": "orchestrator_scheduler_rollback",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/scheduler/rollback_pipeline.py",
-        "apps/orchestrator/src/cortexpilot_orch/services/rollback_service.py"
+        "apps/orchestrator/src/openvibecoding_orch/scheduler/rollback_pipeline.py",
+        "apps/orchestrator/src/openvibecoding_orch/services/rollback_service.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_scheduler_rollback_pipeline_new.py",
@@ -162,9 +162,9 @@
     {
       "id": "orchestrator_runners_agents",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/runners/agents_*.py",
-        "apps/orchestrator/src/cortexpilot_orch/runners/agents_runner.py",
-        "apps/orchestrator/src/cortexpilot_orch/runners/provider_resolution.py"
+        "apps/orchestrator/src/openvibecoding_orch/runners/agents_*.py",
+        "apps/orchestrator/src/openvibecoding_orch/runners/agents_runner.py",
+        "apps/orchestrator/src/openvibecoding_orch/runners/provider_resolution.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_agents_runner_behavior_parity.py",
@@ -175,9 +175,9 @@
     {
       "id": "orchestrator_runners_mcp",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/runners/*mcp*.py",
-        "apps/orchestrator/src/cortexpilot_orch/runners/tool_runner.py",
-        "apps/orchestrator/src/cortexpilot_orch/runners/mcp_adapter_runtime.py"
+        "apps/orchestrator/src/openvibecoding_orch/runners/*mcp*.py",
+        "apps/orchestrator/src/openvibecoding_orch/runners/tool_runner.py",
+        "apps/orchestrator/src/openvibecoding_orch/runners/mcp_adapter_runtime.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_runners_mcp_new_modules.py",
@@ -188,9 +188,9 @@
     {
       "id": "orchestrator_runners_langgraph",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/runners/langgraph_*.py",
-        "apps/orchestrator/src/cortexpilot_orch/runners/agents_contract_flow.py",
-        "apps/orchestrator/src/cortexpilot_orch/runners/agents_stream_flow.py"
+        "apps/orchestrator/src/openvibecoding_orch/runners/langgraph_*.py",
+        "apps/orchestrator/src/openvibecoding_orch/runners/agents_contract_flow.py",
+        "apps/orchestrator/src/openvibecoding_orch/runners/agents_stream_flow.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_p1_langgraph_contract_flow.py",
@@ -201,8 +201,8 @@
     {
       "id": "orchestrator_replay",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/replay/*.py",
-        "apps/orchestrator/src/cortexpilot_orch/replay/**/*.py"
+        "apps/orchestrator/src/openvibecoding_orch/replay/*.py",
+        "apps/orchestrator/src/openvibecoding_orch/replay/**/*.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_replayer_branch_coverage.py",
@@ -213,8 +213,8 @@
     {
       "id": "orchestrator_chain",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/chain/*.py",
-        "apps/orchestrator/src/cortexpilot_orch/chain/**/*.py"
+        "apps/orchestrator/src/openvibecoding_orch/chain/*.py",
+        "apps/orchestrator/src/openvibecoding_orch/chain/**/*.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_chain_runner.py",
@@ -225,8 +225,8 @@
     {
       "id": "orchestrator_store",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/store/*.py",
-        "apps/orchestrator/src/cortexpilot_orch/store/**/*.py"
+        "apps/orchestrator/src/openvibecoding_orch/store/*.py",
+        "apps/orchestrator/src/openvibecoding_orch/store/**/*.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_run_store.py",
@@ -238,8 +238,8 @@
     {
       "id": "orchestrator_gates",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/gates/*.py",
-        "apps/orchestrator/src/cortexpilot_orch/gates/**/*.py"
+        "apps/orchestrator/src/openvibecoding_orch/gates/*.py",
+        "apps/orchestrator/src/openvibecoding_orch/gates/**/*.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_gates.py",
@@ -252,8 +252,8 @@
     {
       "id": "orchestrator_planning",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/planning/*.py",
-        "apps/orchestrator/src/cortexpilot_orch/planning/**/*.py"
+        "apps/orchestrator/src/openvibecoding_orch/planning/*.py",
+        "apps/orchestrator/src/openvibecoding_orch/planning/**/*.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_intake_plan_bundle.py",
@@ -264,8 +264,8 @@
     {
       "id": "orchestrator_contract",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/contract/*.py",
-        "apps/orchestrator/src/cortexpilot_orch/contract/**/*.py"
+        "apps/orchestrator/src/openvibecoding_orch/contract/*.py",
+        "apps/orchestrator/src/openvibecoding_orch/contract/**/*.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_validator_and_compiler.py",
@@ -275,8 +275,8 @@
     {
       "id": "orchestrator_observability",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/observability/*.py",
-        "apps/orchestrator/src/cortexpilot_orch/observability/**/*.py"
+        "apps/orchestrator/src/openvibecoding_orch/observability/*.py",
+        "apps/orchestrator/src/openvibecoding_orch/observability/**/*.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_observability_logger.py",
@@ -287,10 +287,10 @@
     {
       "id": "orchestrator_runtime_locks_queue_worktrees",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/runtime/*.py",
-        "apps/orchestrator/src/cortexpilot_orch/locks/*.py",
-        "apps/orchestrator/src/cortexpilot_orch/queue/*.py",
-        "apps/orchestrator/src/cortexpilot_orch/worktrees/*.py"
+        "apps/orchestrator/src/openvibecoding_orch/runtime/*.py",
+        "apps/orchestrator/src/openvibecoding_orch/locks/*.py",
+        "apps/orchestrator/src/openvibecoding_orch/queue/*.py",
+        "apps/orchestrator/src/openvibecoding_orch/worktrees/*.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_runtime_retention.py",
@@ -425,8 +425,8 @@
     {
       "id": "orchestrator_cli_runtime",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/cli.py",
-        "apps/orchestrator/src/cortexpilot_orch/cli_*helpers.py"
+        "apps/orchestrator/src/openvibecoding_orch/cli.py",
+        "apps/orchestrator/src/openvibecoding_orch/cli_*helpers.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_cli_commands.py",
@@ -436,7 +436,7 @@
     {
       "id": "orchestrator_config_core",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/config.py"
+        "apps/orchestrator/src/openvibecoding_orch/config.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_policy_registry_alignment.py",
@@ -446,8 +446,8 @@
     {
       "id": "orchestrator_services",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/services/*.py",
-        "apps/orchestrator/src/cortexpilot_orch/services/**/*.py"
+        "apps/orchestrator/src/openvibecoding_orch/services/*.py",
+        "apps/orchestrator/src/openvibecoding_orch/services/**/*.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_rollback_service.py",
@@ -457,8 +457,8 @@
     {
       "id": "orchestrator_reviewer",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/reviewer/*.py",
-        "apps/orchestrator/src/cortexpilot_orch/reviewer/**/*.py"
+        "apps/orchestrator/src/openvibecoding_orch/reviewer/*.py",
+        "apps/orchestrator/src/openvibecoding_orch/reviewer/**/*.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_reviewer_gate_extended.py",
@@ -468,8 +468,8 @@
     {
       "id": "orchestrator_temporal",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/temporal/*.py",
-        "apps/orchestrator/src/cortexpilot_orch/temporal/**/*.py"
+        "apps/orchestrator/src/openvibecoding_orch/temporal/*.py",
+        "apps/orchestrator/src/openvibecoding_orch/temporal/**/*.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_temporal_runner.py",
@@ -479,8 +479,8 @@
     {
       "id": "orchestrator_transport",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/transport/*.py",
-        "apps/orchestrator/src/cortexpilot_orch/transport/**/*.py"
+        "apps/orchestrator/src/openvibecoding_orch/transport/*.py",
+        "apps/orchestrator/src/openvibecoding_orch/transport/**/*.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_transport_modules.py",
@@ -490,8 +490,8 @@
     {
       "id": "orchestrator_policy_directory",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/policy/*.py",
-        "apps/orchestrator/src/cortexpilot_orch/policy/**/*.py"
+        "apps/orchestrator/src/openvibecoding_orch/policy/*.py",
+        "apps/orchestrator/src/openvibecoding_orch/policy/**/*.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_policy_registry_alignment.py",
@@ -501,8 +501,8 @@
     {
       "id": "orchestrator_chain_helpers",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/chain/*helpers*.py",
-        "apps/orchestrator/src/cortexpilot_orch/chain/runtime_helpers.py"
+        "apps/orchestrator/src/openvibecoding_orch/chain/*helpers*.py",
+        "apps/orchestrator/src/openvibecoding_orch/chain/runtime_helpers.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_chain_helpers.py",
@@ -512,8 +512,8 @@
     {
       "id": "orchestrator_replay_helpers",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/replay/*helpers*.py",
-        "apps/orchestrator/src/cortexpilot_orch/replay/replayer_*.py"
+        "apps/orchestrator/src/openvibecoding_orch/replay/*helpers*.py",
+        "apps/orchestrator/src/openvibecoding_orch/replay/replayer_*.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_replayer_helper_matrix_extra.py",
@@ -523,7 +523,7 @@
     {
       "id": "orchestrator_locks_specific",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/locks/*.py"
+        "apps/orchestrator/src/openvibecoding_orch/locks/*.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_locker_additional.py",
@@ -533,7 +533,7 @@
     {
       "id": "orchestrator_queue_specific",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/queue/*.py"
+        "apps/orchestrator/src/openvibecoding_orch/queue/*.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_queue.py",
@@ -559,7 +559,7 @@
     {
       "id": "orchestrator_worktrees_specific",
       "path_globs": [
-        "apps/orchestrator/src/cortexpilot_orch/worktrees/*.py"
+        "apps/orchestrator/src/openvibecoding_orch/worktrees/*.py"
       ],
       "tests": [
         "apps/orchestrator/tests/test_worktree_manager_extended.py",

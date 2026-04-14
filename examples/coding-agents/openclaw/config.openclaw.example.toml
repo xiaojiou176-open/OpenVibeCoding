@@ -1,18 +1,18 @@
 # Merge this into your OpenClaw config when you want the compatible local
-# CortexPilot bundle plus the same read-only MCP server definition.
+# OpenVibeCoding bundle plus the same read-only MCP server definition.
 
 [plugins]
 enabled = true
 
 [plugins.load]
 paths = [
-  "__CORTEXPILOT_REPO_ROOT__/examples/coding-agents/plugin-bundles/cortexpilot-coding-agent-bundle"
+  "__OPENVIBECODING_REPO_ROOT__/examples/coding-agents/plugin-bundles/openvibecoding-coding-agent-bundle"
 ]
 
-[plugins.entries.cortexpilot-coding-agent-bundle]
+[plugins.entries.openvibecoding-coding-agent-bundle]
 enabled = true
 
-[mcp.servers.cortexpilot]
+[mcp.servers.openvibecoding]
 command = "bash"
-args = ["__CORTEXPILOT_REPO_ROOT__/scripts/run_readonly_mcp.sh"]
-cwd = "__CORTEXPILOT_REPO_ROOT__"
+args = ["__OPENVIBECODING_REPO_ROOT__/scripts/run_openvibecoding_readonly_mcp.sh"]
+cwd = "__OPENVIBECODING_REPO_ROOT__"

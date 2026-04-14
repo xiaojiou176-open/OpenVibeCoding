@@ -3,8 +3,8 @@ from pathlib import Path
 
 import pytest
 
-from cortexpilot_orch.gates.tool_gate import validate_command
-from cortexpilot_orch.gates.tool_gate import run_tool_gate
+from openvibecoding_orch.gates.tool_gate import validate_command
+from openvibecoding_orch.gates.tool_gate import run_tool_gate
 
 
 def _write_allowlist(root: Path, allow: list[dict] | None = None, deny: list[str] | None = None) -> None:
@@ -44,14 +44,14 @@ def test_tool_gate_invalid_network_policy(tmp_path: Path) -> None:
 
 
 def test_tool_gate_network_on_request_approved(monkeypatch, tmp_path: Path) -> None:
-    monkeypatch.setenv("CORTEXPILOT_NETWORK_APPROVED", "1")
+    monkeypatch.setenv("OPENVIBECODING_NETWORK_APPROVED", "1")
     _write_allowlist(tmp_path, allow=[{"exec": "curl", "argv_prefixes": [["curl"]]}])
     result = validate_command("curl https://example.com", [], network_policy="on-request", repo_root=tmp_path)
     assert result["ok"] is True
 
 
 def test_tool_gate_network_on_request_denied(monkeypatch, tmp_path: Path) -> None:
-    monkeypatch.delenv("CORTEXPILOT_NETWORK_APPROVED", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_NETWORK_APPROVED", raising=False)
     _write_allowlist(tmp_path, allow=[{"exec": "curl", "argv_prefixes": [["curl"]]}])
     result = validate_command("curl https://example.com", [], network_policy="on-request", repo_root=tmp_path)
     assert result["ok"] is False
@@ -103,8 +103,8 @@ def test_tool_gate_run_tool_gate() -> None:
 
 
 def test_tool_gate_allows_python_module(monkeypatch, tmp_path: Path) -> None:
-    _write_allowlist(tmp_path, allow=[{"exec": "python", "argv_prefixes": [["python", "-m", "cortexpilot_orch.cli"]]}])
-    result = validate_command("python -m cortexpilot_orch.cli", [], repo_root=tmp_path)
+    _write_allowlist(tmp_path, allow=[{"exec": "python", "argv_prefixes": [["python", "-m", "openvibecoding_orch.cli"]]}])
+    result = validate_command("python -m openvibecoding_orch.cli", [], repo_root=tmp_path)
     assert result["ok"] is True
 
 
@@ -137,7 +137,7 @@ def test_tool_gate_allows_managed_toolchain_python_outside_worktree(monkeypatch,
     python_bin = toolchain_bin / "python"
     python_bin.write_text("#!/usr/bin/env bash\nexit 0\n", encoding="utf-8")
     python_bin.chmod(0o755)
-    monkeypatch.setattr("cortexpilot_orch.gates.tool_gate._repo_root", lambda: actual_repo_root)
+    monkeypatch.setattr("openvibecoding_orch.gates.tool_gate._repo_root", lambda: actual_repo_root)
 
     result = validate_command(
         f'"{python_bin}" -m pytest apps/orchestrator/tests/test_schema_validation.py -q',

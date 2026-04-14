@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Any
 
 DEFAULT_INPUT = Path(".runtime-cache/logs/runtime/rum_web_vitals.jsonl")
-DEFAULT_OUTPUT = Path(".runtime-cache/cortexpilot/release/rum_rollup.json")
+DEFAULT_OUTPUT = Path(".runtime-cache/openvibecoding/release/rum_rollup.json")
 DEFAULT_MIN_PV = 1000
 CORE_WEB_VITALS = {"LCP", "CLS", "INP"}
 

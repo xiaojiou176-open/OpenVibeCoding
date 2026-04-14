@@ -23,10 +23,10 @@ def test_collect_source_keys_captures_os_environ_writes(monkeypatch, tmp_path: P
     source.write_text(
         "\n".join(
             [
-                'os.environ["CORTEXPILOT_RUNNER"] = "agents"',
-                'os.environ.setdefault("CORTEXPILOT_ALLOW_CODEX_EXEC", "1")',
-                'os.environ.pop("CORTEXPILOT_FORCE_UNLOCK", None)',
-                'os.getenv("CORTEXPILOT_RUNTIME_ROOT", ".runtime-cache/cortexpilot")',
+                'os.environ["OPENVIBECODING_RUNNER"] = "agents"',
+                'os.environ.setdefault("OPENVIBECODING_ALLOW_CODEX_EXEC", "1")',
+                'os.environ.pop("OPENVIBECODING_FORCE_UNLOCK", None)',
+                'os.getenv("OPENVIBECODING_RUNTIME_ROOT", ".runtime-cache/openvibecoding")',
             ]
         ),
         encoding="utf-8",
@@ -35,7 +35,7 @@ def test_collect_source_keys_captures_os_environ_writes(monkeypatch, tmp_path: P
     monkeypatch.setattr(module, "SCAN_ROOTS", ("src",))
     refs = module._collect_source_keys(tmp_path)
 
-    assert "CORTEXPILOT_RUNNER" in refs
-    assert "CORTEXPILOT_ALLOW_CODEX_EXEC" in refs
-    assert "CORTEXPILOT_FORCE_UNLOCK" in refs
-    assert "CORTEXPILOT_RUNTIME_ROOT" in refs
+    assert "OPENVIBECODING_RUNNER" in refs
+    assert "OPENVIBECODING_ALLOW_CODEX_EXEC" in refs
+    assert "OPENVIBECODING_FORCE_UNLOCK" in refs
+    assert "OPENVIBECODING_RUNTIME_ROOT" in refs

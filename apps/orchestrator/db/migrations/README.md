@@ -18,7 +18,7 @@ bash scripts/check_db_migration_governance.sh
 
 Output:
 
-- `.runtime-cache/cortexpilot/release/db_migration_governance.json`
+- `.runtime-cache/openvibecoding/release/db_migration_governance.json`
 
 The script reports:
 

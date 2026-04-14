@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from cortexpilot_orch.reviewer.reviewer import Reviewer, CodexReviewer, _contract_alignment, _extract_diff_files
+from openvibecoding_orch.reviewer.reviewer import Reviewer, CodexReviewer, _contract_alignment, _extract_diff_files
 
 
 def test_reviewer_flags_missing_diff_and_failed_tests() -> None:

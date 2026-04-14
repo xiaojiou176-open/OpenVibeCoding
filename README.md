@@ -6,15 +6,12 @@ Stop babysitting AI coding work.
 
 AI coding does not lack models. It lacks a command tower.
 
-OpenVibeCoding is the public shell for the CortexPilot repo and runtime
-compatibility layer. It helps teams plan / delegate / track / resume / prove
-long-running engineering work across Codex and Claude Code instead of
-juggling scattered chats, local scripts, and after-the-fact logs.
+OpenVibeCoding is the command tower for AI engineering. It helps teams
+plan / delegate / track / resume / prove long-running engineering work across
+Codex and Claude Code instead of juggling scattered chats, local scripts, and
+after-the-fact logs.
 
-CortexPilot is a contract-first multi-agent orchestration repository.
-
-The underlying repository, runtime, package, and compatibility names remain
-`CortexPilot` where that internal surface is the truthful identifier.
+OpenVibeCoding is a contract-first multi-agent orchestration repository.
 
 The public story is intentionally narrower than the full monorepo:
 
@@ -22,9 +19,8 @@ The public story is intentionally narrower than the full monorepo:
 - **Choose the right adoption path second**
 - **Open MCP / API / builder / skills surfaces only after the real job is clear**
 
-Current public boundary: OpenVibeCoding is a repo-backed public shell over the
-CortexPilot runtime, not a hosted product, and the shipped MCP surface remains
-**read-only**.
+Current public boundary: OpenVibeCoding is a repo-backed command tower, not a
+hosted product, and the shipped MCP surface remains **read-only**.
 
 Current lane order is deliberate:
 
@@ -34,13 +30,13 @@ Current lane order is deliberate:
 
 [Quickstart](#quickstart) · [First Proven Workflow](https://xiaojiou176-open.github.io/OpenVibeCoding/use-cases/) · [Compatibility Matrix](https://xiaojiou176-open.github.io/OpenVibeCoding/compatibility/) · [Distribution Contract](DISTRIBUTION.md) · [Distribution Status](https://xiaojiou176-open.github.io/OpenVibeCoding/distribution/) · [Docs](docs/README.md) · [Architecture](docs/architecture/runtime-topology.md) · [AI + MCP + API Surfaces](https://xiaojiou176-open.github.io/OpenVibeCoding/ai-surfaces/) · [Builder Quickstart](https://xiaojiou176-open.github.io/OpenVibeCoding/builders/) · [Releases](https://github.com/xiaojiou176-open/OpenVibeCoding/releases)
 
-![CortexPilot command tower showcase card](docs/assets/storefront/command-tower-showcase-card.svg)
+![OpenVibeCoding command tower showcase card](docs/assets/storefront/command-tower-showcase-card.svg)
 
 ## Official Distribution Story
 
 The shortest truthful answer today is:
 
-> OpenVibeCoding currently ships through the public CortexPilot repo, a public
+> OpenVibeCoding currently ships through the public OpenVibeCoding repo, a public
 > Pages front door, a repo-local read-only MCP surface, a published PyPI
 > package, a live Official MCP Registry entry, and a live ClawHub skill. The
 > adoption-router skill is the secondary public lane. Local coding-agent
@@ -55,9 +51,9 @@ Use these buckets:
 - **Starter-only / example lane**: Codex / Claude Code / OpenClaw local starter kits and local coding-agent bundle examples
 - **Submitted externally**: `OpenHands/extensions#151` and `chatmcp/mcpso#1559` are public receipts and still await host acceptance
 - **Publish-ready but deferred**:
-  `@cortexpilot/frontend-api-client`,
-  `@cortexpilot/frontend-api-contract`
-- **Workspace-only**: `@cortexpilot/frontend-shared` stays repo-owned and is
+  `@openvibecoding/frontend-api-client`,
+  `@openvibecoding/frontend-api-contract`
+- **Workspace-only**: `@openvibecoding/frontend-shared` stays repo-owned and is
   not marketed as a standalone package
 - **Deferred**: hosted operator, write-capable MCP, Docker image, and standalone npm releases
 
@@ -66,11 +62,11 @@ If you need the exact matrix instead of a one-line summary, open
 [Distribution Status](https://xiaojiou176-open.github.io/OpenVibeCoding/distribution/)
 mirror.
 
-![CortexPilot studio preview card](docs/assets/storefront/cortexpilot-studio-preview.svg)
+![OpenVibeCoding studio preview card](docs/assets/storefront/openvibecoding-studio-preview.svg)
 
-![CortexPilot command tower flow](docs/assets/storefront/hero-command-tower.svg)
+![OpenVibeCoding command tower flow](docs/assets/storefront/hero-command-tower.svg)
 
-![CortexPilot first-loop storyboard](docs/assets/storefront/first-loop-storyboard.gif)
+![OpenVibeCoding first-loop storyboard](docs/assets/storefront/first-loop-storyboard.gif)
 
 ## Open The Right Door
 
@@ -94,7 +90,7 @@ paths:
 | --- | --- | --- |
 | see the full operator surface quickly | `npm run bootstrap:host && npm run dev` | the localhost orchestrator API plus dashboard in one local product loop |
 | iterate on the dashboard only | `npm run bootstrap:host && npm run dashboard:dev` | the dashboard shell on port 3100; use this when the API is already running |
-| validate the smallest governed path | `CORTEXPILOT_HOST_COMPAT=1 bash scripts/test_quick.sh --no-related` | the quickest repo-side proof path without pretending the full system already ran |
+| validate the smallest governed path | `OPENVIBECODING_HOST_COMPAT=1 bash scripts/test_quick.sh --no-related` | the quickest repo-side proof path without pretending the full system already ran |
 | inspect what the system records | open the run list and `.runtime-cache/` after the quick path | a concrete evidence bundle and replay surface, not just a shell success line |
 
 A clean first pass should let you:
@@ -135,7 +131,7 @@ The engineering philosophy underneath that loop is equally explicit:
 - **Context Engineering**: keep the right material in the right head, and treat explicit handoff as a fallback rather than the default loop.
 - **Harness Engineering**: move work through contracts, runtime bindings, approvals, and proof surfaces so the system can keep operating safely.
 
-The CortexPilot runtime underneath that public shell combines:
+OpenVibeCoding currently combines:
 
 - **Command Tower**: one operator surface for governed AI work, live run visibility, queue posture, and L0-style oversight
 - **Workflow Cases**: one stable operating record that ties request, verdict, proof, and linked runs together
@@ -166,7 +162,7 @@ manual:
 2. Run the smallest verified safety path:
 
    ```bash
-   CORTEXPILOT_HOST_COMPAT=1 bash scripts/test_quick.sh --no-related
+   OPENVIBECODING_HOST_COMPAT=1 bash scripts/test_quick.sh --no-related
    ```
 
 3. Open the full local product loop:
@@ -230,8 +226,8 @@ repository should be judged on.
   `Switchyard /v1/runtime/invoke` for intake/operator-style chat paths, but
   MCP tool execution still needs a tool-capable provider path and therefore
   fails closed instead of pretending Switchyard already has tool parity
-- the CortexPilot runtime under OpenVibeCoding is still **not** a hosted
-  operator service; `cortexpilot.ai` should be treated as a marketing/holding
+- OpenVibeCoding is still **not** a hosted
+  operator service; `openvibecoding.ai` should be treated as a marketing/holding
   domain until the public contract, support boundary, and live surface
   materially change
 
@@ -255,7 +251,7 @@ live GitHub control-plane requirements live in
 `configs/github_control_plane_policy.json`.
 
 Repo-first pushes on a freshly created GitHub repository may set
-`github.event.before` to the all-zero SHA. CortexPilot's repo-owned doc-drift
+`github.event.before` to the all-zero SHA. OpenVibeCoding's repo-owned doc-drift
 and doc-sync hooks now skip `ci-diff` comparison for that bootstrap-only case
 so Quick Feedback fails only on real drift, not on the lack of an initial
 baseline commit. The `GitHub Control Plane` workflow also prefers the repo
@@ -423,7 +419,7 @@ If your team needs starter assets instead of only wording, open:
 
 - [examples/coding-agents/README.md](examples/coding-agents/README.md): one map for Codex, Claude Code, OpenClaw, and the shared read-only MCP recipe
 - [examples/coding-agents/codex/marketplace.example.json](examples/coding-agents/codex/marketplace.example.json): local Codex marketplace entry
-- [examples/coding-agents/plugin-bundles/cortexpilot-coding-agent-bundle/.codex-plugin/plugin.json](examples/coding-agents/plugin-bundles/cortexpilot-coding-agent-bundle/.codex-plugin/plugin.json): compatible local skill-bundle manifest
+- [examples/coding-agents/plugin-bundles/openvibecoding-coding-agent-bundle/.codex-plugin/plugin.json](examples/coding-agents/plugin-bundles/openvibecoding-coding-agent-bundle/.codex-plugin/plugin.json): compatible local skill-bundle manifest
 - [examples/coding-agents/claude-code/README.md](examples/coding-agents/claude-code/README.md): `.claude/` command + agent starter
 - [examples/coding-agents/openclaw/README.md](examples/coding-agents/openclaw/README.md): OpenClaw-compatible local bundle recipe
 - [examples/coding-agents/mcp/readonly.mcp.json.example](examples/coding-agents/mcp/readonly.mcp.json.example): shared read-only MCP config example
@@ -495,7 +491,7 @@ The current stage freeze keeps two high-risk directions explicitly constrained:
 - Repo-side groundwork for that later-gated pilot can include queue preview,
   queue cancel, and a queue-only MCP pilot server. That pilot now also keeps
   `enqueue_from_run` behind an explicit
-  `CORTEXPILOT_MCP_QUEUE_PILOT_ENABLE_APPLY=1` trusted-operator gate, so the
+  `OPENVIBECODING_MCP_QUEUE_PILOT_ENABLE_APPLY=1` trusted-operator gate, so the
   preview surface can exist without silently turning mutation on by default.
   These repo-owned controls do not by themselves upgrade the public product
   contract into write-capable MCP.
@@ -503,7 +499,7 @@ The current stage freeze keeps two high-risk directions explicitly constrained:
   [docs/runbooks/write-mcp-queue-pilot.md](docs/runbooks/write-mcp-queue-pilot.md).
 
 - **Hosted operator surface** remains **No-Go**.
-- `cortexpilot.ai` is still a weak marketing/holding domain, not a production
+- `openvibecoding.ai` is still a weak marketing/holding domain, not a production
   front door.
 - The current public contract still describes OpenVibeCoding as source code plus
   operator/demo surfaces, not as a hosted service.
@@ -583,7 +579,7 @@ specific transitive dependency layout such as `data-urls`.
 
 Recent operator-surface upgrades now include:
 
-- persisted `workflow case` snapshots under `.runtime-cache/cortexpilot/workflow-cases/`
+- persisted `workflow case` snapshots under `.runtime-cache/openvibecoding/workflow-cases/`
 - derived `proof_pack.json` reports for successful public task slices
 - a dedicated run-compare surface alongside the existing Run Detail replay area
 - a repo-local `mcp-readonly-server` entry for read-only runs/workflows/queue/approval/diff-gate/report access
@@ -621,8 +617,8 @@ already running.
 <!-- GENERATED:ci-topology-summary:end -->
 
 <!-- GENERATED:current-run-evidence-summary:start -->
-- authoritative release-truth builders must consume `.runtime-cache/cortexpilot/reports/ci/current_run/source_manifest.json`.
-- the live current-run authority verdict belongs to `python3 scripts/check_ci_current_run_sources.py` and `.runtime-cache/cortexpilot/reports/ci/current_run/consistency.json`.
+- authoritative release-truth builders must consume `.runtime-cache/openvibecoding/reports/ci/current_run/source_manifest.json`.
+- the live current-run authority verdict belongs to `python3 scripts/check_ci_current_run_sources.py` and `.runtime-cache/openvibecoding/reports/ci/current_run/consistency.json`.
 - current-run builders: `artifact_index/current_run_index`, `cost_profile`, `runner_health`, `slo`, `portal`, `provenance`.
 - docs and wrappers must not hand-maintain live current-run status; they must point readers back to the checker receipts.
 - if the current-run source manifest is missing, authoritative current-run reports must fail closed or run only in explicit advisory mode.
@@ -693,7 +689,7 @@ Runtime retention and space-governance now stay coupled at the report layer:
 `retention_report.json` carries `log_lane_summary` plus `space_bridge`, while
 space-governance receipts expose serial-only heavy cleanup ordering, expected
 reclaim bytes, and post-cleanup verification metadata. Repo-external apply
-scope remains limited to `~/.cache/cortexpilot`; Docker Desktop, global
+scope remains limited to `~/.cache/openvibecoding`; Docker Desktop, global
 Cargo/Rustup, global uv, global npm, and global Playwright remain observation
 only.
 Repo-authored runtime/test/temp/report artifacts stay under `.runtime-cache/`,
@@ -701,7 +697,7 @@ while app-local `node_modules`, `.next`, `.venv`, `dist`, and `*.tsbuildinfo`
 surfaces are explicit build/dependency exceptions rather than part of the
 unified runtime cache story.
 Heavy machine-scoped temp producers now also stay under the governed
-`~/.cache/cortexpilot/tmp/` subtree by default. Current examples include local
+`~/.cache/openvibecoding/tmp/` subtree by default. Current examples include local
 `docker_ci` host runner temp roots and clean-room recovery machine cache /
 preserve roots, so Darwin `TMPDIR` is no longer the default heavy temp landing
 zone for those repo-owned surfaces.
@@ -717,24 +713,24 @@ Docker-heavy local CI residue now has its own operator lane:
 - `npm run docker:runtime:prune:aggressive`
 - `npm run docker:runtime:prune:aggressive:full`
 
-Use the Docker runtime lane for `cortexpilot-ci-core:local`,
-`cortexpilot-ci-desktop-native:local`, and stale repo container residue. Keep
+Use the Docker runtime lane for `openvibecoding-ci-core:local`,
+`openvibecoding-ci-desktop-native:local`, and stale repo container residue. Keep
 `space:cleanup:wave*` focused on repo-local residue and the governed
-`~/.cache/cortexpilot` namespace. Aggressive cleanup skips images that still
+`~/.cache/openvibecoding` namespace. Aggressive cleanup skips images that still
 back running containers, and the `:full` variant adds repo-related named volume
-removal. The lane only applies cleanup to CortexPilot-owned images, containers,
+removal. The lane only applies cleanup to OpenVibeCoding-owned images, containers,
 repo-prefixed volumes; workstation-global Docker/cache totals remain
 audit-only observations. Repo-owned buildx local cache now also lives under
-`~/.cache/cortexpilot/docker-buildx-cache/`, and the Docker lane writes a
+`~/.cache/openvibecoding/docker-buildx-cache/`, and the Docker lane writes a
 structured receipt to
-`.runtime-cache/cortexpilot/reports/space_governance/docker_runtime.json`.
+`.runtime-cache/openvibecoding/reports/space_governance/docker_runtime.json`.
 That buildx cache path is a local-development accelerator, not a GitHub-hosted
 CI requirement; hosted/container lanes stay on the more conservative daemon
 path when local cache export is unsupported.
 Local browser development now defaults to the repo-owned singleton Chrome root
-under `~/.cache/cortexpilot/browser/chrome-user-data/`. Run
+under `~/.cache/openvibecoding/browser/chrome-user-data/`. Run
 `npm run browser:chrome:migrate` once to copy the default-Chrome display name
-`cortexpilot` into that root as `Profile 1`, then use
+`openvibecoding` into that root as `Profile 1`, then use
 `npm run browser:chrome:launch` when you want a manual singleton Chrome window
 that the repo's Playwright automation can later attach to over
 `127.0.0.1:9341`. The repo now avoids the usual login-loss pattern by keeping
@@ -839,4 +835,4 @@ evidence-backed.
 
 ## License
 
-CortexPilot is released under the MIT License. See [LICENSE](LICENSE).
+OpenVibeCoding is released under the MIT License. See [LICENSE](LICENSE).

@@ -7,7 +7,7 @@ from pathlib import Path
 
 def _load_generator_module() -> object:
     script_path = Path(__file__).resolve().parents[3] / "scripts" / "generate_storefront_proof_pack_index.py"
-    spec = importlib.util.spec_from_file_location("cortexpilot_generate_storefront_proof_pack_index", script_path)
+    spec = importlib.util.spec_from_file_location("openvibecoding_generate_storefront_proof_pack_index", script_path)
     module = importlib.util.module_from_spec(spec)
     assert spec and spec.loader
     spec.loader.exec_module(module)
@@ -22,7 +22,7 @@ def test_generate_storefront_proof_pack_index_builds_assets_from_pack_manifest(t
 
     registry = {
         "schema_version": 1,
-        "artifact_type": "cortexpilot_storefront_proof_bundle_registry",
+        "artifact_type": "openvibecoding_storefront_proof_bundle_registry",
         "vocabulary_contract": {
             "proven_workflow_label": "first proven workflow",
             "proof_pack_label": "public proof pack",
@@ -75,7 +75,7 @@ def test_generate_storefront_proof_pack_index_builds_assets_from_pack_manifest(t
     registry_payload["source_registry"] = "configs/storefront_proof_bundle_registry.json"
     rendered = module.build_index(registry_payload)
 
-    assert rendered["artifact_type"] == "cortexpilot_public_proof_pack_index"
+    assert rendered["artifact_type"] == "openvibecoding_public_proof_pack_index"
     assert rendered["source_registry"] == "configs/storefront_proof_bundle_registry.json"
     news = rendered["bundles"][0]
     roles = {item["role"] for item in news["assets"]}

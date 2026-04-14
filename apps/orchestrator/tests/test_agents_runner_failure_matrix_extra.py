@@ -7,9 +7,9 @@ from pathlib import Path
 
 import pytest
 
-from cortexpilot_orch.runners import agents_runner
-from cortexpilot_orch.runners.agents_runner import AgentsRunner
-from cortexpilot_orch.store.run_store import RunStore
+from openvibecoding_orch.runners import agents_runner
+from openvibecoding_orch.runners.agents_runner import AgentsRunner
+from openvibecoding_orch.store.run_store import RunStore
 
 
 class _DummyRunConfig:
@@ -162,7 +162,7 @@ def _install_fake_agents_sdk(monkeypatch, runner_cb, mcp_cls=_DummyMCPDefault, s
 def _prepare_runner(tmp_path: Path, monkeypatch, task_id: str) -> tuple[AgentsRunner, Path, dict, str]:
     store = RunStore(runs_root=tmp_path)
     run_id = store.create_run(task_id)
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", run_id)
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", run_id)
     monkeypatch.setenv("GEMINI_API_KEY", "test-key")
     runner = AgentsRunner(store)
     schema_path = Path(__file__).resolve().parents[3] / "schemas" / "task_result.v1.json"
@@ -274,9 +274,9 @@ def test_agents_runner_context_manager_cleanup_timeout(tmp_path: Path, monkeypat
         lambda *_args, **_kwargs: _DummyStreamResult(json.dumps(payload, ensure_ascii=False)),
         mcp_cls=_MCPContextManager,
     )
-    monkeypatch.setenv("CORTEXPILOT_CODEX_PROFILE", "worker")
-    monkeypatch.setenv("CORTEXPILOT_MCP_CONNECT_TIMEOUT_SEC", "0")
-    monkeypatch.setenv("CORTEXPILOT_MCP_CLEANUP_TIMEOUT_SEC", "0.001")
+    monkeypatch.setenv("OPENVIBECODING_CODEX_PROFILE", "worker")
+    monkeypatch.setenv("OPENVIBECODING_MCP_CONNECT_TIMEOUT_SEC", "0")
+    monkeypatch.setenv("OPENVIBECODING_MCP_CLEANUP_TIMEOUT_SEC", "0.001")
 
     runner, schema_path, contract, run_id = _prepare_runner(tmp_path, monkeypatch, "task_cleanup_timeout")
     result = runner.run_contract(contract, tmp_path / "worktree", schema_path, mock_mode=False)
@@ -301,7 +301,7 @@ def test_agents_runner_connect_without_timeout_branch(tmp_path: Path, monkeypatc
         lambda *_args, **_kwargs: _DummyStreamResult(json.dumps(payload, ensure_ascii=False)),
         mcp_cls=_DummyMCPDefault,
     )
-    monkeypatch.setenv("CORTEXPILOT_MCP_CONNECT_TIMEOUT_SEC", "0")
+    monkeypatch.setenv("OPENVIBECODING_MCP_CONNECT_TIMEOUT_SEC", "0")
 
     runner, schema_path, contract, _ = _prepare_runner(tmp_path, monkeypatch, "task_connect_no_timeout")
     result = runner.run_contract(contract, tmp_path / "worktree", schema_path, mock_mode=False)
@@ -338,8 +338,8 @@ def test_agents_runner_context_manager_direct_exit_without_timeout_branch(tmp_pa
         lambda *_args, **_kwargs: _DummyStreamResult(json.dumps(payload, ensure_ascii=False)),
         mcp_cls=_MCPContextManagerNoTimeout,
     )
-    monkeypatch.setenv("CORTEXPILOT_MCP_CONNECT_TIMEOUT_SEC", "0")
-    monkeypatch.setenv("CORTEXPILOT_MCP_CLEANUP_TIMEOUT_SEC", "0")
+    monkeypatch.setenv("OPENVIBECODING_MCP_CONNECT_TIMEOUT_SEC", "0")
+    monkeypatch.setenv("OPENVIBECODING_MCP_CLEANUP_TIMEOUT_SEC", "0")
 
     runner, schema_path, contract, _ = _prepare_runner(tmp_path, monkeypatch, "task_context_no_timeout")
     result = runner.run_contract(contract, tmp_path / "worktree", schema_path, mock_mode=False)
@@ -350,8 +350,8 @@ def test_agents_runner_context_manager_direct_exit_without_timeout_branch(tmp_pa
 def test_agents_runner_stream_idle_timeout_branch(tmp_path: Path, monkeypatch) -> None:
     _install_fake_agents_sdk(monkeypatch, lambda *_args, **_kwargs: _IdleStreamResult())
     # Use a realistic-but-stable idle timeout for loaded CI workers.
-    monkeypatch.setenv("CORTEXPILOT_STREAM_IDLE_TIMEOUT_SEC", "0.3")
-    monkeypatch.setenv("CORTEXPILOT_CODEX_TIMEBOX_SEC", "")
+    monkeypatch.setenv("OPENVIBECODING_STREAM_IDLE_TIMEOUT_SEC", "0.3")
+    monkeypatch.setenv("OPENVIBECODING_CODEX_TIMEBOX_SEC", "")
 
     runner, schema_path, contract, run_id = _prepare_runner(tmp_path, monkeypatch, "task_idle_timeout")
     contract["timeout_retry"]["timeout_sec"] = 5
@@ -398,7 +398,7 @@ def test_agents_runner_tool_timeout_branch(tmp_path: Path, monkeypatch) -> None:
             return self._cancelled
 
     _install_fake_agents_sdk(monkeypatch, lambda *_args, **_kwargs: _ToolTimeoutResult())
-    monkeypatch.setenv("CORTEXPILOT_MCP_TOOL_TIMEOUT_SEC", "0.2")
+    monkeypatch.setenv("OPENVIBECODING_MCP_TOOL_TIMEOUT_SEC", "0.2")
 
     runner, schema_path, contract, run_id = _prepare_runner(tmp_path, monkeypatch, "task_tool_timeout")
     contract["timeout_retry"]["timeout_sec"] = 3
@@ -446,7 +446,7 @@ def test_agents_runner_broken_pipe_branch(tmp_path: Path, monkeypatch) -> None:
             return self._cancelled
 
     _install_fake_agents_sdk(monkeypatch, lambda *_args, **_kwargs: _BlockingResult(), mcp_cls=_BrokenPipeMCP)
-    monkeypatch.setenv("CORTEXPILOT_MCP_BROKEN_PIPE_FAIL", "1")
+    monkeypatch.setenv("OPENVIBECODING_MCP_BROKEN_PIPE_FAIL", "1")
 
     runner, schema_path, contract, run_id = _prepare_runner(tmp_path, monkeypatch, "task_broken_pipe")
     contract["timeout_retry"]["timeout_sec"] = 1
@@ -475,7 +475,7 @@ def test_agents_runner_cleanup_timeout_branch(tmp_path: Path, monkeypatch) -> No
         lambda *_args, **_kwargs: _DummyStreamResult(json.dumps(payload, ensure_ascii=False)),
         mcp_cls=_SlowCleanupMCP,
     )
-    monkeypatch.setenv("CORTEXPILOT_MCP_CLEANUP_TIMEOUT_SEC", "0.001")
+    monkeypatch.setenv("OPENVIBECODING_MCP_CLEANUP_TIMEOUT_SEC", "0.001")
 
     runner, schema_path, contract, run_id = _prepare_runner(tmp_path, monkeypatch, "task_cleanup_timeout_real")
     result = runner.run_contract(contract, tmp_path / "worktree", schema_path, mock_mode=False)

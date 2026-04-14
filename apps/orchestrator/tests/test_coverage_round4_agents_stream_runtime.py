@@ -6,8 +6,8 @@ from types import SimpleNamespace
 
 import pytest
 
-from cortexpilot_orch.runners import agents_stream_runtime
-from cortexpilot_orch.store.run_store import RunStore
+from openvibecoding_orch.runners import agents_stream_runtime
+from openvibecoding_orch.store.run_store import RunStore
 
 
 class _Item:
@@ -118,8 +118,8 @@ def test_stream_runtime_invalid_timeout_inputs_are_fail_closed(
         _start_watch_tasks_factory(),
     )
     monkeypatch.setattr(agents_stream_runtime, "cancel_watch_tasks", lambda *args: None)
-    monkeypatch.setenv("CORTEXPILOT_STREAM_IDLE_TIMEOUT_SEC", "oops")
-    monkeypatch.setenv("CORTEXPILOT_CODEX_TIMEBOX_SEC", "oops")
+    monkeypatch.setenv("OPENVIBECODING_STREAM_IDLE_TIMEOUT_SEC", "oops")
+    monkeypatch.setenv("OPENVIBECODING_CODEX_TIMEBOX_SEC", "oops")
 
     asyncio.run(
         agents_stream_runtime.consume_stream_events(
@@ -148,8 +148,8 @@ def test_stream_runtime_non_positive_idle_and_hard_timebox_values(
         _start_watch_tasks_factory(),
     )
     monkeypatch.setattr(agents_stream_runtime, "cancel_watch_tasks", lambda *args: None)
-    monkeypatch.setenv("CORTEXPILOT_STREAM_IDLE_TIMEOUT_SEC", "0")
-    monkeypatch.setenv("CORTEXPILOT_CODEX_TIMEBOX_SEC", "-1")
+    monkeypatch.setenv("OPENVIBECODING_STREAM_IDLE_TIMEOUT_SEC", "0")
+    monkeypatch.setenv("OPENVIBECODING_CODEX_TIMEBOX_SEC", "-1")
 
     asyncio.run(
         agents_stream_runtime.consume_stream_events(
@@ -178,8 +178,8 @@ def test_stream_runtime_hard_timebox_only_applies_and_completes(
         _start_watch_tasks_factory(),
     )
     monkeypatch.setattr(agents_stream_runtime, "cancel_watch_tasks", lambda *args: None)
-    monkeypatch.setenv("CORTEXPILOT_CODEX_TIMEBOX_SEC", "0.2")
-    monkeypatch.delenv("CORTEXPILOT_STREAM_IDLE_TIMEOUT_SEC", raising=False)
+    monkeypatch.setenv("OPENVIBECODING_CODEX_TIMEBOX_SEC", "0.2")
+    monkeypatch.delenv("OPENVIBECODING_STREAM_IDLE_TIMEOUT_SEC", raising=False)
 
     asyncio.run(
         agents_stream_runtime.consume_stream_events(
@@ -261,7 +261,7 @@ def test_stream_runtime_broken_pipe_and_idle_timeout_events(
         "start_watch_tasks",
         _start_watch_tasks_factory(trigger="idle"),
     )
-    monkeypatch.setenv("CORTEXPILOT_STREAM_IDLE_TIMEOUT_SEC", "0.1")
+    monkeypatch.setenv("OPENVIBECODING_STREAM_IDLE_TIMEOUT_SEC", "0.1")
     with pytest.raises(RuntimeError, match="idle timeout"):
         asyncio.run(
             agents_stream_runtime.consume_stream_events(

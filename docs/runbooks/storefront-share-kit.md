@@ -1,6 +1,6 @@
 # Storefront Share Kit
 
-Use this file as the minimum public sharing kit for CortexPilot.
+Use this file as the minimum public sharing kit for OpenVibeCoding.
 
 For the first public release window, `news_digest` is the only official
 happy-path baseline for proof-oriented copy. Other slices may exist in product
@@ -67,9 +67,9 @@ Code.
 
 - why governed runs matter after “the agent replied”
 - how evidence + replay changes debugging and review
-- how read-only MCP access turns CortexPilot into a node other tools can inspect
+- how read-only MCP access turns OpenVibeCoding into a node other tools can inspect
 - how the operator brief explains failures without pretending to execute recovery
-- why CortexPilot is a control plane, not a generic agent demo
+- why OpenVibeCoding is a control plane, not a generic agent demo
 - anchor first-look copy on the `news_digest` path when referring to a public
   first run
 - use the storyboard GIF only as a process explainer, not as proof of live runtime behavior

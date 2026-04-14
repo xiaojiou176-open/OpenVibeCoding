@@ -1,5 +1,5 @@
 // GENERATED FILE. DO NOT EDIT.
-// Source: docs/api/openapi.cortexpilot.json
+// Source: docs/api/openapi.openvibecoding.json
 
 export declare const PM_JOURNEY_STAGES: readonly ["discover", "clarify", "execute", "verify"];
 export type PmJourneyStage = "discover" | "clarify" | "execute" | "verify";

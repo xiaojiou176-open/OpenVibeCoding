@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from cortexpilot_orch.runners import agents_handoff_runtime
+from openvibecoding_orch.runners import agents_handoff_runtime
 
 
 class _Store:
@@ -47,10 +47,10 @@ def _handoff_instructions(from_role: str, to_role: str) -> str:
 
 
 def test_handoff_timeout_helpers(monkeypatch) -> None:
-    monkeypatch.setenv("CORTEXPILOT_AGENTS_HANDOFF_TIMEOUT_FAIL_OPEN", "yes")
+    monkeypatch.setenv("OPENVIBECODING_AGENTS_HANDOFF_TIMEOUT_FAIL_OPEN", "yes")
     assert agents_handoff_runtime._handoff_timeout_fail_open_enabled() is True
 
-    monkeypatch.delenv("CORTEXPILOT_AGENTS_HANDOFF_TIMEOUT_FAIL_OPEN", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_AGENTS_HANDOFF_TIMEOUT_FAIL_OPEN", raising=False)
     assert agents_handoff_runtime._handoff_timeout_fail_open_enabled() is False
 
     assert agents_handoff_runtime._is_timeout_like_error(RuntimeError("timed out while waiting")) is True
@@ -304,7 +304,7 @@ def test_single_handoff_timeout_fail_open(monkeypatch, tmp_path: Path) -> None:
     store = _Store()
     transcripts: list[dict[str, Any]] = []
 
-    monkeypatch.setenv("CORTEXPILOT_AGENTS_HANDOFF_TIMEOUT_FAIL_OPEN", "1")
+    monkeypatch.setenv("OPENVIBECODING_AGENTS_HANDOFF_TIMEOUT_FAIL_OPEN", "1")
     monkeypatch.setattr(agents_handoff_runtime.agents_handoff, "_handoff_required", lambda _contract: True)
     monkeypatch.setattr(agents_handoff_runtime.agents_handoff, "_handoff_prompt", lambda _task_id, text: text)
 
@@ -339,7 +339,7 @@ def test_single_handoff_timeout_fail_open(monkeypatch, tmp_path: Path) -> None:
 
 
 def test_single_handoff_error_missing_output_invalid_and_schema(monkeypatch, tmp_path: Path) -> None:
-    monkeypatch.delenv("CORTEXPILOT_AGENTS_HANDOFF_TIMEOUT_FAIL_OPEN", raising=False)
+    monkeypatch.delenv("OPENVIBECODING_AGENTS_HANDOFF_TIMEOUT_FAIL_OPEN", raising=False)
     monkeypatch.setattr(agents_handoff_runtime.agents_handoff, "_handoff_required", lambda _contract: True)
     monkeypatch.setattr(agents_handoff_runtime.agents_handoff, "_handoff_prompt", lambda _task_id, text: text)
 

@@ -1,12 +1,12 @@
 import os
 from pathlib import Path
 
-from cortexpilot_orch.store.session_map import SessionAliasStore
+from openvibecoding_orch.store.session_map import SessionAliasStore
 
 
 def test_session_alias_store_roundtrip(tmp_path: Path):
     path = tmp_path / "alias_map.json"
-    os.environ["CORTEXPILOT_SESSION_ALIAS_PATH"] = str(path)
+    os.environ["OPENVIBECODING_SESSION_ALIAS_PATH"] = str(path)
     try:
         store = SessionAliasStore()
 
@@ -24,4 +24,4 @@ def test_session_alias_store_roundtrip(tmp_path: Path):
         assert store.delete("plan-1") is True
         assert store.resolve("plan-1") is None
     finally:
-        os.environ.pop("CORTEXPILOT_SESSION_ALIAS_PATH", None)
+        os.environ.pop("OPENVIBECODING_SESSION_ALIAS_PATH", None)

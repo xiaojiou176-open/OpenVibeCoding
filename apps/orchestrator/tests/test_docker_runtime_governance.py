@@ -11,7 +11,7 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 
 def _load_module():
     spec = importlib.util.spec_from_file_location(
-        "cortexpilot_docker_runtime_governance",
+        "openvibecoding_docker_runtime_governance",
         REPO_ROOT / "scripts" / "docker_runtime_governance.py",
     )
     assert spec is not None and spec.loader is not None
@@ -73,16 +73,16 @@ def test_build_docker_runtime_report_tracks_build_cache_and_skipped_active(monke
         dry_run=True,
         include_image=True,
         include_volumes=True,
-        image_name="cortexpilot-ci-core:local",
-        desktop_image_name="cortexpilot-ci-desktop-native:local",
-        volume_prefix="cortexpilot",
+        image_name="openvibecoding-ci-core:local",
+        desktop_image_name="openvibecoding-ci-desktop-native:local",
+        volume_prefix="openvibecoding",
     )
 
     assert report["status"] == "ok"
     assert report["plan"]["removable_build_cache_paths"] == ["/tmp/core-cache", "/tmp/desktop-cache"]
-    assert report["plan"]["removable_image_names"] == ["cortexpilot-ci-desktop-native:local"]
+    assert report["plan"]["removable_image_names"] == ["openvibecoding-ci-desktop-native:local"]
     assert report["plan"]["skipped_active"] == [
-        {"kind": "image", "name": "cortexpilot-ci-core:local", "reason": "active_container"}
+        {"kind": "image", "name": "openvibecoding-ci-core:local", "reason": "active_container"}
     ]
     assert report["managed_totals"]["build_cache_bytes"] == 160
     assert report["plan"]["planned_reclaim_bytes"] == 440
@@ -109,7 +109,7 @@ def test_build_docker_runtime_report_apply_records_removed_build_cache(monkeypat
     )
     monkeypatch.setattr(module, "_docker_container_entries", lambda container_ids, image_name: [])
     monkeypatch.setattr(module, "_docker_volume_entries", lambda prefix: [])
-    cache_dir = tmp_path / "docker-buildx-cache" / "cortexpilot-ci-core-local"
+    cache_dir = tmp_path / "docker-buildx-cache" / "openvibecoding-ci-core-local"
     cache_dir.mkdir(parents=True, exist_ok=True)
     (cache_dir / "marker.txt").write_text("cache", encoding="utf-8")
     monkeypatch.setattr(
@@ -133,9 +133,9 @@ def test_build_docker_runtime_report_apply_records_removed_build_cache(monkeypat
         dry_run=False,
         include_image=False,
         include_volumes=False,
-        image_name="cortexpilot-ci-core:local",
-        desktop_image_name="cortexpilot-ci-desktop-native:local",
-        volume_prefix="cortexpilot",
+        image_name="openvibecoding-ci-core:local",
+        desktop_image_name="openvibecoding-ci-desktop-native:local",
+        volume_prefix="openvibecoding",
     )
 
     assert report["result"]["removed"]["build_caches"] == [str(cache_dir)]

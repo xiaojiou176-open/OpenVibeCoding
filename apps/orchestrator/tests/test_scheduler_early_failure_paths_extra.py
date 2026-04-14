@@ -3,8 +3,8 @@ import json
 import subprocess
 from pathlib import Path
 
-from cortexpilot_orch.scheduler import scheduler as sched
-from cortexpilot_orch.scheduler.scheduler import Orchestrator
+from openvibecoding_orch.scheduler import scheduler as sched
+from openvibecoding_orch.scheduler.scheduler import Orchestrator
 
 
 SCHEMA_ROOT = Path(__file__).resolve().parents[3] / "schemas"
@@ -110,10 +110,10 @@ def test_execute_task_baseline_commit_missing_branch(tmp_path: Path, monkeypatch
     runs_root = runtime_root / "runs"
     worktree_root = runtime_root / "worktrees"
     monkeypatch.chdir(repo)
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(worktree_root))
-    monkeypatch.setenv("CORTEXPILOT_SCHEMA_ROOT", str(SCHEMA_ROOT))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(worktree_root))
+    monkeypatch.setenv("OPENVIBECODING_SCHEMA_ROOT", str(SCHEMA_ROOT))
 
     contract = _base_contract("task_baseline_missing")
     contract_path = repo / "contract.json"
@@ -135,10 +135,10 @@ def test_execute_task_agent_registry_load_error_branch(tmp_path: Path, monkeypat
     runs_root = runtime_root / "runs"
     worktree_root = runtime_root / "worktrees"
     monkeypatch.chdir(repo)
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(worktree_root))
-    monkeypatch.setenv("CORTEXPILOT_SCHEMA_ROOT", str(SCHEMA_ROOT))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(worktree_root))
+    monkeypatch.setenv("OPENVIBECODING_SCHEMA_ROOT", str(SCHEMA_ROOT))
 
     contract = _base_contract("task_registry_error")
     contract_path = repo / "contract.json"
@@ -161,10 +161,10 @@ def test_execute_task_assigned_agent_validation_error_branch(tmp_path: Path, mon
     runs_root = runtime_root / "runs"
     worktree_root = runtime_root / "worktrees"
     monkeypatch.chdir(repo)
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(worktree_root))
-    monkeypatch.setenv("CORTEXPILOT_SCHEMA_ROOT", str(SCHEMA_ROOT))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(worktree_root))
+    monkeypatch.setenv("OPENVIBECODING_SCHEMA_ROOT", str(SCHEMA_ROOT))
 
     contract = _base_contract("task_agent_invalid")
     contract_path = repo / "contract.json"
@@ -188,10 +188,10 @@ def test_execute_task_codex_home_resolve_error_branch(tmp_path: Path, monkeypatc
     runs_root = runtime_root / "runs"
     worktree_root = runtime_root / "worktrees"
     monkeypatch.chdir(repo)
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNS_ROOT", str(runs_root))
-    monkeypatch.setenv("CORTEXPILOT_WORKTREE_ROOT", str(worktree_root))
-    monkeypatch.setenv("CORTEXPILOT_SCHEMA_ROOT", str(SCHEMA_ROOT))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runs_root))
+    monkeypatch.setenv("OPENVIBECODING_WORKTREE_ROOT", str(worktree_root))
+    monkeypatch.setenv("OPENVIBECODING_SCHEMA_ROOT", str(SCHEMA_ROOT))
 
     contract = _base_contract("task_codex_home_error")
     contract_path = repo / "contract.json"

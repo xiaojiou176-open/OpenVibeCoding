@@ -3,8 +3,8 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 source "$ROOT_DIR/scripts/lib/env.sh"
-INCIDENT_DIR="${CORTEXPILOT_INCIDENT_DIR:-$ROOT_DIR/docs/governance/incidents}"
-MAP_PATH="${CORTEXPILOT_INCIDENT_MAP_PATH:-$ROOT_DIR/docs/governance/incident-regression-map.json}"
+INCIDENT_DIR="${OPENVIBECODING_INCIDENT_DIR:-$ROOT_DIR/docs/governance/incidents}"
+MAP_PATH="${OPENVIBECODING_INCIDENT_MAP_PATH:-$ROOT_DIR/docs/governance/incident-regression-map.json}"
 CI_MODE="${CI:-}"
 
 is_ci_mode() {
@@ -37,7 +37,7 @@ fi
 
 PYTHON_BIN="${PYTHON_BIN:-}"
 if [[ -z "$PYTHON_BIN" ]]; then
-  PYTHON_BIN="${CORTEXPILOT_PYTHON:-}"
+  PYTHON_BIN="${OPENVIBECODING_PYTHON:-}"
 fi
 if [[ -z "$PYTHON_BIN" ]]; then
   echo "❌ [incident-gate] missing managed Python toolchain (run ./scripts/bootstrap.sh)" >&2

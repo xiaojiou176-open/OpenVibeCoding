@@ -10,7 +10,7 @@ from typing import Any
 import pytest
 from fastapi import HTTPException
 
-from cortexpilot_orch.api.main_runs_handlers import build_runs_handlers
+from openvibecoding_orch.api.main_runs_handlers import build_runs_handlers
 
 
 def _write_json(path: Path, payload: Any) -> None:
@@ -294,7 +294,7 @@ def test_round4_stream_events_and_follow_keepalive(tmp_path: Path, monkeypatch: 
         async def _no_sleep(_seconds: float) -> None:
             return None
 
-        monkeypatch.setattr("cortexpilot_orch.api.main_runs_handlers.asyncio.sleep", _no_sleep)
+        monkeypatch.setattr("openvibecoding_orch.api.main_runs_handlers.asyncio.sleep", _no_sleep)
 
         def _read_events_incremental(**kwargs: Any) -> tuple[list[dict[str, Any]], int]:
             if kwargs["offset"] == 0:

@@ -3,13 +3,13 @@
 run_ci_step126_current_run_fanin() {
   echo "🚀 [STEP 12.6/12] Start: CI evidence/dashboard/SBOM fan-in"
   export PYTHONDONTWRITEBYTECODE=1
-  CI_REPORT_ROOT=".runtime-cache/cortexpilot/reports/ci"
+  CI_REPORT_ROOT=".runtime-cache/openvibecoding/reports/ci"
   CI_SOURCE_MANIFEST_PATH="${CI_REPORT_ROOT}/current_run/source_manifest.json"
-  CI_ROUTE_ID="${CORTEXPILOT_CI_ROUTE_ID:-local_full_ci}"
-  CI_TRUST_CLASS="${CORTEXPILOT_CI_TRUST_CLASS:-trusted}"
-  CI_RUNNER_CLASS="${CORTEXPILOT_CI_RUNNER_CLASS:-local}"
-  CI_CLOUD_BOOTSTRAP_ALLOWED="${CORTEXPILOT_CI_CLOUD_BOOTSTRAP_ALLOWED:-false}"
-  CI_CLOUD_BOOTSTRAP_USED="${CORTEXPILOT_CI_CLOUD_BOOTSTRAP_USED:-false}"
+  CI_ROUTE_ID="${OPENVIBECODING_CI_ROUTE_ID:-local_full_ci}"
+  CI_TRUST_CLASS="${OPENVIBECODING_CI_TRUST_CLASS:-trusted}"
+  CI_RUNNER_CLASS="${OPENVIBECODING_CI_RUNNER_CLASS:-local}"
+  CI_CLOUD_BOOTSTRAP_ALLOWED="${OPENVIBECODING_CI_CLOUD_BOOTSTRAP_ALLOWED:-false}"
+  CI_CLOUD_BOOTSTRAP_USED="${OPENVIBECODING_CI_CLOUD_BOOTSTRAP_USED:-false}"
   CI_ROUTE_REPORT_PATH="${CI_REPORT_ROOT}/routes/${CI_ROUTE_ID}.json"
   python3 scripts/build_ci_route_report.py seed \
     --output "${CI_ROUTE_REPORT_PATH}" \
@@ -45,7 +45,7 @@ run_ci_step126_current_run_fanin() {
     --report "artifact_index_verdict=${CI_REPORT_ROOT}/artifact_index/verdict.json"
     --report "current_run_index=${CI_REPORT_ROOT}/artifact_index/current_run_index.json"
     --report "sbom=${CI_REPORT_ROOT}/sbom/image_sbom.json"
-    --report "provenance=.runtime-cache/cortexpilot/release/provenance/provenance.json"
+    --report "provenance=.runtime-cache/openvibecoding/release/provenance/provenance.json"
     --report "portal=${CI_REPORT_ROOT}/portal/portal.json"
   )
 
@@ -88,7 +88,7 @@ run_ci_step126_current_run_fanin() {
   python3 scripts/build_ci_release_provenance.py \
     --source-manifest "${CI_SOURCE_MANIFEST_PATH}" \
     $([[ "${GITHUB_ACTIONS:-0}" == "1" ]] && printf '%s' '--strict')
-  python3 scripts/build_ci_image_sbom.py --image cortexpilot-ci-core:local --source-manifest "${CI_SOURCE_MANIFEST_PATH}"
+  python3 scripts/build_ci_image_sbom.py --image openvibecoding-ci-core:local --source-manifest "${CI_SOURCE_MANIFEST_PATH}"
   python3 scripts/build_ci_break_glass_dashboard.py
   python3 scripts/build_ci_cost_profile.py --source-manifest "${CI_SOURCE_MANIFEST_PATH}"
   bash scripts/run_governance_py.sh scripts/check_ci_retry_green_policy.py

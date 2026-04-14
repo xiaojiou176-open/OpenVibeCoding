@@ -2,15 +2,15 @@
 
 ```mermaid
 flowchart LR
-    U["User / CLI"] --> C["CLI: cortexpilot_orch.cli"]
-    C --> API["FastAPI: apps/orchestrator/src/cortexpilot_orch/api/main.py"]
+    U["User / CLI"] --> C["CLI: openvibecoding_orch.cli"]
+    C --> API["FastAPI: apps/orchestrator/src/openvibecoding_orch/api/main.py"]
     C --> SCH["Scheduler: Orchestrator"]
     API --> SCH
     SCH --> RUN["Runners (codex/app/tool/agents)"]
     SCH --> GATE["Governance Gates"]
     RUN --> STORE["RunStore"]
     GATE --> STORE
-    STORE --> ART[".runtime-cache/cortexpilot/runs/<run_id>"]
+    STORE --> ART[".runtime-cache/openvibecoding/runs/<run_id>"]
 
     LOG[".runtime-cache/logs/{runtime,error,e2e,access,ci,governance}"] --> OBS["Observability"]
     CACHE[".runtime-cache/cache/{runtime,test,build}"] --> SCH
@@ -21,7 +21,7 @@ flowchart LR
 
 ## Notes
 - API layer should stay protocol-focused and delegate orchestration to services.
-- CortexPilot's current control-layer model is hybrid: L0 is a persisted
+- OpenVibeCoding's current control-layer model is hybrid: L0 is a persisted
   command-tower state plus an active brain/session when a decision must be
   made, rather than a promise that one forever-open chat window never degrades.
 - Default execution posture is long-running. Explicit `Context Pack` handoff is
@@ -79,11 +79,11 @@ flowchart LR
   runtime may advance `planning_unblock_tasks.json` from `proposed` to `queued`
   and emit `UNBLOCK_TASK_QUEUED`, so the unblock path is no longer only a
   planning preview artifact.
-- Queue truth currently lives in `.runtime-cache/cortexpilot/queue.jsonl`; API
+- Queue truth currently lives in `.runtime-cache/openvibecoding/queue.jsonl`; API
   and workflow surfaces read that queue state and derive `eligible` /
   `sla_state` instead of storing a second scheduler database.
 - Workflow-case truth now persists under
-  `.runtime-cache/cortexpilot/workflow-cases/<workflow_id>/case.json`; API and
+  `.runtime-cache/openvibecoding/workflow-cases/<workflow_id>/case.json`; API and
   operator surfaces still derive fields from runs/PM sessions, but now write a
   stable case snapshot for downstream compare/queue/proof flows.
 - Workflow/control-plane reads now also expose `workflow_case_read_model`,
@@ -106,29 +106,29 @@ flowchart LR
 - Replay compare flows now also write `run_compare_report.json`, so compare
   summaries survive as run-local reports instead of living only in transient UI
   state.
-- Run-bundle evidence logs (for example `tests/stdout.log`, `tests/stderr.log`, `codex/*/mcp_stderr.log`) are retained under `.runtime-cache/cortexpilot/runs/<run_id>/` as audit artifacts; they do not replace the primary operational log channels under `.runtime-cache/logs/`.
-- Daily operator briefings are generated under `.runtime-cache/cortexpilot/briefings/` by `tooling/briefing_generator.py`; this is a governed reporting surface rather than an ad-hoc scratch directory.
+- Run-bundle evidence logs (for example `tests/stdout.log`, `tests/stderr.log`, `codex/*/mcp_stderr.log`) are retained under `.runtime-cache/openvibecoding/runs/<run_id>/` as audit artifacts; they do not replace the primary operational log channels under `.runtime-cache/logs/`.
+- Daily operator briefings are generated under `.runtime-cache/openvibecoding/briefings/` by `tooling/briefing_generator.py`; this is a governed reporting surface rather than an ad-hoc scratch directory.
 - Chain orchestration now emits lifecycle evidence in `reports/chain_report.json` (`lifecycle` section) and event stream markers (`CHAIN_HANDOFF_STEP_MARKED`, `CHAIN_LIFECYCLE_EVALUATED`, `CHAIN_COMPLETED`) for PM→TL→Worker→Reviewer→Testing→TL→PM closure and reviewer quorum outcomes.
 - Control-plane role transitions can be represented with `task_chain` `handoff` steps, keeping PM/TL transitions explicit and auditable without execution-side effects.
 - Handoff summaries are now contract-authoritative read surfaces only; they may
   summarize risks and next-role context, but they do not rewrite the execution
   instruction carried by the task contract.
-- Retention policy controls run/worktree/log/cache/codex-home/intake/contract-artifact lifecycle, plus repo-owned machine-cache child retention under `~/.cache/cortexpilot`, and writes reports to `.runtime-cache/cortexpilot/reports/retention_report.json`.
+- Retention policy controls run/worktree/log/cache/codex-home/intake/contract-artifact lifecycle, plus repo-owned machine-cache child retention under `~/.cache/openvibecoding`, and writes reports to `.runtime-cache/openvibecoding/reports/retention_report.json`.
 - Retention reports now also expose `log_lane_summary`, `test_output_visibility`, `space_bridge`, and `machine_cache_summary`, so canonical log lanes, the latest repo-side space audit, and machine-cache cap/TTL pressure are visible from one runtime-governance receipt.
-- CI governance reports share the governed root `.runtime-cache/cortexpilot/reports/ci/`; policy tracks the root plus the authoritative `current_run/` receipt surface, while the stable leaf report lanes currently include `artifact_index/`, `break_glass/`, `cost_profile/`, `evidence_manifest/`, `portal/`, `routes/`, `runner_health/`, `sbom/`, and `slo/`.
-- Release-evidence builders write provenance, release-anchor, canary, RUM, and DB-migration governance outputs under `.runtime-cache/cortexpilot/release/`.
-- Space-governance reports write repo/external/shared-layer audit snapshots under `.runtime-cache/cortexpilot/reports/space_governance/`, embed the latest retention summary for log/evidence visibility, and expose `governance_owner` / `preserve_reason` / rebuild metadata per entry so operator-facing cleanup decisions stay explicit.
-- Managed backup snapshots live under `.runtime-cache/cortexpilot/backups/`; they are runtime-owned historical safety nets, not primary truth surfaces and not part of default cleanup scope.
+- CI governance reports share the governed root `.runtime-cache/openvibecoding/reports/ci/`; policy tracks the root plus the authoritative `current_run/` receipt surface, while the stable leaf report lanes currently include `artifact_index/`, `break_glass/`, `cost_profile/`, `evidence_manifest/`, `portal/`, `routes/`, `runner_health/`, `sbom/`, and `slo/`.
+- Release-evidence builders write provenance, release-anchor, canary, RUM, and DB-migration governance outputs under `.runtime-cache/openvibecoding/release/`.
+- Space-governance reports write repo/external/shared-layer audit snapshots under `.runtime-cache/openvibecoding/reports/space_governance/`, embed the latest retention summary for log/evidence visibility, and expose `governance_owner` / `preserve_reason` / rebuild metadata per entry so operator-facing cleanup decisions stay explicit.
+- Managed backup snapshots live under `.runtime-cache/openvibecoding/backups/`; they are runtime-owned historical safety nets, not primary truth surfaces and not part of default cleanup scope.
 - Shared transient cache buckets also include `.runtime-cache/cache/tmp/` and `.runtime-cache/cache/gemini_ui_audit/` when test or Gemini audit flows need bounded scratch space beyond the canonical `runtime/test/build` lanes.
-- Codex diagnostic-mode runs may legitimately materialize under `.runtime-cache/cortexpilot/runs_diagnostic/`; this is a governed parallel run-root for diagnostic-only execution, not a replacement for the primary `.runtime-cache/cortexpilot/runs/` surface.
-- Browser profile runtime state is allowed only under `.runtime-cache/cortexpilot/browser-profiles/`; the older root `.runtime-cache/browser-profiles/` is a legacy compatibility surface and must not be treated as the preferred runtime root.
+- Codex diagnostic-mode runs may legitimately materialize under `.runtime-cache/openvibecoding/runs_diagnostic/`; this is a governed parallel run-root for diagnostic-only execution, not a replacement for the primary `.runtime-cache/openvibecoding/runs/` surface.
+- Browser profile runtime state is allowed only under `.runtime-cache/openvibecoding/browser-profiles/`; the older root `.runtime-cache/browser-profiles/` is a legacy compatibility surface and must not be treated as the preferred runtime root.
 - Local host development now defaults browser policy to `allow_profile` against
   the repo-owned Chrome user-data root
-  `~/.cache/cortexpilot/browser/chrome-user-data`; CI, repo CI containers, and
+  `~/.cache/openvibecoding/browser/chrome-user-data`; CI, repo CI containers, and
   clean-room recovery lanes still fail closed to ephemeral browser state so
   they never depend on an existing login session.
 - The one-time migrate step copies the default-Chrome display name
-  `cortexpilot` into that repo-owned root as `Profile 1`, together with a
+  `openvibecoding` into that repo-owned root as `Profile 1`, together with a
   rewritten `Local State` that points only at the repo-owned profile.
 - `allow_profile` is now attach-first: the runtime checks the fixed CDP
   endpoint `127.0.0.1:9341`, verifies that the owning Chrome process really
@@ -160,7 +160,7 @@ flowchart LR
 - A same-root legacy-port process is now treated as a managed transition path:
   the repo may stop that legacy singleton and relaunch the same root on `9341`
   instead of misclassifying it as a foreign process.
-- Contract artifact cleanup scope follows configured `CORTEXPILOT_RUNTIME_CONTRACT_ROOT` inside `.runtime-cache/cortexpilot/contracts/`.
+- Contract artifact cleanup scope follows configured `OPENVIBECODING_RUNTIME_CONTRACT_ROOT` inside `.runtime-cache/openvibecoding/contracts/`.
 - Root cleanliness and runtime artifact routing are SSOT-driven by `configs/root_allowlist.json` + `configs/runtime_artifact_policy.json`; root-noise directories such as root `logs/`, root `.next/`, and root coverage artifacts are treated as governance violations rather than acceptable steady state.
 - JS runtime machine state is app- or package-local and explicit: only `apps/dashboard/node_modules`, `apps/dashboard/.next`, `apps/dashboard/tsconfig.tsbuildinfo`, `apps/dashboard/tsconfig.typecheck.tsbuildinfo`, `apps/desktop/node_modules`, `apps/desktop/dist`, `apps/desktop/tsconfig.tsbuildinfo`, and `packages/frontend-api-client/node_modules` are allowed repo-local machine-managed surfaces; root `node_modules` remains forbidden.
 - Staged dashboard UI-audit workspaces must keep required
@@ -173,28 +173,28 @@ flowchart LR
   to a workspace-local store path so the clean-room / UI-audit lanes stop
   repeating the same failing cross-cache copy route.
 - Log rotation remains owned by `observability/logger.py` (`RotatingFileHandler` + gzip rollover), while lifecycle cleanup remains owned by runtime retention and guarded high-yield cleanup remains owned by space governance. The three layers are complementary, not interchangeable.
-- `~/.cache/cortexpilot` is the repo-external strong-related cache root, but it is still machine-shared across local CortexPilot worktrees and branches. Treat it as governed shared cache, not single-repo private disk.
+- `~/.cache/openvibecoding` is the repo-external strong-related cache root, but it is still machine-shared across local OpenVibeCoding worktrees and branches. Treat it as governed shared cache, not single-repo private disk.
 - Runtime retention applies the default **20 GiB** cap at the machine-cache
   root by reclaiming only repo-owned child paths explicitly marked for
   auto-clean in `configs/space_governance_policy.json`; observe-only entries
   such as `toolchains/python/current` stay outside automatic apply scope.
 - The repo-owned browser singleton subtree under
-  `~/.cache/cortexpilot/browser/` is explicitly protected and cap-excluded. It
+  `~/.cache/openvibecoding/browser/` is explicitly protected and cap-excluded. It
   stays auditable, but it never becomes a TTL/cap cleanup candidate.
 - Repo-owned Docker build cache now also has a governed home under
-  `~/.cache/cortexpilot/docker-buildx-cache/` when `docker buildx` is
+  `~/.cache/openvibecoding/docker-buildx-cache/` when `docker buildx` is
   available. That turns rebuildable local CI image cache into a first-class
   repo-owned external cache instead of leaving it as a purely opaque daemon
   layer.
 - Heavy machine-scoped temp producers now default into the governed
-  `~/.cache/cortexpilot/tmp/` subtree instead of Darwin `TMPDIR`. Current
+  `~/.cache/openvibecoding/tmp/` subtree instead of Darwin `TMPDIR`. Current
   examples include local `docker_ci` host runner temp
   (`tmp/docker-ci/runner-temp-*`) plus clean-room recovery machine cache /
   preserve roots (`tmp/clean-room-machine-cache.*`,
   `tmp/clean-room-preserve.*`).
 - The latest Docker runtime audit/prune receipt lives beside the rest of the
   space-governance evidence at
-  `.runtime-cache/cortexpilot/reports/space_governance/docker_runtime.json`,
+  `.runtime-cache/openvibecoding/reports/space_governance/docker_runtime.json`,
   and `space_governance/report.json` now embeds its summary.
 - Log envelope SSOT is `schemas/log_event.v2.json`, and machine-consumed log correlation must stay auditable through `lane` + `correlation_kind`.
 - Runtime de-monolith modules now carry orchestration helper load while preserving existing contracts: `api/main_*_helpers.py` + `api/main_runs_handlers.py` (API compatibility handlers), `chain/runtime_helpers.py` + `chain/runner_execution_helpers.py`, `replay/replay_helpers.py` + `replay/replayer_*_helpers.py`, `scheduler/preflight_gate_*` + `scheduler/task_execution_*` + `scheduler/execute_task_*`, `runners/agents_*_runtime.py` + `runners/agents_*_helpers.py`, and helper splits for planning/store/cli (`planning/intake_*_helpers.py`, `store/run_store_*_helpers.py`, `cli_*_helpers.py`).
@@ -202,7 +202,7 @@ flowchart LR
 - Scheduler preflight bridge (`scheduler/execute_task_preflight.py`) now applies dependency and tool-loader overrides (`load_search_requests`, `load_browser_tasks`, `load_tampermonkey_tasks`) with restore-on-exit semantics, so test/runtime injections do not leak mutable global bindings across runs.
 - Runtime-root test rebinding must invalidate cached config before switching roots; otherwise parallel/xdist orchestrator tests can read stale `.runtime-cache` locations and produce false-negative tool-pipeline evidence paths.
 - Tool-pipeline search artifact writers now reuse the active `RunStore` instance for `search_results`, `verification`, and AI verification persistence so run-local artifact roots/locks stay consistent under parallel GitHub-hosted CI and protected manual verification lanes.
-- Tool-pipeline browser integration tests should stub `cortexpilot_orch.runners.tool_runner.BrowserRunner` instead of patching higher-level `ToolRunner.run_browser`; this keeps browser-task mocks stable even when scheduler/runtime layers hold imported `ToolRunner` references during large parallel suites.
+- Tool-pipeline browser integration tests should stub `openvibecoding_orch.runners.tool_runner.BrowserRunner` instead of patching higher-level `ToolRunner.run_browser`; this keeps browser-task mocks stable even when scheduler/runtime layers hold imported `ToolRunner` references during large parallel suites.
 - When `apps/orchestrator` points its provider base URL at
   `Switchyard /v1/runtime/invoke`, the current compatibility layer only covers
   chat-style intake/operator flows. It forces `chat_completions` for those
@@ -215,7 +215,7 @@ flowchart LR
   dashboard/desktop `Contracts` plus `Run Detail` surfaces; this keeps the
   runtime boundary readable without upgrading chat-compatible lanes into full
   execution parity.
-- Contract package entrypoints (`cortexpilot_orch.contract`) now lazy-load
+- Contract package entrypoints (`openvibecoding_orch.contract`) now lazy-load
   `compiler` / `validator` submodules, so CI/governance readers such as
   `scripts/check_schedule_boundary.py` can stay below runtime-provider
   dependencies on Quick Feedback lanes instead of importing `httpx` just to

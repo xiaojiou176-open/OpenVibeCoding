@@ -2,7 +2,7 @@ import json
 import os
 from pathlib import Path
 
-from cortexpilot_orch.locks import locker
+from openvibecoding_orch.locks import locker
 
 
 def _write_manifest(runtime_root: Path, run_id: str, status: str) -> None:
@@ -31,7 +31,7 @@ def test_pid_alive_branch_matrix(monkeypatch) -> None:
 
 def test_lock_is_stale_branches_and_remaining_record(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
 
     # RUNNING + pid alive => rely on TTL branch
     _write_manifest(runtime_root, "run-running", "RUNNING")
@@ -92,8 +92,8 @@ def test_lock_is_stale_branches_and_remaining_record(tmp_path: Path, monkeypatch
 
 def test_acquire_reclaims_hard_stale_without_auto_cleanup(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUN_ID", "run-new")
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUN_ID", "run-new")
 
     allowed_path = "apps/orchestrator/src"
     locks_root = runtime_root / "locks"
@@ -125,8 +125,8 @@ def test_acquire_reclaims_hard_stale_without_auto_cleanup(tmp_path: Path, monkey
 
 def test_lock_running_without_active_marker_is_stale(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNNING_LOCK_STALE_SEC", "1")
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNNING_LOCK_STALE_SEC", "1")
 
     _write_manifest(runtime_root, "run-running", "RUNNING")
     meta = {
@@ -143,8 +143,8 @@ def test_lock_running_without_active_marker_is_stale(tmp_path: Path, monkeypatch
 
 def test_lock_running_with_active_marker_not_stale(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNNING_LOCK_STALE_SEC", "1")
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNNING_LOCK_STALE_SEC", "1")
 
     _write_manifest(runtime_root, "run-running", "RUNNING")
     active_dir = runtime_root / "active"
@@ -165,8 +165,8 @@ def test_lock_running_with_active_marker_not_stale(tmp_path: Path, monkeypatch) 
 
 def test_lock_running_with_other_active_marker_is_stale(tmp_path: Path, monkeypatch) -> None:
     runtime_root = tmp_path / "runtime"
-    monkeypatch.setenv("CORTEXPILOT_RUNTIME_ROOT", str(runtime_root))
-    monkeypatch.setenv("CORTEXPILOT_RUNNING_LOCK_STALE_SEC", "1")
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNNING_LOCK_STALE_SEC", "1")
 
     _write_manifest(runtime_root, "run-running", "RUNNING")
     active_dir = runtime_root / "active"

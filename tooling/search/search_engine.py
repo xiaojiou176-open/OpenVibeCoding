@@ -91,7 +91,7 @@ def _browser_search(query: str, browser_policy: dict[str, Any] | None = None) ->
 
 
 def _web_allowlist() -> list[str]:
-    raw = os.getenv("CORTEXPILOT_WEB_ALLOWLIST", "").strip()
+    raw = os.getenv("OPENVIBECODING_WEB_ALLOWLIST", "").strip()
     if raw:
         return [item.strip() for item in raw.split(",") if item.strip()]
     return [
@@ -158,11 +158,11 @@ def _url_allowed(url: str, allowlist: list[str]) -> bool:
 
 
 def _runtime_root() -> Path:
-    return Path(os.getenv("CORTEXPILOT_RUNTIME_ROOT", ".runtime-cache/cortexpilot")).resolve()
+    return Path(os.getenv("OPENVIBECODING_RUNTIME_ROOT", ".runtime-cache/openvibecoding")).resolve()
 
 
 def _web_headless() -> bool:
-    raw = os.getenv("CORTEXPILOT_WEB_HEADLESS", "").strip().lower()
+    raw = os.getenv("OPENVIBECODING_WEB_HEADLESS", "").strip().lower()
     if raw in {"0", "false", "no"}:
         return False
     if raw in {"1", "true", "yes"}:
@@ -175,10 +175,10 @@ def _web_profile_mode(browser_policy: dict[str, Any] | None = None) -> str:
         value = browser_policy.get("profile_mode")
         if isinstance(value, str) and value.strip():
             return value.strip().lower()
-    raw = os.getenv("CORTEXPILOT_BROWSER_PROFILE_MODE", "").strip().lower()
+    raw = os.getenv("OPENVIBECODING_BROWSER_PROFILE_MODE", "").strip().lower()
     if raw:
         return raw
-    legacy = os.getenv("CORTEXPILOT_WEB_PROFILE_MODE", "").strip().lower()
+    legacy = os.getenv("OPENVIBECODING_WEB_PROFILE_MODE", "").strip().lower()
     if legacy:
         return legacy
     return "ephemeral"
@@ -189,10 +189,10 @@ def _web_stealth_mode(browser_policy: dict[str, Any] | None = None) -> str:
         value = browser_policy.get("stealth_mode")
         if isinstance(value, str) and value.strip():
             return value.strip().lower()
-    raw = os.getenv("CORTEXPILOT_BROWSER_STEALTH_MODE", "").strip().lower()
+    raw = os.getenv("OPENVIBECODING_BROWSER_STEALTH_MODE", "").strip().lower()
     if raw:
         return raw
-    return os.getenv("CORTEXPILOT_WEB_STEALTH_MODE", "none").strip().lower() or "none"
+    return os.getenv("OPENVIBECODING_WEB_STEALTH_MODE", "none").strip().lower() or "none"
 
 
 def _web_human_behavior(browser_policy: dict[str, Any] | None = None) -> dict[str, Any]:
@@ -462,10 +462,10 @@ def _extract_domains(results: list[dict[str, str]]) -> list[str]:
 
 def search_verify(query: str, provider: str | None = None, browser_policy: dict[str, Any] | None = None) -> dict[str, Any]:
     start = time.monotonic()
-    raw_provider = provider or os.getenv("CORTEXPILOT_SEARCH_PROVIDER", "duckduckgo")
+    raw_provider = provider or os.getenv("OPENVIBECODING_SEARCH_PROVIDER", "duckduckgo")
     provider_name = _normalize_provider(str(raw_provider))
-    forced_mock = os.getenv("CORTEXPILOT_SEARCH_MODE", "").strip().lower() == "mock"
-    fallback_policy = os.getenv("CORTEXPILOT_WEB_SEARCH_FALLBACK_POLICY", "strict").strip().lower()
+    forced_mock = os.getenv("OPENVIBECODING_SEARCH_MODE", "").strip().lower() == "mock"
+    fallback_policy = os.getenv("OPENVIBECODING_WEB_SEARCH_FALLBACK_POLICY", "strict").strip().lower()
 
     results: list[dict[str, str]]
     mode = "mock"
@@ -510,7 +510,7 @@ def search_verify(query: str, provider: str | None = None, browser_policy: dict[
                 "ok": False,
                 "error": error,
             }
-        fallback = os.getenv("CORTEXPILOT_WEB_SEARCH_FALLBACK", "duckduckgo").strip().lower()
+        fallback = os.getenv("OPENVIBECODING_WEB_SEARCH_FALLBACK", "duckduckgo").strip().lower()
         resolved_provider = _normalize_provider(fallback or "mock")
         warning = f"provider_fallback: {provider_name} -> {resolved_provider} ({error})"
 

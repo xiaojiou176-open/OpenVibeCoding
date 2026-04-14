@@ -14,7 +14,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_BASELINE = ROOT / "configs" / "ci_runner_baseline.json"
-DEFAULT_OUT_DIR = ROOT / ".runtime-cache" / "cortexpilot" / "reports" / "ci" / "runner_drift"
+DEFAULT_OUT_DIR = ROOT / ".runtime-cache" / "openvibecoding" / "reports" / "ci" / "runner_drift"
 REPORT_ONLY_ROUTE_IDS = {"trusted_pr", "untrusted_pr", "push_main"}
 HOST_ONLY_COMMANDS = {"docker", "sudo"}
 
@@ -37,7 +37,7 @@ def _run_command(name: str, args: list[str]) -> tuple[bool, str]:
 
 
 def _current_ci_route_id() -> str:
-    return str(os.environ.get("CORTEXPILOT_CI_ROUTE_ID") or "").strip()
+    return str(os.environ.get("OPENVIBECODING_CI_ROUTE_ID") or "").strip()
 
 
 def _is_report_only_host_check(name: str, *, route_id: str) -> bool:
@@ -95,7 +95,7 @@ def main() -> int:
         rows.append(row)
 
     payload = {
-        "report_type": "cortexpilot_ci_runner_drift_report",
+        "report_type": "openvibecoding_ci_runner_drift_report",
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "baseline": str(baseline_path),
         "route_id": route_id or None,

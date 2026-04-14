@@ -5,7 +5,7 @@ from urllib.parse import parse_qs
 
 from starlette.requests import Request
 
-from cortexpilot_orch.api.pm_session_aggregation_views import list_pm_sessions_view
+from openvibecoding_orch.api.pm_session_aggregation_views import list_pm_sessions_view
 
 
 def _request(query: str) -> Request:
@@ -48,7 +48,7 @@ def test_list_pm_sessions_view_filters_before_sorting_work() -> None:
                 "pm_session_id": session_id,
                 "status": "active",
                 "owner_pm": "target-owner" if idx == total_sessions - 1 else "other-owner",
-                "project_key": "cortexpilot",
+                "project_key": "openvibecoding",
                 "updated_at": f"2026-02-25T00:{idx % 60:02d}:00+00:00",
                 "created_at": "2026-02-25T00:00:00+00:00",
                 "blocked_runs": idx % 3,
@@ -107,7 +107,7 @@ def test_list_pm_sessions_view_topk_pagination_matches_expected_order() -> None:
                 "pm_session_id": session_id,
                 "status": "active",
                 "owner_pm": "pm",
-                "project_key": "cortexpilot",
+                "project_key": "openvibecoding",
                 "updated_at": scores[session_id],
                 "created_at": "2026-02-25T00:00:00+00:00",
                 "blocked_runs": 0,
@@ -168,7 +168,7 @@ def test_list_pm_sessions_view_uses_precomputed_sort_keys_and_hides_internal_fie
                 "pm_session_id": "session-new",
                 "status": "active",
                 "owner_pm": "pm",
-                "project_key": "cortexpilot",
+                "project_key": "openvibecoding",
                 "updated_at": "2026-02-25T00:00:10+00:00",
                 "created_at": "2026-02-25T00:00:00+00:00",
                 "_sort_updated_ts": 10.0,
@@ -178,7 +178,7 @@ def test_list_pm_sessions_view_uses_precomputed_sort_keys_and_hides_internal_fie
                 "pm_session_id": "session-old",
                 "status": "active",
                 "owner_pm": "pm",
-                "project_key": "cortexpilot",
+                "project_key": "openvibecoding",
                 "updated_at": "2026-02-25T00:00:01+00:00",
                 "created_at": "2026-02-25T00:00:00+00:00",
                 "_sort_updated_ts": 1.0,

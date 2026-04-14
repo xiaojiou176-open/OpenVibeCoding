@@ -13,8 +13,8 @@ DEFAULT_API_PORT="10000"
 DEFAULT_DASHBOARD_PORT="3100"
 DEFAULT_DESKTOP_PORT="18173"
 DEFAULT_TAURI_PORT="1420"
-DEFAULT_AUTH_REQUIRED="$(cortexpilot_env_normalize_bool "$(cortexpilot_env_get CORTEXPILOT_API_AUTH_REQUIRED "true")")"
-DEFAULT_API_TOKEN="$(cortexpilot_env_get CORTEXPILOT_API_TOKEN "cortexpilot-dev-token")"
+DEFAULT_AUTH_REQUIRED="$(openvibecoding_env_normalize_bool "$(openvibecoding_env_get OPENVIBECODING_API_AUTH_REQUIRED "true")")"
+DEFAULT_API_TOKEN="$(openvibecoding_env_get OPENVIBECODING_API_TOKEN "openvibecoding-dev-token")"
 
 HOST="$DEFAULT_HOST"
 API_PORT="$DEFAULT_API_PORT"
@@ -100,31 +100,31 @@ configure_all() {
 
 run_web() {
   cd "$ROOT_DIR"
-  CORTEXPILOT_DEV_HOST="$HOST" \
-  CORTEXPILOT_API_PORT="$API_PORT" \
-  CORTEXPILOT_DASHBOARD_PORT="$DASHBOARD_PORT" \
-  CORTEXPILOT_API_AUTH_REQUIRED="$(cortexpilot_env_normalize_bool "$API_AUTH_REQUIRED")" \
-  CORTEXPILOT_API_TOKEN="$API_TOKEN" \
+  OPENVIBECODING_DEV_HOST="$HOST" \
+  OPENVIBECODING_API_PORT="$API_PORT" \
+  OPENVIBECODING_DASHBOARD_PORT="$DASHBOARD_PORT" \
+  OPENVIBECODING_API_AUTH_REQUIRED="$(openvibecoding_env_normalize_bool "$API_AUTH_REQUIRED")" \
+  OPENVIBECODING_API_TOKEN="$API_TOKEN" \
   npm run dev:up
 }
 
 run_desktop() {
   cd "$ROOT_DIR"
-  CORTEXPILOT_DEV_HOST="$HOST" \
-  CORTEXPILOT_API_PORT="$API_PORT" \
-  CORTEXPILOT_DESKTOP_PORT="$DESKTOP_PORT" \
-  CORTEXPILOT_API_AUTH_REQUIRED="$(cortexpilot_env_normalize_bool "$API_AUTH_REQUIRED")" \
-  CORTEXPILOT_API_TOKEN="$API_TOKEN" \
+  OPENVIBECODING_DEV_HOST="$HOST" \
+  OPENVIBECODING_API_PORT="$API_PORT" \
+  OPENVIBECODING_DESKTOP_PORT="$DESKTOP_PORT" \
+  OPENVIBECODING_API_AUTH_REQUIRED="$(openvibecoding_env_normalize_bool "$API_AUTH_REQUIRED")" \
+  OPENVIBECODING_API_TOKEN="$API_TOKEN" \
   npm run desktop:up
 }
 
 run_tauri() {
   cd "$ROOT_DIR"
-  CORTEXPILOT_DEV_HOST="$HOST" \
-  CORTEXPILOT_API_PORT="$API_PORT" \
-  CORTEXPILOT_TAURI_DEV_PORT="$TAURI_PORT" \
-  CORTEXPILOT_API_AUTH_REQUIRED="$(cortexpilot_env_normalize_bool "$API_AUTH_REQUIRED")" \
-  CORTEXPILOT_API_TOKEN="$API_TOKEN" \
+  OPENVIBECODING_DEV_HOST="$HOST" \
+  OPENVIBECODING_API_PORT="$API_PORT" \
+  OPENVIBECODING_TAURI_DEV_PORT="$TAURI_PORT" \
+  OPENVIBECODING_API_AUTH_REQUIRED="$(openvibecoding_env_normalize_bool "$API_AUTH_REQUIRED")" \
+  OPENVIBECODING_API_TOKEN="$API_TOKEN" \
   npm run desktop:up:tauri
 }
 
@@ -152,7 +152,7 @@ run_quick_wizard() {
 main_menu() {
   while true; do
     echo "=============================="
-    echo " CortexPilot launch console"
+    echo " OpenVibeCoding launch console"
     echo "=============================="
     echo "1) Start Web (backend + Dashboard)"
     echo "2) Start Desktop (backend + Desktop Vite)"

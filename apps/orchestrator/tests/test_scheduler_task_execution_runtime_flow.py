@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from cortexpilot_orch.scheduler import task_execution_runtime_helpers as runtime_helpers
+from openvibecoding_orch.scheduler import task_execution_runtime_helpers as runtime_helpers
 
 
 class _FakeStore:
@@ -217,7 +217,7 @@ def test_runtime_flow_fix_loop_retries_then_succeeds(monkeypatch, tmp_path: Path
 
 
 def test_runtime_flow_marks_evals_failure_as_tests_failure(monkeypatch, tmp_path: Path) -> None:
-    monkeypatch.setenv("CORTEXPILOT_EVALS_ENABLED", "1")
+    monkeypatch.setenv("OPENVIBECODING_EVALS_ENABLED", "1")
     runner = _FakeRunner([{"status": "SUCCESS", "summary": "ok"}])
     result, store = _call_runtime_flow(
         monkeypatch,

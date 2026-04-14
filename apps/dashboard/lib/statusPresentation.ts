@@ -12,10 +12,10 @@ import {
   statusVariantFromCanonical,
   toCanonicalStage,
   toCanonicalStatusFuzzy,
-} from "@cortexpilot/frontend-shared/statusPresentation";
+} from "@openvibecoding/frontend-shared/statusPresentation";
 
-export { knownOutcomeTypeLabelZh, outcomeTypeLabelZh } from "@cortexpilot/frontend-shared/statusPresentation";
-export type { UiLocale } from "@cortexpilot/frontend-shared/statusPresentation";
+export { knownOutcomeTypeLabelZh, outcomeTypeLabelZh } from "@openvibecoding/frontend-shared/statusPresentation";
+export type { UiLocale } from "@openvibecoding/frontend-shared/statusPresentation";
 
 export const DASHBOARD_DEFAULT_LOCALE: UiLocale = "en";
 

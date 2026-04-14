@@ -17,9 +17,9 @@ All notable changes to this repository will be documented in this file.
   `5.2.2` in both the root and dashboard lockfiles, clearing the live
   Dependabot alert chain without widening into unrelated dependency upgrades
 - added a registry-shaped `manifest.yaml` for the repo-owned
-  `cortexpilot-adoption-router` skill inside the coding-agent bundle, then
+  `openvibecoding-adoption-router` skill inside the coding-agent bundle, then
   synced the distribution contract, skills quickstart, and Codex / Claude Code /
-  OpenClaw starter docs so CortexPilot can truthfully describe one cross-tool
+  OpenClaw starter docs so OpenVibeCoding can truthfully describe one cross-tool
   skill artifact as `publish-ready but deferred` without claiming any live
   marketplace or registry listing
 - added a repo-owned workflow/dependency/security closeout lane by bootstrapping
@@ -109,7 +109,7 @@ All notable changes to this repository will be documented in this file.
   covers approval-gated queue pilot surfaces alongside the existing admin
   routes
 - replaced the old shared-root `allow_profile` model with a repo-owned Chrome
-  singleton workspace under `~/.cache/cortexpilot/browser/chrome-user-data`,
+  singleton workspace under `~/.cache/openvibecoding/browser/chrome-user-data`,
   added explicit `browser:chrome:migrate|launch|status` entrypoints, moved
   Playwright browser/search cleanup onto the live-CDP lifetime instead of
   post-teardown best effort, and marked the browser subtree as protected +
@@ -122,16 +122,16 @@ All notable changes to this repository will be documented in this file.
 - hardened cache/browser closeout by unifying repo-authored runtime artifacts
   under `.runtime-cache/`, formalizing build/dependency exceptions, adding a
   default 20 GiB + TTL machine-cache retention contract for
-  `~/.cache/cortexpilot`, introducing a rate-limited auto-prune hook before
+  `~/.cache/openvibecoding`, introducing a rate-limited auto-prune hook before
   heavy cache producers, and keeping `.serena/` as ignore-only local MCP state
   instead of a governed repo cache
 - added repo-owned Docker runtime governance receipts plus local buildx cache
-  under `~/.cache/cortexpilot/docker-buildx-cache/`, so the Docker runtime
+  under `~/.cache/openvibecoding/docker-buildx-cache/`, so the Docker runtime
   lane now reports managed image/container/volume/build-cache totals through
-  `.runtime-cache/cortexpilot/reports/space_governance/docker_runtime.json`
+  `.runtime-cache/openvibecoding/reports/space_governance/docker_runtime.json`
   instead of relying only on shell stdout
 - switched local browser policy to the real Chrome profile display name
-  `cortexpilot`, resolving Chrome `Local State -> profile.info_cache` to the
+  `openvibecoding`, resolving Chrome `Local State -> profile.info_cache` to the
   actual `Profile N` directory, while forcing CI / docker / clean-room lanes
   back to `ephemeral` and failing closed when the real Chrome executable or
   real profile directory cannot be resolved
@@ -184,7 +184,7 @@ All notable changes to this repository will be documented in this file.
   `Integrations and skills adoption` section, lifting integrations/skills
   adoption into the dashboard home discovery ladder, adding the repo-owned
   `packages/frontend-api-contract/docs/README.md` guide to replace raw
-  `@cortexpilot/frontend-api-contract` type-file links, and extending the
+  `@openvibecoding/frontend-api-contract` type-file links, and extending the
   dashboard public-docs resolver so `/integrations/` and `/skills/` follow the
   configured public-docs base instead of falling back to app-local paths
 - continued the Omega closeout hardening line by moving the dashboard
@@ -194,7 +194,7 @@ All notable changes to this repository will be documented in this file.
   desktop module READMEs to the same detail-route contract
 - tightened the later-gated queue-only MCP pilot into a truly default-off
   operator path: `enqueue_from_run` now requires explicit operator metadata and
-  also stays disabled unless `CORTEXPILOT_MCP_QUEUE_PILOT_ENABLE_APPLY=1` is
+  also stays disabled unless `OPENVIBECODING_MCP_QUEUE_PILOT_ENABLE_APPLY=1` is
   enabled in a trusted operator environment, with env governance, examples,
   and docs updated in the same change set
 - closed the stale dependabot maintenance shell by explicitly closing PRs
@@ -225,8 +225,8 @@ All notable changes to this repository will be documented in this file.
   dashboard and desktop Workflow Case detail surfaces, typing the frontend
   `RoleBindingReadModel` / `WorkflowCaseReadModel` shapes, and keeping those
   operator cards explicitly below `task_contract` execution authority
-- opened Prompt 8 by converging `docs/api/openapi.cortexpilot.json`,
-  `generate_frontend_contracts.py`, `@cortexpilot/frontend-api-contract`,
+- opened Prompt 8 by converging `docs/api/openapi.openvibecoding.json`,
+  `generate_frontend_contracts.py`, `@openvibecoding/frontend-api-contract`,
   frontend client/types, and dashboard/desktop Run Detail so
   `role_binding_read_model` is now contract-backed from the generated frontend
   surface through the primary run operator views
@@ -250,7 +250,7 @@ All notable changes to this repository will be documented in this file.
   as the only execution authority and preserving fail-closed tool/runtime
   posture
 - opened Prompt 10 Wave 3 by hardening the repo-owned frontend starter path:
-  `@cortexpilot/frontend-api-client` now documents and exports
+  `@openvibecoding/frontend-api-client` now documents and exports
   `createControlPlaneStarter(...)`, the package ships a runnable local example
   at `packages/frontend-api-client/examples/control_plane_starter.local.mjs`,
   and the builder/API/docs entrypoints now describe that preview-first starter
@@ -264,7 +264,7 @@ All notable changes to this repository will be documented in this file.
   `scripts/check_clean_room_recovery.sh` reinstall package-local
   `frontend-api-client` dependencies before it runs the node smoke bundle
 - hardened Prompt 10 closeout CI by lazy-loading
-  `cortexpilot_orch.contract` package entrypoints, so Quick Feedback /
+  `openvibecoding_orch.contract` package entrypoints, so Quick Feedback /
   schedule-boundary governance checks no longer pull runtime-provider
   dependencies like `httpx` just to import `ContractValidator`
 - hardened the Prompt 10 control-plane CI path by extracting lightweight
@@ -409,7 +409,7 @@ All notable changes to this repository will be documented in this file.
 - tightened the space-governance / retention contract so cleanup inventory,
   wave receipts, retention lane summaries, and test-output namespace discipline
   now agree on the same repo-local and repo-external cache boundaries
-- added a dedicated Docker runtime lane for CortexPilot-owned local CI residue,
+- added a dedicated Docker runtime lane for OpenVibeCoding-owned local CI residue,
   registered its environment knobs, and kept workstation-global Docker/cache
   totals audit-only instead of apply targets
 
