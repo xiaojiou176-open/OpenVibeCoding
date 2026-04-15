@@ -75,7 +75,7 @@ describe("desktop command tower mode split", () => {
   it("shows execution-first and web-first governance navigation grouping", () => {
     render(<AppSidebar activePage="pm" onNavigate={vi.fn()} />);
     expect(screen.getByRole("heading", { name: "Core loop" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Governance" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Desks & controls" })).toBeInTheDocument();
   });
 
   it("keeps desktop command tower execution-first and provides web deep-analysis handoff", async () => {
