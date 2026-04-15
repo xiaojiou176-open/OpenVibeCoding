@@ -363,6 +363,7 @@ def release_lock(allowed_paths: Iterable[str]) -> None:
     run_id = os.getenv("OPENVIBECODING_RUN_ID", "").strip()
     current_pid = str(os.getpid())
     current_owner = _owner_token()
+    explicit_owner = os.getenv("OPENVIBECODING_LOCK_OWNER_TOKEN", "").strip()
     force_unlock = _force_unlock_enabled()
     for path in paths:
         lock_path = _lock_path(path, locks_root)
@@ -371,12 +372,18 @@ def release_lock(allowed_paths: Iterable[str]) -> None:
         meta = _parse_lock_file(lock_path)
         owner = meta.get("owner", "")
         owner_match = bool(owner and owner == current_owner)
+        same_pid_local_fallback = (
+            not run_id
+            and not explicit_owner
+            and bool(meta.get("pid", ""))
+            and meta.get("pid", "") == current_pid
+        )
         legacy_owner_match = (
             bool(run_id)
             and meta.get("run_id", "") == run_id
             and (not meta.get("pid", "") or meta.get("pid", "") == current_pid)
         )
-        if force_unlock or owner_match or legacy_owner_match:
+        if force_unlock or owner_match or legacy_owner_match or same_pid_local_fallback:
             try:
                 lock_path.unlink()
             except FileNotFoundError:
