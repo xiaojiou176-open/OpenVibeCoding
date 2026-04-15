@@ -16,8 +16,10 @@ OpenVibeCoding front door. `docs/README.md` remains the repo-side
 documentation summary for contributors and maintainers who still need the
 runtime and repository inventory.
 
-`configs/docs_nav_registry.json` is the machine source of truth for the active
-docs inventory. This file is the human-readable summary of that registry.
+`configs/docs_nav_registry.json` is the machine source of truth for the **active
+public docs inventory only**. Treat files outside that active inventory as
+maintainer-only reference or archive material, even if they still live under
+`docs/` for repo history and contributor access.
 
 Daily local verification lives in the root [README](../README.md). Treat this
 file as the docs inventory map, not as a second CI manual.
@@ -80,21 +82,28 @@ These are the active registered docs that stay in the primary docs navigation.
 
 ## Supplemental Registered Docs
 
-These files remain active and canonical, but they stay outside the primary
-navigation set.
+These are the only active public supplemental surfaces.
 
 1. [robots.txt](robots.txt)
 2. [sitemap.xml](sitemap.xml)
 
-## Archived / Maintainer References
+## Maintainer References Outside The Active Public Inventory
+
+Some repo-owned materials still live under `docs/` for contributor setup,
+historical release archaeology, implementation truth, or archival proof, but
+they are **not** part of the active public docs inventory and must not be
+treated as front-door navigation. This includes:
+
+- architecture notes and topology references
+- engineering/specification baselines
+- maintainer runbooks and future pilot blueprints
+- historical release-draft sources and release-side proof ledgers
+- storefront methodology/status ledgers that remain useful as archive material
 
 Heavy reference docs, release archaeology, proof ledgers, governance maps, and
-preview runbooks still live in the repository for maintainers. Two standing
-repo-side reference paths remain `docs/architecture/runtime-topology.md` and
-`docs/specs/00_SPEC.md`; use them when you need implementation truth rather
-than the minimal public story. The rest stay useful for historical release
-context or repo-side implementation detail, but they are intentionally outside
-the active public docs inventory.
+preview runbooks still live in the repository for maintainers. Treat them as
+implementation/archive reference when needed, not as part of the minimal
+public story.
 
 ## What Each Active Public File Is For
 
@@ -112,39 +121,7 @@ the active public docs inventory.
 - `docs/skills/index.html`: repo-owned skills quickstart for teams adopting OpenVibeCoding playbooks with coding agents
 - `docs/robots.txt` / `docs/sitemap.xml`: crawler-facing discovery surfaces
 - `configs/mcp_public_manifest.json`: machine-readable MCP distribution artifact for the shipped read-only stdio surface
-- `design-system/MASTER.md`: repo-owned design constitution for the command-tower identity; use it when web/desktop surfaces change so visual hierarchy does not drift back to generic dashboard tropes
-- `design-system/pages/*.md`: page-specific design overrides for `dashboard-home`, `command-tower`, `workflow-detail`, `run-detail`, and `desktop-overview`
-- `.stitch/DESIGN.md`: repo-owned Stitch fallback design source when authenticated screen generation is unavailable
-- `.stitch/designs/*.prompt.md`: enhanced prompt pack to feed Stitch later without reopening the product/visual direction debate
-- `apps/dashboard/README.md`: dashboard-owned module note for operator-surface wording, staged UI-audit build behavior, and control-plane/runtime-capability presentation changes
-- `apps/desktop/README.md`: desktop-owned module note for operator-surface locale/status hardening when desktop wording contracts change
-- `policies/agent_registry.json`: machine SSOT for role-contract defaults such as purpose, prompt ref, MCP bundle ref, downstream-role expectations, and fail-closed posture
-- `policies/skills_bundle_registry.json`: repo-owned authority surface for named skills bundles used by qualifying role contracts
-- `policies/role_config_registry.json`: repo-owned mutable defaults surface for role configuration preview/apply flows; changes here affect future compiled role defaults, not the execution authority of already-issued task contracts
-- `configs/env_direct_read_allowlist.json`: machine allowlist for governed backend direct env reads; update this alongside docs when a role/runtime helper legitimately reads env-backed model metadata
 - `docs/api/openapi.openvibecoding.json`: canonical frontend contract extension that now carries Prompt 8 run/workflow route bindings plus Prompt 9 agents/contracts catalog bindings and generated read-model metadata for `RoleBindingReadModel` / `WorkflowCaseReadModel`
-- `schemas/completion_governance_report.v1.json`: runtime-evaluated completion-governance report emitted during run finalize; use it when operator surfaces need the live DoD / reply-audit / continuation verdict instead of only the planning artifact summary
-- `scripts/generate_frontend_contracts.py`: repo-owned generator that now emits Prompt 8 read-model types plus Prompt 9 agents/contracts catalog routes into `@openvibecoding/frontend-api-contract`
-- `schemas/role_config_registry.v1.json`: schema-first contract for the repo-owned role configuration overlay used by Prompt 10 role-default preview/apply surfaces
-- `packages/frontend-api-contract/generated/index.d.ts`: generated TypeScript contract surface for frontend-safe run/workflow routes and read-model types; avoid hand-maintaining parallel overlays when this file changes
-- `packages/frontend-api-contract/docs/README.md`: human-readable contract package guide that now sits between the public API/builder quickstarts and the raw generated contract files
-- `scripts/check_clean_room_recovery.sh`: clean-room bootstrap/verification path that now reinstalls package-local frontend-api-client deps before its node smoke bundle and runs the repo-owned workspace-module cleanup before the broader runtime delete sweep; that cleanup path can quarantine stubborn dashboard module residue before deletion when recursive removal alone is not enough
-- `scripts/install_dashboard_deps.sh`: dashboard clean-room install gate that now proves `jsdom` itself can load, so quick-lane success does not depend on a specific transitive dependency layout such as `data-urls`
-- `scripts/check_public_sensitive_surface.py`: fail-closed tracked-surface gate for maintainer-local paths, raw token-like literals, direct PII markers, and forbidden tracked runtime files; the gate is wired into repo hygiene and a dedicated pre-commit hook
-- `scripts/check_workflow_static_security.sh`: repo-owned GitHub Actions security wrapper; it resolves the pinned `actionlint` + `zizmor` binaries through `scripts/lib/release_tool_helpers.sh` and fails on actionlint errors plus medium/high zizmor findings
-- `scripts/check_trivy_repo_scan.sh`: repo-owned Trivy filesystem/dependency scan for the tracked repository surface and lockfiles
-- `scripts/check_secret_scan_closeout.sh`: closeout-oriented secret scan wrapper; it can run the canonical history scan on the current tree or repeat it from a fresh clone
-- `scripts/lib/release_tool_helpers.sh`: pinned release-tool bootstrap for `actionlint`, `zizmor`, `trivy`, `gitleaks`, and `trufflehog`
-- `.github/dependency-review-config.yml`: repo-owned configuration for the official GitHub Dependency Review action on pull requests
-- `.pre-commit-config.yaml`: host-compatible hook inventory; repo-owned
-  `scripts/*.py` hooks should run through `bash scripts/run_governance_py.sh`
-  (or an equivalent `python3 -B` path) so clean hook passes do not leave
-  repo-local `__pycache__` residue behind
-- `apps/orchestrator/src/openvibecoding_orch/api/main_pm_intake_helpers.py`: PM-facing helper surface that now returns a contract-derived `role_binding_summary`, and the same read model now persists into run manifests for stable post-run inspection without becoming execution authority
-- `schemas/execution_plan_report.v1.json` / `schemas/run_manifest.v1.json`: schema-owned runtime capability summaries (`lane`, `compat_api_mode`, `provider_status`, `tool_execution`) that keep preview/manifests honest about chat-compatible vs fail-closed tool posture
-- `apps/orchestrator/src/openvibecoding_orch/api/main_runs_handlers.py`: run-detail helper surface that now returns a stable `role_binding_read_model` derived from persisted contract truth for read-only inspection
-- `apps/orchestrator/src/openvibecoding_orch/api/main_state_store_helpers.py`: workflow aggregation helper that now projects `workflow_case_read_model` from the latest linked run's persisted binding summary for control-plane/workflow reads
-- `apps/orchestrator/src/openvibecoding_orch/api/main_run_views_helpers.py`: registry-backed agent inventory now also publishes a read-only role catalog, while contract artifact listing emits normalized bundle/runtime inspector rows for Prompt 9 operator pages
 
 ## Public CI Contract
 

@@ -12,8 +12,8 @@
       "path": "docs/README.md",
       "must_include": [
         "This repository keeps its public documentation intentionally small.",
-        "docs/architecture/runtime-topology.md",
-        "docs/specs/00_SPEC.md"
+        "public docs inventory only",
+        "implementation/archive reference"
       ]
     },
     {

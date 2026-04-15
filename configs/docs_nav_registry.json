@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "description": "Minimal navigation registry for the public documentation surface.",
+  "description": "Minimal navigation registry for the active public documentation surface only.",
   "entries": [
     {
       "path": "docs/index.html",
@@ -14,8 +14,8 @@
     {
       "path": "docs/architecture/runtime-topology.md",
       "kind": "reference",
-      "status": "active",
-      "canonical": false,
+      "status": "archived",
+      "canonical": true,
       "generated": false,
       "owner_surface": "docs",
       "listed_in_primary_navigation": false
@@ -23,8 +23,8 @@
     {
       "path": "docs/specs/00_SPEC.md",
       "kind": "policy",
-      "status": "active",
-      "canonical": false,
+      "status": "archived",
+      "canonical": true,
       "generated": false,
       "owner_surface": "docs",
       "listed_in_primary_navigation": false
