@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from contextlib import contextmanager
-import os
 import re
 import subprocess
 import threading
@@ -131,6 +130,7 @@ def remove_worktree(run_id: str, task_id: str) -> None:
             try:
                 parent.rmdir()
             except OSError:
+                # Best-effort cleanup only; parent may still hold other task worktrees.
                 pass
 
         cmd_branch = ["git", "branch", "-D", branch]
