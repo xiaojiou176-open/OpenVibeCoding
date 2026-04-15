@@ -151,6 +151,16 @@
   line-height: 1.02;
 }
 
+.home-briefing-copy .page-subtitle,
+.planner-hero-copy .page-subtitle,
+.compare-room-copy .page-subtitle,
+.compare-room-copy > p,
+.home-briefing-copy .home-briefing-guidance,
+.planner-hero-copy .cell-sub,
+.compare-room-copy .cell-sub {
+  color: color-mix(in srgb, var(--color-text-primary) 86%, white);
+}
+
 .page-title-stacked {
   display: grid;
   gap: 2px;
@@ -175,7 +185,7 @@
 .home-briefing-directive p,
 .planner-priority-summary,
 .compare-verdict-summary {
-  color: var(--color-text-secondary);
+  color: color-mix(in srgb, var(--color-text-primary) 80%, var(--color-text-secondary));
   font-size: var(--text-sm);
   line-height: 1.6;
 }
@@ -208,7 +218,7 @@
 
 .home-dispatch-desc {
   margin: 0;
-  color: var(--color-text-secondary);
+  color: color-mix(in srgb, var(--color-text-primary) 74%, var(--color-text-secondary));
   font-size: 12px;
   line-height: 1.6;
 }
@@ -254,7 +264,7 @@
 
 .home-briefing-meter-detail {
   margin: 0;
-  color: var(--color-text-secondary);
+  color: color-mix(in srgb, var(--color-text-primary) 74%, var(--color-text-secondary));
   font-size: 12px;
   line-height: 1.55;
 }
@@ -323,7 +333,7 @@
 }
 
 .home-briefing-signal p {
-  color: var(--color-text-secondary);
+  color: color-mix(in srgb, var(--color-text-primary) 74%, var(--color-text-secondary));
   font-size: 13px;
   line-height: 1.65;
   margin: 0;
@@ -429,7 +439,7 @@
 
 .home-command-desc,
 .home-loop-desc {
-  color: var(--color-text-secondary);
+  color: color-mix(in srgb, var(--color-text-primary) 74%, var(--color-text-secondary));
   font-size: 13px;
   line-height: 1.65;
 }
@@ -859,7 +869,7 @@
   margin: 0;
   font-size: 13px;
   line-height: 1.6;
-  color: var(--color-text-secondary);
+  color: color-mix(in srgb, var(--color-text-primary) 74%, var(--color-text-secondary));
 }
 
 .triage-spotlight-actions {
