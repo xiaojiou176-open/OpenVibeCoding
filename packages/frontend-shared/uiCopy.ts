@@ -1098,9 +1098,9 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
             desc: "Prove what happened with evidence bundles, rerun comparison, and replay before you trust the result.",
           },
         ],
-        publicTemplatesTitle: "One proven workflow, two showcase expansions",
+        publicTemplatesTitle: "One proven workflow, one tracked bundle, one showcase expansion",
         publicTemplatesDescription:
-          "Start with `news_digest` first. It is the official public baseline. `topic_brief` and `page_brief` stay useful, but they are still showcase paths until they earn their own healthy proof bundles.",
+          "Start with `news_digest` first. It is the official public baseline. `topic_brief` is still a showcase path until it earns its own healthy proof bundle. `page_brief` now has a tracked browser-backed proof bundle, but it is still not the official first public baseline.",
         publicTemplatesActionLabel: "Open proof pack",
         publicTemplatesActionHref: "/use-cases/",
         publicTemplateCards: [
@@ -1126,12 +1126,12 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
           },
           {
             href: "/pm?template=page_brief",
-            badge: "Public showcase",
+            badge: "Tracked browser-backed bundle",
             title: "page_brief",
             desc: "Capture one URL as a read-only workflow case with browser-backed evidence.",
             bestFor: "Use when one page matters more than a whole search topic.",
             example: "https://example.com + focused summary request",
-            proof: "Proof state: browser-backed showcase path",
+            proof: "Proof state: tracked browser-backed public proof bundle",
             fields: ["url", "focus"],
           },
         ],
@@ -2393,9 +2393,9 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
             desc: "在真正信任结果前，先看证据包、对比重跑和失败回放，把“做完了”变成能验的事实。",
           },
         ],
-        publicTemplatesTitle: "一个已证明工作流，两个展示扩展",
+        publicTemplatesTitle: "一个已证明工作流，一个已追踪证明包，一个展示扩展",
         publicTemplatesDescription:
-          "先从 `news_digest` 开始。它是官方公开基线。`topic_brief` 和 `page_brief` 仍然有用，但在拿到各自健康证明包之前，它们仍属于展示路径。",
+          "先从 `news_digest` 开始。它是官方公开基线。`topic_brief` 仍是展示路径，直到它拿到自己的健康证明包。`page_brief` 现在已经有已追踪的浏览器证明包，但它仍不是官方第一公开基线。",
         publicTemplatesActionLabel: "打开证明包",
         publicTemplatesActionHref: "/use-cases/",
         publicTemplateCards: [
@@ -2421,12 +2421,12 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
           },
           {
             href: "/pm?template=page_brief",
-            badge: "公开展示",
+            badge: "已追踪浏览器证明包",
             title: "page_brief",
             desc: "围绕单个 URL 和浏览器证据生成只读 workflow case。",
             bestFor: "适合单页比整段主题更重要的情况。",
             example: "https://example.com + focused summary request",
-            proof: "Proof 状态：浏览器证据展示路径",
+            proof: "Proof 状态：已追踪的浏览器公开证明包",
             fields: ["url", "focus"],
           },
         ],

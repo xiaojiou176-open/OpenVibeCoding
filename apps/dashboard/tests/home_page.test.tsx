@@ -143,6 +143,8 @@ describe("dashboard home run-summary clarity", () => {
   it("keeps the shared home copy contract aligned across locales", () => {
     const en = getUiCopy("en").dashboard.homePhase2;
     const zh = getUiCopy("zh-CN").dashboard.homePhase2;
+    const enPageBrief = en.publicTemplateCards.find((card) => card.title === "page_brief");
+    const zhPageBrief = zh.publicTemplateCards.find((card) => card.title === "page_brief");
 
     expect(en.productSpineCards).toHaveLength(3);
     expect(zh.productSpineCards).toHaveLength(en.productSpineCards.length);
@@ -150,6 +152,12 @@ describe("dashboard home run-summary clarity", () => {
     expect(zh.publicAdvantageCards).toHaveLength(en.publicAdvantageCards.length);
     expect(zh.integrationCards).toHaveLength(en.integrationCards.length);
     expect(zh.firstTaskGuideSteps).toHaveLength(en.firstTaskGuideSteps.length);
+    expect(en.publicTemplatesDescription).toContain("`page_brief` now has a tracked browser-backed proof bundle");
+    expect(zh.publicTemplatesDescription).toContain("`page_brief` 现在已经有已追踪的浏览器证明包");
+    expect(enPageBrief?.badge).toBe("Tracked browser-backed bundle");
+    expect(enPageBrief?.proof).toBe("Proof state: tracked browser-backed public proof bundle");
+    expect(zhPageBrief?.badge).toBe("已追踪浏览器证明包");
+    expect(zhPageBrief?.proof).toBe("Proof 状态：已追踪的浏览器公开证明包");
     expect(en.aiSurfacesActionHref).toBe("/ai-surfaces/");
     expect(en.publicTemplatesActionHref).toBe("/use-cases/");
     expect(zh.liveCaseGalleryActionHref).toBe("/workflows");
