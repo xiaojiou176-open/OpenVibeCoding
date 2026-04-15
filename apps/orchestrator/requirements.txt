@@ -46,3 +46,4 @@ pyasn1==0.6.3
 pyjwt==2.12.1
 pygments==2.20.0
 requests==2.33.0
+python-multipart==0.0.26
