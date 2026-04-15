@@ -31,18 +31,12 @@ run_ci_step7_dependency_audit() {
     fi
     echo "⚠️ [WARN] soft audit mode enabled"
     "$PYTHON" scripts/check_pip_audit_gate.py || true
-    cd apps/dashboard
-    pnpm audit --audit-level high --prod || true
-    cd "$ROOT_DIR/apps/desktop"
-    pnpm audit --audit-level high --prod || true
-    cd "$ROOT_DIR"
+    bash scripts/run_npm_audit_with_temp_lock.sh apps/dashboard --audit-level high --omit dev || true
+    bash scripts/run_npm_audit_with_temp_lock.sh apps/desktop --audit-level high --omit dev || true
   else
     "$PYTHON" scripts/check_pip_audit_gate.py
-    cd apps/dashboard
-    pnpm audit --audit-level high --prod
-    cd "$ROOT_DIR/apps/desktop"
-    pnpm audit --audit-level high --prod
-    cd "$ROOT_DIR"
+    bash scripts/run_npm_audit_with_temp_lock.sh apps/dashboard --audit-level high --omit dev
+    bash scripts/run_npm_audit_with_temp_lock.sh apps/desktop --audit-level high --omit dev
   fi
   bash scripts/check_trivy_repo_scan.sh
   echo "ℹ️ [ci] skip desktop Cargo.lock audit in the default dependency slice; Linux/BSD desktop support is out of the public support contract, native graph review stays manual, and excluded unsupported-surface advisories must remain declared in configs/cargo_audit_ignored_advisories.json + governance closeout"

@@ -10,6 +10,7 @@ import { Input, Select } from "../../components/ui/input";
 import { RoleConfigControlPlane } from "../../components/control-plane/RoleConfigControlPlane";
 import { safeLoad } from "../../lib/serverPageData";
 import type { AgentCatalogPayload, AgentStatusPayload, RoleCatalogRecord } from "../../lib/types";
+import { localizeRolePurpose } from "../../lib/rolePresentation";
 import { formatBindingReadModelLabel, formatRoleBindingRuntimeSummary } from "../../lib/types";
 
 type AgentsPageProps = {
@@ -116,56 +117,73 @@ function isFailedStage(stage: string): boolean {
 }
 
 type FlowStagePresentation = {
-  label: "Pending assignment" | "In progress" | "In review" | "Completed" | "Failed";
+  label: string;
   badgeVariant: BadgeVariant;
   rawStage: string;
   isFailed: boolean;
 };
 
-function resolveFlowStage(item: Record<string, unknown>): FlowStagePresentation {
+function resolveFlowStage(item: Record<string, unknown>, locale: "en" | "zh-CN"): FlowStagePresentation {
   const stage = stageText(item.stage);
   const hasAgent = String(item.agent_id ?? "").trim().length > 0;
+  const labels =
+    locale === "zh-CN"
+      ? {
+          failed: "失败",
+          completed: "已完成",
+          review: "复核中",
+          pending: "待分配",
+          progress: "执行中",
+        }
+      : {
+          failed: "Failed",
+          completed: "Completed",
+          review: "In review",
+          pending: "Pending assignment",
+          progress: "In progress",
+        };
   if (isFailedStage(stage)) {
-    return { label: "Failed", badgeVariant: "failed", rawStage: stage, isFailed: true };
+    return { label: labels.failed, badgeVariant: "failed", rawStage: stage, isFailed: true };
   }
   if (stageIncludesAny(stage, ["DONE", "COMPLETE", "SUCCESS", "APPROVE", "ARCHIVE", "CLOSE", "FINISH"])) {
-    return { label: "Completed", badgeVariant: "success", rawStage: stage, isFailed: false };
+    return { label: labels.completed, badgeVariant: "success", rawStage: stage, isFailed: false };
   }
   if (stageIncludesAny(stage, ["VERIFY", "REVIEW", "TEST", "CHECK", "QA", "AUDIT", "APPROVAL", "MERGE"])) {
-    return { label: "In review", badgeVariant: "running", rawStage: stage, isFailed: false };
+    return { label: labels.review, badgeVariant: "running", rawStage: stage, isFailed: false };
   }
   if (!hasAgent || isInitializingStage(stage) || stageIncludesAny(stage, ["QUEUE", "PENDING", "WAIT", "ASSIGN", "SCHEDULE"])) {
-    return { label: "Pending assignment", badgeVariant: "warning", rawStage: stage, isFailed: false };
+    return { label: labels.pending, badgeVariant: "warning", rawStage: stage, isFailed: false };
   }
-  return { label: "In progress", badgeVariant: "running", rawStage: stage, isFailed: false };
+  return { label: labels.progress, badgeVariant: "running", rawStage: stage, isFailed: false };
 }
 
-function fallbackRoleLabel(role: unknown, stage: unknown): string {
+function fallbackRoleLabel(role: unknown, stage: unknown, locale: "en" | "zh-CN"): string {
   const rawRole = String(role ?? "").trim();
   if (rawRole) {
     return rawRole;
   }
   const stageLabel = stageText(stage);
   if (isInitializingStage(stageLabel)) {
-    return "Bootstrapping";
+    return locale === "zh-CN" ? "启动中" : "Bootstrapping";
   }
-  return "System task";
+  return locale === "zh-CN" ? "系统任务" : "System task";
 }
 
-function fallbackAgentLabel(agentId: unknown, stage: unknown): string {
+function fallbackAgentLabel(agentId: unknown, stage: unknown, locale: "en" | "zh-CN"): string {
   const raw = String(agentId ?? "").trim();
   if (raw) {
     return readableId("AGENT", raw);
   }
   const stageLabel = stageText(stage);
   if (isInitializingStage(stageLabel)) {
-    return "Bootstrapping";
+    return locale === "zh-CN" ? "启动中" : "Bootstrapping";
   }
-  return "Unassigned";
+  return locale === "zh-CN" ? "待分配" : "Unassigned";
 }
 
 function resolveExecutionContext(
-  item: Record<string, unknown>
+  item: Record<string, unknown>,
+  locale: "en" | "zh-CN",
 ): { primary: string; detail: string; title: string; isFallback: boolean } {
   const worktree = String(item.worktree ?? "").trim();
   const path = String(item.path ?? "").trim();
@@ -180,11 +198,13 @@ function resolveExecutionContext(
     };
   }
   const stageLabel = stageText(item.stage);
-  const detail = isInitializingStage(stageLabel) ? "INIT" : "SYSTEM";
+  const detail = isInitializingStage(stageLabel)
+    ? locale === "zh-CN" ? "启动阶段" : "INIT"
+    : locale === "zh-CN" ? "系统" : "SYSTEM";
   return {
-    primary: "Unbound",
+    primary: locale === "zh-CN" ? "未绑定" : "Unbound",
     detail,
-    title: `Unbound worktree (${detail})`,
+    title: locale === "zh-CN" ? `未绑定工作树（${detail}）` : `Unbound worktree (${detail})`,
     isFallback: true,
   };
 }
@@ -331,6 +351,13 @@ export default async function AgentsPage({ searchParams }: AgentsPageProps) {
   const capacityRatio = registeredAgents > 0 ? Math.round((activeAgents / registeredAgents) * 100) : 0;
   const healthyStatuses = Math.max(0, statuses.length - failedStatuses.length);
   const highRiskOps = failedStatuses.length + unassignedStatuses;
+  const hasLiveSeatEvidence = statuses.length > 0 || registeredAgents > 0;
+  const firstScreenNeedsCaution = Boolean(warning) || highRiskOps > 0 || !hasLiveSeatEvidence;
+  const firstScreenBadge = !hasLiveSeatEvidence
+    ? locale === "zh-CN" ? "等待实时席位" : "Awaiting live seats"
+    : highRiskOps > 0
+      ? agentsPageCopy.metricBadges.schedulerNeedsAction
+      : agentsPageCopy.metricBadges.schedulerStable;
   const baseQuery = new URLSearchParams();
   if (queryText) {
     baseQuery.set("q", queryText);
@@ -348,6 +375,9 @@ export default async function AgentsPage({ searchParams }: AgentsPageProps) {
     next.set("page", String(Math.min(totalPages, safePageNo + 1)));
     return `/agents?${next.toString()}`;
   })();
+  const triageSpotlight = [...failedStatuses, ...statuses.filter((item) => !isFailedStage(stageText(item.stage)))]
+    .filter((item, index, array) => array.findIndex((candidate) => statusRowKey(candidate, 0) === statusRowKey(item, 0)) === index)
+    .slice(0, 3);
 
   return (
     <main className="grid" aria-labelledby="agents-page-title">
@@ -357,7 +387,9 @@ export default async function AgentsPage({ searchParams }: AgentsPageProps) {
             <h1 id="agents-page-title" className="page-title">{agentsPageCopy.title}</h1>
             <p className="page-subtitle">{agentsPageCopy.subtitle}</p>
             <p className="sr-only">
-              Triage blocked risk first, confirm available execution seats next, then drill into individual task records.
+              {locale === "zh-CN"
+                ? "先分诊风险，再确认谁真的在线，最后再下钻具体任务记录。"
+                : "Triage blocked risk first, confirm available execution seats next, then drill into individual task records."}
             </p>
           </div>
           <div className="toolbar" role="group" aria-label="Page-level governance entry">
@@ -374,50 +406,66 @@ export default async function AgentsPage({ searchParams }: AgentsPageProps) {
           <p className="mono muted">{warning}</p>
         </Card>
       ) : null}
-      <section className="stats-grid" aria-label={agentsPageCopy.summaryAriaLabel}>
-        <article className="metric-card">
-          <p className="metric-label">{agentsPageCopy.metricLabels.riskDesk}</p>
-          <span className="sr-only">Failure-led queue</span>
-          <p
-            className={`metric-value ${failedStatuses.length > 0 ? "metric-value--danger" : "metric-value--primary"}`}
-          >
-            {failedStatuses.length}
-          </p>
-          <Badge variant={failedStatuses.length > 0 ? "failed" : "success"}>
-            {failedStatuses.length > 0 ? agentsPageCopy.metricBadges.riskActive : agentsPageCopy.metricBadges.riskClear}
-          </Badge>
-          <p className="cell-sub mono muted">{agentsPageCopy.metricSublines.risk(statuses.length, healthyStatuses)}</p>
-          <p className="cell-sub mono muted">{agentsPageCopy.metricSublines.riskHint}</p>
-        </article>
-        <article className="metric-card">
-          <p className="metric-label">{agentsPageCopy.metricLabels.executionSeats}</p>
-          <span className="sr-only">Registered capacity</span>
-          <p className="metric-value">{registeredAgents}</p>
-          <p className="cell-sub mono muted">{agentsPageCopy.metricSublines.execution(activeAgents, capacityRatio)}</p>
-          <p className="cell-sub mono muted">{agentsPageCopy.metricSublines.executionHint}</p>
-          <p className="sr-only">Pending tasks stay out of this card to avoid backlog confusion.</p>
-        </article>
-        <article className="metric-card">
-          <p className="metric-label">{agentsPageCopy.metricLabels.schedulerPosture}</p>
-          <span className="sr-only">Pending scheduling backlog</span>
-          <p className={`metric-value ${highRiskOps > 0 ? "metric-value--warning" : "metric-value--primary"}`}>{highRiskOps}</p>
-          <Badge variant={highRiskOps > 0 ? "failed" : "success"}>
-            {highRiskOps > 0 ? agentsPageCopy.metricBadges.schedulerNeedsAction : agentsPageCopy.metricBadges.schedulerStable}
-          </Badge>
-          <div className="inline-stack">
-            <Button asChild variant={highRiskOps > 0 ? "warning" : "default"}>
-              <Link href="#agents-state-machine-title">{agentsPageCopy.actions.inspectRiskDesk}</Link>
-            </Button>
-            <Button asChild variant="secondary" aria-label="Go to the registered agent list">
-              <Link href="#agents-role-catalog-title">{agentsPageCopy.actions.inspectRoleDesk}</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link href="/events">{agentsPageCopy.actions.openFailedEvents}</Link>
-            </Button>
+      <section className="app-section">
+        <div className="home-briefing-shell">
+          <div className="home-briefing-copy">
+            <p className="cell-sub mono muted">
+              {locale === "zh-CN" ? "角色治理 / 首屏分诊" : "Role operations / first-screen triage"}
+            </p>
+            <h2 className="section-title">
+              {locale === "zh-CN" ? "先看风险、席位和调度姿态" : "Read risk, seats, and scheduler posture first"}
+            </h2>
+            <p className="cell-sub mono muted">
+              {locale === "zh-CN"
+                ? "不要把这页做成注册表 dump。先判断失败队列、执行席位和调度姿态，再下钻 state machine、locks 和 role catalog。"
+                : "Do not let this page read like a registry dump. Judge the failure queue, execution seats, and scheduler posture before drilling into state machines, locks, or the role catalog."}
+            </p>
+            <p className="desk-question">
+              {locale === "zh-CN"
+                ? "这张桌子第一眼只回答一个问题：哪张席位过载、缺位，或者需要你先处理。"
+                : "This desk should answer one question first: which seat is overloaded, missing, or needs you right now."}
+            </p>
+            <nav className="home-briefing-actions" aria-label="Agent desk actions">
+              <Button asChild variant={highRiskOps > 0 ? "warning" : "default"}>
+                <Link href="#agents-state-machine-title">{agentsPageCopy.actions.inspectRiskDesk}</Link>
+              </Button>
+              <Button asChild variant="secondary" aria-label="Go to the full registered agent list">
+                <Link href="#agents-role-catalog-title">{agentsPageCopy.actions.inspectRoleDesk}</Link>
+              </Button>
+              <Button asChild variant="secondary">
+                <Link href="/events">{agentsPageCopy.actions.openFailedEvents}</Link>
+              </Button>
+            </nav>
           </div>
-          <p className="cell-sub mono muted">{agentsPageCopy.metricSublines.scheduler(unassignedStatuses, unassignedFailedStatuses)}</p>
-          <p className="cell-sub mono muted">{agentsPageCopy.metricSublines.schedulerHint(lockedAgentCount)}</p>
-        </article>
+          <Card className="home-briefing-panel">
+            <div className="home-briefing-panel-head">
+              <span className="cell-sub mono muted">
+                {locale === "zh-CN" ? "首屏判断" : "First-screen judgment"}
+              </span>
+              <Badge variant={firstScreenNeedsCaution ? "warning" : "success"}>{firstScreenBadge}</Badge>
+            </div>
+            <div className="home-briefing-signal-list" aria-label={agentsPageCopy.summaryAriaLabel}>
+              <div className="home-briefing-signal">
+                <span className="cell-sub mono muted">{agentsPageCopy.metricLabels.riskDesk}</span>
+                <strong>{failedStatuses.length}</strong>
+                <p>{agentsPageCopy.metricSublines.risk(statuses.length, healthyStatuses)}</p>
+              </div>
+              <div className="home-briefing-signal">
+                <span className="cell-sub mono muted">{agentsPageCopy.metricLabels.executionSeats}</span>
+                <strong>{registeredAgents}</strong>
+                <p>{agentsPageCopy.metricSublines.execution(activeAgents, capacityRatio)}</p>
+                <p className="cell-sub mono muted">
+                  {agentsPageCopy.metricSublines.executionHint}
+                </p>
+              </div>
+              <div className="home-briefing-signal">
+                <span className="cell-sub mono muted">{agentsPageCopy.metricLabels.schedulerPosture}</span>
+                <strong>{highRiskOps}</strong>
+                <p>{agentsPageCopy.metricSublines.scheduler(unassignedStatuses, unassignedFailedStatuses)}</p>
+              </div>
+            </div>
+          </Card>
+        </div>
       </section>
       <section className="app-section" aria-labelledby="agents-ops-title">
         <div className="section-header">
@@ -425,22 +473,33 @@ export default async function AgentsPage({ searchParams }: AgentsPageProps) {
             <h2 id="agents-ops-title" className="section-title">{agentsPageCopy.filters.title}</h2>
             <p>{agentsPageCopy.filters.subtitle}</p>
             <p className="sr-only">
-              Use role and keyword filters to separate bound agent records from pending scheduling backlog. Without filters, the page shows a full inspection view.
+              {locale === "zh-CN"
+                ? "用角色和关键词把已绑定代理、待调度积压和失败记录拆开看；不筛选时会显示完整检查视图。"
+                : "Use role and keyword filters to separate bound agent records from pending scheduling backlog. Without filters, the page shows a full inspection view."}
             </p>
           </div>
         </div>
         <form method="get" className="toolbar toolbar--mt" data-testid="agents-filter-form">
-          <label className="sr-only" htmlFor="agents-filter-q">Search agent records</label>
+          <label className="sr-only" htmlFor="agents-filter-q">
+            {locale === "zh-CN" ? "搜索代理记录" : "Search agent records"}
+          </label>
           <Input
             id="agents-filter-q"
             type="text"
             name="q"
             defaultValue={queryText}
             placeholder={agentsPageCopy.filters.searchPlaceholder}
-            aria-label="Search agent records"
+            aria-label={locale === "zh-CN" ? "搜索代理记录" : "Search agent records"}
           />
-          <label className="sr-only" htmlFor="agents-filter-role">Filter by role</label>
-          <Select id="agents-filter-role" name="role" defaultValue={roleFilter} aria-label="Filter by role">
+          <label className="sr-only" htmlFor="agents-filter-role">
+            {locale === "zh-CN" ? "按角色筛选" : "Filter by role"}
+          </label>
+          <Select
+            id="agents-filter-role"
+            name="role"
+            defaultValue={roleFilter}
+            aria-label={locale === "zh-CN" ? "按角色筛选" : "Filter by role"}
+          >
             <option value="">{agentsPageCopy.filters.allRoles}</option>
             {roles.map((role) => (
               <option key={role} value={role}>
@@ -462,7 +521,7 @@ export default async function AgentsPage({ searchParams }: AgentsPageProps) {
       <section className="app-section" aria-labelledby="agents-state-machine-title">
         <div className="section-header">
           <div>
-            <h2 className="sr-only">Scheduling and task triage detail</h2>
+            <h2 className="sr-only">{locale === "zh-CN" ? "调度与任务分诊细节" : "Scheduling and task triage detail"}</h2>
             <h2 id="agents-state-machine-title" className="section-title">{agentsPageCopy.stateMachine.title}</h2>
             <p className="mono muted">{agentsPageCopy.stateMachine.subtitle}</p>
           </div>
@@ -481,6 +540,56 @@ export default async function AgentsPage({ searchParams }: AgentsPageProps) {
             ) : null}
           </div>
         </div>
+        {triageSpotlight.length > 0 ? (
+          <div className="quick-grid quick-grid--triage-spotlight">
+            {triageSpotlight.map((item, index) => {
+              const flowStage = resolveFlowStage(item, locale);
+              const runId = String(item.run_id || "").trim();
+              const roleLabel = fallbackRoleLabel(item.role, item.stage, locale);
+              const context = resolveExecutionContext(item, locale);
+              return (
+                <Card
+                  key={`agents-spotlight:${statusRowKey(item, index)}`}
+                  variant="detail"
+                  className={`triage-spotlight-card ${flowStage.isFailed ? "triage-spotlight-card--critical" : "triage-spotlight-card--notice"}`}
+                >
+                  <div className="triage-spotlight-head">
+                    <span className="cell-sub mono muted">
+                      {locale === "zh-CN" ? `优先运行 ${index + 1}` : `Priority run ${index + 1}`}
+                    </span>
+                    <Badge variant={flowStage.badgeVariant}>{flowStage.label}</Badge>
+                  </div>
+                  <div className="triage-spotlight-body">
+                    <strong className="triage-spotlight-title">
+                      {runId ? readableId("RUN", runId) : agentsPageCopy.stateMachine.missingRunId}
+                    </strong>
+                    <p className="triage-spotlight-desc">
+                      {locale === "zh-CN"
+                        ? `${roleLabel} · ${context.primary} · ${context.detail}`
+                        : `${roleLabel} · ${context.primary} · ${context.detail}`}
+                    </p>
+                    <p className="cell-sub mono muted">
+                      {flowStage.isFailed
+                        ? locale === "zh-CN"
+                          ? "先进入详情复核失败原因和恢复路径。"
+                          : "Open detail first to inspect failure cause and recovery path."
+                        : locale === "zh-CN"
+                          ? "先确认当前执行线是否继续推进，再决定是否派更多任务。"
+                          : "Confirm whether this lane is still moving before you dispatch more work."}
+                    </p>
+                  </div>
+                  {runId ? (
+                    <div className="triage-spotlight-actions">
+                      <Button asChild variant={flowStage.isFailed ? "warning" : "secondary"}>
+                        <Link href={`/runs/${encodeURIComponent(runId)}`}>{agentsPageCopy.stateMachine.detail}</Link>
+                      </Button>
+                    </div>
+                  ) : null}
+                </Card>
+              );
+            })}
+          </div>
+        ) : null}
         {visibleStatusesPage.length === 0 ? (
           <Card>
             <div className="empty-state-stack">
@@ -506,14 +615,13 @@ export default async function AgentsPage({ searchParams }: AgentsPageProps) {
               </thead>
               <tbody>
                 {visibleStatusesPage.map((item, index) => {
-                  const stage = stageText(item.stage);
-                  const flowStage = resolveFlowStage(item);
+                  const flowStage = resolveFlowStage(item, locale);
                   const runId = String(item.run_id || "").trim();
-                  const roleLabel = fallbackRoleLabel(item.role, stage);
+                  const roleLabel = fallbackRoleLabel(item.role, item.stage, locale);
                   const roleIsFallback = !String(item.role ?? "").trim();
-                  const agentLabel = fallbackAgentLabel(item.agent_id, stage);
+                  const agentLabel = fallbackAgentLabel(item.agent_id, item.stage, locale);
                   const agentIsFallback = !String(item.agent_id ?? "").trim();
-                  const context = resolveExecutionContext(item);
+                  const context = resolveExecutionContext(item, locale);
                   return (
                     <tr key={statusRowKey(item, index)}>
                       <th scope="row">
@@ -715,7 +823,6 @@ export default async function AgentsPage({ searchParams }: AgentsPageProps) {
         </Card>
       </section>
 
-      <RoleConfigControlPlane roleCatalog={roleCatalogAll} />
       <section className="app-section" aria-labelledby="agents-role-catalog-title">
         <Card asChild>
           <details>
@@ -755,7 +862,9 @@ export default async function AgentsPage({ searchParams }: AgentsPageProps) {
                         <th scope="row">
                           <div className="stack-gap-2">
                             <Badge>{roleEntry.role}</Badge>
-                            <span className="muted">{roleEntry.purpose || agentsPageCopy.roleCatalog.noRolePurpose}</span>
+                            <span className="muted">
+                              {localizeRolePurpose(roleEntry.role, roleEntry.purpose, locale) || agentsPageCopy.roleCatalog.noRolePurpose}
+                            </span>
                           </div>
                         </th>
                         <td>
@@ -792,6 +901,8 @@ export default async function AgentsPage({ searchParams }: AgentsPageProps) {
           </details>
         </Card>
       </section>
+
+      <RoleConfigControlPlane roleCatalog={roleCatalogAll} />
 
       <section className="app-section" aria-label="Agent pagination navigation (footer)">
         <nav className="toolbar" aria-label="Agent pagination navigation (footer)">

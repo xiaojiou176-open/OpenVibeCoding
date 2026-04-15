@@ -137,6 +137,46 @@ describe("pm intake center panel component branches", () => {
     expect(onFillTemplate).not.toHaveBeenCalled();
   });
 
+  it("turns decision cards into real clarifier shortcuts for the composer", () => {
+    const onChatInputChange = vi.fn();
+    const chatInputRef = createRef<HTMLTextAreaElement>();
+    const chatLog: ChatItem[] = [
+      {
+        id: "decision-1",
+        role: "OpenVibeCoding Command Tower",
+        text: "Created session pm-clarify. Continue by answering these clarifiers.",
+        createdAt: "2026-03-01T10:00:00.000Z",
+        kind: "decision",
+        origin: "remote",
+        card: {
+          title: "Decision required",
+          subtitle: "Fill in these details before moving into execution.",
+          options: [
+            {
+              label: "Which specific directories or files need to change?",
+              description: "Answering this keeps plan generation moving.",
+            },
+          ],
+        },
+      },
+    ];
+
+    render(
+      <PMIntakeCenterPanel
+        {...createCenterProps({
+          intakeId: "pm-clarify",
+          chatLog,
+          onChatInputChange,
+          chatInputRef,
+        })}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: /Use clarifier: Which specific directories or files need to change\?/ }));
+    expect(onChatInputChange).toHaveBeenCalledWith("Which specific directories or files need to change?\n");
+    expect(screen.getByLabelText("PM composer")).toHaveFocus();
+  });
+
   it("renders loading and empty states for chat-first flow", () => {
     const { rerender, container } = render(
       <PMIntakeCenterPanel {...createCenterProps()} />

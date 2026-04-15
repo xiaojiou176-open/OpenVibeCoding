@@ -20,9 +20,10 @@ type ChatCardPayload = {
 type PmChatCardProps = {
   kind: string;
   card: ChatCardPayload;
+  onOptionSelect?: (option: ChatCardOption) => void;
 };
 
-export default function PmChatCard({ kind, card }: PmChatCardProps) {
+export default function PmChatCard({ kind, card, onOptionSelect }: PmChatCardProps) {
   return (
     <section className={`pm-embed-card is-${kind}`} aria-label={`${card.title} card`}>
       <header className="pm-embed-card-head">
@@ -39,13 +40,20 @@ export default function PmChatCard({ kind, card }: PmChatCardProps) {
       {card.options && card.options.length > 0 ? (
         <div className="pm-embed-options">
           {card.options.map((option, index) => (
-            <article key={`${option.label}-${index}`} className="pm-embed-option">
+            <button
+              type="button"
+              key={`${option.label}-${index}`}
+              className={`pm-embed-option${onOptionSelect ? " is-clickable" : ""}`}
+              onClick={onOptionSelect ? () => onOptionSelect(option) : undefined}
+              aria-label={onOptionSelect ? `Use clarifier: ${option.label}` : undefined}
+              title={onOptionSelect ? "Insert this clarifier into the composer" : undefined}
+            >
               <div>
                 <strong>{option.label}</strong>
                 <p>{option.description}</p>
               </div>
               {option.recommended ? <Badge variant="running">Recommended</Badge> : null}
-            </article>
+            </button>
           ))}
         </div>
       ) : null}

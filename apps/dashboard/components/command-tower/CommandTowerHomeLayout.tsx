@@ -217,7 +217,10 @@ export default function CommandTowerHomeLayout(props: LayoutProps) {
 
           <section className="ct-priority-lanes" aria-label={props.liveHomeCopy.layout.overviewAriaLabel}>
             {props.priorityLanes.map((lane) => (
-              <article key={lane.lane} className={`ct-priority-lane is-${lane.lane}`}>
+              <article
+                key={lane.lane}
+                className={`ct-priority-lane is-${lane.lane} ${lane.lane === "actions" ? "ct-priority-lane--wide" : ""}`}
+              >
                 <header>
                   <h3>{lane.title}</h3>
                   <Badge variant={lane.badgeVariant}>

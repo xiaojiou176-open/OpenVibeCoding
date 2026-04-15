@@ -35,17 +35,18 @@ export default function DashboardHomeStorySections({
   const shellCopy =
     locale === "zh-CN"
       ? {
-          eyebrow: "OpenVibeCoding / 指挥塔入口",
-          heroTitle: homePhase2Copy.heroTitle,
-          heroSubtitle: homePhase2Copy.heroSubtitle,
-          primaryAction: hasRunHistory ? "打开 Command Tower" : homePhase2Copy.startFirstTaskLabel,
+          eyebrow: "值班入口",
+          heroTitle: "AI 工程开放指挥塔",
+          heroSubtitle:
+            "别再盯着模型跑到哪一步。OpenVibeCoding 把规划、派工、追踪、续跑和验真收进一条真正能值班的操作链。",
+          primaryAction: hasRunHistory ? "打开指挥塔" : homePhase2Copy.startFirstTaskLabel,
           secondaryAction: hasRunHistory ? homePhase2Copy.startNewTaskLabel : homePhase2Copy.viewLatestRunsLabel,
-          deskTitle: "第一屏控制台",
+          deskTitle: "第一排操作台",
           deskDescription:
             "把最重要的操作面放到第一排，不再让首页像等权链接目录。",
-          loopTitle: "Operator loop",
+          loopTitle: "操作主循环",
           loopDescription:
-            "先 plan，再 delegate，然后 track、resume、prove。首页应该像飞行前简报，不是站内导航页。",
+            "先规划，再派发，然后跟踪、续跑、验真。首页应该像飞行前简报，不是站内导航页。",
           methodTitle: "方法层，不抢第一屏",
           methodDescription:
             "Prompt / Context / Harness 仍然重要，但它们应该在 command tower 语义之后出现。",
@@ -59,6 +60,7 @@ export default function DashboardHomeStorySections({
           guidesDescription:
             "方法层、模板层和生态入口保留，但收进更安静的第二层，避免首页继续像站点目录墙。",
           guidesSummary: "展开第二层导览",
+          guidesMeta: ["方法层", "模板", "生态"],
         }
       : {
           eyebrow: "OpenVibeCoding / command tower entry",
@@ -85,6 +87,7 @@ export default function DashboardHomeStorySections({
           guidesDescription:
             "Keep methods, templates, and ecosystem routes available, but move them into a calmer second layer so the home page stops reading like a route catalog.",
           guidesSummary: "Open second-layer guides",
+          guidesMeta: ["Methods", "Templates", "Ecosystem"],
         };
   const adoptionCards = [
     homePhase2Copy.integrationCards[0],
@@ -96,39 +99,55 @@ export default function DashboardHomeStorySections({
   const controlDeskCards = [
     {
       href: "/command-tower",
-      badge: locale === "zh-CN" ? "Where am I" : "Where am I",
-      title: locale === "zh-CN" ? "实时 Command Tower" : "Live command tower",
+      badge: locale === "zh-CN" ? "当前主面" : "Where am I",
+      title: locale === "zh-CN" ? "实时指挥塔" : "Live command tower",
       desc: hasRunHistory
         ? locale === "zh-CN"
-          ? `当前有 ${runningCount} 条 live run 正在推进，先从 tower 看全局。`
+          ? `当前有 ${runningCount} 条运行正在推进，先从指挥塔看全局，再决定要不要下钻清单。`
           : `${runningCount} live runs are moving right now. Start in the tower before drilling into lists.`
         : locale === "zh-CN"
-          ? "第一条 run 出现后，tower 会成为你的主驾驶舱。"
+          ? "第一条运行出现后，指挥塔会变成你的主驾驶舱。"
           : "The tower becomes the main cockpit as soon as the first delegated run exists.",
+      meta:
+        locale === "zh-CN"
+          ? "先看全局，再看细节"
+          : "Read the board before drilling down",
+      cta: locale === "zh-CN" ? "打开指挥塔" : "Open tower",
+      tone: "primary",
     },
     {
       href: failedCount > 0 ? latestFailureGovernanceHref : "/workflows",
-      badge: locale === "zh-CN" ? "What is blocked" : "What is blocked",
+      badge: locale === "zh-CN" ? "当前堵点" : "What is blocked",
       title:
         failedCount > 0
           ? locale === "zh-CN"
             ? "风险与堵点"
             : "Risk and blockers"
           : locale === "zh-CN"
-            ? "Workflow posture"
+            ? "工作流姿态"
             : "Workflow posture",
       desc:
         failedCount > 0
           ? locale === "zh-CN"
-            ? `目前有 ${failedCount} 条失败或高风险 run，先处理堵点，再决定是否继续放行。`
+            ? `目前有 ${failedCount} 条失败或高风险运行，先处理堵点，再决定是否继续放行。`
             : `${failedCount} failed or high-risk runs need triage before you promote anything else.`
           : locale === "zh-CN"
-            ? "当前没有明显失败面，直接从 Workflow Cases 看 owner、queue 和 next step。"
+            ? "当前没有明显失败面，直接从工作流案例看 owner、queue 和 next step。"
             : "No obvious failure lane is dominating. Open Workflow Cases to inspect owner, queue, and next action.",
+      meta:
+        locale === "zh-CN"
+          ? failedCount > 0
+            ? "失败线优先"
+            : "回到工作流案例"
+          : failedCount > 0
+            ? "Triage blockers first"
+            : "Open workflow record",
+      cta: locale === "zh-CN" ? "查看风险面" : "Inspect blockers",
+      tone: "risk",
     },
     {
       href: "/pm",
-      badge: locale === "zh-CN" ? "What next" : "What next",
+      badge: locale === "zh-CN" ? "下一动作" : "What next",
       title:
         hasRunHistory
           ? locale === "zh-CN"
@@ -139,19 +158,25 @@ export default function DashboardHomeStorySections({
             : "Start the first task",
       desc:
         hasRunHistory
-          ? locale === "zh-CN"
-            ? "确认 tower 状态后，回到 PM 入口继续派发新任务。"
-            : "After you scan the tower, return to PM intake to dispatch the next piece of work."
+        ? locale === "zh-CN"
+          ? "确认指挥塔状态后，回到 PM 入口继续派发新任务。"
+          : "After you scan the tower, return to PM intake to dispatch the next piece of work."
           : locale === "zh-CN"
             ? "先把第一条任务送进系统，再回来用 tower 观察它。"
             : "Start from PM intake, then come back here to watch the first task move through the tower.",
+      meta:
+        locale === "zh-CN"
+          ? "回到 PM 入口"
+          : "Return to PM intake",
+      cta: locale === "zh-CN" ? "继续派发" : "Dispatch next",
+      tone: "action",
     },
   ];
   const operatorLoopCards = [
     {
       href: "/pm",
       badge: "1",
-      title: "Plan",
+      title: locale === "zh-CN" ? "规划" : "Plan",
       desc:
         locale === "zh-CN"
           ? "从 PM 入口写清目标、约束和验收口径。"
@@ -160,7 +185,7 @@ export default function DashboardHomeStorySections({
     {
       href: "/pm",
       badge: "2",
-      title: "Delegate",
+      title: locale === "zh-CN" ? "派发" : "Delegate",
       desc:
         locale === "zh-CN"
           ? "把计划变成真实队列任务，不要停在说明文档里。"
@@ -169,16 +194,16 @@ export default function DashboardHomeStorySections({
     {
       href: "/command-tower",
       badge: "3",
-      title: "Track",
+      title: locale === "zh-CN" ? "跟踪" : "Track",
       desc:
         locale === "zh-CN"
-          ? "用 live tower 先看现在到底在发生什么。"
+          ? "用实时指挥塔先看现在到底在发生什么。"
           : "Use the live tower to see what is happening right now.",
     },
     {
       href: "/workflows",
       badge: "4",
-      title: "Resume",
+      title: locale === "zh-CN" ? "续跑" : "Resume",
       desc:
         locale === "zh-CN"
           ? "回到 Workflow Case，沿 durable state 继续推进。"
@@ -187,7 +212,7 @@ export default function DashboardHomeStorySections({
     {
       href: "/runs",
       badge: "5",
-      title: "Prove",
+      title: locale === "zh-CN" ? "验真" : "Prove",
       desc:
         locale === "zh-CN"
           ? "用 run 结果、失败线索和 replay 证据收口。"
@@ -205,29 +230,33 @@ export default function DashboardHomeStorySections({
             : homePhase2Copy.handleLatestFailureLabel,
         variant: (failureRate >= 0.5 ? "warning" : "secondary") as ButtonVariant,
       }
-    : hasRunHistory
+      : hasRunHistory
       ? {
           href: "/pm",
           label: shellCopy.secondaryAction,
           variant: "secondary" as ButtonVariant,
         }
-      : null;
+      : {
+          href: resolveHomeHref(homePhase2Copy.proofFirstActionHref),
+          label: homePhase2Copy.proofFirstActionLabel,
+          variant: "secondary" as ButtonVariant,
+        };
   const briefingSignals =
     locale === "zh-CN"
       ? [
           {
-            kicker: "现在发生什么",
-            title: hasRunHistory ? `${runningCount} 条 live run 在推进` : "系统还没进入第一条 run",
+            kicker: "值班摘要",
+            title: hasRunHistory ? `${runningCount} 条运行在推进` : "系统还没进入第一条运行",
             desc: hasRunHistory
-              ? "先从 command tower 读当前状态，再决定要不要切到 Workflow Cases。"
+              ? "先从指挥塔读当前状态，再决定要不要切到工作流案例。"
               : "先把第一条任务送进系统，首页才会进入真正的值班节奏。",
           },
           {
             kicker: "当前堵点",
-            title: failedCount > 0 ? `${failedCount} 条 run 需要分诊` : "目前没有主导性的失败面",
+            title: failedCount > 0 ? `${failedCount} 条运行需要分诊` : "目前没有主导性的失败面",
             desc:
               failedCount > 0
-                ? "高风险或失败 run 需要先看治理入口，而不是继续派更多任务。"
+                ? "高风险或失败运行要先处理，再决定是否继续派更多任务。"
                 : "现在更像是建立第一条主循环，而不是处理事故。",
           },
           {
@@ -235,7 +264,7 @@ export default function DashboardHomeStorySections({
             title: shellCopy.primaryAction,
             desc:
               hasRunHistory
-                ? "先读 tower，再派发；不要一上来把首页当成跳转墙。"
+                ? "先读指挥塔，再派发；不要一上来把首页当成跳转墙。"
                 : "从 PM 入口开始，用第一条任务把整个 command loop 跑起来。",
           },
         ]
@@ -264,6 +293,58 @@ export default function DashboardHomeStorySections({
                 : "Start from PM intake and let the first task teach the rest of the system.",
           },
         ];
+  const dispatchBrief =
+    locale === "zh-CN"
+      ? [
+          {
+            kicker: "现在发生什么",
+            title: hasRunHistory ? `${runningCount} 条运行在推进` : "系统还在等待第一条运行",
+            desc: hasRunHistory
+              ? "先读 tower，再决定是不是要切到 Workflow Case 或证明室。"
+              : "先用第一条任务把 command loop 真的跑起来。",
+          },
+          {
+            kicker: "先去哪一桌",
+            title: failedCount > 0 ? "先去指挥塔或失败事件" : hasRunHistory ? "先去指挥塔" : "先去 PM 入口",
+            desc: failedCount > 0
+              ? "先分诊高风险线，再考虑继续派发。"
+              : hasRunHistory
+                ? "首页不是路由墙。先从主驾驶舱看全局。"
+                : "先写请求，再让系统自己把后续房间点亮。",
+          },
+          {
+            kicker: "为什么可信",
+            title: hasRunHistory ? "Workflow + Proof 才算真相" : "先跑出第一条证据链",
+            desc: hasRunHistory
+              ? "不要只看漂亮的首页卡片。真正可托底的是 Workflow Case 和 Proof & Replay。"
+              : "没有第一条任务，就没有值得相信的 tower / workflow / proof 节奏。",
+          },
+        ]
+      : [
+          {
+            kicker: "What is live now",
+            title: hasRunHistory ? `${runningCount} runs are moving` : "The system is still waiting for the first run",
+            desc: hasRunHistory
+              ? "Read the tower first, then decide whether to branch into Workflow Cases or Proof."
+              : "Run one real task so the command loop becomes a live system instead of a promise.",
+          },
+          {
+            kicker: "Where to go first",
+            title: failedCount > 0 ? "Start in Command Tower or Events" : hasRunHistory ? "Start in Command Tower" : "Start in PM intake",
+            desc: failedCount > 0
+              ? "Triage the risky lane before you queue or promote anything else."
+              : hasRunHistory
+                ? "This home page should not behave like a route wall. Start from the cockpit."
+                : "Write the request first, then let the rest of the system light up around it.",
+          },
+          {
+            kicker: "Why this is trustworthy",
+            title: hasRunHistory ? "Workflow plus Proof is the truth path" : "Earn the first proof chain",
+            desc: hasRunHistory
+              ? "Do not trust the homepage alone. Workflow Cases and Proof & Replay are where the operator truth actually hardens."
+              : "Without one real task, the tower, workflow, and proof rooms are still only a shell.",
+          },
+        ];
 
   return (
     <>
@@ -271,22 +352,30 @@ export default function DashboardHomeStorySections({
         <div className="home-briefing-shell">
           <div className="home-briefing-copy">
             <p className="cell-sub mono muted">{shellCopy.eyebrow}</p>
-            <h1 id="dashboard-home-title" className="page-title">
-              {shellCopy.heroTitle}
+              <h1 id="dashboard-home-title" className="page-title">
+              {locale === "zh-CN" ? (
+                <span className="page-title-stacked">
+                  <span>AI 工程开放</span>
+                  <span>指挥塔</span>
+                </span>
+              ) : (
+                shellCopy.heroTitle
+              )}
             </h1>
             <p className="page-subtitle">{shellCopy.heroSubtitle}</p>
-            <p className="cell-sub mono muted">
+            <p className="cell-sub mono muted home-briefing-guidance">
               {locale === "zh-CN"
                 ? "首页第一屏先回答四件事：你现在在哪、系统正在发生什么、哪里堵住了、下一步该进哪条操作路径。"
                 : "The first screen should answer four questions immediately: where you are, what is happening now, what is blocked, and which surface to open next."}
             </p>
-            <div className="home-briefing-directive">
-              <span className="cell-sub mono muted">Command deck doctrine</span>
-              <p>
-                {locale === "zh-CN"
-                  ? "把首页当作值班交接简报，而不是导航页：先定主动作，再给风险，再给第二层导览。"
-                  : "Treat the home page like an operator handoff briefing: primary action first, risk second, second-layer routes last."}
-              </p>
+            <div className="home-briefing-directive" aria-label={locale === "zh-CN" ? "首页 dispatch brief" : "Homepage dispatch brief"}>
+              {dispatchBrief.map((item) => (
+                <div key={item.kicker} className="home-dispatch-item">
+                  <span className="home-dispatch-kicker">{item.kicker}</span>
+                  <strong className="home-dispatch-title">{item.title}</strong>
+                  <p className="home-dispatch-desc">{item.desc}</p>
+                </div>
+              ))}
             </div>
             <nav aria-label="Home primary actions" className="home-briefing-actions">
               <Button asChild variant="default">
@@ -326,37 +415,38 @@ export default function DashboardHomeStorySections({
       </header>
 
       <section className="app-section" aria-labelledby="dashboard-control-desk-title">
-        <div className="section-header">
-          <div>
-            <h2 id="dashboard-control-desk-title" className="section-title">
-              {shellCopy.deskTitle}
-            </h2>
-            <p>{shellCopy.deskDescription}</p>
-          </div>
-        </div>
+        <h2 id="dashboard-control-desk-title" className="sr-only">
+          {shellCopy.deskTitle}
+        </h2>
         <div className="home-command-grid">
-          {controlDeskCards.map((item) => (
-            <Link key={item.title} href={item.href} className="home-command-card">
-              <span className="home-command-kicker">{item.badge}</span>
-              <span className="home-command-title">{item.title}</span>
-              <span className="home-command-desc">{item.desc}</span>
+          {controlDeskCards.map((item, index) => (
+            <Link
+              key={item.title}
+              href={item.href}
+              className={`home-command-card ${index === 0 ? "home-command-card--primary" : "home-command-card--supporting"} home-command-card--${item.tone}`}
+            >
+              <div className="home-command-card-head">
+                <span className="home-command-kicker">{item.badge}</span>
+              </div>
+              <div className="home-command-card-body">
+                <span className="home-command-title">{item.title}</span>
+                <span className="home-command-desc">{item.desc}</span>
+              </div>
             </Link>
           ))}
         </div>
       </section>
 
       <section className="app-section" aria-labelledby="dashboard-operator-loop-title">
-        <div className="section-header">
-          <div>
-            <h2 id="dashboard-operator-loop-title" className="section-title">
-              {shellCopy.loopTitle}
-            </h2>
-            <p>{shellCopy.loopDescription}</p>
-          </div>
-        </div>
+        <h2 id="dashboard-operator-loop-title" className="sr-only">
+          {shellCopy.loopTitle}
+        </h2>
         <ol className="home-loop-rail" aria-label={shellCopy.loopTitle}>
-          {operatorLoopCards.map((item) => (
-            <li key={item.title} className="home-loop-step">
+          {operatorLoopCards.map((item, index) => (
+            <li
+              key={item.title}
+              className={`home-loop-step ${index === 0 ? "home-loop-step--entry" : index === operatorLoopCards.length - 1 ? "home-loop-step--proof" : ""}`}
+            >
               <Link href={item.href} className="home-loop-link">
                 <span className="home-loop-index">{item.badge}</span>
                 <span className="home-loop-body">
@@ -367,99 +457,6 @@ export default function DashboardHomeStorySections({
             </li>
           ))}
         </ol>
-      </section>
-
-      <section className="app-section" aria-labelledby="dashboard-second-layer-guides-title">
-        <div className="section-header">
-          <div>
-            <h2 id="dashboard-second-layer-guides-title" className="section-title">
-              {shellCopy.guidesTitle}
-            </h2>
-            <p>{shellCopy.guidesDescription}</p>
-          </div>
-        </div>
-        <Card asChild>
-          <details data-testid="home-second-layer-guides">
-            <summary className="quick-card-title">{shellCopy.guidesSummary}</summary>
-            <div className="stack-gap-4 mt-2">
-              <div className="section-header">
-                <div>
-                  <h3 className="section-title">{shellCopy.methodTitle}</h3>
-                  <p>{shellCopy.methodDescription}</p>
-                </div>
-              </div>
-              <div className="quick-grid">
-                {homePhase2Copy.publicAdvantageCards.map((item) => (
-                  <Link key={item.title} href={resolveHomeHref(item.href)} className="quick-card">
-                    <span className="quick-card-title">{item.title}</span>
-                    <span className="quick-card-desc">{item.desc}</span>
-                  </Link>
-                ))}
-              </div>
-
-              <div className="section-header">
-                <div>
-                  <h3 className="section-title">{shellCopy.templatesTitle}</h3>
-                  <p>{shellCopy.templatesDescription}</p>
-                </div>
-                <nav aria-label="Public task template actions">
-                  <Button asChild variant="secondary">
-                    <Link href={resolveHomeHref(homePhase2Copy.publicTemplatesActionHref)}>
-                      {homePhase2Copy.publicTemplatesActionLabel}
-                    </Link>
-                  </Button>
-                </nav>
-              </div>
-              <div className="quick-grid">
-                {homePhase2Copy.publicTemplateCards.map((item) => (
-                  <Link key={item.title} href={resolveHomeHref(item.href)} className="quick-card">
-                    <span className="quick-card-desc">{item.badge}</span>
-                    <span className="quick-card-title">{item.title}</span>
-                    <span className="quick-card-desc">{item.desc}</span>
-                    <span className="cell-sub mono">Best for: {item.bestFor}</span>
-                    <span className="cell-sub mono">Try with: {item.example}</span>
-                    <span className="cell-sub mono">{item.proof}</span>
-                    <span className="cell-sub mono">{item.fields.join(" · ")}</span>
-                  </Link>
-                ))}
-              </div>
-
-              <div className="section-header">
-                <div>
-                  <h3 className="section-title">{shellCopy.adoptionTitle}</h3>
-                  <p>{shellCopy.adoptionDescription}</p>
-                </div>
-                <nav aria-label="Adoption and proof-first actions">
-                  <Button asChild variant="secondary">
-                    <Link href={resolveHomeHref(homePhase2Copy.proofFirstActionHref)}>{homePhase2Copy.proofFirstActionLabel}</Link>
-                  </Button>
-                  <Button asChild variant="secondary">
-                    <Link href={resolveHomeHref(homePhase2Copy.aiSurfacesActionHref)}>{homePhase2Copy.aiSurfacesActionLabel}</Link>
-                  </Button>
-                </nav>
-              </div>
-              <div className="quick-grid">
-                {adoptionCards.map((item) => {
-                  const href = resolveHomeHref(item.href);
-                  return (
-                    <Link key={item.title} href={href} className="quick-card" prefetch={item.prefetch ?? href.startsWith("/")}>
-                      <span className="quick-card-desc">{item.badge}</span>
-                      <span className="quick-card-title">{item.title}</span>
-                      <span className="quick-card-desc">{item.desc}</span>
-                    </Link>
-                  );
-                })}
-              </div>
-              <p>
-                Need the broader ecosystem framing? <Link href={resolveHomeHref(homePhase2Copy.ecosystemActionHref)}>{homePhase2Copy.ecosystemAction}</Link>.
-                Need the full package ladder in one place?{" "}
-                <Link href={resolveHomeHref(homePhase2Copy.builderQuickstartCtaHref)}>
-                  {homePhase2Copy.builderQuickstartCtaLabel}
-                </Link>.
-              </p>
-            </div>
-          </details>
-        </Card>
       </section>
 
       {showFirstTaskGuide ? (
@@ -497,6 +494,111 @@ export default function DashboardHomeStorySections({
           </Card>
         </section>
       ) : null}
+
+      <section className="app-section" aria-labelledby="dashboard-second-layer-guides-title">
+        <div className="section-header">
+          <div>
+            <h2 id="dashboard-second-layer-guides-title" className="section-title">
+              {shellCopy.guidesTitle}
+            </h2>
+            <p>{shellCopy.guidesDescription}</p>
+          </div>
+        </div>
+        <Card asChild>
+          <details data-testid="home-second-layer-guides" className="home-guides-details">
+            <summary className="home-guides-summary">
+              <span className="home-guides-summary-title">{shellCopy.guidesSummary}</span>
+              <span className="home-guides-summary-meta">
+                {shellCopy.guidesMeta.map((label) => (
+                  <span key={label} className="home-guides-summary-chip">
+                    {label}
+                  </span>
+                ))}
+              </span>
+            </summary>
+            <div className="home-guides-body mt-3">
+              <section className="home-guides-section">
+                <div className="home-guides-copy">
+                  <h3 className="section-title">{shellCopy.methodTitle}</h3>
+                  <p>{shellCopy.methodDescription}</p>
+                </div>
+                <div className="home-guides-list">
+                  {homePhase2Copy.publicAdvantageCards.map((item) => (
+                    <Link key={item.title} href={resolveHomeHref(item.href)} className="home-guides-link">
+                      <span className="home-guides-link-title">{item.title}</span>
+                      <span className="home-guides-link-desc">{item.desc}</span>
+                    </Link>
+                  ))}
+                </div>
+              </section>
+
+              <section className="home-guides-section">
+                <div className="home-guides-copy">
+                  <h3 className="section-title">{shellCopy.templatesTitle}</h3>
+                  <p>{shellCopy.templatesDescription}</p>
+                  <nav aria-label="Public task template actions">
+                    <Button asChild variant="secondary">
+                      <Link href={resolveHomeHref(homePhase2Copy.publicTemplatesActionHref)}>
+                        {homePhase2Copy.publicTemplatesActionLabel}
+                      </Link>
+                    </Button>
+                  </nav>
+                </div>
+                <div className="home-guides-list">
+                  {homePhase2Copy.publicTemplateCards.map((item) => (
+                    <Link key={item.title} href={resolveHomeHref(item.href)} className="home-guides-link">
+                      <span className="home-guides-link-kicker">{item.badge}</span>
+                      <span className="home-guides-link-title">{item.title}</span>
+                      <span className="home-guides-link-desc">{item.desc}</span>
+                      <span className="home-guides-link-meta">{item.proof}</span>
+                    </Link>
+                  ))}
+                </div>
+              </section>
+
+              <section className="home-guides-section">
+                <div className="home-guides-copy">
+                  <h3 className="section-title">{shellCopy.adoptionTitle}</h3>
+                  <p>{shellCopy.adoptionDescription}</p>
+                  <nav aria-label="Adoption and proof-first actions" className="home-guides-actions">
+                    <Button asChild variant="secondary">
+                      <Link href={resolveHomeHref(homePhase2Copy.proofFirstActionHref)}>{homePhase2Copy.proofFirstActionLabel}</Link>
+                    </Button>
+                    <Button asChild variant="secondary">
+                      <Link href={resolveHomeHref(homePhase2Copy.aiSurfacesActionHref)}>{homePhase2Copy.aiSurfacesActionLabel}</Link>
+                    </Button>
+                  </nav>
+                </div>
+                <div className="home-guides-list">
+                  {adoptionCards.map((item) => {
+                    const href = resolveHomeHref(item.href);
+                    return (
+                      <Link
+                        key={item.title}
+                        href={href}
+                        className="home-guides-link home-guides-link--secondary"
+                        prefetch={item.prefetch ?? href.startsWith("/")}
+                      >
+                        <span className="home-guides-link-kicker">{item.badge}</span>
+                        <span className="home-guides-link-title">{item.title}</span>
+                        <span className="home-guides-link-desc">{item.desc}</span>
+                      </Link>
+                    );
+                  })}
+                </div>
+                <div className="home-guides-footer">
+                  <Link href={resolveHomeHref(homePhase2Copy.ecosystemActionHref)} className="home-guides-footer-link">
+                    {homePhase2Copy.ecosystemAction}
+                  </Link>
+                  <Link href={resolveHomeHref(homePhase2Copy.builderQuickstartCtaHref)} className="home-guides-footer-link">
+                    {homePhase2Copy.builderQuickstartCtaLabel}
+                  </Link>
+                </div>
+              </section>
+            </div>
+          </details>
+        </Card>
+      </section>
     </>
   );
 }

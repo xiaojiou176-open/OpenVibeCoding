@@ -58,7 +58,7 @@ def create_tiny_repo(base_dir: Path) -> Path:
 
 
 def _acquire_ui_lock(repo_root: Path):
-    lock_dir = repo_root / ".runtime-cache" / "locks"
+    lock_dir = repo_root / ".runtime-cache" / "openvibecoding" / "locks"
     lock_dir.mkdir(parents=True, exist_ok=True)
     lock_file = (lock_dir / "dashboard_e2e_ui.lock").open("a+", encoding="utf-8")
     fcntl.flock(lock_file.fileno(), fcntl.LOCK_EX)

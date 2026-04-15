@@ -165,12 +165,12 @@ describe("pm page chat-driven flow", () => {
     expect(screen.getByLabelText("Session history sidebar")).toBeInTheDocument();
     expect(screen.getByLabelText("PM conversation area")).toBeInTheDocument();
     expect(screen.getByLabelText("Context sidebar")).toBeInTheDocument();
-    expect(await screen.findByText("pm-history-1")).toBeInTheDocument();
+    expect(await screen.findByText(/ID pm-history-1/)).toBeInTheDocument();
   });
 
   it("supports layout mode switching via buttons and shortcut", async () => {
     render(<PMIntakePage />);
-    await screen.findByText("pm-history-1");
+    await screen.findByText(/ID pm-history-1/);
 
     const page = document.querySelector("main.pm-claude-page");
     expect(page).toHaveClass("pm-layout-dialog");
@@ -188,7 +188,7 @@ describe("pm page chat-driven flow", () => {
 
   it("supports global shortcuts for reset and focus controls", async () => {
     render(<PMIntakePage />);
-    await screen.findByText("pm-history-1");
+    await screen.findByText(/ID pm-history-1/);
 
     await sendChat("快捷键创建会话");
     await waitFor(() => expect(mockCreateIntake).toHaveBeenCalledTimes(1));
@@ -220,7 +220,7 @@ describe("pm page chat-driven flow", () => {
 
   it("uses Ctrl/Cmd+Shift+C to exit focus layout and focus Command Chain", async () => {
     render(<PMIntakePage />);
-    await screen.findByText("pm-history-1");
+    await screen.findByText(/ID pm-history-1/);
 
     await act(async () => {
       fireEvent.click(screen.getByRole("tab", { name: "Focus chat" }));
@@ -254,12 +254,11 @@ describe("pm page chat-driven flow", () => {
     delete process.env.NEXT_PUBLIC_PM_COPY_VARIANT;
 
     render(<PMIntakePage />);
-    await screen.findByText("pm-history-1");
+    await screen.findByText(/ID pm-history-1/);
 
     const contextDesc = document.querySelector(".pm-context-card-desc");
-    expect(screen.getByText(/First-run path: send request/)).toBeInTheDocument();
-    expect(contextDesc).toHaveTextContent("Current next step: send the first request");
-    expect(contextDesc).toHaveTextContent("I will turn this request into a session automatically.");
+    expect(screen.getByText("Send the first real task into the system")).toBeInTheDocument();
+    expect(contextDesc).toHaveTextContent("This screen should do one thing well");
     expect(screen.getByRole("button", { name: /Next: enter the first request/ })).toBeInTheDocument();
     expect(screen.getByLabelText(PM_CHAT_INPUT_LABEL)).toHaveAttribute(
       "placeholder",
@@ -271,12 +270,11 @@ describe("pm page chat-driven flow", () => {
     process.env.NEXT_PUBLIC_PM_COPY_VARIANT = "b";
 
     render(<PMIntakePage />);
-    await screen.findByText("pm-history-1");
+    await screen.findByText(/ID pm-history-1/);
 
     const contextDesc = document.querySelector(".pm-context-card-desc");
-    expect(screen.getByText(/First-run path: send request/)).toBeInTheDocument();
-    expect(contextDesc).toHaveTextContent("Current next step: send the first request");
-    expect(contextDesc).toHaveTextContent("I will turn this request into a session automatically.");
+    expect(screen.getByText("Send the first real task into the system")).toBeInTheDocument();
+    expect(contextDesc).toHaveTextContent("This screen should do one thing well");
     expect(screen.getByRole("button", { name: /Next: enter the first request/ })).toBeInTheDocument();
     expect(screen.getByLabelText(PM_CHAT_INPUT_LABEL)).toHaveAttribute(
       "placeholder",
@@ -321,7 +319,7 @@ describe("pm page chat-driven flow", () => {
   it("switches session and syncs latest run snapshot", async () => {
     render(<PMIntakePage />);
 
-    const sessionButton = (await screen.findByText("pm-history-1")).closest("button");
+    const sessionButton = (await screen.findByText(/ID pm-history-1/)).closest("button");
     expect(sessionButton).not.toBeNull();
     await act(async () => {
       fireEvent.click(sessionButton as HTMLButtonElement);
@@ -751,14 +749,14 @@ describe("pm page chat-driven flow", () => {
 
     render(<PMIntakePage />);
 
-    const firstSession = (await screen.findByText("pm-history-1")).closest("button");
+    const firstSession = (await screen.findByText(/ID pm-history-1/)).closest("button");
     expect(firstSession).not.toBeNull();
     await act(async () => {
       fireEvent.click(firstSession as HTMLButtonElement);
     });
     expect(await screen.findByText("会话一消息")).toBeInTheDocument();
 
-    const secondSession = screen.getByText("pm-history-2").closest("button");
+    const secondSession = screen.getByText(/ID pm-history-2/).closest("button");
     expect(secondSession).not.toBeNull();
     await act(async () => {
       fireEvent.click(secondSession as HTMLButtonElement);
@@ -806,7 +804,7 @@ describe("pm page chat-driven flow", () => {
     );
     render(<PMIntakePage />);
 
-    const firstSessionButton = (await screen.findByText("pm-history-1")).closest("button");
+    const firstSessionButton = (await screen.findByText(/ID pm-history-1/)).closest("button");
     expect(firstSessionButton).not.toBeNull();
 
     await act(async () => {

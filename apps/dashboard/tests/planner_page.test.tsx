@@ -35,6 +35,12 @@ vi.mock("../lib/api", () => ({
 }));
 
 import PlannerPage from "../app/planner/page";
+import {
+  plannerPriorityRank,
+  plannerPriorityState,
+  plannerText,
+  plannerTriage,
+} from "../app/planner/page";
 import { fetchArtifact, fetchReports, fetchRun, fetchRuns } from "../lib/api";
 
 describe("planner page", () => {
@@ -162,5 +168,103 @@ describe("planner page", () => {
     expect(screen.getByText("Priority queue: Continuation already selected: continue_same_session")).toBeInTheDocument();
     expect(screen.getAllByText("Resume the continuation lane").length).toBeGreaterThan(0);
     expect(screen.getAllByRole("link", { name: "Open run detail" })[0]).toHaveAttribute("href", "/runs/run-plan-1");
+  });
+
+  it("covers planner helper branches for launch, governance, unblock, and continuation states", () => {
+    const en = plannerText("en");
+    const zh = plannerText("zh-CN");
+
+    expect(zh.title).toBe("规划桌");
+    expect(en.metrics.runs).toBe("Runs with planning artifacts");
+
+    const baseRow = {
+      run: { run_id: "run-helper-1", task_id: "task-helper-1", status: "RUNNING" },
+      wavePlan: { objective: "Helper wave", worker_count: 2, wake_policy_ref: "wake/ref" },
+      workerContracts: [{ prompt_contract_id: "worker-1" }],
+      unblockTasks: [],
+      completionGovernance: null,
+      plannedWorkerCount: 2,
+    } as any;
+
+    expect(plannerTriage(en, baseRow)).toMatchObject({
+      label: "Missing completion governance",
+      nextHref: "/pm",
+      secondaryHref: "/command-tower",
+    });
+    expect(plannerPriorityRank(baseRow)).toBe(0);
+
+    const missingContractsRow = {
+      ...baseRow,
+      completionGovernance: { overall_verdict: "continue_same_session" },
+    } as any;
+    expect(plannerTriage(en, missingContractsRow)).toMatchObject({
+      label: "Missing worker prompt contract",
+      nextHref: "/pm",
+    });
+    expect(plannerPriorityRank(missingContractsRow)).toBe(1);
+
+    const unblockRow = {
+      ...missingContractsRow,
+      workerContracts: [{ prompt_contract_id: "worker-1" }, { prompt_contract_id: "worker-2" }],
+      unblockTasks: [{ unblock_task_id: "task-1" }],
+    } as any;
+    expect(plannerTriage(en, unblockRow)).toMatchObject({
+      label: "Queued unblock tasks need review",
+      nextHref: "/workflows",
+      secondaryHref: "/runs/run-helper-1",
+    });
+    expect(plannerPriorityRank(unblockRow)).toBe(2);
+
+    const continuationRow = {
+      ...unblockRow,
+      unblockTasks: [],
+      completionGovernance: {
+        overall_verdict: "continue_same_session",
+        continuation_decision: { selected_action: "continue_same_session" },
+      },
+    } as any;
+    expect(plannerTriage(zh, continuationRow)).toMatchObject({
+      label: "已选续跑: continue_same_session",
+      nextHref: "/runs/run-helper-1",
+      secondaryHref: "/command-tower",
+    });
+    expect(plannerPriorityRank(continuationRow)).toBe(3);
+
+    const reviewProofRow = {
+      ...continuationRow,
+      completionGovernance: {
+        overall_verdict: "review",
+        continuation_decision: { selected_action: "-" },
+      },
+    } as any;
+    expect(plannerTriage(en, reviewProofRow)).toMatchObject({
+      label: "Return to proof for live result review",
+      nextHref: "/runs/run-helper-1",
+      secondaryHref: "/workflows",
+    });
+    expect(plannerPriorityRank(reviewProofRow)).toBe(4);
+
+    expect(plannerPriorityState(en, [])).toMatchObject({
+      tone: "warning",
+      primaryHref: "/pm",
+      secondaryHref: "/command-tower",
+      runId: "-",
+    });
+    expect(plannerPriorityState(en, [missingContractsRow])).toMatchObject({
+      tone: "failed",
+      primaryHref: "/pm",
+      secondaryHref: "/command-tower",
+      runId: "run-helper-1",
+    });
+    expect(plannerPriorityState(en, [unblockRow])).toMatchObject({
+      tone: "warning",
+      primaryHref: "/workflows",
+      secondaryHref: "/runs/run-helper-1",
+    });
+    expect(plannerPriorityState(en, [reviewProofRow])).toMatchObject({
+      tone: "running",
+      primaryHref: "/runs/run-helper-1",
+      secondaryHref: "/workflows",
+    });
   });
 });

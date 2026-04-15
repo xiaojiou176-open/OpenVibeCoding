@@ -46,15 +46,17 @@
 
 .ct-priority-lanes {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
 }
 
 .ct-priority-lane {
-  border-radius: 12px;
-  border: 1px solid color-mix(in srgb, var(--color-brand-indigo) 12%, var(--color-border));
-  background: color-mix(in srgb, var(--color-bg-surface) 96%, white);
-  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 12%, var(--color-border));
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--color-bg-surface) 96%, white), color-mix(in srgb, var(--color-bg-elevated) 86%, var(--color-bg-surface)));
+  padding: 14px;
+  min-height: 152px;
 }
 
 .ct-priority-lane header {
@@ -73,6 +75,26 @@
   margin: 8px 0 0;
   color: var(--color-text-secondary);
   font-size: 12px;
+  line-height: 1.6;
+}
+
+.ct-priority-lane.is-live {
+  border-color: color-mix(in srgb, var(--color-primary) 28%, var(--color-border));
+}
+
+.ct-priority-lane.is-risk {
+  border-color: color-mix(in srgb, var(--color-danger) 26%, var(--color-border));
+}
+
+.ct-priority-lane.is-actions {
+  border-color: color-mix(in srgb, var(--color-warning) 22%, var(--color-border));
+}
+
+.ct-priority-lane--wide {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  align-items: end;
 }
 
 .session-row-detail td {

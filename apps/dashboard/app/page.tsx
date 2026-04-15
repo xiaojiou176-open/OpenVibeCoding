@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { Button } from "../components/ui/button";
-import { Badge, type BadgeVariant } from "../components/ui/badge";
+import { Badge } from "../components/ui/badge";
 import { Card } from "../components/ui/card";
 import DashboardHomeStorySections from "../components/DashboardHomeStorySections";
 import { fetchRuns, fetchWorkflows } from "../lib/api";
@@ -168,7 +168,6 @@ export default async function Home() {
   const { data: workflows, warning: workflowsWarning } = await safeLoad(fetchWorkflows, [], "workflow list");
   const latestRuns = Array.isArray(runs) ? runs.slice(0, 12) : [];
   const latestWorkflows = Array.isArray(workflows) ? workflows.slice(0, 3) : [];
-  const latestRun = latestRuns[0];
   const hasDegradedRunsData = Boolean(warning);
   const hasDegradedWorkflowData = Boolean(workflowsWarning);
   const latestFailure = latestRuns.find((run) =>
@@ -185,80 +184,7 @@ export default async function Home() {
   const statusSampleCount = latestRuns.length;
   const hasRunHistory = statusSampleCount > 0;
   const failureRate = statusSampleCount > 0 ? failedCount / statusSampleCount : 0;
-  const failureRatePercent = Math.round(failureRate * 100);
-  const latestRunStatus = String(latestRun?.status || "UNKNOWN").toUpperCase();
-  const latestRunIsFailed = ["FAILED", "FAILURE", "ERROR"].includes(latestRunStatus);
-  const latestRunIsSuccess = ["SUCCESS", "DONE", "PASSED"].includes(latestRunStatus);
-  const latestRunIsRunning = hasRunHistory && !latestRunIsFailed && !latestRunIsSuccess;
-  const latestRunStatusClass = latestRunIsFailed
-    ? "metric-value--danger"
-    : latestRunIsSuccess
-      ? "metric-value--success"
-      : latestRunIsRunning
-        ? "metric-value--warning"
-        : "metric-value--primary";
-  const distributionValueClass =
-    hasDegradedRunsData
-      ? "metric-value--warning"
-      : failureRate >= 0.5
-      ? "metric-value--danger"
-      : failureRate >= 0.25
-        ? "metric-value--warning"
-        : failedCount === 0
-          ? "metric-value--success"
-          : "metric-value--primary";
-  const distributionRiskBadgeVariant: BadgeVariant =
-    hasDegradedRunsData
-      ? "warning"
-      : failureRate >= 0.5
-      ? "failed"
-      : failureRate >= 0.25
-        ? "warning"
-        : failedCount === 0
-          ? "success"
-          : "running";
-  const distributionRiskText =
-    hasDegradedRunsData
-      ? "Data degraded: the run list is temporarily unavailable"
-      : failureRate >= 0.5
-      ? "High risk: failure rate is elevated, investigate first"
-      : failureRate >= 0.25
-        ? "Attention: failure rate is rising, monitor abnormal events"
-        : failedCount === 0
-          ? "Stable: no recent failed runs"
-          : "Controlled: a few failures exist, keep monitoring";
-  const latestFailureCategory =
-    (latestFailure
-      ? outcomeLabelEn(latestFailure.failure_class) ||
-        outcomeLabelEn(latestFailure.outcome_type)
-      : undefined) || "-";
-  const latestFailureHint = firstEnglishText(latestFailure?.action_hint_zh) || "inspect failure events";
   const latestFailureGovernanceHref = latestFailure ? "/events" : "/runs";
-  const latestFailureGovernanceLabel = latestFailure
-    ? `Next action: ${latestFailureHint}`
-    : "Next action: open runs";
-  const riskSummaryTitle =
-    hasDegradedRunsData
-      ? "Degraded inputs"
-      : !hasRunHistory
-      ? "Waiting for first run"
-      : failureRate >= 0.5 || latestRunIsFailed
-      ? "High-risk alert"
-      : failureRate >= 0.25 || latestRunIsRunning
-        ? "Risk rising"
-        : failedCount === 0
-          ? "Stable"
-          : "Controlled";
-  const riskSummaryClass =
-    hasDegradedRunsData
-      ? "metric-value--warning"
-      : !hasRunHistory
-      ? "metric-value--primary"
-      : failureRate >= 0.5 || latestRunIsFailed
-      ? "metric-value--danger"
-      : failureRate >= 0.25 || latestRunIsRunning
-      ? "metric-value--warning"
-      : "metric-value--success";
   const warningText =
     firstEnglishText(warning) || "The run list is temporarily unavailable. Try again soon.";
   const governanceDeckTitle =
@@ -289,195 +215,211 @@ export default async function Home() {
         showFirstTaskGuide={!hasRunHistory}
       />
 
-      <section className="app-section" aria-label="Risk and status summary">
-        {warning ? (
+      {hasRunHistory && warning ? (
+        <section className="app-section" aria-label="Home data degradation">
           <Card variant="compact" role="status" aria-live="polite">
-            <p className="ct-home-empty-text">Some home data is degraded. Core entry actions and the latest snapshot remain available.</p>
+            <p className="ct-home-empty-text">
+              {locale === "zh-CN"
+                ? "首页数据当前是降级快照，但主入口与最新读面仍可继续使用。"
+                : "Home data is currently degraded, but the main entry actions and latest read surfaces remain available."}
+            </p>
             <p className="mono muted">{warningText}</p>
           </Card>
-        ) : null}
-        <div className="stats-grid">
-          <article className="metric-card">
-            <p className="metric-label">Operator risk bulletin</p>
-            <p className={`metric-value ${riskSummaryClass}`}>{riskSummaryTitle}</p>
-            <p className={`cell-sub mono ${latestRunStatusClass}`}>
-              Current posture: {hasDegradedRunsData ? "Degraded inputs" : hasRunHistory ? statusLabelEn(latestRun?.status) : "No runs yet"}
-            </p>
-            <p className={`cell-sub mono ${hasDegradedRunsData ? "cell-warning" : latestFailure ? "cell-danger" : "muted"}`}>
-              Primary risk: {hasDegradedRunsData ? "run list unavailable" : String(latestFailureCategory)}
-            </p>
-            <p className="cell-sub mono muted">{formatLocalTime(latestRun?.last_event_ts || latestRun?.created_at)}</p>
-            <Link href={latestFailureGovernanceHref} className="cell-sub mono">
-              {hasDegradedRunsData ? "Next action: inspect data sources and the run list" : latestFailureGovernanceLabel}
-            </Link>
-          </article>
-          <article className="metric-card">
-            <p className="metric-label">Status distribution across the last 12 runs</p>
-            <p className={`metric-value ${distributionValueClass}`}>{`Success ${successCount} / Running ${runningCount} / Failed ${failedCount}`}</p>
-            <div className="inline-stack" aria-label="Failure-rate risk signal">
-              <progress
-                className="run-progress"
-                max={Math.max(statusSampleCount, 1)}
-                value={failedCount}
-                aria-label={`Failure share ${failedCount}/${statusSampleCount}`}
-              />
-              <Badge variant={distributionRiskBadgeVariant} role="status" aria-live="polite">
-                {`${distributionRiskText} (${failureRatePercent}%)`}
-              </Badge>
+        </section>
+      ) : null}
+
+      {hasRunHistory ? (
+        <>
+          <section className="app-section" aria-labelledby="dashboard-case-gallery-live-title">
+            <div className="section-header">
+              <div>
+                <h2 id="dashboard-case-gallery-live-title" className="section-title">
+                  {homePhase2Copy.liveCaseGalleryTitle}
+                </h2>
+                <p>{homePhase2Copy.liveCaseGalleryDescription}</p>
+              </div>
+              <nav aria-label="Case gallery actions">
+                <Button asChild variant="secondary">
+                  <Link href={homePhase2Copy.liveCaseGalleryActionHref}>
+                    {homePhase2Copy.liveCaseGalleryActionLabel}
+                  </Link>
+                </Button>
+              </nav>
             </div>
-            <p className="cell-sub mono muted">Total: {hasDegradedRunsData ? "-" : statusSampleCount}</p>
-          </article>
-        </div>
-      </section>
+            {hasDegradedWorkflowData ? (
+              <Card>
+                <p className="muted">Workflow gallery data is temporarily degraded. Use the workflow list directly until the gallery snapshot refreshes.</p>
+                <p className="mono muted">{String(workflowsWarning || "").trim() || "Workflow list is temporarily unavailable."}</p>
+              </Card>
+            ) : latestWorkflows.length === 0 ? (
+              <Card variant="compact">
+                <p className="ct-home-empty-text">No Workflow Case is available for gallery mode yet. Start from PM, then return here to reuse the share-ready case path as a showcase asset.</p>
+              </Card>
+            ) : (
+              <div className="quick-grid">
+                {latestWorkflows.map((workflow) => {
+                  const workflowId = String(workflow.workflow_id || "").trim();
+                  const workflowSummary = firstEnglishText(workflow.summary, workflow.objective) || "No workflow summary is attached yet.";
+                  const runCount = Array.isArray(workflow.runs) ? workflow.runs.length : Array.isArray(workflow.run_ids) ? workflow.run_ids.length : 0;
+                  return (
+                    <Card key={workflowId || workflowSummary}>
+                      <div className="stack-gap-2">
+                        <div className="toolbar">
+                          <Badge variant="default">Workflow Case</Badge>
+                          <Badge>{statusLabelEn(workflow.status)}</Badge>
+                        </div>
+                        <h3 className="quick-card-title">{workflowId || "Workflow case"}</h3>
+                        <p className="quick-card-desc">{workflowSummary}</p>
+                        <p className="cell-sub mono">Verdict: {String(workflow.verdict || "-")}</p>
+                        <p className="cell-sub mono">Owner: {String(workflow.owner_pm || "-")} · Project: {String(workflow.project_key || "-")}</p>
+                        <p className="cell-sub mono">Run mappings: {runCount}</p>
+                        <div className="toolbar">
+                          {workflowId ? (
+                            <Button asChild variant="secondary">
+                              <Link href={`/workflows/${encodeURIComponent(workflowId)}`}>Open case</Link>
+                            </Button>
+                          ) : null}
+                          {workflowId ? (
+                            <Button asChild variant="ghost">
+                              <Link href={`/workflows/${encodeURIComponent(workflowId)}/share`}>Open share-ready asset</Link>
+                            </Button>
+                          ) : null}
+                        </div>
+                      </div>
+                    </Card>
+                  );
+                })}
+              </div>
+            )}
+          </section>
 
-      <section className="app-section" aria-labelledby="dashboard-case-gallery-live-title">
-        <div className="section-header">
-          <div>
-            <h2 id="dashboard-case-gallery-live-title" className="section-title">
-              {homePhase2Copy.liveCaseGalleryTitle}
-            </h2>
-            <p>{homePhase2Copy.liveCaseGalleryDescription}</p>
-          </div>
-          <nav aria-label="Case gallery actions">
-            <Button asChild variant="secondary">
-              <Link href={homePhase2Copy.liveCaseGalleryActionHref}>
-                {homePhase2Copy.liveCaseGalleryActionLabel}
-              </Link>
-            </Button>
-          </nav>
-        </div>
-        {hasDegradedWorkflowData ? (
-          <Card>
-            <p className="muted">Workflow gallery data is temporarily degraded. Use the workflow list directly until the gallery snapshot refreshes.</p>
-            <p className="mono muted">{String(workflowsWarning || "").trim() || "Workflow list is temporarily unavailable."}</p>
-          </Card>
-        ) : latestWorkflows.length === 0 ? (
-          <Card>
-            <p className="muted">No Workflow Case is available for gallery mode yet. Start from PM, then return here to reuse the share-ready case path as a showcase asset.</p>
-          </Card>
-        ) : (
-          <div className="quick-grid">
-            {latestWorkflows.map((workflow) => {
-              const workflowId = String(workflow.workflow_id || "").trim();
-              const workflowSummary = firstEnglishText(workflow.summary, workflow.objective) || "No workflow summary is attached yet.";
-              const runCount = Array.isArray(workflow.runs) ? workflow.runs.length : Array.isArray(workflow.run_ids) ? workflow.run_ids.length : 0;
-              return (
-                <Card key={workflowId || workflowSummary}>
-                  <div className="stack-gap-2">
-                    <div className="toolbar">
-                      <Badge variant="default">Workflow Case</Badge>
-                      <Badge>{statusLabelEn(workflow.status)}</Badge>
-                    </div>
-                    <h3 className="quick-card-title">{workflowId || "Workflow case"}</h3>
-                    <p className="quick-card-desc">{workflowSummary}</p>
-                    <p className="cell-sub mono">Verdict: {String(workflow.verdict || "-")}</p>
-                    <p className="cell-sub mono">Owner: {String(workflow.owner_pm || "-")} · Project: {String(workflow.project_key || "-")}</p>
-                    <p className="cell-sub mono">Run mappings: {runCount}</p>
-                    <div className="toolbar">
-                      {workflowId ? (
-                        <Button asChild variant="secondary">
-                          <Link href={`/workflows/${encodeURIComponent(workflowId)}`}>Open case</Link>
-                        </Button>
-                      ) : null}
-                      {workflowId ? (
-                        <Button asChild variant="ghost">
-                          <Link href={`/workflows/${encodeURIComponent(workflowId)}/share`}>Open share-ready asset</Link>
-                        </Button>
-                      ) : null}
-                    </div>
-                  </div>
-                </Card>
-              );
-            })}
-          </div>
-        )}
-      </section>
+          <section className="app-section" aria-labelledby="dashboard-latest-runs-title">
+            <div className="section-header">
+              <div>
+                <h2 id="dashboard-latest-runs-title" className="section-title">
+                  {locale === "zh-CN" ? "最新结果与运行" : "Latest results and runs"}
+                </h2>
+                <p>
+                  {locale === "zh-CN"
+                    ? "先从最新结果开始看。每一条都把任务 ID、失败线索和下一步操作保留在首屏。"
+                    : "Start with the latest outcomes. Each entry keeps the task ID, failure clue, and next operator action visible."}
+                </p>
+                <p>
+                  {locale === "zh-CN"
+                    ? "只有在你需要审计归因时，再下钻到 Run Detail 或更深的证据面。"
+                    : "Use run details and deeper evidence surfaces only when you need audit or attribution."}
+                </p>
+              </div>
+              <nav aria-label="Latest runs actions">
+                <Button asChild>
+                  <Link href="/runs">{locale === "zh-CN" ? "查看全部运行" : "View all runs"}</Link>
+                </Button>
+                <Button asChild variant="secondary">
+                  <Link href="/search">{locale === "zh-CN" ? "打开结果视图" : "Open results view"}</Link>
+                </Button>
+              </nav>
+            </div>
+            <Card>
+              <ul className="row-stack" aria-label="Latest run summary">
+                {latestRuns.slice(0, 6).map((run) => {
+                  const runIdRaw = String(run.run_id || "").trim();
+                  const runHasId = Boolean(runIdRaw);
+                  const taskIdRaw = String(run.task_id || "").trim();
+                  const runStatus = String(run.status || "").toUpperCase();
+                  const runIsFailed = ["FAILED", "FAILURE", "ERROR"].includes(runStatus);
+                  const runIsSuccess = ["SUCCESS", "DONE", "PASSED"].includes(runStatus);
+                  const runLabel = runIdentityLabel(runIdRaw, taskIdRaw);
+                  const failureActionHref = runHasId ? `/events?run_id=${encodeURIComponent(runIdRaw)}` : "/events";
+                  const runContextText = String(
+                    firstEnglishText(run.failure_summary_zh, run.failure_reason, run.outcome_label_zh) ||
+                      outcomeLabelEn(run.failure_class) ||
+                      outcomeLabelEn(run.outcome_type) ||
+                      "Status pending"
+                  );
+                  const runActionText =
+                    firstEnglishText(run.action_hint_zh) ||
+                    (runIsFailed ? "Recommended: inspect failure events" : "Recommended: open run details");
 
-      <section className="app-section" aria-labelledby="dashboard-latest-runs-title">
-        <div className="section-header">
-          <div>
-            <h2 id="dashboard-latest-runs-title" className="section-title">
-              Latest results and runs
-            </h2>
-            <p>Start with the latest outcomes. Each entry keeps the task ID, failure clue, and next operator action visible.</p>
-            <p>Use run details and deeper evidence surfaces only when you need audit or attribution.</p>
+                  return (
+                    <li key={runIdRaw || String(run.task_id || "")} className="row-stack-item">
+                      <span>
+                        {runHasId ? (
+                          <Link
+                            href={`/runs/${encodeURIComponent(runIdRaw)}`}
+                            className="run-link"
+                            title={runIdRaw}
+                            aria-label={`Run ${runIdRaw}`}
+                          >
+                            {runLabel}
+                          </Link>
+                        ) : (
+                          <span className="mono muted">{runLabel}</span>
+                        )}
+                        <span className="cell-sub mono muted">{`Task: ${compactTaskId(taskIdRaw)} · ${runContextText}`}</span>
+                        {runIsFailed ? (
+                          <span className="cell-sub mono cell-danger">
+                            {runActionText} ·{" "}
+                            <Button asChild variant="warning">
+                              <Link
+                                href={failureActionHref}
+                                aria-label={`Handle failure ${runIdRaw || taskIdRaw || "run"}`}
+                              >
+                                Handle failure
+                              </Link>
+                            </Button>
+                          </span>
+                        ) : (
+                          <span className="cell-sub mono muted">{runActionText}</span>
+                        )}
+                      </span>
+                      <Badge variant={runIsFailed ? "failed" : runIsSuccess ? "success" : "running"}>
+                        {statusLabelEn(run.status)}
+                      </Badge>
+                      <span className="muted">{formatLocalTime(run.last_event_ts || run.created_at)}</span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </Card>
+          </section>
+        </>
+      ) : (
+        <section className="app-section" aria-labelledby="dashboard-first-unlock-title">
+          <div className="section-header">
+            <div>
+                <h2 id="dashboard-first-unlock-title" className="section-title">
+                  {locale === "zh-CN" ? "首个任务落地后会解锁什么" : "What unlocks after the first task lands"}
+                </h2>
+                <p>
+                  {locale === "zh-CN"
+                    ? "空首页不该假装自己已经有实时数据。先把最重要的三间房间亮出来：工作流、证明室，以及治理桌。"
+                    : "The empty home state should not pretend it already has live data. Surface the three most valuable rooms first: Workflow, Proof, and the governance desks."}
+                </p>
+              </div>
           </div>
-          <nav aria-label="Latest runs actions">
-            <Button asChild>
-              <Link href="/runs">View all runs</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link href="/search">Open results view</Link>
-            </Button>
-          </nav>
-        </div>
-        {latestRuns.length === 0 ? (
-          <Card><p className="muted">No runs yet.</p></Card>
-        ) : (
-          <Card>
-            <ul className="row-stack" aria-label="Latest run summary">
-              {latestRuns.slice(0, 6).map((run) => {
-                const runIdRaw = String(run.run_id || "").trim();
-                const runHasId = Boolean(runIdRaw);
-                const taskIdRaw = String(run.task_id || "").trim();
-                const runStatus = String(run.status || "").toUpperCase();
-                const runIsFailed = ["FAILED", "FAILURE", "ERROR"].includes(runStatus);
-                const runIsSuccess = ["SUCCESS", "DONE", "PASSED"].includes(runStatus);
-                const runLabel = runIdentityLabel(runIdRaw, taskIdRaw);
-                const failureActionHref = runHasId ? `/events?run_id=${encodeURIComponent(runIdRaw)}` : "/events";
-                const runContextText = String(
-                  firstEnglishText(run.failure_summary_zh, run.failure_reason, run.outcome_label_zh) ||
-                    outcomeLabelEn(run.failure_class) ||
-                    outcomeLabelEn(run.outcome_type) ||
-                    "Status pending"
-                );
-                const runActionText =
-                  firstEnglishText(run.action_hint_zh) ||
-                  (runIsFailed ? "Recommended: inspect failure events" : "Recommended: open run details");
-
-                return (
-                  <li key={runIdRaw || String(run.task_id || "")} className="row-stack-item">
-                    <span>
-                      {runHasId ? (
-                        <Link
-                          href={`/runs/${encodeURIComponent(runIdRaw)}`}
-                          className="run-link"
-                          title={runIdRaw}
-                          aria-label={`Run ${runIdRaw}`}
-                        >
-                          {runLabel}
-                        </Link>
-                      ) : (
-                        <span className="mono muted">{runLabel}</span>
-                      )}
-                      <span className="cell-sub mono muted">{`Task: ${compactTaskId(taskIdRaw)} · ${runContextText}`}</span>
-                      {runIsFailed ? (
-                        <span className="cell-sub mono cell-danger">
-                          {runActionText} · {" "}
-                          <Button asChild variant="warning">
-                            <Link
-                              href={failureActionHref}
-                              aria-label={`Handle failure ${runIdRaw || taskIdRaw || "run"}`}
-                            >
-                              Handle failure
-                            </Link>
-                          </Button>
-                        </span>
-                      ) : (
-                        <span className="cell-sub mono muted">{runActionText}</span>
-                      )}
-                    </span>
-                    <Badge variant={runIsFailed ? "failed" : runIsSuccess ? "success" : "running"}>
-                      {statusLabelEn(run.status)}
-                    </Badge>
-                    <span className="muted">{formatLocalTime(run.last_event_ts || run.created_at)}</span>
-                  </li>
-                );
-              })}
-            </ul>
-          </Card>
-        )}
-      </section>
+          <div className="home-command-grid">
+            <Link href="/workflows" className="home-command-card home-command-card--supporting">
+              <span className="home-command-kicker">Workflow Cases</span>
+              <span className="home-command-title">{homePhase2Copy.liveCaseGalleryTitle}</span>
+              <span className="home-command-desc">The first durable case record appears here once PM intake launches the first task.</span>
+            </Link>
+            <Link href="/runs" className="home-command-card home-command-card--supporting">
+              <span className="home-command-kicker">Proof &amp; Replay</span>
+              <span className="home-command-title">{locale === "zh-CN" ? "最新结果与运行" : "Latest results and runs"}</span>
+              <span className="home-command-desc">
+                {locale === "zh-CN"
+                  ? "当第一条运行真正留下证据后，这里才会成为可以核对真相的房间。"
+                  : "This room becomes the truth surface once the first run finishes and leaves evidence behind."}
+              </span>
+            </Link>
+            <Link href="/contracts" className="home-command-card home-command-card--supporting">
+              <span className="home-command-kicker">{locale === "zh-CN" ? "治理" : "Governance"}</span>
+              <span className="home-command-title">{locale === "zh-CN" ? "治理桌集合" : "Governance rooms"}</span>
+              <span className="home-command-desc">{governanceDeckDescription}</span>
+            </Link>
+          </div>
+        </section>
+      )}
 
       <section className="app-section" aria-labelledby="dashboard-advanced-title">
         <div className="section-header">
@@ -490,19 +432,31 @@ export default async function Home() {
         </div>
         <div className="quick-grid">
           <Link href="/god-mode" className="quick-card">
-            <span className="quick-card-desc">Governance</span>
-            <span className="quick-card-title">Approvals and release control</span>
-            <span className="quick-card-desc">Enter manual approval only when a review item requires it.</span>
+            <span className="quick-card-desc">{locale === "zh-CN" ? "治理" : "Governance"}</span>
+            <span className="quick-card-title">{locale === "zh-CN" ? "审批与放行控制" : "Approvals and release control"}</span>
+            <span className="quick-card-desc">
+              {locale === "zh-CN"
+                ? "只有当评审项真的需要人工放行时，才进入手动审批。"
+                : "Enter manual approval only when a review item requires it."}
+            </span>
           </Link>
           <Link href="/contracts" className="quick-card">
-            <span className="quick-card-desc">Authority</span>
-            <span className="quick-card-title">Contract desk</span>
-            <span className="quick-card-desc">Inspect execution authority, bundle posture, and contract blockers before a run continues.</span>
+            <span className="quick-card-desc">{locale === "zh-CN" ? "执行权" : "Authority"}</span>
+            <span className="quick-card-title">{locale === "zh-CN" ? "合约桌" : "Contract desk"}</span>
+            <span className="quick-card-desc">
+              {locale === "zh-CN"
+                ? "继续放行之前，先检查执行权、技能包姿态和当前合约阻碍。"
+                : "Inspect execution authority, bundle posture, and contract blockers before a run continues."}
+            </span>
           </Link>
           <Link href="/agents" className="quick-card">
-            <span className="quick-card-desc">Role posture</span>
-            <span className="quick-card-title">Role desk</span>
-            <span className="quick-card-desc">Check execution seats, runtime bindings, and scheduler posture without turning the homepage into a registry dump.</span>
+            <span className="quick-card-desc">{locale === "zh-CN" ? "角色姿态" : "Role posture"}</span>
+            <span className="quick-card-title">{locale === "zh-CN" ? "角色桌" : "Role desk"}</span>
+            <span className="quick-card-desc">
+              {locale === "zh-CN"
+                ? "检查执行席位、运行时绑定和调度姿态，但不要把首页变回注册表 dump。"
+                : "Check execution seats, runtime bindings, and scheduler posture without turning the homepage into a registry dump."}
+            </span>
           </Link>
         </div>
       </section>
