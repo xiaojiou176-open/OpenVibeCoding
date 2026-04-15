@@ -589,10 +589,10 @@ describe("desktop p1 controls", () => {
     expect(cssPath).not.toBeUndefined();
     const css = readCssBundle(cssPath as string);
 
-    expect(css).toContain("--color-text-muted: #6b7280;");
-    expect(css).toContain("--color-success-ink: #065f46;");
-    expect(css).toContain("--color-warning-ink: #92400e;");
-    expect(css).toContain("--color-danger-ink: #b91c1c;");
+    expect(css).toContain("--color-text-muted: #9fb0c8;");
+    expect(css).toContain("--color-success-ink: #7fe0b7;");
+    expect(css).toContain("--color-warning-ink: #f2c27d;");
+    expect(css).toContain("--color-danger-ink: #f0aaaa;");
     expect(css).toContain(".quick-card-desc");
     expect(css).toContain(".badge--muted");
     expect(css).toContain(".sidebar-link");
