@@ -225,11 +225,13 @@
         </p>
         <p class="lede">
           The current package and discovery layer is real:
-          <strong>openvibecoding-orchestrator</strong> is live on PyPI,
-          the <strong>Official MCP Registry</strong> entry is live,
+          the live public package and Official MCP Registry entry still use the
+          legacy <strong>CortexPilot</strong> identity for the same read-only
+          MCP runtime,
           and <strong>openvibecoding-adoption-router</strong> is live on ClawHub.
-          <strong>OpenHands/extensions</strong> and <strong>MCP.so</strong>
-          submissions are filed but still await external review or acceptance.
+          <strong>MCP.so</strong> still has an open external submission receipt,
+          while the previous <strong>OpenHands/extensions</strong> submission is
+          closed without a live listing.
           <strong>@openvibecoding/frontend-api-client</strong> and
           <strong>@openvibecoding/frontend-api-contract</strong> remain
           <strong>publish-ready but deferred</strong>, while
@@ -244,9 +246,9 @@
           without sending readers into internal markdown trails.
         </p>
         <div class="pill-row">
-          <span class="pill">Shipped now: repo, Pages, first proven workflow, read-only MCP, PyPI package, Official MCP Registry, ClawHub skill</span>
+          <span class="pill">Shipped now: repo, Pages, first proven workflow, read-only MCP, legacy-branded live PyPI + Official MCP Registry entry, ClawHub skill</span>
           <span class="pill">Starter/example lane: Codex / Claude Code config seeds and the local coding-agent bundle</span>
-          <span class="pill">Submitted externally: OpenHands/extensions PR and MCP.so issue are filed but not accepted yet</span>
+          <span class="pill">External receipts: MCP.so is still open; OpenHands/extensions is a closed receipt without a live listing</span>
           <span class="pill">Publish-ready but deferred: frontend-api-client and frontend-api-contract; frontend-shared stays workspace-only</span>
           <span class="pill">Deferred: Docker, hosted Render pilot, write-capable MCP, standalone npm releases</span>
         </div>
@@ -342,18 +344,18 @@
               <tr>
                 <td><strong>PyPI package</strong></td>
                 <td><span class="badge shipped">shipped</span></td>
-                <td><code>openvibecoding-orchestrator==0.1.0a4</code> is the published package for the public read-only MCP runtime.</td>
-                <td><a href="https://pypi.org/project/openvibecoding-orchestrator/0.1.0a4/">PyPI package</a></td>
+                <td><code>cortexpilot-orchestrator==0.1.0a4</code> is the live published package for the public read-only MCP runtime; the OpenVibeCoding-branded package name is not live yet.</td>
+                <td><a href="https://pypi.org/project/cortexpilot-orchestrator/0.1.0a4/">PyPI package</a></td>
                 <td>Package install only</td>
-                <td>Keep package README, entrypoints, and version markers aligned with registry truth.</td>
+                <td>Keep public docs explicit that the live package still carries the legacy CortexPilot name until a real renamed release exists.</td>
               </tr>
               <tr>
                 <td><strong>Official MCP Registry</strong></td>
                 <td><span class="badge shipped">shipped</span></td>
-                <td>The public registry entry for <code>io.github.xiaojiou176-open/openvibecoding-readonly</code> is live.</td>
-                <td><a href="https://registry.modelcontextprotocol.io/v0/servers?search=io.github.xiaojiou176-open/openvibecoding-readonly">Registry entry</a></td>
+                <td>The live public registry entry still uses <code>io.github.xiaojiou176-open/cortexpilot-readonly</code>; the OpenVibeCoding-branded registry identity is not live yet.</td>
+                <td><a href="https://registry.modelcontextprotocol.io/v0/servers?search=io.github.xiaojiou176-open/cortexpilot-readonly">Registry entry</a></td>
                 <td>Registry discovery, stdio package install</td>
-                <td>Keep <code>server.json</code>, PyPI metadata, and the MCP docs aligned.</td>
+                <td>Keep the repo-side manifest and public MCP docs honest about the legacy live registry identity until a renamed entry is actually accepted.</td>
               </tr>
               <tr>
                 <td><strong>Codex starter</strong></td>
@@ -405,11 +407,11 @@
               </tr>
               <tr>
                 <td><strong>OpenHands/extensions submission</strong></td>
-                <td><span class="badge starter">submitted externally</span></td>
-                <td>The public submission receipt for the same adoption-router skill is filed and waiting on host review.</td>
+                <td><span class="badge starter">external receipt only</span></td>
+                <td>The public submission receipt exists, but the tracked PR is closed without merge, so there is no live listing today.</td>
                 <td><a href="https://github.com/OpenHands/extensions/pull/151">OpenHands/extensions#151</a></td>
-                <td>Host review flow, not live until merged</td>
-                <td>Track review without overclaiming a merged listing.</td>
+                <td>Historical external receipt only</td>
+                <td>Do not describe this closed PR as a live or still-pending listing.</td>
               </tr>
               <tr>
                 <td><strong>MCP.so submission</strong></td>

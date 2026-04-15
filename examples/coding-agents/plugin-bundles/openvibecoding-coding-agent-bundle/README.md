@@ -32,9 +32,10 @@ The adoption-router skill now ships with both:
 - `manifest.yaml` for registry-shaped metadata and semver
 
 That means the bundle can honestly say it already contains one **cross-tool
-skill artifact** for Codex / Claude Code / OpenClaw style installs. It still
-does **not** mean a live public listing already exists in any of those
-ecosystems.
+skill artifact** for Codex / Claude Code / OpenClaw style installs. It does
+mean the shared adoption-router skill now has one live public ClawHub listing,
+but it still does **not** mean live public listings already exist across all of
+those ecosystems.
 
 ## How the MCP wrapper behaves
 

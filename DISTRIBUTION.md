@@ -14,13 +14,14 @@ change set.
 
 Today OpenVibeCoding officially ships a public repo front door, a GitHub Pages
 product front door, one proof-first public workflow baseline, a repo-local
-read-only MCP server, a published PyPI package, a live Official MCP Registry
-entry, and a live ClawHub skill.
+read-only MCP server, one legacy-branded live PyPI package plus one
+legacy-branded live Official MCP Registry entry for that same read-only
+runtime, and a live ClawHub skill.
 
 It does not yet officially ship a hosted operator service, a public write-capable
-MCP, a Docker distribution path, or standalone npm releases. OpenHands/extensions
-and MCP.so submissions are filed, but they still depend on external review or
-intake handling rather than repo-only publication.
+MCP, a Docker distribution path, or standalone npm releases. MCP.so still has
+an open external submission receipt, while the previous OpenHands/extensions
+submission is closed without a live listing.
 
 Lane order today is:
 
@@ -54,15 +55,15 @@ Lane order today is:
 | GitHub Pages | `shipped` | Canonical public product front door | `https://xiaojiou176-open.github.io/OpenVibeCoding/` | none | keep first screen compressed |
 | First proven workflow (`news_digest`) | `shipped` | Official public proof-first baseline | `docs/use-cases/index.html` and tracked proof assets | read-only proof / replay story | keep as the only release-proven public workflow |
 | Read-only MCP | `shipped` | Repo-owned stdio JSON-RPC MCP for machine-readable inspection only | bootstrapped repo checkout + `bash __OPENVIBECODING_REPO_ROOT__/scripts/run_openvibecoding_readonly_mcp.sh` or the tracked starter templates | `stdio`, JSON-RPC 2.0, read-only, repo-local, no hosted auth, no OAuth | keep artifactized through `configs/mcp_public_manifest.json` |
-| PyPI package (`openvibecoding-orchestrator`) | `shipped` | Published package for the public read-only MCP runtime | `https://pypi.org/project/openvibecoding-orchestrator/0.1.0a4/` | package install only | keep package README, entrypoints, and version markers aligned with registry truth |
-| Official MCP Registry entry | `shipped` | Public MCP discovery entry for the read-only OpenVibeCoding server | `https://registry.modelcontextprotocol.io/v0/servers?search=io.github.xiaojiou176-open/openvibecoding-readonly` | registry discovery only, stdio package install | keep `server.json` aligned with PyPI and the public MCP docs |
+| PyPI package (`cortexpilot-orchestrator`) | `shipped (legacy brand)` | Published package for the public read-only MCP runtime; the external package name has not yet been reissued under `openvibecoding-orchestrator` | `https://pypi.org/project/cortexpilot-orchestrator/0.1.0a4/` | package install only | keep repo docs explicit that the live public package still carries the legacy CortexPilot name |
+| Official MCP Registry entry (`io.github.xiaojiou176-open/cortexpilot-readonly`) | `shipped (legacy brand)` | Public MCP discovery entry is live, but the active registry identity still uses the legacy CortexPilot name rather than `openvibecoding-readonly` | `https://registry.modelcontextprotocol.io/v0/servers?search=io.github.xiaojiou176-open/cortexpilot-readonly` | registry discovery only, stdio package install | keep the repo-side manifest and public docs honest about the legacy live registry identity until a renamed entry is actually accepted |
 | Codex starter | `starter-only` | Local marketplace seed plus shared read-only MCP template | `examples/coding-agents/codex/` | local path wiring only | keep truthful; do not relabel as official directory listing |
 | Claude Code starter | `starter-only` | Project-local `.claude` and `.mcp.json` starter | `examples/coding-agents/claude-code/` | local project wiring only | keep truthful; do not relabel as marketplace package |
 | OpenClaw starter | `starter-only` | Local config seed for the same read-only MCP and compatible bundle | `examples/coding-agents/openclaw/` | local config + local plugin path | keep truthful; do not relabel as ClawHub publication |
 | Cross-tool coding-agent bundle | `bundle-compatible` | Local bundle compatible with Codex local marketplace installs, Claude plugin-dir development, and OpenClaw local plugin loading | `examples/coding-agents/plugin-bundles/openvibecoding-coding-agent-bundle/` | local bundle metadata + repo-aware MCP wrapper | keep local-install contract; no published listing claim |
 | Repo-owned adoption-router skill | `shipped` | Cross-tool routing skill with `SKILL.md` + `manifest.yaml`, shared between the public skill packet, the repo bundle, and external skill distribution | `public-skills/openvibecoding-adoption-router/` | repo-owned skill contract, public skill packet plus local bundle example | keep the public packet, repo bundle, and published skill receipts aligned |
 | ClawHub skill (`openvibecoding-adoption-router`) | `shipped` | Published OpenClaw skill for honest OpenVibeCoding adoption routing | `https://www.clawhub.ai/skills/openvibecoding-adoption-router` | skill registry, no hosted OpenVibeCoding account, no write-capable MCP | keep the skill copy aligned with the repo bundle and public boundary |
-| OpenHands/extensions submission | `submitted-externally` | Public skill submission receipt for the same adoption-router artifact | `https://github.com/OpenHands/extensions/pull/151` | host review flow, not live until merged | track review without overclaiming a merged listing |
+| OpenHands/extensions submission | `external receipt only` | Historical public submission receipt for the same adoption-router artifact; the tracked PR is closed without merge, so no live listing exists today | `https://github.com/OpenHands/extensions/pull/151` | external host review/archive state | keep the closed receipt truthful and do not describe it as a live or still-pending listing |
 | MCP.so submission | `submitted-externally` | Directory submission for the public read-only MCP server | `https://github.com/chatmcp/mcpso/issues/1559` | directory intake flow, not live until accepted | keep the issue body aligned with current package + registry truth |
 | `@openvibecoding/frontend-api-client` | `publish-ready but deferred` | Thin JS/TS client for control-plane reads and guarded operator add-ons | package metadata + README are publish-ready, but the official install story is still clone / vendor reuse until the first npm release exists | HTTP API with token / mutation-role expectations | publish later only after the first public package release is intentionally cut |
 | `@openvibecoding/frontend-api-contract` | `publish-ready but deferred` | Generated route / query / type boundary for frontend consumers | package metadata + README are publish-ready, but the official install story is still clone / vendor reuse until the first npm release exists | typed contract layer only | publish later only after the first public package release is intentionally cut |
@@ -76,10 +77,13 @@ Lane order today is:
 - The latest live GitHub release is `v0.1.0-alpha.3`.
 - `v0.1.0-alpha.3` is the current published prerelease baseline, but it is no
   longer the current `main` snapshot.
-- The latest published public package for the read-only MCP is
-  `openvibecoding-orchestrator==0.1.0a4`.
-- The latest Official MCP Registry entry points to
-  `io.github.xiaojiou176-open/openvibecoding-readonly@0.1.0a4`.
+- The latest live public package for the read-only MCP is still the
+  legacy-branded `cortexpilot-orchestrator==0.1.0a4`.
+- The latest live Official MCP Registry entry still points to the
+  legacy-branded `io.github.xiaojiou176-open/cortexpilot-readonly@0.1.0a4`.
+- `openvibecoding-orchestrator` and
+  `io.github.xiaojiou176-open/openvibecoding-readonly` are not live external
+  package/registry identities yet.
 - `v0.1.0-alpha.1` remains the historical first public baseline, not the latest
   release truth.
 - README, Pages, and manifest surfaces must keep explicit lag wording whenever
@@ -101,7 +105,8 @@ Lane order today is:
 These are intentionally outside repo-side completion:
 
 - publish npm packages
-- wait for OpenHands/extensions review on PR `#151`
+- decide whether to reopen or replace the closed OpenHands/extensions receipt if
+  a live listing is still desired
 - wait for MCP.so intake handling on issue `#1559`
 - publish a Docker image
 - deploy a live hosted operator service

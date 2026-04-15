@@ -37,19 +37,21 @@ Current lane order is deliberate:
 The shortest truthful answer today is:
 
 > OpenVibeCoding currently ships through the public OpenVibeCoding repo, a public
-> Pages front door, a repo-local read-only MCP surface, a published PyPI
-> package, a live Official MCP Registry entry, and a live ClawHub skill. The
-> adoption-router skill is the secondary public lane. Local coding-agent
-> starters and bundle examples remain companion/example materials, not the
-> canonical public root. OpenHands/extensions and MCP.so external receipts
-> exist, while hosted service, write-capable MCP, Docker distribution, and
-> standalone npm releases remain deferred.
+> Pages front door, a repo-local read-only MCP surface, one legacy-branded live
+> PyPI package plus one legacy-branded live Official MCP Registry entry for that
+> same read-only runtime, and a live ClawHub skill. The adoption-router skill is
+> the secondary public lane. Local coding-agent starters and bundle examples
+> remain companion/example materials, not the canonical public root. MCP.so
+> still has an open external submission receipt, while the previous
+> OpenHands/extensions submission is closed without a live listing. Hosted
+> service, write-capable MCP, Docker distribution, and standalone npm releases
+> remain deferred.
 
 Use these buckets:
 
-- **Shipped now**: repo, Pages, proof-first docs, read-only MCP, PyPI package, Official MCP Registry entry, ClawHub skill
+- **Shipped now**: repo, Pages, proof-first docs, read-only MCP, legacy-branded live PyPI package + Official MCP Registry entry, ClawHub skill
 - **Starter-only / example lane**: Codex / Claude Code / OpenClaw local starter kits and local coding-agent bundle examples
-- **Submitted externally**: `OpenHands/extensions#151` and `chatmcp/mcpso#1559` are public receipts and still await host acceptance
+- **Submitted externally**: `chatmcp/mcpso#1559` is still open; `OpenHands/extensions#151` remains a public receipt but is closed without a live listing
 - **Publish-ready but deferred**:
   `@openvibecoding/frontend-api-client`,
   `@openvibecoding/frontend-api-contract`

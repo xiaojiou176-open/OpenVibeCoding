@@ -2,7 +2,7 @@ schema_version: 1
 name: openvibecoding-adoption-router
 display_name: OpenVibeCoding Adoption Router
 version: 0.1.0
-status: publish-ready-but-deferred
+status: shipped
 summary: >
   Repo-owned cross-tool skill that routes Codex, Claude Code, and OpenClaw-style
   workflows to the right OpenVibeCoding adoption lane without overclaiming hosted,
@@ -27,7 +27,7 @@ compatibility:
     published_listing: false
   openclaw:
     mode: local bundle or copied skill workspace item
-    published_listing: false
+    published_listing: true
 capabilities:
   - route to the truthful OpenVibeCoding adoption lane
   - keep read order anchored to repo docs and MCP truth
@@ -36,7 +36,7 @@ boundaries:
   hosted_operator: false
   write_capable_mcp: false
   oauth_login: false
-  official_listing_live: false
+  official_listing_live: true
 canonical_docs:
   - ../../README.md
   - ../../../../README.md
@@ -47,11 +47,10 @@ canonical_docs:
   - ../../../../docs/mcp/index.html
 distribution_notes:
   shipped_shape: repo-owned skill artifact inside the local coding-agent bundle
-  current_claim: publish-ready metadata is present, but no external Codex / Claude Code / OpenClaw listing is live yet
+  current_claim: one external ClawHub listing is live today; Codex and Claude Code listings are still not live
   later_phase:
     - Codex directory submission
     - Claude Code marketplace submission
-    - OpenClaw or ClawHub registry submission
 verification:
   repo_commands:
     - npm run docs:check

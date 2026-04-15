@@ -13,8 +13,9 @@ truthful OpenVibeCoding position inside that ecosystem.
 
    That bundle now includes
    `skills/openvibecoding-adoption-router/manifest.yaml`, so the same repo-owned
-   skill already has ClawHub-style metadata even though no public listing is
-   live yet.
+   skill already has ClawHub-style metadata and a matching live ClawHub skill
+   listing, even though this local starter itself is not a published OpenClaw
+   plugin listing.
 
 2. Pair it with one of the tracked OpenClaw MCP/config examples:
 

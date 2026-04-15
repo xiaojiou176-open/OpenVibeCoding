@@ -104,7 +104,7 @@ That bundle is intended for:
 It is intentionally not framed as a published Codex Plugin Directory entry.
 What is now true, though, is that the shared bundle already carries a
 registry-shaped `manifest.yaml` for the bundled `openvibecoding-adoption-router`
-skill, so the repo can treat that skill as **publish-ready but deferred**
+skill, and that same skill already has one live public listing on ClawHub
 without pretending an official Codex listing already exists.
 
 ## Claude Code
@@ -130,8 +130,8 @@ and `openclaw/config.openclaw.example.toml`.
 The truthful story is:
 
 - OpenClaw has native plugin and skills surfaces
-- OpenVibeCoding currently ships a compatible local bundle example, not a
-  published registry item
+- OpenVibeCoding currently ships a compatible local bundle example, while the
+  matching adoption-router skill is already live on ClawHub
 - that bundle now includes a registry-shaped `manifest.yaml` for the shared
   `openvibecoding-adoption-router` skill
 - pair the bundle with the shared read-only MCP config and repo-owned proof /

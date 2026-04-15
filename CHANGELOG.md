@@ -103,7 +103,8 @@ All notable changes to this repository will be documented in this file.
   direct-execution governance helpers now keep their tracked-child imports
   working without a repo-root `PYTHONPATH` assumption
 - tightened the Final-100 Wave 4 truth layer by documenting the default-off,
-  queue-only write-MCP pilot in `docs/runbooks/write-mcp-queue-pilot.md`,
+  queue-only write-MCP pilot in
+  `.agents/InternalDocs/runbooks/write-mcp-queue-pilot.md`,
   adding a share-ready `news_digest` Workflow Case recap asset, and syncing the
   root/use-case/storefront/env wording so the public contract still says
   read-only MCP while the guarded queue pilot stays an internal operator-only

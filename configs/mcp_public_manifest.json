@@ -2,9 +2,9 @@
   "schema_version": 1,
   "name": "openvibecoding-readonly",
   "display_name": "OpenVibeCoding Read-only MCP",
-  "status": "shipped",
+  "status": "repo-shipped-with-legacy-public-publication",
   "version": "0.1.0-alpha.4",
-  "version_truth": "This is the latest published public read-only MCP package version for registry and package-manager installs. The latest GitHub release tag can differ; re-check PyPI, Official MCP Registry, and the repo release page before broadening claims.",
+  "version_truth": "The repo-owned read-only MCP surface is shipped, but the live public package and Official MCP Registry entry still use the legacy CortexPilot identity (`cortexpilot-orchestrator` / `io.github.xiaojiou176-open/cortexpilot-readonly`) rather than the OpenVibeCoding-branded names in this manifest. Re-check PyPI, Official MCP Registry, and the repo release page before broadening claims.",
   "release_represents_current_main": false,
   "description": "Repo-owned read-only MCP server for OpenVibeCoding runs, workflows, approvals, compare, proof, and incident summaries.",
   "homepage": "https://xiaojiou176-open.github.io/OpenVibeCoding/mcp/",
@@ -71,6 +71,11 @@
     "wrapper": "scripts/run_openvibecoding_readonly_mcp.sh",
     "human_quickstart": "docs/mcp/index.html",
     "distribution_status": "DISTRIBUTION.md"
+  },
+  "external_publication_truth": {
+    "live_pypi_package": "cortexpilot-orchestrator==0.1.0a4",
+    "live_registry_entry": "io.github.xiaojiou176-open/cortexpilot-readonly@0.1.0a4",
+    "openvibecoding_branded_publication_live": false
   },
   "explicit_non_claims": [
     "not a hosted MCP account",
