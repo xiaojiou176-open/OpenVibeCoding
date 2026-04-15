@@ -156,47 +156,14 @@ def main() -> int:
         errors,
     )
 
-    use_case_anchors = _parse_anchors(USE_CASES_PATH)
-    _require_anchor(
+    _require_substrings(
         USE_CASES_PATH,
-        use_case_anchors,
-        "../releases/assets/news-digest-healthy-proof-2026-03-27.md",
-        "Open proof summary",
-        errors,
-    )
-    _require_anchor(
-        USE_CASES_PATH,
-        use_case_anchors,
-        "../releases/assets/news-digest-benchmark-summary-2026-03-27.md",
-        "Open benchmark summary",
-        errors,
-    )
-    _require_anchor(
-        USE_CASES_PATH,
-        use_case_anchors,
-        "../releases/assets/news-digest-workflow-case-recap-2026-03-27.md",
-        "Open recap asset",
-        errors,
-    )
-    _require_anchor(
-        USE_CASES_PATH,
-        use_case_anchors,
-        "../releases/assets/news-digest-proof-pack-2026-03-27.json",
-        "Open proof-pack manifest",
-        errors,
-    )
-    _require_anchor(
-        USE_CASES_PATH,
-        use_case_anchors,
-        "../assets/storefront/proof-pack-index.json",
-        "Open proof-pack index",
-        errors,
-    )
-    _require_anchor(
-        USE_CASES_PATH,
-        use_case_anchors,
-        "../assets/storefront/demo-status.md",
-        "Open demo-status ledger",
+        use_cases_html,
+        [
+            "repo-tracked public proof bundle",
+            "Machine-readable proof metadata still exists in the repo",
+            "Proof you can rely on today",
+        ],
         errors,
     )
 

@@ -12,8 +12,8 @@ inventing numbers.
 - A first tracked public single-run baseline now exists at
   `docs/releases/assets/news-digest-benchmark-summary-2026-03-27.md`.
 - Broader multi-round public benchmark figures do **not** exist yet.
-- A tracked route/blocker receipt for the latest real attempt lives at
-  `docs/releases/assets/news-digest-benchmark-route-2026-03-27.md`.
+- The latest failed benchmark-route receipt now lives in the maintainer-only
+  internal docs bundle rather than the default public docs surface.
 - Any public performance or reliability claim must quote a tracked summary
   copied out of `.runtime-cache/`, and must keep the current single-run scope
   explicit until a broader benchmark artifact exists.

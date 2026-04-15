@@ -36,12 +36,9 @@ def _write_frontdoor_fixture(root: Path) -> None:
         <p>news_digest is the only official release-proven public baseline.</p>
         <p>topic_brief and page_brief are not yet equally release-proven.</p>
         <p>What we still do not claim</p>
-        <a href="../releases/assets/news-digest-healthy-proof-2026-03-27.md">Open proof summary</a>
-        <a href="../releases/assets/news-digest-benchmark-summary-2026-03-27.md">Open benchmark summary</a>
-        <a href="../releases/assets/news-digest-workflow-case-recap-2026-03-27.md">Open recap asset</a>
-        <a href="../releases/assets/news-digest-proof-pack-2026-03-27.json">Open proof-pack manifest</a>
-        <a href="../assets/storefront/proof-pack-index.json">Open proof-pack index</a>
-        <a href="../assets/storefront/demo-status.md">Open demo-status ledger</a>
+        <p>This page summarizes the repo-tracked public proof bundle instead of deep-linking every raw ledger file.</p>
+        <p>Proof you can rely on today</p>
+        <p>Machine-readable proof metadata still exists in the repo, but this public page no longer sends readers directly to raw manifests and ledger-style contracts.</p>
         """,
         encoding="utf-8",
     )
@@ -78,7 +75,7 @@ def test_frontdoor_contract_gate_passes_with_required_surfaces(tmp_path: Path, m
     assert module.main() == 0
 
 
-def test_frontdoor_contract_gate_fails_when_proof_link_drifts(
+def test_frontdoor_contract_gate_fails_when_public_proof_bundle_text_drifts(
     tmp_path: Path, capsys, monkeypatch
 ) -> None:
     module = _load_gate_module()
@@ -86,7 +83,7 @@ def test_frontdoor_contract_gate_fails_when_proof_link_drifts(
     use_cases = tmp_path / "docs" / "use-cases" / "index.html"
     use_cases.write_text(
         use_cases.read_text(encoding="utf-8").replace(
-            "Open benchmark summary", "Open benchmark bundle"
+            "Proof you can rely on today", "Proof files you can inspect today"
         ),
         encoding="utf-8",
     )
@@ -105,4 +102,4 @@ def test_frontdoor_contract_gate_fails_when_proof_link_drifts(
     rc = module.main()
     out = capsys.readouterr().out
     assert rc == 1
-    assert "Open benchmark summary" in out
+    assert "Proof you can rely on today" in out

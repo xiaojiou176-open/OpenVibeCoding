@@ -3,9 +3,8 @@
 This file records the first repo-tracked successful backend-backed
 `news_digest` proof bundle for the public release path.
 
-It supersedes `docs/releases/assets/news-digest-healthy-proof-route-2026-03-27.md`
-as the latest W3 proof state. The older file remains useful as a historical
-blocker receipt.
+It supersedes the older healthy-proof route receipt, which now lives only in
+the maintainer-only internal docs bundle as a historical blocker record.
 
 This is repo-side proof only. It is not proof that a live GitHub Release has
 already been published.
@@ -109,5 +108,5 @@ screenshots were copied, so repository hygiene could return to green.
   Release page.
 - The local browser profile root used by the run is intentionally not written
   into git; only the required environment variable names are documented here.
-- `docs/releases/assets/news-digest-healthy-proof-route-2026-03-27.md` remains
-  a historical blocker receipt, not the latest truth state.
+- the earlier healthy-proof route receipt remains archived in the maintainer-only
+  internal docs bundle, not on the default public docs surface.

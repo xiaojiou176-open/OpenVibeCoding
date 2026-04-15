@@ -71,10 +71,9 @@ The public storytelling shorthand is now:
   not proof that the live GitHub Release page has already been published.
 - `docs/releases/assets/news-digest-benchmark-summary-2026-03-27.md` is a real
   single-run baseline summary, not a broad multi-round benchmark campaign.
-- `docs/releases/assets/news-digest-benchmark-route-2026-03-27.md` remains a
-  historical blocker receipt from an earlier failed benchmark route.
-- `docs/releases/assets/news-digest-healthy-proof-route-2026-03-27.md` remains
-  a historical blocker receipt from earlier failed healthy-proof attempts.
+- the earlier benchmark-route and healthy-proof-route blocker receipts now live
+  in the maintainer-only internal docs bundle, not on the default public docs
+  surface.
 - `https://xiaojiou176-open.github.io/OpenVibeCoding/` is now the live GitHub
   Pages site backed by `main` / `/docs`.
 - None of these captures should be described as proof of live hosted readiness, live GitHub publication state, or broad production-scale stability.
