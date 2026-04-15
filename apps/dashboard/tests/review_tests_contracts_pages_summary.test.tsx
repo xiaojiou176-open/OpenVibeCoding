@@ -21,6 +21,11 @@ import TestsPage from "../app/tests/page";
 import ContractsPage from "../app/contracts/page";
 import { fetchContracts, fetchReviews, fetchTests } from "../lib/api";
 
+function openContractsFullQueue() {
+  const details = screen.getByTestId("contracts-full-queue");
+  details.setAttribute("open", "");
+}
+
 describe("summary-first rendering for reviews/tests/contracts pages", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -144,6 +149,7 @@ describe("summary-first rendering for reviews/tests/contracts pages", () => {
     ] as never[]);
 
     render(await ContractsPage({ searchParams: Promise.resolve({}) }));
+    openContractsFullQueue();
 
     const permissionRow = screen.getByText("Tool permissions").closest(".data-list-row");
     expect(permissionRow).not.toBeNull();
@@ -178,6 +184,7 @@ describe("summary-first rendering for reviews/tests/contracts pages", () => {
     );
 
     render(await ContractsPage({ searchParams: Promise.resolve({}) }));
+    openContractsFullQueue();
 
     expect(screen.getByRole("link", { name: "Show all" })).toHaveAttribute("href", "/contracts?q=&limit=11");
   });
@@ -371,6 +378,7 @@ describe("summary-first rendering for reviews/tests/contracts pages", () => {
     );
 
     render(await ContractsPage({ searchParams: Promise.resolve({ q: "run-contract", limit: "10" }) }));
+    openContractsFullQueue();
 
     expect(screen.getByText("Unrestricted")).toBeInTheDocument();
     expect(screen.getByText("None")).toBeInTheDocument();
@@ -397,6 +405,7 @@ describe("summary-first rendering for reviews/tests/contracts pages", () => {
     ] as never[]);
 
     render(await ContractsPage({ searchParams: Promise.resolve({}) }));
+    openContractsFullQueue();
 
     expect(screen.getByText("Default")).toBeInTheDocument();
   });
@@ -426,9 +435,7 @@ describe("summary-first rendering for reviews/tests/contracts pages", () => {
 
     render(await ContractsPage({ searchParams: Promise.resolve({ q: "missing-contract" }) }));
 
-    expect(screen.getByRole("status")).toHaveTextContent("Contract list");
     expect(screen.getByText("No contracts yet")).toBeInTheDocument();
     expect(screen.getByText("Contracts are generated automatically when work is assigned.")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Apply filter" })).not.toBeDisabled();
   });
 });

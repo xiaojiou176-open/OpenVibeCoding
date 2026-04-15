@@ -74,7 +74,7 @@ describe("dashboard p1 controls", () => {
 
   it("covers PM page new conversation, session switch and split expand", async () => {
     render(<PMIntakePage />);
-    expect(await screen.findByText("pm-history-1")).toBeInTheDocument();
+    expect(await screen.findByText(/ID pm-history-1/)).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: /\+ New chat/ }));
     const chatLog = screen.getByRole("log");
@@ -83,9 +83,9 @@ describe("dashboard p1 controls", () => {
     expect(emptyState).not.toBeNull();
     expect(emptyState).toHaveTextContent(/No session yet\. Send the first request/);
     expect(emptyState).toHaveTextContent(/Send the first request and I will create the session automatically\./);
-    expect(screen.getByText(/First-run path: send request -> answer clarifiers -> type \/run/)).toBeInTheDocument();
+    expect(screen.getByText(/Send the first real task into the system/)).toBeInTheDocument();
 
-    const sessionEntry = screen.getByText("pm-history-1").closest("button");
+    const sessionEntry = screen.getByText(/ID pm-history-1/).closest("button");
     expect(sessionEntry).not.toBeNull();
     fireEvent.click(sessionEntry as HTMLButtonElement);
     await waitFor(() => expect(fetchPmSession).toHaveBeenCalled());

@@ -164,16 +164,20 @@ function isActive(pathname: string, href: string): boolean {
 
 type AppNavProps = {
   locale?: UiLocale;
+  compact?: boolean;
 };
 
-export default function AppNav({ locale = DEFAULT_UI_LOCALE }: AppNavProps) {
+export default function AppNav({ locale = DEFAULT_UI_LOCALE, compact = false }: AppNavProps) {
   const pathname = usePathname() || "/";
   const uiCopy = getUiCopy(locale);
   const navSections = buildNavSections(locale);
+  const visibleSections = compact
+    ? navSections.filter((section) => section.title === uiCopy.dashboard.sectionPrimary)
+    : navSections;
 
   return (
     <nav className="sidebar-nav" aria-label={uiCopy.dashboard.navigationAriaLabel}>
-      {navSections.map((section) => (
+      {visibleSections.map((section) => (
         <section key={section.title} className="sidebar-section">
           {section.title === uiCopy.dashboard.sectionAdvanced ? (
             <details
@@ -193,9 +197,10 @@ export default function AppNav({ locale = DEFAULT_UI_LOCALE }: AppNavProps) {
                         href={item.href}
                         aria-current={isCurrent ? "page" : undefined}
                         className={`sidebar-link ${isCurrent ? "is-active" : ""}`}
+                        title={compact ? item.label : undefined}
                       >
                         {ICON_MAP[item.icon] || null}
-                        {item.label}
+                        <span className="sidebar-link-label">{item.label}</span>
                       </Link>
                     </li>
                   );
@@ -214,9 +219,10 @@ export default function AppNav({ locale = DEFAULT_UI_LOCALE }: AppNavProps) {
                         href={item.href}
                         aria-current={isCurrent ? "page" : undefined}
                         className={`sidebar-link ${isCurrent ? "is-active" : ""}`}
+                        title={compact ? item.label : undefined}
                       >
                         {ICON_MAP[item.icon] || null}
-                        {item.label}
+                        <span className="sidebar-link-label">{item.label}</span>
                       </Link>
                     </li>
                   );

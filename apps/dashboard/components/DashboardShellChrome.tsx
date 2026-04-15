@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { DEFAULT_UI_LOCALE, getUiCopy, type UiLocale } from "@openvibecoding/frontend-shared/uiCopy";
 import {
@@ -21,6 +21,8 @@ type DashboardShellChromeProps = {
 
 export default function DashboardShellChrome({ children }: DashboardShellChromeProps) {
   const router = useRouter();
+  const pathname = usePathname();
+  const isLanding = pathname === "/";
   const [locale, setLocale] = useState<UiLocale>(DEFAULT_UI_LOCALE);
 
   useEffect(() => {
@@ -40,24 +42,33 @@ export default function DashboardShellChrome({ children }: DashboardShellChromeP
       <a className="skip-link" href="#dashboard-content">
         {uiCopy.dashboard.skipToMainContent}
       </a>
-      <div className="app-shell">
+      <div className={`app-shell ${isLanding ? "app-shell--landing" : ""}`}>
         <aside className="sidebar" aria-label={uiCopy.dashboard.navigationAriaLabel}>
           <div className="sidebar-brand">
-            <Link href="/" className="brand-link">
-              {uiCopy.brandTitle}
+            <Link href="/" className="brand-link" aria-label={uiCopy.brandTitle} title={uiCopy.brandTitle}>
+              {isLanding ? "OVC" : uiCopy.brandTitle}
             </Link>
             <p className="sidebar-subtitle">{uiCopy.brandSubtitle}</p>
           </div>
-          <AppNav locale={locale} />
+          <AppNav locale={locale} compact={isLanding} />
         </aside>
 
         <div className="app-main">
           <header className="topbar" role="banner">
-            <p className="topbar-title">{uiCopy.dashboard.topbarTitle}</p>
+            <div className="topbar-copy">
+              <p className="topbar-eyebrow">
+                {locale === "zh-CN" ? "实时操作壳层" : "Live operator shell"}
+              </p>
+              <p className="topbar-title">{uiCopy.dashboard.topbarTitle}</p>
+            </div>
             <div className="home-section-health" role="group" aria-label={uiCopy.dashboard.platformStatusAriaLabel}>
-              <Badge>{uiCopy.dashboard.badges.governanceView}</Badge>
-              <Badge>{uiCopy.dashboard.badges.liveVerificationRequired}</Badge>
-              <Badge>{uiCopy.dashboard.badges.pageLevelStatus}</Badge>
+              {!isLanding ? (
+                <>
+                  <Badge>{uiCopy.dashboard.badges.governanceView}</Badge>
+                  <Badge>{uiCopy.dashboard.badges.liveVerificationRequired}</Badge>
+                  <Badge>{uiCopy.dashboard.badges.pageLevelStatus}</Badge>
+                </>
+              ) : null}
               <Button
                 variant="ghost"
                 aria-label={uiCopy.dashboard.localeToggleAriaLabel}

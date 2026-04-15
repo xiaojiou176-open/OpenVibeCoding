@@ -276,6 +276,37 @@ export function summarizeSession(session: PmSessionSummary): string {
   return `${status} · ${step} · ${updated}`;
 }
 
+function compactHumanLabel(value: string, maxLength = 42): string {
+  const cleaned = value.replace(/\s+/g, " ").trim();
+  if (!cleaned) {
+    return "";
+  }
+  if (cleaned.length <= maxLength) {
+    return cleaned;
+  }
+  return `${cleaned.slice(0, maxLength - 1).trimEnd()}…`;
+}
+
+export function buildSessionDisplayLabel(session: Pick<PmSessionSummary, "objective" | "project_key" | "pm_session_id">): string {
+  const objective = compactHumanLabel(String(session.objective || ""));
+  if (objective) {
+    return objective;
+  }
+  const projectKey = compactHumanLabel(String(session.project_key || ""));
+  if (projectKey) {
+    return `Project · ${projectKey}`;
+  }
+  return "Untitled session";
+}
+
+export function compactSessionId(value: string): string {
+  const sessionId = value.trim();
+  if (!sessionId) {
+    return "-";
+  }
+  return sessionId.length <= 16 ? sessionId : `${sessionId.slice(0, 8)}...${sessionId.slice(-4)}`;
+}
+
 export function inferActiveRole(events: EventRecord[], fallbackRole: string): string {
   for (let idx = events.length - 1; idx >= 0; idx -= 1) {
     const event = events[idx];

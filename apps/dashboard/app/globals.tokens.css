@@ -10,25 +10,25 @@
   color-scheme: dark;
 
   /* ── Core Palette ── */
-  --color-bg: #0b1220;
-  --color-bg-elevated: #111a2e;
-  --color-bg-surface: #17233b;
-  --color-surface-subtle: #142038;
-  --color-surface-hover: #1b2a45;
+  --color-bg: #121d2f;
+  --color-bg-elevated: #1b2940;
+  --color-bg-surface: #273955;
+  --color-surface-subtle: #22324c;
+  --color-surface-hover: #314663;
 
-  --color-text-primary: #e8eef8;
-  --color-text-secondary: #b7c6db;
-  --color-text-muted: #9fb0c8;
-  --color-text-tertiary: #8396b3;
+  --color-text-primary: #f7faff;
+  --color-text-secondary: #dde6f2;
+  --color-text-muted: #c4d1e0;
+  --color-text-tertiary: #9eafc3;
 
   --color-primary: #1fb981;
   --color-primary-hover: #17a16f;
   --color-primary-soft: rgba(31, 185, 129, 0.12);
   --color-primary-muted: rgba(31, 185, 129, 0.06);
 
-  --color-border: rgba(159, 176, 200, 0.16);
-  --color-border-strong: rgba(159, 176, 200, 0.28);
-  --color-border-subtle: rgba(159, 176, 200, 0.1);
+  --color-border: rgba(159, 176, 200, 0.26);
+  --color-border-strong: rgba(159, 176, 200, 0.38);
+  --color-border-subtle: rgba(159, 176, 200, 0.2);
   --color-focus-ring: #1fb981;
 
   /* ── Semantic Status ── */
@@ -68,10 +68,10 @@
   --shadow-pulse-end: 0 0 0 0 rgba(31, 185, 129, 0);
 
   /* ── Shadows ── */
-  --shadow-sm: 0 1px 2px rgba(4, 7, 13, 0.38), 0 0 0 1px rgba(232, 238, 248, 0.03);
-  --shadow-md: 0 6px 18px rgba(4, 7, 13, 0.42), 0 0 0 1px rgba(232, 238, 248, 0.04);
-  --shadow-lg: 0 14px 36px rgba(4, 7, 13, 0.48), 0 0 0 1px rgba(232, 238, 248, 0.05);
-  --shadow-xl: 0 24px 54px rgba(4, 7, 13, 0.55);
+  --shadow-sm: 0 2px 6px rgba(4, 7, 13, 0.32), 0 0 0 1px rgba(232, 238, 248, 0.05);
+  --shadow-md: 0 10px 28px rgba(4, 7, 13, 0.4), 0 0 0 1px rgba(232, 238, 248, 0.06);
+  --shadow-lg: 0 20px 48px rgba(4, 7, 13, 0.46), 0 0 0 1px rgba(232, 238, 248, 0.08);
+  --shadow-xl: 0 30px 68px rgba(4, 7, 13, 0.52);
   --shadow-glow-primary: 0 14px 34px rgba(31, 185, 129, 0.08);
 
   /* ── Radius ── */
@@ -101,9 +101,9 @@
   --text-sm: 13px;
   --text-md: 14px;
   --text-base: 15px;
-  --text-lg: 18px;
-  --text-xl: 22px;
-  --text-2xl: 28px;
+  --text-lg: 19px;
+  --text-xl: 24px;
+  --text-2xl: 34px;
   --text-3xl: 36px;
   --text-display: 44px;
   --text-hero: 18px;
@@ -134,8 +134,8 @@
   --interaction-scrollbar-thumb-opacity-active: 0.86;
 
   /* ── Layout tokens ── */
-  --sidebar-width: 240px;
-  --topbar-height: 56px;
+  --sidebar-width: 258px;
+  --topbar-height: 64px;
   --ct-drawer-width: 320px;
   --ct-panel-min: 260px;
   --ct-toolbar-height: 32px;

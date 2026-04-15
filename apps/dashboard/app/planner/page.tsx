@@ -67,49 +67,49 @@ async function resolveDashboardLocale() {
   }
 }
 
-function plannerText(locale: "en" | "zh-CN") {
+export function plannerText(locale: "en" | "zh-CN") {
   if (locale === "zh-CN") {
     return {
       title: "规划桌",
-      subtitle: "先做分诊，再看细节。把 wave plan、worker prompt contracts、wake policy 和 completion governance 放到同一张控制桌上，直接回答下一步该派谁、该回哪里、该继续还是该解阻塞。",
+      subtitle: "先做规划分诊，再看细节。把波次计划、worker 提示词合约、唤醒策略姿态和完成治理放到同一张控制桌上，直接回答下一步该派谁、该回哪里、该继续还是该解阻塞。",
       actions: {
         pm: "打开 PM 入口",
-        tower: "打开 Command Tower",
+        tower: "打开指挥塔",
         workflows: "打开工作流案例",
-        proof: "打开 Proof & Replay",
+        proof: "打开证明与回放",
       },
       metrics: {
-        runs: "带规划产物的 runs",
-        workers: "可见 worker contracts",
-        unblock: "可见 unblock tasks",
-        wake: "挂了 wake policy 的 runs",
+        runs: "带规划产物的运行",
+        workers: "可见 worker 合约",
+        unblock: "可见解阻塞任务",
+        wake: "挂了唤醒策略的运行",
       },
       table: {
-        run: "Run",
-        objective: "Wave objective",
+        run: "运行",
+        objective: "波次目标",
         blocker: "当前分诊",
         next: "下一步",
       },
       empty: "当前还没有可见的规划产物。",
-      note: "这张桌子保持 `task_contract` 仍是唯一执行权威，但它已经不再只是 read-only 摆件：现在先做规划分诊，再决定回 PM、Workflow Cases、Command Tower 还是 Proof & Replay。",
+      note: "这张桌子保持 `task_contract` 仍是唯一执行权威，但它已经不再只是只读摆件：现在先做规划分诊，再决定回 PM、工作流案例、指挥塔还是证明与回放。",
       openRun: "打开证明室",
       openWorkflow: "打开工作流案例",
-      openTower: "打开 Command Tower",
+      openTower: "打开指挥塔",
       openPm: "打开 PM 入口",
-      wakeLabel: "Wake policy",
-      governanceLabel: "Governance verdict",
-      unblockLabel: "Unblock tasks",
-      contractsLabel: "Worker contracts",
-      plannedWorkersLabel: "Planned workers",
+      wakeLabel: "唤醒策略",
+      governanceLabel: "治理结论",
+      unblockLabel: "解阻塞任务",
+      contractsLabel: "Worker 合约",
+      plannedWorkersLabel: "计划 Worker 数",
       triageTitle: "规划分诊队列",
-      triageSubtitle: "先确认哪条 wave 缺 worker contract、哪条已经进入 continuation、哪条该优先处理 unblock，再去下一张桌子。",
+      triageSubtitle: "先确认哪条波次缺 worker 合约、哪条已经进入续跑、哪条该优先处理解阻塞任务，再去下一张桌子。",
       inspectionTitle: "规划细节档案",
-      inspectionSubtitle: "把原始 planning artifact 留在第二层阅读，同时保留 planner desk 自己的 queue / dispatch 控制，不再让它只是一个跳转台。",
+      inspectionSubtitle: "把原始规划产物留在第二层阅读，同时保留规划桌自己的队列 / 派发控制，不再让它只是一个跳转台。",
       blocker: {
-        missingGovernance: "缺 completion governance",
-        missingContracts: "缺 worker prompt contract",
-        hasUnblock: "有 unblock 任务待看",
-        continuation: "已选 continuation",
+        missingGovernance: "缺完成治理",
+        missingContracts: "缺 worker 提示词合约",
+        hasUnblock: "有解阻塞任务待看",
+        continuation: "已选续跑",
         reviewProof: "回证明室看真实结果",
       },
     };
@@ -163,7 +163,7 @@ function plannerText(locale: "en" | "zh-CN") {
   };
 }
 
-function plannerTriage(text: ReturnType<typeof plannerText>, row: PlannerRow) {
+export function plannerTriage(text: ReturnType<typeof plannerText>, row: PlannerRow) {
   const continuationDecision =
     row.completionGovernance?.continuation_decision &&
     typeof row.completionGovernance.continuation_decision === "object" &&
@@ -217,7 +217,7 @@ function plannerTriage(text: ReturnType<typeof plannerText>, row: PlannerRow) {
   };
 }
 
-function plannerPriorityRank(row: PlannerRow) {
+export function plannerPriorityRank(row: PlannerRow) {
   if (!row.completionGovernance) return 0;
   if (row.workerContracts.length === 0 || row.plannedWorkerCount > row.workerContracts.length) return 1;
   if (row.unblockTasks.length > 0) return 2;
@@ -232,7 +232,7 @@ function plannerPriorityRank(row: PlannerRow) {
   return 4;
 }
 
-function plannerPriorityState(text: ReturnType<typeof plannerText>, rows: PlannerRow[]): PlannerPriorityState {
+export function plannerPriorityState(text: ReturnType<typeof plannerText>, rows: PlannerRow[]): PlannerPriorityState {
   if (rows.length === 0) {
     return {
       title:
@@ -390,6 +390,11 @@ export default async function PlannerPage() {
               <p className="cell-sub mono muted">OpenVibeCoding / planner desk</p>
               <h1 id="planner-page-title" className="page-title">{text.title}</h1>
               <p className="page-subtitle">{text.subtitle}</p>
+              <p className="desk-question">
+                {locale === "zh-CN"
+                  ? "这张桌子第一眼只回答一个问题：下一波该派谁、该继续哪条线。"
+                  : "This desk should answer one question first: who moves next and which wave continues."}
+              </p>
             </div>
             <div className="planner-primary-actions">
               <Button asChild>
