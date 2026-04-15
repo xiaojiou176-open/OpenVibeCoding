@@ -158,6 +158,7 @@ describe("pm intake component branches", () => {
       chatFlowBusy: false,
       newConversationBusy: false,
       onStartNewConversation: vi.fn(),
+      objective: "",
       workspacePath: "apps/dashboard",
       repoName: "openvibecoding",
       onWorkspacePathChange: vi.fn(),
@@ -349,8 +350,23 @@ describe("pm intake component branches", () => {
       />,
     );
     expect(screen.getByTestId("pm-session-item-draft")).not.toHaveAttribute("aria-current");
-    expect(screen.getByTestId("pm-sidebar-active-session-indicator")).toHaveTextContent("Current session: pm-history-1");
+    expect(screen.getByTestId("pm-sidebar-active-session-indicator")).toHaveTextContent("Current session: Untitled session");
     expect(screen.getByTestId("pm-session-item-pm-history-1")).toHaveAttribute("aria-current", "page");
+    expect(screen.getByTestId("pm-session-item-pm-history-1")).toHaveTextContent("ID pm-history-1");
+
+    rerender(
+      <PMIntakeLeftSidebar
+        {...buildLeftSidebarProps({
+          intakeId: "pm-live-1",
+          objective: "Polish dashboard copy and session naming.",
+          repoName: "openvibecoding",
+          sessionHistory: [],
+        })}
+      />,
+    );
+    expect(screen.getByTestId("pm-sidebar-active-session-indicator")).toHaveTextContent(
+      "Current session: Polish dashboard copy and session naming."
+    );
 
     rerender(<PMIntakeLeftSidebar {...buildLeftSidebarProps({ historyBusy: true })} />);
     expect(screen.getByText("Loading session history")).toBeInTheDocument();

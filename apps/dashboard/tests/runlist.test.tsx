@@ -257,7 +257,7 @@ test("keeps contrast-safe muted and badge text tokens in dashboard globals", () 
   })();
   const css = readCssBundle(cssPath);
 
-  expect(css).toContain("--color-text-muted: #9fb0c8;");
+  expect(css).toContain("--color-text-muted: #c4d1e0;");
   expect(css).toContain("--color-success-ink: #7fe0b7;");
   expect(css).toContain("--color-warning-ink: #f2c27d;");
   expect(css).toContain("--color-danger-ink: #f0aaaa;");

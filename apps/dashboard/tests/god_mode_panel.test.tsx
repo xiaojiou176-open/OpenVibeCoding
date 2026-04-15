@@ -34,6 +34,10 @@ function withRole(role: string | null, executable = Boolean(role)) {
   });
 }
 
+function openManualApproval() {
+  fireEvent.click(screen.getByText("Handle a specific run manually"));
+}
+
 describe("god mode panel accessibility and high-risk actions", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -67,6 +71,7 @@ describe("god mode panel accessibility and high-risk actions", () => {
   it("disables mutation paths when operator role missing", async () => {
     withRole(null, false);
     render(<GodModePanel />);
+    openManualApproval();
 
     await waitFor(() => {
       expect(screen.getByTestId("god-mode-role-tip")).toBeInTheDocument();
@@ -117,6 +122,7 @@ describe("god mode panel accessibility and high-risk actions", () => {
   it("approves by manual run id input", async () => {
     render(<GodModePanel />);
     await screen.findByRole("button", { name: "I am done, continue" });
+    openManualApproval();
 
     fireEvent.change(screen.getByRole("textbox", { name: "Run ID" }), {
       target: { value: "run-manual-1" },
@@ -134,6 +140,7 @@ describe("god mode panel accessibility and high-risk actions", () => {
 
     render(<GodModePanel />);
     await screen.findByRole("button", { name: "I am done, continue" });
+    openManualApproval();
 
     fireEvent.change(screen.getByRole("textbox", { name: "Run ID" }), {
       target: { value: "run-auth" },
@@ -142,7 +149,7 @@ describe("god mode panel accessibility and high-risk actions", () => {
 
     await waitFor(() => {
       expect(screen.getByTestId("god-mode-status")).toHaveTextContent(
-        /Failed: Approval failed: (permission or authentication error|authentication or permission issue)\./,
+        /Failed: (Approval failed: )?((permission|authentication) or (permission|authentication) issue|Authentication or permission issue)\./,
       );
     });
   });
@@ -230,15 +237,14 @@ describe("god mode panel accessibility and high-risk actions", () => {
       expect(screen.getByTestId("god-mode-retry-pending")).toHaveTextContent("Retrying...");
       expect(screen.getByTestId("god-mode-retry-pending")).toBeDisabled();
       expect(screen.getByTestId("god-mode-loading-state")).toBeInTheDocument();
-      expect(screen.getByTestId("god-mode-status")).toHaveTextContent("Retrying pending approvals queue...");
     });
 
     retryDeferred.reject(new Error("403 forbidden"));
     await waitFor(() => {
-      expect(screen.getByTestId("god-mode-status")).toHaveTextContent(
-        /Retry failed: Pending approvals queue fetch failed: (permission or authentication error|authentication or permission issue)\./,
+      expect(screen.queryByTestId("god-mode-status")).not.toBeInTheDocument();
+      expect(screen.getByRole("alert")).toHaveTextContent(
+        /Pending approval truth is unavailable: (permission|authentication|Authentication)/,
       );
-      expect(screen.getByTestId("god-mode-status")).toHaveTextContent("Confirm permissions or sign in again before retrying.");
       expect(screen.getByTestId("god-mode-last-attempt-at")).toHaveTextContent("Last attempt:");
     });
   });

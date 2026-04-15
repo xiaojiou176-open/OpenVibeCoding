@@ -199,8 +199,11 @@ describe("agents page presentation", () => {
 
     render(await AgentsPage({ searchParams: Promise.resolve({}) }));
 
-    expect(await screen.findByText("Role configuration desk")).toBeInTheDocument();
-    expect(screen.getByText("Preview is available, but saving defaults requires an operator role.")).toBeInTheDocument();
+    fireEvent.click(await screen.findByText("Role behavior settings (advanced)"));
+    expect(await screen.findByText("Role behavior settings")).toBeInTheDocument();
+    expect(
+      screen.getByText("Preview is available, but saving repo defaults still requires an executable operator role."),
+    ).toBeInTheDocument();
     expect(screen.getByText("Role desk (read-only mirror)")).toBeInTheDocument();
     expect(screen.getAllByText("task_contract").length).toBeGreaterThan(0);
     expect(screen.getAllByText(/worker_delivery_core_v1/).length).toBeGreaterThan(0);
@@ -316,7 +319,8 @@ describe("agents page presentation", () => {
     } as never);
 
     render(await AgentsPage({ searchParams: Promise.resolve({}) }));
-    fireEvent.click(await screen.findByRole("button", { name: "Preview defaults" }));
+    fireEvent.click(await screen.findByText("Role behavior settings (advanced)"));
+    fireEvent.click(await screen.findByRole("button", { name: "Preview effective result" }));
     await waitFor(() => expect(previewRoleConfig).toHaveBeenCalledTimes(1));
   });
 });

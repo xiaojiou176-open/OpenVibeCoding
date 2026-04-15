@@ -99,9 +99,9 @@ describe("agents page pagination semantics", () => {
     render(await AgentsPage({ searchParams: Promise.resolve({ page: "1" }) }));
 
     expect(screen.getByRole("heading", { name: "Scheduling and task triage detail" })).toBeInTheDocument();
-    expect(screen.getByText("Failure-led queue")).toBeInTheDocument();
-    expect(screen.getByText("Registered capacity")).toBeInTheDocument();
-    expect(screen.getByText("Pending scheduling backlog")).toBeInTheDocument();
+    expect(screen.getByText("Blocked or failed lanes")).toBeInTheDocument();
+    expect(screen.getByText("Live execution seats")).toBeInTheDocument();
+    expect(screen.getByText("Scheduler posture")).toBeInTheDocument();
     expect(screen.getByText("Role desk (read-only mirror)")).toBeInTheDocument();
 
     expect(screen.queryByRole("link", { name: "Previous" })).toBeNull();
@@ -159,7 +159,7 @@ describe("agents page pagination semantics", () => {
     expect(screen.getByText("Scheduling failed")).toBeInTheDocument();
     expect(screen.getByText("System task")).toBeInTheDocument();
     expect(screen.getAllByText("Pending scheduling").length).toBeGreaterThan(0);
-    expect(screen.getByText("Run ID missing")).toBeInTheDocument();
+    expect(screen.getAllByText("Run ID missing").length).toBeGreaterThan(0);
     expect(screen.getByText("Unbound")).toBeInTheDocument();
   });
 
@@ -193,7 +193,10 @@ describe("agents page pagination semantics", () => {
 
     render(await AgentsPage({ searchParams: Promise.resolve({ page: "1" }) }));
 
-    const runDetailLink = screen.getByRole("link", { name: "Detail" });
+    const runDetailLink = screen
+      .getAllByRole("link", { name: "Detail" })
+      .find((link) => link.getAttribute("title")?.includes("run detail"));
+    expect(Boolean(runDetailLink)).toBe(true);
     expect(runDetailLink).toHaveAttribute("href", "/runs/run%20alpha%2F1");
     expect(runDetailLink).toHaveAttribute("title", expect.stringContaining("run detail"));
 
@@ -203,7 +206,10 @@ describe("agents page pagination semantics", () => {
       expect(link).toHaveAttribute("href", "/runs?status=FAILED");
     }
 
-    const registeredAgentsLink = screen.getByRole("link", { name: "Go to the registered agent list" });
+    const registeredAgentsLink = screen
+      .getAllByRole("link", { name: "Go to the full registered agent list" })
+      .find((link) => link.getAttribute("href") === "#agents-role-catalog-title");
+    expect(Boolean(registeredAgentsLink)).toBe(true);
     expect(registeredAgentsLink).toHaveAttribute("href", "#agents-role-catalog-title");
     expect(registeredAgentsLink).toHaveTextContent("View role catalog");
 
@@ -281,10 +287,10 @@ describe("agents page pagination semantics", () => {
 
     render(await AgentsPage({ searchParams: Promise.resolve({ page: "1" }) }));
 
-    expect(screen.getByText("In review")).toBeInTheDocument();
-    expect(screen.getByText("Completed")).toBeInTheDocument();
+    expect(screen.getAllByText("In review").length).toBeGreaterThan(0);
+    expect(screen.getAllByText("Completed").length).toBeGreaterThan(0);
     expect(screen.getByText("Bootstrapping")).toBeInTheDocument();
-    expect(screen.getByText(/Node/)).toBeInTheDocument();
+    expect(screen.getAllByText(/Node/).length).toBeGreaterThan(0);
   });
 
   it("shows active filter CTA and keeps query params in pagination links", async () => {

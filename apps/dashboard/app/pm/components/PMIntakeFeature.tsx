@@ -6,8 +6,10 @@ import PMIntakeRightSidebar from "./PMIntakeRightSidebar";
 import { usePMIntakeActions } from "../hooks/usePMIntakeActions";
 import { usePMIntakeData } from "../hooks/usePMIntakeData";
 import { usePMIntakeView } from "../hooks/usePMIntakeView";
+import { useDashboardLocale } from "../../../components/DashboardLocaleContext";
 
 export default function PMIntakeFeature() {
+  const { locale } = useDashboardLocale();
   const state = usePMIntakeData();
   const actions = usePMIntakeActions(state);
   const view = usePMIntakeView(state, actions);
@@ -21,19 +23,20 @@ export default function PMIntakeFeature() {
     >
       <section className="sr-only" aria-label="PM 起步动作" lang="zh-CN">
         <ul>
-          <li>填写仓库路径</li>
-          <li>输入第一条需求</li>
-          <li>开始生成计划</li>
+          <li>{locale === "zh-CN" ? "填写仓库路径" : "Fill in the workspace path"}</li>
+          <li>{locale === "zh-CN" ? "输入第一条需求" : "Enter the first request"}</li>
+          <li>{locale === "zh-CN" ? "开始生成计划" : "Start generating the first plan"}</li>
         </ul>
       </section>
       <h1 id="pm-page-title" className="sr-only">
-        PM workspace
+        {locale === "zh-CN" ? "PM 工作台" : "PM workspace"}
       </h1>
       <PMIntakeLeftSidebar
         intakeId={state.intakeId}
         chatFlowBusy={state.chatFlowBusy}
         newConversationBusy={state.newConversationBusy}
         onStartNewConversation={() => void actions.handleStartNewConversation()}
+        objective={state.objective}
         workspacePath={state.workspacePath}
         repoName={state.repoName}
         onWorkspacePathChange={state.setWorkspacePath}
