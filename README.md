@@ -768,9 +768,10 @@ The public release surface now has a live baseline. Use these entrypoints:
 Release truth note: `v0.1.0-alpha.3` is still the latest published prerelease,
 but `main` has already moved ahead of that tag. Treat the tag as the latest
 published snapshot, not as proof that current `main` is already released.
-Historical release drafts and March 2026 proof assets remain archived under
-`docs/releases/` and `docs/releases/assets/`; they are no longer part of the
-active front-door navigation.
+Historical release archaeology still exists as repo-side archive material.
+Machine-readable proof ledgers now belong under `configs/public_proof/` for
+tooling and audits, while the public reading path stays on the use-cases page
+and the published release surfaces instead of raw ledger files or `docs/README.md`.
 
 Public repo hygiene stays fail-closed as well: token-like fixture coverage must
 use synthetic string assembly, and public path fixtures must use generic

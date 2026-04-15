@@ -21,6 +21,11 @@ public docs inventory only**. Treat files outside that active inventory as
 maintainer-only reference or archive material, even if they still live under
 `docs/` for repo history and contributor access.
 
+This file is not the public proof router. Keep public readers on the root
+README and the registered route pages, and keep machine-readable proof ledgers
+under `configs/public_proof/` for tooling and audits instead of turning
+`docs/README.md` into a human path toward raw proof metadata.
+
 Daily local verification lives in the root [README](../README.md). Treat this
 file as the docs inventory map, not as a second CI manual.
 
@@ -97,13 +102,13 @@ treated as front-door navigation. This includes:
 - architecture notes and topology references
 - engineering/specification baselines
 - maintainer runbooks and future pilot blueprints
-- historical release-draft sources and release-side proof ledgers
-- storefront methodology/status ledgers that remain useful as archive material
+- historical release archaeology and maintainer-grade proof source material
+- storefront methodology/archive material that still matters for maintainers
 
-Heavy reference docs, release archaeology, proof ledgers, governance maps, and
-preview runbooks still live in the repository for maintainers. Treat them as
-implementation/archive reference when needed, not as part of the minimal
-public story.
+Heavy reference docs, release archaeology, proof source material, governance
+maps, and preview runbooks still live in the repository for maintainers. Treat
+them as implementation/archive reference when needed, not as part of the
+minimal public story or the default human proof path.
 
 ## What Each Active Public File Is For
 
@@ -112,7 +117,7 @@ public story.
 - `docs/compatibility/index.html`: public adoption matrix for choosing between Codex / Claude Code / OpenClaw / skills / builders / proof-first onboarding paths
 - `docs/distribution/index.html`: public mirror of the root `DISTRIBUTION.md` contract for shipped, starter-only, deferred, and workspace-only surfaces
 - `docs/agent-starters/index.html`: public copy-paste starter kits for Codex / Claude Code / OpenClaw teams that want the shortest repo-owned bootstrap path
-- `docs/use-cases/index.html`: public first-run, proof, and share-ready asset guide
+- `docs/use-cases/index.html`: public first-run, proof, and share-ready asset guide; keep the human proof path here instead of sending readers into raw proof ledgers
 - `docs/ai-surfaces/index.html`: public AI / read-only MCP / API entrypoint map for truthful discoverability
 - `docs/mcp/index.html`: public read-only MCP quickstart page for truthful protocol discovery
 - `docs/api/index.html`: public API / contract quickstart page for OpenAPI, thin client helpers, and contract-facing types

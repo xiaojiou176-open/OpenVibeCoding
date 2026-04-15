@@ -8,9 +8,9 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+REGISTRY_PATH = ROOT / "configs" / "storefront_proof_bundle_registry.json"
+RENDER_MANIFEST_PATH = ROOT / "configs" / "docs_render_manifest.json"
 PROOF_PACK_INDEX = ROOT / "docs" / "assets" / "storefront" / "proof-pack-index.json"
-DEMO_STATUS_PATH = ROOT / "docs" / "assets" / "storefront" / "demo-status.md"
-LIVE_CAPTURE_REQUIREMENTS_PATH = ROOT / "docs" / "assets" / "storefront" / "live-capture-requirements.json"
 USE_CASES_PATH = ROOT / "docs" / "use-cases" / "index.html"
 
 
@@ -26,6 +26,16 @@ def _load_json(path: Path) -> dict:
     if not isinstance(payload, dict):
         raise ValueError(f"{path} must contain a JSON object")
     return payload
+
+
+def _find_render_entry(payload: dict, *, output_path: str) -> dict | None:
+    entries = payload.get("entries")
+    if not isinstance(entries, list):
+        return None
+    for item in entries:
+        if isinstance(item, dict) and item.get("output_path") == output_path:
+            return item
+    return None
 
 
 def _require(condition: bool, message: str, errors: list[str]) -> None:
@@ -62,31 +72,78 @@ def main() -> int:
     if not PROOF_PACK_INDEX.exists():
         print("❌ [storefront-proof-assets] proof-pack index missing")
         return 1
-    if not LIVE_CAPTURE_REQUIREMENTS_PATH.exists():
-        print("❌ [storefront-proof-assets] live capture requirements missing")
+    if not REGISTRY_PATH.exists():
+        print("❌ [storefront-proof-assets] storefront proof bundle registry missing")
+        return 1
+    if not RENDER_MANIFEST_PATH.exists():
+        print("❌ [storefront-proof-assets] docs render manifest missing")
         return 1
 
     generator = _load_generator_module()
     generator.ROOT = ROOT
-    generator.REGISTRY_PATH = ROOT / "configs" / "storefront_proof_bundle_registry.json"
+    generator.REGISTRY_PATH = REGISTRY_PATH
     generator.OUTPUT_PATH = PROOF_PACK_INDEX
     registry_payload = generator._load_json(generator.REGISTRY_PATH)
     registry_payload["source_registry"] = generator.REGISTRY_PATH.relative_to(ROOT).as_posix()
     expected_payload = generator.build_index(registry_payload)
     current_payload = _load_json(PROOF_PACK_INDEX)
+    render_manifest_payload = _load_json(RENDER_MANIFEST_PATH)
     if current_payload != expected_payload:
         errors.append("proof-pack index drifted from generator output")
 
     payload = current_payload
-    live_capture_requirements = _load_json(LIVE_CAPTURE_REQUIREMENTS_PATH)
+    public_contract = registry_payload.get("public_proof_contract")
+    _require(isinstance(public_contract, dict), "registry missing public_proof_contract", errors)
+    if isinstance(public_contract, dict):
+        _require(
+            public_contract.get("authoritative_registry_path") == "configs/storefront_proof_bundle_registry.json",
+            "public_proof_contract must point at the tracked proof bundle registry",
+            errors,
+        )
+        _require(
+            public_contract.get("render_manifest_path") == "configs/docs_render_manifest.json",
+            "public_proof_contract must point at the docs render manifest",
+            errors,
+        )
+        required_outputs = public_contract.get("required_rendered_outputs")
+        _require(
+            isinstance(required_outputs, list) and "docs/assets/storefront/proof-pack-index.json" in required_outputs,
+            "public_proof_contract must require the proof-pack index output",
+            errors,
+        )
+        contract_inputs = public_contract.get("tracked_contract_inputs")
+        _require(
+            isinstance(contract_inputs, list) and "configs/storefront_proof_bundle_registry.json" in contract_inputs,
+            "public_proof_contract must keep configs-side tracked contract inputs",
+            errors,
+        )
+        _require(
+            isinstance(contract_inputs, list)
+            and "docs/assets/storefront/demo-status.md" not in contract_inputs
+            and "docs/assets/storefront/live-capture-requirements.json" not in contract_inputs,
+            "public_proof_contract must not treat docs-side ledgers as tracked contract inputs",
+            errors,
+        )
+
+    proof_pack_entry = _find_render_entry(render_manifest_payload, output_path="docs/assets/storefront/proof-pack-index.json")
+    _require(proof_pack_entry is not None, "docs render manifest missing proof-pack index entry", errors)
+    if isinstance(proof_pack_entry, dict):
+        contract_inputs = proof_pack_entry.get("contract_inputs")
+        _require(
+            isinstance(contract_inputs, list) and "configs/storefront_proof_bundle_registry.json" in contract_inputs,
+            "proof-pack render entry must declare configs-side contract inputs",
+            errors,
+        )
+        _require(
+            isinstance(contract_inputs, list)
+            and "docs/assets/storefront/demo-status.md" not in contract_inputs
+            and "docs/assets/storefront/live-capture-requirements.json" not in contract_inputs,
+            "proof-pack render entry must not bind tracked contract inputs to docs-side ledgers",
+            errors,
+        )
     _require(
         payload.get("artifact_type") == "openvibecoding_public_proof_pack_index",
         "proof-pack index has unexpected artifact_type",
-        errors,
-    )
-    _require(
-        live_capture_requirements.get("artifact_type") == "openvibecoding_storefront_live_capture_requirements",
-        "live capture requirements has unexpected artifact_type",
         errors,
     )
 
@@ -200,15 +257,6 @@ def main() -> int:
             )
 
     _require_text(
-        DEMO_STATUS_PATH,
-        [
-            "Healthy backend-backed dashboard capture set",
-            "Healthy backend-backed live GIF",
-            "safe repo-side proof of a healthy local first public path",
-        ],
-        errors,
-    )
-    _require_text(
         USE_CASES_PATH,
         [
             "tracked healthy local captures and proof assets",
@@ -217,24 +265,6 @@ def main() -> int:
         ],
         errors,
     )
-    requirements_assets = live_capture_requirements.get("required_assets")
-    _require(isinstance(requirements_assets, list), "live capture requirements missing required_assets[]", errors)
-    if isinstance(requirements_assets, list):
-        required_ids = {
-            "healthy_live_capture_gif",
-            "healthy_english_first_dashboard_home_capture",
-            "healthy_english_first_command_tower_capture",
-            "healthy_english_first_runs_capture",
-        }
-        seen_ids = {str(item.get("asset_id")) for item in requirements_assets if isinstance(item, dict)}
-        if not required_ids.issubset(seen_ids):
-            errors.append("live capture requirements lost one or more required asset ids")
-        for item in requirements_assets:
-            if not isinstance(item, dict):
-                errors.append("live capture requirements entries must be objects")
-                continue
-            if str(item.get("status") or "").strip() != "present":
-                errors.append("live capture requirements must mark landed assets as present")
 
     if errors:
         print("❌ [storefront-proof-assets] public proof asset contract violations:")

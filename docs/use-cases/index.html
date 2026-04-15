@@ -291,8 +291,10 @@
         This is the smallest reusable trust bundle on the public surface today:
         one healthy proof summary, one single-run benchmark, one Workflow Case
         recap, and one storefront proof status snapshot. The public page now
-        summarizes that bundle instead of sending every reader into the raw
-        repo-side ledgers.
+        summarizes that bundle instead of sending every reader into raw
+        ledgers. Machine-readable proof metadata now lives under
+        <code>configs/public_proof/</code> for tooling and audits, while this
+        page stays the human-facing summary.
       </div>
       <table>
         <thead>
@@ -306,27 +308,17 @@
           <tr>
             <td><strong>Healthy proof summary</strong></td>
             <td>Shows the tracked healthy result path for the official public baseline.</td>
-            <td>Included in the repo-tracked public proof bundle.</td>
+            <td>Summarized here; detailed audit metadata lives under <code>configs/public_proof/</code>.</td>
           </tr>
           <tr>
             <td><strong>Single-run benchmark summary</strong></td>
             <td>Shows the current public performance baseline without pretending it is a broad benchmark campaign.</td>
-            <td>Included in the repo-tracked public proof bundle.</td>
+            <td>Summarized here; detailed audit metadata lives under <code>configs/public_proof/</code>.</td>
           </tr>
           <tr>
             <td><strong>Workflow Case recap</strong></td>
             <td>Shows the strongest March 2026 share-ready artifact for why Workflow Cases matter outside the operator UI.</td>
-            <td>Included in the repo-tracked public proof bundle.</td>
-          </tr>
-          <tr>
-            <td><strong>Proof-pack manifest</strong></td>
-            <td>Shows the machine-readable directory of what shipped in the March 2026 public trust bundle and what was still missing at that checkpoint.</td>
-            <td>Maintained as repo-side machine-readable proof metadata.</td>
-          </tr>
-          <tr>
-            <td><strong>Global proof-pack index</strong></td>
-            <td>Shows the storefront-wide index of proven bundles, showcase bundles, and current public proof gaps.</td>
-            <td>Maintained as storefront proof metadata.</td>
+            <td>Summarized here; detailed audit metadata lives under <code>configs/public_proof/</code>.</td>
           </tr>
           <tr>
             <td><strong>Proof status snapshot</strong></td>
@@ -335,6 +327,12 @@
           </tr>
         </tbody>
       </table>
+      <p class="caption">
+        Machine-readable proof metadata now lives under
+        <code>configs/public_proof/</code> for tooling and audits, but the
+        human reading path stays on this public summary page rather than the
+        raw manifests and index files.
+      </p>
 
       <h2>Why this helps discovery</h2>
       <p>
@@ -355,9 +353,8 @@
       <ul>
         <li>The official public baseline still belongs to <strong>news_digest</strong>.</li>
         <li>The current benchmark story is a tracked single-run baseline, not a broad release average.</li>
-        <li>The public recap story still centers on one share-ready Workflow Case artifact plus a repo-tracked proof bundle.</li>
-        <li>Global proof-pack index across public proven and showcase bundles remains available as repo-side metadata rather than a front-door jump target.</li>
-        <li>Machine-readable proof metadata still exists in the repo, but this public page no longer sends readers directly to raw manifests and ledger-style contracts.</li>
+        <li>The public recap story still centers on one share-ready Workflow Case artifact plus a human-readable proof summary.</li>
+        <li>Machine-readable proof metadata still exists under <code>configs/public_proof/</code> for audits and tooling, but this page is the human-facing proof summary.</li>
       </ul>
 
       <h2>Current gaps that still matter</h2>

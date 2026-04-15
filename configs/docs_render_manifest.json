@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "description": "Minimal public/generated doc outputs kept after the public-surface reduction; internal governance markdown is intentionally excluded.",
+  "description": "Minimal public/generated doc outputs kept after the public-surface reduction; tracked proof/render contracts live under configs rather than docs-side ledgers.",
   "entries": [
     {
       "output_path": "docs/assets/storefront/proof-pack-index.json",
@@ -9,6 +9,9 @@
         "scripts/generate_storefront_proof_pack_index.py",
         "configs/storefront_proof_bundle_registry.json",
         "docs/releases/assets/news-digest-proof-pack-2026-03-27.json"
+      ],
+      "contract_inputs": [
+        "configs/storefront_proof_bundle_registry.json"
       ],
       "generator": "python3 scripts/generate_storefront_proof_pack_index.py",
       "freshness_strategy": "timestamp",

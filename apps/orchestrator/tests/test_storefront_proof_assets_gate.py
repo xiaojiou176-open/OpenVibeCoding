@@ -27,7 +27,6 @@ def _load_gate_module() -> object:
 def _write_fixture(root: Path) -> None:
     (root / "docs" / "assets" / "storefront").mkdir(parents=True, exist_ok=True)
     (root / "docs" / "releases" / "assets").mkdir(parents=True, exist_ok=True)
-    (root / "docs" / "runbooks").mkdir(parents=True, exist_ok=True)
     (root / "docs" / "use-cases").mkdir(parents=True, exist_ok=True)
     (root / "configs").mkdir(parents=True, exist_ok=True)
 
@@ -104,28 +103,21 @@ def _write_fixture(root: Path) -> None:
         """,
         encoding="utf-8",
     )
-    (root / "docs" / "assets" / "storefront" / "live-capture-requirements.json").write_text(
-        json.dumps(
-            {
-                "artifact_type": "openvibecoding_storefront_live_capture_requirements",
-                "required_assets": [
-                    {"asset_id": "healthy_live_capture_gif", "status": "present"},
-                    {"asset_id": "healthy_english_first_dashboard_home_capture", "status": "present"},
-                    {"asset_id": "healthy_english_first_command_tower_capture", "status": "present"},
-                    {"asset_id": "healthy_english_first_runs_capture", "status": "present"},
-                ],
-            },
-            ensure_ascii=False,
-            indent=2,
-        )
-        + "\n",
-        encoding="utf-8",
-    )
     (root / "configs" / "storefront_proof_bundle_registry.json").write_text(
         json.dumps(
             {
                 "schema_version": 1,
                 "artifact_type": "openvibecoding_storefront_proof_bundle_registry",
+                "public_proof_contract": {
+                    "authoritative_registry_path": "configs/storefront_proof_bundle_registry.json",
+                    "render_manifest_path": "configs/docs_render_manifest.json",
+                    "required_rendered_outputs": [
+                        "docs/assets/storefront/proof-pack-index.json"
+                    ],
+                    "tracked_contract_inputs": [
+                        "configs/storefront_proof_bundle_registry.json"
+                    ]
+                },
                 "vocabulary_contract": {
                     "proven_workflow_label": "first proven workflow",
                     "proof_pack_label": "public proof pack",
@@ -167,6 +159,38 @@ def _write_fixture(root: Path) -> None:
         + "\n",
         encoding="utf-8",
     )
+    (root / "configs" / "docs_render_manifest.json").write_text(
+        json.dumps(
+            {
+                "schema_version": 1,
+                "description": "Minimal public/generated doc outputs kept after the public-surface reduction; proof contracts live under configs.",
+                "entries": [
+                    {
+                        "output_path": "docs/assets/storefront/proof-pack-index.json",
+                        "mode": "full_render",
+                        "source_inputs": [
+                            "scripts/generate_storefront_proof_pack_index.py",
+                            "configs/storefront_proof_bundle_registry.json",
+                            "docs/releases/assets/news-digest-proof-pack-2026-03-27.json",
+                        ],
+                        "contract_inputs": [
+                            "configs/storefront_proof_bundle_registry.json",
+                        ],
+                        "generator": "python3 scripts/generate_storefront_proof_pack_index.py",
+                        "freshness_strategy": "timestamp",
+                        "authoritative_for": [
+                            "public_storefront_proof_pack_index",
+                        ],
+                        "human_editable_regions": "none",
+                    }
+                ],
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
 
     generator = _load_generator_module()
     generator.ROOT = root
@@ -180,9 +204,9 @@ def test_storefront_proof_assets_gate_passes_with_expected_index(tmp_path: Path,
     module = _load_gate_module()
     _write_fixture(tmp_path)
     module.ROOT = tmp_path
+    module.REGISTRY_PATH = tmp_path / "configs" / "storefront_proof_bundle_registry.json"
+    module.RENDER_MANIFEST_PATH = tmp_path / "configs" / "docs_render_manifest.json"
     module.PROOF_PACK_INDEX = tmp_path / "docs" / "assets" / "storefront" / "proof-pack-index.json"
-    module.DEMO_STATUS_PATH = tmp_path / "docs" / "assets" / "storefront" / "demo-status.md"
-    module.LIVE_CAPTURE_REQUIREMENTS_PATH = tmp_path / "docs" / "assets" / "storefront" / "live-capture-requirements.json"
     module.USE_CASES_PATH = tmp_path / "docs" / "use-cases" / "index.html"
     monkeypatch.setattr(sys, "argv", ["check_storefront_proof_assets.py"])
     assert module.main() == 0
@@ -199,9 +223,9 @@ def test_storefront_proof_assets_gate_fails_when_news_digest_loses_release_prove
     index_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     module.ROOT = tmp_path
+    module.REGISTRY_PATH = tmp_path / "configs" / "storefront_proof_bundle_registry.json"
+    module.RENDER_MANIFEST_PATH = tmp_path / "configs" / "docs_render_manifest.json"
     module.PROOF_PACK_INDEX = index_path
-    module.DEMO_STATUS_PATH = tmp_path / "docs" / "assets" / "storefront" / "demo-status.md"
-    module.LIVE_CAPTURE_REQUIREMENTS_PATH = tmp_path / "docs" / "assets" / "storefront" / "live-capture-requirements.json"
     module.USE_CASES_PATH = tmp_path / "docs" / "use-cases" / "index.html"
     monkeypatch.setattr(sys, "argv", ["check_storefront_proof_assets.py"])
 

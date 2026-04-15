@@ -17,8 +17,22 @@ def _load_gate_module() -> object:
 def _write_frontdoor_fixture(root: Path) -> None:
     (root / "docs" / "use-cases").mkdir(parents=True, exist_ok=True)
     (root / "docs" / "compatibility").mkdir(parents=True, exist_ok=True)
-    (root / "docs" / "releases" / "assets").mkdir(parents=True, exist_ok=True)
-    (root / "docs" / "assets" / "storefront").mkdir(parents=True, exist_ok=True)
+
+    (root / "README.md").write_text(
+        """
+        Machine-readable proof ledgers now belong under `configs/public_proof/`.
+        The public reading path stays on the use-cases page instead of raw ledger files or `docs/README.md`.
+        """,
+        encoding="utf-8",
+    )
+    (root / "docs" / "README.md").write_text(
+        """
+        This file is not the public proof router.
+        Keep machine-readable proof ledgers under `configs/public_proof/`
+        for tooling and audits instead of turning `docs/README.md` into a human path toward raw proof metadata.
+        """,
+        encoding="utf-8",
+    )
 
     (root / "docs" / "index.html").write_text(
         """
@@ -38,7 +52,7 @@ def _write_frontdoor_fixture(root: Path) -> None:
         <p>What we still do not claim</p>
         <p>This page summarizes the repo-tracked public proof bundle instead of deep-linking every raw ledger file.</p>
         <p>Proof you can rely on today</p>
-        <p>Machine-readable proof metadata still exists in the repo, but this public page no longer sends readers directly to raw manifests and ledger-style contracts.</p>
+        <p>Machine-readable proof metadata now lives under configs/public_proof/ for tooling and audits, while this page stays the human-facing proof summary.</p>
         """,
         encoding="utf-8",
     )
@@ -50,27 +64,16 @@ def _write_frontdoor_fixture(root: Path) -> None:
         """,
         encoding="utf-8",
     )
-    (root / "docs" / "releases" / "assets" / "news-digest-healthy-proof-2026-03-27.md").write_text("ok\n", encoding="utf-8")
-    (root / "docs" / "releases" / "assets" / "news-digest-benchmark-summary-2026-03-27.md").write_text("ok\n", encoding="utf-8")
-    (root / "docs" / "releases" / "assets" / "news-digest-workflow-case-recap-2026-03-27.md").write_text("ok\n", encoding="utf-8")
-    (root / "docs" / "releases" / "assets" / "news-digest-proof-pack-2026-03-27.json").write_text("{}\n", encoding="utf-8")
-    (root / "docs" / "assets" / "storefront" / "demo-status.md").write_text("ok\n", encoding="utf-8")
-    (root / "docs" / "assets" / "storefront" / "proof-pack-index.json").write_text("{}\n", encoding="utf-8")
-
 
 def test_frontdoor_contract_gate_passes_with_required_surfaces(tmp_path: Path, monkeypatch) -> None:
     module = _load_gate_module()
     _write_frontdoor_fixture(tmp_path)
     module.ROOT = tmp_path
+    module.README_PATH = tmp_path / "README.md"
+    module.DOCS_README_PATH = tmp_path / "docs" / "README.md"
     module.INDEX_PATH = tmp_path / "docs" / "index.html"
     module.USE_CASES_PATH = tmp_path / "docs" / "use-cases" / "index.html"
     module.COMPATIBILITY_PATH = tmp_path / "docs" / "compatibility" / "index.html"
-    module.PROOF_SUMMARY_PATH = tmp_path / "docs" / "releases" / "assets" / "news-digest-healthy-proof-2026-03-27.md"
-    module.BENCHMARK_SUMMARY_PATH = tmp_path / "docs" / "releases" / "assets" / "news-digest-benchmark-summary-2026-03-27.md"
-    module.WORKFLOW_RECAP_PATH = tmp_path / "docs" / "releases" / "assets" / "news-digest-workflow-case-recap-2026-03-27.md"
-    module.PROOF_PACK_MANIFEST_PATH = tmp_path / "docs" / "releases" / "assets" / "news-digest-proof-pack-2026-03-27.json"
-    module.DEMO_STATUS_PATH = tmp_path / "docs" / "assets" / "storefront" / "demo-status.md"
-    module.PROOF_PACK_INDEX_PATH = tmp_path / "docs" / "assets" / "storefront" / "proof-pack-index.json"
     monkeypatch.setattr(sys, "argv", ["check_frontdoor_contract.py"])
     assert module.main() == 0
 
@@ -88,15 +91,11 @@ def test_frontdoor_contract_gate_fails_when_public_proof_bundle_text_drifts(
         encoding="utf-8",
     )
     module.ROOT = tmp_path
+    module.README_PATH = tmp_path / "README.md"
+    module.DOCS_README_PATH = tmp_path / "docs" / "README.md"
     module.INDEX_PATH = tmp_path / "docs" / "index.html"
     module.USE_CASES_PATH = use_cases
     module.COMPATIBILITY_PATH = tmp_path / "docs" / "compatibility" / "index.html"
-    module.PROOF_SUMMARY_PATH = tmp_path / "docs" / "releases" / "assets" / "news-digest-healthy-proof-2026-03-27.md"
-    module.BENCHMARK_SUMMARY_PATH = tmp_path / "docs" / "releases" / "assets" / "news-digest-benchmark-summary-2026-03-27.md"
-    module.WORKFLOW_RECAP_PATH = tmp_path / "docs" / "releases" / "assets" / "news-digest-workflow-case-recap-2026-03-27.md"
-    module.PROOF_PACK_MANIFEST_PATH = tmp_path / "docs" / "releases" / "assets" / "news-digest-proof-pack-2026-03-27.json"
-    module.DEMO_STATUS_PATH = tmp_path / "docs" / "assets" / "storefront" / "demo-status.md"
-    module.PROOF_PACK_INDEX_PATH = tmp_path / "docs" / "assets" / "storefront" / "proof-pack-index.json"
     monkeypatch.setattr(sys, "argv", ["check_frontdoor_contract.py"])
 
     rc = module.main()
