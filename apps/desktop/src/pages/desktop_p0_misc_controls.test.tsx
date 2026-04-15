@@ -195,7 +195,7 @@ describe("desktop p0 misc controls", () => {
 
     const runNav = vi.fn();
     const runs = render(<RunsPage onNavigateToRun={runNav} />);
-    expect(await screen.findByRole("heading", { name: /Proof & Replay/ })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: /Proof & Replay|证明与回放/ })).toBeInTheDocument();
     expect(screen.getByText(/proof desk|Run 证据、对比姿态和重放决策/i)).toBeInTheDocument();
     expect(screen.getByRole("columnheader", { name: "Run" })).toBeInTheDocument();
     expect(screen.getByRole("columnheader", { name: /Operator posture|操作者姿态/ })).toBeInTheDocument();
