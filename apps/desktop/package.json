@@ -55,7 +55,7 @@
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "5.2.0",
     "@vitest/coverage-v8": "4.0.18",
-    "jsdom": "26.1.0",
+    "jsdom": "29.0.2",
     "playwright": "1.58.2",
     "typescript": "5.9.3",
     "vite": "8.0.5",
