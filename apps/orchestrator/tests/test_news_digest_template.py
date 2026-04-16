@@ -153,6 +153,44 @@ def test_topic_brief_intake_and_result_builder() -> None:
     assert search_payload["topic_brief_result"] == {"name": "topic_brief_result.json"}
 
 
+def test_topic_brief_fail_closes_when_only_provider_homepages_are_captured() -> None:
+    search_request = {
+        "task_template": "topic_brief",
+        "template_payload": {
+            "topic": "Seattle AI",
+            "time_range": "24h",
+            "max_results": 3,
+        },
+    }
+    results = [
+        {
+            "provider": "gemini_web",
+            "results": [
+                {
+                    "title": "gemini_web response",
+                    "href": "https://gemini.google.com/",
+                    "snippet": "Gemini 与 Gemini 对话 你说 Seattle AI",
+                }
+            ],
+        },
+        {
+            "provider": "grok_web",
+            "results": [
+                {
+                    "title": "grok_web response",
+                    "href": "https://grok.com/",
+                    "snippet": "登录 注册 Seattle AI",
+                }
+            ],
+        },
+    ]
+    brief = search_pipeline.build_topic_brief_result(search_request, results)
+    assert brief is not None
+    assert brief["status"] == "FAILED"
+    assert "provider outputs stayed on provider shell pages" in brief["summary"]
+    assert "provider 壳页" in brief["failure_reason_zh"]
+
+
 def test_page_brief_intake_builds_browser_contract_artifact(monkeypatch, tmp_path: Path) -> None:
     runtime_root = tmp_path / "runtime"
     monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
@@ -370,3 +408,53 @@ def test_news_digest_result_writes_failed_report_when_search_pipeline_fails(monk
     assert digest_payload["status"] == "FAILED"
     assert digest_payload["summary"].startswith("The news digest for 'Seattle AI' did not complete successfully.")
     assert "来源链路失败" in digest_payload["failure_reason_zh"]
+
+
+def test_topic_brief_provider_homepage_only_results_write_failed_report(monkeypatch, tmp_path: Path) -> None:
+    runtime_root = tmp_path / "runtime"
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runtime_root / "runs"))
+
+    store = RunStore()
+    run_id = store.create_run("topic-brief-provider-homepage-only")
+
+    class ProviderHomepageOnlyToolRunner(ToolRunner):
+        def __init__(self) -> None:
+            super().__init__(run_id=run_id, store=store)
+
+        def run_search(self, query: str, provider: str | None = None, browser_policy=None, policy_audit=None) -> dict:
+            normalized_provider = "gemini_web" if provider == "chatgpt_web" else str(provider or "")
+            href = "https://gemini.google.com/" if normalized_provider == "gemini_web" else "https://grok.com/"
+            return {
+                "ok": True,
+                "provider": normalized_provider,
+                "results": [{"title": f"{normalized_provider} response", "href": href, "snippet": f"{query} provider shell"}],
+                "verification": {"consistent": True},
+            }
+
+    request = {
+        "queries": ["Seattle AI"],
+        "providers": ["chatgpt_web", "grok_web"],
+        "verify": {"providers": ["chatgpt_web"], "repeat": 1},
+        "task_template": "topic_brief",
+        "template_payload": {
+            "topic": "Seattle AI",
+            "time_range": "24h",
+            "max_results": 3,
+        },
+    }
+
+    result = run_search_pipeline(
+        run_id,
+        ProviderHomepageOnlyToolRunner(),
+        store,
+        request,
+        requested_by={"role": "PM", "agent_id": "pm-1"},
+    )
+    assert result["ok"] is False
+    assert result["public_source_receipt_missing"] is True
+    run_dir = runtime_root / "runs" / run_id / "reports"
+    digest_payload = json.loads((run_dir / "topic_brief_result.json").read_text(encoding="utf-8"))
+    assert digest_payload["status"] == "FAILED"
+    assert digest_payload["summary"].startswith("The topic brief for 'Seattle AI' did not complete successfully.")
+    assert "provider 壳页" in digest_payload["failure_reason_zh"]

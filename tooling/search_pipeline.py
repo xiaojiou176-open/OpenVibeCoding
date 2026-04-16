@@ -10,6 +10,12 @@ from typing import Any
 from openvibecoding_orch.store.run_store import RunStore
 from openvibecoding_orch.contract.validator import ContractValidator
 
+_CHAT_PROVIDER_HOSTS: dict[str, set[str]] = {
+    "gemini_web": {"gemini.google.com"},
+    "grok_web": {"grok.com"},
+    "chatgpt_web": {"chatgpt.com", "chat.openai.com"},
+}
+
 
 def _now_ts() -> str:
     return datetime.now(timezone.utc).isoformat()
@@ -40,6 +46,47 @@ def _domain_from_href(href: str) -> str:
         return urlparse(href).netloc
     except Exception:  # noqa: BLE001
         return ""
+
+
+def _is_chat_provider_homepage(provider: Any, href: Any) -> bool:
+    provider_name = str(provider or "").strip().lower()
+    domain = _domain_from_href(str(href or "")).strip().lower()
+    return bool(domain) and domain in _CHAT_PROVIDER_HOSTS.get(provider_name, set())
+
+
+def _has_public_source_hits(results: list[dict[str, Any]]) -> bool:
+    for item in results:
+        if not isinstance(item, dict):
+            continue
+        provider = item.get("provider") or item.get("resolved_provider") or item.get("mode") or "unknown"
+        hits = item.get("results") if isinstance(item.get("results"), list) else []
+        for hit in hits:
+            if not isinstance(hit, dict):
+                continue
+            href = str(hit.get("href") or "").strip()
+            if href and not _is_chat_provider_homepage(provider, href):
+                return True
+    return False
+
+
+def _summarize_public_source_failure(results: list[dict[str, Any]]) -> str:
+    offenders: list[str] = []
+    for item in results:
+        if not isinstance(item, dict):
+            continue
+        provider = item.get("provider") or item.get("resolved_provider") or item.get("mode") or "unknown"
+        hits = item.get("results") if isinstance(item.get("results"), list) else []
+        for hit in hits:
+            if not isinstance(hit, dict):
+                continue
+            href = str(hit.get("href") or "").strip()
+            if href and _is_chat_provider_homepage(provider, href):
+                offender = f"{str(provider).strip()} -> {_domain_from_href(href)}"
+                if offender not in offenders:
+                    offenders.append(offender)
+    if offenders:
+        return f"来源链路失败：当前结果仍停在 provider 壳页而不是公开来源页面（{', '.join(offenders)}）。"
+    return "来源链路失败：当前结果没有产出可公开审计的来源页面。"
 
 
 def _build_sources(results: list[dict]) -> list[dict]:
@@ -116,6 +163,8 @@ def _purify_results(results: list[dict], verification: dict | None = None) -> di
             href = hit.get("href", "")
             if not href:
                 missing_href += 1
+                continue
+            if _is_chat_provider_homepage(provider, href):
                 continue
             domain = _domain_from_href(str(href))
             if domain:
@@ -242,6 +291,7 @@ def _build_digest_result(
 ) -> dict[str, Any]:
     digest_sources: list[dict[str, Any]] = []
     seen_urls: set[str] = set()
+    public_source_hit_found = False
     for provider_entry in results:
         if not isinstance(provider_entry, dict):
             continue
@@ -256,10 +306,13 @@ def _build_digest_result(
             if not isinstance(hit, dict):
                 continue
             href = str(hit.get("href") or "").strip()
+            if href and _is_chat_provider_homepage(provider, href):
+                continue
             if href and href in seen_urls:
                 continue
             if href:
                 seen_urls.add(href)
+                public_source_hit_found = True
             digest_sources.append(
                 {
                     "title": str(hit.get("title") or hit.get("name") or href or "result").strip() or "result",
@@ -283,6 +336,13 @@ def _build_digest_result(
             " Review failure_reason_zh and the evidence bundle for the detailed provider failure context."
         ).strip()
         status = "FAILED"
+    elif not public_source_hit_found and results:
+        summary = (
+            f"The {template_label} for '{topic}' did not produce a trustworthy public-source receipt."
+            " The current provider outputs stayed on provider shell pages instead of auditable source URLs."
+        )
+        status = "FAILED"
+        failure_reason_zh = failure_reason_zh or _summarize_public_source_failure(results)
     elif digest_sources:
         preview = ", ".join(item["title"] for item in digest_sources[:3])
         summary = (

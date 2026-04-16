@@ -13,6 +13,8 @@ from openvibecoding_orch.store.run_store import RunStore
 from tooling.page_brief_pipeline import write_page_brief_evidence_bundle, write_page_brief_result
 from tooling.search.ai_verifier import verify_search_results_ai
 from tooling.search_pipeline import (
+    _has_public_source_hits,
+    _summarize_public_source_failure,
     write_ai_verification,
     write_evidence_bundle,
     write_news_digest_result,
@@ -113,6 +115,10 @@ def _summarize_page_brief_failure(result: dict[str, Any]) -> str:
     if error:
         return f"页面抓取失败：{error}"
     return "页面抓取失败：浏览器任务未返回可用结果。"
+
+
+def _summarize_public_source_receipt_failure(results: list[dict[str, Any]]) -> str:
+    return _summarize_public_source_failure(results)
 
 
 def _write_public_task_result(
@@ -287,13 +293,15 @@ def run_search_pipeline(
                 domain_counts[domain] = domain_counts.get(domain, 0) + 1
     consensus_domains = [domain for domain, count in domain_counts.items() if count >= 2]
 
+    public_source_receipt_missing = not _has_public_source_hits(results)
     verification = {
         "queries": queries,
         "runs": len(results),
         "providers": provider_counts,
-        "consensus_domains": consensus_domains,
+        "consensus_domains": [] if public_source_receipt_missing else consensus_domains,
         "verification_runs": len(verify_results),
-        "all_consistent": all(r.get("verification", {}).get("consistent") for r in results),
+        "all_consistent": (not public_source_receipt_missing) and all(r.get("verification", {}).get("consistent") for r in results),
+        "public_source_receipt_missing": public_source_receipt_missing,
     }
     if policy_adjustments:
         verification["policy_adjustments"] = policy_adjustments
@@ -339,14 +347,18 @@ def run_search_pipeline(
     verify_failures = [item for item in verify_results if isinstance(item, dict) and not item.get("ok", True)]
     verification["failure_count"] = len(failures)
     verification["verify_failure_count"] = len(verify_failures)
-    if failures or verify_failures:
+    if failures or verify_failures or public_source_receipt_missing:
         _write_public_task_result(
             run_id,
             request,
             results,
             store=store,
             status_override="FAILED",
-            failure_reason_zh=_summarize_news_digest_failure(failures, verify_failures),
+            failure_reason_zh=(
+                _summarize_news_digest_failure(failures, verify_failures)
+                if (failures or verify_failures)
+                else _summarize_public_source_receipt_failure(results)
+            ),
         )
         return {
             "ok": False,
@@ -354,6 +366,7 @@ def run_search_pipeline(
             "verification_runs": len(verify_results),
             "failures": failures,
             "verify_failures": verify_failures,
+            "public_source_receipt_missing": public_source_receipt_missing,
         }
     _write_public_task_result(run_id, request, results, store=store)
     return {"ok": True, "runs": len(results), "verification_runs": len(verify_results)}
