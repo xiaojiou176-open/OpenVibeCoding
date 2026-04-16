@@ -16,6 +16,34 @@ If a page-specific override exists under `design-system/pages/`, that override
 may tighten or specialize the rules below, but it may not contradict the core
 product identity.
 
+## Donor Source Trace
+
+This design system is repo-owned, but it is not donor-free.
+
+OpenVibeCoding's current design absorption stack is:
+
+- **Primary donor**: `Linear`
+- **Secondary donors**: `IBM`, `Vercel`
+- **Reference mirror root**: `${HOME}/.codex/design/awesome-design-md`
+
+Repo-local source-trace anchors:
+
+- `Linear`: `${HOME}/.codex/design/awesome-design-md/design-md/linear.app/DESIGN.md`
+- `IBM`: `${HOME}/.codex/design/awesome-design-md/design-md/ibm/DESIGN.md`
+- `Vercel`: `${HOME}/.codex/design/awesome-design-md/design-md/vercel/DESIGN.md`
+
+Absorption intent:
+
+- `Linear` owns interaction rhythm, first-screen compression, and the sense
+  that every surface is part of one product loop rather than a loose route wall.
+- `IBM` sharpens information architecture, enterprise-grade readability, and
+  the calm structure behind dense product surfaces.
+- `Vercel` informs motion restraint, front-door confidence, and the polish of
+  premium developer-facing public entrypoints.
+
+These donors inform layout and language discipline. They do **not** authorize
+copying product claims, brand identity, or page structure verbatim.
+
 ## Atmosphere
 
 OpenVibeCoding should feel like an architecture studio crossed with a mission

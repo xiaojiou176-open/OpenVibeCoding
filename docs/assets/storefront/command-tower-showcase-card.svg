@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
-  <title id="title">OpenVibeCoding showcase card</title>
-  <desc id="desc">A storefront card showing PM request, Command Tower, Workflow Case, and Proof and Replay in one public-facing visual.</desc>
+  <title id="title">OpenVibeCoding command tower briefing card</title>
+  <desc id="desc">A storefront briefing card showing PM request, Command Tower, Workflow Case, and Proof and Replay in one public-facing visual.</desc>
   <defs>
     <linearGradient id="bg" x1="120" y1="60" x2="1160" y2="660" gradientUnits="userSpaceOnUse">
       <stop offset="0%" stop-color="#fbf6ed"/>
@@ -24,7 +24,7 @@
   <circle cx="1110" cy="120" r="116" fill="#d07c51" opacity="0.18"/>
   <circle cx="190" cy="610" r="138" fill="#27485d" opacity="0.10"/>
 
-  <text x="88" y="94" fill="#27485d" font-family="'Trebuchet MS', Verdana, sans-serif" font-size="20" font-weight="700" letter-spacing="0.08em">CORTEXPILOT PUBLIC SHOWCASE</text>
+  <text x="88" y="94" fill="#27485d" font-family="'Trebuchet MS', Verdana, sans-serif" font-size="20" font-weight="700" letter-spacing="0.08em">OPENVIBECODING COMMAND TOWER</text>
   <text x="88" y="168" fill="#16232d" font-family="Georgia, 'Times New Roman', serif" font-size="66" font-weight="700">One request.</text>
   <text x="88" y="242" fill="#16232d" font-family="Georgia, 'Times New Roman', serif" font-size="66" font-weight="700">One command tower.</text>
   <text x="88" y="316" fill="#16232d" font-family="Georgia, 'Times New Roman', serif" font-size="66" font-weight="700">One proof pack you can inspect.</text>

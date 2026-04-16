@@ -158,6 +158,8 @@ describe("dashboard home run-summary clarity", () => {
     expect(enPageBrief?.proof).toBe("Proof state: tracked browser-backed public proof bundle");
     expect(zhPageBrief?.badge).toBe("已追踪浏览器证明包");
     expect(zhPageBrief?.proof).toBe("Proof 状态：已追踪的浏览器公开证明包");
+    expect(en.liveCaseGalleryDescription).toContain("proof-ready reference cases");
+    expect(zh.liveCaseGalleryDescription).toContain("可验的参考案例");
     expect(en.aiSurfacesActionHref).toBe("/ai-surfaces/");
     expect(en.publicTemplatesActionHref).toBe("/use-cases/");
     expect(zh.liveCaseGalleryActionHref).toBe("/workflows");

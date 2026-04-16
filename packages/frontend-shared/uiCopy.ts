@@ -1281,7 +1281,7 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
         ],
         liveCaseGalleryTitle: "Live Workflow Case gallery",
         liveCaseGalleryDescription:
-          "Use real Workflow Cases as lightweight showcase assets. This baseline links to live case detail and share-ready recap instead of inventing demo-only gallery data.",
+          "Use real Workflow Cases as proof-ready reference cases. This baseline links to live case detail and a share-ready recap instead of inventing demo-only gallery data.",
         liveCaseGalleryActionLabel: "Open Workflow Cases",
         liveCaseGalleryActionHref: "/workflows",
         firstTaskGuideTitle: "First-task guide (expandable)",
@@ -2576,7 +2576,7 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
         ],
         liveCaseGalleryTitle: "真实 Workflow Case 画廊",
         liveCaseGalleryDescription:
-          "把真实 Workflow Cases 作为轻量 showcase asset 来使用。这里会直接链接 live case detail 和可分享 recap，而不是伪造 demo-only 画廊数据。",
+          "把真实 Workflow Cases 当作可验的参考案例来使用。这里会直接链接 live case detail 和可分享 recap，而不是伪造 demo-only 画廊数据。",
         liveCaseGalleryActionLabel: "打开 Workflow Cases",
         liveCaseGalleryActionHref: "/workflows",
         firstTaskGuideTitle: "首个任务指南（可展开）",

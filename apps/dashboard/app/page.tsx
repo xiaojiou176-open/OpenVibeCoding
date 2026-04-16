@@ -253,7 +253,7 @@ export default async function Home() {
               </Card>
             ) : latestWorkflows.length === 0 ? (
               <Card variant="compact">
-                <p className="ct-home-empty-text">No Workflow Case is available for gallery mode yet. Start from PM, then return here to reuse the share-ready case path as a showcase asset.</p>
+                <p className="ct-home-empty-text">No Workflow Case is available for gallery mode yet. Start from PM, then return here to reuse the first share-ready case as a proof-ready reference.</p>
               </Card>
             ) : (
               <div className="quick-grid">

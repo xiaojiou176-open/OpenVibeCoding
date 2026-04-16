@@ -9,6 +9,22 @@ operations cockpit at the same time. The design should communicate that humans
 do not babysit every model step; instead, they operate one control layer that
 plans, delegates, tracks, resumes, and proves work.
 
+## Donor Source Trace
+
+- Primary donor: `Linear`
+- Secondary donors: `IBM`, `Vercel`
+- Local mirror root: `${HOME}/.codex/design/awesome-design-md`
+- Source anchors:
+  - `${HOME}/.codex/design/awesome-design-md/design-md/linear.app/DESIGN.md`
+  - `${HOME}/.codex/design/awesome-design-md/design-md/ibm/DESIGN.md`
+  - `${HOME}/.codex/design/awesome-design-md/design-md/vercel/DESIGN.md`
+
+Use that stack to keep the product feeling like a premium command deck:
+
+- `Linear` for interaction compression and deliberate hierarchy
+- `IBM` for structured information density and calm system-grade clarity
+- `Vercel` for tasteful developer-product polish and restrained motion
+
 ## Visual Atmosphere
 
 - Dark, premium, command-center baseline
@@ -67,6 +83,8 @@ Avoid Inter, generic serif fonts, and oversized startup-style hero typography.
 - Lead with the command-tower sentence and the pain hook.
 - Show the operator loop before adoption/router content.
 - Include a philosophy band for Prompt / Context / Harness Engineering.
+- Keep the public gallery phrasing closer to `proof-ready reference cases` than
+  to internal showcase jargon.
 
 ### planner
 - Make one priority wave obvious above the fold.
