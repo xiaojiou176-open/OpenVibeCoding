@@ -20,7 +20,7 @@ opentelemetry-exporter-otlp-proto-grpc==1.40.0
 opentelemetry-exporter-otlp-proto-http==1.40.0
 playwright==1.58.0
 # Primary LLM provider (Gemini-first).
-google-genai==1.68.0
+google-genai==1.71.0
 # Optional provider accelerator (enabled via OPENVIBECODING_PROVIDER_USE_LITELLM=1).
 # Keep this path optional at runtime; do not block baseline bootstrap/clean-room
 # recovery on a provider accelerator that is activated only behind an env flag.
