@@ -16,7 +16,7 @@ overrides:
   picomatch@2: 2.3.2
   picomatch@4: 4.0.4
   rollup: 4.59.0
-  vite: 8.0.5
+  vite: 8.0.7
 
 importers:
 
@@ -33,7 +33,7 @@ importers:
         version: file:../../packages/frontend-shared
       '@radix-ui/react-slot':
         specifier: 1.2.4
-        version: 1.2.4(@types/react@19.2.14)(react@19.2.4)
+        version: 1.2.4(@types/react@19.2.14)(react@19.2.5)
       axe-core:
         specifier: 4.11.1
         version: 4.11.1
@@ -51,19 +51,19 @@ importers:
         version: 2.2.0
       next:
         specifier: 16.2.3
-        version: 16.2.3(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+        version: 16.2.3(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       playwright:
         specifier: 1.59.1
         version: 1.59.1
       react:
-        specifier: 19.2.4
-        version: 19.2.4
+        specifier: 19.2.5
+        version: 19.2.5
       react-dom:
-        specifier: 19.2.4
-        version: 19.2.4(react@19.2.4)
+        specifier: 19.2.5
+        version: 19.2.5(react@19.2.5)
       styled-jsx:
         specifier: 5.1.7
-        version: 5.1.7(@babel/core@7.29.0)(react@19.2.4)
+        version: 5.1.7(@babel/core@7.29.0)(react@19.2.5)
     devDependencies:
       '@axe-core/cli':
         specifier: 4.10.2
@@ -73,7 +73,7 @@ importers:
         version: 6.9.1
       '@testing-library/react':
         specifier: 16.3.2
-        version: 16.3.2(@testing-library/dom@10.4.1)(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+        version: 16.3.2(@testing-library/dom@10.4.1)(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
       '@types/node':
         specifier: 25.5.2
         version: 25.5.2
@@ -82,7 +82,7 @@ importers:
         version: 19.2.14
       '@vitejs/plugin-react':
         specifier: 5.2.0
-        version: 5.2.0(vite@8.0.5(@emnapi/core@1.9.2)(@emnapi/runtime@1.8.1)(@types/node@25.5.2)(esbuild@0.27.2))
+        version: 5.2.0(vite@8.0.7(@emnapi/core@1.9.2)(@emnapi/runtime@1.8.1)(@types/node@25.5.2)(esbuild@0.27.2))
       '@vitest/coverage-v8':
         specifier: 4.1.3
         version: 4.1.3(vitest@4.1.3)
@@ -97,7 +97,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: 4.1.3
-        version: 4.1.3(@opentelemetry/api@1.9.0)(@types/node@25.5.2)(@vitest/coverage-v8@4.1.3)(jsdom@29.0.2)(vite@8.0.5(@emnapi/core@1.9.2)(@emnapi/runtime@1.8.1)(@types/node@25.5.2)(esbuild@0.27.2))
+        version: 4.1.3(@opentelemetry/api@1.9.0)(@types/node@25.5.2)(@vitest/coverage-v8@4.1.3)(jsdom@29.0.2)(vite@8.0.7(@emnapi/core@1.9.2)(@emnapi/runtime@1.8.1)(@types/node@25.5.2)(esbuild@0.27.2))
 
   ../..: {}
 
@@ -1125,7 +1125,7 @@ packages:
     resolution: {integrity: sha512-YmKkfhOAi3wsB1PhJq5Scj3GXMn3WvtQ/JC0xoopuHoXSdmtdStOpFrYaT1kie2YgFBcIe64ROzMYRjCrYOdYw==}
     engines: {node: ^20.19.0 || >=22.12.0}
     peerDependencies:
-      vite: 8.0.5
+      vite: 8.0.7
 
   '@vitest/coverage-v8@4.1.3':
     resolution: {integrity: sha512-/MBdrkA8t6hbdCWFKs09dPik774xvs4Z6L4bycdCxYNLHM8oZuRyosumQMG19LUlBsB6GeVpL1q4kFFazvyKGA==}
@@ -1143,7 +1143,7 @@ packages:
     resolution: {integrity: sha512-XN3TrycitDQSzGRnec/YWgoofkYRhouyVQj4YNsJ5r/STCUFqMrP4+oxEv3e7ZbLi4og5kIHrZwekDJgw6hcjw==}
     peerDependencies:
       msw: ^2.4.9
-      vite: 8.0.5
+      vite: 8.0.7
     peerDependenciesMeta:
       msw:
         optional: true
@@ -2096,10 +2096,10 @@ packages:
     resolution: {integrity: sha512-MWL3XbUCfVgGR0gRsidzT6oKJT2QydPLhMITU6HoVWiiv4gkb6gJi3pcdAa8q4HwjBTbqISOWVP4aJiiyUJvag==}
     engines: {node: '>=18'}
 
-  react-dom@19.2.4:
-    resolution: {integrity: sha512-AXJdLo8kgMbimY95O2aKQqsz2iWi9jMgKJhRBAxECE4IFxfcazB2LmzloIoibJI3C12IlY20+KFaLv+71bUJeQ==}
+  react-dom@19.2.5:
+    resolution: {integrity: sha512-J5bAZz+DXMMwW/wV3xzKke59Af6CHY7G4uYLN1OvBcKEsWOs4pQExj86BBKamxl/Ik5bx9whOrvBlSDfWzgSag==}
     peerDependencies:
-      react: ^19.2.4
+      react: ^19.2.5
 
   react-is@17.0.2:
     resolution: {integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==}
@@ -2108,8 +2108,8 @@ packages:
     resolution: {integrity: sha512-QgT5//D3jfjJb6Gsjxv0Slpj23ip+HtOpnNgnb2S5zU3CB26G/IDPGoy4RJB42wzFE46DRsstbW6tKHoKbhAxw==}
     engines: {node: '>=0.10.0'}
 
-  react@19.2.4:
-    resolution: {integrity: sha512-9nfp2hYpCwOjAN+8TZFGhtWEwgvWHXqESH8qT89AT/lWklpLON22Lc8pEtnpsZz7VmawabSU0gCjnj8aC0euHQ==}
+  react@19.2.5:
+    resolution: {integrity: sha512-llUJLzz1zTUBrskt2pwZgLq59AemifIftw4aB7JxOqf1HY2FDaGDxgwpAPVzHU1kdWabH7FauP4i1oEeer2WCA==}
     engines: {node: '>=0.10.0'}
 
   readable-stream@2.3.8:
@@ -2358,8 +2358,8 @@ packages:
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
-  vite@8.0.5:
-    resolution: {integrity: sha512-nmu43Qvq9UopTRfMx2jOYW5l16pb3iDC1JH6yMuPkpVbzK0k+L7dfsEDH4jRgYFmsg0sTAqkojoZgzLMlwHsCQ==}
+  vite@8.0.7:
+    resolution: {integrity: sha512-P1PbweD+2/udplnThz3btF4cf6AgPky7kk23RtHUkJIU5BIxwPprhRGmOAHs6FTI7UiGbTNrgNP6jSYD6JaRnw==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
     peerDependencies:
@@ -2417,7 +2417,7 @@ packages:
       '@vitest/ui': 4.1.3
       happy-dom: '*'
       jsdom: '*'
-      vite: 8.0.5
+      vite: 8.0.7
     peerDependenciesMeta:
       '@edge-runtime/vm':
         optional: true
@@ -3279,16 +3279,16 @@ snapshots:
       - react-native-b4a
       - supports-color
 
-  '@radix-ui/react-compose-refs@1.1.2(@types/react@19.2.14)(react@19.2.4)':
+  '@radix-ui/react-compose-refs@1.1.2(@types/react@19.2.14)(react@19.2.5)':
     dependencies:
-      react: 19.2.4
+      react: 19.2.5
     optionalDependencies:
       '@types/react': 19.2.14
 
-  '@radix-ui/react-slot@1.2.4(@types/react@19.2.14)(react@19.2.4)':
+  '@radix-ui/react-slot@1.2.4(@types/react@19.2.14)(react@19.2.5)':
     dependencies:
-      '@radix-ui/react-compose-refs': 1.1.2(@types/react@19.2.14)(react@19.2.4)
-      react: 19.2.4
+      '@radix-ui/react-compose-refs': 1.1.2(@types/react@19.2.14)(react@19.2.5)
+      react: 19.2.5
     optionalDependencies:
       '@types/react': 19.2.14
 
@@ -3438,12 +3438,12 @@ snapshots:
       picocolors: 1.1.1
       redent: 3.0.0
 
-  '@testing-library/react@16.3.2(@testing-library/dom@10.4.1)(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)':
+  '@testing-library/react@16.3.2(@testing-library/dom@10.4.1)(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)':
     dependencies:
       '@babel/runtime': 7.28.6
       '@testing-library/dom': 10.4.1
-      react: 19.2.4
-      react-dom: 19.2.4(react@19.2.4)
+      react: 19.2.5
+      react-dom: 19.2.5(react@19.2.5)
     optionalDependencies:
       '@types/react': 19.2.14
 
@@ -3526,7 +3526,7 @@ snapshots:
       '@types/node': 25.5.2
     optional: true
 
-  '@vitejs/plugin-react@5.2.0(vite@8.0.5(@emnapi/core@1.9.2)(@emnapi/runtime@1.8.1)(@types/node@25.5.2)(esbuild@0.27.2))':
+  '@vitejs/plugin-react@5.2.0(vite@8.0.7(@emnapi/core@1.9.2)(@emnapi/runtime@1.8.1)(@types/node@25.5.2)(esbuild@0.27.2))':
     dependencies:
       '@babel/core': 7.29.0
       '@babel/plugin-transform-react-jsx-self': 7.27.1(@babel/core@7.29.0)
@@ -3534,7 +3534,7 @@ snapshots:
       '@rolldown/pluginutils': 1.0.0-rc.3
       '@types/babel__core': 7.20.5
       react-refresh: 0.18.0
-      vite: 8.0.5(@emnapi/core@1.9.2)(@emnapi/runtime@1.8.1)(@types/node@25.5.2)(esbuild@0.27.2)
+      vite: 8.0.7(@emnapi/core@1.9.2)(@emnapi/runtime@1.8.1)(@types/node@25.5.2)(esbuild@0.27.2)
     transitivePeerDependencies:
       - supports-color
 
@@ -3550,7 +3550,7 @@ snapshots:
       obug: 2.1.1
       std-env: 4.0.0
       tinyrainbow: 3.1.0
-      vitest: 4.1.3(@opentelemetry/api@1.9.0)(@types/node@25.5.2)(@vitest/coverage-v8@4.1.3)(jsdom@29.0.2)(vite@8.0.5(@emnapi/core@1.9.2)(@emnapi/runtime@1.8.1)(@types/node@25.5.2)(esbuild@0.27.2))
+      vitest: 4.1.3(@opentelemetry/api@1.9.0)(@types/node@25.5.2)(@vitest/coverage-v8@4.1.3)(jsdom@29.0.2)(vite@8.0.7(@emnapi/core@1.9.2)(@emnapi/runtime@1.8.1)(@types/node@25.5.2)(esbuild@0.27.2))
 
   '@vitest/expect@4.1.3':
     dependencies:
@@ -3561,13 +3561,13 @@ snapshots:
       chai: 6.2.2
       tinyrainbow: 3.1.0
 
-  '@vitest/mocker@4.1.3(vite@8.0.5(@emnapi/core@1.9.2)(@emnapi/runtime@1.8.1)(@types/node@25.5.2)(esbuild@0.27.2))':
+  '@vitest/mocker@4.1.3(vite@8.0.7(@emnapi/core@1.9.2)(@emnapi/runtime@1.8.1)(@types/node@25.5.2)(esbuild@0.27.2))':
     dependencies:
       '@vitest/spy': 4.1.3
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
-      vite: 8.0.5(@emnapi/core@1.9.2)(@emnapi/runtime@1.8.1)(@types/node@25.5.2)(esbuild@0.27.2)
+      vite: 8.0.7(@emnapi/core@1.9.2)(@emnapi/runtime@1.8.1)(@types/node@25.5.2)(esbuild@0.27.2)
 
   '@vitest/pretty-format@4.1.3':
     dependencies:
@@ -4349,16 +4349,16 @@ snapshots:
 
   netmask@2.1.1: {}
 
-  next@16.2.3(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
+  next@16.2.3(@babel/core@7.29.0)(@opentelemetry/api@1.9.0)(react-dom@19.2.5(react@19.2.5))(react@19.2.5):
     dependencies:
       '@next/env': 16.2.3
       '@swc/helpers': 0.5.15
       baseline-browser-mapping: 2.9.19
       caniuse-lite: 1.0.30001767
       postcss: 8.4.31
-      react: 19.2.4
-      react-dom: 19.2.4(react@19.2.4)
-      styled-jsx: 5.1.6(@babel/core@7.29.0)(react@19.2.4)
+      react: 19.2.5
+      react-dom: 19.2.5(react@19.2.5)
+      styled-jsx: 5.1.6(@babel/core@7.29.0)(react@19.2.5)
     optionalDependencies:
       '@next/swc-darwin-arm64': 16.2.3
       '@next/swc-darwin-x64': 16.2.3
@@ -4519,16 +4519,16 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  react-dom@19.2.4(react@19.2.4):
+  react-dom@19.2.5(react@19.2.5):
     dependencies:
-      react: 19.2.4
+      react: 19.2.5
       scheduler: 0.27.0
 
   react-is@17.0.2: {}
 
   react-refresh@0.18.0: {}
 
-  react@19.2.4: {}
+  react@19.2.5: {}
 
   readable-stream@2.3.8:
     dependencies:
@@ -4711,17 +4711,17 @@ snapshots:
 
   stubborn-utils@1.0.2: {}
 
-  styled-jsx@5.1.6(@babel/core@7.29.0)(react@19.2.4):
+  styled-jsx@5.1.6(@babel/core@7.29.0)(react@19.2.5):
     dependencies:
       client-only: 0.0.1
-      react: 19.2.4
+      react: 19.2.5
     optionalDependencies:
       '@babel/core': 7.29.0
 
-  styled-jsx@5.1.7(@babel/core@7.29.0)(react@19.2.4):
+  styled-jsx@5.1.7(@babel/core@7.29.0)(react@19.2.5):
     dependencies:
       client-only: 0.0.1
-      react: 19.2.4
+      react: 19.2.5
     optionalDependencies:
       '@babel/core': 7.29.0
 
@@ -4822,7 +4822,7 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  vite@8.0.5(@emnapi/core@1.9.2)(@emnapi/runtime@1.8.1)(@types/node@25.5.2)(esbuild@0.27.2):
+  vite@8.0.7(@emnapi/core@1.9.2)(@emnapi/runtime@1.8.1)(@types/node@25.5.2)(esbuild@0.27.2):
     dependencies:
       lightningcss: 1.32.0
       picomatch: 4.0.4
@@ -4837,10 +4837,10 @@ snapshots:
       - '@emnapi/core'
       - '@emnapi/runtime'
 
-  vitest@4.1.3(@opentelemetry/api@1.9.0)(@types/node@25.5.2)(@vitest/coverage-v8@4.1.3)(jsdom@29.0.2)(vite@8.0.5(@emnapi/core@1.9.2)(@emnapi/runtime@1.8.1)(@types/node@25.5.2)(esbuild@0.27.2)):
+  vitest@4.1.3(@opentelemetry/api@1.9.0)(@types/node@25.5.2)(@vitest/coverage-v8@4.1.3)(jsdom@29.0.2)(vite@8.0.7(@emnapi/core@1.9.2)(@emnapi/runtime@1.8.1)(@types/node@25.5.2)(esbuild@0.27.2)):
     dependencies:
       '@vitest/expect': 4.1.3
-      '@vitest/mocker': 4.1.3(vite@8.0.5(@emnapi/core@1.9.2)(@emnapi/runtime@1.8.1)(@types/node@25.5.2)(esbuild@0.27.2))
+      '@vitest/mocker': 4.1.3(vite@8.0.7(@emnapi/core@1.9.2)(@emnapi/runtime@1.8.1)(@types/node@25.5.2)(esbuild@0.27.2))
       '@vitest/pretty-format': 4.1.3
       '@vitest/runner': 4.1.3
       '@vitest/snapshot': 4.1.3
@@ -4857,7 +4857,7 @@ snapshots:
       tinyexec: 1.0.2
       tinyglobby: 0.2.15
       tinyrainbow: 3.1.0
-      vite: 8.0.5(@emnapi/core@1.9.2)(@emnapi/runtime@1.8.1)(@types/node@25.5.2)(esbuild@0.27.2)
+      vite: 8.0.7(@emnapi/core@1.9.2)(@emnapi/runtime@1.8.1)(@types/node@25.5.2)(esbuild@0.27.2)
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@opentelemetry/api': 1.9.0
