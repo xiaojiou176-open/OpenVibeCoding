@@ -28,7 +28,7 @@ google-genai==1.71.0
 # `apps/orchestrator/src/openvibecoding_orch/**`; removing this now breaks runtime.
 # Minimal fallback for now is to keep this dependency until agents runtime is migrated.
 openai-agents==0.13.5
-temporalio==1.22.0
+temporalio==1.25.0
 duckduckgo-search==8.1.1
 
 # Dev/test toolchain (intentionally locked in the same graph for CI/local parity).
