@@ -772,8 +772,11 @@ describe("RunDetailPage p0 controls", () => {
     render(<RunDetailPage runId="run-sse-terminal" onBack={vi.fn()} />);
     expect(await screen.findByRole("heading", { name: "run-001" })).toBeInTheDocument();
 
+    await waitFor(() => {
+      expect(openEventsStream).toHaveBeenCalledWith("run-sse-terminal", { tail: true });
+      expect(streamState.stream).not.toBeNull();
+    });
     const stream = streamState.stream;
-    expect(stream).not.toBeNull();
     expect(stream?.close).toEqual(expect.any(Function));
     act(() => {
       stream?.onmessage?.(
