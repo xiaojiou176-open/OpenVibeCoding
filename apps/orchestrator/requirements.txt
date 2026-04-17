@@ -27,7 +27,7 @@ google-genai==1.71.0
 # TEMP BLOCKER: current runtime imports `agents.*` modules in
 # `apps/orchestrator/src/openvibecoding_orch/**`; removing this now breaks runtime.
 # Minimal fallback for now is to keep this dependency until agents runtime is migrated.
-openai-agents==0.13.5
+openai-agents==0.13.6
 temporalio==1.22.0
 duckduckgo-search==8.1.1
 
