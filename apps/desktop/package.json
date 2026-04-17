@@ -38,7 +38,7 @@
     "@tauri-apps/plugin-os": "2.3.2",
     "@tauri-apps/plugin-updater": "2.10.1",
     "@xyflow/react": "^12.10.1",
-    "lucide-react": "0.564.0",
+    "lucide-react": "1.8.0",
     "react": "19.2.5",
     "react-dom": "19.2.5",
     "react-markdown": "^10.1.0",
