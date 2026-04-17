@@ -60,6 +60,7 @@ import {
   CommandTowerHomeSection,
   CommandTowerHomeSectionFallback,
   CommandTowerPageIntro,
+  default as CommandTowerPage,
 } from "../app/command-tower/page";
 import { fetchCommandTowerOverview, fetchPmSessions } from "../lib/api";
 
@@ -144,5 +145,20 @@ describe("command tower page render", () => {
     expect(screen.getByRole("status")).toHaveTextContent("正在加载指挥塔实时总览...");
     expect(screen.getByTestId("ct-callout")).toHaveTextContent("指挥塔当前只提供部分真相");
     expect(screen.getByTestId("ct-live-client")).toHaveTextContent("overview:0 sessions:1");
+  });
+
+  it("switches the page intro into recovery mode when live data is unavailable", async () => {
+    mockFetchCommandTowerOverview.mockRejectedValueOnce(new Error("overview down"));
+    mockFetchPmSessions.mockRejectedValueOnce(new Error("sessions down"));
+
+    render(await CommandTowerPage());
+
+    expect(screen.getByText("Recovery mode / live surface unavailable")).toBeInTheDocument();
+    expect(
+      screen.getByText("Command Tower cannot read the live overview right now. Verify the read-only truth first, then take one recovery path."),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Reload Command Tower" })).toHaveAttribute("href", "/command-tower");
+    expect(screen.getByRole("link", { name: "Start from PM" })).toHaveAttribute("href", "/pm");
+    expect(screen.queryByTestId("ct-live-client")).toBeNull();
   });
 });
