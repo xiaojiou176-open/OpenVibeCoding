@@ -108,6 +108,15 @@ describe("command tower page render", () => {
     expect(screen.queryByTestId("ct-callout")).toBeNull();
   });
 
+  it("renders the full page live path when command tower data is available", async () => {
+    render(await CommandTowerPage());
+
+    expect(screen.getByRole("heading", { name: "Command Tower" })).toBeInTheDocument();
+    expect(screen.getByText("L0 cockpit / live control desk")).toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveTextContent("Loading Command Tower live overview...");
+    expect(screen.queryByTestId("ct-callout")).toBeNull();
+  });
+
   it("renders unavailable callout when both overview and session data fail", async () => {
     mockFetchCommandTowerOverview.mockRejectedValueOnce(new Error("overview down"));
     mockFetchPmSessions.mockRejectedValueOnce(new Error("sessions down"));
@@ -159,6 +168,23 @@ describe("command tower page render", () => {
     ).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Reload Command Tower" })).toHaveAttribute("href", "/command-tower");
     expect(screen.getByRole("link", { name: "Start from PM" })).toHaveAttribute("href", "/pm");
+    expect(screen.queryByTestId("ct-live-client")).toBeNull();
+  });
+
+  it("switches the page intro into zh-CN recovery mode when live data is unavailable", async () => {
+    mockCookies.mockResolvedValue({
+      get: (name: string) => (name === "openvibecoding.ui.locale" ? { value: "zh-CN" } : undefined),
+      toString: () => "openvibecoding.ui.locale=zh-CN",
+    });
+    mockFetchCommandTowerOverview.mockRejectedValueOnce(new Error("总览失败"));
+    mockFetchPmSessions.mockRejectedValueOnce(new Error("会话失败"));
+
+    render(await CommandTowerPage());
+
+    expect(screen.getByText("恢复模式 / 当前主面不可用")).toBeInTheDocument();
+    expect(screen.getByText("指挥塔当前拿不到 live 总览。先确认只读真相，再走一条恢复路径。")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "重载指挥塔" })).toHaveAttribute("href", "/command-tower");
+    expect(screen.getByRole("link", { name: "回到 PM 入口" })).toHaveAttribute("href", "/pm");
     expect(screen.queryByTestId("ct-live-client")).toBeNull();
   });
 });
