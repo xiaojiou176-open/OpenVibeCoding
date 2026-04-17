@@ -241,58 +241,6 @@ export default function DashboardHomeStorySections({
           label: homePhase2Copy.proofFirstActionLabel,
           variant: "secondary" as ButtonVariant,
         };
-  const briefingSignals =
-    locale === "zh-CN"
-      ? [
-          {
-            kicker: "值班摘要",
-            title: hasRunHistory ? `${runningCount} 条运行在推进` : "系统还没进入第一条运行",
-            desc: hasRunHistory
-              ? "先从指挥塔读当前状态，再决定要不要切到工作流案例。"
-              : "先把第一条任务送进系统，首页才会进入真正的值班节奏。",
-          },
-          {
-            kicker: "当前堵点",
-            title: failedCount > 0 ? `${failedCount} 条运行需要分诊` : "目前没有主导性的失败面",
-            desc:
-              failedCount > 0
-                ? "高风险或失败运行要先处理，再决定是否继续派更多任务。"
-                : "现在更像是建立第一条主循环，而不是处理事故。",
-          },
-          {
-            kicker: "下一步",
-            title: shellCopy.primaryAction,
-            desc:
-              hasRunHistory
-                ? "先读指挥塔，再派发；不要一上来把首页当成跳转墙。"
-                : "从 PM 入口开始，用第一条任务把整个 command loop 跑起来。",
-          },
-        ]
-      : [
-          {
-            kicker: "Now live",
-            title: hasRunHistory ? `${runningCount} live runs are moving` : "The first run has not started yet",
-            desc: hasRunHistory
-              ? "Read the command tower before you branch into Workflow Cases or proof."
-              : "Start one task first. The cockpit only becomes real once a run exists.",
-          },
-          {
-            kicker: "Current risk",
-            title: failedCount > 0 ? `${failedCount} runs need triage` : "No blocker is dominating the board",
-            desc:
-              failedCount > 0
-                ? "Handle the failing lane before you queue more work."
-                : "The current job is to establish the first durable loop, not to chase noise.",
-          },
-          {
-            kicker: "Next move",
-            title: shellCopy.primaryAction,
-            desc:
-              hasRunHistory
-                ? "Scan the tower first, then decide whether to dispatch or investigate."
-                : "Start from PM intake and let the first task teach the rest of the system.",
-          },
-        ];
   const heroMeters =
     locale === "zh-CN"
       ? [
@@ -398,32 +346,6 @@ export default function DashboardHomeStorySections({
             </Link>
           ))}
         </div>
-      </section>
-
-      <section className="app-section" aria-label={locale === "zh-CN" ? "首屏判断卡" : "First-screen operator judgment"}>
-        <Card className="home-briefing-panel">
-          <div className="home-briefing-panel-head">
-            <span className="cell-sub mono muted">
-              {locale === "zh-CN" ? "首屏先回答的三件事" : "Three answers before you scroll"}
-            </span>
-            <Badge variant={failedCount > 0 ? "warning" : hasRunHistory ? "running" : "default"}>
-              {failedCount > 0
-                ? locale === "zh-CN" ? "先看风险" : "Risk first"
-                : hasRunHistory
-                  ? locale === "zh-CN" ? "进入值班态" : "Operator mode"
-                  : locale === "zh-CN" ? "先建主循环" : "Start the loop"}
-            </Badge>
-          </div>
-          <div className="home-briefing-signal-list">
-            {briefingSignals.map((item) => (
-              <div key={item.kicker} className="home-briefing-signal">
-                <span className="cell-sub mono muted">{item.kicker}</span>
-                <strong>{item.title}</strong>
-                <p>{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </Card>
       </section>
 
       <section className="app-section" aria-labelledby="dashboard-operator-loop-title">

@@ -73,9 +73,11 @@ export async function CommandTowerHomeSection({ locale }: { locale: UiLocale }) 
 
   return (
     <>
-      <section aria-label="Command Tower live overview" aria-describedby="command-tower-page-subtitle">
-        <CommandTowerHomeLiveClient initialOverview={overview} initialSessions={sessions} locale={locale} />
-      </section>
+      {warning && !hasLiveData ? null : (
+        <section aria-label="Command Tower live overview" aria-describedby="command-tower-page-subtitle">
+          <CommandTowerHomeLiveClient initialOverview={overview} initialSessions={sessions} locale={locale} />
+        </section>
+      )}
       {warning && !hasLiveData ? (
         <ControlPlaneStatusCallout
           title={commandTowerCopy.unavailableTitle}
