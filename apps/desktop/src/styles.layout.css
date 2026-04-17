@@ -594,7 +594,7 @@
 }
 
 .run-link {
-  color: var(--color-primary);
+  color: var(--color-success-ink);
   font-weight: 600;
   font-family: var(--font-mono);
   font-size: var(--text-sm);

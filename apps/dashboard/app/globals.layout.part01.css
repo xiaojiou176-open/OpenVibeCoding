@@ -647,7 +647,7 @@
 }
 
 .run-link {
-  color: var(--color-primary);
+  color: var(--color-success-ink);
   font-weight: 600;
   font-family: "SF Mono", "JetBrains Mono", ui-monospace, monospace;
   font-size: var(--text-sm);
