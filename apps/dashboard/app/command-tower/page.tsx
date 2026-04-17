@@ -111,19 +111,6 @@ export async function CommandTowerHomeSection({ locale }: { locale: UiLocale }) 
           ]}
         />
       ) : null}
-      {warning && hasLiveData ? (
-        <ControlPlaneStatusCallout
-          title={commandTowerCopy.partialTitle}
-          summary={warning}
-          nextAction={commandTowerCopy.partialNextAction}
-          tone="warning"
-          badgeLabel={commandTowerCopy.partialBadge}
-          actions={[
-            { href: "/runs", label: commandTowerCopy.actions.openRuns },
-            { href: "/workflows", label: commandTowerCopy.actions.openWorkflowCases },
-          ]}
-        />
-      ) : null}
     </>
   );
 }
@@ -139,13 +126,16 @@ export function CommandTowerHomeSectionFallback({ locale }: { locale: UiLocale }
 
 export function CommandTowerPageIntro({
   locale,
-  recoverySummary,
+  mode = "live",
+  summary,
 }: {
   locale: UiLocale;
-  recoverySummary?: string;
+  mode?: "live" | "partial" | "recovery";
+  summary?: string;
 }) {
   const commandTowerCopy = getUiCopy(locale).dashboard.commandTowerPage;
-  const recoveryMode = Boolean(recoverySummary);
+  const recoveryMode = mode === "recovery";
+  const partialMode = mode === "partial";
   const towerActions = recoveryMode
     ? locale === "zh-CN"
       ? [
@@ -156,6 +146,16 @@ export function CommandTowerPageIntro({
           { href: "/command-tower", label: "Reload Command Tower", variant: "default" as const },
           { href: "/pm", label: "Start from PM", variant: "secondary" as const },
         ]
+    : partialMode
+      ? locale === "zh-CN"
+        ? [
+            { href: "/command-tower", label: "重载指挥塔", variant: "default" as const },
+            { href: "/runs", label: commandTowerCopy.actions.viewRuns, variant: "secondary" as const },
+          ]
+        : [
+            { href: "/command-tower", label: "Reload Command Tower", variant: "default" as const },
+            { href: "/runs", label: commandTowerCopy.actions.viewRuns, variant: "secondary" as const },
+          ]
     : locale === "zh-CN"
       ? [
           { href: "/events", label: "打开风险事件", variant: "warning" as const },
@@ -176,6 +176,10 @@ export function CommandTowerPageIntro({
               ? locale === "zh-CN"
                 ? "恢复模式 / 当前主面不可用"
                 : "Recovery mode / live surface unavailable"
+              : partialMode
+                ? locale === "zh-CN"
+                  ? "部分真相 / live 面当前降级"
+                  : "Partial truth / live surface degraded"
               : locale === "zh-CN"
                 ? "L0 驾驶舱 / 实时控制桌"
                 : "L0 cockpit / live control desk"}
@@ -188,11 +192,15 @@ export function CommandTowerPageIntro({
               ? locale === "zh-CN"
                 ? "指挥塔当前拿不到 live 总览。先确认只读真相，再走一条恢复路径。"
                 : "Command Tower cannot read the live overview right now. Verify the read-only truth first, then take one recovery path."
+              : partialMode
+                ? commandTowerCopy.partialNextAction
               : commandTowerCopy.srSubtitle}
           </p>
           <p className="cell-sub mono muted">
             {recoveryMode
-              ? recoverySummary
+              ? summary
+              : partialMode
+                ? summary
               : locale === "zh-CN"
                 ? "这一页应该先告诉你：现在发生什么、哪条线危险、下一步该去哪个真相入口。"
                 : "This page should answer three questions first: what is happening now, which lane is risky, and which truth surface to open next."}
@@ -212,15 +220,23 @@ export function CommandTowerPageIntro({
                 ? locale === "zh-CN"
                   ? "恢复判断"
                   : "Recovery judgment"
+                : partialMode
+                  ? locale === "zh-CN"
+                    ? "部分真相判断"
+                    : "Partial-truth judgment"
                 : locale === "zh-CN"
                   ? "值班判断"
                   : "Operator judgment"}
             </span>
-            <Badge variant={recoveryMode ? "warning" : "running"}>
+            <Badge variant={recoveryMode || partialMode ? "warning" : "running"}>
               {recoveryMode
                 ? locale === "zh-CN"
                   ? "先恢复主面"
                   : "Restore the surface first"
+                : partialMode
+                  ? locale === "zh-CN"
+                    ? commandTowerCopy.partialBadge
+                    : commandTowerCopy.partialBadge
                 : locale === "zh-CN"
                   ? "先看 live"
                   : "Live first"}
@@ -243,6 +259,24 @@ export function CommandTowerPageIntro({
                   <span className="cell-sub mono muted">{locale === "zh-CN" ? "恢复动作" : "Recovery move"}</span>
                   <strong>{locale === "zh-CN" ? "先重载，再决定是否回 PM" : "Reload first, then decide whether to return to PM"}</strong>
                   <p>{locale === "zh-CN" ? "把恢复动作收成一条主路径，而不是继续分散到多个正常驾驶舱动作。 " : "Keep recovery on one main path instead of splitting attention across normal cockpit actions."}</p>
+                </div>
+              </>
+            ) : partialMode ? (
+              <>
+                <div className="home-briefing-signal">
+                  <span className="cell-sub mono muted">{locale === "zh-CN" ? "当前状态" : "Current state"}</span>
+                  <strong>{commandTowerCopy.partialTitle}</strong>
+                  <p>{locale === "zh-CN" ? "你现在看到的是部分可读的值班面，不是完整 live cockpit。首屏要先承认降级，再继续分诊。" : "You are looking at a partially readable operator surface, not a full live cockpit. The first screen should acknowledge degradation before continuing triage."}</p>
+                </div>
+                <div className="home-briefing-signal">
+                  <span className="cell-sub mono muted">{locale === "zh-CN" ? "仍然成立的真相" : "What still holds"}</span>
+                  <strong>{locale === "zh-CN" ? "可见 board 只算部分快照" : "The visible board only counts as a partial snapshot"}</strong>
+                  <p>{commandTowerCopy.partialNextAction}</p>
+                </div>
+                <div className="home-briefing-signal">
+                  <span className="cell-sub mono muted">{locale === "zh-CN" ? "下一步" : "What to do next"}</span>
+                  <strong>{locale === "zh-CN" ? "先重载，再核对运行记录" : "Reload first, then verify runs"}</strong>
+                  <p>{locale === "zh-CN" ? "把动作收成一条恢复路径和一条只读核对路径，不要继续按正常 live cockpit 分散注意力。" : "Keep the first screen to one recovery path and one read-only verification path instead of scattering attention across normal live-cockpit actions."}</p>
                 </div>
               </>
             ) : (
@@ -275,12 +309,12 @@ export default async function CommandTowerPage() {
   const cookieStore = await cookies();
   const locale = normalizeUiLocale(cookieStore.get(UI_LOCALE_STORAGE_KEY)?.value);
   const { warning, hasLiveData } = await loadCommandTowerHomeState(locale);
-  const recoverySummary =
-    warning && !hasLiveData ? warning : undefined;
+  const introMode = warning ? (hasLiveData ? "partial" : "recovery") : "live";
+  const introSummary = warning || undefined;
   return (
     <main className="grid" aria-labelledby="command-tower-page-title" aria-describedby="command-tower-page-subtitle">
-      <CommandTowerPageIntro locale={locale} recoverySummary={recoverySummary} />
-      {recoverySummary ? null : (
+      <CommandTowerPageIntro locale={locale} mode={introMode} summary={introSummary} />
+      {introMode === "recovery" ? null : (
         <Suspense fallback={<CommandTowerHomeSectionFallback locale={locale} />}>
           <CommandTowerHomeSection locale={locale} />
         </Suspense>

@@ -150,10 +150,64 @@ describe("command tower page render", () => {
 
     expect(screen.getByRole("heading", { name: "指挥塔" })).toBeInTheDocument();
     expect(screen.getByText("L0 驾驶舱 / 实时控制桌")).toBeInTheDocument();
-    expect(screen.getByText("这一页应该先告诉你：现在发生什么、哪条线危险、下一步该去哪个真相入口。")).toBeInTheDocument();
     expect(screen.getByRole("status")).toHaveTextContent("正在加载指挥塔实时总览...");
-    expect(screen.getByTestId("ct-callout")).toHaveTextContent("指挥塔当前只提供部分真相");
+    expect(screen.queryByTestId("ct-callout")).toBeNull();
     expect(screen.getByTestId("ct-live-client")).toHaveTextContent("overview:0 sessions:1");
+  });
+
+  it("switches the page intro into partial-truth mode when warning data still has live context", async () => {
+    mockFetchCommandTowerOverview.mockRejectedValueOnce(new Error("overview down"));
+    mockFetchPmSessions.mockResolvedValueOnce([
+      {
+        pm_session_id: "pm-partial",
+        status: "active",
+        run_count: 1,
+        running_runs: 1,
+        failed_runs: 0,
+        success_runs: 0,
+        blocked_runs: 0,
+      },
+    ] as never);
+
+    render(await CommandTowerPage());
+
+    expect(screen.getByText("Partial truth / live surface degraded")).toBeInTheDocument();
+    expect(screen.getByText("Command Tower is running with partial truth")).toBeInTheDocument();
+    expect(screen.getByText("Partial context")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Reload Command Tower" })).toHaveAttribute("href", "/command-tower");
+    expect(screen.getByRole("link", { name: "View runs" })).toHaveAttribute("href", "/runs");
+    expect(screen.queryByTestId("ct-callout")).toBeNull();
+    expect(screen.getByRole("status")).toHaveTextContent("Loading Command Tower live overview...");
+  });
+
+  it("switches the page intro into zh-CN partial-truth mode when warning data still has live context", async () => {
+    mockCookies.mockResolvedValue({
+      get: (name: string) => (name === "openvibecoding.ui.locale" ? { value: "zh-CN" } : undefined),
+      toString: () => "openvibecoding.ui.locale=zh-CN",
+    });
+    mockFetchCommandTowerOverview.mockRejectedValueOnce(new Error("总览失败"));
+    mockFetchPmSessions.mockResolvedValueOnce([
+      {
+        pm_session_id: "pm-partial-zh",
+        status: "active",
+        run_count: 1,
+        running_runs: 1,
+        failed_runs: 0,
+        success_runs: 0,
+        blocked_runs: 0,
+      },
+    ] as never);
+
+    render(await CommandTowerPage());
+
+    expect(screen.getByText("部分真相 / live 面当前降级")).toBeInTheDocument();
+    expect(screen.getByText("指挥塔当前只提供部分真相")).toBeInTheDocument();
+    expect(screen.getByText("上下文不完整")).toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveTextContent("正在加载指挥塔实时总览...");
+    expect(screen.getByRole("link", { name: "重载指挥塔" })).toHaveAttribute("href", "/command-tower");
+    expect(screen.getByRole("link", { name: "查看运行记录" })).toHaveAttribute("href", "/runs");
+    expect(screen.queryByTestId("ct-callout")).toBeNull();
+    expect(screen.getByRole("status")).toHaveTextContent("正在加载指挥塔实时总览...");
   });
 
   it("switches the page intro into recovery mode when live data is unavailable", async () => {

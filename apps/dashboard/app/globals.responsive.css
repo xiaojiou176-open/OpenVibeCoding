@@ -93,11 +93,17 @@
     grid-template-columns: 1fr;
   }
 
+  .app-main {
+    order: 1;
+  }
+
   .sidebar {
+    order: 2;
     position: static;
     height: auto;
     border-right: 0;
-    border-bottom: 1px solid var(--color-border);
+    border-top: 1px solid var(--color-border);
+    border-bottom: 0;
     flex-direction: row;
     flex-wrap: wrap;
     padding: var(--space-4);

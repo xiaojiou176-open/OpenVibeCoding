@@ -1478,7 +1478,7 @@ body {
 }
 
 .app-shell--landing .home-briefing-shell {
-  grid-template-columns: minmax(0, 1.18fr) 420px;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-5);
 }
 
@@ -1489,6 +1489,7 @@ body {
     radial-gradient(circle at top left, color-mix(in srgb, var(--color-primary) 10%, transparent), transparent 44%);
   box-shadow: none;
   padding: var(--space-3) 0 var(--space-4);
+  max-width: 72rem;
 }
 
 .app-shell--landing .home-briefing-copy .page-title {
@@ -1510,6 +1511,23 @@ body {
 .app-shell--landing .home-briefing-panel {
   padding: var(--space-4);
   min-height: 100%;
+}
+
+@media (max-width: 640px) {
+  .app-shell--landing .home-briefing-copy {
+    max-width: none;
+    padding: var(--space-2) 0 var(--space-3);
+  }
+
+  .app-shell--landing .home-briefing-copy .page-title {
+    font-size: clamp(2.25rem, 12vw, 3.25rem);
+    max-width: 9ch;
+  }
+
+  .app-shell--landing .home-briefing-copy .page-subtitle {
+    max-width: 30ch;
+    font-size: 16px;
+  }
 }
 
 .ui-card,
