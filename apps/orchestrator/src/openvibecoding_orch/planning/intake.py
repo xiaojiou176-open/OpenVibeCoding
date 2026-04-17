@@ -719,7 +719,11 @@ def _apply_intake_contract_overrides(
             search_path = intake_dir / "search_requests.json"
             payload: dict[str, Any] = {"queries": search_queries}
             if isinstance(task_template, str) and task_template.strip():
-                payload["task_template"] = task_template.strip()
+                normalized_task_template = task_template.strip().lower()
+                payload["task_template"] = normalized_task_template
+                if normalized_task_template == "topic_brief":
+                    payload["providers"] = ["browser_ddg"]
+                    payload["verify"] = {"providers": ["browser_ddg"], "repeat": 1}
             if isinstance(template_payload, dict) and template_payload:
                 payload["template_payload"] = template_payload
             search_text = json.dumps(payload, ensure_ascii=False, indent=2)

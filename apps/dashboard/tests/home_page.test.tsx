@@ -286,8 +286,8 @@ describe("dashboard home run-summary clarity", () => {
     ] as never[]);
 
     render(await Home());
-    expect(screen.getByText("Where to go first")).toBeInTheDocument();
-    expect(screen.getByText("Workflow plus Proof is the truth path")).toBeInTheDocument();
+    expect(screen.getByText("Blocked now")).toBeInTheDocument();
+    expect(screen.getByText("The homepage routes you; it does not replace proof.")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Investigate high-risk failures" })).toHaveAttribute("href", "/events");
     expect(screen.queryByText(/^manual$/i)).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Run run-1" })).toHaveAttribute("href", "/runs/run-1");
@@ -306,8 +306,8 @@ describe("dashboard home run-summary clarity", () => {
     ] as never[]);
 
     render(await Home());
-    expect(screen.getByText("Start in Command Tower or Events")).toBeInTheDocument();
-    expect(screen.getByText("Workflow plus Proof is the truth path")).toBeInTheDocument();
+    expect(screen.getByText("Blocked now")).toBeInTheDocument();
+    expect(screen.getByText("Handle the risky lane before you dispatch more work.")).toBeInTheDocument();
     expect(screen.queryByRole("alert")).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Investigate high-risk failures" })).toHaveAttribute("href", "/events");
     expect(screen.getAllByRole("link", { name: /Handle failure run-/ })).toHaveLength(3);

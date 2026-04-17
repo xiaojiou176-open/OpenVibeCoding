@@ -153,6 +153,52 @@ def test_topic_brief_intake_and_result_builder() -> None:
     assert search_payload["topic_brief_result"] == {"name": "topic_brief_result.json"}
 
 
+def test_topic_brief_build_contract_writes_browser_provider_defaults(monkeypatch, tmp_path: Path) -> None:
+    runtime_root = tmp_path / "runtime"
+    monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
+    monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runtime_root / "runs"))
+
+    service = intake.IntakeService()
+    payload = {
+        "objective": "Create a topic brief",
+        "allowed_paths": ["apps/dashboard"],
+        "task_template": "topic_brief",
+        "template_payload": {
+            "topic": "Seattle AI",
+            "time_range": "24h",
+            "max_results": 3,
+        },
+        "requester_role": "PM",
+    }
+
+    response = service.create(payload)
+    monkeypatch.setattr(
+        intake,
+        "compile_plan",
+        lambda _plan: {
+            "task_id": "task-topic-brief",
+            "inputs": {"artifacts": []},
+            "owner_agent": {"role": "PM", "agent_id": "pm-1"},
+            "assigned_agent": {"role": "TECH_LEAD", "agent_id": "tl-1"},
+        },
+    )
+    service._store.write_response(
+        response["intake_id"],
+        {
+            "intake_id": response["intake_id"],
+            "status": "READY",
+            "questions": [],
+            "plan": {"plan_id": "p", "task_id": "task-topic-brief"},
+        },
+    )
+    contract = service.build_contract(response["intake_id"])
+    artifact = next(item for item in contract["inputs"]["artifacts"] if item["name"] == "search_requests.json")
+    artifact_payload = json.loads(Path(artifact["uri"]).read_text(encoding="utf-8"))
+    assert artifact_payload["task_template"] == "topic_brief"
+    assert artifact_payload["providers"] == ["browser_ddg"]
+    assert artifact_payload["verify"] == {"providers": ["browser_ddg"], "repeat": 1}
+
+
 def test_topic_brief_fail_closes_when_only_provider_homepages_are_captured() -> None:
     search_request = {
         "task_template": "topic_brief",
@@ -410,7 +456,7 @@ def test_news_digest_result_writes_failed_report_when_search_pipeline_fails(monk
     assert "来源链路失败" in digest_payload["failure_reason_zh"]
 
 
-def test_topic_brief_provider_homepage_only_results_write_failed_report(monkeypatch, tmp_path: Path) -> None:
+def test_topic_brief_run_search_pipeline_requires_browser_public_source_provider(monkeypatch, tmp_path: Path) -> None:
     runtime_root = tmp_path / "runtime"
     monkeypatch.setenv("OPENVIBECODING_RUNTIME_ROOT", str(runtime_root))
     monkeypatch.setenv("OPENVIBECODING_RUNS_ROOT", str(runtime_root / "runs"))
@@ -452,9 +498,5 @@ def test_topic_brief_provider_homepage_only_results_write_failed_report(monkeypa
         requested_by={"role": "PM", "agent_id": "pm-1"},
     )
     assert result["ok"] is False
-    assert result["public_source_receipt_missing"] is True
-    run_dir = runtime_root / "runs" / run_id / "reports"
-    digest_payload = json.loads((run_dir / "topic_brief_result.json").read_text(encoding="utf-8"))
-    assert digest_payload["status"] == "FAILED"
-    assert digest_payload["summary"].startswith("The topic brief for 'Seattle AI' did not complete successfully.")
-    assert "provider 壳页" in digest_payload["failure_reason_zh"]
+    assert result["reason"] == "missing required providers"
+    assert result["missing"] == ["browser_ddg"]

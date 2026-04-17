@@ -179,12 +179,15 @@ def run_search_pipeline(
         }
         return mapping.get(value, value)
 
+    task_template = str(request.get("task_template") or "").strip().lower()
+    topic_brief_mode = task_template == "topic_brief"
+
     queries = request.get("queries", [])
     repeat = int(request.get("repeat", 2))
     parallel = int(request.get("parallel", 2))
-    raw_providers = request.get("providers") or ["gemini_web", "grok_web"]
+    raw_providers = request.get("providers") or (["browser_ddg"] if topic_brief_mode else ["gemini_web", "grok_web"])
     providers = [_normalize_provider(item) for item in raw_providers]
-    required_providers = {"gemini_web", "grok_web"}
+    required_providers = {"browser_ddg"} if topic_brief_mode else {"gemini_web", "grok_web"}
     provider_set = {_normalize_provider(item) for item in providers}
     missing = sorted(required_providers - provider_set)
     policy_adjustments: dict[str, Any] = {}
@@ -206,11 +209,13 @@ def run_search_pipeline(
         policy_adjustments["parallel"] = {"from": parallel, "to": 2}
         parallel = 2
     verify = request.get("verify") or {}
-    verify_providers = [_normalize_provider(item) for item in (verify.get("providers") or ["gemini_web"])]
+    verify_default_providers = ["browser_ddg"] if topic_brief_mode else ["gemini_web"]
+    verify_providers = [_normalize_provider(item) for item in (verify.get("providers") or verify_default_providers)]
     verify_repeat = int(verify.get("repeat", 1))
-    if "gemini_web" not in {str(item) for item in verify_providers}:
-        verify_providers = [*verify_providers, "gemini_web"]
-        policy_adjustments["verify_providers"] = "gemini_web added"
+    required_verify_provider = "browser_ddg" if topic_brief_mode else "gemini_web"
+    if required_verify_provider not in {str(item) for item in verify_providers}:
+        verify_providers = [*verify_providers, required_verify_provider]
+        policy_adjustments["verify_providers"] = f"{required_verify_provider} added"
     if verify_repeat < 1:
         policy_adjustments["verify_repeat"] = {"from": verify_repeat, "to": 1}
         verify_repeat = 1

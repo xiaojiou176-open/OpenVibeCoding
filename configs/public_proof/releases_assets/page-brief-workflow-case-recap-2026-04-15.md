@@ -45,5 +45,5 @@ Avoid wording like:
 - This recap is fit for public explanation, not for hosted-product or
   production-scale claims.
 - `news_digest` still owns the official first public baseline.
-- `topic_brief` still remains showcase-only until it earns its own healthy
-  proof and benchmark bundle.
+- `topic_brief` now has a tracked search-backed public proof bundle, but it is
+  still a secondary proof path.

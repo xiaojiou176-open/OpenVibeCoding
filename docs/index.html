@@ -28,6 +28,12 @@
       content="Stop babysitting AI coding work. OpenVibeCoding helps teams plan / delegate / track / resume / prove long-running engineering work across Codex and Claude Code."
     />
     <meta name="twitter:image" content="./assets/storefront/social-preview-1280x640.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -91,127 +97,216 @@
     </script>
     <style>
       :root {
-        --bg: #f5f0e8;
-        --paper: #fffaf2;
-        --ink: #17232c;
-        --muted: #4f616e;
-        --accent: #9f4c26;
-        --accent-dark: #234056;
-        --line: #d8ccbb;
+        --bg: #0b1220;
+        --bg-elevated: #111a2e;
+        --surface: #17233b;
+        --surface-subtle: #1c2a44;
+        --surface-hover: #223250;
+        --ink: #e8eef8;
+        --muted: #9fb0c8;
+        --accent: #1fb981;
+        --accent-strong: #7fe0b7;
+        --line: rgba(159, 176, 200, 0.18);
+        --line-strong: rgba(159, 176, 200, 0.32);
+        --danger: #d95c5c;
+        --warning: #e59a2f;
+        --shadow: 0 24px 60px rgba(4, 7, 13, 0.52);
       }
 
       * { box-sizing: border-box; }
 
       body {
         margin: 0;
-        font-family: "Trebuchet MS", Verdana, sans-serif;
+        font-family: "Manrope", "Avenir Next", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         color: var(--ink);
         background:
-          radial-gradient(circle at 10% 15%, rgba(203, 115, 73, 0.18), transparent 22%),
-          radial-gradient(circle at 85% 10%, rgba(35, 64, 86, 0.14), transparent 18%),
-          linear-gradient(180deg, #f7f2ea 0%, #efe6d8 100%);
+          radial-gradient(circle at 12% 10%, rgba(31, 185, 129, 0.14), transparent 20%),
+          radial-gradient(circle at 88% 12%, rgba(229, 154, 47, 0.08), transparent 16%),
+          linear-gradient(180deg, #0b1220 0%, #101a2e 48%, #09111e 100%);
       }
 
       main {
-        max-width: 1100px;
+        max-width: 1180px;
         margin: 0 auto;
-        padding: 56px 24px 88px;
+        padding: 56px 24px 96px;
       }
 
       .hero {
         display: grid;
-        gap: 28px;
+        gap: 24px;
       }
 
       .eyebrow {
         display: inline-block;
         padding: 8px 14px;
         border-radius: 999px;
-        background: rgba(35, 64, 86, 0.08);
-        color: var(--accent-dark);
-        font-size: 14px;
+        background: rgba(31, 185, 129, 0.1);
+        color: var(--accent-strong);
+        font-size: 12px;
         font-weight: 700;
-        letter-spacing: 0.02em;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
       }
 
       h1 {
         margin: 0;
-        font-family: Georgia, "Times New Roman", serif;
-        font-size: clamp(40px, 7vw, 68px);
-        line-height: 1.05;
+        max-width: 11ch;
+        font-family: "Space Grotesk", "Manrope", sans-serif;
+        font-size: clamp(46px, 7vw, 74px);
+        line-height: 0.98;
+        letter-spacing: -0.05em;
+        text-wrap: balance;
       }
 
       .lede {
-        max-width: 850px;
+        max-width: 760px;
         margin: 0;
         color: var(--muted);
-        font-size: clamp(20px, 2.5vw, 26px);
-        line-height: 1.5;
+        font-size: clamp(18px, 2.3vw, 24px);
+        line-height: 1.6;
       }
 
       .actions {
         display: flex;
         flex-wrap: wrap;
-        gap: 14px;
+        gap: 12px;
       }
 
       .mini-nav {
         display: flex;
         flex-wrap: wrap;
-        gap: 12px;
+        gap: 10px;
       }
 
       .mini-nav a {
-        color: var(--accent-dark);
+        color: var(--muted);
         text-decoration: none;
-        font-size: 14px;
+        font-size: 13px;
         font-weight: 700;
+        border-radius: 999px;
+        padding: 9px 12px;
+        border: 1px solid var(--line);
+        background: rgba(17, 26, 46, 0.84);
       }
 
       .mini-nav a:hover,
       .mini-nav a:focus-visible {
-        text-decoration: underline;
-        text-underline-offset: 2px;
+        color: var(--ink);
+        border-color: rgba(127, 224, 183, 0.3);
+        background: rgba(23, 35, 59, 0.96);
       }
 
       .mini-nav a:focus-visible {
-        outline: 2px solid var(--accent-dark);
+        outline: 2px solid var(--accent);
         outline-offset: 2px;
+      }
+
+      .hero-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .hero-meta a {
+        color: var(--muted);
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+        font-size: 12px;
+        text-decoration: none;
+      }
+
+      .hero-meta a:hover,
+      .hero-meta a:focus-visible {
+        color: var(--ink);
+        text-decoration: underline;
+        text-underline-offset: 3px;
       }
 
       .actions a {
         text-decoration: none;
         border-radius: 999px;
-        padding: 14px 20px;
+        padding: 13px 18px;
         font-weight: 700;
       }
 
       .actions .primary {
         background: var(--accent);
-        color: white;
+        color: #08131c;
       }
 
       .actions .secondary {
-        background: rgba(35, 64, 86, 0.08);
-        color: var(--accent-dark);
+        background: rgba(17, 26, 46, 0.92);
+        color: var(--ink);
+        border: 1px solid var(--line);
       }
 
       .panel,
       .grid-card {
-        background: rgba(255, 250, 242, 0.9);
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 52%),
+          rgba(17, 26, 46, 0.9);
         border: 1px solid var(--line);
-        border-radius: 26px;
+        border-radius: 24px;
+        box-shadow: var(--shadow);
       }
 
       .panel {
         padding: 24px;
       }
 
+      .truth-strip,
+      .hero-media-grid,
+      .loop-grid {
+        display: grid;
+        gap: 16px;
+      }
+
+      .truth-strip {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .truth-card {
+        display: grid;
+        gap: 8px;
+        padding: 18px;
+        border-radius: 18px;
+        border: 1px solid var(--line);
+        background: rgba(17, 26, 46, 0.72);
+      }
+
+      .truth-card strong,
+      .loop-card h3 {
+        font-family: "Space Grotesk", "Manrope", sans-serif;
+        font-size: 18px;
+        line-height: 1.15;
+        letter-spacing: -0.03em;
+      }
+
+      .truth-card p,
+      .loop-card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .truth-kicker,
+      .loop-kicker {
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--accent-strong);
+      }
+
+      .hero-media-grid {
+        grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+      }
+
       .hero-image {
         width: 100%;
         border-radius: 22px;
         border: 1px solid var(--line);
-        background: white;
+        background: rgba(8, 13, 28, 0.9);
       }
 
       .caption {
@@ -221,13 +316,14 @@
       }
 
       .section {
-        margin-top: 44px;
+        margin-top: 48px;
       }
 
       .section h2 {
-        font-family: Georgia, "Times New Roman", serif;
-        font-size: 32px;
+        font-family: "Space Grotesk", "Manrope", sans-serif;
+        font-size: 30px;
         margin: 0 0 14px;
+        letter-spacing: -0.04em;
       }
 
       .grid {
@@ -243,6 +339,7 @@
       .grid-card h3 {
         margin-top: 0;
         font-size: 19px;
+        line-height: 1.2;
       }
 
       .grid-card p,
@@ -252,84 +349,145 @@
         line-height: 1.65;
       }
 
+      .loop-grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+      }
+
+      .loop-card {
+        padding: 18px;
+        border-radius: 18px;
+        border: 1px solid var(--line);
+        background: rgba(17, 26, 46, 0.74);
+      }
+
       code {
-        background: rgba(35, 64, 86, 0.08);
+        background: rgba(23, 35, 59, 0.82);
         padding: 2px 6px;
         border-radius: 6px;
-        font-family: "SFMono-Regular", "Menlo", monospace;
-        color: var(--accent-dark);
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+        color: var(--accent-strong);
+      }
+
+      a {
+        color: var(--accent-strong);
+      }
+
+      a:hover,
+      a:focus-visible {
+        color: var(--ink);
+      }
+
+      @media (max-width: 960px) {
+        .truth-strip,
+        .hero-media-grid,
+        .loop-grid {
+          grid-template-columns: 1fr;
+        }
       }
     </style>
   </head>
   <body>
     <main>
       <section class="hero">
-        <span class="eyebrow">Public landing source for OpenVibeCoding</span>
-        <nav class="mini-nav" aria-label="Top navigation">
-          <a href="./use-cases/">First proven workflow</a>
-          <a href="./compatibility/">Compatibility matrix</a>
-          <a href="./distribution/">Distribution status</a>
-          <a href="./builders/">Builder quickstart</a>
-          <a href="https://github.com/xiaojiou176-open/OpenVibeCoding">Repository</a>
-          <a href="https://github.com/xiaojiou176-open/OpenVibeCoding/releases">Releases</a>
-        </nav>
+        <span class="eyebrow">OpenVibeCoding / operator front door</span>
         <h1>The open command tower for AI engineering.</h1>
         <p class="lede">
-          Stop babysitting AI coding work. OpenVibeCoding is the command tower for AI engineering.
-          AI coding does not lack models. It lacks a command tower. It helps teams
-          <strong>plan / delegate / track / resume / prove</strong> long-running work across
-          Codex and Claude Code by turning PM request -&gt; Workflow Case -&gt; Proof &amp; Replay
-          into one governed command-tower loop.
-        </p>
-        <p class="caption">
-          Current boundary: OpenVibeCoding is a repo-backed operator control plane, not a hosted product,
-          and the shipped MCP surface remains read-only.
-        </p>
-        <p class="caption">
-          Official distribution today is the public repo, the Pages front door, one proven workflow
-          baseline, the repo-local read-only MCP server, and local starter or bundle material. The
-          thin client and contract packages are publish-ready but not published yet, while the shared
-          package stays workspace-only, so no public package release, hosted operator, Docker image,
-          or public write-capable MCP is live today.
+          Stop babysitting AI coding work. OpenVibeCoding keeps
+          <strong>plan / delegate / track / resume / prove</strong> inside one governed command deck,
+          so PM request -&gt; Workflow Case -&gt; Proof &amp; Replay reads like one operator loop instead of
+          a pile of scattered chats and logs.
         </p>
         <div class="actions">
           <a class="primary" href="./use-cases/">See the first proven workflow</a>
-          <a class="secondary" href="./distribution/">Open distribution status</a>
           <a class="secondary" href="./compatibility/">Choose the right adoption path</a>
+          <a class="secondary" href="./distribution/">Open distribution status</a>
+        </div>
+        <div class="hero-meta" aria-label="Repository meta">
+          <a href="https://github.com/xiaojiou176-open/OpenVibeCoding">Repository</a>
+          <a href="https://github.com/xiaojiou176-open/OpenVibeCoding/releases">Releases</a>
+          <a href="./builders/">Builder quickstart</a>
+          <a href="./ai-surfaces/">AI + MCP + API surfaces</a>
         </div>
         <p class="caption">
-          After those two doors, go deeper through
-          <a href="./agent-starters/"> agent starter kits</a>,
-          <a href="./mcp/"> read-only MCP</a>,
-          <a href="./integrations/"> integrations</a>,
-          <a href="./skills/"> skills</a>,
-          <a href="./ai-surfaces/"> AI + MCP + API surfaces</a>, or the
-          <a href="./ecosystem/"> ecosystem map</a>.
+          Current boundary: OpenVibeCoding is a <strong>repo-backed operator control plane, not a hosted product</strong>,
+          and the <strong>shipped MCP surface remains read-only</strong>.
         </p>
-
-        <div class="panel">
-          <img
-            class="hero-image"
-            src="./assets/storefront/command-tower-showcase-card.svg"
-            alt="OpenVibeCoding command tower briefing card showing PM request, Command Tower, and Proof and Replay"
-          />
-          <p class="caption">
-            The public story should stay simple: one request enters, one Workflow Case becomes
-            visible, and one Proof &amp; Replay surface stays inspectable before you trust the
-            result.
-          </p>
+        <nav class="mini-nav" aria-label="Mission-critical doors">
+          <a href="./use-cases/">First proven workflow</a>
+          <a href="./compatibility/">Compatibility matrix</a>
+          <a href="./distribution/">Distribution status</a>
+          <a href="./mcp/">Read-only MCP</a>
+        </nav>
+        <div class="truth-strip" aria-label="Current truth">
+          <article class="truth-card">
+            <span class="truth-kicker">Current boundary</span>
+            <strong>Repo-backed operator surface</strong>
+            <p>OpenVibeCoding is not a hosted product today, and the public MCP contract stays read-only.</p>
+          </article>
+          <article class="truth-card">
+            <span class="truth-kicker">Shipped now</span>
+            <strong>One workflow, one proof path, one read-only MCP lane</strong>
+            <p>The public repo, Pages front door, first proven workflow, read-only MCP surface, and local starter materials are the current honest core.</p>
+          </article>
+          <article class="truth-card">
+            <span class="truth-kicker">Not live yet</span>
+            <strong>Hosted operator and write-capable distribution stay deferred</strong>
+            <p>Standalone npm releases, Docker distribution, hosted operator service, and public write-capable MCP still sit outside the current promise.</p>
+          </article>
         </div>
+        <div class="hero-media-grid">
+          <div class="panel">
+            <img
+              class="hero-image"
+              src="./assets/storefront/command-tower-showcase-card.svg"
+              alt="OpenVibeCoding command tower briefing card showing PM request, Command Tower, and Proof and Replay"
+            />
+            <p class="caption">
+              One request enters, one Workflow Case becomes visible, and one Proof &amp; Replay room stays inspectable before you trust the result.
+            </p>
+          </div>
 
-        <div class="panel">
-          <img
-            class="hero-image"
-            src="./assets/storefront/first-loop-storyboard.gif"
-            alt="OpenVibeCoding storyboard showing the first public loop from PM request to evidence"
-          />
-          <p class="caption">
-            This tracked storyboard is the shareable first-loop asset: it shows the same public
-            path the README, Pages, and release notes are promising.
-          </p>
+          <div class="panel">
+            <img
+              class="hero-image"
+              src="./assets/storefront/first-loop-storyboard.gif"
+              alt="OpenVibeCoding storyboard showing the first public loop from PM request to evidence"
+            />
+            <p class="caption">
+              The tracked storyboard exists to prove the same first loop the README, Pages, and release notes are promising.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>One operator loop</h2>
+        <div class="loop-grid">
+          <article class="loop-card">
+            <span class="loop-kicker">1 / Plan</span>
+            <h3>Start from a real request</h3>
+            <p>Define the task, constraints, and acceptance bar instead of hoping one giant prompt will hold the whole job together.</p>
+          </article>
+          <article class="loop-card">
+            <span class="loop-kicker">2 / Delegate</span>
+            <h3>Turn the plan into queued work</h3>
+            <p>Push the request into a real operating record so the next move stays visible when humans step away.</p>
+          </article>
+          <article class="loop-card">
+            <span class="loop-kicker">3 / Track</span>
+            <h3>Read the command tower first</h3>
+            <p>Start from the cockpit before drilling into lists so you can see which lane is moving and which lane is risky.</p>
+          </article>
+          <article class="loop-card">
+            <span class="loop-kicker">4 / Resume</span>
+            <h3>Use Workflow Cases as durable state</h3>
+            <p>Resume from the case record instead of reconstructing context from scattered chats and one-off notes.</p>
+          </article>
+          <article class="loop-card">
+            <span class="loop-kicker">5 / Prove</span>
+            <h3>Inspect Proof &amp; Replay before trust</h3>
+            <p>The product only closes the loop when evidence, replay, and operator judgment all line up.</p>
+          </article>
         </div>
       </section>
 
@@ -475,7 +633,7 @@
         </p>
         <p class="caption">
           Official first public path: start with <code>news_digest</code> if you want the smallest release-proven
-          proof loop. Treat <code>topic_brief</code> as a public showcase expansion, and treat
+          proof loop. Treat <code>topic_brief</code> as a tracked search-backed proof expansion, and treat
           <code>page_brief</code> as a tracked browser-backed proof expansion that still is not the official
           first public baseline or equally release-proven with <code>news_digest</code>.
         </p>
@@ -488,7 +646,7 @@
           <article class="grid-card">
             <h3>topic_brief</h3>
             <p>Best for a bounded topic brief when you want search-backed evidence without broadening scope.</p>
-            <p><strong>Proof state:</strong> public showcase, not yet equally release-proven.</p>
+            <p><strong>Proof state:</strong> tracked search-backed public proof bundle; not the official first public baseline.</p>
           </article>
           <article class="grid-card">
             <h3>page_brief</h3>

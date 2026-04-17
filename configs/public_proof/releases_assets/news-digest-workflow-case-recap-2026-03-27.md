@@ -81,8 +81,8 @@ Avoid wording like:
   `news-digest-healthy-proof-2026-03-27.md`.
 - It is fit for public explanation and recap language, not for broader claims
   about hosted readiness, production scale, or stable multi-run performance.
-- `topic_brief` remains a showcase path until it has its own healthy proof and
-  benchmark bundle.
+- `topic_brief` now has a tracked search-backed public proof bundle, but it is
+  still not the official first public baseline.
 - `page_brief` now has a tracked browser-backed public proof bundle, but it is
   still not the official first public baseline.
 - The missing storefront gaps still remain:

@@ -1,0 +1,27 @@
+{
+  "artifact_type": "topic_brief_public_proof_pack",
+  "task_template": "topic_brief",
+  "status": "tracked_search_backed_public_proof_bundle",
+  "baseline_scope": "secondary_search_backed_bundle",
+  "summary": "This pack is the smallest truthful search-backed public trust bundle for topic_brief today. It combines the tracked healthy proof summary, a bundle baseline summary, a share-ready Workflow Case recap, and the shared storefront demo-status ledger without claiming that topic_brief replaced news_digest as the official first public baseline.",
+  "truth_boundary": {
+    "official_first_public_baseline": false,
+    "equally_release_proven_as_news_digest": false,
+    "hosted_production_proof": false,
+    "public_write_capable_mcp_proof": false,
+    "search_backed_bundle_present": true
+  },
+  "primary_assets": {
+    "proof_summary_markdown": "configs/public_proof/releases_assets/topic-brief-healthy-proof-2026-04-15.md",
+    "proof_summary_json": "configs/public_proof/releases_assets/topic-brief-healthy-proof-summary-2026-04-15.json",
+    "benchmark_summary_markdown": "configs/public_proof/releases_assets/topic-brief-benchmark-summary-2026-04-15.md",
+    "benchmark_summary_json": "configs/public_proof/releases_assets/topic-brief-benchmark-summary-2026-04-15.json",
+    "workflow_case_recap_markdown": "configs/public_proof/releases_assets/topic-brief-workflow-case-recap-2026-04-15.md",
+    "demo_status_markdown": "configs/public_proof/storefront/demo-status.md"
+  },
+  "supporting_assets": {},
+  "known_gaps": [
+    "topic_brief is still not the official first public baseline; news_digest retains that role.",
+    "The current topic_brief bundle does not prove hosted production readiness, broad multi-run benchmark coverage, or public write-capable MCP."
+  ]
+}

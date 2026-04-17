@@ -30,6 +30,6 @@
   },
   "known_gaps": [
     "No broader multi-round benchmark artifact beyond the current single-run baseline summary yet.",
-    "topic_brief still needs its own healthy proof and benchmark bundle before it can leave showcase status."
+    "topic_brief and page_brief remain tracked secondary proof bundles below the official first public baseline."
   ]
 }

@@ -228,6 +228,8 @@ def load_search_requests(
             queries = [str(item).strip() for item in raw_queries if str(item).strip()]
             if not queries:
                 return None, "search queries empty"
+            task_template = str(payload.get("task_template") or "").strip().lower()
+            default_providers = ["browser_ddg"] if task_template == "topic_brief" else ["chatgpt_web", "grok_web"]
             repeat = payload.get("repeat", 2)
             parallel = payload.get("parallel", 2)
             providers = payload.get("providers") or payload.get("provider") or []
@@ -237,7 +239,7 @@ def load_search_requests(
                 return None, "search providers invalid"
             providers = [str(item).strip() for item in providers if str(item).strip()]
             if not providers:
-                providers = ["chatgpt_web", "grok_web"]
+                providers = default_providers
             verify = payload.get("verify") or {}
             if not isinstance(verify, dict):
                 return None, "search verify config invalid"
@@ -270,7 +272,6 @@ def load_search_requests(
                 "verify": {"providers": verify_providers, "repeat": verify_repeat},
                 "verify_ai": payload.get("verify_ai") if isinstance(payload.get("verify_ai"), dict) else {"enabled": True},
             }
-            task_template = str(payload.get("task_template") or "").strip().lower()
             if task_template:
                 normalized["task_template"] = task_template
             template_payload = payload.get("template_payload")

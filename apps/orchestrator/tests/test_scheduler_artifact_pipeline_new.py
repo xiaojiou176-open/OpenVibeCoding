@@ -256,6 +256,21 @@ def test_load_search_requests_matrix(tmp_path: Path, monkeypatch) -> None:
     assert payload["verify"]["providers"] == ["chatgpt_web"]
     assert payload["verify"]["repeat"] == 2
 
+    topic_defaults_path = repo_root / "topic_defaults.json"
+    topic_defaults_path.write_text(
+        json.dumps({"queries": ["q"], "task_template": "topic_brief", "providers": []}),
+        encoding="utf-8",
+    )
+    payload, error = artifact_pipeline.load_search_requests(
+        _artifact_contract("search_requests.json", str(topic_defaults_path)),
+        repo_root,
+        schema_root,
+    )
+    assert error is None
+    assert payload is not None
+    assert payload["providers"] == ["browser_ddg"]
+    assert payload["verify"]["providers"] == ["browser_ddg"]
+
     invalid_queries = repo_root / "invalid_queries.json"
     invalid_queries.write_text(json.dumps({"queries": 1}), encoding="utf-8")
     payload, error = artifact_pipeline.load_search_requests(

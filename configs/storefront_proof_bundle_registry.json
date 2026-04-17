@@ -10,6 +10,7 @@
     "tracked_contract_inputs": [
       "configs/storefront_proof_bundle_registry.json",
       "configs/public_proof/releases_assets/news-digest-proof-pack-2026-03-27.json",
+      "configs/public_proof/releases_assets/topic-brief-proof-pack-2026-04-15.json",
       "configs/public_proof/releases_assets/page-brief-proof-pack-2026-04-15.json",
       "configs/public_proof/storefront/demo-status.md",
       "configs/public_proof/storefront/live-capture-requirements.json"
@@ -52,24 +53,22 @@
     {
       "bundle_id": "topic_brief",
       "task_template": "topic_brief",
-      "proof_state": "showcase_only",
-      "claim_scope": "public_showcase_path",
-      "authority_level": "repo_side_story_surface",
+      "proof_state": "proof_bundle_tracked",
+      "claim_scope": "search_backed_public_proof_bundle",
+      "authority_level": "repo_side_public_proof",
       "public_entrypoint": "docs/use-cases/index.html",
+      "pack_manifest": "configs/public_proof/releases_assets/topic-brief-proof-pack-2026-04-15.json",
       "safe_public_claims": [
-        "topic_brief is a public showcase and discovery lane with search-backed evidence",
-        "topic_brief is pending a dedicated healthy proof summary, a dedicated benchmark summary, and a share-ready recap before it can leave showcase status"
+        "topic_brief now has a tracked search-backed public proof bundle",
+        "topic_brief remains a secondary public proof path, not the official first public baseline",
+        "the bundle includes a healthy proof summary, a bundle baseline summary, a Workflow Case recap, and the shared demo-status ledger"
       ],
       "forbidden_claims": [
-        "topic_brief is an equally release-proven baseline today",
-        "topic_brief already has a tracked public proof bundle today",
-        "topic_brief already has a dedicated healthy proof summary, benchmark summary, and share-ready recap today"
+        "topic_brief is the official first public baseline today",
+        "topic_brief is equally release-proven as news_digest today",
+        "topic_brief proves hosted production readiness or public write-capable MCP"
       ],
-      "missing_expected_artifacts": [
-        "dedicated_healthy_proof_summary",
-        "dedicated_benchmark_summary",
-        "share_ready_recap"
-      ]
+      "missing_expected_artifacts": []
     },
     {
       "bundle_id": "page_brief",

@@ -480,17 +480,27 @@ def main() -> int:
                         errors,
                     )
 
-    _require_text(
-        USE_CASES_PATH,
-        [
-            "tracked browser-backed public proof bundle",
-            "The current benchmark story is a tracked single-run baseline, not a broad release average.",
-            "Global proof-pack index across the official baseline, tracked bundle, and showcase bundles",
-            "dedicated healthy proof summary, dedicated benchmark summary, and share-ready recap before it can leave showcase status.",
-            "repo-tracked proof pack or another share-ready proof asset on the public surface.",
-        ],
-        errors,
-    )
+    required_use_case_text = [
+        "tracked browser-backed public proof bundle",
+        "The current benchmark story is a tracked single-run baseline, not a broad release average.",
+        "Global proof-pack index across the official baseline, tracked bundle, and showcase bundles",
+    ]
+    topic_state = str(topic.get("proof_state") or "").strip()
+    if topic_state == "showcase_only":
+        required_use_case_text.extend(
+            [
+                "dedicated healthy proof summary, dedicated benchmark summary, and share-ready recap before it can leave showcase status.",
+                "repo-tracked proof pack or another share-ready proof asset on the public surface.",
+            ]
+        )
+    elif topic_state == "proof_bundle_tracked":
+        required_use_case_text.extend(
+            [
+                "tracked search-backed public proof bundle",
+                "not yet equally release-proven",
+            ]
+        )
+    _require_text(USE_CASES_PATH, required_use_case_text, errors)
 
     if errors:
         print("❌ [storefront-proof-assets] public proof asset contract violations:")

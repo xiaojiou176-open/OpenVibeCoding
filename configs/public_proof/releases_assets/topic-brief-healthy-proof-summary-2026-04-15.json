@@ -1,0 +1,29 @@
+{
+  "artifact_type": "topic_brief_healthy_proof_summary",
+  "status": "TRACKED",
+  "proof_state": "proof_bundle_tracked",
+  "proof_date": "2026-04-15",
+  "task_template": "topic_brief",
+  "claim_scope": "search_backed_public_proof_bundle",
+  "summary": "Repo-tracked healthy proof packaging now exists for the search-backed topic_brief path.",
+  "observed_run": {
+    "run_id": "run_20260416_023549_fcf0b6b4a6a849a88af876220bf0294f",
+    "generated_at": "2026-04-16T02:35:54.827540+00:00",
+    "public_source_receipt_missing": false,
+    "providers": {
+      "browser_ddg": 2
+    }
+  },
+  "tracked_assets": {
+    "proof_markdown": "configs/public_proof/releases_assets/topic-brief-healthy-proof-2026-04-15.md",
+    "benchmark_markdown": "configs/public_proof/releases_assets/topic-brief-benchmark-summary-2026-04-15.md",
+    "workflow_case_recap_markdown": "configs/public_proof/releases_assets/topic-brief-workflow-case-recap-2026-04-15.md",
+    "demo_status_markdown": "configs/public_proof/storefront/demo-status.md"
+  },
+  "truth_boundary": {
+    "official_first_public_baseline": false,
+    "equally_release_proven_as_news_digest": false,
+    "hosted_production_proof": false,
+    "search_backed_bundle_present": true
+  }
+}

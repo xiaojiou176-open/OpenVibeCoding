@@ -20,7 +20,7 @@ All notable changes to this repository will be documented in this file.
   of leaving those pages on scattered inspector phrasing
 - pinned transitive dashboard security fixes through the maintained pnpm
   override surfaces so `axios` now resolves to `1.15.0` and `basic-ftp` to
-  `5.2.2` in both the root and dashboard lockfiles, clearing the live
+  `5.3.0` in both the root and dashboard lockfiles, clearing the live
   Dependabot alert chain without widening into unrelated dependency upgrades
 - added a registry-shaped `manifest.yaml` for the repo-owned
   `openvibecoding-adoption-router` skill inside the coding-agent bundle, then

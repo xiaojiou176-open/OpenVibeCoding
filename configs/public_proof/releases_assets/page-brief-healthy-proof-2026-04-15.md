@@ -47,5 +47,5 @@ public write-capable MCP surface, or equal release-proven status with
 - This proof source is a repo-tracked public bundle contract for the
   browser-backed `page_brief` path.
 - The current official first public baseline still belongs to `news_digest`.
-- The current `topic_brief` path still remains showcase-only until it earns its
-  own healthy proof and benchmark bundle.
+- `topic_brief` now has a tracked search-backed public proof bundle, but it is
+  still not the official first public baseline.

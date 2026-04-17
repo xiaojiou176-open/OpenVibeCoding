@@ -9,11 +9,13 @@
         "scripts/generate_storefront_proof_pack_index.py",
         "configs/storefront_proof_bundle_registry.json",
         "configs/public_proof/releases_assets/news-digest-proof-pack-2026-03-27.json",
+        "configs/public_proof/releases_assets/topic-brief-proof-pack-2026-04-15.json",
         "configs/public_proof/releases_assets/page-brief-proof-pack-2026-04-15.json"
       ],
       "contract_inputs": [
         "configs/storefront_proof_bundle_registry.json",
         "configs/public_proof/releases_assets/news-digest-proof-pack-2026-03-27.json",
+        "configs/public_proof/releases_assets/topic-brief-proof-pack-2026-04-15.json",
         "configs/public_proof/releases_assets/page-brief-proof-pack-2026-04-15.json",
         "configs/public_proof/storefront/demo-status.md",
         "configs/public_proof/storefront/live-capture-requirements.json"

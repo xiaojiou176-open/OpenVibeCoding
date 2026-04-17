@@ -164,6 +164,50 @@ def test_run_search_pipeline_ai_disabled_and_failure_paths(tmp_path: Path, monke
     assert result["failures"]
 
 
+def test_run_search_pipeline_topic_brief_defaults_to_browser_public_source_chain(
+    tmp_path: Path, monkeypatch
+) -> None:
+    store = _Store(tmp_path)
+    captured: dict[str, Any] = {}
+
+    monkeypatch.setattr(
+        tool_execution_pipeline,
+        "write_search_results",
+        lambda run_id, results: captured.setdefault("results", results),
+    )
+    monkeypatch.setattr(
+        tool_execution_pipeline,
+        "write_verification",
+        lambda run_id, verification: captured.setdefault("verification", verification),
+    )
+    monkeypatch.setattr(tool_execution_pipeline, "write_purified_summary", lambda *args, **kwargs: None)
+    monkeypatch.setattr(tool_execution_pipeline, "write_evidence_bundle", lambda *args, **kwargs: None)
+
+    result = tool_execution_pipeline.run_search_pipeline(
+        run_id="run-topic-brief-browser",
+        tool_runner=_ToolRunner(),
+        store=store,
+        request={
+            "task_template": "topic_brief",
+            "queries": ["Seattle AI"],
+            "providers": ["browser"],
+            "repeat": 1,
+            "parallel": 1,
+            "verify": {"repeat": 0},
+        },
+        requested_by={"role": "SEARCHER", "agent_id": "topic-brief-check"},
+    )
+
+    assert result["ok"] is True
+    assert captured["verification"]["providers"] == {"browser_ddg": 2}
+    assert captured["verification"]["verification_runs"] == 1
+    assert captured["verification"]["public_source_receipt_missing"] is False
+    assert captured["verification"]["policy_adjustments"]["repeat"] == {"from": 1, "to": 2}
+    assert captured["verification"]["policy_adjustments"]["parallel"] == {"from": 1, "to": 2}
+    assert captured["verification"]["policy_adjustments"]["verify_repeat"] == {"from": 0, "to": 1}
+    assert "verify_providers" not in captured["verification"]["policy_adjustments"]
+
+
 def test_run_sampling_requests_gate_and_sampling_outcomes(tmp_path: Path, monkeypatch) -> None:
     store = _Store(tmp_path)
 

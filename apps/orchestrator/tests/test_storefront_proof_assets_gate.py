@@ -423,6 +423,19 @@ def test_storefront_proof_assets_gate_accepts_topic_brief_tracked_bundle_when_co
     registry["bundles"][1]["forbidden_claims"] = ["topic_brief is the official first public baseline today"]
     registry_path.write_text(json.dumps(registry, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
+    (tmp_path / "docs" / "use-cases" / "index.html").write_text(
+        """
+        <h1>First proven workflow and public proof pack</h1>
+        <a href="../assets/storefront/proof-pack-index.json">Open proof-pack index</a>
+        <p>topic_brief now has one tracked search-backed public proof bundle beside the official news_digest baseline.</p>
+        <p>page_brief now has one tracked browser-backed public proof bundle beside the official news_digest baseline.</p>
+        <p>The current benchmark story is a tracked single-run baseline, not a broad release average.</p>
+        <p>Global proof-pack index across the official baseline, tracked bundle, and showcase bundles</p>
+        <p>topic_brief is not yet equally release-proven with news_digest.</p>
+        """,
+        encoding="utf-8",
+    )
+
     generator.ROOT = tmp_path
     generator.REGISTRY_PATH = registry_path
     generator.OUTPUT_PATH = tmp_path / "configs" / "public_proof" / "storefront" / "proof-pack-index.json"

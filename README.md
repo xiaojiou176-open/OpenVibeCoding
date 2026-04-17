@@ -103,9 +103,9 @@ A clean first pass should let you:
 
 For the public product story, the current official first proven workflow is
 [`news_digest`](https://xiaojiou176-open.github.io/OpenVibeCoding/use-cases/).
-`topic_brief` remains a public showcase and discovery lane, and it still does
-not belong to the repo-tracked public proof bundle until it has its own
-dedicated healthy proof summary, benchmark summary, and share-ready recap.
+`topic_brief` now has a tracked search-backed public proof bundle, but it is
+still not the official first public baseline and should not be described as
+equally release-proven with `news_digest`.
 `page_brief` now has a tracked browser-backed public proof bundle, but it is
 still not the official first public baseline and should not be described as
 equally release-proven with `news_digest`.
@@ -332,13 +332,13 @@ The current dashboard front door now surfaces all three public cases, while
 | Public case | Best for | Example input | Proof state |
 | --- | --- | --- | --- |
 | `news_digest` | the fastest proof-oriented public first run | one topic + 3 public domains + `24h` | **official first public baseline** |
-| `topic_brief` | a narrow topic brief with search-backed evidence | one topic + `7d` + max results | public showcase / discovery lane, not yet equally release-proven |
+| `topic_brief` | a narrow topic brief with search-backed evidence | one topic + `7d` + max results | tracked search-backed public proof bundle |
 | `page_brief` | one URL with browser-backed evidence | one URL + one focused summary request | tracked browser-backed public proof bundle |
 
 For the first public release bundle, `news_digest` is the only official
-proof-oriented first-run baseline. `topic_brief` remains part of the broader
-public surface as a showcase / discovery path, and it still lacks its own
-dedicated healthy proof summary, benchmark summary, and share-ready recap.
+proof-oriented first-run baseline. `topic_brief` now has its own tracked
+search-backed public proof bundle, but it still should not be described as the
+official first baseline or as equally release-proven with `news_digest`.
 `page_brief` now has its own tracked browser-backed public proof bundle, but it
 still should not be described as the official first baseline or as equally
 release-proven with `news_digest`.
