@@ -44,9 +44,6 @@ export default function DashboardHomeStorySections({
           deskTitle: "第一排操作台",
           deskDescription:
             "把最重要的操作面放到第一排，不再让首页像等权链接目录。",
-          loopTitle: "操作主循环",
-          loopDescription:
-            "先规划，再派发，然后跟踪、续跑、验真。首页应该像飞行前简报，不是站内导航页。",
           methodTitle: "方法层，不抢第一屏",
           methodDescription:
             "Prompt / Context / Harness 仍然重要，但它们应该在 command tower 语义之后出现。",
@@ -71,9 +68,6 @@ export default function DashboardHomeStorySections({
           deskTitle: "First-screen control desk",
           deskDescription:
             "Put the highest-leverage surfaces in the front row so the page reads like a cockpit, not a catalog of equal-weight links.",
-          loopTitle: "Operator loop",
-          loopDescription:
-            "Plan, delegate, track, resume, and prove. The home page should behave like a pre-flight briefing, not a router-heavy portal.",
           methodTitle: "Method layer, not the hero",
           methodDescription:
             "Prompt / Context / Harness still matters, but it belongs below the control loop instead of competing with it.",
@@ -172,54 +166,6 @@ export default function DashboardHomeStorySections({
       tone: "action",
     },
   ];
-  const operatorLoopCards = [
-    {
-      href: "/pm",
-      badge: "1",
-      title: locale === "zh-CN" ? "规划" : "Plan",
-      desc:
-        locale === "zh-CN"
-          ? "从 PM 入口写清目标、约束和验收口径。"
-          : "Define the objective, constraints, and acceptance bar from PM intake.",
-    },
-    {
-      href: "/pm",
-      badge: "2",
-      title: locale === "zh-CN" ? "派发" : "Delegate",
-      desc:
-        locale === "zh-CN"
-          ? "把计划变成真实队列任务，不要停在说明文档里。"
-          : "Turn the plan into queued work instead of leaving it as a note.",
-    },
-    {
-      href: "/command-tower",
-      badge: "3",
-      title: locale === "zh-CN" ? "跟踪" : "Track",
-      desc:
-        locale === "zh-CN"
-          ? "用实时指挥塔先看现在到底在发生什么。"
-          : "Use the live tower to see what is happening right now.",
-    },
-    {
-      href: "/workflows",
-      badge: "4",
-      title: locale === "zh-CN" ? "续跑" : "Resume",
-      desc:
-        locale === "zh-CN"
-          ? "回到 Workflow Case，沿 durable state 继续推进。"
-          : "Use Workflow Cases as the durable operating record.",
-    },
-    {
-      href: "/runs",
-      badge: "5",
-      title: locale === "zh-CN" ? "验真" : "Prove",
-      desc:
-        locale === "zh-CN"
-          ? "用 run 结果、失败线索和 replay 证据收口。"
-          : "Use run results, failure clues, and replayable evidence to close the loop.",
-    },
-  ];
-
   const primaryActionHref = hasRunHistory ? "/command-tower" : "/pm";
   const topSecondaryAction = failedCount > 0
     ? {
@@ -241,58 +187,6 @@ export default function DashboardHomeStorySections({
           label: homePhase2Copy.proofFirstActionLabel,
           variant: "secondary" as ButtonVariant,
         };
-  const briefingSignals =
-    locale === "zh-CN"
-      ? [
-          {
-            kicker: "值班摘要",
-            title: hasRunHistory ? `${runningCount} 条运行在推进` : "系统还没进入第一条运行",
-            desc: hasRunHistory
-              ? "先从指挥塔读当前状态，再决定要不要切到工作流案例。"
-              : "先把第一条任务送进系统，首页才会进入真正的值班节奏。",
-          },
-          {
-            kicker: "当前堵点",
-            title: failedCount > 0 ? `${failedCount} 条运行需要分诊` : "目前没有主导性的失败面",
-            desc:
-              failedCount > 0
-                ? "高风险或失败运行要先处理，再决定是否继续派更多任务。"
-                : "现在更像是建立第一条主循环，而不是处理事故。",
-          },
-          {
-            kicker: "下一步",
-            title: shellCopy.primaryAction,
-            desc:
-              hasRunHistory
-                ? "先读指挥塔，再派发；不要一上来把首页当成跳转墙。"
-                : "从 PM 入口开始，用第一条任务把整个 command loop 跑起来。",
-          },
-        ]
-      : [
-          {
-            kicker: "Now live",
-            title: hasRunHistory ? `${runningCount} live runs are moving` : "The first run has not started yet",
-            desc: hasRunHistory
-              ? "Read the command tower before you branch into Workflow Cases or proof."
-              : "Start one task first. The cockpit only becomes real once a run exists.",
-          },
-          {
-            kicker: "Current risk",
-            title: failedCount > 0 ? `${failedCount} runs need triage` : "No blocker is dominating the board",
-            desc:
-              failedCount > 0
-                ? "Handle the failing lane before you queue more work."
-                : "The current job is to establish the first durable loop, not to chase noise.",
-          },
-          {
-            kicker: "Next move",
-            title: shellCopy.primaryAction,
-            desc:
-              hasRunHistory
-                ? "Scan the tower first, then decide whether to dispatch or investigate."
-                : "Start from PM intake and let the first task teach the rest of the system.",
-          },
-        ];
   const heroMeters =
     locale === "zh-CN"
       ? [
@@ -398,54 +292,6 @@ export default function DashboardHomeStorySections({
             </Link>
           ))}
         </div>
-      </section>
-
-      <section className="app-section" aria-label={locale === "zh-CN" ? "首屏判断卡" : "First-screen operator judgment"}>
-        <Card className="home-briefing-panel">
-          <div className="home-briefing-panel-head">
-            <span className="cell-sub mono muted">
-              {locale === "zh-CN" ? "首屏先回答的三件事" : "Three answers before you scroll"}
-            </span>
-            <Badge variant={failedCount > 0 ? "warning" : hasRunHistory ? "running" : "default"}>
-              {failedCount > 0
-                ? locale === "zh-CN" ? "先看风险" : "Risk first"
-                : hasRunHistory
-                  ? locale === "zh-CN" ? "进入值班态" : "Operator mode"
-                  : locale === "zh-CN" ? "先建主循环" : "Start the loop"}
-            </Badge>
-          </div>
-          <div className="home-briefing-signal-list">
-            {briefingSignals.map((item) => (
-              <div key={item.kicker} className="home-briefing-signal">
-                <span className="cell-sub mono muted">{item.kicker}</span>
-                <strong>{item.title}</strong>
-                <p>{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </Card>
-      </section>
-
-      <section className="app-section" aria-labelledby="dashboard-operator-loop-title">
-        <h2 id="dashboard-operator-loop-title" className="sr-only">
-          {shellCopy.loopTitle}
-        </h2>
-        <ol className="home-loop-rail" aria-label={shellCopy.loopTitle}>
-          {operatorLoopCards.map((item, index) => (
-            <li
-              key={item.title}
-              className={`home-loop-step ${index === 0 ? "home-loop-step--entry" : index === operatorLoopCards.length - 1 ? "home-loop-step--proof" : ""}`}
-            >
-              <Link href={item.href} className="home-loop-link">
-                <span className="home-loop-index">{item.badge}</span>
-                <span className="home-loop-body">
-                  <span className="home-loop-title">{item.title}</span>
-                  <span className="home-loop-desc">{item.desc}</span>
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ol>
       </section>
 
       {showFirstTaskGuide ? (

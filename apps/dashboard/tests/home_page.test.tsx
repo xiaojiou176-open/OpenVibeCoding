@@ -487,8 +487,9 @@ describe("dashboard home run-summary clarity", () => {
 
     render(await Home());
 
-    expect(screen.getByText("The first run has not started yet")).toBeInTheDocument();
-    expect(screen.getByText("The current job is to establish the first durable loop, not to chase noise.")).toBeInTheDocument();
+    expect(screen.getByText("Start the first task before you trust the shell.")).toBeInTheDocument();
+    expect(screen.getByText("No dominant failure lane is blocking the board.")).toBeInTheDocument();
+    expect(screen.getByText("Write the request first, then let the truth rooms light up.")).toBeInTheDocument();
     expect(screen.queryByText("Degraded inputs")).not.toBeInTheDocument();
     expect(screen.queryByText("Current posture: Degraded inputs")).not.toBeInTheDocument();
     expect(screen.queryByText("Primary risk: run list unavailable")).not.toBeInTheDocument();

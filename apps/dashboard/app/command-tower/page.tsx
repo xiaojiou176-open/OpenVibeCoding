@@ -20,7 +20,14 @@ export const metadata: Metadata = {
     "Monitor live operator visibility, linked Workflow Cases, blockers, and next operator actions from the OpenVibeCoding command tower cockpit.",
 };
 
-export async function CommandTowerHomeSection({ locale }: { locale: UiLocale }) {
+type CommandTowerHomeState = {
+  overview: CommandTowerOverviewPayload;
+  sessions: PmSessionSummary[];
+  warning: string;
+  hasLiveData: boolean;
+};
+
+async function loadCommandTowerHomeState(locale: UiLocale): Promise<CommandTowerHomeState> {
   const commandTowerCopy = getUiCopy(locale).dashboard.commandTowerPage;
   const fallbackOverview: CommandTowerOverviewPayload = {
     generated_at: new Date().toISOString(),
@@ -71,11 +78,25 @@ export async function CommandTowerHomeSection({ locale }: { locale: UiLocale }) 
     (overview.active_sessions || 0) > 0 ||
     (sessions?.length || 0) > 0;
 
+  return {
+    overview,
+    sessions,
+    warning,
+    hasLiveData,
+  };
+}
+
+export async function CommandTowerHomeSection({ locale }: { locale: UiLocale }) {
+  const commandTowerCopy = getUiCopy(locale).dashboard.commandTowerPage;
+  const { overview, sessions, warning, hasLiveData } = await loadCommandTowerHomeState(locale);
+
   return (
     <>
-      <section aria-label="Command Tower live overview" aria-describedby="command-tower-page-subtitle">
-        <CommandTowerHomeLiveClient initialOverview={overview} initialSessions={sessions} locale={locale} />
-      </section>
+      {warning && !hasLiveData ? null : (
+        <section aria-label="Command Tower live overview" aria-describedby="command-tower-page-subtitle">
+          <CommandTowerHomeLiveClient initialOverview={overview} initialSessions={sessions} locale={locale} />
+        </section>
+      )}
       {warning && !hasLiveData ? (
         <ControlPlaneStatusCallout
           title={commandTowerCopy.unavailableTitle}
@@ -116,41 +137,69 @@ export function CommandTowerHomeSectionFallback({ locale }: { locale: UiLocale }
   );
 }
 
-export function CommandTowerPageIntro({ locale }: { locale: UiLocale }) {
+export function CommandTowerPageIntro({
+  locale,
+  recoverySummary,
+}: {
+  locale: UiLocale;
+  recoverySummary?: string;
+}) {
   const commandTowerCopy = getUiCopy(locale).dashboard.commandTowerPage;
-  const towerActions =
-    locale === "zh-CN"
+  const recoveryMode = Boolean(recoverySummary);
+  const towerActions = recoveryMode
+    ? locale === "zh-CN"
       ? [
-          { href: "/events", label: "打开风险事件" },
-          { href: "/workflows", label: "打开工作流案例" },
-          { href: "/runs", label: "打开证明室" },
+          { href: "/command-tower", label: "重载指挥塔", variant: "default" as const },
+          { href: "/pm", label: "回到 PM 入口", variant: "secondary" as const },
         ]
       : [
-          { href: "/events", label: "Open risk events" },
-          { href: "/workflows", label: "Open Workflow Cases" },
-          { href: "/runs", label: "Open proof room" },
+          { href: "/command-tower", label: "Reload Command Tower", variant: "default" as const },
+          { href: "/pm", label: "Start from PM", variant: "secondary" as const },
+        ]
+    : locale === "zh-CN"
+      ? [
+          { href: "/events", label: "打开风险事件", variant: "warning" as const },
+          { href: "/workflows", label: "打开工作流案例", variant: "secondary" as const },
+          { href: "/runs", label: "打开证明室", variant: "secondary" as const },
+        ]
+      : [
+          { href: "/events", label: "Open risk events", variant: "warning" as const },
+          { href: "/workflows", label: "Open Workflow Cases", variant: "secondary" as const },
+          { href: "/runs", label: "Open proof room", variant: "secondary" as const },
         ];
   return (
     <header className="app-section">
       <div className="home-briefing-shell">
         <div className="home-briefing-copy">
           <p className="cell-sub mono muted">
-            {locale === "zh-CN" ? "L0 驾驶舱 / 实时控制桌" : "L0 cockpit / live control desk"}
+            {recoveryMode
+              ? locale === "zh-CN"
+                ? "恢复模式 / 当前主面不可用"
+                : "Recovery mode / live surface unavailable"
+              : locale === "zh-CN"
+                ? "L0 驾驶舱 / 实时控制桌"
+                : "L0 cockpit / live control desk"}
           </p>
           <h1 id="command-tower-page-title" className="page-title">
             {commandTowerCopy.srTitle}
           </h1>
           <p id="command-tower-page-subtitle" className="page-subtitle">
-            {commandTowerCopy.srSubtitle}
+            {recoveryMode
+              ? locale === "zh-CN"
+                ? "指挥塔当前拿不到 live 总览。先确认只读真相，再走一条恢复路径。"
+                : "Command Tower cannot read the live overview right now. Verify the read-only truth first, then take one recovery path."
+              : commandTowerCopy.srSubtitle}
           </p>
           <p className="cell-sub mono muted">
-            {locale === "zh-CN"
-              ? "这一页应该先告诉你：现在发生什么、哪条线危险、下一步该去哪个真相入口。"
-              : "This page should answer three questions first: what is happening now, which lane is risky, and which truth surface to open next."}
+            {recoveryMode
+              ? recoverySummary
+              : locale === "zh-CN"
+                ? "这一页应该先告诉你：现在发生什么、哪条线危险、下一步该去哪个真相入口。"
+                : "This page should answer three questions first: what is happening now, which lane is risky, and which truth surface to open next."}
           </p>
           <nav className="home-briefing-actions" aria-label={locale === "zh-CN" ? "指挥塔首屏操作" : "Command Tower first-screen actions"}>
-            {towerActions.map((action, index) => (
-              <Button asChild key={action.href} variant={index === 0 ? "warning" : "secondary"}>
+            {towerActions.map((action) => (
+              <Button asChild key={action.href} variant={action.variant}>
                 <Link href={action.href}>{action.label}</Link>
               </Button>
             ))}
@@ -159,28 +208,62 @@ export function CommandTowerPageIntro({ locale }: { locale: UiLocale }) {
         <Card className="home-briefing-panel">
           <div className="home-briefing-panel-head">
             <span className="cell-sub mono muted">
-              {locale === "zh-CN" ? "值班判断" : "Operator judgment"}
+              {recoveryMode
+                ? locale === "zh-CN"
+                  ? "恢复判断"
+                  : "Recovery judgment"
+                : locale === "zh-CN"
+                  ? "值班判断"
+                  : "Operator judgment"}
             </span>
-            <Badge variant="running">
-              {locale === "zh-CN" ? "先看 live" : "Live first"}
+            <Badge variant={recoveryMode ? "warning" : "running"}>
+              {recoveryMode
+                ? locale === "zh-CN"
+                  ? "先恢复主面"
+                  : "Restore the surface first"
+                : locale === "zh-CN"
+                  ? "先看 live"
+                  : "Live first"}
             </Badge>
           </div>
           <div className="home-briefing-signal-list">
-            <div className="home-briefing-signal">
-              <span className="cell-sub mono muted">{locale === "zh-CN" ? "现在发生什么" : "What is happening now"}</span>
-              <strong>{locale === "zh-CN" ? "先看 live session board" : "Scan the live session board first"}</strong>
-              <p>{locale === "zh-CN" ? "不要先钻细节页。先确定 board 上最重要的 run 和 session。" : "Do not drill into detail pages first. Identify the most important session and run on the board."}</p>
-            </div>
-            <div className="home-briefing-signal">
-              <span className="cell-sub mono muted">{locale === "zh-CN" ? "风险在哪" : "Where is the risk"}</span>
-              <strong>{locale === "zh-CN" ? "先读 risk lane 和 degraded alert" : "Read the risk lane and degraded alert first"}</strong>
-              <p>{locale === "zh-CN" ? "这页的主任务是分诊，不是浏览所有模块。" : "The main job here is triage, not browsing every module."}</p>
-            </div>
-            <div className="home-briefing-signal">
-              <span className="cell-sub mono muted">{locale === "zh-CN" ? "下一步" : "What to do next"}</span>
-              <strong>{locale === "zh-CN" ? "先用 tower 再跳去 Workflow 或 Proof" : "Use the tower before jumping to Workflow or Proof"}</strong>
-              <p>{locale === "zh-CN" ? "让 tower 成为主驾驶舱，而不是另一个数据列表页。" : "Treat the tower as the cockpit, not another reporting page."}</p>
-            </div>
+            {recoveryMode ? (
+              <>
+                <div className="home-briefing-signal">
+                  <span className="cell-sub mono muted">{locale === "zh-CN" ? "当前状态" : "Current state"}</span>
+                  <strong>{locale === "zh-CN" ? "live 总览暂时不可读" : "The live overview is temporarily unavailable"}</strong>
+                  <p>{locale === "zh-CN" ? "这不是正常驾驶舱读面。先恢复主面，再继续值班。" : "This is not a normal cockpit read. Restore the surface first, then resume operator work."}</p>
+                </div>
+                <div className="home-briefing-signal">
+                  <span className="cell-sub mono muted">{locale === "zh-CN" ? "仍然成立的真相" : "What still holds"}</span>
+                  <strong>{locale === "zh-CN" ? "只读入口与证明室仍可用" : "The read-only rooms still work"}</strong>
+                  <p>{locale === "zh-CN" ? "你仍然可以回 PM、Runs 和 Workflow Cases，但不要把当前页面当成 live cockpit。 " : "You can still use PM, Runs, and Workflow Cases, but do not treat this page as a live cockpit right now."}</p>
+                </div>
+                <div className="home-briefing-signal">
+                  <span className="cell-sub mono muted">{locale === "zh-CN" ? "恢复动作" : "Recovery move"}</span>
+                  <strong>{locale === "zh-CN" ? "先重载，再决定是否回 PM" : "Reload first, then decide whether to return to PM"}</strong>
+                  <p>{locale === "zh-CN" ? "把恢复动作收成一条主路径，而不是继续分散到多个正常驾驶舱动作。 " : "Keep recovery on one main path instead of splitting attention across normal cockpit actions."}</p>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="home-briefing-signal">
+                  <span className="cell-sub mono muted">{locale === "zh-CN" ? "现在发生什么" : "What is happening now"}</span>
+                  <strong>{locale === "zh-CN" ? "先看 live session board" : "Scan the live session board first"}</strong>
+                  <p>{locale === "zh-CN" ? "不要先钻细节页。先确定 board 上最重要的 run 和 session。" : "Do not drill into detail pages first. Identify the most important session and run on the board."}</p>
+                </div>
+                <div className="home-briefing-signal">
+                  <span className="cell-sub mono muted">{locale === "zh-CN" ? "风险在哪" : "Where is the risk"}</span>
+                  <strong>{locale === "zh-CN" ? "先读 risk lane 和 degraded alert" : "Read the risk lane and degraded alert first"}</strong>
+                  <p>{locale === "zh-CN" ? "这页的主任务是分诊，不是浏览所有模块。" : "The main job here is triage, not browsing every module."}</p>
+                </div>
+                <div className="home-briefing-signal">
+                  <span className="cell-sub mono muted">{locale === "zh-CN" ? "下一步" : "What to do next"}</span>
+                  <strong>{locale === "zh-CN" ? "先用 tower 再跳去 Workflow 或 Proof" : "Use the tower before jumping to Workflow or Proof"}</strong>
+                  <p>{locale === "zh-CN" ? "让 tower 成为主驾驶舱，而不是另一个数据列表页。" : "Treat the tower as the cockpit, not another reporting page."}</p>
+                </div>
+              </>
+            )}
           </div>
         </Card>
       </div>
@@ -191,12 +274,17 @@ export function CommandTowerPageIntro({ locale }: { locale: UiLocale }) {
 export default async function CommandTowerPage() {
   const cookieStore = await cookies();
   const locale = normalizeUiLocale(cookieStore.get(UI_LOCALE_STORAGE_KEY)?.value);
+  const { warning, hasLiveData } = await loadCommandTowerHomeState(locale);
+  const recoverySummary =
+    warning && !hasLiveData ? warning : undefined;
   return (
     <main className="grid" aria-labelledby="command-tower-page-title" aria-describedby="command-tower-page-subtitle">
-      <CommandTowerPageIntro locale={locale} />
-      <Suspense fallback={<CommandTowerHomeSectionFallback locale={locale} />}>
-        <CommandTowerHomeSection locale={locale} />
-      </Suspense>
+      <CommandTowerPageIntro locale={locale} recoverySummary={recoverySummary} />
+      {recoverySummary ? null : (
+        <Suspense fallback={<CommandTowerHomeSectionFallback locale={locale} />}>
+          <CommandTowerHomeSection locale={locale} />
+        </Suspense>
+      )}
     </main>
   );
 }
