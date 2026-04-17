@@ -58,9 +58,9 @@ export CORTEXPILOT_BROWSER_PROFILE_DIR="<chrome-profile-root>"
 export CORTEXPILOT_BROWSER_PROFILE_ALLOWLIST="<chrome-profile-root>"
 "$CORTEXPILOT_PYTHON" - <<'"'"'PY'"'"'
 import json
-from cortexpilot_orch.store.run_store import RunStore
-from cortexpilot_orch.runners.tool_runner import ToolRunner
-from cortexpilot_orch.scheduler.tool_execution_pipeline import run_search_pipeline
+from openvibecoding_orch.store.run_store import RunStore
+from openvibecoding_orch.runners.tool_runner import ToolRunner
+from openvibecoding_orch.scheduler.tool_execution_pipeline import run_search_pipeline
 
 store = RunStore()
 run_id = store.create_run("w3-news-digest-profile-allowlist-v2")
