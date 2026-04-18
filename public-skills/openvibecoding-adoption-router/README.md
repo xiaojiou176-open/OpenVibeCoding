@@ -1,7 +1,7 @@
 # OpenVibeCoding Adoption Router
 
-This bundle teaches an agent how to connect the published OpenVibeCoding read-only
-MCP package and choose the right public adoption lane.
+This bundle teaches an agent how to connect the current live public OpenVibeCoding
+read-only MCP package and choose the right public adoption lane.
 
 This is OpenVibeCoding's secondary public adoption lane. The read-only MCP package
 plus the Official MCP Registry entry remain the primary machine-readable front
@@ -9,7 +9,8 @@ door, and local coding-agent bundles stay example-only.
 
 ## What the agent learns here
 
-- how to install the published `openvibecoding-orchestrator==0.1.0a4` MCP package
+- how to install the current live legacy package
+  `cortexpilot-orchestrator==0.1.0a4` for the OpenVibeCoding read-only MCP
 - which read-only OpenVibeCoding tools exist and which are safe-first
 - how to choose between run/workflow inspection, queue/approval reads, and
   proof/incident reads
@@ -30,11 +31,16 @@ door, and local coding-agent bundles stay example-only.
 
 ## The shortest install path
 
-Use the published package, not a repo-local checkout:
+Use the live public package, not a repo-local checkout:
 
 ```bash
-uvx --from openvibecoding-orchestrator==0.1.0a4 openvibecoding-readonly-mcp
+uvx --from cortexpilot-orchestrator==0.1.0a4 openvibecoding-readonly-mcp
 ```
+
+Today the executable is already OpenVibeCoding-branded, but the published PyPI
+package still uses the legacy live name `cortexpilot-orchestrator`. Do not
+claim that the OpenVibeCoding-branded package name is live until the renamed
+publication actually exists.
 
 If the host needs a saved MCP config snippet, use the host-specific examples in
 `references/INSTALL.md`.

@@ -2,7 +2,7 @@
   "mcpServers": {
     "openvibecoding-readonly": {
       "command": "uvx",
-      "args": ["--from", "openvibecoding-orchestrator==0.1.0a4", "openvibecoding-readonly-mcp"]
+      "args": ["--from", "cortexpilot-orchestrator==0.1.0a4", "openvibecoding-readonly-mcp"]
     }
   }
 }

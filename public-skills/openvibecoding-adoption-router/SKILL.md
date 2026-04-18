@@ -1,6 +1,6 @@
 ---
 name: openvibecoding-adoption-router
-description: Teach the agent how to connect the published OpenVibeCoding read-only MCP package, choose the right public lane, and use the stable read-only tools without overclaiming hosted or write-capable support.
+description: Teach the agent how to connect the current live public package for the OpenVibeCoding read-only MCP, choose the right public lane, and use the stable read-only tools without overclaiming hosted or write-capable support.
 triggers:
   - openvibecoding
   - openvibecoding setup
@@ -15,7 +15,7 @@ Use this skill when the user needs the shortest truthful path into OpenVibeCodin
 
 ## What this skill teaches
 
-- how to install the published OpenVibeCoding MCP package
+- how to install the current live public package for the OpenVibeCoding read-only MCP
 - how to choose the right read-only tool for the current job
 - how to start with one public lane instead of mixing every surface together
 - how to keep the answer inside the current read-only public boundary
@@ -33,7 +33,7 @@ Use this skill when the user asks to:
 ## If the MCP is not connected yet
 
 Open `README.md` in this folder and follow `references/INSTALL.md`.
-Do not invent repo-local startup paths when the published package already
+Do not invent repo-local startup paths when the live public package already
 exists.
 
 ## Safe-first workflow
