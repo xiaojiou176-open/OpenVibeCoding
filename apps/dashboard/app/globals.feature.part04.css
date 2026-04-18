@@ -163,7 +163,7 @@
 
 .page-title-stacked {
   display: grid;
-  gap: 2px;
+  gap: var(--space-0-5);
 }
 
 .page-title-stacked span {
@@ -230,7 +230,11 @@
   overflow: hidden;
   padding: var(--space-4) var(--space-5);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 52%),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-text-primary) 4%, transparent),
+      transparent 52%
+    ),
     linear-gradient(145deg, color-mix(in srgb, var(--color-bg-surface) 94%, white), color-mix(in srgb, var(--color-bg-elevated) 92%, var(--color-bg-surface)));
   border: 1px solid color-mix(in srgb, var(--color-primary) 14%, var(--color-border));
   box-shadow: var(--shadow-lg);
@@ -1355,7 +1359,11 @@ body {
 .app-shell--landing .sidebar {
   border-right-color: color-mix(in srgb, var(--color-primary) 10%, var(--color-border));
   background:
-    linear-gradient(180deg, rgba(18, 27, 40, 0.88), rgba(22, 31, 44, 0.76)),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-bg) 88%, transparent),
+      color-mix(in srgb, var(--color-bg-elevated) 76%, transparent)
+    ),
     var(--color-brand-aurora);
   backdrop-filter: blur(10px) saturate(124%);
 }
@@ -1447,7 +1455,7 @@ body {
 
 .app-shell--landing .topbar {
   height: 56px;
-  background: rgba(19, 30, 47, 0.78);
+  background: color-mix(in srgb, var(--color-bg-elevated) 78%, transparent);
   box-shadow: none;
   justify-content: flex-end;
 }

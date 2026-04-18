@@ -326,7 +326,11 @@
 .compare-stage-decision,
 .compare-stage-next {
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 48%),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--color-text-primary) 2%, transparent),
+      transparent 48%
+    ),
     linear-gradient(145deg, color-mix(in srgb, var(--color-bg-surface) 88%, var(--color-bg-elevated)), var(--color-bg-elevated));
 }
 

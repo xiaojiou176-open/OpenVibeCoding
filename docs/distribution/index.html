@@ -28,6 +28,12 @@
       content="Canonical current distribution matrix for OpenVibeCoding."
     />
     <meta name="twitter:image" content="../assets/storefront/social-preview-1280x640.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -39,19 +45,23 @@
     </script>
     <style>
       :root {
-        color-scheme: light;
-        --bg: #f7f1e7;
-        --panel: #fffaf3;
-        --ink: #17232c;
-        --muted: #556471;
-        --line: rgba(23, 35, 44, 0.12);
-        --accent: #8b4513;
-        --accent-soft: rgba(139, 69, 19, 0.1);
-        --accent-alt: #155e75;
-        --accent-alt-soft: rgba(21, 94, 117, 0.1);
-        --warn: #92400e;
-        --warn-soft: rgba(146, 64, 14, 0.1);
-        --shadow: 0 24px 60px rgba(23, 35, 44, 0.1);
+        color-scheme: dark;
+        --bg: #0b1220;
+        --bg-elevated: #111a2e;
+        --panel: #17233b;
+        --panel-raised: #1c2b43;
+        --panel-soft: rgba(23, 35, 59, 0.88);
+        --ink: #e8eef8;
+        --muted: #9fb0c8;
+        --line: rgba(159, 176, 200, 0.18);
+        --line-strong: rgba(159, 176, 200, 0.3);
+        --accent: #1fb981;
+        --accent-soft: rgba(31, 185, 129, 0.12);
+        --accent-alt: #f2c27d;
+        --accent-alt-soft: rgba(242, 194, 125, 0.12);
+        --warn: #e59a2f;
+        --warn-soft: rgba(229, 154, 47, 0.12);
+        --shadow: 0 24px 60px rgba(4, 7, 13, 0.48);
       }
 
       * { box-sizing: border-box; }
@@ -59,26 +69,31 @@
       body {
         margin: 0;
         background:
-          radial-gradient(circle at top right, rgba(139, 69, 19, 0.08), transparent 28%),
-          radial-gradient(circle at top left, rgba(21, 94, 117, 0.08), transparent 24%),
-          linear-gradient(180deg, #faf5ed 0%, #efe6da 100%);
+          radial-gradient(circle at 12% 10%, rgba(31, 185, 129, 0.14), transparent 20%),
+          radial-gradient(circle at 88% 12%, rgba(242, 194, 125, 0.08), transparent 16%),
+          linear-gradient(180deg, #0b1220 0%, #101a2e 48%, #09111e 100%);
         color: var(--ink);
-        font: 16px/1.65 "Inter", "Segoe UI", system-ui, sans-serif;
+        font: 16px/1.65 "Manrope", "Avenir Next", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       }
 
       main {
         max-width: 1140px;
         margin: 0 auto;
-        padding: 40px 20px 72px;
+        padding: 48px 20px 80px;
       }
 
-      a { color: var(--accent-alt); }
-      a:hover { color: #0f4d60; }
+      a {
+        color: var(--accent-alt);
+        text-underline-offset: 3px;
+      }
+      a:hover { color: #ffe2b0; }
 
       .hero,
       .section,
       .table-shell {
-        background: var(--panel);
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.028), rgba(255, 255, 255, 0.012)),
+          var(--panel-soft);
         border: 1px solid var(--line);
         border-radius: 28px;
         box-shadow: var(--shadow);
@@ -102,17 +117,28 @@
       }
 
       .eyebrow {
-        background: rgba(23, 35, 44, 0.08);
+        background: rgba(31, 185, 129, 0.1);
         color: var(--muted);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
       }
 
-      .badge.shipped { background: var(--accent-alt-soft); color: var(--accent-alt); }
-      .badge.starter { background: var(--accent-soft); color: var(--accent); }
-      .badge.deferred { background: var(--warn-soft); color: var(--warn); }
+      .badge.shipped { background: var(--accent-soft); color: #86e5bd; }
+      .badge.starter { background: var(--accent-alt-soft); color: var(--accent-alt); }
+      .badge.deferred { background: var(--warn-soft); color: #f4c078; }
 
       h1, h2, h3 { margin: 0; line-height: 1.15; }
-      h1 { font-size: clamp(2.4rem, 4vw, 3.8rem); max-width: 13ch; }
+      h1 {
+        max-width: 12ch;
+        font-family: "Space Grotesk", "Manrope", sans-serif;
+        font-size: clamp(2.5rem, 4vw, 4rem);
+        letter-spacing: -0.04em;
+      }
       h2 { font-size: 1.65rem; margin-bottom: 12px; }
+      h2, h3 {
+        font-family: "Space Grotesk", "Manrope", sans-serif;
+        letter-spacing: -0.02em;
+      }
       p, li, td { color: var(--muted); }
       .lede { font-size: 1.08rem; max-width: 78ch; }
 
@@ -124,13 +150,33 @@
         gap: 12px;
       }
 
+      .mini-nav a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 14px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: rgba(17, 26, 46, 0.8);
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 700;
+        text-decoration: none;
+      }
+
+      .mini-nav a:hover {
+        color: var(--ink);
+        border-color: var(--line-strong);
+        background: rgba(23, 35, 59, 0.96);
+      }
+
       .pill {
         display: inline-flex;
         align-items: center;
         gap: 8px;
         padding: 10px 14px;
         border-radius: 999px;
-        background: white;
+        background: rgba(17, 26, 46, 0.84);
         border: 1px solid var(--line);
         color: var(--ink);
         font-weight: 600;
@@ -146,10 +192,10 @@
         font-weight: 600;
       }
 
-      .button.primary { background: var(--accent); color: white; }
+      .button.primary { background: var(--accent); color: #08131c; }
       .button.secondary {
         border: 1px solid var(--line);
-        background: white;
+        background: rgba(17, 26, 46, 0.84);
         color: var(--ink);
       }
 
@@ -162,7 +208,9 @@
       .card {
         border: 1px solid var(--line);
         border-radius: 22px;
-        background: white;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.022), rgba(255, 255, 255, 0.012)),
+          var(--panel-raised);
         padding: 18px;
       }
 
@@ -187,16 +235,76 @@
         font-size: 13px;
         letter-spacing: 0.03em;
         text-transform: uppercase;
-        background: rgba(23, 35, 44, 0.04);
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--ink);
       }
 
       tr:last-child td { border-bottom: none; }
 
       code {
-        background: rgba(23, 35, 44, 0.06);
+        background: rgba(255, 255, 255, 0.06);
         border-radius: 6px;
         padding: 2px 6px;
-        font-family: "SFMono-Regular", Menlo, monospace;
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+      }
+
+      pre {
+        margin: 0;
+        overflow-x: auto;
+        padding: 18px;
+        border-radius: 18px;
+        border: 1px solid var(--line);
+        background: rgba(8, 16, 28, 0.82);
+      }
+
+      @media (max-width: 860px) {
+        .table-shell {
+          padding: 12px;
+        }
+
+        table, tbody, tr, td {
+          display: block;
+          width: 100%;
+        }
+
+        thead {
+          display: none;
+        }
+
+        tbody {
+          display: grid;
+          gap: 14px;
+        }
+
+        tr {
+          border: 1px solid var(--line);
+          border-radius: 22px;
+          overflow: hidden;
+          background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.022), rgba(255, 255, 255, 0.012)),
+            var(--panel-raised);
+        }
+
+        td {
+          display: grid;
+          gap: 8px;
+          padding: 14px 16px;
+        }
+
+        td::before {
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: var(--accent);
+        }
+
+        tr td:nth-of-type(1)::before { content: "Surface"; }
+        tr td:nth-of-type(2)::before { content: "Current status"; }
+        tr td:nth-of-type(3)::before { content: "Official claim"; }
+        tr td:nth-of-type(4)::before { content: "Install path"; }
+        tr td:nth-of-type(5)::before { content: "Protocol / Auth"; }
+        tr td:nth-of-type(6)::before { content: "Next action"; }
       }
 
       @media (max-width: 720px) {
@@ -262,7 +370,7 @@
         <h2>Release truth</h2>
         <div class="grid">
           <article class="card">
-            <span class="badge shipped">Published today</span>
+            <span class="badge shipped">Latest published release</span>
             <h3>Latest GitHub release</h3>
             <p><code>v0.1.0-alpha.3</code> is the latest published GitHub Release and the latest public semver tag.</p>
           </article>
