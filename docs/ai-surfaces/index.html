@@ -28,6 +28,7 @@
       content="Truthful command-tower map for advisory AI briefs, read-only MCP, and API entrypoints in OpenVibeCoding."
     />
     <meta name="twitter:image" content="../assets/storefront/social-preview-1280x640.png" />
+    <link rel="stylesheet" href="../assets/storefront/public-docs-command-deck.css" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -39,30 +40,33 @@
     </script>
   </head>
   <body>
-    <main style="max-width:960px;margin:0 auto;padding:40px 20px;font:16px/1.7 system-ui,sans-serif;color:#17232c;">
-      <p>
+    <main class="plain-doc-shell">
+      <nav class="mini-nav" aria-label="Top navigation">
         <a href="../">Back to the public landing page</a>
-        · <a href="../compatibility/">Compatibility matrix</a>
-        · <a href="../ecosystem/">Ecosystem map</a>
-        · <a href="../integrations/">Integration guide</a>
-        · <a href="../builders/">Builder quickstart</a>
-        · <a href="../skills/">Skills quickstart</a>
-        · <a href="../mcp/">MCP quickstart</a>
-        · <a href="../api/">API quickstart</a>
-        · <a href="../use-cases/">Use cases</a>
-      </p>
+        <a href="../compatibility/">Compatibility matrix</a>
+        <a href="../ecosystem/">Ecosystem map</a>
+        <a href="../integrations/">Integration guide</a>
+        <a href="../builders/">Builder quickstart</a>
+        <a href="../skills/">Skills quickstart</a>
+        <a href="../mcp/">MCP quickstart</a>
+        <a href="../api/">API quickstart</a>
+        <a href="../use-cases/">Use cases</a>
+      </nav>
 
-      <h1>AI, MCP, and API surfaces for the command tower</h1>
-      <p>
-        OpenVibeCoding is the command tower for AI engineering. This page is not the top-level product story; it is the
-        secondary technical map that shows which AI-facing, MCP-facing, and API-facing surfaces already exist for
-        <strong>Codex</strong> and <strong>Claude Code</strong> workflows.
-      </p>
-      <p>
-        Current boundary: these surfaces are <strong>not</strong> a hosted operator product, the shipped MCP node remains
-        <strong>read-only</strong>, and the frontend packages remain a <strong>thin client + contract + shared substrate</strong>
-        layer instead of a full SDK platform.
-      </p>
+      <section class="hero">
+        <span class="eyebrow">Secondary technical surfaces</span>
+        <h1>AI, MCP, and API surfaces for the command tower</h1>
+        <p class="lede">
+          OpenVibeCoding is the command tower for AI engineering. This page is not the top-level product story; it is the
+          secondary technical map that shows which AI-facing, MCP-facing, and API-facing surfaces already exist for
+          <strong>Codex</strong> and <strong>Claude Code</strong> workflows.
+        </p>
+        <p class="caption">
+          Current boundary: these surfaces are <strong>not</strong> a hosted operator product, the shipped MCP node remains
+          <strong>read-only</strong>, and the frontend packages remain a <strong>thin client + contract + shared substrate</strong>
+          layer instead of a full SDK platform.
+        </p>
+      </section>
 
       <h2>1. Explain-only AI operator copilot</h2>
       <p>
