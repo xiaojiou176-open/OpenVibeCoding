@@ -47,7 +47,7 @@
 .ct-priority-lanes {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
+  gap: calc(var(--space-3) + var(--space-0-5));
 }
 
 .ct-priority-lane {
@@ -55,7 +55,7 @@
   border: 1px solid color-mix(in srgb, var(--color-primary) 12%, var(--color-border));
   background:
     linear-gradient(180deg, color-mix(in srgb, var(--color-bg-surface) 96%, white), color-mix(in srgb, var(--color-bg-elevated) 86%, var(--color-bg-surface)));
-  padding: 14px;
+  padding: calc(var(--space-3) + var(--space-0-5));
   min-height: 152px;
 }
 

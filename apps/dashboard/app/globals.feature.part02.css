@@ -444,7 +444,7 @@
   border-radius: 999px;
   border: 1px solid color-mix(in srgb, var(--color-primary) 20%, var(--color-border));
   background: color-mix(in srgb, white 84%, var(--color-primary) 16%);
-  color: #02070c;
+  color: var(--color-text-on-primary);
   font-size: var(--text-xs);
   font-weight: 600;
 }

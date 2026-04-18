@@ -269,7 +269,7 @@
 
 .topbar-copy {
   display: grid;
-  gap: 2px;
+  gap: var(--space-0-5);
   min-width: 0;
 }
 
@@ -381,7 +381,7 @@
   padding: var(--surface-card-padding);
   display: flex;
   flex-direction: column;
-  gap: calc(var(--surface-card-gap) + 2px);
+  gap: calc(var(--surface-card-gap) + var(--space-0-5));
   transition: border-color var(--motion-normal) var(--motion-ease-out),
     box-shadow var(--motion-normal) var(--motion-ease-out),
     transform var(--motion-fast) var(--motion-ease-out);
