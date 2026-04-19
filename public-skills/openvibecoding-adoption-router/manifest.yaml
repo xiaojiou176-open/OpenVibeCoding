@@ -15,20 +15,20 @@ registry_targets:
     listing_url: https://www.clawhub.ai/skills/openvibecoding-adoption-router
     submit_via: clawhub publish . --slug openvibecoding-adoption-router --name "OpenVibeCoding Adoption Router" --version 1.1.1 --tags mcp,workflow,proof,read-only,openvibecoding
   openhands-extensions:
-    status: review-pending
+    status: closed-receipt-no-live-listing
     package_shape: skill-folder
     submission_url: https://github.com/OpenHands/extensions/pull/151
-    submit_via: submit this folder as skills/openvibecoding-adoption-router/ in OpenHands/extensions
+    submit_via: historical receipt only; reopen or replace the submission before claiming any live OpenHands/extensions listing
 
 boundaries:
   product_identity: Secondary public adoption skill for OpenVibeCoding's proof-first command tower through the published read-only MCP surface.
   canonical_repo_version: 0.1.0a4
-  official_listing_state: clawhub-live-openhands-review-pending-other-hosts-pending
+  official_listing_state: clawhub-live-openhands-closed-receipt-other-hosts-pending
   not_claimed:
     - No hosted operator service is claimed
     - No write-capable public MCP surface is claimed
     - No first-party marketplace listing is claimed unless independently confirmed
-    - No live OpenHands/extensions listing is claimed until the PR lands
+    - No live OpenHands/extensions listing is claimed until a new listing is independently confirmed
 
 pair_with:
   - SKILL.md

@@ -32,4 +32,4 @@ inspection lane.
 
 This packet is for the public, read-only OpenVibeCoding MCP surface. It does not
 claim a hosted operator service, a write-capable public MCP, or a live
-OpenHands/extensions listing until the PR lands.
+OpenHands/extensions listing until a new listing is independently confirmed.
