@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import {createRequire} from "node:module";
-import {mkdirSync, readFileSync, rmSync, writeFileSync} from "node:fs";
+import {mkdirSync, rmSync, writeFileSync} from "node:fs";
 import {resolve, dirname} from "node:path";
 import {fileURLToPath} from "node:url";
 import {spawn} from "node:child_process";
