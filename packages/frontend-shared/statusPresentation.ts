@@ -312,7 +312,7 @@ export function knownOutcomeTypeLabel(
 
 // Legacy compatibility helper: public UI is now English-first by default.
 export function knownOutcomeTypeLabelZh(outcomeType: string | undefined | null): string | undefined {
-  return knownOutcomeTypeLabel(outcomeType, "en");
+  return knownOutcomeTypeLabel(outcomeType, "zh-CN");
 }
 
 export function outcomeTypeLabel(
@@ -325,7 +325,7 @@ export function outcomeTypeLabel(
 
 // Legacy compatibility helper: public UI is now English-first by default.
 export function outcomeTypeLabelZh(outcomeType: string | undefined | null): string {
-  return outcomeTypeLabel(outcomeType, "en");
+  return outcomeTypeLabel(outcomeType, "zh-CN");
 }
 
 export function statusLabelFromCanonical(
@@ -339,7 +339,7 @@ export function statusLabelFromCanonical(
 
 // Legacy compatibility helper: public UI is now English-first by default.
 export function statusLabelZhFromCanonical(canonical: string | undefined): string {
-  return statusLabelFromCanonical(canonical, "en");
+  return statusLabelFromCanonical(canonical, "zh-CN");
 }
 
 export function statusVariantFromCanonical(canonical: string | undefined): StatusVariant {
@@ -377,7 +377,7 @@ export function stageLabelFromCanonical(
 
 // Legacy compatibility helper: public UI is now English-first by default.
 export function stageLabelZhFromCanonical(canonical: string | undefined): string {
-  return stageLabelFromCanonical(canonical, "en");
+  return stageLabelFromCanonical(canonical, "zh-CN");
 }
 
 export function stageVariantFromCanonical(canonical: string | undefined): StageVariant {
@@ -399,7 +399,7 @@ export function statusCtaFromCanonical(
 
 // Legacy compatibility helper: public UI is now English-first by default.
 export function statusCtaZhFromCanonical(canonical: string | undefined): string {
-  return statusCtaFromCanonical(canonical, "en");
+  return statusCtaFromCanonical(canonical, "zh-CN");
 }
 
 export function stageCtaFromCanonical(
@@ -413,5 +413,5 @@ export function stageCtaFromCanonical(
 
 // Legacy compatibility helper: public UI is now English-first by default.
 export function stageCtaZhFromCanonical(canonical: string | undefined): string {
-  return stageCtaFromCanonical(canonical, "en");
+  return stageCtaFromCanonical(canonical, "zh-CN");
 }

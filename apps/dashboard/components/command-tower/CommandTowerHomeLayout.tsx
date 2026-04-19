@@ -12,6 +12,7 @@ type SortMode = "updated_desc" | "created_desc" | "failed_desc" | "blocked_desc"
 type FocusMode = "all" | "high_risk" | "blocked" | "running";
 
 type LayoutProps = {
+  locale?: "en" | "zh-CN";
   drawerCollapsed: boolean;
   liveMode: "running" | "backoff" | "paused";
   alertsStatus: string;
@@ -38,6 +39,7 @@ type LayoutProps = {
   SessionBoardComponent: ComponentType<{
     sessions: PmSessionSummary[];
     snapshotStatus?: { enabled: boolean; label: string };
+    locale?: "en" | "zh-CN";
   }>;
   DrawerComponent: ComponentType<any>;
   drawerLiveBadgeVariant: StatusVariant;
@@ -79,6 +81,7 @@ type LayoutProps = {
 };
 
 export default function CommandTowerHomeLayout(props: LayoutProps) {
+  const locale = props.locale ?? "en";
   const hasRefreshIssue =
     props.refreshHealthSummary.badgeVariant === "failed" ||
     props.refreshHealthSummary.badgeVariant === "warning";
@@ -299,7 +302,7 @@ export default function CommandTowerHomeLayout(props: LayoutProps) {
             {props.snapshotStatus.enabled ? <Badge variant="warning">{props.liveHomeCopy.layout.cachedSnapshotBadge}</Badge> : null}
           </div>
           <div id="command-tower-session-board-region" role="region" aria-label={props.liveHomeCopy.layout.sessionBoardListAriaLabel}>
-            <props.SessionBoardComponent sessions={props.visibleSessions} snapshotStatus={props.snapshotStatus} />
+            <props.SessionBoardComponent sessions={props.visibleSessions} snapshotStatus={props.snapshotStatus} locale={locale} />
           </div>
         </section>
       </div>

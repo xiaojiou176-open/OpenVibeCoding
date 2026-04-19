@@ -918,6 +918,7 @@ export default function CommandTowerHomeLive({
 
   return (
     <CommandTowerHomeLayout
+      locale={locale}
       drawerCollapsed={drawerCollapsed}
       liveMode={liveMode}
       alertsStatus={alertsStatus}

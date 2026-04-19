@@ -2367,29 +2367,29 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
       homePhase2: {
         heroTitle: "面向 AI 工程的开放指挥塔",
         heroSubtitle:
-          "别再盯着 AI coding 一步一步催了。AI coding 不缺模型，缺的是指挥塔。OpenVibeCoding 会围绕 Codex / Claude Code 去规划、派工、追踪、续跑和验真，把长期工程任务收进一条可治理、可续跑、可验真的操作路径。",
+          "别再盯着 AI 编码一步一步催了。AI 编码不缺模型，缺的是指挥塔。OpenVibeCoding 会围绕 Codex / Claude Code 去规划、派工、追踪、续跑和验真，把长期工程任务收进一条可治理、可续跑、可验真的操作路径。",
         startFirstTaskLabel: "启动首个任务",
         startNewTaskLabel: "启动新任务",
-        viewLatestRunsLabel: "查看最近 runs",
+        viewLatestRunsLabel: "查看最近运行",
         investigateHighRiskFailuresLabel: "排查高风险失败",
         handleLatestFailureLabel: "处理最近失败",
         productSpineTitle: "一个开放指挥塔，五个动作",
         productSpineDescription:
-          "首页先讲 live command deck，再把主循环钉在三块真相面上：Command Tower、Workflow Cases 和 Proof & Replay。",
+          "首页先讲实时指挥台，再把主循环钉在三块真相面上：指挥塔、工作流案例和证明与回放。",
         productSpineCards: [
           {
             href: "/command-tower",
-            title: "Command Tower",
+            title: "指挥塔",
             desc: "把分散的会话、队列姿态和高风险漂移收进一个指挥塔里，而不是继续盯着零散窗口当保姆。",
           },
           {
             href: "/workflows",
-            title: "Workflow Cases",
+            title: "工作流案例",
             desc: "把请求、队列、判定、证明和关联 runs 绑成一条可委派、可续跑的案例记录。",
           },
           {
             href: "/runs",
-            title: "Proof & Replay",
+            title: "证明与回放",
             desc: "在真正信任结果前，先看证据包、对比重跑和失败回放，把“做完了”变成能验的事实。",
           },
         ],
@@ -2512,7 +2512,7 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
         aiSurfacesTitle: "AI 功能已经进入主工作流",
         aiSurfacesDescription:
           "OpenVibeCoding 里的 AI 不是漂浮聊天框。它已经分别出现在执行前建议、工作流解释，以及运行/对比的操作摘要里。",
-        aiSurfacesActionLabel: "打开 AI + MCP + API 页面",
+        aiSurfacesActionLabel: "打开 AI、MCP 与 API 页面",
         aiSurfacesActionHref: "/ai-surfaces/",
         aiSurfaceCards: [
           {
@@ -2524,15 +2524,15 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
           },
           {
             badge: "工作流级 AI",
-            title: "Workflow 副驾驶",
-            desc: "Workflow Case 已经能给出工作流级别的解释，覆盖队列姿态、最新 run 上下文和下一步操作。",
+            title: "工作流副驾驶",
+            desc: "工作流案例已经能给出工作流级别的解释，覆盖队列姿态、最新运行上下文和下一步操作。",
             href: "/workflows",
             prefetch: true,
           },
           {
             badge: "运行时 AI",
-            title: "Run / Compare 操作摘要",
-            desc: "Run Detail 和 compare 面已经能解释差异、证明、incident 上下文和下一步动作，而不假装自己在执行恢复。",
+            title: "运行与对比操作摘要",
+            desc: "运行详情和对比页面已经能解释差异、证明、incident 上下文和下一步动作，而不假装自己在执行恢复。",
             href: "/runs",
             prefetch: true,
           },
@@ -2558,7 +2558,7 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
           {
             badge: "薄客户端",
             title: "@openvibecoding/frontend-api-client",
-            desc: "当你想从一个导入边界里拿到 runs、Workflow Cases、approvals 和 Command Tower 读取能力时，就从这里开始。",
+            desc: "当你想从一个导入边界里拿到 runs、工作流案例、approvals 和指挥塔读取能力时，就从这里开始。",
             href: "https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/packages/frontend-api-client/README.md",
           },
           {
@@ -2574,14 +2574,14 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
             href: "https://github.com/xiaojiou176-open/OpenVibeCoding/blob/main/packages/frontend-shared/README.md",
           },
         ],
-        liveCaseGalleryTitle: "真实 Workflow Case 画廊",
+        liveCaseGalleryTitle: "真实工作流案例画廊",
         liveCaseGalleryDescription:
-          "把真实 Workflow Cases 当作可验的参考案例来使用。这里会直接链接 live case detail 和可分享 recap，而不是伪造 demo-only 画廊数据。",
-        liveCaseGalleryActionLabel: "打开 Workflow Cases",
+          "把真实工作流案例当作可验的参考案例来使用。这里会直接链接可实时查看的案例详情和可分享 recap，而不是伪造演示专用的画廊数据。",
+        liveCaseGalleryActionLabel: "打开工作流案例",
         liveCaseGalleryActionHref: "/workflows",
         firstTaskGuideTitle: "首个任务指南（可展开）",
         firstTaskGuideDescription:
-          "从请求开始，观察 Command Tower，确认 Workflow Case，再检查 Proof & Replay。默认折叠，避免首屏过吵。",
+          "从请求开始，观察指挥塔，确认工作流案例，再检查证明与回放。默认折叠，避免首屏过吵。",
         firstTaskGuideSummary: "显示四步首跑流程",
         firstTaskGuideSteps: [
           {
@@ -2596,21 +2596,21 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
             prefetch: false,
             step: "第 2 步",
             title: "观察实时进展（确认它在前进）",
-            desc: "打开 Command Tower，确认 run 在推进而不是卡住。",
+            desc: "打开指挥塔，确认运行在推进而不是卡住。",
           },
           {
             href: "/workflows",
             prefetch: true,
             step: "第 3 步",
-            title: "确认 Workflow Case",
-            desc: "打开 Workflow Cases，确认持久案例记录、队列姿态和关联 runs。",
+            title: "确认工作流案例",
+            desc: "打开工作流案例，确认持久案例记录、队列姿态和关联运行。",
           },
           {
             href: "/runs",
             prefetch: true,
             step: "第 4 步",
-            title: "检查 Proof & Replay",
-            desc: "打开 run 台账，检查状态、证据、compare 状态和 replay 状态。",
+            title: "检查证明与回放",
+            desc: "打开运行台账，检查状态、证据、对比状态和回放状态。",
           },
         ],
         optionalApprovalStep: {
@@ -2852,12 +2852,12 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
               stable: "当前态势稳定。先做一次例行刷新，再抽查几个会话详情，防止隐藏阻塞。",
             },
             priorityLanes: {
-              liveTitle: "实时 Lane",
+              liveTitle: "实时通道",
               liveSummary: (status: string, intervalMs: number) => `${status} · 间隔 ${intervalMs}ms`,
-              riskTitle: "风险 Lane",
+              riskTitle: "风险通道",
               riskSummary: (failed: number, blocked: number, critical: number) =>
                 `失败 ${failed} · 阻塞 ${blocked} · 严重 ${critical}`,
-              actionsTitle: "动作 Lane",
+              actionsTitle: "动作通道",
               draftFiltersWaiting: (count: number) => `有 ${count} 个草稿筛选待应用`,
               refreshFirst: "先刷新，再聚焦高风险会话",
               primaryActionsReady: "主动作已就绪",
@@ -2929,13 +2929,13 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
           owner: "负责人",
           project: "项目",
           verdict: "结论",
-          runs: "Runs",
+          runs: "运行",
         },
       },
       workflowListPage: {
         title: "工作流案例",
         subtitle:
-          "工作流案例会把队列姿态、关联 Runs、结论，以及后续的 Proof & Replay 决策都绑在同一条操作记录上。",
+          "工作流案例会把队列姿态、关联运行、结论，以及后续的证明与回放决策都绑在同一条操作记录上。",
         summaryAriaLabel: "工作流案例操作摘要",
         countsBadge: (workflowCount: number, queueCount: number) =>
           `${workflowCount} 个工作流 / ${queueCount} 个队列项`,
@@ -2961,16 +2961,16 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
           status: "状态",
           namespace: "命名空间",
           taskQueue: "任务队列",
-          runs: "Runs",
+          runs: "运行",
         },
         verdictPrefix: "结论",
         queueSummary: (count: number, slaState: string) => `队列：${count} / SLA ${slaState}`,
       },
       runsPage: {
-        title: "Proof & Replay",
+        title: "证明与回放",
         subtitle:
           "这里是 Run 证据、对比姿态和重放决策的主入口。失败分流只是其中一条操作 lane，不是这张页面的全部意义。",
-        countsBadge: (runCount: number) => `${runCount} 个 runs`,
+        countsBadge: (runCount: number) => `${runCount} 个运行`,
         warningTitle: "证明与回放当前处于部分真相模式。",
         warningNextStep: "先把当前可见 runs 当成只读快照，再进入对应的 Run Detail 做治理判断。",
         metricLabels: {
@@ -2978,7 +2978,7 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
           replayPosture: "重放姿态",
           operatorPriority: "当前操作优先级",
         },
-        inventorySubline: "当前 Dashboard 在证明与回放页能看到的总 runs",
+        inventorySubline: "当前仪表板在证明与回放页能看到的总运行数",
         failureHeadline: (failed: number) => `失败 ${failed}`,
         successHeadline: (success: number) => `成功 ${success}`,
         failureSubline: (success: number, running: number) => `先看失败 · 成功 ${success} · 运行中 ${running}`,
@@ -3526,7 +3526,7 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
       overview: {
         title: "指挥面总览",
         subtitle:
-          "OpenVibeCoding 的第一条主循环是：发起任务、观察指挥塔、确认 Workflow Case、再检查 Proof & Replay。只有在流程要求时才进入审批。",
+          "OpenVibeCoding 的第一条主循环是：发起任务、观察指挥塔、确认工作流案例、再检查证明与回放。只有在流程要求时才进入审批。",
         refreshData: "刷新数据",
         metricsAriaLabel: "总览指标",
         metricLabels: {
@@ -3579,9 +3579,9 @@ const UI_COPY: Record<UiLocale, UiCopy> = {
           step1Label: "主步骤 1 · 发需求",
           step1Desc: "从 PM 入口开始，说明目标和验收标准，让系统先建立会话。",
           step2Label: "主步骤 2 · 看进度",
-          step2Desc: "通过 Command Tower 观察会话状态、告警和执行进度。",
+          step2Desc: "通过指挥塔观察会话状态、告警和执行进度。",
           step3Label: "主步骤 3 · 看案例",
-          step3Desc: "打开 Workflow Cases，确认队列姿态、运行结论和当前案例记录。",
+          step3Desc: "打开工作流案例，确认队列姿态、运行结论和当前案例记录。",
           step4Label: "主步骤 4 · 核证据",
           step4Desc: "打开运行记录，核对状态、证据链、对比结果和回放信息。",
         },

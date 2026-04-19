@@ -205,7 +205,7 @@ describe("command tower page render", () => {
 
     render(await CommandTowerPage());
 
-    expect(screen.getByText("部分真相 / live 面当前降级")).toBeInTheDocument();
+    expect(screen.getByText("部分真相 / 实时主面当前降级")).toBeInTheDocument();
     expect(screen.getByText("指挥塔当前只提供部分真相")).toBeInTheDocument();
     expect(screen.getByText("上下文不完整")).toBeInTheDocument();
     expect(screen.getByText("可见面板只算部分快照")).toBeInTheDocument();

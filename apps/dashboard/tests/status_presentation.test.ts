@@ -86,20 +86,20 @@ describe("status presentation helpers", () => {
     expect(badgeClass("pending")).toBe("badge badge--warning");
     expect(badgeClass("unmapped")).toBe("badge");
 
-    expect(statusCtaZh("running")).toBe("View progress");
-    expect(statusCtaZh("paused")).toBe("Resume run");
-    expect(statusCtaZh("unknown")).toBe("View details");
-    expect(statusCtaZh("")).toBe("View details");
+    expect(statusCtaZh("running")).toBe("查看进度");
+    expect(statusCtaZh("paused")).toBe("恢复运行");
+    expect(statusCtaZh("unknown")).toBe("查看详情");
+    expect(statusCtaZh("")).toBe("查看详情");
   });
 
   it("maps stage label variant and cta consistently", () => {
-    expect(stageLabelZh("planning")).toBe("Planning");
-    expect(stageLabelZh("analysis")).toBe("Discovery");
-    expect(stageLabelZh("execution")).toBe("Execution");
-    expect(stageLabelZh("qa")).toBe("Verification");
-    expect(stageLabelZh("release")).toBe("Release");
-    expect(stageLabelZh("done")).toBe("Done");
-    expect(stageLabelZh("unknown")).toBe("Unknown stage");
+    expect(stageLabelZh("planning")).toBe("规划");
+    expect(stageLabelZh("analysis")).toBe("发现");
+    expect(stageLabelZh("execution")).toBe("执行");
+    expect(stageLabelZh("qa")).toBe("验证");
+    expect(stageLabelZh("release")).toBe("发布");
+    expect(stageLabelZh("done")).toBe("完成");
+    expect(stageLabelZh("unknown")).toBe("未知阶段");
 
     expect(stageVariant("planning")).toBe("todo");
     expect(stageVariant("analysis")).toBe("active");
@@ -109,30 +109,30 @@ describe("status presentation helpers", () => {
     expect(stageVariant("done")).toBe("done");
     expect(stageVariant("unknown")).toBe("default");
 
-    expect(stageCtaZh("todo")).toBe("Start intake");
-    expect(stageCtaZh("plan")).toBe("Confirm plan");
-    expect(stageCtaZh("verify")).toBe("Handle review");
-    expect(stageCtaZh("release")).toBe("Start release");
-    expect(stageCtaZh("done")).toBe("View result");
-    expect(stageCtaZh("unknown")).toBe("View details");
-    expect(stageCtaZh("")).toBe("View details");
+    expect(stageCtaZh("todo")).toBe("开始接单");
+    expect(stageCtaZh("plan")).toBe("确认方案");
+    expect(stageCtaZh("verify")).toBe("处理审查");
+    expect(stageCtaZh("release")).toBe("开始发布");
+    expect(stageCtaZh("done")).toBe("查看结果");
+    expect(stageCtaZh("unknown")).toBe("查看详情");
+    expect(stageCtaZh("")).toBe("查看详情");
   });
 });
 
 describe("outcome type presentation helpers", () => {
   it("maps unified outcome labels without legacy wording", () => {
-    expect(knownOutcomeTypeLabelZh("gate")).toBe("Gate blocked");
-    expect(knownOutcomeTypeLabelZh("manual")).toBe("Manual confirmation required");
-    expect(knownOutcomeTypeLabelZh("env")).toBe("Environment issue");
-    expect(knownOutcomeTypeLabelZh("product")).toBe("Functional failure");
-    expect(knownOutcomeTypeLabelZh("functional_failure")).toBe("Functional failure");
-    expect(knownOutcomeTypeLabelZh("unknown")).toBe("Failure pending confirmation");
+    expect(knownOutcomeTypeLabelZh("gate")).toBe("Gate 被阻塞");
+    expect(knownOutcomeTypeLabelZh("manual")).toBe("需要人工确认");
+    expect(knownOutcomeTypeLabelZh("env")).toBe("环境异常");
+    expect(knownOutcomeTypeLabelZh("product")).toBe("功能失败");
+    expect(knownOutcomeTypeLabelZh("functional_failure")).toBe("功能失败");
+    expect(knownOutcomeTypeLabelZh("unknown")).toBe("失败原因待确认");
     expect(knownOutcomeTypeLabelZh("not_exists")).toBeUndefined();
 
-    expect(outcomeTypeLabelZh("gate_blocked")).toBe("Gate blocked");
-    expect(outcomeTypeLabelZh("manual_pending")).toBe("Manual confirmation required");
-    expect(outcomeTypeLabelZh("environment_error")).toBe("Environment issue");
-    expect(outcomeTypeLabelZh("functional_failure")).toBe("Functional failure");
-    expect(outcomeTypeLabelZh("not_exists")).toBe("Unclassified");
+    expect(outcomeTypeLabelZh("gate_blocked")).toBe("Gate 被阻塞");
+    expect(outcomeTypeLabelZh("manual_pending")).toBe("需要人工确认");
+    expect(outcomeTypeLabelZh("environment_error")).toBe("环境异常");
+    expect(outcomeTypeLabelZh("functional_failure")).toBe("功能失败");
+    expect(outcomeTypeLabelZh("not_exists")).toBe("未分类");
   });
 });

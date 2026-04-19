@@ -209,7 +209,7 @@ export function outcomeActionHint(
 }
 
 export function statusLabelZh(status: string | undefined | null): string {
-  return statusLabelDesktop(status, DESKTOP_DEFAULT_LOCALE);
+  return statusLabelDesktop(status, "zh-CN");
 }
 
 export function statusLabelDesktop(
@@ -236,7 +236,7 @@ export function badgeClass(status: string | undefined | null): string {
 }
 
 export function stageLabelZh(stage: string | undefined | null): string {
-  return stageLabelFromCanonical(toCanonicalStage(stage), DESKTOP_DEFAULT_LOCALE);
+  return stageLabelFromCanonical(toCanonicalStage(stage), "zh-CN");
 }
 
 export function stageVariant(stage: string | undefined | null) {
@@ -244,11 +244,11 @@ export function stageVariant(stage: string | undefined | null) {
 }
 
 export function statusCtaZh(status: string | undefined | null): string {
-  return statusCtaFromCanonical(toCanonicalStatusStrict(status), DESKTOP_DEFAULT_LOCALE);
+  return statusCtaFromCanonical(toCanonicalStatusStrict(status), "zh-CN");
 }
 
 export function stageCtaZh(stage: string | undefined | null): string {
-  return stageCtaFromCanonical(toCanonicalStage(stage), DESKTOP_DEFAULT_LOCALE);
+  return stageCtaFromCanonical(toCanonicalStage(stage), "zh-CN");
 }
 
 export function formatDesktopDateTime(

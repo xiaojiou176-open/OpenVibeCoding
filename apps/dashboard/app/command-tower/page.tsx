@@ -224,7 +224,7 @@ export function CommandTowerPageIntro({
                 : "Recovery mode / live surface unavailable"
               : partialMode
                 ? locale === "zh-CN"
-                  ? "部分真相 / live 面当前降级"
+                  ? "部分真相 / 实时主面当前降级"
                   : "Partial truth / live surface degraded"
               : locale === "zh-CN"
                 ? "L0 驾驶舱 / 实时控制桌"
@@ -329,17 +329,17 @@ export function CommandTowerPageIntro({
               <>
                 <div className="home-briefing-signal">
                   <span className="cell-sub mono muted">{locale === "zh-CN" ? "现在发生什么" : "What is happening now"}</span>
-                  <strong>{locale === "zh-CN" ? "先看 live session board" : "Scan the live session board first"}</strong>
+                  <strong>{locale === "zh-CN" ? "先看实时会话面板" : "Scan the live session board first"}</strong>
                   <p>{locale === "zh-CN" ? "不要先钻细节页。先确定 board 上最重要的 run 和 session。" : "Do not drill into detail pages first. Identify the most important session and run on the board."}</p>
                 </div>
                 <div className="home-briefing-signal">
                   <span className="cell-sub mono muted">{locale === "zh-CN" ? "风险在哪" : "Where is the risk"}</span>
-                  <strong>{locale === "zh-CN" ? "先读 risk lane 和 degraded alert" : "Read the risk lane and degraded alert first"}</strong>
+                  <strong>{locale === "zh-CN" ? "先看风险通道和降级告警" : "Read the risk lane and degraded alert first"}</strong>
                   <p>{locale === "zh-CN" ? "这页的主任务是分诊，不是浏览所有模块。" : "The main job here is triage, not browsing every module."}</p>
                 </div>
                 <div className="home-briefing-signal">
                   <span className="cell-sub mono muted">{locale === "zh-CN" ? "下一步" : "What to do next"}</span>
-                  <strong>{locale === "zh-CN" ? "先用 tower 再跳去 Workflow 或 Proof" : "Use the tower before jumping to Workflow or Proof"}</strong>
+                  <strong>{locale === "zh-CN" ? "先用指挥塔，再跳去工作流或证明面" : "Use the tower before jumping to Workflow or Proof"}</strong>
                   <p>{locale === "zh-CN" ? "让 tower 成为主驾驶舱，而不是另一个数据列表页。" : "Treat the tower as the cockpit, not another reporting page."}</p>
                 </div>
               </>

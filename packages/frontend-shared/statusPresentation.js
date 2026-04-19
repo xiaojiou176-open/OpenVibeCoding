@@ -288,14 +288,14 @@ export function knownOutcomeTypeLabel(outcomeType, locale = "en") {
     return OUTCOME_TYPE_LABELS_BY_LOCALE[normalizeUiLocale(locale)][token];
 }
 export function knownOutcomeTypeLabelZh(outcomeType) {
-    return knownOutcomeTypeLabel(outcomeType, "en");
+    return knownOutcomeTypeLabel(outcomeType, "zh-CN");
 }
 export function outcomeTypeLabel(outcomeType, locale = "en") {
     const resolvedLocale = normalizeUiLocale(locale);
     return knownOutcomeTypeLabel(outcomeType, resolvedLocale) || UNCLASSIFIED_BY_LOCALE[resolvedLocale];
 }
 export function outcomeTypeLabelZh(outcomeType) {
-    return outcomeTypeLabel(outcomeType, "en");
+    return outcomeTypeLabel(outcomeType, "zh-CN");
 }
 export function statusLabelFromCanonical(canonical, locale = "en") {
     const resolvedLocale = normalizeUiLocale(locale);
@@ -304,7 +304,7 @@ export function statusLabelFromCanonical(canonical, locale = "en") {
     return STATUS_LABELS_BY_LOCALE[resolvedLocale][canonical] || UNKNOWN_LABEL_BY_LOCALE[resolvedLocale];
 }
 export function statusLabelZhFromCanonical(canonical) {
-    return statusLabelFromCanonical(canonical, "en");
+    return statusLabelFromCanonical(canonical, "zh-CN");
 }
 export function statusVariantFromCanonical(canonical) {
     if (canonical === "completed" || canonical === "healthy")
@@ -346,7 +346,7 @@ export function stageLabelFromCanonical(canonical, locale = "en") {
     return STAGE_LABELS_BY_LOCALE[resolvedLocale][canonical] || UNKNOWN_STAGE_BY_LOCALE[resolvedLocale];
 }
 export function stageLabelZhFromCanonical(canonical) {
-    return stageLabelFromCanonical(canonical, "en");
+    return stageLabelFromCanonical(canonical, "zh-CN");
 }
 export function stageVariantFromCanonical(canonical) {
     if (canonical === "intake" || canonical === "plan")
@@ -366,7 +366,7 @@ export function statusCtaFromCanonical(canonical, locale = "en") {
     return CTA_BY_STATUS_BY_LOCALE[resolvedLocale][canonical] || VIEW_DETAILS_BY_LOCALE[resolvedLocale];
 }
 export function statusCtaZhFromCanonical(canonical) {
-    return statusCtaFromCanonical(canonical, "en");
+    return statusCtaFromCanonical(canonical, "zh-CN");
 }
 export function stageCtaFromCanonical(canonical, locale = "en") {
     const resolvedLocale = normalizeUiLocale(locale);
@@ -375,5 +375,5 @@ export function stageCtaFromCanonical(canonical, locale = "en") {
     return CTA_BY_STAGE_BY_LOCALE[resolvedLocale][canonical] || VIEW_DETAILS_BY_LOCALE[resolvedLocale];
 }
 export function stageCtaZhFromCanonical(canonical) {
-    return stageCtaFromCanonical(canonical, "en");
+    return stageCtaFromCanonical(canonical, "zh-CN");
 }

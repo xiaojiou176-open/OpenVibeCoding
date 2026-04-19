@@ -91,13 +91,13 @@ describe("statusPresentation outcome semantics", () => {
 
 describe("statusPresentation canonical wrappers", () => {
   it("returns localized status and stage metadata", () => {
-    expect(statusLabelZh("completed")).toBe("Completed");
-    expect(statusCtaZh("failed")).toBe("Review failure and retry");
+    expect(statusLabelZh("completed")).toBe("已完成");
+    expect(statusCtaZh("failed")).toBe("复盘失败并重试");
     expect(statusVariant("running")).toBe("running");
     expect(statusDotClass("paused")).toContain("dot");
 
-    expect(stageLabelZh("execution")).toBe("Execution");
-    expect(stageCtaZh("verify")).toBe("Handle review");
+    expect(stageLabelZh("execution")).toBe("执行");
+    expect(stageCtaZh("verify")).toBe("处理审查");
     expect(stageVariant("unknown-stage")).toBe("default");
   });
 });

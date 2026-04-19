@@ -44,7 +44,7 @@ export function badgeClass(status: string | undefined | null): string {
 }
 
 export function stageLabelZh(stage: string | undefined | null): string {
-  return stageLabelFromCanonical(toCanonicalStage(stage), DASHBOARD_DEFAULT_LOCALE);
+  return stageLabelFromCanonical(toCanonicalStage(stage), "zh-CN");
 }
 
 export function stageVariant(stage: string | undefined | null) {
@@ -52,11 +52,11 @@ export function stageVariant(stage: string | undefined | null) {
 }
 
 export function statusCtaZh(status: string | undefined | null): string {
-  return statusCtaFromCanonical(toCanonicalStatusFuzzy(status), DASHBOARD_DEFAULT_LOCALE);
+  return statusCtaFromCanonical(toCanonicalStatusFuzzy(status), "zh-CN");
 }
 
 export function stageCtaZh(stage: string | undefined | null): string {
-  return stageCtaFromCanonical(toCanonicalStage(stage), DASHBOARD_DEFAULT_LOCALE);
+  return stageCtaFromCanonical(toCanonicalStage(stage), "zh-CN");
 }
 
 export function formatDashboardDateTime(

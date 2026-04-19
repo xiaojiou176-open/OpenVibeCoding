@@ -244,7 +244,7 @@ describe("dashboard home run-summary clarity", () => {
     expect(screen.getByRole("heading", { name: "AI 工程开放指挥塔" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "启动首个任务" })).toHaveAttribute("href", "/pm");
     expect(screen.getByText("延伸入口")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "打开 AI + MCP + API 页面" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "打开 AI、MCP 与 API 页面" })).toHaveAttribute(
       "href",
       "https://xiaojiou176-open.github.io/OpenVibeCoding/ai-surfaces/"
     );
