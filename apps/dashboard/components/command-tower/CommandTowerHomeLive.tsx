@@ -3,7 +3,11 @@
 import dynamic from "next/dynamic";
 import { type KeyboardEvent as ReactKeyboardEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { getUiCopy, type UiLocale } from "@openvibecoding/frontend-shared/uiCopy";
-import type { StatusVariant } from "@openvibecoding/frontend-shared/statusPresentation";
+import {
+  statusLabelFromCanonical,
+  toCanonicalStatusFuzzy,
+  type StatusVariant,
+} from "@openvibecoding/frontend-shared/statusPresentation";
 
 import { fetchCommandTowerAlerts, fetchCommandTowerOverview, fetchPmSessions } from "../../lib/api";
 import type {
@@ -23,9 +27,9 @@ import {
   classifyErrorMessage,
   FOCUS_OPTIONS,
   homeLiveBadgeVariant,
-  homeLiveBadgeText,
+  homeLiveBadgeText as baseHomeLiveBadgeText,
   sectionStatusBadgeVariant,
-  sectionStatusLabel,
+  sectionStatusLabel as baseSectionStatusLabel,
   SORT_OPTIONS,
   STATUS_OPTIONS,
 } from "./commandTowerHomeHelpers";
@@ -104,7 +108,7 @@ function focusModeActionLabel(
   return focusModeLabels.all;
 }
 
-export { alertsBadgeVariant, classifyErrorMessage, homeLiveBadgeVariant, homeLiveBadgeText };
+export { alertsBadgeVariant, classifyErrorMessage, homeLiveBadgeVariant, baseHomeLiveBadgeText as homeLiveBadgeText };
 
 export default function CommandTowerHomeLive({
   initialOverview,
@@ -211,6 +215,34 @@ export default function CommandTowerHomeLive({
   });
 
   const errorMeta = useMemo(() => classifyErrorMessage(errorMessage), [errorMessage]);
+  const alertsStatusLabel = useMemo(
+    () => statusLabelFromCanonical(toCanonicalStatusFuzzy(alertsStatus), locale),
+    [alertsStatus, locale],
+  );
+  const homeLiveBadgeText = useCallback(
+    (mode: LiveMode) => {
+      if (locale === "zh-CN") {
+        if (mode === "paused") {
+          return "已暂停";
+        }
+        if (mode === "backoff") {
+          return "退避中";
+        }
+        return "实时";
+      }
+      return baseHomeLiveBadgeText(mode);
+    },
+    [locale],
+  );
+  const sectionStatusLabel = useCallback(
+    (status: SectionFetchStatus) => {
+      if (locale === "zh-CN") {
+        return status === "ok" ? "健康" : "异常";
+      }
+      return baseSectionStatusLabel(status);
+    },
+    [locale],
+  );
 
   const toggleDrawerCollapsed = useCallback(() => {
     setDrawerCollapsed((prev) => {
@@ -887,6 +919,7 @@ export default function CommandTowerHomeLive({
     errorMessage,
     errorMetaLabel: errorMeta.label,
     liveStatusText,
+    alertsStatusLabel,
     refreshFreshnessSummary,
     showFilterEmptyState,
     showFocusEmptyState,

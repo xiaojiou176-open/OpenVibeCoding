@@ -88,6 +88,17 @@ describe("CTSessionDetailPage", () => {
     expect(within(buttons[0]).queryByText(/"event": "CHAIN_DONE"/)).toBeNull();
   });
 
+  it("renders zh-CN shell copy when locale is passed", async () => {
+    render(<CTSessionDetailPage sessionId="pm-1" onBack={vi.fn()} locale="zh-CN" />);
+
+    expect(await screen.findByRole("heading", { name: "会话详情" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "< 返回会话总览" })).toBeInTheDocument();
+    expect(screen.getByText("本会话运行")).toBeInTheDocument();
+    expect(screen.getByText("事件时间线")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "暂停实时" })).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "发送给 PM 的消息" })).toBeInTheDocument();
+  });
+
   it("supports PM message send success path by button and enter key", async () => {
     const user = userEvent.setup();
     render(<CTSessionDetailPage sessionId="pm-1" onBack={vi.fn()} />);

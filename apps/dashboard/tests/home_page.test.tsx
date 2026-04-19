@@ -32,7 +32,8 @@ vi.mock("next/navigation", () => ({
 
 import Home from "../app/page";
 import RunsPage from "../app/runs/page";
-import { metadata } from "../app/layout";
+import { buildRunsMetadata } from "../app/runs/page";
+import { buildDashboardLayoutMetadata } from "../app/layout";
 import DashboardShellChrome from "../components/DashboardShellChrome";
 import { fetchRuns, fetchWorkflows } from "../lib/api";
 import { getUiCopy } from "@openvibecoding/frontend-shared/uiCopy";
@@ -157,7 +158,7 @@ describe("dashboard home run-summary clarity", () => {
     expect(enPageBrief?.badge).toBe("Tracked browser-backed bundle");
     expect(enPageBrief?.proof).toBe("Proof state: tracked browser-backed public proof bundle");
     expect(zhPageBrief?.badge).toBe("已追踪浏览器证明包");
-    expect(zhPageBrief?.proof).toBe("Proof 状态：已追踪的浏览器公开证明包");
+    expect(zhPageBrief?.proof).toBe("证明状态：已追踪的浏览器公开证明包");
     expect(en.liveCaseGalleryDescription).toContain("proof-ready reference cases");
     expect(zh.liveCaseGalleryDescription).toContain("可验的参考案例");
     expect(en.aiSurfacesActionHref).toBe("/ai-surfaces/");
@@ -252,7 +253,7 @@ describe("dashboard home run-summary clarity", () => {
       "href",
       "https://xiaojiou176-open.github.io/OpenVibeCoding/use-cases/"
     );
-    expect(screen.getByRole("link", { name: "打开 Builder 快速入口" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "打开构建者快速入口" })).toHaveAttribute(
       "href",
       "https://xiaojiou176-open.github.io/OpenVibeCoding/builders/"
     );
@@ -274,7 +275,73 @@ describe("dashboard home run-summary clarity", () => {
     expect(screen.getByText("显示四步首跑流程")).toBeInTheDocument();
     expect(screen.getByText("当前实况")).toBeInTheDocument();
     expect(screen.getByText("先从 PM 开始")).toBeInTheDocument();
+    expect(screen.getByText("工作流案例")).toBeInTheDocument();
+    expect(screen.getByText("证明与回放")).toBeInTheDocument();
+    expect(screen.getByText("首个可追踪的案例记录会在 PM 发起第一项任务后出现在这里。")).toBeInTheDocument();
+    expect(screen.getByText("第一条运行真正留下证据后，这里才会成为可以核对真相的房间。")).toBeInTheDocument();
     expect(screen.queryByText("Start in PM")).not.toBeInTheDocument();
+    expect(screen.queryByText("Workflow Cases")).not.toBeInTheDocument();
+    expect(screen.queryByText("Proof & Replay")).not.toBeInTheDocument();
+    expect(screen.queryByText("The first durable case record appears here once PM intake launches the first task.")).not.toBeInTheDocument();
+    expect(screen.queryByText("This room becomes the truth surface once the first run finishes and leaves evidence behind.")).not.toBeInTheDocument();
+  });
+
+  it("renders zh-CN dataful home without leaked English gallery and run copy", async () => {
+    mockCookies.mockResolvedValueOnce({
+      get: (name: string) => (name === "openvibecoding.ui.locale" ? { value: "zh-CN" } : undefined),
+      toString: () => "openvibecoding.ui.locale=zh-CN",
+    });
+    mockFetchRuns.mockResolvedValueOnce([
+      {
+        run_id: "run-zh-1",
+        task_id: "task-zh-1",
+        status: "FAILED",
+        failure_class: "manual",
+        failure_reason: "english failure reason should stay hidden",
+        action_hint_zh: "",
+      },
+    ] as never[]);
+    mockFetchWorkflows.mockResolvedValueOnce([
+      {
+        workflow_id: "wf-zh",
+        status: "RUNNING",
+        summary: "English workflow summary should stay hidden",
+        objective: "English objective should stay hidden",
+        verdict: "",
+        owner_pm: "pm-owner",
+        project_key: "proj-home",
+        run_ids: ["run-zh-1"],
+      },
+    ] as never[]);
+
+    render(await Home());
+
+    expect(screen.getByRole("link", { name: "打开工作流案例" })).toHaveAttribute("href", "/workflows");
+    expect(screen.getByRole("link", { name: "打开案例" })).toHaveAttribute("href", "/workflows/wf-zh");
+    expect(screen.getByRole("link", { name: "打开可分享资产" })).toHaveAttribute("href", "/workflows/wf-zh/share");
+    expect(screen.getByRole("link", { name: "查看全部运行" })).toHaveAttribute("href", "/runs");
+    expect(screen.getByRole("link", { name: "打开结果视图" })).toHaveAttribute("href", "/search");
+    expect(screen.getByRole("link", { name: "运行 run-zh-1" })).toHaveAttribute("href", "/runs/run-zh-1");
+    expect(screen.getByRole("link", { name: "处理失败 run-zh-1" })).toHaveAttribute("href", "/events?run_id=run-zh-1");
+    expect(screen.getByText("当前还没有工作流摘要。")).toBeInTheDocument();
+    expect(screen.getByText(/^判定: -$/)).toBeInTheDocument();
+    expect(screen.getByText("负责人: pm-owner · 项目: proj-home")).toBeInTheDocument();
+    expect(screen.getByText("运行映射: 1")).toBeInTheDocument();
+    expect(screen.getByText("任务: task-zh-1 · 需要人工确认")).toBeInTheDocument();
+    expect(screen.getByText(/建议：检查失败事件/)).toBeInTheDocument();
+    expect(screen.getByText("失败")).toBeInTheDocument();
+    expect(screen.getByText("运行中")).toBeInTheDocument();
+    expect(screen.queryByText("Open case")).not.toBeInTheDocument();
+    expect(screen.queryByText("Open share-ready asset")).not.toBeInTheDocument();
+    expect(screen.queryByText("View all runs")).not.toBeInTheDocument();
+    expect(screen.queryByText("Open results view")).not.toBeInTheDocument();
+    expect(screen.queryByText("Handle failure")).not.toBeInTheDocument();
+    expect(screen.queryByText("Workflow Case")).not.toBeInTheDocument();
+    expect(screen.queryByText("Task: task-zh-1")).not.toBeInTheDocument();
+    expect(screen.queryByText("Manual review required")).not.toBeInTheDocument();
+    expect(screen.queryByText("English workflow summary should stay hidden")).not.toBeInTheDocument();
+    expect(screen.queryByText("English objective should stay hidden")).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Run run-zh-1" })).not.toBeInTheDocument();
   });
 
   it("maps latest failure category to semantic label and provides governance link", async () => {
@@ -484,6 +551,16 @@ describe("dashboard home run-summary clarity", () => {
     consoleSpy.mockRestore();
   });
 
+  it("exports locale-aware runs metadata", () => {
+    const enMetadata = buildRunsMetadata("en");
+    const zhMetadata = buildRunsMetadata("zh-CN");
+
+    expect(enMetadata.title).toBe("Proof & Replay | OpenVibeCoding");
+    expect(String(enMetadata.description)).toContain("replay posture");
+    expect(zhMetadata.title).toBe("证明与回放 | OpenVibeCoding");
+    expect(String(zhMetadata.description)).toContain("证明与回放桌面");
+  });
+
   it("shows degraded risk summary when runs data is unavailable", async () => {
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
     mockFetchRuns.mockRejectedValueOnce(new Error("runs down"));
@@ -501,6 +578,7 @@ describe("dashboard home run-summary clarity", () => {
   });
 
   it("renders the public shell with English-first layout metadata and chrome copy", () => {
+    const metadata = buildDashboardLayoutMetadata("en");
     expect(metadata.title).toBe("OpenVibeCoding | The open command tower for AI engineering");
     expect(metadata.description).toContain("Stop babysitting AI coding work.");
 
@@ -520,5 +598,30 @@ describe("dashboard home run-summary clarity", () => {
     expect(screen.queryByText("Live read-back")).not.toBeInTheDocument();
     expect(screen.queryByText("Page contract")).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Switch to Chinese" })).toBeInTheDocument();
+  });
+
+  it("renders the public shell with zh-CN locale preloaded on the server", () => {
+    const metadata = buildDashboardLayoutMetadata("zh-CN");
+    render(
+      <DashboardShellChrome initialLocale="zh-CN">
+        <div>content</div>
+      </DashboardShellChrome>,
+    );
+
+    expect(metadata.title).toBe("OpenVibeCoding | 面向 AI 工程的开放指挥塔");
+    expect(metadata.description).toContain("AI 编码不缺模型");
+    expect(screen.getByRole("link", { name: "跳到控制台主内容" })).toHaveAttribute("href", "#dashboard-content");
+    expect(screen.getAllByLabelText("控制台导航").length).toBeGreaterThan(0);
+    expect(screen.getByText("规划 · 派工 · 追踪 · 续跑 · 验真")).toBeInTheDocument();
+    expect(screen.getByText("OpenVibeCoding 指挥塔")).toBeInTheDocument();
+    expect(screen.getByLabelText("平台状态概览")).toBeInTheDocument();
+    expect(screen.getByText("实时操作壳层")).toBeInTheDocument();
+    expect(screen.queryByText("Live operator shell")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "切换到英文" })).toBeInTheDocument();
+    expect(screen.getByRole("navigation", { name: "控制台导航" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "指挥塔" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "工作流案例" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "证明与回放" })).toBeInTheDocument();
+    expect(screen.queryByText("低频工具 8")).not.toBeInTheDocument();
   });
 });

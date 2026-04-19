@@ -54,6 +54,7 @@ type BuildArgs = {
   errorMessage: string;
   errorMetaLabel: string;
   liveStatusText: string;
+  alertsStatusLabel: string;
   refreshFreshnessSummary: string;
   showFilterEmptyState: boolean;
   showFocusEmptyState: boolean;
@@ -202,9 +203,9 @@ export function buildHomeViewModel(args: BuildArgs): {
     {
       id: "slo",
       label: args.liveHomeCopy.viewModel.contextHealth.sloHealth,
-      value: args.alertsStatus,
+      value: args.alertsStatusLabel,
       badgeVariant: args.alertsBadgeVariant(args.alertsStatus),
-      badgeLabel: args.alertsStatus.toUpperCase(),
+      badgeLabel: args.alertsStatusLabel,
     },
     {
       id: "focus",
@@ -287,7 +288,7 @@ export function buildHomeViewModel(args: BuildArgs): {
         args.alertsSeveritySummary.critical,
       ),
       badgeVariant: args.alertsBadgeVariant(args.alertsStatus),
-      badgeText: args.alertsStatus,
+      badgeText: args.alertsStatusLabel,
     },
     {
       lane: "actions" as const,

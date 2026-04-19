@@ -15,10 +15,10 @@ import {
 type ContractsPageProps = {
   onNavigate?: (page: "command-tower" | "workflows" | "agents" | "runs") => void;
   onNavigateToRun?: (runId: string) => void;
+  locale?: UiLocale;
 };
 
-export function ContractsPage({ onNavigate, onNavigateToRun }: ContractsPageProps = {}) {
-  const locale: UiLocale = detectPreferredUiLocale();
+export function ContractsPage({ onNavigate, onNavigateToRun, locale = detectPreferredUiLocale() as UiLocale }: ContractsPageProps = {}) {
   const contractsPageCopy = getUiCopy(locale).dashboard.contractsPage;
   const shellCopy =
     locale === "zh-CN"
@@ -113,7 +113,7 @@ export function ContractsPage({ onNavigate, onNavigateToRun }: ContractsPageProp
             </div>
           ) : null}
         </div>
-        <div className="stats-grid" aria-label="Contract desk summary">
+        <div className="stats-grid" aria-label={locale === "zh-CN" ? "合约桌摘要" : "Contract desk summary"}>
           <article className="metric-card">
             <p className="metric-label">{shellCopy.riskTitle}</p>
             <p className={`metric-value ${contractsNeedingTriage > 0 ? "metric-value--warning" : "metric-value--success"}`}>{contractsNeedingTriage}</p>

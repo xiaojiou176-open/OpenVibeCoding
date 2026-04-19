@@ -6,7 +6,11 @@ import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 import Link from "next/link";
-import type { StatusVariant } from "@openvibecoding/frontend-shared/statusPresentation";
+import {
+  statusLabelFromCanonical,
+  toCanonicalStatusFuzzy,
+  type StatusVariant,
+} from "@openvibecoding/frontend-shared/statusPresentation";
 
 type SortMode = "updated_desc" | "created_desc" | "failed_desc" | "blocked_desc";
 type FocusMode = "all" | "high_risk" | "blocked" | "running";
@@ -80,8 +84,31 @@ type LayoutProps = {
   liveHomeCopy: UiCopy["dashboard"]["commandTowerPage"]["liveHome"];
 };
 
+function buildHomeLayoutLiveAnnouncement({
+  locale,
+  hasRefreshIssue,
+  refreshHealthLabel,
+  liveStatusText,
+  intervalMs,
+  alertsStatusLabel,
+}: {
+  locale: "en" | "zh-CN";
+  hasRefreshIssue: boolean;
+  refreshHealthLabel: string;
+  liveStatusText: string;
+  intervalMs: number;
+  alertsStatusLabel: string;
+}): string {
+  if (locale === "zh-CN") {
+    return `${hasRefreshIssue ? `刷新状态 ${refreshHealthLabel}` : liveStatusText}。刷新间隔 ${intervalMs} 毫秒。当前 SLO 状态 ${alertsStatusLabel}。详细筛选在右侧抽屉中。`;
+  }
+
+  return `${hasRefreshIssue ? `Refresh state ${refreshHealthLabel}` : liveStatusText}. Refresh interval ${intervalMs} ms. Current SLO state ${alertsStatusLabel}. Detailed filters are in the right drawer.`;
+}
+
 export default function CommandTowerHomeLayout(props: LayoutProps) {
   const locale = props.locale ?? "en";
+  const alertsStatusLabel = statusLabelFromCanonical(toCanonicalStatusFuzzy(props.alertsStatus), locale);
   const hasRefreshIssue =
     props.refreshHealthSummary.badgeVariant === "failed" ||
     props.refreshHealthSummary.badgeVariant === "warning";
@@ -98,13 +125,21 @@ export default function CommandTowerHomeLayout(props: LayoutProps) {
     ? props.refreshHealthSummary.badgeVariant === "failed"
       ? props.liveHomeCopy.layout.sloDegraded
       : props.liveHomeCopy.layout.sloWarning
-    : `${props.commandTowerCopy.badges.sloPrefix}${props.alertsStatus}`;
+    : `${props.commandTowerCopy.badges.sloPrefix}${alertsStatusLabel}`;
   const showFailureEventsAction = props.visibleSummary.failed > 0 || props.visibleSummary.blocked > 0;
   const primarySession = props.visibleSessions[0];
   const primaryActionHref = primarySession
     ? `/command-tower/sessions/${encodeURIComponent(primarySession.pm_session_id)}`
     : "/pm";
   const primaryActionLabel = primarySession ? props.liveHomeCopy.layout.primaryActionOpenRisk : props.liveHomeCopy.layout.primaryActionGoToPm;
+  const liveAnnouncement = buildHomeLayoutLiveAnnouncement({
+    locale,
+    hasRefreshIssue,
+    refreshHealthLabel: props.refreshHealthSummary.label,
+    liveStatusText: props.liveStatusText,
+    intervalMs: props.intervalMs,
+    alertsStatusLabel,
+  });
 
   return (
     <div
@@ -210,7 +245,7 @@ export default function CommandTowerHomeLayout(props: LayoutProps) {
           ) : null}
 
           <p className="sr-only" role="status" aria-live="polite">
-            {hasRefreshIssue ? `Refresh state ${props.refreshHealthSummary.label}` : props.liveStatusText}. Refresh interval {props.intervalMs} ms. Current SLO state {props.alertsStatus}. Detailed filters are in the right drawer.
+            {liveAnnouncement}
           </p>
           {props.actionFeedback && (
             <div role="status" aria-live="polite" className="ct-home-action-feedback">

@@ -10,11 +10,27 @@ import { safeLoad } from "../../lib/serverPageData";
 import type { JsonValue, ReportRecord, RunDetailPayload, RunSummary } from "../../lib/types";
 import WorkflowQueueMutationControls from "../workflows/WorkflowQueueMutationControls";
 
-export const metadata: Metadata = {
-  title: "Planner desk | OpenVibeCoding",
-  description:
-    "Triages wave plans, worker prompt contracts, unblock tasks, and continuation governance from one planner-facing control desk.",
-};
+const CJK_TEXT_RE = /[\u3400-\u9fff]/;
+
+export function buildPlannerMetadata(locale: "en" | "zh-CN"): Metadata {
+  if (locale === "zh-CN") {
+    return {
+      title: "规划桌 | OpenVibeCoding",
+      description:
+        "在同一张规划桌里分诊波次计划、worker 提示词合约、解阻塞任务和续跑治理。",
+    };
+  }
+
+  return {
+    title: "Planner desk | OpenVibeCoding",
+    description:
+      "Triages wave plans, worker prompt contracts, unblock tasks, and continuation governance from one planner-facing control desk.",
+  };
+}
+
+function hasCjkText(value: string | undefined | null): boolean {
+  return Boolean(value && CJK_TEXT_RE.test(value));
+}
 
 type PlannerRow = {
   run: RunDetailPayload;
@@ -67,11 +83,16 @@ async function resolveDashboardLocale() {
   }
 }
 
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await resolveDashboardLocale();
+  return buildPlannerMetadata(locale);
+}
+
 export function plannerText(locale: "en" | "zh-CN") {
   if (locale === "zh-CN") {
     return {
       title: "规划桌",
-      subtitle: "先做规划分诊，再看细节。把波次计划、worker 提示词合约、唤醒策略姿态和完成治理放到同一张控制桌上，直接回答下一步该派谁、该回哪里、该继续还是该解阻塞。",
+      subtitle: "先做规划分诊，再看细节。把波次计划、工作者提示词合约、唤醒策略姿态和完成治理放到同一张控制桌上，直接回答下一步该派谁、该回哪里、该继续还是该解阻塞。",
       actions: {
         pm: "打开 PM 入口",
         tower: "打开指挥塔",
@@ -80,7 +101,7 @@ export function plannerText(locale: "en" | "zh-CN") {
       },
       metrics: {
         runs: "带规划产物的运行",
-        workers: "可见 worker 合约",
+        workers: "可见工作者合约",
         unblock: "可见解阻塞任务",
         wake: "挂了唤醒策略的运行",
       },
@@ -99,16 +120,23 @@ export function plannerText(locale: "en" | "zh-CN") {
       wakeLabel: "唤醒策略",
       governanceLabel: "治理结论",
       unblockLabel: "解阻塞任务",
-      contractsLabel: "Worker 合约",
-      plannedWorkersLabel: "计划 Worker 数",
+      contractsLabel: "工作者合约",
+      plannedWorkersLabel: "计划工作者数",
       triageTitle: "规划分诊队列",
-      triageSubtitle: "先确认哪条波次缺 worker 合约、哪条已经进入续跑、哪条该优先处理解阻塞任务，再去下一张桌子。",
+      triageSubtitle: "先确认哪条波次缺工作者合约、哪条已经进入续跑、哪条该优先处理解阻塞任务，再去下一张桌子。",
       inspectionTitle: "规划细节档案",
-      inspectionSubtitle: "把原始规划产物留在第二层阅读，同时保留规划桌自己的队列 / 派发控制，不再让它只是一个跳转台。",
-      blocker: {
-        missingGovernance: "缺完成治理",
-        missingContracts: "缺 worker 提示词合约",
-        hasUnblock: "有解阻塞任务待看",
+      inspectionSubtitle: "把原始规划产物留在第二层阅读，同时保留规划桌自己的队列与派发控制，不再让它只是一个跳转台。",
+    shellLabel: "OpenVibeCoding / 规划桌",
+    summaryAriaLabel: "规划桌摘要",
+    warningFallback: "当前运行列表暂时不可用，请稍后再试。",
+    launchChecklistLabel: "规划桌启动清单",
+    launchOpenPmHint: "先把第一条目标、约束和验收口径写清，再回来让规划桌真正开机。",
+    launchOpenTowerHint: "如果系统已经在跑，只是规划产物还没挂出来，就先回指挥塔看当前谁在动。",
+    launchOpenWorkflowHint: "工作流案例是可持续状态，不是首页解释文；当规划行出现后，回这里继续追。",
+    blocker: {
+      missingGovernance: "缺完成治理",
+        missingContracts: "缺工作者提示词合约",
+        hasUnblock: "有待查看的解阻塞任务",
         continuation: "已选续跑",
         reviewProof: "回证明室看真实结果",
       },
@@ -153,6 +181,13 @@ export function plannerText(locale: "en" | "zh-CN") {
     inspectionTitle: "Planning inspection archive",
     inspectionSubtitle:
       "Keep the raw planning artifacts in a second layer while the desk itself keeps minimal queue and dispatch controls close to the triage row.",
+    shellLabel: "OpenVibeCoding / planner desk",
+    summaryAriaLabel: "Planner desk summary",
+    warningFallback: "Run list is temporarily unavailable. Try again later.",
+    launchChecklistLabel: "Planner launch checklist",
+    launchOpenPmHint: "Start the first wave from PM intake, then return here once the planning surface exists.",
+    launchOpenTowerHint: "If work is already running but planning artifacts are missing, scan the tower before you dispatch anything else.",
+    launchOpenWorkflowHint: "Workflow Cases keep the durable state once the planner row becomes real.",
     blocker: {
       missingGovernance: "Missing completion governance",
       missingContracts: "Missing worker prompt contract",
@@ -237,7 +272,7 @@ export function plannerPriorityState(text: ReturnType<typeof plannerText>, rows:
     return {
       title:
         text.title === "规划桌"
-          ? "先让第一条规划 wave 进入系统"
+          ? "先让第一条规划波次进入系统"
           : "Seed the first planning wave",
       summary:
         text.title === "规划桌"
@@ -269,7 +304,7 @@ export function plannerPriorityState(text: ReturnType<typeof plannerText>, rows:
         : `Priority queue: ${triage.label}`,
     summary:
       text.title === "规划桌"
-        ? `最该先看的 wave 是「${objective}」。先处理这条 triage，再决定是否继续派发、回到 workflow case，还是直接进证明室。`
+        ? `最该先看的波次是「${objective}」。先处理这条分诊，再决定是否继续派发、回到工作流案例，还是直接进证明室。`
         : `The highest-priority wave right now is "${objective}". Resolve this triage first, then decide whether to dispatch more work, return to Workflow Cases, or move into Proof & Replay.`,
     tone,
     primaryHref: triage.nextHref,
@@ -355,15 +390,15 @@ export default async function PlannerPage() {
       ? [
           {
             title: "锁定目标和验收口径",
-            desc: "先在 PM 入口把 objective、constraints 和 done signal 讲清楚，planner 才能开始工作。",
+            desc: "先在 PM 入口把目标、约束和完成信号讲清楚，规划桌才能开始工作。",
           },
           {
-            title: "把第一条 wave 送进系统",
-            desc: "没有真实 wave plan，就不会有 triage queue，也不会有 planner 的优先级排序。",
+            title: "把第一条波次送进系统",
+            desc: "没有真实波次计划，就不会有分诊队列，也不会有规划桌的优先级排序。",
           },
           {
-            title: "回到 planner 做 dispatch",
-            desc: "等 planning artifact 出现后，再回来决定是去 tower、workflow case，还是 proof & replay。",
+            title: "回到规划桌继续派发",
+            desc: "等规划产物出现后，再回来决定是去指挥塔、工作流案例，还是证明与回放。",
           },
         ]
       : [
@@ -387,7 +422,7 @@ export default async function PlannerPage() {
         <div className="planner-hero-shell">
           <div className="planner-hero-copy">
             <div>
-              <p className="cell-sub mono muted">OpenVibeCoding / planner desk</p>
+              <p className="cell-sub mono muted">{text.shellLabel}</p>
               <h1 id="planner-page-title" className="page-title">{text.title}</h1>
               <p className="page-subtitle">{text.subtitle}</p>
               <p className="desk-question">
@@ -430,32 +465,32 @@ export default async function PlannerPage() {
         </div>
       </header>
 
-      <section className="stats-grid" aria-label="Planner desk summary">
+      <section className="stats-grid" aria-label={text.summaryAriaLabel}>
         <article className="metric-card">
           <p className="metric-label">{text.metrics.runs}</p>
           <p className="metric-value">{rows.length}</p>
-          <p className="cell-sub mono muted">{text.title === "规划桌" ? "有多少条 wave 已经进入规划读面" : "How many waves already have visible planning surfaces."}</p>
+          <p className="cell-sub mono muted">{text.title === "规划桌" ? "有多少条波次已经进入规划读面" : "How many waves already have visible planning surfaces."}</p>
         </article>
         <article className="metric-card">
           <p className="metric-label">{text.metrics.workers}</p>
           <p className="metric-value">{totalWorkerContracts}</p>
-          <p className="cell-sub mono muted">{text.title === "规划桌" ? "先看 contract 是否补齐，再决定是否继续派工" : "Check whether worker contracts are complete before dispatching more work."}</p>
+          <p className="cell-sub mono muted">{text.title === "规划桌" ? "先看合约是否补齐，再决定是否继续派工" : "Check whether worker contracts are complete before dispatching more work."}</p>
         </article>
         <article className="metric-card">
           <p className="metric-label">{text.metrics.unblock}</p>
           <p className="metric-value">{totalUnblockTasks}</p>
-          <p className="cell-sub mono muted">{text.title === "规划桌" ? "unblock task 不该埋进原始报告里" : "Queued unblock tasks should stay visible above the raw artifacts."}</p>
+          <p className="cell-sub mono muted">{text.title === "规划桌" ? "解阻塞任务不该埋进原始报告里" : "Queued unblock tasks should stay visible above the raw artifacts."}</p>
         </article>
         <article className="metric-card">
           <p className="metric-label">{text.metrics.wake}</p>
           <p className="metric-value">{wakeAnchoredRuns}</p>
-          <p className="cell-sub mono muted">{text.title === "规划桌" ? "wake policy 是否挂上，决定它是不是可续跑的 planning wave" : "Wake-policy posture tells you whether the planning wave is resumable."}</p>
+          <p className="cell-sub mono muted">{text.title === "规划桌" ? "唤醒策略是否挂上，决定它是不是可续跑的规划波次" : "Wake-policy posture tells you whether the planning wave is resumable."}</p>
         </article>
       </section>
 
       {warning ? (
         <Card variant="compact">
-          <p className="mono muted">{warning}</p>
+          <p className="mono muted">{locale === "zh-CN" && !hasCjkText(warning) ? text.warningFallback : warning}</p>
         </Card>
       ) : null}
 
@@ -463,12 +498,12 @@ export default async function PlannerPage() {
         <Card className="planner-empty-stage">
           <div className="planner-empty-shell">
             <div className="planner-empty-brief">
-              <span className="cell-sub mono muted">Planner launch checklist</span>
+              <span className="cell-sub mono muted">{text.launchChecklistLabel}</span>
               <strong className="planner-empty-title">
-                {locale === "zh-CN" ? "先把第一条规划 wave 发车，再回来做真正的 triage。" : "Start the first planning wave, then come back for real triage."}
+                {locale === "zh-CN" ? "先把第一条规划波次发车，再回来做真正的分诊。" : "Start the first planning wave, then come back for real triage."}
               </strong>
               <p className="planner-empty-summary">{text.note}</p>
-              <div className="planner-empty-checklist" aria-label="Planner launch checklist">
+              <div className="planner-empty-checklist" aria-label={text.launchChecklistLabel}>
                 {emptyChecklist.map((item, index) => (
                   <div key={item.title} className="planner-empty-check">
                     <span className="cell-sub mono muted">{String(index + 1).padStart(2, "0")}</span>
@@ -484,17 +519,17 @@ export default async function PlannerPage() {
               <Link href="/pm" className="planner-empty-card">
                 <span className="cell-sub mono muted">DISPATCH · 01</span>
               <strong>{text.openPm}</strong>
-              <span>{text.title === "规划桌" ? "先把第一条目标、约束和验收口径写清，再回来让 planner desk 真正开机。" : "Start the first wave from PM intake, then return here once the planning surface exists."}</span>
+              <span>{text.launchOpenPmHint}</span>
               </Link>
               <Link href="/command-tower" className="planner-empty-card">
                 <span className="cell-sub mono muted">OBSERVE · 02</span>
               <strong>{text.openTower}</strong>
-              <span>{text.title === "规划桌" ? "如果系统已经在跑，只是规划产物还没挂出来，就先回 tower 看当前谁在动。" : "If work is already running but planning artifacts are missing, scan the tower before you dispatch anything else."}</span>
+              <span>{text.launchOpenTowerHint}</span>
               </Link>
               <Link href="/workflows" className="planner-empty-card">
                 <span className="cell-sub mono muted">RESUME · 03</span>
               <strong>{text.openWorkflow}</strong>
-              <span>{text.title === "规划桌" ? "Workflow Case 是 durable state，不是首页解释文；当 planning row 出现后，回这里继续追。" : "Workflow Cases keep the durable state once the planner row becomes real."}</span>
+              <span>{text.launchOpenWorkflowHint}</span>
               </Link>
             </div>
           </div>

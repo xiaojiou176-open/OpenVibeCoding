@@ -21,12 +21,18 @@ type WorkflowDetailPageParams = {
   id: string;
 };
 
+const CJK_TEXT_RE = /[\u3400-\u9fff]/;
+
 function safeDecodeParam(value: string): string {
   try {
     return decodeURIComponent(value);
   } catch {
     return value;
   }
+}
+
+function hasCjkText(value: string | undefined | null): boolean {
+  return Boolean(value && CJK_TEXT_RE.test(value));
 }
 
 function isWorkflowAtRisk(status: unknown): boolean {
@@ -80,9 +86,18 @@ export async function generateMetadata({
 }: {
   params: Promise<WorkflowDetailPageParams>;
 }): Promise<Metadata> {
+  const cookieStore = await cookies();
+  const locale = normalizeUiLocale(cookieStore.get(UI_LOCALE_STORAGE_KEY)?.value);
   const { id } = await params;
   const workflowId = safeDecodeParam(id);
   const titleSuffix = workflowId ? ` · ${workflowId}` : "";
+  if (locale === "zh-CN") {
+    return {
+      title: `工作流案例详情${titleSuffix} | OpenVibeCoding`,
+      description:
+        "围绕风险、队列姿态、关联运行、事件时间线和下一步操作查看单个工作流案例。",
+    };
+  }
   return {
     title: `Workflow Case detail${titleSuffix} | OpenVibeCoding`,
     description:
@@ -138,23 +153,30 @@ export default async function WorkflowDetailPage({
   }).length;
 
   if (warning) {
+    const warningSummary =
+      locale === "zh-CN" && !hasCjkText(warning)
+        ? "当前工作流详情暂时不可用，请稍后再试。"
+        : warning;
     return (
       <main className="grid" aria-labelledby="workflow-detail-title">
         <header className="app-section">
           <div className="section-header">
             <div>
-              <p className="cell-sub mono muted">OpenVibeCoding / workflow case detail</p>
+              <p className="cell-sub mono muted">
+                {locale === "zh-CN" ? "OpenVibeCoding / 工作流案例详情" : "OpenVibeCoding / workflow case detail"}
+              </p>
               <h1 id="workflow-detail-title">{workflowDetailPageCopy.title}</h1>
               <p>{workflowDetailPageCopy.subtitle}</p>
             </div>
             <Badge className="mono">{workflowId}</Badge>
           </div>
         </header>
-        <section className="app-section" aria-label="Workflow degraded state">
+        <section className="app-section" aria-label={locale === "zh-CN" ? "工作流降级状态" : "Workflow degraded state"}>
           <ControlPlaneStatusCallout
             title={workflowDetailPageCopy.degradedTitle}
-            summary={warning}
+            summary={warningSummary}
             nextAction={workflowDetailPageCopy.degradedNextAction}
+            nextStepLabel={locale === "zh-CN" ? "下一步" : "Next step"}
             tone="warning"
             badgeLabel={workflowDetailPageCopy.degradedBadge}
             actions={[
@@ -186,7 +208,7 @@ export default async function WorkflowDetailPage({
             </Card>
             <Card>
               <h3>{workflowDetailPageCopy.degradedEventTimelineTitle}</h3>
-              <EventTimeline events={events} />
+              <EventTimeline events={events} locale={locale} />
               <span className="mono muted">{workflowDetailPageCopy.degradedEventTimelineReadonlyNote}</span>
             </Card>
           </div>
@@ -213,7 +235,9 @@ export default async function WorkflowDetailPage({
       <header className="app-section">
         <div className="section-header">
           <div>
-            <p className="cell-sub mono muted">OpenVibeCoding / workflow case detail</p>
+            <p className="cell-sub mono muted">
+              {locale === "zh-CN" ? "OpenVibeCoding / 工作流案例详情" : "OpenVibeCoding / workflow case detail"}
+            </p>
             <h1 id="workflow-detail-title">{workflowDetailPageCopy.title}</h1>
             <p>{workflowDetailPageCopy.subtitle}</p>
           </div>
@@ -324,7 +348,7 @@ export default async function WorkflowDetailPage({
           </Card>
           <Card>
             <h3>{workflowDetailCopy.eventsTitle(events.length)}</h3>
-            <EventTimeline events={events} />
+            <EventTimeline events={events} locale={locale} />
           </Card>
           <Card>
             <h3>{workflowDetailCopy.queueSlaTitle(queueItems.length)}</h3>

@@ -28,9 +28,52 @@ Current lane order is deliberate:
 - **Secondary lane** = the adoption-router public skill packet
 - **Companion/example lane** = local starter kits and coding-agent bundle examples, which are not the canonical public root
 
-[Quickstart](#quickstart) · [First Proven Workflow](https://xiaojiou176-open.github.io/OpenVibeCoding/use-cases/) · [Compatibility Matrix](https://xiaojiou176-open.github.io/OpenVibeCoding/compatibility/) · [Distribution Status](https://xiaojiou176-open.github.io/OpenVibeCoding/distribution/) · [Public Docs](https://xiaojiou176-open.github.io/OpenVibeCoding/) · [AI + MCP + API Surfaces](https://xiaojiou176-open.github.io/OpenVibeCoding/ai-surfaces/) · [Builder Quickstart](https://xiaojiou176-open.github.io/OpenVibeCoding/builders/) · [Releases](https://github.com/xiaojiou176-open/OpenVibeCoding/releases)
+[Quickstart](#quickstart) · [Watch the 18s Teaser](docs/assets/storefront/openvibecoding-command-tower-teaser.mp4) · [First Proven Workflow](https://xiaojiou176-open.github.io/OpenVibeCoding/use-cases/) · [Compatibility Matrix](https://xiaojiou176-open.github.io/OpenVibeCoding/compatibility/) · [Distribution Status](https://xiaojiou176-open.github.io/OpenVibeCoding/distribution/) · [Public Docs](https://xiaojiou176-open.github.io/OpenVibeCoding/) · [AI + MCP + API Surfaces](https://xiaojiou176-open.github.io/OpenVibeCoding/ai-surfaces/) · [Builder Quickstart](https://xiaojiou176-open.github.io/OpenVibeCoding/builders/) · [Releases](https://github.com/xiaojiou176-open/OpenVibeCoding/releases)
 
 ![OpenVibeCoding command tower showcase card](docs/assets/storefront/command-tower-showcase-card.svg)
+
+If you want the fastest product read instead of the full distribution matrix,
+open the 18-second teaser first.
+
+[![OpenVibeCoding command tower teaser poster](docs/assets/storefront/openvibecoding-command-tower-teaser-poster.png)](docs/assets/storefront/openvibecoding-command-tower-teaser.mp4)
+
+## Why OpenVibeCoding Exists
+
+Most agent demos stop at "the model replied." OpenVibeCoding is built for the
+next question: **can we inspect what happened, review what changed, classify
+the workflow case, and rerun it without guessing?**
+
+The deeper product claim is straightforward:
+
+- **Plan** the next move instead of improvising one more prompt.
+- **Delegate** scoped work without losing the case record.
+- **Track** live progress and queue posture from one command tower.
+- **Resume** long-running work when humans step away or sessions degrade.
+- **Prove** what happened with evidence, compare, replay, and approvals.
+
+The engineering philosophy underneath that loop is equally explicit:
+
+- **Prompt Engineering**: write the right worker brief, scope, constraints, and deliverables.
+- **Context Engineering**: keep the right material in the right head, and treat explicit handoff as a fallback rather than the default loop.
+- **Harness Engineering**: move work through contracts, runtime bindings, approvals, and proof surfaces so the system can keep operating safely.
+
+OpenVibeCoding currently combines:
+
+- **Command Tower**: one operator surface for governed AI work, live run visibility, queue posture, and L0-style oversight
+- **Workflow Cases**: one stable operating record that ties request, verdict, proof, and linked runs together
+- **Proof & Replay**: one place to inspect evidence bundles, compare reruns, and replay failures before promotion
+- **Control surfaces**: a web dashboard plus a macOS desktop shell for the same command tower
+- **Read-only inspection surfaces**: repo-local MCP, API, and contract read models that expose truth without turning mirrors into execution authority
+- **Governed boundaries**: fail-closed gates for CI, host safety, repo hygiene, and public-proof honesty
+
+If you need the deeper public bundle/runtime/read-model map, open the focused
+public entrypoints instead of treating the root README like the whole
+control-plane manual:
+
+- [AI + MCP + API Surfaces](https://xiaojiou176-open.github.io/OpenVibeCoding/ai-surfaces/)
+- [Builder Quickstart](https://xiaojiou176-open.github.io/OpenVibeCoding/builders/)
+- [API quickstart](https://xiaojiou176-open.github.io/OpenVibeCoding/api/)
+- [Distribution Status](https://xiaojiou176-open.github.io/OpenVibeCoding/distribution/)
 
 ## Official Distribution Story
 
@@ -63,9 +106,9 @@ If you need the exact matrix instead of a one-line summary, open the public
 [Distribution Status](https://xiaojiou176-open.github.io/OpenVibeCoding/distribution/)
 page.
 
-![OpenVibeCoding studio preview card](docs/assets/storefront/openvibecoding-studio-preview.svg)
+![OpenVibeCoding dashboard home live screenshot](docs/assets/storefront/dashboard-home-live-1440x900.png)
 
-![OpenVibeCoding command tower flow](docs/assets/storefront/hero-command-tower.svg)
+![OpenVibeCoding desktop shell live screenshot](docs/assets/storefront/desktop-shell-live-1440x900.png)
 
 ![OpenVibeCoding first-loop storyboard](docs/assets/storefront/first-loop-storyboard.gif)
 
@@ -118,44 +161,6 @@ release, new task templates, and storefront updates.
 
 If you need contributor setup instead of product evaluation, jump to
 [CONTRIBUTING.md](CONTRIBUTING.md) and the local quickstart below.
-
-## Why OpenVibeCoding Exists
-
-Most agent demos stop at "the model replied." OpenVibeCoding is built for the
-next question: **can we inspect what happened, review what changed, classify
-the workflow case, and rerun it without guessing?**
-
-The deeper product claim is straightforward:
-
-- **Plan** the next move instead of improvising one more prompt.
-- **Delegate** scoped work without losing the case record.
-- **Track** live progress and queue posture from one command tower.
-- **Resume** long-running work when humans step away or sessions degrade.
-- **Prove** what happened with evidence, compare, replay, and approvals.
-
-The engineering philosophy underneath that loop is equally explicit:
-
-- **Prompt Engineering**: write the right worker brief, scope, constraints, and deliverables.
-- **Context Engineering**: keep the right material in the right head, and treat explicit handoff as a fallback rather than the default loop.
-- **Harness Engineering**: move work through contracts, runtime bindings, approvals, and proof surfaces so the system can keep operating safely.
-
-OpenVibeCoding currently combines:
-
-- **Command Tower**: one operator surface for governed AI work, live run visibility, queue posture, and L0-style oversight
-- **Workflow Cases**: one stable operating record that ties request, verdict, proof, and linked runs together
-- **Proof & Replay**: one place to inspect evidence bundles, compare reruns, and replay failures before promotion
-- **Control surfaces**: a web dashboard plus a macOS desktop shell for the same command tower
-- **Read-only inspection surfaces**: repo-local MCP, API, and contract read models that expose truth without turning mirrors into execution authority
-- **Governed boundaries**: fail-closed gates for CI, host safety, repo hygiene, and public-proof honesty
-
-If you need the deeper public bundle/runtime/read-model map, open the focused
-public entrypoints instead of treating the root README like the whole
-control-plane manual:
-
-- [AI + MCP + API Surfaces](https://xiaojiou176-open.github.io/OpenVibeCoding/ai-surfaces/)
-- [Builder Quickstart](https://xiaojiou176-open.github.io/OpenVibeCoding/builders/)
-- [API quickstart](https://xiaojiou176-open.github.io/OpenVibeCoding/api/)
-- [Distribution Status](https://xiaojiou176-open.github.io/OpenVibeCoding/distribution/)
 
 ## Quickstart
 

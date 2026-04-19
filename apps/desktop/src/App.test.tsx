@@ -1437,6 +1437,12 @@ describe("Desktop command center shell", { timeout: 15000 }, () => {
 
   it("supports additional hotkey routing branches", async () => {
     const user = userEvent.setup();
+    await Promise.all([
+      import("./pages/OverviewPage"),
+      import("./pages/ChangeGatesPage"),
+      import("./pages/SearchPage"),
+      import("./pages/PoliciesPage"),
+    ]);
     render(<App />);
     await navigateToPmEntry(user);
     await expectActiveSession("pm-live-1");

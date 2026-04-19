@@ -18,11 +18,27 @@ import {
 } from "../../lib/types";
 import WorkflowQueueMutationControls from "./WorkflowQueueMutationControls";
 
-export const metadata: Metadata = {
-  title: "Workflow Cases | OpenVibeCoding",
-  description:
-    "Review Workflow Cases, queue posture, linked runs, and next operator actions inside the OpenVibeCoding command tower.",
-};
+const CJK_TEXT_RE = /[\u3400-\u9fff]/;
+
+export function buildWorkflowsMetadata(locale: "en" | "zh-CN"): Metadata {
+  if (locale === "zh-CN") {
+    return {
+      title: "工作流案例 | OpenVibeCoding",
+      description:
+        "在 OpenVibeCoding 指挥塔里查看工作流案例、队列姿态、关联运行和下一步操作。",
+    };
+  }
+
+  return {
+    title: "Workflow Cases | OpenVibeCoding",
+    description:
+      "Review Workflow Cases, queue posture, linked runs, and next operator actions inside the OpenVibeCoding command tower.",
+  };
+}
+
+function hasCjkText(value: string | undefined | null): boolean {
+  return Boolean(value && CJK_TEXT_RE.test(value));
+}
 
 function statusBadgeVariant(status: string | undefined): BadgeVariant {
   const s = String(status || "").toLowerCase();
@@ -68,7 +84,7 @@ function workflowListText(locale: "en" | "zh-CN") {
       proofLabel: "Proof",
       verdictLabel: "Verdict",
       sourceRunLabel: "Source run",
-      operatorDeskNote: "列表会把 owner、linked run、authority、runtime 和下一步动作压到同一行，方便 operator 先看指挥语义，再点进详情。",
+    operatorDeskNote: "这张列表会把负责人、关联运行、执行权、运行时和下一步动作压到同一行，方便操作者先看指挥语义，再决定是否下钻。",
     };
   }
   return {
@@ -130,6 +146,12 @@ function pickLatestRun(workflow: WorkflowRecord): WorkflowRun | undefined {
   })[0];
 }
 
+export async function generateMetadata(): Promise<Metadata> {
+  const cookieStore = await cookies();
+  const locale = normalizeUiLocale(cookieStore.get(UI_LOCALE_STORAGE_KEY)?.value);
+  return buildWorkflowsMetadata(locale);
+}
+
 export default async function WorkflowsPage() {
   const cookieStore = await cookies();
   const locale = normalizeUiLocale(cookieStore.get(UI_LOCALE_STORAGE_KEY)?.value);
@@ -174,7 +196,7 @@ export default async function WorkflowsPage() {
       <header className="app-section">
         <div className="section-header">
           <div>
-            <p className="cell-sub mono muted">OpenVibeCoding / workflow desk</p>
+            <p className="cell-sub mono muted">{locale === "zh-CN" ? "OpenVibeCoding / 工作流桌" : "OpenVibeCoding / workflow desk"}</p>
             <h1 id="workflows-page-title" className="page-title">{workflowListPageCopy.title}</h1>
             <p className="page-subtitle">{workflowListPageCopy.subtitle}</p>
           </div>
@@ -200,8 +222,14 @@ export default async function WorkflowsPage() {
           <p className="cell-sub mono muted">{recommendedActionText}</p>
         </article>
       </section>
-      <section className="app-section" aria-label="Workflow list">
-        {warning ? <p className="alert alert-warning" role="status">{warning}</p> : null}
+      <section className="app-section" aria-label={locale === "zh-CN" ? "工作流列表" : "Workflow list"}>
+        {warning ? (
+          <p className="alert alert-warning" role="status">
+            {locale === "zh-CN" && !hasCjkText(warning)
+              ? "当前工作流列表暂时不可用，请稍后再试。"
+              : warning}
+          </p>
+        ) : null}
         <Card variant="compact">
           <p className="mono muted">{listText.operatorDeskNote}</p>
         </Card>

@@ -62,6 +62,7 @@ import {
   CommandTowerPageIntro,
   default as CommandTowerPage,
 } from "../app/command-tower/page";
+import CommandTowerLoading from "../app/command-tower/loading";
 import { fetchCommandTowerOverview, fetchPmSessions } from "../lib/api";
 
 describe("command tower page render", () => {
@@ -153,6 +154,29 @@ describe("command tower page render", () => {
     expect(screen.getByRole("status")).toHaveTextContent("正在加载指挥塔实时总览...");
     expect(screen.queryByTestId("ct-callout")).toBeNull();
     expect(screen.getByTestId("ct-live-client")).toHaveTextContent("overview:0 sessions:1");
+    expect(screen.getAllByRole("region", { name: "指挥塔实时总览" })).toHaveLength(2);
+  });
+
+  it("renders zh-CN aria labels for both live and fallback command tower sections", async () => {
+    render(await CommandTowerHomeSection({ locale: "zh-CN" }));
+    expect(screen.getByRole("region", { name: "指挥塔实时总览" })).toBeInTheDocument();
+
+    render(<CommandTowerHomeSectionFallback locale="zh-CN" />);
+    expect(screen.getAllByRole("region", { name: "指挥塔实时总览" })).toHaveLength(2);
+  });
+
+  it("renders zh-CN route loading copy when the locale cookie requests it", async () => {
+    mockCookies.mockResolvedValue({
+      get: (name: string) => (name === "openvibecoding.ui.locale" ? { value: "zh-CN" } : undefined),
+      toString: () => "openvibecoding.ui.locale=zh-CN",
+    });
+
+    render(await CommandTowerLoading());
+
+    expect(screen.getByRole("heading", { name: "正在加载指挥塔" })).toBeInTheDocument();
+    expect(screen.getByText("请稍候，系统正在聚合会话总览、告警和实时状态。")).toBeInTheDocument();
+    expect(screen.getByLabelText("指挥塔加载状态")).toBeInTheDocument();
+    expect(screen.queryByText("Loading Command Tower")).not.toBeInTheDocument();
   });
 
   it("switches the page intro into partial-truth mode when warning data still has live context", async () => {

@@ -21,6 +21,12 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://xiaojiou176-open.github.io/OpenVibeCoding/" />
     <meta property="og:image" content="./assets/storefront/social-preview-1280x640.png" />
+    <meta
+      property="og:image:alt"
+      content="OpenVibeCoding command tower teaser preview showing plan, delegate, track, resume, and prove inside one governed operator loop."
+    />
+    <meta property="og:video" content="https://xiaojiou176-open.github.io/OpenVibeCoding/assets/storefront/openvibecoding-command-tower-teaser.mp4" />
+    <meta property="og:video:type" content="video/mp4" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="OpenVibeCoding | The open command tower for AI engineering" />
     <meta
@@ -28,6 +34,10 @@
       content="Stop babysitting AI coding work. OpenVibeCoding helps teams plan / delegate / track / resume / prove long-running engineering work across Codex and Claude Code."
     />
     <meta name="twitter:image" content="./assets/storefront/social-preview-1280x640.png" />
+    <meta
+      name="twitter:image:alt"
+      content="OpenVibeCoding command tower teaser preview showing plan, delegate, track, resume, and prove inside one governed operator loop."
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -53,6 +63,18 @@
           "skills",
           "builders"
         ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "VideoObject",
+        "name": "OpenVibeCoding command tower teaser",
+        "description": "A short promo teaser showing how OpenVibeCoding keeps plan, delegate, track, resume, and prove in one governed operator loop.",
+        "thumbnailUrl": "https://xiaojiou176-open.github.io/OpenVibeCoding/assets/storefront/openvibecoding-command-tower-teaser-poster.png",
+        "contentUrl": "https://xiaojiou176-open.github.io/OpenVibeCoding/assets/storefront/openvibecoding-command-tower-teaser.mp4",
+        "embedUrl": "https://xiaojiou176-open.github.io/OpenVibeCoding/assets/storefront/openvibecoding-command-tower-teaser.mp4",
+        "uploadDate": "2026-04-19"
       }
     </script>
     <script type="application/ld+json">
@@ -302,11 +324,17 @@
         grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
       }
 
-      .hero-image {
+      .hero-image,
+      .hero-video {
         width: 100%;
         border-radius: 22px;
         border: 1px solid var(--line);
         background: rgba(8, 13, 28, 0.9);
+      }
+
+      .hero-video {
+        display: block;
+        box-shadow: var(--shadow);
       }
 
       .caption {
@@ -400,24 +428,57 @@
         <div class="actions">
           <a class="primary" href="./use-cases/">See the first proven workflow</a>
           <a class="secondary" href="./compatibility/">Choose the right adoption path</a>
-          <a class="secondary" href="./distribution/">Open distribution status</a>
-        </div>
-        <div class="hero-meta" aria-label="Repository meta">
-          <a href="https://github.com/xiaojiou176-open/OpenVibeCoding">Repository</a>
-          <a href="https://github.com/xiaojiou176-open/OpenVibeCoding/releases">Releases</a>
-          <a href="./builders/">Builder quickstart</a>
-          <a href="./ai-surfaces/">AI + MCP + API surfaces</a>
+          <a class="secondary" href="./assets/storefront/openvibecoding-command-tower-teaser.mp4">Watch the 18s teaser</a>
         </div>
         <p class="caption">
           Current boundary: OpenVibeCoding is a <strong>repo-backed operator control plane, not a hosted product</strong>,
           and the <strong>shipped MCP surface remains read-only</strong>.
         </p>
-        <nav class="mini-nav" aria-label="Mission-critical doors">
-          <a href="./use-cases/">First proven workflow</a>
-          <a href="./compatibility/">Compatibility matrix</a>
-          <a href="./distribution/">Distribution status</a>
-          <a href="./mcp/">Read-only MCP</a>
-        </nav>
+        <div class="hero-media-grid">
+          <div class="panel">
+            <img
+              class="hero-image"
+              src="./assets/storefront/dashboard-command-tower-current-1440x900.png"
+              alt="OpenVibeCoding Command Tower current read-back showing the live operator shell and an explicit partial-degradation state"
+            />
+            <p class="caption">
+              Current read-back example: the OpenVibeCoding Command Tower is already productized, and degraded states stay explicit instead of pretending everything is healthy.
+            </p>
+          </div>
+
+          <div class="panel">
+            <video
+              class="hero-video"
+              controls
+              muted
+              playsinline
+              preload="metadata"
+              poster="./assets/storefront/openvibecoding-command-tower-teaser-poster.png"
+              aria-label="OpenVibeCoding 18-second product teaser"
+            >
+              <source src="./assets/storefront/openvibecoding-command-tower-teaser.mp4" type="video/mp4" />
+              <track
+                src="./assets/storefront/openvibecoding-command-tower-teaser.vtt"
+                kind="captions"
+                srclang="en"
+                label="English captions"
+                default
+              />
+            </video>
+            <p class="caption">
+              Watch the command-tower teaser first if you want the shortest product read before opening deeper docs and matrices.
+            </p>
+            <details>
+              <summary>Read the teaser transcript</summary>
+              <p class="caption">
+                Stop babysitting AI coding work. AI coding does not lack models. It lacks a command tower.
+                OpenVibeCoding turns PM intake, Command Tower, Workflow Cases, and Proof &amp; Replay into one governed operator path.
+                Read the board before you trust the result, then carry the same command tower onto desktop.
+                Public boundary today: repo-backed, proof-first, read-only MCP.
+              </p>
+            </details>
+          </div>
+        </div>
         <div class="truth-strip" aria-label="Current truth">
           <article class="truth-card">
             <span class="truth-kicker">Current boundary</span>
@@ -435,28 +496,15 @@
             <p>Standalone npm releases, Docker distribution, hosted operator service, and public write-capable MCP still sit outside the current promise.</p>
           </article>
         </div>
-        <div class="hero-media-grid">
-          <div class="panel">
-            <img
-              class="hero-image"
-              src="./assets/storefront/command-tower-showcase-card.svg"
-              alt="OpenVibeCoding command tower briefing card showing PM request, Command Tower, and Proof and Replay"
-            />
-            <p class="caption">
-              One request enters, one Workflow Case becomes visible, and one Proof &amp; Replay room stays inspectable before you trust the result.
-            </p>
-          </div>
-
-          <div class="panel">
-            <img
-              class="hero-image"
-              src="./assets/storefront/first-loop-storyboard.gif"
-              alt="OpenVibeCoding storyboard showing the first public loop from PM request to evidence"
-            />
-            <p class="caption">
-              The tracked storyboard exists to prove the same first loop the README, Pages, and release notes are promising.
-            </p>
-          </div>
+        <div class="hero-meta" aria-label="Repository meta">
+          <a href="https://github.com/xiaojiou176-open/OpenVibeCoding">Repository</a>
+          <a href="https://github.com/xiaojiou176-open/OpenVibeCoding/releases">Releases</a>
+          <a href="./builders/">Builder quickstart</a>
+          <a href="./ai-surfaces/">AI + MCP + API surfaces</a>
+          <a href="./use-cases/">First proven workflow</a>
+          <a href="./compatibility/">Compatibility matrix</a>
+          <a href="./distribution/">Distribution status</a>
+          <a href="./mcp/">Read-only MCP</a>
         </div>
       </section>
 

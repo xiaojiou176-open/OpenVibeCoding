@@ -16,14 +16,30 @@ type RunsPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
 
-export const metadata: Metadata = {
-  title: "Proof & Replay | OpenVibeCoding",
-  description:
-    "Inspect latest outcomes, replay posture, failure clues, and next operator actions from the OpenVibeCoding proof and replay surface.",
-};
+const CJK_TEXT_RE = /[\u3400-\u9fff]/;
+
+export function buildRunsMetadata(locale: "en" | "zh-CN"): Metadata {
+  if (locale === "zh-CN") {
+    return {
+      title: "证明与回放 | OpenVibeCoding",
+      description:
+        "在 OpenVibeCoding 的证明与回放桌面查看最新结果、回放姿态、失败线索和下一步操作。",
+    };
+  }
+
+  return {
+    title: "Proof & Replay | OpenVibeCoding",
+    description:
+      "Inspect latest outcomes, replay posture, failure clues, and next operator actions from the OpenVibeCoding proof and replay surface.",
+  };
+}
 
 function queryValue(value: string | string[] | undefined): string {
   return Array.isArray(value) ? String(value[0] || "").trim() : String(value || "").trim();
+}
+
+function hasCjkText(value: string | undefined | null): boolean {
+  return Boolean(value && CJK_TEXT_RE.test(value));
 }
 
 async function resolveDashboardLocale() {
@@ -33,6 +49,11 @@ async function resolveDashboardLocale() {
   } catch {
     return normalizeUiLocale(undefined);
   }
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await resolveDashboardLocale();
+  return buildRunsMetadata(locale);
 }
 
 export default async function RunsPage({ searchParams }: RunsPageProps) {
@@ -90,14 +111,20 @@ export default async function RunsPage({ searchParams }: RunsPageProps) {
       ? runsPageCopy.operatorPrioritySubline
       : runsPageCopy.operatorPriorityClearSubline;
   const operatorDeskNote = locale === "zh-CN"
-    ? `当前首屏把 ${proofReady} 个 proof-ready run 和 ${hintedRuns} 个带 action hint 的 run 放回同一张 operator list，不再只把 Runs 当失败分诊表。`
+    ? `当前首屏会把 ${proofReady} 个可直接进入证明复核的运行和 ${hintedRuns} 个带动作提示的运行放回同一张操作列表，不再只把证明与回放当失败分诊表。`
     : `This first screen keeps ${proofReady} proof-ready runs and ${hintedRuns} runs with explicit operator hints in the same operator list, so Proof & Replay is not reduced to a failure queue.`;
+  const warningDetail =
+    locale === "zh-CN"
+      ? hasCjkText(warning)
+        ? String(warning)
+        : "当前运行读面暂时不可用，请稍后再试。"
+      : String(warning || "");
   return (
     <main className="grid" aria-labelledby="runs-page-title">
       <header className="app-section">
         <div className="section-header">
           <div>
-            <p className="cell-sub mono muted">OpenVibeCoding / proof and replay</p>
+            <p className="cell-sub mono muted">{locale === "zh-CN" ? "OpenVibeCoding / 证明与回放桌" : "OpenVibeCoding / proof and replay"}</p>
             <h1 id="runs-page-title" className="page-title">{runsPageCopy.title}</h1>
             <p className="page-subtitle">{runsPageCopy.subtitle}</p>
             <p className="desk-question">
@@ -109,12 +136,12 @@ export default async function RunsPage({ searchParams }: RunsPageProps) {
           <Badge>{runsPageCopy.countsBadge(runs.length)}</Badge>
         </div>
       </header>
-      <section className="app-section" aria-label="Run list">
+      <section className="app-section" aria-label={locale === "zh-CN" ? "运行列表" : "Run list"}>
         {warning ? (
           <Card variant="compact" role="status" aria-live="polite">
             <p className="ct-home-empty-text">{runsPageCopy.warningTitle}</p>
             <p className="mono muted">{runsPageCopy.warningNextStep}</p>
-            <p className="mono muted">{warning}</p>
+            <p className="mono muted">{warningDetail}</p>
           </Card>
         ) : null}
         <Card variant="compact">

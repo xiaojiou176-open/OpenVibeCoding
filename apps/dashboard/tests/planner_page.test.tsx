@@ -36,6 +36,7 @@ vi.mock("../lib/api", () => ({
 
 import PlannerPage from "../app/planner/page";
 import {
+  buildPlannerMetadata,
   plannerPriorityRank,
   plannerPriorityState,
   plannerText,
@@ -96,6 +97,16 @@ describe("planner page", () => {
         },
       },
     ] as never);
+  });
+
+  it("exports locale-aware planner metadata", () => {
+    const enMetadata = buildPlannerMetadata("en");
+    const zhMetadata = buildPlannerMetadata("zh-CN");
+
+    expect(enMetadata.title).toBe("Planner desk | OpenVibeCoding");
+    expect(String(enMetadata.description)).toContain("worker prompt contracts");
+    expect(zhMetadata.title).toBe("规划桌 | OpenVibeCoding");
+    expect(String(zhMetadata.description)).toContain("解阻塞任务");
   });
 
   it("renders a triage-first planner desk from planning artifacts", async () => {

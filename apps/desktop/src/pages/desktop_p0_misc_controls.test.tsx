@@ -137,12 +137,12 @@ describe("desktop p0 misc controls", () => {
 
   it("covers ChangeGates diff toggle + rollback/reject", async () => {
     const user = userEvent.setup();
-    render(<ChangeGatesPage />);
+    render(<ChangeGatesPage locale="zh-CN" />);
 
-    expect(await screen.findByRole("heading", { name: /变更门禁|Diff gate/ })).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: /查看 Diff|View diff/ }));
+    expect(await screen.findByRole("heading", { name: /变更门禁|Diff Gate|Diff gate/ })).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: /查看 diff|View diff/ }));
     await waitFor(() => expect(fetchDiff).toHaveBeenCalledWith("run-001"));
-    await user.click(screen.getByRole("button", { name: /隐藏 Diff|Hide diff/ }));
+    await user.click(screen.getByRole("button", { name: /收起 diff|Hide diff/ }));
     await user.click(screen.getByRole("button", { name: /回滚|Rollback/ }));
     await waitFor(() => expect(rollbackRun).toHaveBeenCalledWith("run-001"));
     await user.click(screen.getByRole("button", { name: /拒绝变更|Reject change/ }));

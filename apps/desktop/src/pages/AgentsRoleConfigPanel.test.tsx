@@ -43,6 +43,13 @@ describe("AgentsRoleConfigPanel", () => {
     expect(screen.getByText("No registered roles are available for configuration yet.")).toBeInTheDocument();
   });
 
+  it("renders zh-CN desk copy when locale is passed", () => {
+    render(<AgentsRoleConfigPanel roleCatalog={[]} onApplied={vi.fn()} locale="zh-CN" />);
+
+    expect(screen.getByRole("heading", { name: "角色配置桌" })).toBeInTheDocument();
+    expect(screen.getByText("当前还没有可配置的已注册角色。")).toBeInTheDocument();
+  });
+
   it("supports preview mode and reports role-load failures when switching roles", async () => {
     let resolveFirstFetch: (value: any) => void = () => {};
     vi.mocked(fetchRoleConfig)

@@ -44,32 +44,35 @@ function humanizeToken(value: string | undefined): string {
 function runListText(locale: RunListLocale) {
   if (locale === "zh-CN") {
     return {
-      caption: "Run 列表，突出操作者席位、Proof 姿态与下一步动作。",
+      caption: "运行列表，突出操作者席位、证明姿态与下一步动作。",
       headers: {
-        run: "Run",
+        run: "运行",
         operator: "操作者姿态",
-        proof: "Proof 姿态",
-        next: "下一步",
+        proof: "证明姿态",
+        next: "下一步操作",
         updated: "最近更新",
       },
-      runTaskPrefix: "Task",
-      workflowPrefix: "Workflow",
-      ownerPrefix: "Owner",
-      assigneePrefix: "Assignee",
-      noOutcome: "当前还没有 outcome posture。",
+      runTaskPrefix: "任务",
+      workflowPrefix: "工作流",
+      ownerPrefix: "负责人",
+      assigneePrefix: "执行者",
+      noOutcome: "当前还没有明确的结果姿态。",
       runningOutcome: "证据仍在形成中。",
-      failedOutcome: "当前 Run 仍有 proof gap。",
-      completedOutcome: "结果已进入可复核 proof 姿态。",
-      neutralOutcome: "当前 Run 还没有明确 proof posture。",
-      noAdditionalProof: "当前没有额外的 failure 或 root-event 摘要。",
-      nextOpenRun: "打开 Run Detail",
-      nextOpenProof: "打开 Proof & Replay",
-      nextMonitorRun: "监看活跃 Run",
-      nextReviewProof: "复核 proof 与 outcome",
-      nextFallback: "检查 Run 详情",
+      failedOutcome: "当前运行仍有待补的证明缺口。",
+      completedOutcome: "结果已进入可复核的证明姿态。",
+      neutralOutcome: "当前运行还没有明确的证明姿态。",
+      noAdditionalProof: "当前没有额外的失败或根事件摘要。",
+      nextOpenRun: "打开运行详情",
+      nextOpenProof: "打开证明与回放",
+      nextMonitorRun: "监看活跃运行",
+      nextReviewProof: "复核证明与结果",
+      nextFallback: "检查运行详情",
       nextOpenEvents: "打开事件时间线",
       noHint: "当前没有显式 action hint。",
-      noRunAction: "Run 还没有稳定 ID，先回到上游任务确认。",
+      noRunAction: "当前这一行还没有稳定的运行 ID，先回到上游任务确认。",
+      emptyTitle: "当前还没有运行记录。",
+      emptyHint: "下一步：先从 PM 入口创建第一项任务，它会自动出现在这里。",
+      emptyCta: "从 PM 启动首个任务",
     };
   }
   return {
@@ -99,6 +102,9 @@ function runListText(locale: RunListLocale) {
     nextOpenEvents: "Open event timeline",
     noHint: "No explicit operator hint is attached yet.",
     noRunAction: "This row does not have a stable run id yet. Confirm the upstream task first.",
+    emptyTitle: "No runs yet.",
+    emptyHint: "Next: create a task from the PM page. It will appear here automatically.",
+    emptyCta: "Create your first task in PM",
   };
 }
 
@@ -142,21 +148,20 @@ function deriveNextAction(run: RunSummary, locale: RunListLocale, text: ReturnTy
 }
 
 export default function RunList({ runs, locale = "en" }: { runs: RunSummary[]; locale?: RunListLocale }) {
+  const text = runListText(locale);
   if (!runs || runs.length === 0) {
     return (
       <Card>
         <div className="empty-state-stack">
-          <span className="muted">No runs yet.</span>
-          <span className="mono muted">Next: create a task from the PM page. It will appear here automatically.</span>
+          <span className="muted">{text.emptyTitle}</span>
+          <span className="mono muted">{text.emptyHint}</span>
           <Button asChild variant="default">
-            <Link href="/pm">Create your first task in PM</Link>
+            <Link href="/pm">{text.emptyCta}</Link>
           </Button>
         </div>
       </Card>
     );
   }
-
-  const text = runListText(locale);
 
   return (
     <Card variant="table">

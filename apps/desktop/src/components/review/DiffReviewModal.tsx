@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef } from "react";
+import { detectPreferredUiLocale } from "@openvibecoding/frontend-shared/uiLocale";
 import { Button } from "../ui/Button";
 
 type DiffReviewModalProps = {
@@ -90,29 +91,30 @@ export function DiffReviewModal({
   if (!open) {
     return null;
   }
+  const isZh = detectPreferredUiLocale() === "zh-CN";
   return (
     <div ref={modalRef} className="overlay-modal" role="dialog" aria-modal="true" aria-labelledby={titleId} tabIndex={-1}>
       <article className="overlay-card diff-review-card">
         <header className="overlay-header">
-          <h2 id={titleId}>Diff Review</h2>
-          <Button variant="icon" onClick={onClose} aria-label="Close diff review">
+          <h2 id={titleId}>{isZh ? "Diff 审查" : "Diff Review"}</h2>
+          <Button variant="icon" onClick={onClose} aria-label={isZh ? "关闭 Diff 审查" : "Close diff review"}>
             ×
           </Button>
         </header>
-        <p>Default policy: review before merge. Current status: {reviewDecision === "pending" ? "Pending review" : reviewDecision === "accepted" ? "Accepted" : "Changes requested"}.</p>
-        <ul className="file-list" aria-label="Diff file list">
+        <p>{isZh ? "默认策略：合并前先审查。当前状态：" : "Default policy: review before merge. Current status: "} {reviewDecision === "pending" ? (isZh ? "待审查" : "Pending review") : reviewDecision === "accepted" ? (isZh ? "已接受" : "Accepted") : (isZh ? "要求修改" : "Changes requested")}.</p>
+        <ul className="file-list" aria-label={isZh ? "Diff 文件列表" : "Diff file list"}>
           <li>apps/desktop/src/App.tsx</li>
           <li>apps/desktop/src/lib/desktopUi.tsx</li>
           <li>apps/desktop/src/hotkeys.ts</li>
         </ul>
-        <pre className="raw-output" aria-label="Diff content preview">
+        <pre className="raw-output" aria-label={isZh ? "Diff 内容预览" : "Diff content preview"}>
 {`+ Added node detail drawer
 + Added keyboard shortcuts contract
 - Replaced report placeholder toasts`}
         </pre>
         <div className="quick-actions">
-          <Button variant="primary" onClick={onAccept}>Accept and merge</Button>
-          <Button variant="destructive" onClick={onRework}>Request changes</Button>
+          <Button variant="primary" onClick={onAccept}>{isZh ? "接受并合并" : "Accept and merge"}</Button>
+          <Button variant="destructive" onClick={onRework}>{isZh ? "要求修改" : "Request changes"}</Button>
         </div>
       </article>
     </div>

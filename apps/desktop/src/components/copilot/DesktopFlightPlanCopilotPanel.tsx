@@ -1,37 +1,93 @@
 import { useState } from "react";
 
+import type { UiLocale } from "@openvibecoding/frontend-shared/uiCopy";
+import { detectPreferredUiLocale } from "@openvibecoding/frontend-shared/uiLocale";
 import type { FlightPlanCopilotBrief } from "../../lib/types";
 import { Badge } from "../ui/Badge";
 import { Button } from "../ui/Button";
 import { Card, CardBody, CardHeader, CardTitle } from "../ui/Card";
 
 type Props = {
+  locale?: UiLocale;
   title?: string;
   intro?: string;
   buttonLabel?: string;
   loadBrief: () => Promise<FlightPlanCopilotBrief>;
 };
 
-const QUESTION_SET = [
-  "What is the most important risk gate before execution starts?",
-  "Why are these capabilities triggered?",
-  "What should the operator confirm before starting?",
-  "Where is this plan most likely to fail?",
-];
+function panelCopy(locale: UiLocale) {
+  if (locale === "zh-CN") {
+    return {
+      defaultTitle: "Flight Plan 副驾",
+      defaultIntro: "生成一份只基于当前 Flight Plan 预览的边界化预跑前简报，而不是冒充 post-run 真相。",
+      defaultButtonLabel: "解释这份 Flight Plan",
+      questionSet: [
+        "执行开始前最重要的风险门是什么？",
+        "为什么会触发这些能力？",
+        "操作员在开始前应该先确认什么？",
+        "这份计划最可能在哪里失败？",
+      ],
+      unavailable: "不可用",
+      advisoryBrief: "建议型简报",
+      onDemand: "按需生成",
+      generating: "生成中...",
+      regenerate: "重新生成简报",
+      advisoryHint: "这份简报始终停留在建议层。它解释当前计划，但不会假装拥有 compare、proof 或 incident 的 post-run 真相。",
+      optimizingFor: "这份计划在优化什么",
+      mainRiskGate: "主风险门",
+      capabilityTriggers: "能力触发原因",
+      approvalPosture: "审批态势",
+      bestNextAction: "最佳下一步",
+      noRecommendedActions: "当前没有返回推荐动作。",
+      topPreRunRisks: "顶部预跑前风险",
+      noTopRisks: "当前没有返回显式风险。",
+    };
+  }
+  return {
+    defaultTitle: "Flight Plan copilot",
+    defaultIntro: "Generate one bounded pre-run brief grounded only in the current Flight Plan preview, not in post-run truth.",
+    defaultButtonLabel: "Explain this Flight Plan",
+    questionSet: [
+      "What is the most important risk gate before execution starts?",
+      "Why are these capabilities triggered?",
+      "What should the operator confirm before starting?",
+      "Where is this plan most likely to fail?",
+    ],
+    unavailable: "Unavailable",
+    advisoryBrief: "Advisory brief",
+    onDemand: "On demand",
+    generating: "Generating...",
+    regenerate: "Regenerate brief",
+    advisoryHint: "This brief stays advisory. It explains the current plan, but it does not claim any post-run compare, proof, or incident truth.",
+    optimizingFor: "What this plan is optimizing for",
+    mainRiskGate: "Main risk gate",
+    capabilityTriggers: "Capability triggers",
+    approvalPosture: "Approval posture",
+    bestNextAction: "Best next action",
+    noRecommendedActions: "No recommended actions were returned.",
+    topPreRunRisks: "Top pre-run risks",
+    noTopRisks: "No explicit risks were returned.",
+  };
+}
 
 function asList(values: string[] | undefined): string[] {
   return Array.isArray(values) ? values.filter((value) => typeof value === "string" && value.trim()) : [];
 }
 
 export function DesktopFlightPlanCopilotPanel({
-  title = "Flight Plan copilot",
-  intro = "Generate one bounded pre-run brief grounded only in the current Flight Plan preview, not in post-run truth.",
-  buttonLabel = "Explain this Flight Plan",
+  locale = detectPreferredUiLocale() as UiLocale,
+  title,
+  intro,
+  buttonLabel,
   loadBrief,
 }: Props) {
   const [brief, setBrief] = useState<FlightPlanCopilotBrief | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const copy = panelCopy(locale);
+  const resolvedTitle = title ?? copy.defaultTitle;
+  const resolvedIntro = intro ?? copy.defaultIntro;
+  const resolvedButtonLabel = buttonLabel ?? copy.defaultButtonLabel;
 
   async function handleGenerate() {
     setLoading(true);
@@ -49,22 +105,22 @@ export function DesktopFlightPlanCopilotPanel({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
+        <CardTitle>{resolvedTitle}</CardTitle>
       </CardHeader>
       <CardBody>
         <div className="stack-gap-2">
-          <p className="muted">{intro}</p>
+          <p className="muted">{resolvedIntro}</p>
           <div className="row-between">
-            <Badge>{brief ? (brief.status === "UNAVAILABLE" ? "Unavailable" : "Advisory brief") : "On demand"}</Badge>
+            <Badge>{brief ? (brief.status === "UNAVAILABLE" ? copy.unavailable : copy.advisoryBrief) : copy.onDemand}</Badge>
             <Button variant="secondary" onClick={() => void handleGenerate()} disabled={loading}>
-              {loading ? "Generating..." : brief ? "Regenerate brief" : buttonLabel}
+              {loading ? copy.generating : brief ? copy.regenerate : resolvedButtonLabel}
             </Button>
           </div>
           {!brief && !error ? (
             <div className="stack-gap-2">
-              <p className="muted">This brief stays advisory. It explains the current plan, but it does not claim any post-run compare, proof, or incident truth.</p>
+              <p className="muted">{copy.advisoryHint}</p>
               <div className="chip-list">
-                {QUESTION_SET.map((question) => (
+                {copy.questionSet.map((question) => (
                   <span key={question} className="chip">
                     {question}
                   </span>
@@ -76,41 +132,41 @@ export function DesktopFlightPlanCopilotPanel({
           {brief ? (
             <div className="grid-2">
               <Card>
-                <CardHeader><CardTitle>What this plan is optimizing for</CardTitle></CardHeader>
+                <CardHeader><CardTitle>{copy.optimizingFor}</CardTitle></CardHeader>
                 <CardBody><p>{brief.summary}</p></CardBody>
               </Card>
               <Card>
-                <CardHeader><CardTitle>Main risk gate</CardTitle></CardHeader>
+                <CardHeader><CardTitle>{copy.mainRiskGate}</CardTitle></CardHeader>
                 <CardBody><p>{brief.risk_takeaway}</p></CardBody>
               </Card>
               <Card>
-                <CardHeader><CardTitle>Capability triggers</CardTitle></CardHeader>
+                <CardHeader><CardTitle>{copy.capabilityTriggers}</CardTitle></CardHeader>
                 <CardBody><p>{brief.capability_takeaway}</p></CardBody>
               </Card>
               <Card>
-                <CardHeader><CardTitle>Approval posture</CardTitle></CardHeader>
+                <CardHeader><CardTitle>{copy.approvalPosture}</CardTitle></CardHeader>
                 <CardBody><p>{brief.approval_takeaway}</p></CardBody>
               </Card>
               <Card>
-                <CardHeader><CardTitle>Best next action</CardTitle></CardHeader>
+                <CardHeader><CardTitle>{copy.bestNextAction}</CardTitle></CardHeader>
                 <CardBody>
                   <ul className="stack-gap-2">
                     {asList(brief.recommended_actions).length > 0 ? (
                       asList(brief.recommended_actions).map((item, index) => <li key={`${item}-${index}`}>{item}</li>)
                     ) : (
-                      <li>No recommended actions were returned.</li>
+                      <li>{copy.noRecommendedActions}</li>
                     )}
                   </ul>
                 </CardBody>
               </Card>
               <Card>
-                <CardHeader><CardTitle>Top pre-run risks</CardTitle></CardHeader>
+                <CardHeader><CardTitle>{copy.topPreRunRisks}</CardTitle></CardHeader>
                 <CardBody>
                   <ul className="stack-gap-2">
                     {asList(brief.top_risks).length > 0 ? (
                       asList(brief.top_risks).map((item, index) => <li key={`${item}-${index}`}>{item}</li>)
                     ) : (
-                      <li>No explicit risks were returned.</li>
+                      <li>{copy.noTopRisks}</li>
                     )}
                   </ul>
                 </CardBody>

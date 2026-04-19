@@ -36,7 +36,7 @@ vi.mock("../lib/serverPageData", () => ({
   safeLoad: vi.fn(),
 }));
 
-import WorkflowsPage, { metadata as workflowsMetadata } from "../app/workflows/page";
+import WorkflowsPage, { buildWorkflowsMetadata } from "../app/workflows/page";
 import { fetchQueue, fetchWorkflows, mutationExecutionCapability, runNextQueue } from "../lib/api";
 import { safeLoad } from "../lib/serverPageData";
 
@@ -79,6 +79,7 @@ describe("workflows queue page", () => {
   });
 
   it("exports workflow list metadata for route-level discoverability", () => {
+    const workflowsMetadata = buildWorkflowsMetadata("en");
     expect(workflowsMetadata.title).toBe("Workflow Cases | OpenVibeCoding");
     expect(workflowsMetadata.description).toContain("queue posture");
   });

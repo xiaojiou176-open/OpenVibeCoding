@@ -187,15 +187,15 @@ export function renderDesktopPage({
     case "command-tower":
       return <CommandTowerPage onNavigateToSession={navigateToSession} locale={uiLocale} />;
     case "ct-session-detail":
-      return <CTSessionDetailPage sessionId={detailSessionId} onBack={() => setActivePage("command-tower")} />;
+      return <CTSessionDetailPage sessionId={detailSessionId} onBack={() => setActivePage("command-tower")} locale={uiLocale} />;
     case "runs":
-      return <RunsPage onNavigateToRun={navigateToRun} />;
+      return <RunsPage onNavigateToRun={navigateToRun} locale={uiLocale} />;
     case "run-detail":
       return <RunDetailPage runId={detailRunId} onBack={() => setActivePage("runs")} onOpenCompare={() => setActivePage("run-compare")} locale={uiLocale} />;
     case "run-compare":
-      return <RunComparePage runId={detailRunId} onBack={() => setActivePage("run-detail")} />;
+      return <RunComparePage runId={detailRunId} onBack={() => setActivePage("run-detail")} locale={uiLocale} />;
     case "workflows":
-      return <WorkflowsPage onNavigateToWorkflow={navigateToWorkflow} />;
+      return <WorkflowsPage onNavigateToWorkflow={navigateToWorkflow} locale={uiLocale} />;
     case "workflow-detail":
       return (
         <WorkflowDetailPage
@@ -206,27 +206,27 @@ export function renderDesktopPage({
         />
       );
     case "events":
-      return <EventsPage />;
+      return <EventsPage locale={uiLocale} />;
     case "contracts":
-      return <ContractsPage onNavigate={navigate} onNavigateToRun={navigateToRun} />;
+      return <ContractsPage onNavigate={navigate} onNavigateToRun={navigateToRun} locale={uiLocale} />;
     case "reviews":
-      return <ReviewsPage />;
+      return <ReviewsPage locale={uiLocale} />;
     case "tests":
-      return <TestsPage />;
+      return <TestsPage locale={uiLocale} />;
     case "policies":
-      return <PoliciesPage />;
+      return <PoliciesPage locale={uiLocale} />;
     case "agents":
-      return <AgentsPage onNavigate={navigate} onNavigateToRun={navigateToRun} />;
+      return <AgentsPage onNavigate={navigate} onNavigateToRun={navigateToRun} locale={uiLocale} />;
     case "locks":
-      return <LocksPage />;
+      return <LocksPage locale={uiLocale} />;
     case "worktrees":
-      return <WorktreesPage />;
+      return <WorktreesPage locale={uiLocale} />;
     case "god-mode":
       return <GodModePage locale={uiLocale} />;
     case "search":
-      return <SearchPage />;
+      return <SearchPage locale={uiLocale} />;
     case "change-gates":
-      return <ChangeGatesPage />;
+      return <ChangeGatesPage locale={uiLocale} />;
     default:
       return <OverviewPage onNavigate={navigate} onNavigateToRun={navigateToRun} locale={uiLocale} />;
   }

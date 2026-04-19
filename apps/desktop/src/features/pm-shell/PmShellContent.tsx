@@ -2,6 +2,7 @@ import { lazy, Suspense, useMemo } from "react";
 import { FolderGit2, GitBranch } from "lucide-react";
 import type { Edge, Node, NodeMouseHandler } from "@xyflow/react";
 import { toast } from "sonner";
+import { detectPreferredUiLocale } from "@openvibecoding/frontend-shared/uiLocale";
 import { Button } from "../../components/ui/Button";
 import { ChatPanel } from "../../components/conversation/ChatPanel";
 import { NodeDetailDrawer } from "../../components/chain/NodeDetailDrawer";
@@ -102,10 +103,11 @@ type PmShellContentProps = {
 };
 
 function ChainFallback({ chainPanelRef, message }: { chainPanelRef: React.MutableRefObject<HTMLElement | null>; message: string }) {
+  const isZh = detectPreferredUiLocale() === "zh-CN";
   return (
-    <section ref={chainPanelRef} className="chain-panel" aria-label="Command Chain panel" tabIndex={-1}>
+    <section ref={chainPanelRef} className="chain-panel" aria-label={isZh ? "Command Chain 面板" : "Command Chain panel"} tabIndex={-1}>
       <header className="chain-toolbar">
-        <h2>Command Chain</h2>
+        <h2>{isZh ? "命令链" : "Command Chain"}</h2>
       </header>
       <p className="shortcut-hint">{message}</p>
     </section>
@@ -195,6 +197,7 @@ export function PmShellContent({
   alerts,
   isChainPopout,
 }: PmShellContentProps) {
+  const isZh = detectPreferredUiLocale() === "zh-CN";
   const reportActions = {
     onAccept: onReportAccept,
     onRework: onReportRework,
@@ -229,12 +232,12 @@ export function PmShellContent({
 
   if (isChainPopout) {
     return (
-      <main className="desktop-shell chain-popout" aria-label="Command Chain pop-out window">
+      <main className="desktop-shell chain-popout" aria-label={isZh ? "命令链弹出窗口" : "Command Chain pop-out window"}>
         <header className="titlebar" data-tauri-drag-region>
           <div className="titlebar-pill" aria-hidden="true" />
-          <h1>Command Chain</h1>
+          <h1>{isZh ? "命令链" : "Command Chain"}</h1>
         </header>
-        <Suspense fallback={<ChainFallback chainPanelRef={chainPanelRef} message="Loading the chain view..." />}>
+        <Suspense fallback={<ChainFallback chainPanelRef={chainPanelRef} message={isZh ? "正在加载命令链视图..." : "Loading the chain view..."} />}>
           <LazyChainPanel
             chainPanelRef={chainPanelRef}
             chainDisplayMode={chainDisplayMode}
@@ -254,19 +257,19 @@ export function PmShellContent({
   return (
     <>
       <div className="pm-workspace-bar">
-        <div className="workspace-picker no-drag" role="group" aria-label="Workspace picker">
-          <Button variant="secondary" className="workspace-trigger" onClick={cycleWorkspace} aria-label="Switch workspace">
+        <div className="workspace-picker no-drag" role="group" aria-label={isZh ? "工作区选择器" : "Workspace picker"}>
+          <Button variant="secondary" className="workspace-trigger" onClick={cycleWorkspace} aria-label={isZh ? "切换工作区" : "Switch workspace"}>
             <FolderGit2 size={14} aria-hidden="true" />
-            {workspace ? workspace.repo : "Select workspace"}
+            {workspace ? workspace.repo : isZh ? "选择工作区" : "Select workspace"}
           </Button>
-          <Button variant="ghost" className="workspace-trigger" onClick={cycleBranch} aria-label="Switch branch">
+          <Button variant="ghost" className="workspace-trigger" onClick={cycleBranch} aria-label={isZh ? "切换分支" : "Switch branch"}>
             <GitBranch size={14} aria-hidden="true" />
             {workspace ? workspace.branch : "-"}
           </Button>
-          <span className="status-badge status-running">{"●"} {workspace?.activeAgents ?? 0} agents</span>
+          <span className="status-badge status-running">{"●"} {workspace?.activeAgents ?? 0} {isZh ? "个代理" : "agents"}</span>
         </div>
       </div>
-      <section className={`main-panel mode-${layoutMode}`} aria-label="Primary interaction area">
+      <section className={`main-panel mode-${layoutMode}`} aria-label={isZh ? "主要交互区" : "Primary interaction area"}>
         <ChatPanel
           onboardingVisible={onboardingVisible}
           dismissOnboarding={dismissOnboarding}
@@ -325,7 +328,7 @@ export function PmShellContent({
           onBackToBottom={onBackToBottom}
         />
         {layoutMode !== "focus" && (
-          <Suspense fallback={<ChainFallback chainPanelRef={chainPanelRef} message="Loading the chain view..." />}>
+          <Suspense fallback={<ChainFallback chainPanelRef={chainPanelRef} message={isZh ? "正在加载命令链视图..." : "Loading the chain view..."} />}>
             {chainPanelReady ? (
               <LazyChainPanel
                 chainPanelRef={chainPanelRef}
@@ -333,7 +336,7 @@ export function PmShellContent({
                 setChainDisplayMode={setChainDisplayMode}
                 focusChainMode={() => {
                   setLayoutMode("chain");
-                  toast("Switched to chain-first mode");
+                  toast(isZh ? "已切换到命令链优先模式" : "Switched to chain-first mode");
                 }}
                 nodes={chainGraph.nodes}
                 edges={chainGraph.edges}
@@ -342,13 +345,13 @@ export function PmShellContent({
                 selectedNodeId={selectedNodeId}
               />
             ) : (
-              <ChainFallback chainPanelRef={chainPanelRef} message="Initializing the chain engine..." />
+              <ChainFallback chainPanelRef={chainPanelRef} message={isZh ? "正在初始化命令链引擎..." : "Initializing the chain engine..."} />
             )}
           </Suspense>
         )}
         {layoutMode === "focus" && (
-          <Button unstyled className="chain-peek" type="button" onClick={() => setLayoutMode("split")} aria-label="Expand Command Chain">
-            Expand chain
+          <Button unstyled className="chain-peek" type="button" onClick={() => setLayoutMode("split")} aria-label={isZh ? "展开命令链" : "Expand Command Chain"}>
+            {isZh ? "展开命令链" : "Expand chain"}
           </Button>
         )}
       </section>

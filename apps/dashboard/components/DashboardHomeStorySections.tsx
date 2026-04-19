@@ -46,13 +46,13 @@ export default function DashboardHomeStorySections({
             "把最重要的操作面放到第一排，不再让首页像等权链接目录。",
           methodTitle: "方法层，不抢第一屏",
           methodDescription:
-            "Prompt / Context / Harness 仍然重要，但它们应该在 command tower 语义之后出现。",
+            "提示词 / 上下文 / 护栏这三层仍然重要，但它们应该排在指挥塔语义之后出现。",
           templatesTitle: "任务包与起步模版",
           templatesDescription:
-            "这些是起步工具，不是首页主角。先看 cockpit，再决定拿哪套模版。",
+            "这些是起步工具，不是首页主角。先看指挥台，再决定拿哪套模版。",
           adoptionTitle: "延伸入口",
           adoptionDescription:
-            "公共文档与生态入口保留在后排，避免抢走 command tower 的第一印象。",
+            "公共文档与生态入口保留在后排，避免抢走指挥塔的第一印象。",
           guidesTitle: "第二层导览，不抢首屏",
           guidesDescription:
             "方法层、模板层和生态入口保留，但收进更安静的第二层，避免首页继续像站点目录墙。",
@@ -97,7 +97,7 @@ export default function DashboardHomeStorySections({
       title: locale === "zh-CN" ? "实时指挥塔" : "Live command tower",
       desc: hasRunHistory
         ? locale === "zh-CN"
-          ? `当前有 ${runningCount} 条运行正在推进，先从指挥塔看全局，再决定要不要下钻清单。`
+          ? `当前有 ${runningCount} 条运行正在推进，先从指挥塔看全局，再决定要不要下钻明细。`
           : `${runningCount} live runs are moving right now. Start in the tower before drilling into lists.`
         : locale === "zh-CN"
           ? "第一条运行出现后，指挥塔会变成你的主驾驶舱。"
@@ -126,7 +126,7 @@ export default function DashboardHomeStorySections({
             ? `目前有 ${failedCount} 条失败或高风险运行，先处理堵点，再决定是否继续放行。`
             : `${failedCount} failed or high-risk runs need triage before you promote anything else.`
           : locale === "zh-CN"
-            ? "当前没有明显失败面，直接从工作流案例看 owner、queue 和 next step。"
+            ? "当前没有明显失败面，直接从工作流案例看负责人、队列和下一步。"
             : "No obvious failure lane is dominating. Open Workflow Cases to inspect owner, queue, and next action.",
       meta:
         locale === "zh-CN"
@@ -155,8 +155,8 @@ export default function DashboardHomeStorySections({
         ? locale === "zh-CN"
           ? "确认指挥塔状态后，回到 PM 入口继续派发新任务。"
           : "After you scan the tower, return to PM intake to dispatch the next piece of work."
-          : locale === "zh-CN"
-            ? "先把第一条任务送进系统，再回来用 tower 观察它。"
+        : locale === "zh-CN"
+            ? "先把第一条任务送进系统，再回来用指挥塔观察它。"
             : "Start from PM intake, then come back here to watch the first task move through the tower.",
       meta:
         locale === "zh-CN"

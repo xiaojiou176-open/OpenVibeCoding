@@ -22,6 +22,7 @@ function stageBadgeVariant(stage: string | null | undefined): "default" | "succe
 type AgentsPageProps = {
   onNavigate?: (page: "command-tower" | "contracts" | "runs") => void;
   onNavigateToRun?: (runId: string) => void;
+  locale?: UiLocale;
 };
 
 function isAttentionStage(stage: unknown): boolean {
@@ -29,8 +30,7 @@ function isAttentionStage(stage: unknown): boolean {
   return ["FAIL", "ERROR", "BLOCK", "DENY", "REJECT", "CANCEL"].some((part) => token.includes(part));
 }
 
-export function AgentsPage({ onNavigate, onNavigateToRun }: AgentsPageProps = {}) {
-  const locale: UiLocale = detectPreferredUiLocale();
+export function AgentsPage({ onNavigate, onNavigateToRun, locale = detectPreferredUiLocale() as UiLocale }: AgentsPageProps = {}) {
   const agentsPageCopy = getUiCopy(locale).dashboard.agentsPage;
   const shellCopy =
     locale === "zh-CN"
@@ -48,6 +48,7 @@ export function AgentsPage({ onNavigate, onNavigateToRun }: AgentsPageProps = {}
           schedulerHint: "没有 agent_id 的 runtime 状态说明还有任务挂在空中，需要先回 tower 处理。",
           nextActionHintWithRun: "先回到对应 run 看 proof / status，再决定是否改 role config。",
           nextActionHintWithoutRun: "这条状态还没有稳定 run 身份，先回指挥塔处理调度姿态。",
+          notesHeader: "备注",
         }
       : {
           deckTitle: "Start with the role risk desk",
@@ -64,6 +65,7 @@ export function AgentsPage({ onNavigate, onNavigateToRun }: AgentsPageProps = {}
           schedulerHint: "Runtime rows without an agent_id mean work is still hanging and should go back to the tower first.",
           nextActionHintWithRun: "Return to the related run first, then decide whether the role config needs to change.",
           nextActionHintWithoutRun: "This lane still needs tower triage before you trust the role desk to fix it.",
+          notesHeader: "Notes",
         };
   const [agents, setAgents] = useState<AgentCatalogPayload>({ agents: [], locks: [], role_catalog: [] });
   const [agentStatus, setAgentStatus] = useState<AgentStatusPayload>({ agents: [] });
@@ -171,7 +173,7 @@ export function AgentsPage({ onNavigate, onNavigateToRun }: AgentsPageProps = {}
               </article>
             </div>
           </section>
-          <AgentsRoleConfigPanel roleCatalog={roleCatalog} onApplied={load} />
+          <AgentsRoleConfigPanel roleCatalog={roleCatalog} onApplied={load} locale={locale} />
           {runtimeStates.length > 0 && (
             <div className="app-section"><h2 className="section-title">{agentsPageCopy.stateMachine.title}</h2><p className="section-subtitle">{agentsPageCopy.stateMachine.subtitle}</p>
               <Card className="table-card"><table className="run-table"><thead><tr><th>{agentsPageCopy.stateMachine.headers.agentId}</th><th>{agentsPageCopy.stateMachine.headers.role}</th><th>{agentsPageCopy.stateMachine.headers.flowStage}</th><th>{agentsPageCopy.stateMachine.headers.runId}</th></tr></thead>
@@ -202,7 +204,7 @@ export function AgentsPage({ onNavigate, onNavigateToRun }: AgentsPageProps = {}
               </summary>
               <div className="collapsible-body">
                 {registry.length === 0 ? <div className="empty-state-stack"><p className="muted">{agentsPageCopy.registeredInventory.emptyTitle}</p></div> : (
-                  <Card className="table-card"><table className="run-table"><thead><tr><th>{agentsPageCopy.registeredInventory.headers.agentId}</th><th>{agentsPageCopy.registeredInventory.headers.role}</th><th>Notes</th><th>{agentsPageCopy.registeredInventory.headers.lockCount}</th></tr></thead>
+                  <Card className="table-card"><table className="run-table"><thead><tr><th>{agentsPageCopy.registeredInventory.headers.agentId}</th><th>{agentsPageCopy.registeredInventory.headers.role}</th><th>{shellCopy.notesHeader}</th><th>{agentsPageCopy.registeredInventory.headers.lockCount}</th></tr></thead>
                     <tbody>{registry.map((agent, index) => renderRegistryRow(agent, index))}</tbody></table></Card>
                 )}
               </div>

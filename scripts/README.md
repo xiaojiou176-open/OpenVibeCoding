@@ -11,6 +11,9 @@ CI, hygiene, and release tasks.
 - `test.sh`
 - `test_quick.sh`
 - `check_repo_hygiene.sh`
+- `audit_public_docs_surface.mjs`
+- `audit_dashboard_surface.mjs`
+- `audit_public_surface_deep.sh`
 - `check_workflow_static_security.sh`
 - `check_trivy_repo_scan.sh`
 - `check_secret_scan_closeout.sh`
@@ -47,6 +50,25 @@ user's ambient Python environment.
   axe verification; keep the required `packages/frontend-*` sources copied
   inside that temporary root so Next/Turbopack does not reject out-of-root
   symlinks during smoke builds.
+- `audit_public_docs_surface.mjs` is the repo-owned deep public-docs audit
+  entrypoint. It serves `/docs`, captures desktop + mobile screenshots for
+  every canonical docs entrypoint from `configs/docs_nav_registry.json`,
+  verifies title/H1/meta/og:image presence, checks internal docs links for
+  `200` reachability, and applies route-specific media contracts such as the
+  homepage teaser video + captions requirements.
+- `audit_dashboard_surface.mjs` is the matching dashboard/operator-surface
+  audit. It starts the local orchestrator + dashboard, captures desktop +
+  mobile screenshots for the public dashboard routes, and verifies route-level
+  display/interaction contracts such as homepage CTA presence, PM first-request
+  entry, and Command Tower focus-toggle reachability.
+- `audit_desktop_surface.mjs` is the matching desktop-shell audit. It starts
+  the local orchestrator + desktop dev shell, captures desktop + compact
+  screenshots across every sidebar surface, and verifies route-level display
+  and interaction contracts plus the locale toggle path.
+- `audit_public_surface_deep.sh` is the one-shot wrapper for docs +
+  dashboard + desktop audits plus `npm run docs:check` and hygiene. Use it
+  when you want a single fresh acceptance pass over the repo's public docs
+  surface and the primary user-facing dashboard / desktop operator shells.
 - `install_dashboard_deps.sh` and `install_desktop_deps.sh` now escalate
   repeated pnpm `ERR_PNPM_ENOENT` failures from fresh-store retries to a
   workspace-local store recovery path instead of repeating the same failing

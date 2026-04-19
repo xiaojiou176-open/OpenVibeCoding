@@ -194,4 +194,87 @@ describe("EventTimeline", () => {
     fireEvent.click(screen.getByTestId("event-drilldown-refresh"));
     expect(onEventInspect).toHaveBeenCalledTimes(2);
   });
+
+  it("covers status classes for failed, success, warning, and running events", () => {
+    const events = [
+      { ts: "t1", event: "DIFF_GATE_FAIL", context: {} },
+      { ts: "t2", event: "TASK_DONE", context: {} },
+      { ts: "t3", event: "HUMAN_APPROVAL_REQUIRED", context: {} },
+      { ts: "t4", event: "RUNNER_ACTIVE", context: {} },
+    ];
+    const { container } = render(<EventTimeline events={events as any} />);
+
+    const cards = Array.from(container.querySelectorAll(".event-item"));
+    expect(cards[0]).toHaveClass("event-card--failed");
+    expect(cards[1]).toHaveClass("event-card--success");
+    expect(cards[2]).toHaveClass("event-card--warning");
+    expect(cards[3]).toHaveClass("event-card--running");
+  });
+
+  it("renders zh-CN preset, filter, and clear copy", () => {
+    const events = [{ ts: "t1", event: "RUNNER_SELECTED", context: { runner: "Codex" } }];
+    render(<EventTimeline events={events as any} locale="zh-CN" />);
+
+    expect(screen.getByRole("button", { name: "全部" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "工具" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "差异" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "审批" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "测试" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "门禁" })).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("搜索事件名称或上下文...")).toBeInTheDocument();
+
+    fireEvent.change(screen.getByPlaceholderText("搜索事件名称或上下文..."), { target: { value: "missing" } });
+    expect(screen.getByText("当前筛选下没有匹配事件")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "清空筛选" }));
+    expect(screen.getByText("显示 1 / 1 条事件")).toBeInTheDocument();
+  });
+
+  it("shows zh-CN action meanings and localized key facts for common event families", () => {
+    const events = [
+      { ts: "t1", event: "RUNNER_SELECTED", context: { runner: "codex", provider: "openai", model: "gpt-5" } },
+      { ts: "t2", event: "WORKTREE_CREATED", context: { worktree: "/tmp/w1", branch: "feat/a", base: "main" } },
+      { ts: "t3", event: "MCP_CONCURRENCY_CHECK", context: { concurrency: 4, mode: "strict", scope: "default" } },
+      { ts: "t4", event: "DIFF_PATCH_APPLIED", context: { patch: "ok" } },
+      { ts: "t5", event: "HUMAN_APPROVAL_PENDING", context: { approver: "pm" } },
+      { ts: "t6", event: "TEST_SUITE_FINISHED", context: { suite: "ui" } },
+      { ts: "t7", event: "POLICY_REVIEW", context: { state: "warn" } },
+      { ts: "t8", event: "CUSTOM_EVENT", context: { custom: "value" } },
+    ];
+    render(<EventTimeline events={events as any} locale="zh-CN" />);
+
+    fireEvent.click(screen.getByTestId("event-name-RUNNER_SELECTED"));
+    expect(screen.getByTestId("event-selection-status")).toHaveTextContent("已选：RUNNER_SELECTED · 执行器决策");
+    expect(screen.getByText("执行器: codex")).toBeInTheDocument();
+    expect(screen.getByText("提供方: openai")).toBeInTheDocument();
+    expect(screen.getByText("模型: gpt-5")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByTestId("event-name-WORKTREE_CREATED"));
+    expect(screen.getByTestId("event-selection-status")).toHaveTextContent("工作树变更");
+    expect(screen.getByText("工作树: /tmp/w1")).toBeInTheDocument();
+    expect(screen.getByText("分支: feat/a")).toBeInTheDocument();
+    expect(screen.getByText("基线: main")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByTestId("event-name-MCP_CONCURRENCY_CHECK"));
+    expect(screen.getByTestId("event-selection-status")).toHaveTextContent("工具并发检查");
+    expect(screen.getByText("并发上限: 4")).toBeInTheDocument();
+    expect(screen.getByText("策略模式: strict")).toBeInTheDocument();
+    expect(screen.getByText("范围: default")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByTestId("event-name-DIFF_PATCH_APPLIED"));
+    expect(screen.getByTestId("event-selection-status")).toHaveTextContent("补丁与差异");
+
+    fireEvent.click(screen.getByTestId("event-name-HUMAN_APPROVAL_PENDING"));
+    expect(screen.getByTestId("event-selection-status")).toHaveTextContent("人工审批");
+
+    fireEvent.click(screen.getByTestId("event-name-TEST_SUITE_FINISHED"));
+    expect(screen.getByTestId("event-selection-status")).toHaveTextContent("测试执行");
+
+    fireEvent.click(screen.getByTestId("event-name-POLICY_REVIEW"));
+    expect(screen.getByTestId("event-selection-status")).toHaveTextContent("策略检查");
+
+    fireEvent.click(screen.getByTestId("event-name-CUSTOM_EVENT"));
+    expect(screen.getByTestId("event-selection-status")).toHaveTextContent("系统事件");
+    expect(screen.getByText("custom: value")).toBeInTheDocument();
+  });
 });

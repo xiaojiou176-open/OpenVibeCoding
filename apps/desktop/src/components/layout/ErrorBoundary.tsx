@@ -1,4 +1,5 @@
 import React from "react";
+import { detectPreferredUiLocale } from "@openvibecoding/frontend-shared/uiLocale";
 import { Button } from "../ui/Button";
 
 type ErrorBoundaryState = {
@@ -13,9 +14,10 @@ export class ErrorBoundary extends React.Component<React.PropsWithChildren, Erro
   };
 
   static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    const isZh = detectPreferredUiLocale() === "zh-CN";
     return {
       hasError: true,
-      message: error?.message || "The desktop shell hit an unexpected error."
+      message: error?.message || (isZh ? "桌面壳发生了未预期异常。" : "The desktop shell hit an unexpected error.")
     };
   }
 
@@ -27,10 +29,11 @@ export class ErrorBoundary extends React.Component<React.PropsWithChildren, Erro
     if (!this.state.hasError) {
       return this.props.children;
     }
+    const isZh = detectPreferredUiLocale() === "zh-CN";
     return (
-      <main className="desktop-shell" aria-label="Error recovery">
+      <main className="desktop-shell" aria-label={isZh ? "错误恢复" : "Error recovery"}>
         <section className="workspace-empty" role="alert">
-          <h2>Something went wrong in the desktop shell</h2>
+          <h2>{isZh ? "桌面壳发生异常" : "Something went wrong in the desktop shell"}</h2>
           <p>{this.state.message}</p>
           <Button
             variant="primary"
@@ -38,7 +41,7 @@ export class ErrorBoundary extends React.Component<React.PropsWithChildren, Erro
               window.location.reload();
             }}
           >
-            Reload
+            {isZh ? "重新加载" : "Reload"}
           </Button>
         </section>
       </main>

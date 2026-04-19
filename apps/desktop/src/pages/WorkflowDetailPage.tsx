@@ -185,6 +185,7 @@ export function WorkflowDetailPage({ workflowId, onBack, onNavigateToRun, locale
       {queueNotice ? <div className="alert alert-warning">{queueNotice}</div> : null}
       <div className="mb-4">
         <DesktopCopilotPanel
+          locale={locale}
           title={workflowDetailCopy.workflowCopilotTitle}
           intro={workflowDetailCopy.workflowCopilotIntro}
           buttonLabel={workflowDetailCopy.workflowCopilotButton}

@@ -1,5 +1,6 @@
 import { lazy, Suspense, type RefObject } from "react";
 import { ArrowUp } from "lucide-react";
+import { detectPreferredUiLocale } from "@openvibecoding/frontend-shared/uiLocale";
 import { previewFlightPlanCopilotBrief } from "../../lib/api";
 import { Button } from "../ui/Button";
 import { Input, Select, Textarea } from "../ui/Input";
@@ -42,18 +43,18 @@ function compactPreviewList(values: string[], limit = 3): string {
   return `${filtered.slice(0, limit).join(", ")} +${filtered.length - limit} more`;
 }
 
-function summarizeFlightPlanTriggers(report: ExecutionPlanReport): string {
+function summarizeFlightPlanTriggers(report: ExecutionPlanReport, isZh: boolean): string {
   const triggers: string[] = [];
   if (report.search_queries.length > 0) {
-    triggers.push(`Search (${report.search_queries.length})`);
+    triggers.push(isZh ? `检索（${report.search_queries.length}）` : `Search (${report.search_queries.length})`);
   }
   if (report.task_template === "page_brief" || report.browser_policy_preset === "custom" || Boolean(report.effective_browser_policy)) {
-    triggers.push("Browser");
+    triggers.push(isZh ? "浏览器" : "Browser");
   }
   if (report.requires_human_approval) {
-    triggers.push("Manual approval");
+    triggers.push(isZh ? "人工审批" : "Manual approval");
   }
-  return triggers.length > 0 ? triggers.join(", ") : "No extra capability trigger predicted.";
+  return triggers.length > 0 ? triggers.join(", ") : isZh ? "当前没有预测到额外能力触发。" : "No extra capability trigger predicted.";
 }
 
 type ChatPanelProps = {
@@ -175,14 +176,15 @@ export function ChatPanel({
   unreadCount,
   onBackToBottom
 }: ChatPanelProps) {
+  const isZh = detectPreferredUiLocale() === "zh-CN";
   const hasUserMessage = activeTimeline.some((item) => item.role === "user");
   const nextStepLabel = !activeSessionId
-    ? "Step 0: create the first session"
+    ? (isZh ? "步骤 0：先创建首个会话" : "Step 0: create the first session")
     : !hasUserMessage
-    ? "Step 1: send the first request"
+    ? (isZh ? "步骤 1：发送第一条请求" : "Step 1: send the first request")
     : activeSessionGenerating
-      ? "Next: wait for this stage to finish"
-      : "Step 2: type /run to begin";
+      ? (isZh ? "下一步：等待当前阶段完成" : "Next: wait for this stage to finish")
+      : (isZh ? "步骤 2：输入 /run 开始" : "Step 2: type /run to begin");
 
   function focusComposerWithTemplate(): void {
     if (!activeSessionId) {
@@ -245,17 +247,17 @@ export function ChatPanel({
   }
 
   return (
-    <section className="chat-panel" aria-label="Conversation panel">
+    <section className="chat-panel" aria-label={isZh ? "对话面板" : "Conversation panel"}>
       <OnboardingBanner
         visible={onboardingVisible}
-        phaseText={activeSessionGenerating ? phaseText : hasUserMessage ? "Ready for /run" : "Waiting for the first request"}
+        phaseText={activeSessionGenerating ? phaseText : hasUserMessage ? (isZh ? "已准备好执行 /run" : "Ready for /run") : (isZh ? "等待首条请求" : "Waiting for the first request")}
         nextStepLabel={nextStepLabel}
         onNextStep={focusComposerWithTemplate}
         onDismiss={dismissOnboarding}
       />
       {isOffline ? (
         <section className="alert-warning" role="alert">
-          You are offline. Sync will resume automatically when the network returns.
+          {isZh ? "你当前离线，网络恢复后会自动继续同步。" : "You are offline. Sync will resume automatically when the network returns."}
         </section>
       ) : null}
       {liveError ? (
@@ -264,44 +266,44 @@ export function ChatPanel({
         </section>
       ) : null}
       {!workspace ? (
-        <section className="workspace-empty" aria-label="Empty workspace state">
-          <h2>Select a workspace before starting the conversation</h2>
-          <p>Each workspace represents one repository and one agent configuration.</p>
+        <section className="workspace-empty" aria-label={isZh ? "空工作区状态" : "Empty workspace state"}>
+          <h2>{isZh ? "开始对话前先选择工作区" : "Select a workspace before starting the conversation"}</h2>
+          <p>{isZh ? "每个工作区都代表一个仓库和一套代理配置。" : "Each workspace represents one repository and one agent configuration."}</p>
         </section>
       ) : (
         <>
-          <section className="chat-toolbar" aria-label="Session toolbar">
+          <section className="chat-toolbar" aria-label={isZh ? "会话工具栏" : "Session toolbar"}>
             <p>
-              <strong>{workspace.repo}</strong> / {workspace.branch} · Session {activeSessionId || "not created yet"}
+              <strong>{workspace.repo}</strong> / {workspace.branch} · {isZh ? "会话" : "Session"} {activeSessionId || (isZh ? "尚未创建" : "not created yet")}
             </p>
             <p className="shortcut-hint" role="status" aria-live="polite">
-              {!activeSessionId ? "Create the first session before sending a message" : activeSessionGenerating ? phaseText : "The PM is ready for your next instruction"}
+              {!activeSessionId ? (isZh ? "发送消息前先创建首个会话" : "Create the first session before sending a message") : activeSessionGenerating ? phaseText : (isZh ? "PM 已准备好接收你的下一条指令" : "The PM is ready for your next instruction")}
             </p>
             {activeSessionGenerating ? (
-              <p className="shortcut-hint" role="note" aria-live="polite">Syncing session data...</p>
+              <p className="shortcut-hint" role="note" aria-live="polite">{isZh ? "正在同步会话数据..." : "Syncing session data..."}</p>
             ) : null}
             <p className="shortcut-hint" role="note">
-              <kbd>Cmd/Ctrl+\\</kbd> toggle layout · <kbd>Cmd/Ctrl+Shift+D</kbd> pop out Chain
+              <kbd>Cmd/Ctrl+\\</kbd> {isZh ? "切换布局" : "toggle layout"} · <kbd>Cmd/Ctrl+Shift+D</kbd> {isZh ? "弹出命令链" : "pop out Chain"}
             </p>
-            <div className="quick-actions" role="group" aria-label="Live quick actions">
-              <Button variant="secondary" onClick={() => refreshNow()}>Refresh now</Button>
+            <div className="quick-actions" role="group" aria-label={isZh ? "实时快捷动作" : "Live quick actions"}>
+              <Button variant="secondary" onClick={() => refreshNow()}>{isZh ? "立即刷新" : "Refresh now"}</Button>
               <Button variant="secondary" aria-pressed={drawerVisible} onClick={() => setDrawerVisible((value) => !value)}>
-                {drawerVisible ? "Hide drawer" : "Show drawer"}
+                {drawerVisible ? (isZh ? "隐藏抽屉" : "Hide drawer") : (isZh ? "显示抽屉" : "Show drawer")}
               </Button>
               <Button
                 variant={drawerPinned ? "primary" : "ghost"}
                 aria-pressed={drawerPinned}
                 onClick={() => setDrawerPinned((value) => !value)}
               >
-                {drawerPinned ? "Drawer pinned" : "Drawer unpinned"}
+                {drawerPinned ? (isZh ? "抽屉已固定" : "Drawer pinned") : (isZh ? "抽屉未固定" : "Drawer unpinned")}
               </Button>
             </div>
           </section>
           {!activeSessionId ? (
-            <section className="workspace-empty" aria-label="First-session empty state">
-              <h2>Create the first session in desktop before sending a request</h2>
-              <p>Desktop submits either the smallest intake (<code>objective</code> + <code>allowed_paths</code>) or a selected task-pack payload.</p>
-              <p className="shortcut-hint">Default <code>allowed_paths</code>: <code>{firstSessionAllowedPath}</code></p>
+            <section className="workspace-empty" aria-label={isZh ? "首会话空状态" : "First-session empty state"}>
+              <h2>{isZh ? "先在桌面端创建首个会话，再发送请求" : "Create the first session in desktop before sending a request"}</h2>
+              <p>{isZh ? <>桌面端会提交最小 intake（<code>objective</code> + <code>allowed_paths</code>）或你选中的 task-pack 载荷。</> : <>Desktop submits either the smallest intake (<code>objective</code> + <code>allowed_paths</code>) or a selected task-pack payload.</>}</p>
+              <p className="shortcut-hint">{isZh ? <>默认 <code>allowed_paths</code>：<code>{firstSessionAllowedPath}</code></> : <>Default <code>allowed_paths</code>: <code>{firstSessionAllowedPath}</code></>}</p>
               {taskPacksError ? (
                 <p className="composer-state-note" role="alert">
                   {taskPacksError}
@@ -309,13 +311,13 @@ export function ChatPanel({
               ) : null}
               <div className="row-start-gap-2">
                 <label className="row-start-gap-2">
-                  <span className="mono text-sm fw-500">Task pack</span>
+                  <span className="mono text-sm fw-500">{isZh ? "任务包" : "Task pack"}</span>
                   <Select
                     value={taskTemplate}
                     onChange={(event) => onTaskTemplateChange(event.target.value)}
-                    aria-label="Desktop task pack"
+                    aria-label={isZh ? "桌面任务包" : "Desktop task pack"}
                   >
-                    {taskPacksLoading ? <option value={taskTemplate}>Loading task packs...</option> : null}
+                    {taskPacksLoading ? <option value={taskTemplate}>{isZh ? "正在加载任务包..." : "Loading task packs..."}</option> : null}
                     {taskPacks.map((pack) => (
                       <option key={pack.pack_id} value={pack.task_template}>
                         {pack.ui_hint?.default_label || pack.task_template}
@@ -328,7 +330,7 @@ export function ChatPanel({
                   <>
                     <p className="shortcut-hint">{selectedTaskPack.description}</p>
                     {selectedTaskPack.evidence_contract?.primary_report ? (
-                      <p className="shortcut-hint">Primary report: {selectedTaskPack.evidence_contract.primary_report}</p>
+                      <p className="shortcut-hint">{isZh ? "主报告：" : "Primary report: "} {selectedTaskPack.evidence_contract.primary_report}</p>
                     ) : null}
                     <div className="stack-gap-3">
                       {selectedTaskPack.input_fields.map((field) => renderTaskPackField(field))}
@@ -347,58 +349,58 @@ export function ChatPanel({
                 </p>
               ) : null}
               {executionPlanPreview ? (
-                <div className="stack-gap-2" aria-label="Desktop Flight Plan preview">
-                  <p className="shortcut-hint"><strong>Flight Plan:</strong> {executionPlanPreview.summary}</p>
+                <div className="stack-gap-2" aria-label={isZh ? "桌面 Flight Plan 预览" : "Desktop Flight Plan preview"}>
+                  <p className="shortcut-hint"><strong>{isZh ? "Flight Plan：" : "Flight Plan:"}</strong> {executionPlanPreview.summary}</p>
                   <p className="shortcut-hint">
-                    <strong>Checklist:</strong> {executionPlanPreview.objective}
+                    <strong>{isZh ? "清单：" : "Checklist:"}</strong> {executionPlanPreview.objective}
                   </p>
                   <p className="shortcut-hint">
-                    Scope boundary: {executionPlanPreview.allowed_paths.length} allowed path entries, starting with {compactPreviewList(executionPlanPreview.allowed_paths)}
+                    {isZh ? "范围边界：" : "Scope boundary:"} {executionPlanPreview.allowed_paths.length} {isZh ? "条允许路径，起始为" : "allowed path entries, starting with"} {compactPreviewList(executionPlanPreview.allowed_paths)}
                   </p>
                   <p className="shortcut-hint">
-                    Expected outputs: reports {compactPreviewList(executionPlanPreview.predicted_reports)}; artifacts {compactPreviewList(executionPlanPreview.predicted_artifacts)}
+                    {isZh ? "预期输出：" : "Expected outputs:"} {isZh ? "报告" : "reports"} {compactPreviewList(executionPlanPreview.predicted_reports)}；{isZh ? "产物" : "artifacts"} {compactPreviewList(executionPlanPreview.predicted_artifacts)}
                   </p>
                   <p className="shortcut-hint">
-                    Approval risk: {executionPlanPreview.requires_human_approval ? "Manual approval likely." : "No manual approval expected."}
+                    {isZh ? "审批风险：" : "Approval risk:"} {executionPlanPreview.requires_human_approval ? (isZh ? "很可能需要人工审批。" : "Manual approval likely.") : (isZh ? "当前不预期需要人工审批。" : "No manual approval expected.")}
                   </p>
                   <p className="shortcut-hint">
-                    Capability triggers: {summarizeFlightPlanTriggers(executionPlanPreview)}
+                    {isZh ? "能力触发：" : "Capability triggers:"} {summarizeFlightPlanTriggers(executionPlanPreview, isZh)}
                   </p>
                   {executionPlanPreview.warnings?.length ? (
-                    <p className="shortcut-hint">Risk gates: {executionPlanPreview.warnings.join(" | ")}</p>
+                    <p className="shortcut-hint">{isZh ? "风险门：" : "Risk gates:"} {executionPlanPreview.warnings.join(" | ")}</p>
                   ) : null}
                   <DesktopFlightPlanCopilotPanel
-                    title="Flight Plan copilot"
-                    intro="Generate one advisory-only pre-run brief grounded in the current Flight Plan preview, expected outputs, capability triggers, and risk gates."
-                    buttonLabel="Explain this Flight Plan"
+                    title={isZh ? "Flight Plan 副驾" : "Flight Plan copilot"}
+                    intro={isZh ? "生成一份只停留在建议层的预跑前简报，依据是当前 Flight Plan 预览、预期输出、能力触发与风险门。" : "Generate one advisory-only pre-run brief grounded in the current Flight Plan preview, expected outputs, capability triggers, and risk gates."}
+                    buttonLabel={isZh ? "解释这份 Flight Plan" : "Explain this Flight Plan"}
                     loadBrief={() => previewFlightPlanCopilotBrief(executionPlanPreview, activeSessionId)}
                   />
                 </div>
               ) : null}
               <div className="quick-actions">
                 <Button variant="secondary" onClick={onPreviewFirstSession} disabled={isOffline || executionPlanPreviewLoading}>
-                  {executionPlanPreviewLoading ? "Previewing Flight Plan..." : "Preview Flight Plan"}
+                  {executionPlanPreviewLoading ? (isZh ? "正在预览 Flight Plan..." : "Previewing Flight Plan...") : (isZh ? "预览 Flight Plan" : "Preview Flight Plan")}
                 </Button>
                 <Button variant="primary" onClick={onCreateFirstSession} disabled={isOffline || creatingFirstSession}>
-                  {creatingFirstSession ? "Creating the first session in desktop..." : "Create first session in desktop"}
+                  {creatingFirstSession ? (isZh ? "正在在桌面端创建首个会话..." : "Creating the first session in desktop...") : (isZh ? "在桌面端创建首个会话" : "Create first session in desktop")}
                 </Button>
-                <Button variant="secondary" onClick={onOpenSessionFallback}>Open Dashboard /pm and create it manually</Button>
+                <Button variant="secondary" onClick={onOpenSessionFallback}>{isZh ? "打开 Dashboard /pm 手动创建" : "Open Dashboard /pm and create it manually"}</Button>
               </div>
             </section>
           ) : null}
           <section
             ref={chatThreadRef}
             className="chat-thread"
-            aria-label="Session messages"
+            aria-label={isZh ? "会话消息" : "Session messages"}
             role="log"
             aria-live="polite"
             aria-relevant="additions text"
             aria-busy={activeSessionGenerating}
           >
             {!activeSessionId ? (
-              <p className="drawer-mode-note">No session exists yet. Click "Create first session in desktop" first. If that fails, open Dashboard /pm and create it manually.</p>
+              <p className="drawer-mode-note">{isZh ? '当前还没有会话。先点击“在桌面端创建首个会话”。如果失败，再打开 Dashboard /pm 手动创建。' : 'No session exists yet. Click "Create first session in desktop" first. If that fails, open Dashboard /pm and create it manually.'}</p>
             ) : activeTimeline.length === 0 ? (
-              <p className="drawer-mode-note">This session has no messages yet. Enter a request below and press Enter to send.</p>
+              <p className="drawer-mode-note">{isZh ? "这个会话还没有消息。在下面输入请求并按 Enter 发送。" : "This session has no messages yet. Enter a request below and press Enter to send."}</p>
             ) : (
               activeTimeline.map((item) => (
                 <article
@@ -406,7 +408,7 @@ export function ChatPanel({
                   data-message-id={item.id}
                   className={`chat-bubble ${item.role === "user" ? "is-user" : "is-pm"}`.trim()}
                 >
-                  <strong>{item.role === "user" ? "You" : "OpenVibeCoding Command Tower PM"}</strong>
+                  <strong>{item.role === "user" ? (isZh ? "你" : "You") : "OpenVibeCoding Command Tower PM"}</strong>
                   <div className="markdown-content">
                     {shouldRenderMarkdown(item.content) ? (
                       <Suspense fallback={<p className="chat-plain-text">{item.content}</p>}>
@@ -427,14 +429,14 @@ export function ChatPanel({
               </article>
             ) : null}
           </section>
-          <section className="chat-composer" aria-label="Message composer">
-            <label htmlFor="desktop-chat-input">Continue the conversation</label>
+          <section className="chat-composer" aria-label={isZh ? "消息输入区" : "Message composer"}>
+            <label htmlFor="desktop-chat-input">{isZh ? "继续对话" : "Continue the conversation"}</label>
             {recoverableDraft ? (
               <section className="alert-warning draft-recovery" role="status" aria-live="polite">
-                <p>An unsent draft was found. Restore it?</p>
+                <p>{isZh ? "发现一份未发送草稿，要恢复吗？" : "An unsent draft was found. Restore it?"}</p>
                 <div className="quick-actions">
-                  <Button variant="secondary" onClick={restoreDraft}>Restore draft</Button>
-                  <Button variant="destructive" onClick={discardDraft}>Discard draft</Button>
+                  <Button variant="secondary" onClick={restoreDraft}>{isZh ? "恢复草稿" : "Restore draft"}</Button>
+                  <Button variant="destructive" onClick={discardDraft}>{isZh ? "丢弃草稿" : "Discard draft"}</Button>
                 </div>
               </section>
             ) : null}
@@ -455,7 +457,7 @@ export function ChatPanel({
               disabled={!workspace || isOffline}
             />
             {!hasUserMessage && starterPrompts.length > 0 ? (
-              <div className="starter-prompts" role="group" aria-label="Starter request templates">
+              <div className="starter-prompts" role="group" aria-label={isZh ? "起步请求模板" : "Starter request templates"}>
                 {starterPrompts.map((prompt) => (
                   <Button
                     key={prompt}
@@ -471,7 +473,7 @@ export function ChatPanel({
               </div>
             ) : null}
             <div className="composer-meta">
-              <p className="shortcut-hint" role="note">Press Enter to send. Use Shift+Enter for a new line.</p>
+              <p className="shortcut-hint" role="note">{isZh ? "按 Enter 发送，Shift+Enter 换行。" : "Press Enter to send. Use Shift+Enter for a new line."}</p>
               <span className={`status-badge ${composerOverLimit ? "status-critical" : "status-running"}`}>
                 {composerLength}/{composerMaxChars}
               </span>
@@ -488,15 +490,15 @@ export function ChatPanel({
                 disabled={!canSend}
               >
                 <ArrowUp size={16} aria-hidden="true" />
-                Send message
+                {isZh ? "发送消息" : "Send message"}
               </Button>
               {!isUserNearBottom || unreadCount > 0 ? (
                 <Button variant="secondary" onClick={onBackToBottom} disabled={activeTimeline.length === 0}>
-                  Back to bottom{unreadCount > 0 ? ` (${unreadCount})` : ""}
+                  {(isZh ? "回到底部" : "Back to bottom")}{unreadCount > 0 ? ` (${unreadCount})` : ""}
                 </Button>
               ) : null}
               <Button variant="ghost" onClick={stopGeneration} disabled={!hasActiveGeneration}>
-                Stop generation
+                {isZh ? "停止生成" : "Stop generation"}
               </Button>
             </div>
           </section>

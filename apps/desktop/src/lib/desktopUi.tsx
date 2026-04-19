@@ -1,4 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
+import type { UiLocale } from "@openvibecoding/frontend-shared/uiCopy";
+import { detectPreferredUiLocale } from "@openvibecoding/frontend-shared/uiLocale";
 import {
   Compass,
   FlaskConical,
@@ -114,33 +116,54 @@ export const PM_PHASES = [
   "Summarizing results..."
 ] as const;
 
+function currentUiLocale(): UiLocale {
+  return detectPreferredUiLocale() as UiLocale;
+}
+
+export function pmPhasesForLocale(locale: UiLocale = currentUiLocale()): string[] {
+  if (locale === "zh-CN") {
+    return [
+      "理解需求中...",
+      "继续深挖中...",
+      "调研中...",
+      "起草方案中...",
+      "等待 TL 分析中...",
+      "汇总结果中...",
+    ];
+  }
+  return [...PM_PHASES];
+}
+
 export function createSeedTimeline(sessionId: string): ChatMessage[] {
+  const isZh = currentUiLocale() === "zh-CN";
   return [
     {
       id: `${sessionId}-intro`,
       role: "pm",
-      content: "OpenVibeCoding Command Tower PM is ready. Tell me the goal and I will coordinate the TL and engineering agents.",
+      content: isZh
+        ? "OpenVibeCoding Command Tower PM 已就绪。告诉我目标，我会去协调 TL 和各条工程执行线。"
+        : "OpenVibeCoding Command Tower PM is ready. Tell me the goal and I will coordinate the TL and engineering agents.",
       embeds: [
         {
           id: `${sessionId}-decision-bootstrap`,
           kind: "decision",
           linkedNodeId: "pm",
-          title: "Decision: execution mode",
-          description: "Choose strict acceptance or faster exploration.",
+          title: isZh ? "决策：执行模式" : "Decision: execution mode",
+          description: isZh ? "选择严格验收，或更快探索。" : "Choose strict acceptance or faster exploration.",
           selected: "strict",
           options: [
             {
               id: "strict",
-              title: "Strict acceptance",
-              summary: "Keep gates and the audit chain in place end to end",
-              risk: "A little slower",
+              title: isZh ? "严格验收" : "Strict acceptance",
+              summary: isZh ? "把门禁和审计链路端到端保留下来" : "Keep gates and the audit chain in place end to end",
+              risk: isZh ? "会稍微慢一些" : "A little slower",
               recommended: true
             },
             {
               id: "fast",
-              title: "Fast exploration",
-              summary: "Validate direction first, then add the full gate path",
-              risk: "Higher rework risk"
+              title: isZh ? "快速探索" : "Fast exploration",
+              summary: isZh ? "先验证方向，再补完整门禁路径" : "Validate direction first, then add the full gate path",
+              risk: isZh ? "返工风险更高" : "Higher rework risk"
             }
           ]
         }
@@ -211,9 +234,10 @@ export function renderChatEmbed(
     onViewDiff?: (embedId: string) => void;
   }
 ) {
+  const isZh = currentUiLocale() === "zh-CN";
   if (embed.kind === "decision") {
     return (
-      <section key={embed.id} className="embed-card decision-card" aria-label="Decision card">
+      <section key={embed.id} className="embed-card decision-card" aria-label={isZh ? "决策卡片" : "Decision card"}>
         <header>
           <h2>{embed.title}</h2>
           <p>{embed.description}</p>
@@ -225,13 +249,13 @@ export function renderChatEmbed(
               <article key={option.id} className={`decision-option ${selected ? "is-selected" : ""}`.trim()}>
                 <p className="decision-title">{option.title}</p>
                 <p>{option.summary}</p>
-                <p className="decision-risk">Risk: {option.risk}</p>
-                {option.recommended ? <span className="status-badge status-running">Recommended</span> : null}
+                <p className="decision-risk">{isZh ? "风险：" : "Risk: "} {option.risk}</p>
+                {option.recommended ? <span className="status-badge status-running">{isZh ? "推荐" : "Recommended"}</span> : null}
                 <Button
                   variant={selected ? "primary" : "secondary"}
                   onClick={() => chooseDecision(message.id, embed.id, option.id)}
                 >
-                  {selected ? "Selected" : "Choose"}
+                  {selected ? (isZh ? "已选中" : "Selected") : (isZh ? "选择" : "Choose")}
                 </Button>
               </article>
             );
@@ -243,18 +267,18 @@ export function renderChatEmbed(
 
   if (embed.kind === "delegation") {
     return (
-      <section key={embed.id} className="embed-card delegation-card" aria-label="Delegation card">
+      <section key={embed.id} className="embed-card delegation-card" aria-label={isZh ? "委派卡片" : "Delegation card"}>
         <h2>{embed.title}</h2>
         <p>
-          <strong>Task:</strong>
+          <strong>{isZh ? "任务：" : "Task:"}</strong>
           {embed.task}
         </p>
         <p>
-          <strong>Plan:</strong>
+          <strong>{isZh ? "计划：" : "Plan:"}</strong>
           {embed.plan}
         </p>
         <p>
-          <strong>Status:</strong>
+          <strong>{isZh ? "状态：" : "Status:"}</strong>
           {embed.status}
         </p>
       </section>
@@ -263,7 +287,7 @@ export function renderChatEmbed(
 
   if (embed.kind === "progress") {
     return (
-      <section key={embed.id} className="embed-card progress-card" aria-label="Progress card">
+      <section key={embed.id} className="embed-card progress-card" aria-label={isZh ? "进度卡片" : "Progress card"}>
         <h2>{embed.title}</h2>
         <ul className="embed-list">
           {embed.updates.map((item) => (
@@ -273,7 +297,7 @@ export function renderChatEmbed(
               <span
                 className={`status-badge status-${item.state === "done" ? "pass" : item.state === "working" ? "running" : "warning"}`}
               >
-                {item.state === "done" ? "Done" : item.state === "working" ? "In progress" : "Waiting"}
+                {item.state === "done" ? (isZh ? "已完成" : "Done") : item.state === "working" ? (isZh ? "进行中" : "In progress") : (isZh ? "等待中" : "Waiting")}
               </span>
             </li>
           ))}
@@ -284,19 +308,19 @@ export function renderChatEmbed(
 
   if (embed.kind === "report") {
     return (
-      <section key={embed.id} className="embed-card report-card" aria-label="Result report card">
+      <section key={embed.id} className="embed-card report-card" aria-label={isZh ? "结果报告卡片" : "Result report card"}>
         <h2>{embed.title}</h2>
         <p>{embed.summary}</p>
-        <ul className="file-list" aria-label="Changed files list">
+        <ul className="file-list" aria-label={isZh ? "变更文件列表" : "Changed files list"}>
           {embed.files.map((file) => (
             <li key={file}>{file}</li>
           ))}
         </ul>
         <p className="report-tests">{embed.tests}</p>
         <div className="embed-actions">
-          <Button variant="primary" onClick={() => reportActions?.onAccept?.(embed.id)}>Accept and merge</Button>
-          <Button variant="secondary" onClick={() => reportActions?.onRework?.(embed.id)}>Request changes</Button>
-          <Button variant="ghost" onClick={() => reportActions?.onViewDiff?.(embed.id)}>View full diff</Button>
+          <Button variant="primary" onClick={() => reportActions?.onAccept?.(embed.id)}>{isZh ? "接受并合并" : "Accept and merge"}</Button>
+          <Button variant="secondary" onClick={() => reportActions?.onRework?.(embed.id)}>{isZh ? "要求修改" : "Request changes"}</Button>
+          <Button variant="ghost" onClick={() => reportActions?.onViewDiff?.(embed.id)}>{isZh ? "查看完整 diff" : "View full diff"}</Button>
         </div>
       </section>
     );
@@ -306,7 +330,7 @@ export function renderChatEmbed(
     <section
       key={embed.id}
       className={`embed-card alert-card ${embed.level === "critical" ? "is-critical" : ""}`.trim()}
-      aria-label="Alert card"
+      aria-label={isZh ? "告警卡片" : "Alert card"}
     >
       <h2>{embed.title}</h2>
       <p>{embed.description}</p>

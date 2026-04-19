@@ -17,6 +17,7 @@ import { Card } from "../components/ui/Card";
 
 type RunsPageProps = {
   onNavigateToRun: (runId: string) => void;
+  locale?: UiLocale;
 };
 
 function runsPageText(locale: UiLocale) {
@@ -72,8 +73,7 @@ function runsPageText(locale: UiLocale) {
   };
 }
 
-export function RunsPage({ onNavigateToRun }: RunsPageProps) {
-  const locale: UiLocale = detectPreferredUiLocale();
+export function RunsPage({ onNavigateToRun, locale = detectPreferredUiLocale() as UiLocale }: RunsPageProps) {
   const runsPageCopy = getUiCopy(locale).dashboard.runsPage;
   const text = runsPageText(locale);
   const [runs, setRuns] = useState<RunSummary[]>([]);

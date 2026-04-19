@@ -24,7 +24,7 @@ import {
 import { sanitizeUiError } from "./lib/uiError";
 import { trackPmSendAttempt, trackPmSendBlocked, trackPmStarterPromptUsed } from "./lib/uxTelemetry";
 import {
-  PM_PHASES,
+  pmPhasesForLocale,
   WORKSPACES,
   createSeedTimeline,
   nextLayoutMode,
@@ -80,7 +80,7 @@ function App() {
   const [unreadCount, setUnreadCount] = useState(0);
   const [timelineBySession, setTimelineBySession] = useState<Record<string, ChatMessage[]>>({});
   const [generationSessionId, setGenerationSessionId] = useState("");
-  const [phaseText, setPhaseText] = useState<(typeof PM_PHASES)[number]>("Understanding the request...");
+  const [phaseText, setPhaseText] = useState<string>(() => pmPhasesForLocale(detectPreferredUiLocale())[0] || "Understanding the request...");
   const [streamingText, setStreamingText] = useState("");
   const [isSendingMessage, setIsSendingMessage] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
@@ -192,6 +192,7 @@ function App() {
 
   const workspace = useMemo(() => WORKSPACES.find((w) => w.id === activeWorkspaceId) ?? null, [activeWorkspaceId]);
   const uiCopy = useMemo(() => getUiCopy(uiLocale), [uiLocale]);
+  const phaseSequence = useMemo(() => pmPhasesForLocale(uiLocale), [uiLocale]);
   const selectedTaskPack = useMemo(() => findTaskPackByTemplate(taskPacks, taskTemplate), [taskPacks, taskTemplate]);
   const taskPackFieldValues = taskPackFieldValuesByTemplate[taskTemplate] || {};
   const activeDraftKey = useMemo(() => (!workspace || !activeSessionId) ? "" : draftStorageKey(workspace.id, activeSessionId), [workspace, activeSessionId]);
@@ -551,7 +552,7 @@ function App() {
         workspaceId: workspace.id,
         reason: !content ? "empty_message" : hasActiveGeneration ? "generation_active" : "composer_over_limit",
       });
-      if (composerOverLimit) toast.error(`Shorten the input to ${COMPOSER_MAX_CHARS} characters or fewer before sending.`);
+      if (composerOverLimit) toast.error(uiLocale === "zh-CN" ? `请先把输入缩短到 ${COMPOSER_MAX_CHARS} 个字符以内再发送。` : `Shorten the input to ${COMPOSER_MAX_CHARS} characters or fewer before sending.`);
       return;
     }
     appendMessage(targetSessionId, { role: "user", content });
@@ -560,7 +561,7 @@ function App() {
       clearTimeout(streamClearTimerRef.current);
       streamClearTimerRef.current = null;
     }
-    setUnreadCount(0); setGenerationSessionId(targetSessionId); setPhaseText(PM_PHASES[0]); setStreamingText("");
+    setUnreadCount(0); setGenerationSessionId(targetSessionId); setPhaseText(phaseSequence[0] || phaseText); setStreamingText("");
     setIsSendingMessage(true);
     const controller = new AbortController();
     const requestId = requestSequenceRef.current + 1;
@@ -569,27 +570,30 @@ function App() {
     if (phaseTimerRef.current) clearInterval(phaseTimerRef.current);
     if (pendingReplyRef.current) { clearTimeout(pendingReplyRef.current); pendingReplyRef.current = null; }
     let phaseIndex = 0;
-    phaseTimerRef.current = setInterval(() => { phaseIndex = (phaseIndex + 1) % PM_PHASES.length; setPhaseText(PM_PHASES[phaseIndex]); }, 1200);
+    phaseTimerRef.current = setInterval(() => {
+      phaseIndex = (phaseIndex + 1) % phaseSequence.length;
+      setPhaseText(phaseSequence[phaseIndex] || phaseSequence[0] || phaseText);
+    }, 1200);
     pendingReplyRef.current = setTimeout(() => { pendingReplyRef.current = null; }, 60000);
     try {
       const res = await postDesktopPmMessage(targetSessionId, { message: content, strict_acceptance: true }, controller.signal);
-      const pmMsg = res.message || "The TL finished decomposition and the workers are now executing.";
+      const pmMsg = res.message || (uiLocale === "zh-CN" ? "TL 已完成拆解，Worker 正在执行。" : "The TL finished decomposition and the workers are now executing.");
       setStreamingText(pmMsg); setReviewDecision("pending");
-      appendMessage(targetSessionId, { role: "pm", content: "Request received. I am handing it to the TL for breakdown and execution.", embeds: [{ id: `delegation-${Date.now()}`, kind: "delegation", linkedNodeId: "tl", title: "Delegated to Tech Lead", task: content, plan: "Break the work into Backend / Frontend / Reviewer lanes and run them in parallel", status: "TL is analyzing..." }] });
+      appendMessage(targetSessionId, { role: "pm", content: uiLocale === "zh-CN" ? "已收到请求。我正在把任务交给 TL 做拆解并启动执行。" : "Request received. I am handing it to the TL for breakdown and execution.", embeds: [{ id: `delegation-${Date.now()}`, kind: "delegation", linkedNodeId: "tl", title: uiLocale === "zh-CN" ? "已委派给 Tech Lead" : "Delegated to Tech Lead", task: content, plan: uiLocale === "zh-CN" ? "把工作拆成 Backend / Frontend / Reviewer 三条 lane 并行推进" : "Break the work into Backend / Frontend / Reviewer lanes and run them in parallel", status: uiLocale === "zh-CN" ? "TL 正在分析..." : "TL is analyzing..." }] });
       appendMessage(targetSessionId, { role: "pm", content: pmMsg });
-      toast.success("The PM response was added to the session");
+      toast.success(uiLocale === "zh-CN" ? "PM 回复已加入当前会话" : "The PM response was added to the session");
     } catch (error) {
       if (isAbortRequestError(error)) {
         if (!userStoppedRequestIdsRef.current.has(requestId)) {
-          appendMessage(targetSessionId, { role: "pm", content: "This message send was cancelled. You can continue with a new instruction right away." });
-          toast("The current send was cancelled");
+          appendMessage(targetSessionId, { role: "pm", content: uiLocale === "zh-CN" ? "这次消息发送已取消。你可以立刻继续发新的指令。" : "This message send was cancelled. You can continue with a new instruction right away." });
+          toast(uiLocale === "zh-CN" ? "当前发送已取消" : "The current send was cancelled");
         }
         return;
       }
-      const fallback = isTimeoutRequestError(error) ? "Message delivery timed out" : "The backend message channel failed";
+      const fallback = isTimeoutRequestError(error) ? (uiLocale === "zh-CN" ? "消息投递超时" : "Message delivery timed out") : (uiLocale === "zh-CN" ? "后端消息通道失败" : "The backend message channel failed");
       const errorMsg = sanitizeUiError(error, fallback);
-      appendMessage(targetSessionId, { role: "pm", content: "The backend message channel is temporarily unavailable, so I switched into a local safe fallback mode.", embeds: [{ id: `alert-${Date.now()}`, kind: "alert", linkedNodeId: "gate", title: "Message channel fallback", level: "warning", description: errorMsg, action: "Continue locally, or fix the API and retry." }] });
-      toast.error("Continue locally, or fix the API and try sending again.");
+      appendMessage(targetSessionId, { role: "pm", content: uiLocale === "zh-CN" ? "后端消息通道暂时不可用，所以我切到了本地安全回退模式。" : "The backend message channel is temporarily unavailable, so I switched into a local safe fallback mode.", embeds: [{ id: `alert-${Date.now()}`, kind: "alert", linkedNodeId: "gate", title: uiLocale === "zh-CN" ? "消息通道回退" : "Message channel fallback", level: "warning", description: errorMsg, action: uiLocale === "zh-CN" ? "先在本地继续，或修好 API 后再重试。" : "Continue locally, or fix the API and retry." }] });
+      toast.error(uiLocale === "zh-CN" ? "先在本地继续，或修好 API 后再重新发送。" : "Continue locally, or fix the API and try sending again.");
     } finally {
       const isCurrentRequest = pendingRequestRef.current?.requestId === requestId;
       userStoppedRequestIdsRef.current.delete(requestId);
@@ -599,7 +603,7 @@ function App() {
       pendingRequestRef.current = null;
       setGenerationSessionId("");
       setIsSendingMessage(false);
-      setPhaseText("Summarizing results...");
+      setPhaseText(phaseSequence[phaseSequence.length - 1] || (uiLocale === "zh-CN" ? "汇总结果中..." : "Summarizing results..."));
       if (streamClearTimerRef.current) {
         clearTimeout(streamClearTimerRef.current);
       }
@@ -621,16 +625,16 @@ function App() {
     if (streamClearTimerRef.current) { clearTimeout(streamClearTimerRef.current); streamClearTimerRef.current = null; }
     setStreamingText("");
     setIsSendingMessage(false);
-    setGenerationSessionId(""); setPhaseText("Understanding the request...");
-    appendMessage(currentRequest.sessionId, { role: "pm", content: "The current generation was stopped. The existing context is preserved and you can continue with a new instruction." });
-    toast("Current generation stopped");
+    setGenerationSessionId(""); setPhaseText(phaseSequence[0] || (uiLocale === "zh-CN" ? "理解需求中..." : "Understanding the request..."));
+    appendMessage(currentRequest.sessionId, { role: "pm", content: uiLocale === "zh-CN" ? "当前生成已停止。现有上下文已保留，你可以继续发新的指令。" : "The current generation was stopped. The existing context is preserved and you can continue with a new instruction." });
+    toast(uiLocale === "zh-CN" ? "当前生成已停止" : "Current generation stopped");
   }
 
   function openSessionFallbackCta() {
     if (typeof window !== "undefined") {
       window.open(`${window.location.origin}/pm`, "_blank", "noopener,noreferrer");
     }
-    toast("Create the first session manually in Dashboard /pm with objective + allowed_paths.");
+    toast(uiLocale === "zh-CN" ? "请去 Dashboard /pm 用 objective + allowed_paths 手动创建首个会话。" : "Create the first session manually in Dashboard /pm with objective + allowed_paths.");
   }
 
   function buildFirstSessionPayload(): Record<string, JsonValue> {

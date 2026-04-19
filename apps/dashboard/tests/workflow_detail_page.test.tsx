@@ -142,6 +142,19 @@ describe("workflow detail page", () => {
     });
   });
 
+  it("exports zh-CN workflow detail metadata when the locale cookie is set", async () => {
+    mockCookies.mockResolvedValueOnce({
+      get: () => ({ value: "zh-CN" }),
+      toString: () => "openvibecoding.ui.locale=zh-CN",
+    });
+
+    await expect(
+      generateMetadata({ params: Promise.resolve({ id: "wf-zh" }) }),
+    ).resolves.toMatchObject({
+      title: "工作流案例详情 · wf-zh | OpenVibeCoding",
+    });
+  });
+
   it("falls back to raw id when route id is malformed percent-encoding", async () => {
     const view = await WorkflowDetailPage({
       params: Promise.resolve({ id: "%E0%A4%A" }),
@@ -164,7 +177,7 @@ describe("workflow detail page", () => {
     render(view);
 
     expect(screen.getByRole("heading", { name: "工作流案例详情" })).toBeInTheDocument();
-    expect(screen.getByText("先判断风险，再确认案例摘要、Run 映射、队列姿态和事件时间线，然后再做治理动作。")).toBeInTheDocument();
+    expect(screen.getByText("先判断风险，再确认案例摘要、运行映射、队列姿态和事件时间线，然后再做治理动作。")).toBeInTheDocument();
     expect(screen.getAllByRole("link", { name: "打开可分享案例资产" })[0]).toHaveAttribute("href", "/workflows/wf-zh/share");
     expect(screen.getByText("操作角色: TECH_LEAD")).toBeInTheDocument();
     expect(screen.getByText("当前可见队列项：0。现在可执行：0。")).toBeInTheDocument();

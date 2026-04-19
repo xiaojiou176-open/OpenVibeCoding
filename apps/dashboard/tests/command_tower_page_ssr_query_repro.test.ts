@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 import { describe, expect, it } from "vitest";
-import { metadata } from "../app/command-tower/page";
+import { buildCommandTowerMetadata } from "../app/command-tower/page";
 
 describe("command tower page SSR query reproduction", () => {
   it("uses fixed PM sessions fetch on first load and does not read searchParams", () => {
@@ -19,6 +19,7 @@ describe("command tower page SSR query reproduction", () => {
   });
 
   it("publishes route-level metadata for discoverability", () => {
+    const metadata = buildCommandTowerMetadata("en");
     expect(metadata.title).toBe("Command Tower | OpenVibeCoding");
     expect(String(metadata.description)).toContain("operator visibility");
   });

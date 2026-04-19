@@ -1,4 +1,6 @@
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { UiLocale } from "@openvibecoding/frontend-shared/uiCopy";
+import { detectPreferredUiLocale } from "@openvibecoding/frontend-shared/uiLocale";
 import type { EventRecord, JsonValue } from "../lib/types";
 import {
   fetchPmSession,
@@ -9,7 +11,7 @@ import {
   postPmSessionMessage,
   openEventsStream,
 } from "../lib/api";
-import { badgeClass, statusLabelZh } from "../lib/statusPresentation";
+import { badgeClass, statusLabelDesktop } from "../lib/statusPresentation";
 import { Button } from "../components/ui/Button";
 import { Badge } from "../components/ui/Badge";
 import { Card, CardHeader, CardTitle } from "../components/ui/Card";
@@ -26,8 +28,21 @@ const REQUEST_TIMEOUT_MS = 6000;
 type Transport = "sse" | "polling";
 type LiveMode = "running" | "paused" | "stopped" | "backoff";
 
-function statusLabel(status: string): string {
+function statusLabel(status: string, locale: UiLocale): string {
   const normalized = status.trim().toLowerCase();
+  if (locale === "zh-CN") {
+    const labels: Record<string, string> = {
+      active: "活跃",
+      archived: "已归档",
+      blocked: "已阻塞",
+      done: "已完成",
+      failed: "失败",
+      paused: "已暂停",
+      running: "进行中",
+      success: "成功",
+    };
+    return labels[normalized] || statusLabelDesktop(status, locale);
+  }
   const labels: Record<string, string> = {
     active: "Active",
     archived: "Archived",
@@ -38,7 +53,7 @@ function statusLabel(status: string): string {
     running: "Running",
     success: "Success",
   };
-  return labels[normalized] || statusLabelZh(status);
+  return labels[normalized] || statusLabelDesktop(status, locale);
 }
 
 function isTerminal(status: string) {
@@ -88,10 +103,108 @@ function isBlockedFlag(value: JsonValue): boolean {
 export function CTSessionDetailPage({
   sessionId,
   onBack,
+  locale = detectPreferredUiLocale() as UiLocale,
 }: {
   sessionId: string;
   onBack: () => void;
+  locale?: UiLocale;
 }) {
+  const copy =
+    locale === "zh-CN"
+      ? {
+          pageTitle: "会话详情",
+          subtitle: "针对单个会话的实时轨迹复核、角色交接可见性与异常收敛操作面。",
+          hotkeys: "快捷键：Alt+L 切换 live，Alt+R 刷新，Alt+M 聚焦消息框",
+          back: "< 返回会话总览",
+          live: "实时",
+          paused: "已暂停",
+          degraded: "已降级",
+          stopped: "已停止",
+          liveStatus: (liveModeLabel: string, transportLabel: string, status: string) =>
+            `实时状态 ${liveModeLabel}，传输模式 ${transportLabel}，会话状态 ${status || "未知"}。`,
+          refreshing: "刷新中...",
+          pauseLive: "暂停实时",
+          resumeLive: "恢复实时",
+          refreshNow: "立即刷新",
+          openWeb: "打开网页会话分析",
+          metrics: {
+            runCount: "运行数",
+            running: "进行中",
+            failed: "失败",
+            blocked: "阻塞",
+            failureRate: "失败率",
+            recovery: "平均恢复（秒）",
+          },
+          runsInSession: "本会话运行",
+          runTableCaption: "当前会话的运行状态列表",
+          runHeaders: { runId: "运行 ID", status: "状态", failureReason: "失败原因", role: "角色", blocked: "阻塞" },
+          noRuns: "当前还没有记录到运行。",
+          blockedBadge: "已阻塞",
+          conversationFlow: "对话流",
+          nodes: (count: number) => `节点（${count}）`,
+          edges: (count: number) => `边（${count}）`,
+          eventTimeline: "事件时间线",
+          filterEvents: "筛选事件",
+          filterPlaceholder: "筛选事件...",
+          eventCount: (visible: number, total: number) => `${visible} / ${total} 条事件`,
+          noEvents: "当前还没有事件。",
+          eventDetails: (eventName: string) => `查看事件详情 ${eventName || "未知事件"}`,
+          messagePm: "给 PM 发消息",
+          messageForPm: "发送给 PM 的消息",
+          messagePlaceholder: "给 PM 发消息（Alt+M 聚焦，Enter 发送）",
+          messageHint: "Alt+M 聚焦输入框，Enter 发送，Shift+Enter 换行。",
+          send: "发送",
+          sending: "发送中...",
+          sent: "消息已发送。",
+          sendFailed: "发送失败。",
+        }
+      : {
+          pageTitle: "Session detail",
+          subtitle: "Single-session shell for live trace review, role handoff visibility, and exception convergence.",
+          hotkeys: "Hotkeys: Alt+L toggle live, Alt+R refresh, Alt+M focus the message box",
+          back: "< Back to session overview",
+          live: "Live",
+          paused: "Paused",
+          degraded: "Degraded",
+          stopped: "Stopped",
+          liveStatus: (liveModeLabel: string, transportLabel: string, status: string) =>
+            `Live state ${liveModeLabel}, transport ${transportLabel}, session status ${status || "unknown"}.`,
+          refreshing: "Refreshing...",
+          pauseLive: "Pause live",
+          resumeLive: "Resume live",
+          refreshNow: "Refresh now",
+          openWeb: "Open web session analysis",
+          metrics: {
+            runCount: "Run count",
+            running: "Running",
+            failed: "Failed",
+            blocked: "Blocked",
+            failureRate: "Failure rate",
+            recovery: "Avg recovery (s)",
+          },
+          runsInSession: "Runs in this session",
+          runTableCaption: "Run status list for the current session",
+          runHeaders: { runId: "Run ID", status: "Status", failureReason: "Failure reason", role: "Role", blocked: "Blocked" },
+          noRuns: "No runs recorded yet.",
+          blockedBadge: "Blocked",
+          conversationFlow: "Conversation flow",
+          nodes: (count: number) => `Nodes (${count})`,
+          edges: (count: number) => `Edges (${count})`,
+          eventTimeline: "Event timeline",
+          filterEvents: "Filter events",
+          filterPlaceholder: "Filter events...",
+          eventCount: (visible: number, total: number) => `${visible} / ${total} events`,
+          noEvents: "No events yet.",
+          eventDetails: (eventName: string) => `View event details ${eventName || "UNKNOWN"}`,
+          messagePm: "Message PM",
+          messageForPm: "Message for PM",
+          messagePlaceholder: "Send a message to PM (Alt+M focus, Enter send)",
+          messageHint: "Alt+M focuses the input, Enter sends, Shift+Enter inserts a new line.",
+          send: "Send",
+          sending: "Sending...",
+          sent: "Message sent.",
+          sendFailed: "Send failed.",
+        };
   const sessionIdSlug = sessionId.replace(/[^a-zA-Z0-9_-]/g, "-") || "session";
   const liveStatusId = `ct-session-live-status-${sessionIdSlug}`;
   const runTableCaptionId = `ct-session-run-table-caption-${sessionIdSlug}`;
@@ -239,9 +352,9 @@ export function CTSessionDetailPage({
     setMsgSending(true); setMsgStatus("");
     try {
       await postPmSessionMessage(sessionId, { message: msg, from_role: "PM", to_role: "TECH_LEAD", kind: "chat" });
-      setMsgDraft(""); setMsgStatus("Message sent.");
+      setMsgDraft(""); setMsgStatus(copy.sent);
       void refreshAll();
-    } catch (err) { setMsgStatus(err instanceof Error ? err.message : "Send failed."); }
+    } catch (err) { setMsgStatus(err instanceof Error ? err.message : copy.sendFailed); }
     finally {
       msgSendingRef.current = false;
       setMsgSending(false);
@@ -269,12 +382,12 @@ export function CTSessionDetailPage({
   /* ── metrics helpers ── */
   const m = metrics as Record<string, JsonValue> | null;
   const metricItems = m ? [
-    { label: "Run count", value: m.run_count },
-    { label: "Running", value: m.running_runs },
-    { label: "Failed", value: m.failed_runs },
-    { label: "Blocked", value: m.blocked_runs },
-    { label: "Failure rate", value: `${(Number(m.failure_rate || 0) * 100).toFixed(1)}%` },
-    { label: "Avg recovery (s)", value: Number(m.mttr_seconds || 0).toFixed(1) },
+    { label: copy.metrics.runCount, value: m.run_count },
+    { label: copy.metrics.running, value: m.running_runs },
+    { label: copy.metrics.failed, value: m.failed_runs },
+    { label: copy.metrics.blocked, value: m.blocked_runs },
+    { label: copy.metrics.failureRate, value: `${(Number(m.failure_rate || 0) * 100).toFixed(1)}%` },
+    { label: copy.metrics.recovery, value: Number(m.mttr_seconds || 0).toFixed(1) },
   ] : [];
 
   /* ── conversation graph helpers ── */
@@ -315,24 +428,26 @@ export function CTSessionDetailPage({
       {/* Header */}
       <div className="section-header">
         <div>
-          <Button className="mb-2" onClick={onBack}>
-            {"<"} Back to session overview
-          </Button>
-          <h1 className="page-title">Session detail</h1>
-          <p className="page-subtitle">Single-session shell for live trace review, role handoff visibility, and exception convergence.</p>
-          <p className="mono muted text-xs">Hotkeys: Alt+L toggle live, Alt+R refresh, Alt+M focus the message box</p>
+          <Button className="mb-2" onClick={onBack}>{copy.back}</Button>
+          <h1 className="page-title">{copy.pageTitle}</h1>
+          <p className="page-subtitle">{copy.subtitle}</p>
+          <p className="mono muted text-xs">{copy.hotkeys}</p>
         </div>
         <div className="row-start-gap-2">
           <Badge className="mono">{sessionId.slice(0, 16)}</Badge>
           <Badge variant={liveMode === "running" ? "success" : liveMode === "paused" ? "muted" : liveMode === "backoff" ? "warning" : "muted"}>
-            {liveMode === "running" ? "Live" : liveMode === "paused" ? "Paused" : liveMode === "backoff" ? "Degraded" : "Stopped"}
+            {liveMode === "running" ? copy.live : liveMode === "paused" ? copy.paused : liveMode === "backoff" ? copy.degraded : copy.stopped}
           </Badge>
           <span className="mono muted text-xs">{transport.toUpperCase()}</span>
         </div>
       </div>
 
       <p id={liveStatusId} className="sr-only" role="status" aria-live="polite" aria-atomic="true">
-        Live state {liveMode}, transport {transport}, session status {sessionStatus || "unknown"}.
+        {copy.liveStatus(
+          liveMode === "running" ? copy.live : liveMode === "paused" ? copy.paused : liveMode === "backoff" ? copy.degraded : copy.stopped,
+          transport.toUpperCase(),
+          sessionStatus || (locale === "zh-CN" ? "未知" : "unknown"),
+        )}
       </p>
       {error && (
         <div className="alert alert-danger" role="alert" aria-live="assertive">
@@ -341,15 +456,15 @@ export function CTSessionDetailPage({
       )}
       {refreshing && (
         <p className="mono muted text-xs" role="status" aria-live="polite">
-          Refreshing...
+          {copy.refreshing}
         </p>
       )}
 
       {/* Toolbar */}
       <div className="row-gap-2 mb-4">
-        <Button variant={liveEnabled ? "primary" : "secondary"} onClick={() => setLiveEnabled((p) => !p)}>{liveEnabled ? "Pause live" : "Resume live"}</Button>
-        <Button onClick={() => void refreshAll()}>Refresh now</Button>
-        <Button variant="ghost" onClick={openWebSessionAnalysis}>Open web session analysis</Button>
+        <Button variant={liveEnabled ? "primary" : "secondary"} onClick={() => setLiveEnabled((p) => !p)}>{liveEnabled ? copy.pauseLive : copy.resumeLive}</Button>
+        <Button onClick={() => void refreshAll()}>{copy.refreshNow}</Button>
+        <Button variant="ghost" onClick={openWebSessionAnalysis}>{copy.openWeb}</Button>
       </div>
 
       {/* Metrics grid */}
@@ -366,18 +481,18 @@ export function CTSessionDetailPage({
 
       {/* Runs table */}
       <Card className="table-card mb-5">
-        <CardHeader><CardTitle>Runs in this session</CardTitle></CardHeader>
+        <CardHeader><CardTitle>{copy.runsInSession}</CardTitle></CardHeader>
         <table className="run-table">
-          <caption id={runTableCaptionId} className="sr-only">Run status list for the current session</caption>
-          <thead><tr><th>Run ID</th><th>Status</th><th>Failure reason</th><th>Role</th><th>Blocked</th></tr></thead>
+          <caption id={runTableCaptionId} className="sr-only">{copy.runTableCaption}</caption>
+          <thead><tr><th>{copy.runHeaders.runId}</th><th>{copy.runHeaders.status}</th><th>{copy.runHeaders.failureReason}</th><th>{copy.runHeaders.role}</th><th>{copy.runHeaders.blocked}</th></tr></thead>
           <tbody>
-            {runs.length === 0 ? <tr><td colSpan={5} className="muted">No runs recorded yet.</td></tr> : runs.map((run, i) => (
+            {runs.length === 0 ? <tr><td colSpan={5} className="muted">{copy.noRuns}</td></tr> : runs.map((run, i) => (
               <tr key={String(run.run_id || i)}>
                 <td className="mono">{String(run.run_id || "-").slice(0, 16)}</td>
-                <td><Badge className={badgeClass(String(run.status || ""))}>{statusLabel(String(run.status || ""))}</Badge></td>
+                <td><Badge className={badgeClass(String(run.status || ""))}>{statusLabel(String(run.status || ""), locale)}</Badge></td>
                 <td className="muted max-w-200-ellipsis">{String(run.failure_reason || "-")}</td>
                 <td className="mono">{String(run.current_role || run.role_step || "-")}</td>
-                <td>{isBlockedFlag(run.blocked as JsonValue) ? <Badge variant="failed">Blocked</Badge> : "-"}</td>
+                <td>{isBlockedFlag(run.blocked as JsonValue) ? <Badge variant="failed">{copy.blockedBadge}</Badge> : "-"}</td>
               </tr>
             ))}
           </tbody>
@@ -387,10 +502,10 @@ export function CTSessionDetailPage({
       {/* Conversation graph */}
       {(graphNodes.length > 0 || graphEdges.length > 0) && (
         <Card className="p-4 mb-5">
-          <h3 className="text-base fw-600 mb-3">Conversation flow</h3>
+          <h3 className="text-base fw-600 mb-3">{copy.conversationFlow}</h3>
           <div className="row-gap-4">
             <div className="flex-1 min-w-0">
-              <h4 className="muted text-sm mb-2">Nodes ({graphNodes.length})</h4>
+              <h4 className="muted text-sm mb-2">{copy.nodes(graphNodes.length)}</h4>
               <div className="row-wrap-gap-1-5">
                 {graphNodes.map((node, idx) => (
                   <span key={idx} className="chip">{String(node.role || node.id || idx)}: {String(node.message_count || node.count || "?")}</span>
@@ -398,7 +513,7 @@ export function CTSessionDetailPage({
               </div>
             </div>
             <div className="flex-1 min-w-0">
-              <h4 className="muted text-sm mb-2">Edges ({graphEdges.length})</h4>
+              <h4 className="muted text-sm mb-2">{copy.edges(graphEdges.length)}</h4>
               <div className="row-wrap-gap-1-5">
                 {graphEdges.map((edge, idx) => (
                   <span key={idx} className="chip">{String(edge.from || edge.source || "?")} -{">"} {String(edge.to || edge.target || "?")}</span>
@@ -411,18 +526,18 @@ export function CTSessionDetailPage({
 
       {/* Event timeline */}
       <Card className="p-4 mb-5">
-        <h3 className="text-base fw-600 mb-3">Event timeline</h3>
-        <label htmlFor={eventFilterInputId} className="sr-only">Filter events</label>
+        <h3 className="text-base fw-600 mb-3">{copy.eventTimeline}</h3>
+        <label htmlFor={eventFilterInputId} className="sr-only">{copy.filterEvents}</label>
         <Input
           id={eventFilterInputId}
           className="ct-filter-input max-w-360 mb-2"
-          placeholder="Filter events..."
+          placeholder={copy.filterPlaceholder}
           value={evtFilter}
           onChange={(e) => setEvtFilter(e.target.value)}
         />
-        <p className="muted text-xs mb-2">{filteredEvents.length} / {events.length} events</p>
+        <p className="muted text-xs mb-2">{copy.eventCount(filteredEvents.length, events.length)}</p>
         <div className="ct-session-event-list">
-          {filteredEvents.length === 0 ? <p className="muted">No events yet.</p> : filteredEvents.map((ev, idx) => {
+          {filteredEvents.length === 0 ? <p className="muted">{copy.noEvents}</p> : filteredEvents.map((ev, idx) => {
             const evStr = String(ev.event || "");
             const isErr = /fail|error|reject/i.test(evStr);
             const isOk = /success|pass|done/i.test(evStr);
@@ -437,7 +552,7 @@ export function CTSessionDetailPage({
                   onClick={() => setExpandedEvtKey((current) => current === eventKey ? null : eventKey)}
                   aria-expanded={expanded}
                   aria-controls={eventDetailsId}
-                  aria-label={`View event details ${evStr || "UNKNOWN"}`}
+                  aria-label={copy.eventDetails(evStr || (locale === "zh-CN" ? "未知事件" : "UNKNOWN"))}
                 >
                   <div className="ct-session-event-head">
                     <strong className={`ct-session-event-title ${isErr ? "is-error" : isOk ? "is-success" : ""}`.trim()}>{evStr || "UNKNOWN"}</strong>
@@ -455,13 +570,13 @@ export function CTSessionDetailPage({
 
       {/* PM message composer */}
       <Card className="p-4">
-        <h3 className="text-base fw-600 mb-3">Message PM</h3>
-        <label htmlFor={messageComposerLabelId} className="sr-only">Message for PM</label>
+        <h3 className="text-base fw-600 mb-3">{copy.messagePm}</h3>
+        <label htmlFor={messageComposerLabelId} className="sr-only">{copy.messageForPm}</label>
         <Textarea
           ref={msgRef}
           id={messageComposerLabelId}
           className="ct-message-textarea"
-          placeholder="Send a message to PM (Alt+M focus, Enter send)"
+          placeholder={copy.messagePlaceholder}
           aria-describedby={messageComposerHintId}
           value={msgDraft}
           onChange={(e) => setMsgDraft(e.target.value)}
@@ -476,10 +591,10 @@ export function CTSessionDetailPage({
           }}
         />
         <p id={messageComposerHintId} className="mono muted text-xs">
-          Alt+M focuses the input, Enter sends, Shift+Enter inserts a new line.
+          {copy.messageHint}
         </p>
         <div className="row-start-gap-2 mt-2">
-          <Button variant="primary" disabled={msgSending || !msgDraft.trim()} onClick={handleSend}>{msgSending ? "Sending..." : "Send"}</Button>
+          <Button variant="primary" disabled={msgSending || !msgDraft.trim()} onClick={handleSend}>{msgSending ? copy.sending : copy.send}</Button>
           {msgStatus && (
             <span
               role="status"

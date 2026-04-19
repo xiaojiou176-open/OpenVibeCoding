@@ -76,4 +76,15 @@ describe("RunComparePage decision surface", () => {
     expect(screen.getByRole("button", { name: "Explain these deltas" })).toBeInTheDocument();
     expect(screen.getByText("Evidence archive")).toBeInTheDocument();
   });
+
+  it("renders zh-CN compare chrome when locale is passed", async () => {
+    render(<RunComparePage runId="run-compare-1" onBack={vi.fn()} locale="zh-CN" />);
+
+    expect(await screen.findByRole("heading", { name: "运行对比" })).toBeInTheDocument();
+    expect(within(screen.getByLabelText("当前对比结论")).getByText("需要决策")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "解释这些差异" })).toBeInTheDocument();
+    expect(screen.getByText("决策摘要")).toBeInTheDocument();
+    expect(screen.getByText(/事故: A gate blocked the run\./)).toBeInTheDocument();
+    expect(screen.getByText(/证明: Proof artifacts are ready\./)).toBeInTheDocument();
+  });
 });

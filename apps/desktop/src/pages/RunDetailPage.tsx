@@ -35,12 +35,22 @@ import { Card, CardBody, CardHeader, CardTitle } from "../components/ui/Card";
 import { Select } from "../components/ui/Input";
 import { DesktopCopilotPanel } from "../components/copilot/DesktopCopilotPanel";
 
-const RUN_COPILOT_QUESTIONS = [
-  "Why did this run fail or get blocked?",
-  "What changed compared with the baseline?",
-  "What is the next operator action?",
-  "Where is the workflow or queue risk right now?",
-];
+function runCopilotQuestions(locale: UiLocale): string[] {
+  if (locale === "zh-CN") {
+    return [
+      "为什么这个 run 失败了或被阻塞了？",
+      "和基线相比，发生了什么变化？",
+      "操作员下一步应该做什么？",
+      "当前工作流或队列风险在哪里？",
+    ];
+  }
+  return [
+    "Why did this run fail or get blocked?",
+    "What changed compared with the baseline?",
+    "What is the next operator action?",
+    "Where is the workflow or queue risk right now?",
+  ];
+}
 
 type RunDetailTab = "events" | "diff" | "reports" | "tools" | "chain" | "contract" | "replay";
 
@@ -550,10 +560,11 @@ export function RunDetailPage({ runId, onBack, onOpenCompare = () => {}, locale 
 
       <div className="mb-5">
         <DesktopCopilotPanel
+          locale={locale}
           title={runDetailCopy.operatorCopilotTitle}
           intro={runDetailCopy.operatorCopilotIntro}
           buttonLabel={runDetailCopy.operatorCopilotButton}
-          questionSet={RUN_COPILOT_QUESTIONS}
+          questionSet={runCopilotQuestions(locale)}
           loadBrief={() => fetchOperatorCopilotBrief(runId)}
         />
       </div>

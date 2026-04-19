@@ -14,11 +14,21 @@ import { safeLoad } from "../../lib/serverPageData";
 import type { CommandTowerOverviewPayload, PmSessionSummary } from "../../lib/types";
 import type { UiLocale } from "@openvibecoding/frontend-shared/uiCopy";
 
-export const metadata: Metadata = {
-  title: "Command Tower | OpenVibeCoding",
-  description:
-    "Monitor live operator visibility, linked Workflow Cases, blockers, and next operator actions from the OpenVibeCoding command tower cockpit.",
-};
+export function buildCommandTowerMetadata(locale: UiLocale): Metadata {
+  if (locale === "zh-CN") {
+    return {
+      title: "指挥塔 | OpenVibeCoding",
+      description:
+        "从 OpenVibeCoding 指挥塔驾驶舱中监控实时可见性、关联工作流案例、阻塞点和下一步操作。",
+    };
+  }
+
+  return {
+    title: "Command Tower | OpenVibeCoding",
+    description:
+      "Monitor live operator visibility, linked Workflow Cases, blockers, and next operator actions from the OpenVibeCoding command tower cockpit.",
+  };
+}
 
 type CommandTowerHomeState = {
   overview: CommandTowerOverviewPayload;
@@ -26,6 +36,10 @@ type CommandTowerHomeState = {
   warning: string;
   hasLiveData: boolean;
 };
+
+function getCommandTowerHomeSectionAriaLabel(locale: UiLocale): string {
+  return locale === "zh-CN" ? "指挥塔实时总览" : "Command Tower live overview";
+}
 
 function buildCommandTowerWarningSummary({
   locale,
@@ -135,11 +149,12 @@ async function loadCommandTowerHomeState(locale: UiLocale): Promise<CommandTower
 export async function CommandTowerHomeSection({ locale }: { locale: UiLocale }) {
   const commandTowerCopy = getUiCopy(locale).dashboard.commandTowerPage;
   const { overview, sessions, warning, hasLiveData } = await loadCommandTowerHomeState(locale);
+  const sectionAriaLabel = getCommandTowerHomeSectionAriaLabel(locale);
 
   return (
     <>
       {warning && !hasLiveData ? null : (
-        <section aria-label="Command Tower live overview" aria-describedby="command-tower-page-subtitle">
+        <section aria-label={sectionAriaLabel} aria-describedby="command-tower-page-subtitle">
           <CommandTowerHomeLiveClient initialOverview={overview} initialSessions={sessions} locale={locale} />
         </section>
       )}
@@ -161,10 +176,17 @@ export async function CommandTowerHomeSection({ locale }: { locale: UiLocale }) 
   );
 }
 
+export async function generateMetadata(): Promise<Metadata> {
+  const cookieStore = await cookies();
+  const locale = normalizeUiLocale(cookieStore.get(UI_LOCALE_STORAGE_KEY)?.value);
+  return buildCommandTowerMetadata(locale);
+}
+
 export function CommandTowerHomeSectionFallback({ locale }: { locale: UiLocale }) {
   const commandTowerCopy = getUiCopy(locale).dashboard.commandTowerPage;
+  const sectionAriaLabel = getCommandTowerHomeSectionAriaLabel(locale);
   return (
-    <section aria-label="Command Tower live overview" aria-describedby="command-tower-page-subtitle" aria-busy="true">
+    <section aria-label={sectionAriaLabel} aria-describedby="command-tower-page-subtitle" aria-busy="true">
       <p className="mono" role="status">{commandTowerCopy.fallbackLoading}</p>
     </section>
   );

@@ -65,8 +65,10 @@ function HookProbe(props: HookProbeProps) {
 function buildHomeLayoutProps(
   overrides: Partial<ComponentProps<typeof CommandTowerHomeLayout>> = {},
 ): ComponentProps<typeof CommandTowerHomeLayout> {
-  const uiCopy = getUiCopy("en");
+  const locale = overrides.locale ?? "en";
+  const uiCopy = getUiCopy(locale);
   return {
+    locale,
     drawerCollapsed: true,
     liveMode: "running",
     alertsStatus: "ok",
@@ -95,7 +97,7 @@ function buildHomeLayoutProps(
     ),
     DrawerComponent: () => <aside>drawer</aside>,
     drawerLiveBadgeVariant: "running",
-    homeLiveBadgeText: () => "Live",
+    homeLiveBadgeText: () => (locale === "zh-CN" ? "实时" : "Live"),
     homeLiveBadgeVariant: () => "running",
     alertsBadgeVariant: () => "running",
     quickActionItems: [],
@@ -266,6 +268,27 @@ describe("command tower session live sync + home layout", () => {
     expect(expandedRoot).toHaveClass("ct-home-layout");
     expect(expandedRoot).toHaveClass("ct-home-layout--drawer-expanded");
     expect(expandedRoot).not.toHaveClass("ct-home-layout--drawer-collapsed");
+  });
+
+  it("announces zh-CN live-region copy in the home layout", () => {
+    render(
+      <CommandTowerHomeLayout
+        {...buildHomeLayoutProps({
+          locale: "zh-CN",
+          liveStatusText: "实时刷新运行中",
+          refreshHealthSummary: { label: "完整刷新健康", badgeVariant: "success" },
+          alertsStatus: "healthy",
+        })}
+      />,
+    );
+
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "实时刷新运行中。刷新间隔 1500 毫秒。当前 SLO 状态 健康。详细筛选在右侧抽屉中。",
+    );
+    expect(screen.getByText("实时")).toBeInTheDocument();
+    expect(screen.getByText("SLO：健康")).toBeInTheDocument();
+    expect(screen.queryByText("Live")).not.toBeInTheDocument();
+    expect(screen.queryByText("SLO：healthy")).not.toBeInTheDocument();
   });
 
   it("resets transport/live mode to running+sse when switched session has latest run and live enabled", async () => {

@@ -14,6 +14,7 @@ type Props = {
   title: string;
   summary: string;
   nextAction: string;
+  nextStepLabel?: string;
   tone?: Tone;
   badgeLabel?: string;
   actions?: ActionLink[];
@@ -44,6 +45,7 @@ export default function ControlPlaneStatusCallout({
   title,
   summary,
   nextAction,
+  nextStepLabel = "Next step",
   tone = "default",
   badgeLabel = "",
   actions = [],
@@ -58,7 +60,7 @@ export default function ControlPlaneStatusCallout({
           </div>
           {badgeLabel ? <Badge variant={toneToBadge(tone)}>{badgeLabel}</Badge> : null}
         </div>
-        <p className="mono">Next step: {nextAction}</p>
+        <p className="mono">{nextStepLabel}: {nextAction}</p>
         {actions.length > 0 ? (
           <div className="toolbar">
             {actions.map((action) => (

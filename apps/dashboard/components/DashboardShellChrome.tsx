@@ -5,10 +5,11 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { DEFAULT_UI_LOCALE, getUiCopy, type UiLocale } from "@openvibecoding/frontend-shared/uiCopy";
 import {
-  detectPreferredUiLocale,
+  normalizeUiLocale,
   readPreferredUiLocaleCookie,
   persistPreferredUiLocale,
   toggleUiLocale,
+  UI_LOCALE_STORAGE_KEY,
 } from "@openvibecoding/frontend-shared/uiLocale";
 import AppNav from "./AppNav";
 import { DashboardLocaleProvider } from "./DashboardLocaleContext";
@@ -17,23 +18,35 @@ import { Button } from "./ui/button";
 
 type DashboardShellChromeProps = {
   children: ReactNode;
+  initialLocale?: UiLocale;
 };
 
-export default function DashboardShellChrome({ children }: DashboardShellChromeProps) {
+export default function DashboardShellChrome({
+  children,
+  initialLocale = DEFAULT_UI_LOCALE,
+}: DashboardShellChromeProps) {
   const router = useRouter();
   const pathname = usePathname();
   const isLanding = pathname === "/";
-  const [locale, setLocale] = useState<UiLocale>(DEFAULT_UI_LOCALE);
+  const [locale, setLocale] = useState<UiLocale>(initialLocale);
 
   useEffect(() => {
-    const detected = detectPreferredUiLocale();
     const cookieLocale = readPreferredUiLocaleCookie(document.cookie);
-    setLocale(detected);
-    if (cookieLocale !== detected) {
-      persistPreferredUiLocale(detected);
+    const hasCookie = document.cookie.includes(`${UI_LOCALE_STORAGE_KEY}=`);
+    const storedLocale = window.localStorage.getItem(UI_LOCALE_STORAGE_KEY);
+    const explicitLocale = storedLocale ? normalizeUiLocale(storedLocale) : hasCookie ? cookieLocale : undefined;
+    const nextLocale = initialLocale !== DEFAULT_UI_LOCALE ? initialLocale : explicitLocale ?? initialLocale;
+
+    setLocale(nextLocale);
+
+    if (storedLocale !== nextLocale || cookieLocale !== nextLocale) {
+      persistPreferredUiLocale(nextLocale);
+    }
+
+    if (nextLocale !== initialLocale) {
       router.refresh();
     }
-  }, [router]);
+  }, [initialLocale, router]);
 
   const uiCopy = useMemo(() => getUiCopy(locale), [locale]);
 
