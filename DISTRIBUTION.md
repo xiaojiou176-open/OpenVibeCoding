@@ -14,9 +14,9 @@ change set.
 
 Today OpenVibeCoding officially ships a public repo front door, a GitHub Pages
 product front door, one proof-first public workflow baseline, a repo-local
-read-only MCP server, one legacy-branded live PyPI package plus one
-legacy-branded live Official MCP Registry entry for that same read-only
-runtime, and a live ClawHub skill.
+read-only MCP server, the live OpenVibeCoding PyPI package plus the live
+OpenVibeCoding Official MCP Registry entry for that same read-only runtime,
+and a live ClawHub skill.
 
 It does not yet officially ship a hosted operator service, a public write-capable
 MCP, a Docker distribution path, or standalone npm releases. MCP.so still has
