@@ -3,7 +3,7 @@
     "servers": {
       "openvibecoding-readonly": {
         "command": "uvx",
-        "args": ["--from", "cortexpilot-orchestrator==0.1.0a4", "openvibecoding-readonly-mcp"]
+        "args": ["--from", "openvibecoding-orchestrator==0.1.0a4", "openvibecoding-readonly-mcp"]
       }
     }
   }

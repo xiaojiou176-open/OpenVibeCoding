@@ -55,8 +55,8 @@ Lane order today is:
 | GitHub Pages | `shipped` | Canonical public product front door | `https://xiaojiou176-open.github.io/OpenVibeCoding/` | none | keep first screen compressed |
 | First proven workflow (`news_digest`) | `shipped` | Official public proof-first baseline | `docs/use-cases/index.html` and tracked proof assets | read-only proof / replay story | keep as the only release-proven public workflow |
 | Read-only MCP | `shipped` | Repo-owned stdio JSON-RPC MCP for machine-readable inspection only | bootstrapped repo checkout + `bash __OPENVIBECODING_REPO_ROOT__/scripts/run_openvibecoding_readonly_mcp.sh` or the tracked starter templates | `stdio`, JSON-RPC 2.0, read-only, repo-local, no hosted auth, no OAuth | keep artifactized through `configs/mcp_public_manifest.json` |
-| PyPI package (`cortexpilot-orchestrator`) | `shipped (legacy live name)` | Published package for the public read-only MCP runtime; the external package name has not yet been reissued under `openvibecoding-orchestrator` | `https://pypi.org/project/cortexpilot-orchestrator/0.1.0a4/` | package install only | keep repo docs explicit that the live public package still carries the legacy live package name |
-| Official MCP Registry entry (`io.github.xiaojiou176-open/cortexpilot-readonly`) | `shipped (legacy live name)` | Public MCP discovery entry is live, but the active registry identity still uses the legacy live registry name rather than `openvibecoding-readonly` | `https://registry.modelcontextprotocol.io/v0/servers?search=io.github.xiaojiou176-open/cortexpilot-readonly` | registry discovery only, stdio package install | keep the repo-side manifest and public docs honest about the legacy live registry identity until a renamed entry is actually accepted |
+| PyPI package (`openvibecoding-orchestrator`) | `shipped` | Published package for the public read-only MCP runtime under the OpenVibeCoding name | `https://pypi.org/project/openvibecoding-orchestrator/0.1.0a4/` | package install only | treat this as the primary install path; keep the legacy package only as a compatibility alias |
+| Official MCP Registry entry (`io.github.xiaojiou176-open/openvibecoding-readonly`) | `shipped` | Public MCP discovery entry is live under the OpenVibeCoding identity | `https://registry.modelcontextprotocol.io/v0/servers?search=io.github.xiaojiou176-open/openvibecoding-readonly` | registry discovery only, stdio package install | keep this as the canonical registry entry; legacy CortexPilot entry is deprecated compatibility only |
 | Codex starter | `starter-only` | Local marketplace seed plus shared read-only MCP template | `examples/coding-agents/codex/` | local path wiring only | keep truthful; do not relabel as official directory listing |
 | Claude Code starter | `starter-only` | Project-local `.claude` and `.mcp.json` starter | `examples/coding-agents/claude-code/` | local project wiring only | keep truthful; do not relabel as marketplace package |
 | OpenClaw starter | `starter-only` | Local config seed for the same read-only MCP and compatible bundle | `examples/coding-agents/openclaw/` | local config + local plugin path | keep truthful; do not relabel as ClawHub publication |
@@ -77,13 +77,16 @@ Lane order today is:
 - The latest live GitHub release is `v0.1.0-alpha.3`.
 - `v0.1.0-alpha.3` is the current published prerelease baseline, but it is no
   longer the current `main` snapshot.
-- The latest live public package for the read-only MCP is still the
-  legacy-branded `cortexpilot-orchestrator==0.1.0a4`.
-- The latest live Official MCP Registry entry still points to the
-  legacy-branded `io.github.xiaojiou176-open/cortexpilot-readonly@0.1.0a4`.
-- `openvibecoding-orchestrator` and
-  `io.github.xiaojiou176-open/openvibecoding-readonly` are not live external
-  package/registry identities yet.
+- The latest live public package for the read-only MCP is now
+  `openvibecoding-orchestrator==0.1.0a4`.
+- The latest live Official MCP Registry entry now points to
+  `io.github.xiaojiou176-open/openvibecoding-readonly@0.1.0a4`.
+- The legacy package `cortexpilot-orchestrator==0.1.0a4` still exists as a
+  compatibility alias and should no longer be treated as the primary install
+  path.
+- The legacy Official MCP Registry entry
+  `io.github.xiaojiou176-open/cortexpilot-readonly@0.1.0a4` now serves only as
+  a deprecated compatibility entry.
 - `v0.1.0-alpha.1` remains the historical first public baseline, not the latest
   release truth.
 - README, Pages, and manifest surfaces must keep explicit lag wording whenever

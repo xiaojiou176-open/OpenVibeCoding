@@ -9,8 +9,8 @@ door, and local coding-agent bundles stay example-only.
 
 ## What the agent learns here
 
-- how to install the current live legacy package
-  `cortexpilot-orchestrator==0.1.0a4` for the OpenVibeCoding read-only MCP
+- how to install the current live package
+  `openvibecoding-orchestrator==0.1.0a4` for the OpenVibeCoding read-only MCP
 - which read-only OpenVibeCoding tools exist and which are safe-first
 - how to choose between run/workflow inspection, queue/approval reads, and
   proof/incident reads
@@ -34,13 +34,13 @@ door, and local coding-agent bundles stay example-only.
 Use the live public package, not a repo-local checkout:
 
 ```bash
-uvx --from cortexpilot-orchestrator==0.1.0a4 openvibecoding-readonly-mcp
+uvx --from openvibecoding-orchestrator==0.1.0a4 openvibecoding-readonly-mcp
 ```
 
-Today the executable is already OpenVibeCoding-branded, but the published PyPI
-package still uses the legacy live name `cortexpilot-orchestrator`. Do not
-claim that the OpenVibeCoding-branded package name is live until the renamed
-publication actually exists.
+Today both the executable and the primary published PyPI package use the
+OpenVibeCoding name. The legacy `cortexpilot-orchestrator` package still exists
+only as a compatibility alias and should not be treated as the primary install
+path.
 
 If the host needs a saved MCP config snippet, use the host-specific examples in
 `references/INSTALL.md`.

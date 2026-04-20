@@ -4,17 +4,15 @@ Use the current live public PyPI package, not a repo-local checkout.
 
 ## Published package
 
-- package: `cortexpilot-orchestrator==0.1.0a4`
+- package: `openvibecoding-orchestrator==0.1.0a4`
 - executable: `openvibecoding-readonly-mcp`
 - transport: `stdio`
 
 Current truth:
 
-- the executable already uses the OpenVibeCoding name
-- the live published PyPI package still uses the legacy live name
-  `cortexpilot-orchestrator`
-- do not claim that `openvibecoding-orchestrator` is live until the renamed
-  package is actually published
+- the executable uses the OpenVibeCoding name
+- the primary live published PyPI package now also uses the OpenVibeCoding name
+- the legacy package `cortexpilot-orchestrator` remains only as a compatibility alias
 
 ## OpenHands example
 
